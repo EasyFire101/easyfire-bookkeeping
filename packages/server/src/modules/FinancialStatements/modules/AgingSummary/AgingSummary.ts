@@ -18,7 +18,7 @@ import { IARAgingSummaryCustomer } from '../ARAgingSummary/ARAgingSummary.types'
 export abstract class AgingSummaryReport extends AgingReport {
   readonly contacts: ModelObject<Customer | Vendor>[];
   readonly agingPeriods: IAgingPeriod[] = [];
-  readonly baseCurrency: string;
+  public baseCurrency: string;
   readonly query: IAgingSummaryQuery;
   readonly overdueInvoicesByContactId: Record<
     number,

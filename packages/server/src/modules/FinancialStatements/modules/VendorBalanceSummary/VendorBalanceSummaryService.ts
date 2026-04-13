@@ -38,7 +38,7 @@ export class VendorBalanceSummaryService {
     const reportInstance = new VendorBalanceSummaryReport(
       this.vendorBalanceSummaryRepository,
       filter,
-      { baseCurrency: this.vendorBalanceSummaryRepository.baseCurrency, dateFormat: meta.dateFormat },
+      { baseCurrency: meta.baseCurrency, dateFormat: meta.dateFormat },
     );
 
     // Triggers `onVendorBalanceSummaryViewed` event.

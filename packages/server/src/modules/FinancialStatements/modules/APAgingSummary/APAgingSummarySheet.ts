@@ -38,6 +38,7 @@ export class APAgingSummarySheet extends AgingSummaryReport {
 
     this.query = query;
     this.repository = repository;
+    this.baseCurrency = meta.baseCurrency;
     this.numberFormat = this.query.numberFormat;
     this.dateFormat = meta.dateFormat || DEFAULT_REPORT_META.dateFormat;
 
