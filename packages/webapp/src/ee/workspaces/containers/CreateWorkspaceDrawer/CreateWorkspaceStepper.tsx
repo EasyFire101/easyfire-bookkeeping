@@ -1,5 +1,6 @@
 // @ts-nocheck
 import React, { useState } from 'react';
+import { css } from '@emotion/css';
 import { Stepper } from '@/components/Stepper';
 import { FormattedMessage as T } from '@/components';
 import CreateWorkspaceForm from './CreateWorkspaceForm';
@@ -14,6 +15,40 @@ interface CreatedWorkspace {
   organizationId: string;
   jobId: string;
 }
+
+const createWorkspaceStepperRootCss = css`
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  min-height: 0;
+  padding: 16px 25px 0;
+`;
+
+const createWorkspaceStepperItemsCss = css`
+  width: 100%;
+  max-width: 600px;
+  margin: 0 auto;
+  flex-shrink: 0;
+`;
+
+const createWorkspaceStepperContentCss = css`
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  min-height: 0;
+  margin-top: 16px;
+  margin-bottom: 0;
+
+  > .bp4-drawer-body {
+    flex: 1;
+    min-height: 0;
+    overflow: auto;
+  }
+
+  > .bp4-navbar {
+    flex-shrink: 0;
+  }
+`;
 
 export function CreateWorkspaceStepper({ onClose }: CreateWorkspaceStepperProps) {
   const [stepIndex, setStepIndex] = useState(0);
@@ -33,7 +68,14 @@ export function CreateWorkspaceStepper({ onClose }: CreateWorkspaceStepperProps)
   };
 
   return (
-    <Stepper active={stepIndex}>
+    <Stepper
+      active={stepIndex}
+      classNames={{
+        root: createWorkspaceStepperRootCss,
+        items: createWorkspaceStepperItemsCss,
+        content: createWorkspaceStepperContentCss,
+      }}
+    >
       <Stepper.Step label={<T id={'create_workspace.steps.workspace'} />}>
         <CreateWorkspaceForm
           onSubmitting={handleWorkspaceCreated}

@@ -34,14 +34,12 @@ export class InactivateWorkspaceService {
     if (!membership) {
       throw new ServiceError('WORKSPACE_NOT_FOUND', 'Workspace not found');
     }
-
     if (membership.role !== 'owner') {
       throw new ServiceError(
         'NOT_OWNER',
         'Only the workspace owner can inactivate the workspace',
       );
     }
-
     await this.tenantModel
       .query()
       .findById(tenant.id)

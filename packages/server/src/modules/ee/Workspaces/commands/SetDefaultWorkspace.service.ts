@@ -38,7 +38,6 @@ export class SetDefaultWorkspaceService {
     if (!tenant) {
       throw new NotFoundException('Organization not found');
     }
-
     // Verify the user belongs to this organization
     const membership = await this.userTenantModel
       .query()
@@ -51,7 +50,6 @@ export class SetDefaultWorkspaceService {
         'User does not belong to this organization',
       );
     }
-
     // Update the user's default tenant
     await this.systemUserModel
       .query()

@@ -7,6 +7,11 @@ import { events } from '@/common/events/events';
 export class OrganizationBuiltSubscriber {
   constructor(private readonly socketGateway: SocketGateway) {}
 
+  @OnEvent(events.organization.build)
+  handleOrganizationBuild() {
+    this.socketGateway.emitWorkspacesChanged();
+  }
+
   @OnEvent(events.organization.built)
   handleOrganizationBuilt() {
     this.socketGateway.emitWorkspacesChanged();

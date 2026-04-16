@@ -1,10 +1,12 @@
-// @ts-nocheck
 import React from 'react';
-import { Formik, Form } from 'formik';
+import { Formik, Form, FormikHelpers } from 'formik';
 import { Button, Intent, Classes } from '@blueprintjs/core';
 import { getAllCountries } from '@bigcapital/utils';
+import { isAxiosError } from 'axios';
 import { x } from '@xstyled/emotion';
 import {
+  Col,
+  Row,
   FFormGroup,
   FInputGroup,
   FSelect,
@@ -13,19 +15,29 @@ import {
   DrawerBody,
   DrawerActionsBar,
 } from '@/components';
-import { Col, Row } from '@/components';
+
+/** Blueprint FormGroup supports `fastField`; package typings omit it. */
+type FFormGroupWithFastField = typeof FFormGroup & {
+  (props: React.ComponentProps<typeof FFormGroup> & { fastField?: boolean }): JSX.Element;
+};
+const FFormGroupField = FFormGroup as FFormGroupWithFastField;
 import { useIsDarkMode } from '@/hooks/useDarkMode';
-import { useCreateWorkspace } from '@/ee/workspaces/hooks/query/workspaces';
+import {
+  useCreateWorkspace,
+  type CreateWorkspaceRequest,
+} from '@/ee/workspaces/hooks/query/workspaces';
 import { getFiscalYear } from '@/constants/fiscalYearOptions';
 import { getLanguages } from '@/constants/languagesOptions';
 import { getAllCurrenciesOptions } from '@/constants/currencies';
-import { getSetupOrganizationValidation } from '@/containers/Setup/SetupOrganization.schema';
+import {
+  getSetupOrganizationValidation,
+  type SetupOrganizationFormValues,
+} from '@/containers/Setup/SetupOrganization.schema';
 import { transfromToSnakeCase } from '@/utils';
 
 const countries = getAllCountries();
 
-// Initial values.
-const defaultValues = {
+const defaultValues: SetupOrganizationFormValues = {
   name: '',
   location: '',
   baseCurrency: '',
@@ -34,10 +46,23 @@ const defaultValues = {
   timezone: '',
 };
 
+export interface CreatedWorkspaceSubmitPayload {
+  organizationId: string;
+  jobId: string;
+}
+
+interface CreateWorkspaceFormProps {
+  onSubmitting: (data: CreatedWorkspaceSubmitPayload) => void;
+  onCancel: () => void;
+}
+
 /**
  * Create workspace form.
  */
-export default function CreateWorkspaceForm({ onSubmitting, onCancel }) {
+export default function CreateWorkspaceForm({
+  onSubmitting,
+  onCancel,
+}: CreateWorkspaceFormProps) {
   const FiscalYear = getFiscalYear();
   const Languages = getLanguages();
   const currencies = getAllCurrenciesOptions();
@@ -45,40 +70,55 @@ export default function CreateWorkspaceForm({ onSubmitting, onCancel }) {
   const { mutateAsync: createWorkspaceMutate } = useCreateWorkspace();
   const validationSchema = getSetupOrganizationValidation();
 
-  const handleSubmit = async (values, { setSubmitting, setErrors }) => {
+  const handleSubmit = async (
+    values: SetupOrganizationFormValues,
+    { setSubmitting, setErrors }: FormikHelpers<SetupOrganizationFormValues>,
+  ) => {
     try {
-      const result = await createWorkspaceMutate({ ...transfromToSnakeCase(values) });
+      const payload = transfromToSnakeCase(
+        values,
+      ) as CreateWorkspaceRequest;
+      const result = await createWorkspaceMutate(payload);
       setSubmitting(false);
       onSubmitting({
         organizationId: result.organizationId,
         jobId: result.jobId,
       });
-    } catch (errors) {
+    } catch (error: unknown) {
       setSubmitting(false);
-      if (errors?.response?.data?.errors) {
-        setErrors(errors.response.data.errors);
+      if (
+        isAxiosError(error) &&
+        error.response?.data &&
+        typeof error.response.data === 'object' &&
+        error.response.data !== null &&
+        'errors' in error.response.data
+      ) {
+        const { errors } = error.response.data as { errors: Record<string, string> };
+        if (errors && typeof errors === 'object') {
+          setErrors(errors);
+        }
       }
     }
   };
 
   return (
-    <Formik
+    <Formik<SetupOrganizationFormValues>
       validationSchema={validationSchema}
       initialValues={{ ...defaultValues }}
       onSubmit={handleSubmit}
     >
       {(formikProps) => (
         <>
-          <DrawerBody>
+          <DrawerBody className="">
             <x.div maxWidth={'600px'} w="100%" mx="auto" pt="30px" pb="20px" px="25px">
               <Form>
                 {/* ---------- Organization name ----------  */}
-                <FFormGroup name={'name'} label={<T id={'legal_organization_name'} />} fastField>
+                <FFormGroupField name={'name'} label={<T id={'legal_organization_name'} />} fastField>
                   <FInputGroup name={'name'} large fastField />
-                </FFormGroup>
+                </FFormGroupField>
 
                 {/* ---------- Location ---------- */}
-                <FFormGroup name={'location'} label={<T id={'business_location'} />} fastField={true}>
+                <FFormGroupField name={'location'} label={<T id={'business_location'} />} fastField={true}>
                   <FSelect
                     name={'location'}
                     items={countries}
@@ -89,12 +129,12 @@ export default function CreateWorkspaceForm({ onSubmitting, onCancel }) {
                     buttonProps={{ large: true }}
                     fastField
                   />
-                </FFormGroup>
+                </FFormGroupField>
 
-                <Row>
-                  <Col xs={6}>
+                <Row bsPrefix="row" className="" noGutters={false}>
+                  <Col xs={6} bsPrefix="col" className="" noGutters={false}>
                     {/* ----------  Base currency ----------  */}
-                    <FFormGroup name={'baseCurrency'} label={<T id={'base_currency'} />} fastField={true}>
+                    <FFormGroupField name={'baseCurrency'} label={<T id={'base_currency'} />} fastField={true}>
                       <FSelect
                         name={'baseCurrency'}
                         items={currencies}
@@ -105,12 +145,12 @@ export default function CreateWorkspaceForm({ onSubmitting, onCancel }) {
                         buttonProps={{ large: true }}
                         fastField
                       />
-                    </FFormGroup>
+                    </FFormGroupField>
                   </Col>
 
                   {/* ---------- Language ---------- */}
-                  <Col xs={6}>
-                    <FFormGroup name={'language'} label={<T id={'language'} />} fastField>
+                  <Col xs={6} bsPrefix="col" className="" noGutters={false}>
+                    <FFormGroupField name={'language'} label={<T id={'language'} />} fastField>
                       <FSelect
                         name={'language'}
                         items={Languages}
@@ -121,12 +161,12 @@ export default function CreateWorkspaceForm({ onSubmitting, onCancel }) {
                         buttonProps={{ large: true }}
                         fastField
                       />
-                    </FFormGroup>
+                    </FFormGroupField>
                   </Col>
                 </Row>
 
                 {/* --------- Fiscal Year ----------- */}
-                <FFormGroup name={'fiscalYear'} label={<T id={'fiscal_year'} />} fastField>
+                <FFormGroupField name={'fiscalYear'} label={<T id={'fiscal_year'} />} fastField>
                   <FSelect
                     name={'fiscalYear'}
                     items={FiscalYear}
@@ -137,15 +177,17 @@ export default function CreateWorkspaceForm({ onSubmitting, onCancel }) {
                     buttonProps={{ large: true }}
                     fastField
                   />
-                </FFormGroup>
+                </FFormGroupField>
 
                 {/* ----------  Time zone ----------  */}
-                <FFormGroup name={'timezone'} label={<T id={'time_zone'} />}>
+                <FFormGroupField name={'timezone'} label={<T id={'time_zone'} />}>
                   <FTimezoneSelect
                     name={'timezone'}
                     valueDisplayFormat="composite"
                     showLocalTimezone={true}
-                    placeholder={<T id={'select_time_zone'} />}
+                    placeholder={
+                      <T id={'select_time_zone'} /> as unknown as string
+                    }
                     popoverProps={{ minimal: true }}
                     buttonProps={{
                       alignText: 'left',
@@ -153,7 +195,7 @@ export default function CreateWorkspaceForm({ onSubmitting, onCancel }) {
                       large: true,
                     }}
                   />
-                </FFormGroup>
+                </FFormGroupField>
 
                 <x.p
                   fontSize={14}
@@ -185,7 +227,9 @@ export default function CreateWorkspaceForm({ onSubmitting, onCancel }) {
                 intent={Intent.PRIMARY}
                 loading={formikProps.isSubmitting}
                 type="submit"
-                onClick={formikProps.handleSubmit}
+                onClick={() => {
+                  formikProps.handleSubmit();
+                }}
               >
                 <T id={'create'} />
               </Button>
