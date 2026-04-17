@@ -1,14 +1,14 @@
 // @ts-nocheck
 import React from 'react';
 import intl from 'react-intl-universal';
-import styled from 'styled-components';
 import { useHistory } from 'react-router-dom';
 
 import ItemFormFormik from './ItemFormFormik';
 
 import { useDashboardPageTitle } from '@/hooks/state';
 import { useItemFormContext, ItemFormProvider } from './ItemFormProvider';
-import { DashboardInsider, DashboardCard } from '@/components';
+import { DashboardInsider } from '@/components';
+import { Box } from '@/components';
 
 /**
  * Item form dashboard title.
@@ -39,9 +39,9 @@ function ItemFormPageLoading({ children }) {
   const { isFormLoading } = useItemFormContext();
 
   return (
-    <DashboardItemFormPageInsider loading={isFormLoading} name={'item-form'}>
+    <DashboardInsider loading={isFormLoading}>
       {children}
-    </DashboardItemFormPageInsider>
+    </DashboardInsider>
   );
 }
 
@@ -59,36 +59,18 @@ export default function ItemForm({ itemId }) {
       history.push('/items');
     }
   };
-  // Handle cancel button click.
-  const handleFormCancel = () => {
-    history.goBack();
-  };
 
   return (
     <ItemFormProvider itemId={itemId}>
       <ItemFormDashboardTitle />
 
       <ItemFormPageLoading>
-        <DashboardCard page>
-          <ItemFormPageFormik
+        <Box mx={'auto'} maxWidth={800}>
+          <ItemFormFormik
             onSubmitSuccess={handleSubmitSuccess}
-            onCancel={handleFormCancel}
           />
-        </DashboardCard>
+        </Box>
       </ItemFormPageLoading>
     </ItemFormProvider>
   );
 }
-
-const DashboardItemFormPageInsider = styled(DashboardInsider)`
-  padding-bottom: 64px;
-`;
-
-const ItemFormPageFormik = styled(ItemFormFormik)`
-  .page-form {
-    &__floating-actions {
-      margin-left: -40px;
-      margin-right: -40px;
-    }
-  }
-`;

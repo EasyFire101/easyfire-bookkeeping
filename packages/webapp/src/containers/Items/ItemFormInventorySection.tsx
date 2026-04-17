@@ -4,8 +4,7 @@ import {
   AccountsSelect,
   FFormGroup,
   FormattedMessage as T,
-  Col,
-  Row,
+  Box,
 } from '@/components';
 
 import { withCurrentOrganization } from '@/containers/Organization/withCurrentOrganization';
@@ -13,43 +12,38 @@ import { accountsFieldShouldUpdate } from './utils';
 import { ACCOUNT_TYPE } from '@/constants/accountTypes';
 import { useItemFormContext } from './ItemFormProvider';
 import { compose } from '@/utils';
+import { ItemFormSectionTitle } from './ItemFormSectionTitle';
 
-/**
- * Item form inventory sections.
- */
-function ItemFormInventorySection({ organization: { base_currency } }) {
+function ItemFormInventorySectionBase() {
   const { accounts } = useItemFormContext();
 
   return (
-    <div class="page-form__section page-form__section--inventory">
-      <h3>
-        <T id={'inventory_information'} />
-      </h3>
+    <Box data-section-id="inventory">
+      <ItemFormSectionTitle>Inventory details</ItemFormSectionTitle>
 
-      <Row>
-        <Col xs={6}>
-          {/*------------- Inventory Account ------------- */}
-          <FFormGroup
-            label={<T id={'inventory_account'} />}
-            name={'inventory_account_id'}
-            items={accounts}
-            fastField={true}
-            shouldUpdate={accountsFieldShouldUpdate}
-            inline={true}
-          >
-            <AccountsSelect
-              name={'inventory_account_id'}
-              items={accounts}
-              placeholder={<T id={'select_account'} />}
-              filterByTypes={[ACCOUNT_TYPE.INVENTORY]}
-              fastField={true}
-              shouldUpdate={accountsFieldShouldUpdate}
-            />
-          </FFormGroup>
-        </Col>
-      </Row>
-    </div>
+      {/*------------- Inventory Account ------------- */}
+      <FFormGroup
+        label={<T id={'inventory_account'} />}
+        name={'inventory_account_id'}
+        items={accounts}
+        fastField={true}
+        shouldUpdate={accountsFieldShouldUpdate}
+        inline={true}
+        fill
+      >
+        <AccountsSelect
+          name={'inventory_account_id'}
+          items={accounts}
+          placeholder={<T id={'select_account'} />}
+          filterByTypes={[ACCOUNT_TYPE.INVENTORY]}
+          fastField={true}
+          shouldUpdate={accountsFieldShouldUpdate}
+        />
+      </FFormGroup>
+    </Box>
   );
 }
 
-export default compose(withCurrentOrganization())(ItemFormInventorySection);
+export const ItemFormInventorySection = compose(withCurrentOrganization())(
+  ItemFormInventorySectionBase,
+);

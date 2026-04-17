@@ -4,15 +4,13 @@ import { Formik, Form } from 'formik';
 import { Intent } from '@blueprintjs/core';
 import intl from 'react-intl-universal';
 import classNames from 'classnames';
+import styled from 'styled-components';
 
 import '@/style/pages/Items/Form.scss';
 
 import { CLASSES } from '@/constants/classes';
 import { AppToaster } from '@/components';
-import ItemFormBody from './ItemFormBody';
-import ItemFormPrimarySection from './ItemFormPrimarySection';
-import ItemFormFloatingActions from './ItemFormFloatingActions';
-import ItemFormInventorySection from './ItemFormInventorySection';
+import { ItemFormContent } from './ItemFormContent';
 
 import {
   transformSubmitRequestErrors,
@@ -37,7 +35,6 @@ export default function ItemFormFormik({
   const {
     itemId,
     item,
-    accounts,
     createItemMutate,
     editItemMutate,
     submitPayload,
@@ -91,7 +88,7 @@ export default function ItemFormFormik({
 
   return (
     <div
-      class={classNames(CLASSES.PAGE_FORM, CLASSES.PAGE_FORM_ITEM, className)}
+      className={classNames(CLASSES.PAGE_FORM, CLASSES.PAGE_FORM_ITEM, className)}
     >
       <Formik
         enableReinitialize={true}
@@ -100,15 +97,24 @@ export default function ItemFormFormik({
         onSubmit={handleFormSubmit}
       >
         <Form>
-          <div class={classNames(CLASSES.PAGE_FORM_BODY)}>
-            <ItemFormPrimarySection />
-            <ItemFormBody accounts={accounts} />
-            <ItemFormInventorySection accounts={accounts} />
-          </div>
-
-          <ItemFormFloatingActions onCancel={onCancel} />
+          <ItemFormFields>
+            <ItemFormContent />
+          </ItemFormFields>
         </Form>
       </Formik>
     </div>
   );
 }
+
+const ItemFormFields = styled.div`
+  .bp4-form-content,
+  .bp6-form-content {
+    min-width: 300px;
+  }
+  .bp4-form-group {
+    margin-bottom: 20px;
+  }
+  .bp4-form-group.bp4-inline label.bp4-label {
+    min-width: 140px;
+  }
+`;

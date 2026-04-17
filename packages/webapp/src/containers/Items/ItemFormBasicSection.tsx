@@ -3,41 +3,31 @@ import React, { useEffect, useRef } from 'react';
 import {
   FormGroup,
   RadioGroup,
-  Classes,
   Radio,
   Position,
-  MenuItem,
+  Checkbox,
 } from '@blueprintjs/core';
 import { ErrorMessage, FastField } from 'formik';
-import { CLASSES } from '@/constants/classes';
 import {
   Hint,
-  Col,
-  Row,
   FieldRequiredHint,
   FormattedMessage as T,
   FormattedHTMLMessage,
   FFormGroup,
   FSelect,
   FInputGroup,
+  Box,
 } from '@/components';
-import classNames from 'classnames';
 
 import { useItemFormContext } from './ItemFormProvider';
 import { handleStringChange, inputIntent } from '@/utils';
-// import { categoriesFieldShouldUpdate } from './utils';
+import { ItemFormSectionTitle } from './ItemFormSectionTitle';
 
-/**
- * Item form primary section.
- */
-export default function ItemFormPrimarySection() {
-  // Item form context.
+export function ItemFormBasicSection() {
   const { isNewMode, item, itemsCategories } = useItemFormContext();
-
   const nameFieldRef = useRef(null);
 
   useEffect(() => {
-    // Auto focus item name field once component mount.
     if (nameFieldRef.current) {
       nameFieldRef.current.focus();
     }
@@ -45,17 +35,19 @@ export default function ItemFormPrimarySection() {
 
   const itemTypeHintContent = (
     <>
-      <div class="mb1">
+      <div className="mb1">
         <FormattedHTMLMessage id={'services_that_you_provide_to_customers'} />
       </div>
-      <div class="mb1">
+      <div className="mb1">
         <FormattedHTMLMessage id={'products_you_buy_and_or_sell'} />
       </div>
     </>
   );
 
   return (
-    <div className={classNames(CLASSES.PAGE_FORM_HEADER_PRIMARY)}>
+    <Box data-section-id="primary">
+      <ItemFormSectionTitle>Basic details</ItemFormSectionTitle>
+
       {/*----------- Item type ----------*/}
       <FastField name={'type'}>
         {({ form, field: { value }, meta: { touched, error } }) => (
@@ -91,61 +83,66 @@ export default function ItemFormPrimarySection() {
         )}
       </FastField>
 
-      <Row>
-        <Col xs={7}>
-          {/*----------- Item name ----------*/}
-          <FFormGroup
-            name={'name'}
-            label={<T id={'item_name'} />}
-            labelInfo={<FieldRequiredHint />}
-            inline={true}
-            fastField
-          >
-            <FInputGroup
-              name={'name'}
-              medium={true}
-              inputRef={(ref) => (nameFieldRef.current = ref)}
-              fastField
+      {/*----------- Item name ----------*/}
+      <FFormGroup
+        name={'name'}
+        label={<T id={'item_name'} />}
+        labelInfo={<FieldRequiredHint />}
+        inline={true}
+        fill
+        fastField
+      >
+        <FInputGroup
+          name={'name'}
+          medium={true}
+          inputRef={(ref) => (nameFieldRef.current = ref)}
+          fastField
+          fill
+        />
+      </FFormGroup>
+
+      {/*----------- SKU ----------*/}
+      <FFormGroup
+        name={'code'}
+        label={<T id={'item_code'} />}
+        inline={true}
+        fill
+        fastField
+      >
+        <FInputGroup name={'code'} medium={true} fastField fill />
+      </FFormGroup>
+
+      {/*----------- Item category ----------*/}
+      <FFormGroup
+        name={'category_id'}
+        label={<T id={'category'} />}
+        inline={true}
+        fill
+      >
+        <FSelect
+          name={'category_id'}
+          items={itemsCategories}
+          valueAccessor={'id'}
+          textAccessor={'name'}
+          placeholder={<T id={'select_category'} />}
+          popoverProps={{ minimal: true, captureDismiss: true }}
+          fill
+        />
+      </FFormGroup>
+
+      {/*----------- Active ----------*/}
+      <FastField name={'active'} type={'checkbox'}>
+        {({ field }) => (
+          <FormGroup inline={true} className={'form-group--active'}>
+            <Checkbox
+              inline={true}
+              label={<T id={'active'} />}
+              name={'active'}
+              {...field}
             />
-          </FFormGroup>
-
-          {/*----------- SKU ----------*/}
-          <FFormGroup
-            name={'code'}
-            label={<T id={'item_code'} />}
-            inline={true}
-            fastField
-          >
-            <FInputGroup name={'code'} medium={true} fastField />
-          </FFormGroup>
-
-          {/*----------- Item category ----------*/}
-          <FFormGroup
-            name={'category_id'}
-            label={<T id={'category'} />}
-            inline={true}
-          >
-            <FSelect
-              name={'category_id'}
-              items={itemsCategories}
-              valueAccessor={'id'}
-              textAccessor={'name'}
-              placeholder={<T id={'select_category'} />}
-              popoverProps={{ minimal: true, captureDismiss: true }}
-            />
-          </FFormGroup>
-        </Col>
-
-        <Col xs={3}>
-          {/* <Dragzone
-            initialFiles={initialAttachmentFiles}
-            onDrop={handleDropFiles}
-            onDeleteFile={handleDeleteFile}
-            hint={'Attachments: Maxiumum size: 20MB'}
-            className={'mt2'}
-          /> */}
-        </Col>
-      </Row>
-    </div>
+          </FormGroup>
+        )}
+      </FastField>
+    </Box>
   );
 }
