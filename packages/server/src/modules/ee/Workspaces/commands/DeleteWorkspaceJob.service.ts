@@ -10,12 +10,7 @@ import {
   DeleteWorkspaceQueueJobPayload,
 } from '../Workspaces.types';
 import { events } from '@/common/events/events';
-
-const ERRORS = {
-  WORKSPACE_NOT_FOUND: 'WORKSPACE.NOT_FOUND',
-  NOT_WORKSPACE_OWNER: 'NOT.WORKSPACE.OWNER',
-  WORKSPACE_DELETING: 'WORKSPACE.DELETING',
-};
+import { WorkspacesError } from '../Workspaces.constants';
 
 interface DeleteWorkspaceResult {
   jobId: string | number;
@@ -51,7 +46,7 @@ export class DeleteWorkspaceJobService {
     const tenant = await this.tenantModel.query().findOne({ organizationId });
 
     if (!tenant) {
-      throw new ServiceError(ERRORS.WORKSPACE_NOT_FOUND);
+      throw new ServiceError(WorkspacesError.WORKSPACE_NOT_FOUND);
     }
 
     const membership = await this.userTenantModel
@@ -59,12 +54,12 @@ export class DeleteWorkspaceJobService {
       .findOne({ userId, tenantId: tenant.id });
 
     if (!membership || membership.role !== 'owner') {
-      throw new ServiceError(ERRORS.NOT_WORKSPACE_OWNER);
+      throw new ServiceError(WorkspacesError.NOT_WORKSPACE_OWNER);
     }
 
     // Check if workspace is already being deleted.
     if (tenant.isDeleting) {
-      throw new ServiceError(ERRORS.WORKSPACE_DELETING);
+      throw new ServiceError(WorkspacesError.WORKSPACE_DELETING);
     }
 
     // Emit workspace deleting event.

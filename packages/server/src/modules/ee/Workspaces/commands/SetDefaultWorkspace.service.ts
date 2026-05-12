@@ -12,8 +12,10 @@ export class SetDefaultWorkspaceService {
   constructor(
     @Inject(UserTenant.name)
     private readonly userTenantModel: typeof UserTenant,
+
     @Inject(SystemUser.name)
     private readonly systemUserModel: typeof SystemUser,
+
     @Inject(TenantModel.name)
     private readonly tenantModel: typeof TenantModel,
     private readonly eventEmitter: EventEmitter2,

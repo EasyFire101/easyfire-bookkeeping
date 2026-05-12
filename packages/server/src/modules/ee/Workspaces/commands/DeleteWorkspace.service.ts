@@ -5,11 +5,7 @@ import { UserTenant } from '@/modules/System/models/UserTenant.model';
 import { TenantModel } from '@/modules/System/models/TenantModel';
 import { TenantDBManager } from '@/modules/TenantDBManager/TenantDBManager';
 import { events } from '@/common/events/events';
-
-const ERRORS = {
-  WORKSPACE_NOT_FOUND: 'WORKSPACE.NOT_FOUND',
-  NOT_WORKSPACE_OWNER: 'NOT.WORKSPACE.OWNER',
-};
+import { WorkspacesError } from '../Workspaces.constants';
 
 @Injectable()
 export class DeleteWorkspaceService {
@@ -33,14 +29,14 @@ export class DeleteWorkspaceService {
     const tenant = await this.tenantModel.query().findOne({ organizationId });
 
     if (!tenant) {
-      throw new ServiceError(ERRORS.WORKSPACE_NOT_FOUND);
+      throw new ServiceError(WorkspacesError.WORKSPACE_NOT_FOUND);
     }
     const membership = await this.userTenantModel
       .query()
       .findOne({ userId, tenantId: tenant.id });
 
     if (!membership || membership.role !== 'owner') {
-      throw new ServiceError(ERRORS.NOT_WORKSPACE_OWNER);
+      throw new ServiceError(WorkspacesError.NOT_WORKSPACE_OWNER);
     }
     // Drop the physical tenant database if it exists.
     await this.tenantDBManager.dropDatabaseIfExists();

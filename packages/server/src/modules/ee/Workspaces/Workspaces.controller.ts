@@ -31,6 +31,7 @@ import {
 } from './dtos/WorkspaceResponse.dto';
 import { WorkspaceBuildJobResponseDto } from './dtos/WorkspaceBuildJobResponse.dto';
 import { ServiceError } from '@/modules/Items/ServiceError';
+import { WorkspacesError } from './Workspaces.constants';
 
 @ApiTags('Workspaces')
 @Controller('workspaces')
@@ -128,7 +129,7 @@ export class WorkspacesController {
 
     if (organizationId === currentOrganizationId) {
       throw new ServiceError(
-        'CANNOT_DELETE_CURRENT_ORGANIZATION',
+        WorkspacesError.CANNOT_DELETE_CURRENT_ORGANIZATION,
         'Cannot delete the current organization',
       );
     }

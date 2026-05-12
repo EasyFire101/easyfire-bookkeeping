@@ -2,6 +2,7 @@ import { Inject, Injectable } from '@nestjs/common';
 import { ServiceError } from '@/modules/Items/ServiceError';
 import { UserTenant } from '@/modules/System/models/UserTenant.model';
 import { TenantModel } from '@/modules/System/models/TenantModel';
+import { WorkspacesError } from '../Workspaces.constants';
 
 @Injectable()
 export class InactivateWorkspaceService {
@@ -23,20 +24,19 @@ export class InactivateWorkspaceService {
     const tenant = await this.tenantModel.query().findOne({ organizationId });
 
     if (!tenant) {
-      throw new ServiceError('WORKSPACE_NOT_FOUND', 'Workspace not found');
+      throw new ServiceError(WorkspacesError.WORKSPACE_NOT_FOUND, 'Workspace not found');
     }
-
     const membership = await this.userTenantModel
       .query()
       .findOne({ userId, tenantId: tenant.id })
       .withGraphFetched('tenant');
 
     if (!membership) {
-      throw new ServiceError('WORKSPACE_NOT_FOUND', 'Workspace not found');
+      throw new ServiceError(WorkspacesError.WORKSPACE_NOT_FOUND, 'Workspace not found');
     }
     if (membership.role !== 'owner') {
       throw new ServiceError(
-        'NOT_OWNER',
+        WorkspacesError.NOT_WORKSPACE_OWNER,
         'Only the workspace owner can inactivate the workspace',
       );
     }
@@ -58,7 +58,7 @@ export class InactivateWorkspaceService {
     const tenant = await this.tenantModel.query().findOne({ organizationId });
 
     if (!tenant) {
-      throw new ServiceError('WORKSPACE_NOT_FOUND', 'Workspace not found');
+      throw new ServiceError(WorkspacesError.WORKSPACE_NOT_FOUND, 'Workspace not found');
     }
 
     const membership = await this.userTenantModel
@@ -67,12 +67,12 @@ export class InactivateWorkspaceService {
       .withGraphFetched('tenant');
 
     if (!membership) {
-      throw new ServiceError('WORKSPACE_NOT_FOUND', 'Workspace not found');
+      throw new ServiceError(WorkspacesError.WORKSPACE_NOT_FOUND, 'Workspace not found');
     }
 
     if (membership.role !== 'owner') {
       throw new ServiceError(
-        'NOT_OWNER',
+        WorkspacesError.NOT_WORKSPACE_OWNER,
         'Only the workspace owner can reactivate the workspace',
       );
     }

@@ -15,9 +15,6 @@ interface FinancialData {
  * Transforms UserTenant (workspace membership) to WorkspaceDto.
  */
 export class WorkspaceTransformer extends Transformer<UserTenant> {
-  private defaultTenantId?: number;
-  private financialData?: FinancialData;
-
   /**
    * Include these attributes in the transformed output.
    */
@@ -29,7 +26,6 @@ export class WorkspaceTransformer extends Transformer<UserTenant> {
       'isDeleting',
       'isActive',
       'buildJobId',
-      'role',
       'metadata',
       'isDefault',
       'totalIncome',
@@ -104,44 +100,48 @@ export class WorkspaceTransformer extends Transformer<UserTenant> {
    * Determine if this workspace is the user's default.
    */
   protected isDefault = (membership: UserTenant): boolean => {
-    if (!this.defaultTenantId) return false;
-    return membership.tenantId === this.defaultTenantId;
+    const defaultTenantId = this.options?.defaultTenantId;
+    if (!defaultTenantId) return false;
+    return membership.tenantId === defaultTenantId;
   };
 
   /**
    * Get total income from financial data.
    */
-  protected totalIncome = (): number => {
-    return this.financialData?.totalIncome ?? 0;
+  protected totalIncome = (financialData?: FinancialData): number => {
+    return financialData?.totalIncome ?? 0;
   };
 
   /**
    * Get total expenses from financial data.
    */
-  protected totalExpenses = (): number => {
-    return this.financialData?.totalExpenses ?? 0;
+  protected totalExpenses = (financialData?: FinancialData): number => {
+    return financialData?.totalExpenses ?? 0;
   };
 
   /**
    * Get total assets from financial data.
    */
-  protected totalAssets = (): number => {
-    return this.financialData?.totalAssets ?? 0;
+  protected totalAssets = (financialData?: FinancialData): number => {
+    return financialData?.totalAssets ?? 0;
   };
 
   /**
    * Get total liabilities from financial data.
    */
-  protected totalLiabilities = (): number => {
-    return this.financialData?.totalLiabilities ?? 0;
+  protected totalLiabilities = (financialData?: FinancialData): number => {
+    return financialData?.totalLiabilities ?? 0;
   };
 
   /**
    * Get formatted total assets.
    */
-  protected formattedTotalAssets = (membership: UserTenant): string => {
+  protected formattedTotalAssets = (
+    membership: UserTenant,
+    financialData?: FinancialData,
+  ): string => {
     const currencyCode = membership.tenant?.metadata?.baseCurrency;
-    return formatNumber(this.totalAssets(), {
+    return formatNumber(financialData?.totalAssets ?? 0, {
       currencyCode,
       money: true,
     });
@@ -150,9 +150,12 @@ export class WorkspaceTransformer extends Transformer<UserTenant> {
   /**
    * Get formatted total liabilities.
    */
-  protected formattedTotalLiabilities = (membership: UserTenant): string => {
+  protected formattedTotalLiabilities = (
+    membership: UserTenant,
+    financialData?: FinancialData,
+  ): string => {
     const currencyCode = membership.tenant?.metadata?.baseCurrency;
-    return formatNumber(this.totalLiabilities(), {
+    return formatNumber(financialData?.totalLiabilities ?? 0, {
       currencyCode,
       money: true,
     });
@@ -161,13 +164,11 @@ export class WorkspaceTransformer extends Transformer<UserTenant> {
   /**
    * Transform single membership to WorkspaceDto.
    */
-  transform = (
-    membership: UserTenant,
-    defaultTenantId?: number,
-    financialData?: FinancialData,
-  ): WorkspaceDto => {
-    this.defaultTenantId = defaultTenantId;
-    this.financialData = financialData;
+  transform = (membership: UserTenant): WorkspaceDto => {
+    const financialData = (
+      this.options?.financialDataMap as Map<number, FinancialData>
+    )?.get(membership.tenantId);
+
     return {
       organizationId: this.organizationId(membership),
       isReady: this.isReady(membership),
@@ -178,12 +179,51 @@ export class WorkspaceTransformer extends Transformer<UserTenant> {
       role: membership.role,
       isDefault: this.isDefault(membership),
       metadata: this.metadata(membership),
-      totalIncome: this.totalIncome(),
-      totalExpenses: this.totalExpenses(),
-      totalAssets: this.totalAssets(),
-      totalLiabilities: this.totalLiabilities(),
-      formattedTotalAssets: this.formattedTotalAssets(membership),
-      formattedTotalLiabilities: this.formattedTotalLiabilities(membership),
+      totalIncome: this.totalIncome(financialData),
+      totalExpenses: this.totalExpenses(financialData),
+      totalAssets: this.totalAssets(financialData),
+      totalLiabilities: this.totalLiabilities(financialData),
+      formattedTotalAssets: this.formattedTotalAssets(membership, financialData),
+      formattedTotalLiabilities: this.formattedTotalLiabilities(
+        membership,
+        financialData,
+      ),
     };
+  };
+
+  /**
+   * Process collections directly through transform, then apply
+   * post-collection filtering and sorting.
+   */
+  public work = (object: any) => {
+    if (Array.isArray(object)) {
+      const transformed = object.map((item) => this.transform(item));
+      return this.postCollectionTransform(transformed);
+    }
+    return this.transform(object);
+  };
+
+  /**
+   * Filter and sort the transformed workspaces collection.
+   */
+  protected postCollectionTransform = (
+    workspaces: WorkspaceDto[],
+  ): WorkspaceDto[] => {
+    let result = workspaces;
+
+    if (!this.options?.includeInactive) {
+      result = result.filter((w) => w.isActive);
+    }
+
+    return result.sort((a, b) => {
+      const currentOrganizationId = this.options?.currentOrganizationId as string;
+      if (currentOrganizationId) {
+        if (a.organizationId === currentOrganizationId) return -1;
+        if (b.organizationId === currentOrganizationId) return 1;
+      }
+      return (a.metadata?.name || a.organizationId).localeCompare(
+        b.metadata?.name || b.organizationId,
+      );
+    });
   };
 }
