@@ -1,6 +1,6 @@
 import { ToNumber } from '@/common/decorators/Validators';
 import { ApiPropertyOptional } from '@nestjs/swagger';
-import { IsArray, IsInt, IsOptional, IsString } from 'class-validator';
+import { IsArray, IsIn, IsInt, IsOptional, IsString } from 'class-validator';
 import { IFilterRole, ISortOrder } from '../DynamicFilter/DynamicFilter.types';
 
 export class DynamicFilterQueryDto {
@@ -32,7 +32,7 @@ export class DynamicFilterQueryDto {
   columnSortBy: string;
 
   @ApiPropertyOptional({ description: 'Sort order (asc/desc)', type: String })
-  @IsString()
+  @IsIn(['ASC', 'DESC', 'asc', 'desc'])
   @IsOptional()
   sortOrder: ISortOrder;
 
