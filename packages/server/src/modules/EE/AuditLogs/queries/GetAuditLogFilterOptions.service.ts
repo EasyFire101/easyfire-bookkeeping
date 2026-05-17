@@ -1,5 +1,5 @@
 import { Inject, Injectable } from '@nestjs/common';
-import { snakeCase } from 'lodash';
+import { I18nService } from 'nestjs-i18n';
 import { AuditLog } from '../models/AuditLog.model';
 import { TenantModelProxy } from '@/modules/System/models/TenantBaseModel';
 
@@ -18,6 +18,7 @@ export class GetAuditLogFilterOptionsService {
   constructor(
     @Inject(AuditLog.name)
     private readonly auditLogModel: TenantModelProxy<typeof AuditLog>,
+    private readonly i18n: I18nService,
   ) {}
 
   async getFilterOptions(): Promise<AuditLogFilterOptions> {
@@ -37,11 +38,11 @@ export class GetAuditLogFilterOptionsService {
       subjects: subjectRows
         .map((r) => r.subject)
         .filter(Boolean)
-        .map((key) => ({ key, label: snakeCase(key) })),
+        .map((key) => ({ key, label: this.i18n.t(`audit_log.subject.${key}`) })),
       actions: actionRows
         .map((r) => r.action)
         .filter(Boolean)
-        .map((key) => ({ key, label: snakeCase(key) })),
+        .map((key) => ({ key, label: this.i18n.t(`audit_log.action.${key}`) })),
     };
   }
 }

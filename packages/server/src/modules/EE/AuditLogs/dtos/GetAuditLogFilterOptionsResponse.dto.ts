@@ -1,9 +1,17 @@
 import { ApiProperty } from '@nestjs/swagger';
 
-export class GetAuditLogFilterOptionsResponseDto {
-  @ApiProperty({ type: [String], example: ['sale_invoice', 'bill', 'payment'] })
-  subjects: string[];
+class AuditLogFilterOptionDto {
+  @ApiProperty({ example: 'SaleInvoice' })
+  key: string;
 
-  @ApiProperty({ type: [String], example: ['created', 'edited', 'deleted'] })
-  actions: string[];
+  @ApiProperty({ example: 'Sale Invoice' })
+  label: string;
+}
+
+export class GetAuditLogFilterOptionsResponseDto {
+  @ApiProperty({ type: [AuditLogFilterOptionDto] })
+  subjects: AuditLogFilterOptionDto[];
+
+  @ApiProperty({ type: [AuditLogFilterOptionDto] })
+  actions: AuditLogFilterOptionDto[];
 }
