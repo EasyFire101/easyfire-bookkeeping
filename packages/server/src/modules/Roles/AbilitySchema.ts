@@ -17,6 +17,7 @@ import { AbilitySubject, ISubjectAbilitiesSchema, ISubjectAbilitySchema } from "
 import { PaymentReceiveAction } from "../PaymentReceived/types/PaymentReceived.types";
 import { PreferencesAction } from "../Settings/Settings.types";
 import { AuditLogAction } from "../EE/AuditLogs/types/AuditLogs.types";
+import { AttachmentAction } from "../Attachments/Attachments.types";
 
 export const AbilitySchema: ISubjectAbilitiesSchema[] = [
   {
@@ -311,6 +312,7 @@ export const AbilitySchema: ISubjectAbilitiesSchema[] = [
     subjectLabel: 'ability.audit_log',
     abilities: [
       { key: AuditLogAction.View, label: 'ability.view' },
+    ],
   },
   {
     subject: AbilitySubject.Attachment,
