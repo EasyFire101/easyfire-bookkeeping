@@ -5,9 +5,9 @@ import { EditVendorCreditService } from './commands/EditVendorCredit.service';
 import { GetVendorCreditService } from './queries/GetVendorCredit.service';
 import {
   IVendorCreditEditDTO,
-  IVendorCreditsQueryDTO,
 } from './types/VendorCredit.types';
 import { IVendorCreditCreateDTO } from './types/VendorCredit.types';
+import { GetVendorCreditsQueryDto } from './dtos/GetVendorCreditsQuery.dto';
 import { Injectable } from '@nestjs/common';
 import { OpenVendorCreditService } from './commands/OpenVendorCredit.service';
 import { GetVendorCreditsService } from './queries/GetVendorCredits.service';
@@ -95,10 +95,10 @@ export class VendorCreditsApplicationService {
 
   /**
    * Retrieves the paginated filterable vendor credits list.
-   * @param {IVendorCreditsQueryDTO} query 
+   * @param {GetVendorCreditsQueryDto} query
    * @returns {}
    */
-  getVendorCredits(query: IVendorCreditsQueryDTO) {
+  getVendorCredits(query: GetVendorCreditsQueryDto) {
     return this.getVendorCreditsService.getVendorCredits(query);
   }
 

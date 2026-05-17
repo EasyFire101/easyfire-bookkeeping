@@ -1,6 +1,6 @@
 import { Knex } from 'knex';
 import { Injectable, Inject } from '@nestjs/common';
-import Bluebird from 'bluebird';
+import * as Bluebird from 'bluebird';
 import { ICreditNoteAppliedToInvoice } from '../types/CreditNoteApplyInvoice.types';
 import { SaleInvoice } from '@/modules/SaleInvoices/models/SaleInvoice';
 import { CreditNoteAppliedInvoice } from '../models/CreditNoteAppliedInvoice';

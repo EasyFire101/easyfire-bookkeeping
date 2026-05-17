@@ -4,12 +4,58 @@ import { FSelect } from '../Forms';
 import { useFormikContext } from 'formik';
 
 export type DisplayNameListItem = { label: string };
+type DisplayNameFormat = {
+  format: string;
+  values: Array<string | undefined>;
+  required: number[];
+};
 
 export interface DisplayNameListProps
   extends Omit<
     React.ComponentProps<typeof FSelect>,
     'items' | 'valueAccessor' | 'textAccessor' | 'labelAccessor'
   > {}
+
+function useDisplayNameFormatOptions(
+  salutation?: string,
+  firstName?: string,
+  lastName?: string,
+  companyName?: string,
+): DisplayNameListItem[] {
+  return useMemo(() => {
+    const formats: DisplayNameFormat[] = [
+      {
+        format: '{1} {2} {3}',
+        values: [salutation, firstName, lastName],
+        required: [1],
+      },
+      { format: '{1} {2}', values: [firstName, lastName], required: [] },
+      { format: '{1}, {2}', values: [firstName, lastName], required: [1, 2] },
+      { format: '{1}', values: [companyName], required: [1] },
+    ];
+
+    return formats
+      .filter(
+        (format) =>
+          !format.values.some((value, index) => {
+            return !value && format.required.indexOf(index + 1) !== -1;
+          }),
+      )
+      .map((formatOption) => {
+        const { format, values } = formatOption;
+        let label = format;
+
+        values.forEach((value, index) => {
+          const replaceWith = value || '';
+          label = label.replace(`{${index + 1}}`, replaceWith).trim();
+        });
+        return {
+          label: label.replace(/\s+/g, ' ').replace(/\s+,/g, ',').trim(),
+        };
+      })
+      .filter(({ label }) => Boolean(label));
+  }, [salutation, firstName, lastName, companyName]);
+}
 
 export function DisplayNameList({ ...restProps }: DisplayNameListProps) {
   const {
@@ -21,40 +67,11 @@ export function DisplayNameList({ ...restProps }: DisplayNameListProps) {
     },
   } = useFormikContext<any>();
 
-  const formats = useMemo(
-    () => [
-      {
-        format: '{1} {2} {3}',
-        values: [salutation, firstName, lastName],
-        required: [1],
-      },
-      { format: '{1} {2}', values: [firstName, lastName], required: [] },
-      { format: '{1}, {2}', values: [firstName, lastName], required: [1, 2] },
-      { format: '{1}', values: [companyName], required: [1] },
-    ],
-    [firstName, lastName, companyName, salutation],
-  );
-
-  const formatOptions: DisplayNameListItem[] = useMemo(
-    () =>
-      formats
-        .filter(
-          (format) =>
-            !format.values.some((value, index) => {
-              return !value && format.required.indexOf(index + 1) !== -1;
-            }),
-        )
-        .map((formatOption) => {
-          const { format, values } = formatOption;
-          let label = format;
-
-          values.forEach((value, index) => {
-            const replaceWith = value || '';
-            label = label.replace(`{${index + 1}}`, replaceWith).trim();
-          });
-          return { label: label.replace(/\s+/g, ' ') };
-        }),
-    [formats],
+  const formatOptions = useDisplayNameFormatOptions(
+    salutation,
+    firstName,
+    lastName,
+    companyName,
   );
 
   return (
@@ -62,6 +79,7 @@ export function DisplayNameList({ ...restProps }: DisplayNameListProps) {
       items={formatOptions}
       valueAccessor={'label'}
       textAccessor={'label'}
+      labelAccessor={'_label'}
       placeholder={intl.get('select_display_name_as')}
       filterable={false}
       {...restProps}

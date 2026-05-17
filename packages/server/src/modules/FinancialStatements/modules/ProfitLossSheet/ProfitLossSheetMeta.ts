@@ -19,8 +19,8 @@ export class ProfitLossSheetMeta {
     query: IProfitLossSheetQuery,
   ): Promise<IProfitLossSheetMeta> {
     const commonMeta = await this.financialSheetMeta.meta();
-    const formattedToDate = moment(query.toDate).format('YYYY/MM/DD');
-    const formattedFromDate = moment(query.fromDate).format('YYYY/MM/DD');
+    const formattedToDate = moment(query.toDate).format(commonMeta.dateFormat);
+    const formattedFromDate = moment(query.fromDate).format(commonMeta.dateFormat);
     const formattedDateRange = `From ${formattedFromDate} | To ${formattedToDate}`;
 
     const sheetName = 'Cashflow Statement';

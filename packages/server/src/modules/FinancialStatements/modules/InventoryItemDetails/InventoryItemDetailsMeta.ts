@@ -19,8 +19,8 @@ export class InventoryDetailsMetaInjectable {
   ): Promise<IInventoryItemDetailMeta> {
     const commonMeta = await this.financialSheetMeta.meta();
 
-    const formattedFromDate = moment(query.fromDate).format('YYYY/MM/DD');
-    const formattedToDay = moment(query.toDate).format('YYYY/MM/DD');
+    const formattedFromDate = moment(query.fromDate).format(commonMeta.dateFormat);
+    const formattedToDay = moment(query.toDate).format(commonMeta.dateFormat);
     const formattedDateRange = `From ${formattedFromDate} | To ${formattedToDay}`;
 
     const sheetName = 'Inventory Item Details';

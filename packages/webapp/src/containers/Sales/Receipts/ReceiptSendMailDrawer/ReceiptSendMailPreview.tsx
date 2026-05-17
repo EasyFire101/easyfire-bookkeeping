@@ -13,7 +13,7 @@ const receiptPreviewCss = css`
 
 export function ReceiptSendMailPreview() {
   return (
-    <Stack>
+    <Stack spacing={0}>
       <ReceiptSendMailPreviewHeader />
 
       <Stack px={4} py={6}>

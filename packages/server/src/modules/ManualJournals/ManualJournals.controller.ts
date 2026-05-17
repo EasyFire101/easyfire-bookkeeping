@@ -8,6 +8,7 @@ import {
   Post,
   Put,
   Query,
+  UseGuards,
 } from '@nestjs/common';
 import { ManualJournalsApplication } from './ManualJournalsApplication.service';
 import {
@@ -22,23 +23,30 @@ import {
   CreateManualJournalDto,
   EditManualJournalDto,
 } from './dtos/ManualJournal.dto';
-import { IManualJournalsFilter } from './types/ManualJournals.types';
+import { GetManualJournalsQueryDto } from './dtos/GetManualJournalsQuery.dto';
 import { ManualJournalResponseDto } from './dtos/ManualJournalResponse.dto';
 import { ApiCommonHeaders } from '@/common/decorators/ApiCommonHeaders';
 import {
   BulkDeleteDto,
   ValidateBulkDeleteResponseDto,
 } from '@/common/dtos/BulkDelete.dto';
+import { RequirePermission } from '@/modules/Roles/RequirePermission.decorator';
+import { PermissionGuard } from '@/modules/Roles/Permission.guard';
+import { AuthorizationGuard } from '@/modules/Roles/Authorization.guard';
+import { AbilitySubject } from '@/modules/Roles/Roles.types';
+import { ManualJournalAction } from './types/ManualJournals.types';
 
 @Controller('manual-journals')
 @ApiTags('Manual Journals')
 @ApiExtraModels(ManualJournalResponseDto)
 @ApiExtraModels(ValidateBulkDeleteResponseDto)
 @ApiCommonHeaders()
+@UseGuards(AuthorizationGuard, PermissionGuard)
 export class ManualJournalsController {
   constructor(private manualJournalsApplication: ManualJournalsApplication) { }
 
   @Post('validate-bulk-delete')
+  @RequirePermission(ManualJournalAction.Delete, AbilitySubject.ManualJournal)
   @ApiOperation({
     summary:
       'Validate which manual journals can be deleted and return the results.',
@@ -60,6 +68,7 @@ export class ManualJournalsController {
   }
 
   @Post('bulk-delete')
+  @RequirePermission(ManualJournalAction.Delete, AbilitySubject.ManualJournal)
   @ApiOperation({ summary: 'Deletes multiple manual journals.' })
   @ApiResponse({
     status: 200,
@@ -75,6 +84,7 @@ export class ManualJournalsController {
   }
 
   @Post()
+  @RequirePermission(ManualJournalAction.Create, AbilitySubject.ManualJournal)
   @ApiOperation({ summary: 'Create a new manual journal.' })
   @ApiResponse({
     status: 201,
@@ -86,6 +96,7 @@ export class ManualJournalsController {
   }
 
   @Put(':id')
+  @RequirePermission(ManualJournalAction.Edit, AbilitySubject.ManualJournal)
   @ApiOperation({ summary: 'Edit the given manual journal.' })
   @ApiResponse({
     status: 200,
@@ -110,6 +121,7 @@ export class ManualJournalsController {
   }
 
   @Delete(':id')
+  @RequirePermission(ManualJournalAction.Delete, AbilitySubject.ManualJournal)
   @ApiOperation({ summary: 'Delete the given manual journal.' })
   @ApiResponse({
     status: 200,
@@ -127,6 +139,7 @@ export class ManualJournalsController {
   }
 
   @Patch(':id/publish')
+  @RequirePermission(ManualJournalAction.Edit, AbilitySubject.ManualJournal)
   @ApiOperation({ summary: 'Publish the given manual journal.' })
   @ApiResponse({
     status: 200,
@@ -147,6 +160,7 @@ export class ManualJournalsController {
   }
 
   @Get(':id')
+  @RequirePermission(ManualJournalAction.View, AbilitySubject.ManualJournal)
   @ApiOperation({ summary: 'Retrieves the manual journal details.' })
   @ApiResponse({
     status: 200,
@@ -167,6 +181,7 @@ export class ManualJournalsController {
   }
 
   @Get()
+  @RequirePermission(ManualJournalAction.View, AbilitySubject.ManualJournal)
   @ApiOperation({ summary: 'Retrieves the manual journals paginated list.' })
   @ApiResponse({
     status: 200,
@@ -179,7 +194,7 @@ export class ManualJournalsController {
     },
   })
   @ApiResponse({ status: 404, description: 'The manual journal not found.' })
-  public getManualJournals(@Query() filterDto: Partial<IManualJournalsFilter>) {
+  public getManualJournals(@Query() filterDto: GetManualJournalsQueryDto) {
     return this.manualJournalsApplication.getManualJournals(filterDto);
   }
 }

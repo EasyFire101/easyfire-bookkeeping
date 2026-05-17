@@ -27,8 +27,8 @@ export class SendInviteUsersMailMessage {
     invite: ModelObject<UserInvite>,
   ) {
     const tenant = await this.tenancyContext.getTenant(true);
-    const root = path.join(global.__views_dir, '/images/bigcapital.png');
-    const baseURL = this.configService.get('baseURL');
+    const root = path.join(global.__images_dirname, '/bigcapital.png');
+    const baseURL = this.configService.get('app.baseUrl');
 
     const mail = new Mail()
       .setSubject(`${fromUser.firstName} has invited you to join a Bigcapital`)

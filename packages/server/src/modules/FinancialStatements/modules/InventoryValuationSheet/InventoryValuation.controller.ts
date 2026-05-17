@@ -1,19 +1,26 @@
 import { Response } from 'express';
 import {
+  ApiExtraModels,
   ApiOperation,
   ApiProduces,
   ApiResponse,
   ApiTags,
+  getSchemaPath,
 } from '@nestjs/swagger';
 import { Controller, Get, Headers, Query, Res } from '@nestjs/common';
 import { InventoryValuationSheetApplication } from './InventoryValuationSheetApplication';
 import { InventoryValuationQueryDto } from './InventoryValuationQuery.dto';
 import { AcceptType } from '@/constants/accept-type';
+import {
+  InventoryValuationResponseDto,
+  InventoryValuationTableResponseDto,
+} from './InventoryValuationResponse.dto';
 import { ApiCommonHeaders } from '@/common/decorators/ApiCommonHeaders';
 
 @Controller('reports/inventory-valuation')
 @ApiTags('Reports')
 @ApiCommonHeaders()
+@ApiExtraModels(InventoryValuationResponseDto, InventoryValuationTableResponseDto)
 export class InventoryValuationController {
   constructor(
     private readonly inventoryValuationApp: InventoryValuationSheetApplication,
@@ -24,6 +31,14 @@ export class InventoryValuationController {
   @ApiResponse({
     status: 200,
     description: 'The inventory valuation sheet',
+    content: {
+      [AcceptType.ApplicationJson]: {
+        schema: { $ref: getSchemaPath(InventoryValuationResponseDto) },
+      },
+      [AcceptType.ApplicationJsonTable]: {
+        schema: { $ref: getSchemaPath(InventoryValuationTableResponseDto) },
+      },
+    },
   })
   @ApiProduces(
     AcceptType.ApplicationJson,

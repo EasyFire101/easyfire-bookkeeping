@@ -12,6 +12,7 @@ import { InventoryCostLotTracker } from '@/modules/InventoryCost/models/Inventor
 import { FinancialSheet } from '../../common/FinancialSheet';
 import { InventoryValuationSheetRepository } from './InventoryValuationSheetRepository';
 import { allPassedConditionsPass } from '@/utils/all-conditions-passed';
+import { IFinancialReportMeta, DEFAULT_REPORT_META } from '../../types/Report.types';
 
 export class InventoryValuationSheet extends FinancialSheet {
   readonly query: IInventoryValuationReportQuery;
@@ -21,16 +22,20 @@ export class InventoryValuationSheet extends FinancialSheet {
    * Constructor method.
    * @param {IInventoryValuationReportQuery} query - Inventory valuation query.
    * @param {InventoryValuationSheetRepository} repository - Inventory valuation sheet repository.
+   * @param {IFinancialReportMeta} meta - Report meta.
    */
   constructor(
     query: IInventoryValuationReportQuery,
     repository: InventoryValuationSheetRepository,
+    meta: IFinancialReportMeta,
   ) {
     super();
 
     this.query = query;
     this.repository = repository;
+    this.baseCurrency = meta.baseCurrency;
     this.numberFormat = this.query.numberFormat;
+    this.dateFormat = meta.dateFormat || DEFAULT_REPORT_META.dateFormat;
   }
 
   /**

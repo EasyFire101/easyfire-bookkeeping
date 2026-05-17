@@ -26,7 +26,7 @@ export class CreditNoteAppliedInvoice extends BaseModel {
    * Timestamps columns.
    */
   get timestamps() {
-    return ['created_at', 'updated_at'];
+    return ['createdAt', 'updatedAt'];
   }
 
   /**

@@ -10,18 +10,34 @@ import {
 import { AcceptType } from '@/constants/accept-type';
 import { SalesByItemsApplication } from './SalesByItemsApplication';
 import { Response } from 'express';
-import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
+import { ApiExtraModels, ApiOperation, ApiResponse, ApiTags, getSchemaPath } from '@nestjs/swagger';
 import { SalesByItemsQueryDto } from './SalesByItemsQuery.dto';
+import {
+  SalesByItemsResponseDto,
+  SalesByItemsTableResponseDto,
+} from './SalesByItemsResponse.dto';
 import { ApiCommonHeaders } from '@/common/decorators/ApiCommonHeaders';
 
 @Controller('/reports/sales-by-items')
 @ApiTags('Reports')
 @ApiCommonHeaders()
+@ApiExtraModels(SalesByItemsResponseDto, SalesByItemsTableResponseDto)
 export class SalesByItemsController {
   constructor(private readonly salesByItemsApp: SalesByItemsApplication) {}
 
   @Get()
-  @ApiResponse({ status: 200, description: 'Sales by items report' })
+  @ApiResponse({
+    status: 200,
+    description: 'Sales by items report',
+    content: {
+      [AcceptType.ApplicationJson]: {
+        schema: { $ref: getSchemaPath(SalesByItemsResponseDto) },
+      },
+      [AcceptType.ApplicationJsonTable]: {
+        schema: { $ref: getSchemaPath(SalesByItemsTableResponseDto) },
+      },
+    },
+  })
   @ApiOperation({
     summary: 'Sales by items report',
     description: 'Retrieves the sales by items report.',

@@ -25,8 +25,8 @@ import {
   CreateSaleReceiptDto,
   EditSaleReceiptDto,
 } from './dtos/SaleReceipt.dto';
+import { GetSaleReceiptsQueryDto } from './dtos/GetSaleReceiptsQuery.dto';
 import {
-  ISalesReceiptsFilter,
   SaleReceiptMailOptsDTO,
 } from './types/SaleReceipts.types';
 import { AcceptType } from '@/constants/accept-type';
@@ -206,7 +206,7 @@ export class SaleReceiptsController {
       ],
     },
   })
-  getSaleReceipts(@Query() filterDTO: Partial<ISalesReceiptsFilter>) {
+  getSaleReceipts(@Query() filterDTO: GetSaleReceiptsQueryDto) {
     return this.saleReceiptApplication.getSaleReceipts(filterDTO);
   }
 

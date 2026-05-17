@@ -36,13 +36,16 @@ export class TransactionsByCustomersSheet {
     this.transactionsByCustomersRepository.setFilter(filter);
     await this.transactionsByCustomersRepository.asyncInit();
 
+    // Retrieve the meta first to get date format.
+    const meta = await this.transactionsByCustomersMeta.meta(filter);
+
     // Transactions by customers data mapper.
     const reportInstance = new TransactionsByCustomers(
       filter,
       this.transactionsByCustomersRepository,
       this.i18n,
+      { baseCurrency: meta.baseCurrency, dateFormat: meta.dateFormat },
     );
-    const meta = await this.transactionsByCustomersMeta.meta(filter);
 
     // Triggers `onCustomerTransactionsViewed` event.
     await this.eventPublisher.emitAsync(

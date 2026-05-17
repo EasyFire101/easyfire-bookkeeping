@@ -8,6 +8,7 @@ export interface IJournalReportQuery {
     noCents: boolean;
     divideOn1000: boolean;
   };
+  dateFormat?: string;
   transactionType: string;
   transactionId: string;
 

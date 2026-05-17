@@ -1,9 +1,11 @@
 import { Controller, Get, Headers, Query, Res } from '@nestjs/common';
 import {
+  ApiExtraModels,
   ApiOperation,
   ApiProduces,
   ApiResponse,
   ApiTags,
+  getSchemaPath,
 } from '@nestjs/swagger';
 import { castArray } from 'lodash';
 import { Response } from 'express';
@@ -11,11 +13,16 @@ import { AcceptType } from '@/constants/accept-type';
 import { TrialBalanceSheetApplication } from './TrialBalanceSheetApplication';
 import { TrialBalanceSheetQueryDto } from './TrialBalanceSheetQuery.dto';
 import { TrialBalanceSheetResponseExample } from './TrialBalanceSheet.swagger';
+import {
+  TrialBalanceSheetResponseDto,
+  TrialBalanceSheetTableResponseDto,
+} from './TrialBalanceSheetResponse.dto';
 import { ApiCommonHeaders } from '@/common/decorators/ApiCommonHeaders';
 
 @Controller('reports/trial-balance-sheet')
 @ApiTags('Reports')
 @ApiCommonHeaders()
+@ApiExtraModels(TrialBalanceSheetResponseDto, TrialBalanceSheetTableResponseDto)
 export class TrialBalanceSheetController {
   constructor(
     private readonly trialBalanceSheetApp: TrialBalanceSheetApplication,
@@ -26,7 +33,15 @@ export class TrialBalanceSheetController {
   @ApiResponse({
     status: 200,
     description: 'Trial balance sheet',
-    example: TrialBalanceSheetResponseExample,
+    content: {
+      [AcceptType.ApplicationJson]: {
+        schema: { $ref: getSchemaPath(TrialBalanceSheetResponseDto) },
+        example: TrialBalanceSheetResponseExample,
+      },
+      [AcceptType.ApplicationJsonTable]: {
+        schema: { $ref: getSchemaPath(TrialBalanceSheetTableResponseDto) },
+      },
+    },
   })
   @ApiProduces(
     AcceptType.ApplicationJson,

@@ -8,8 +8,8 @@ import {
   VendorFormProvider,
   useVendorFormContext,
 } from '@/containers/Vendors/VendorForm/VendorFormProvider';
-import VendorFormFormik, {
-  VendorFormHeaderPrimary,
+import {
+  VendorFormFormik,
 } from '@/containers/Vendors/VendorForm/VendorFormFormik';
 
 import { withDrawerActions } from '@/containers/Drawer/withDrawerActions';
@@ -62,13 +62,11 @@ function QuickVendorFormDrawer({
   return (
     <VendorFormProvider vendorId={vendorId}>
       <DrawerVendorFormLoading>
-        <VendorFormCard>
           <VendorFormFormik
             initialValues={{ first_name: displayName }}
             onSubmitSuccess={handleSubmitSuccess}
             onCancel={handleCancelForm}
           />
-        </VendorFormCard>
       </DrawerVendorFormLoading>
     </VendorFormProvider>
   );
@@ -79,20 +77,3 @@ export default R.compose(
   withDashboardActions,
 )(QuickVendorFormDrawer);
 
-const VendorFormCard = styled(Card)`
-  margin: 15px;
-  padding: 25px;
-  margin-bottom: calc(15px + 65px);
-
-  ${VendorFormHeaderPrimary} {
-    padding-top: 0;
-  }
-  .page-form {
-    padding: 0;
-
-    &__floating-actions {
-      margin-left: -41px;
-      margin-right: -41px;
-    }
-  }
-`;

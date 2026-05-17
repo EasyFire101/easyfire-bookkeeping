@@ -18,7 +18,7 @@ const estimatePreviewCss = css`
 
 export const EstimateSendMailReceiptPreview = () => {
   return (
-    <Stack>
+    <Stack spacing={0}>
       <EstimateSendMailPreviewHeader />
 
       <Stack px={4} py={6}>

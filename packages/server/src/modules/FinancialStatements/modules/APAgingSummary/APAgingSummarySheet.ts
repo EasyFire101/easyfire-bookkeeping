@@ -14,6 +14,7 @@ import { allPassedConditionsPass } from '@/utils/all-conditions-passed';
 import { APAgingSummaryRepository } from './APAgingSummaryRepository';
 import { Bill } from '@/modules/Bills/models/Bill';
 import { APAgingSummaryQueryDto } from './APAgingSummaryQuery.dto';
+import { IFinancialReportMeta, DEFAULT_REPORT_META } from '../../types/Report.types';
 
 export class APAgingSummarySheet extends AgingSummaryReport {
   readonly repository: APAgingSummaryRepository;
@@ -31,12 +32,15 @@ export class APAgingSummarySheet extends AgingSummaryReport {
   constructor(
     query: APAgingSummaryQueryDto,
     repository: APAgingSummaryRepository,
+    meta: IFinancialReportMeta,
   ) {
     super();
 
     this.query = query;
     this.repository = repository;
+    this.baseCurrency = meta.baseCurrency;
     this.numberFormat = this.query.numberFormat;
+    this.dateFormat = meta.dateFormat || DEFAULT_REPORT_META.dateFormat;
 
     this.overdueInvoicesByContactId = this.repository.overdueBillsByVendorId;
     this.currentInvoicesByContactId = this.repository.dueBillsByVendorId;

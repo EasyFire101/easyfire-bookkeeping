@@ -84,6 +84,20 @@ export const handleBooleanChange = (handler) => {
   return (event) => handler(event.target.checked);
 };
 
+/**
+ * Parses a value to boolean (handles 1, 0, '1', '0', true, false).
+ * @param {*} value
+ * @param {boolean} defaultValue - value when empty/unknown
+ * @returns {boolean}
+ */
+export const parseBoolean = (value, defaultValue = false) => {
+  if (typeof value === 'boolean') return value;
+  if (value === 1 || value === '1') return true;
+  if (value === 0 || value === '0') return false;
+  if (value == null || value === '') return defaultValue;
+  return Boolean(value);
+};
+
 /** Event handler that exposes the target element's value as a string. */
 export const handleStringChange = (handler) => {
   return (event) => handler(event.target.value);

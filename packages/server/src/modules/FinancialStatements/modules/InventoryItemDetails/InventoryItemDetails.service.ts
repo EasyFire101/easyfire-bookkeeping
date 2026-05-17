@@ -8,6 +8,7 @@ import { InventoryDetails } from './InventoryItemDetails';
 import { InventoryItemDetailsRepository } from './InventoryItemDetailsRepository';
 import { InventoryDetailsMetaInjectable } from './InventoryItemDetailsMeta';
 import { getInventoryItemDetailsDefaultQuery } from './constant';
+import { TenancyContext } from '@/modules/Tenancy/TenancyContext.service';
 
 @Injectable()
 export class InventoryDetailsService {
@@ -15,6 +16,7 @@ export class InventoryDetailsService {
     private readonly inventoryItemDetailsRepository: InventoryItemDetailsRepository,
     private readonly inventoryDetailsMeta: InventoryDetailsMetaInjectable,
     private readonly i18n: I18nService,
+    private readonly tenancyContext: TenancyContext,
   ) {}
 
   /**
@@ -34,13 +36,16 @@ export class InventoryDetailsService {
     this.inventoryItemDetailsRepository.setFilter(filter);
     await this.inventoryItemDetailsRepository.asyncInit();
 
+    // Retrieve the meta first to get date format.
+    const meta = await this.inventoryDetailsMeta.meta(query);
+
     // Inventory details report mapper.
     const inventoryDetailsInstance = new InventoryDetails(
       filter,
       this.inventoryItemDetailsRepository,
       this.i18n,
+      { baseCurrency: meta.baseCurrency, dateFormat: meta.dateFormat },
     );
-    const meta = await this.inventoryDetailsMeta.meta(query);
 
     return {
       data: inventoryDetailsInstance.reportData(),

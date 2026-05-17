@@ -7,6 +7,7 @@ import { GetExpenseService } from './queries/GetExpense.service';
 import { IExpensesFilter } from './interfaces/Expenses.interface';
 import { GetExpensesService } from './queries/GetExpenses.service';
 import { CreateExpenseDto, EditExpenseDto } from './dtos/Expense.dto';
+import { GetExpensesQueryDto } from './dtos/GetExpensesQuery.dto';
 import { BulkDeleteExpensesService } from './BulkDeleteExpenses.service';
 import { ValidateBulkDeleteExpensesService } from './ValidateBulkDeleteExpenses.service';
 
@@ -95,9 +96,9 @@ export class ExpensesApplication {
 
   /**
    * Retrieve expenses paginated list.
-   * @param  {IExpensesFilter} expensesFilter
+   * @param  {GetExpensesQueryDto} filterDTO
    */
-  public getExpenses(filterDTO: Partial<IExpensesFilter>) {
+  public getExpenses(filterDTO: GetExpensesQueryDto) {
     return this.getExpensesService.getExpensesList(filterDTO);
   }
 }

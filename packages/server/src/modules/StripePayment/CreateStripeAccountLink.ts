@@ -12,4 +12,12 @@ export class CreateStripeAccountLinkService {
   public createAccountLink(stripeAccountId: string) {
     return this.stripePaymentService.createAccountLink(stripeAccountId);
   }
+
+  /**
+   * Creates a Stripe account session for the Connect embedded component.
+   * @param {string} accountId - Stripe Connect account ID.
+   */
+  public createAccountSession(accountId: string) {
+    return this.stripePaymentService.createAccountSession(accountId);
+  }
 }

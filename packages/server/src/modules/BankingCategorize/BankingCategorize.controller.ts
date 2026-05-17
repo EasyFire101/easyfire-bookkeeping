@@ -2,7 +2,14 @@ import { Body, Controller, Delete, Param, Post, Query } from '@nestjs/common';
 import { castArray, omit } from 'lodash';
 import { BankingCategorizeApplication } from './BankingCategorize.application';
 import { CategorizeBankTransactionRouteDto } from './dtos/CategorizeBankTransaction.dto';
-import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
+import {
+  ApiBody,
+  ApiOperation,
+  ApiParam,
+  ApiQuery,
+  ApiResponse,
+  ApiTags,
+} from '@nestjs/swagger';
 import { ApiCommonHeaders } from '@/common/decorators/ApiCommonHeaders';
 
 @Controller('banking/categorize')
@@ -15,6 +22,7 @@ export class BankingCategorizeController {
 
   @Post()
   @ApiOperation({ summary: 'Categorize bank transactions.' })
+  @ApiBody({ type: CategorizeBankTransactionRouteDto })
   @ApiResponse({
     status: 200,
     description: 'The bank transactions have been categorized successfully.',
@@ -29,21 +37,38 @@ export class BankingCategorizeController {
   }
 
   @Delete('/bulk')
-  @ApiOperation({ summary: 'Uncategorize bank transactions.' })
+  @ApiOperation({ summary: 'Uncategorize bank transactions in bulk.' })
+  @ApiQuery({
+    name: 'uncategorizedTransactionIds',
+    required: true,
+    type: [Number],
+    isArray: true,
+    description: 'Array of uncategorized transaction IDs to uncategorize',
+  })
   @ApiResponse({
     status: 200,
     description: 'The bank transactions have been uncategorized successfully.',
   })
   public uncategorizeTransactionsBulk(
-    @Query() uncategorizedTransactionIds: number[] | number,
+    @Query('uncategorizedTransactionIds')
+    uncategorizedTransactionIds: number[] | number,
   ) {
+    const ids = castArray(uncategorizedTransactionIds).map((id) =>
+      Number(id),
+    );
     return this.bankingCategorizeApplication.uncategorizeTransactionsBulk(
-      castArray(uncategorizedTransactionIds),
+      ids,
     );
   }
 
   @Delete('/:id')
   @ApiOperation({ summary: 'Uncategorize a bank transaction.' })
+  @ApiParam({
+    name: 'id',
+    required: true,
+    type: Number,
+    description: 'Uncategorized transaction ID to uncategorize',
+  })
   @ApiResponse({
     status: 200,
     description: 'The bank transaction has been uncategorized successfully.',

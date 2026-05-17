@@ -1,5 +1,5 @@
 import { ModuleRef } from '@nestjs/core';
-import bluebird from 'bluebird';
+import * as bluebird from 'bluebird';
 import { Knex } from 'knex';
 import {
   validateLinkModelEntryExists,
@@ -53,7 +53,8 @@ export class LinkAttachment {
     const foundLinkModel = await LinkModel().query(trx).findById(modelId);
     validateLinkModelEntryExists(foundLinkModel);
 
-    const foundLinks = await this.documentLinkModel().query(trx)
+    const foundLinks = await this.documentLinkModel()
+      .query(trx)
       .where('modelRef', modelRef)
       .where('modelId', modelId)
       .where('documentId', foundFile.id);
@@ -70,7 +71,7 @@ export class LinkAttachment {
 
   /**
    * Links the given file keys to the given model type and id.
-   * @param {string[]} filekeys - File keys. 
+   * @param {string[]} filekeys - File keys.
    * @param {string} modelRef - Model reference.
    * @param {number} modelId - Model id.
    * @param {Knex.Transaction} trx - Knex transaction.

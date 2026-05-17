@@ -2,7 +2,6 @@
 import intl from 'react-intl-universal';
 import React from 'react';
 
-import { FormatDateCell } from '@/components';
 import { useAccountDrawerTableOptionsContext } from './AccountDrawerTableOptionsProvider';
 
 /**
@@ -15,8 +14,7 @@ export const useAccountReadEntriesColumns = () => {
     () => [
       {
         Header: intl.get('transaction_date'),
-        accessor: 'date',
-        Cell: FormatDateCell,
+        accessor: 'formatted_date',
         width: 110,
         textOverview: true,
       },

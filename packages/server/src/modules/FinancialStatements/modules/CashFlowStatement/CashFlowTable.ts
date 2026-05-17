@@ -239,7 +239,7 @@ export class CashFlowTable {
     section: ICashFlowStatementSection,
   ): ICashFlowStatementSection => {
     const label = section.footerLabel
-      ? section.footerLabel
+      ? this.i18n.t(section.footerLabel)
       : this.i18n.t('financial_sheet.total_row', {
           args: { value: section.label },
         });
@@ -302,7 +302,7 @@ export class CashFlowTable {
    * @returns {ITableColumn}
    */
   private totalColumns = (): ITableColumn[] => {
-    return [{ key: 'total', label: this.i18n.t('Total') }];
+    return [{ key: 'total', label: this.i18n.t('cash_flow_statement.total') }];
   };
 
   /**
@@ -366,7 +366,7 @@ export class CashFlowTable {
    */
   public tableColumns = (): ITableColumn[] => {
     return R.compose(
-      R.concat([{ key: 'name', label: this.i18n.t('Account name') }]),
+      R.concat([{ key: 'name', label: this.i18n.t('cash_flow_statement.account_name') }]),
       R.when(
         R.always(this.isDisplayColumnsBy(DISPLAY_COLUMNS_BY.DATE_PERIODS)),
         R.concat(this.datePeriodsColumns()),

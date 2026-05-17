@@ -12,6 +12,7 @@ import { Item } from '@/modules/Items/models/Item';
 import { transformToMap } from '@/utils/transform-to-key';
 import { allPassedConditionsPass } from '@/utils/all-conditions-passed';
 import { InventoryTransaction } from '@/modules/InventoryCost/models/InventoryTransaction';
+import { IFinancialReportMeta, DEFAULT_REPORT_META } from '../../types/Report.types';
 
 export class SalesByItemsReport extends FinancialSheet {
   readonly baseCurrency: string;
@@ -24,21 +25,22 @@ export class SalesByItemsReport extends FinancialSheet {
    * @param {ISalesByItemsReportQuery} query
    * @param {IItem[]} items
    * @param {IAccountTransaction[]} itemsTransactions
-   * @param {string} baseCurrency
+   * @param {IFinancialReportMeta} meta
    */
   constructor(
     query: ISalesByItemsReportQuery,
     items: Item[],
     itemsTransactions: ModelObject<InventoryTransaction>[],
-    baseCurrency: string,
+    meta: IFinancialReportMeta,
   ) {
     super();
 
-    this.baseCurrency = baseCurrency;
+    this.baseCurrency = meta.baseCurrency;
     this.items = items;
     this.itemsTransactions = transformToMap(itemsTransactions, 'itemId');
     this.query = query;
     this.numberFormat = this.query.numberFormat;
+    this.dateFormat = meta.dateFormat || DEFAULT_REPORT_META.dateFormat;
   }
 
   /**

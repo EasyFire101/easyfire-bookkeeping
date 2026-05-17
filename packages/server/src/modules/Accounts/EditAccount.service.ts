@@ -7,6 +7,7 @@ import { UnitOfWork } from '../Tenancy/TenancyDB/UnitOfWork.service';
 import { events } from '@/common/events/events';
 import { EditAccountDTO } from './EditAccount.dto';
 import { TenantModelProxy } from '../System/models/TenantBaseModel';
+import { AccountsSettingsService } from './AccountsSettings.service';
 
 @Injectable()
 export class EditAccount {
@@ -17,7 +18,8 @@ export class EditAccount {
 
     @Inject(Account.name)
     private readonly accountModel: TenantModelProxy<typeof Account>,
-  ) { }
+    private readonly accountsSettings: AccountsSettingsService,
+  ) {}
 
   /**
    * Authorize the account editing.
@@ -30,6 +32,24 @@ export class EditAccount {
     accountDTO: EditAccountDTO,
     oldAccount: Account,
   ) => {
+    const { accountCodeRequired, accountCodeUnique } =
+      await this.accountsSettings.getAccountsSettings();
+
+    // Validate account code required when setting is enabled.
+    if (accountCodeRequired) {
+      this.validator.validateAccountCodeRequiredOrThrow(accountDTO.code);
+    }
+    // Validate the account code uniquiness when setting is enabled.
+    if (
+      accountCodeUnique &&
+      accountDTO.code?.trim() &&
+      accountDTO.code !== oldAccount.code
+    ) {
+      await this.validator.isAccountCodeUniqueOrThrowError(
+        accountDTO.code,
+        oldAccount.id,
+      );
+    }
     // Validate account name uniquiness.
     await this.validator.validateAccountNameUniquiness(
       accountDTO.name,
@@ -40,13 +60,6 @@ export class EditAccount {
       oldAccount,
       accountDTO,
     );
-    // Validate the account code not exists on the storage.
-    if (accountDTO.code && accountDTO.code !== oldAccount.code) {
-      await this.validator.isAccountCodeUniqueOrThrowError(
-        accountDTO.code,
-        oldAccount.id,
-      );
-    }
     // Retrieve the parent account of throw not found service error.
     if (accountDTO.parentAccountId) {
       const parentAccount = await this.validator.getParentAccountOrThrowError(

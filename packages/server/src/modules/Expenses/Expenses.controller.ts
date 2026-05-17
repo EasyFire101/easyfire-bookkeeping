@@ -7,9 +7,10 @@ import {
   Post,
   Put,
   Query,
+  UseGuards,
 } from '@nestjs/common';
 import { ExpensesApplication } from './ExpensesApplication.service';
-import { IExpensesFilter } from './Expenses.types';
+import { GetExpensesQueryDto } from './dtos/GetExpensesQuery.dto';
 import {
   ApiExtraModels,
   ApiOperation,
@@ -25,6 +26,11 @@ import {
   BulkDeleteDto,
   ValidateBulkDeleteResponseDto,
 } from '@/common/dtos/BulkDelete.dto';
+import { RequirePermission } from '@/modules/Roles/RequirePermission.decorator';
+import { PermissionGuard } from '@/modules/Roles/Permission.guard';
+import { AuthorizationGuard } from '@/modules/Roles/Authorization.guard';
+import { AbilitySubject } from '@/modules/Roles/Roles.types';
+import { ExpenseAction } from './Expenses.types';
 
 @Controller('expenses')
 @ApiTags('Expenses')
@@ -34,10 +40,12 @@ import {
   ValidateBulkDeleteResponseDto,
 )
 @ApiCommonHeaders()
+@UseGuards(AuthorizationGuard, PermissionGuard)
 export class ExpensesController {
   constructor(private readonly expensesApplication: ExpensesApplication) { }
 
   @Post('validate-bulk-delete')
+  @RequirePermission(ExpenseAction.Delete, AbilitySubject.Expense)
   @ApiOperation({
     summary: 'Validate which expenses can be deleted and return the results.',
   })
@@ -58,6 +66,7 @@ export class ExpensesController {
   }
 
   @Post('bulk-delete')
+  @RequirePermission(ExpenseAction.Delete, AbilitySubject.Expense)
   @ApiOperation({ summary: 'Deletes multiple expenses.' })
   @ApiResponse({
     status: 200,
@@ -76,6 +85,7 @@ export class ExpensesController {
    * @param {IExpenseCreateDTO} expenseDTO
    */
   @Post()
+  @RequirePermission(ExpenseAction.Create, AbilitySubject.Expense)
   @ApiOperation({ summary: 'Create a new expense transaction.' })
   public createExpense(@Body() expenseDTO: CreateExpenseDto) {
     return this.expensesApplication.createExpense(expenseDTO);
@@ -87,6 +97,7 @@ export class ExpensesController {
    * @param {IExpenseEditDTO} expenseDTO
    */
   @Put(':id')
+  @RequirePermission(ExpenseAction.Edit, AbilitySubject.Expense)
   @ApiOperation({ summary: 'Edit the given expense transaction.' })
   public editExpense(
     @Param('id') expenseId: number,
@@ -100,6 +111,7 @@ export class ExpensesController {
    * @param {number} expenseId
    */
   @Delete(':id')
+  @RequirePermission(ExpenseAction.Delete, AbilitySubject.Expense)
   @ApiOperation({ summary: 'Delete the given expense transaction.' })
   public deleteExpense(@Param('id') expenseId: number) {
     return this.expensesApplication.deleteExpense(expenseId);
@@ -110,6 +122,7 @@ export class ExpensesController {
    * @param {number} expenseId
    */
   @Post(':id/publish')
+  @RequirePermission(ExpenseAction.Edit, AbilitySubject.Expense)
   @ApiOperation({ summary: 'Publish the given expense transaction.' })
   public publishExpense(@Param('id') expenseId: number) {
     return this.expensesApplication.publishExpense(expenseId);
@@ -119,6 +132,7 @@ export class ExpensesController {
    * Get the expense transaction details.
    */
   @Get()
+  @RequirePermission(ExpenseAction.View, AbilitySubject.Expense)
   @ApiOperation({ summary: 'Get the expense transactions.' })
   @ApiResponse({
     status: 200,
@@ -137,7 +151,7 @@ export class ExpensesController {
       ],
     },
   })
-  public getExpenses(@Query() filterDTO: IExpensesFilter) {
+  public getExpenses(@Query() filterDTO: GetExpensesQueryDto) {
     return this.expensesApplication.getExpenses(filterDTO);
   }
 
@@ -146,6 +160,7 @@ export class ExpensesController {
    * @param {number} expenseId
    */
   @Get(':id')
+  @RequirePermission(ExpenseAction.View, AbilitySubject.Expense)
   @ApiOperation({ summary: 'Get the expense transaction details.' })
   @ApiResponse({
     status: 200,

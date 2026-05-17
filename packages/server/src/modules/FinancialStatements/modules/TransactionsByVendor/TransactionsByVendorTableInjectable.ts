@@ -25,7 +25,7 @@ export class TransactionsByVendorTableInjectable {
     const sheet = await this.transactionsByVendor.transactionsByVendors(
       query
     );
-    const table = new TransactionsByVendorsTable(sheet.data, this.i18n);
+    const table = new TransactionsByVendorsTable(sheet.data, this.i18n, sheet.meta.dateFormat);
 
     return {
       table: {

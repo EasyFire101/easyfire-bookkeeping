@@ -60,8 +60,8 @@ function TransactionTypeFields() {
             <FAccountsSuggestField
               name={'cashflow_account_id'}
               items={cashflowAccounts}
-              onItemSelect={({ id }) => {
-                setAccountId(id);
+              onItemChange={(value) => {
+                setAccountId(value);
               }}
             />
           </FFormGroup>

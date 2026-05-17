@@ -13,6 +13,7 @@ import { BrandingTemplateDTOTransformer } from './BrandingTemplateDTOTransformer
 import { GetOrganizationBrandingAttributesService } from './queries/GetOrganizationBrandingAttributes.service';
 import { GetPdfTemplates } from './queries/GetPdfTemplates.service';
 import { GetPdfTemplateBrandingState } from './queries/GetPdfTemplateBrandingState.service';
+import { AttachmentsModule } from '../Attachments/Attachment.module';
 
 @Module({
   exports: [
@@ -20,7 +21,7 @@ import { GetPdfTemplateBrandingState } from './queries/GetPdfTemplateBrandingSta
     BrandingTemplateDTOTransformer,
     GetOrganizationBrandingAttributesService,
   ],
-  imports: [TenancyDatabaseModule],
+  imports: [TenancyDatabaseModule, AttachmentsModule],
   controllers: [PdfTemplatesController],
   providers: [
     PdfTemplateApplication,

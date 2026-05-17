@@ -30,17 +30,18 @@ export class JournalSheetService {
     this.journalRepository.setFilter(query);
     await this.journalRepository.load();
 
+    // Retrieve the journal sheet meta first to get the date format.
+    const meta = await this.journalSheetMeta.meta(filter);
+
     // Journal report instance.
     const journalSheetInstance = new JournalSheet(
       filter,
       this.journalRepository,
       this.i18n,
+      { baseCurrency: meta.baseCurrency, dateFormat: meta.dateFormat },
     );
     // Retrieve journal report columns.
     const journalSheetData = journalSheetInstance.reportData();
-
-    // Retrieve the journal sheet meta.
-    const meta = await this.journalSheetMeta.meta(filter);
 
     // Triggers `onJournalViewed` event.
     await this.eventPublisher.emitAsync(events.reports.onJournalViewed, {

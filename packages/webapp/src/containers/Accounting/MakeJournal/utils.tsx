@@ -213,17 +213,17 @@ export const currenciesFieldShouldUpdate = (newProps, oldProps) => {
 
 export const useSetPrimaryBranchToForm = () => {
   const { setFieldValue } = useFormikContext();
-  const { branches, isBranchesSuccess } = useMakeJournalFormContext();
+  const { branches, isBranchesSuccess, isNewMode } = useMakeJournalFormContext();
 
   React.useEffect(() => {
-    if (isBranchesSuccess) {
+    if (isBranchesSuccess && isNewMode) {
       const primaryBranch = branches.find((b) => b.primary) || first(branches);
 
       if (primaryBranch) {
         setFieldValue('branch_id', primaryBranch.id);
       }
     }
-  }, [isBranchesSuccess, setFieldValue, branches]);
+  }, [isBranchesSuccess, setFieldValue, branches, isNewMode]);
 };
 
 export const useManualJournalCreditTotal = () => {

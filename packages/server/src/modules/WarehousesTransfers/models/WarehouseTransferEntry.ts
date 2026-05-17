@@ -20,6 +20,13 @@ export class WarehouseTransferEntry extends TenantBaseModel {
   }
 
   /**
+   * Timestamps columns.
+   */
+  get timestamps() {
+    return [];
+  }
+
+  /**
    * Virtual attributes.
    */
   static get virtualAttributes() {

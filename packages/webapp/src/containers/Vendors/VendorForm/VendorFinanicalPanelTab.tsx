@@ -28,7 +28,7 @@ import { useCurrentOrganization } from '@/hooks/state';
 /**
  * Vendor Finaniceal Panel Tab.
  */
-export default function VendorFinanicalPanelTab() {
+export function VendorFinanicalPanelTab() {
   const { currencies, branches } = useVendorFormContext();
 
   // Sets the primary branch to form.
@@ -44,10 +44,12 @@ export default function VendorFinanicalPanelTab() {
             label={<T id={'currency'} />}
             fastField
             inline
+            fastField
           >
             <CurrencySelectList
               name="currency_code"
               items={currencies}
+              fastField
             />
           </FFormGroup>
 
@@ -93,16 +95,17 @@ function VendorOpeningBalanceField() {
     <FFormGroup
       name={'opening_balance'}
       label={<T id={'opening_balance'} />}
-      inline={true}
       shouldUpdate={openingBalanceFieldShouldUpdate}
       shouldUpdateDeps={{ currencyCode: values.currency_code }}
-      fastField={true}
+      inline
+      fastField
     >
       <ControlGroup>
         <InputPrependText text={values.currency_code} />
         <FMoneyInputGroup
           name={'opening_balance'}
           inputGroupProps={{ fill: true }}
+          fastField
         />
       </ControlGroup>
     </FFormGroup>
@@ -123,8 +126,9 @@ function VendorOpeningBalanceAtField() {
     <FFormGroup
       name={'opening_balance_at'}
       label={<T id={'opening_balance_at'} />}
-      inline={true}
       helperText={<ErrorMessage name="opening_balance_at" />}
+      inline
+      fastField
     >
       <FDateInput
         name={'opening_balance_at'}
@@ -132,7 +136,8 @@ function VendorOpeningBalanceAtField() {
         disabled={vendorId}
         formatDate={(date) => date.toLocaleDateString()}
         parseDate={(str) => new Date(str)}
-        fill={true}
+        fill
+        fastField
       />
     </FFormGroup>
   );
@@ -156,12 +161,14 @@ function VendorOpeningBalanceExchangeRateField() {
     <FFormGroup
       label={' '}
       name={'opening_balance_exchange_rate'}
-      inline={true}
+      inline
+      fastField
     >
       <ExchangeRateInputGroup
         fromCurrency={values.currency_code}
         toCurrency={currentOrganization.base_currency}
         name={'opening_balance_exchange_rate'}
+        fastField
       />
     </FFormGroup>
   );

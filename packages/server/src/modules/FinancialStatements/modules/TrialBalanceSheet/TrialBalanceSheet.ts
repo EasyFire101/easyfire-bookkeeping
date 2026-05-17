@@ -12,6 +12,7 @@ import { Account } from '@/modules/Accounts/models/Account.model';
 import { allPassedConditionsPass } from '@/utils/all-conditions-passed';
 import { ModelObject } from 'objection';
 import { flatToNestedArray } from '@/utils/flat-to-nested-array';
+import { IFinancialReportMeta, DEFAULT_REPORT_META } from '../../types/Report.types';
 
 export class TrialBalanceSheet extends FinancialSheet {
   /**
@@ -42,14 +43,15 @@ export class TrialBalanceSheet extends FinancialSheet {
   constructor(
     query: ITrialBalanceSheetQuery,
     repository: TrialBalanceSheetRepository,
-    baseCurrency: string
+    meta: IFinancialReportMeta,
   ) {
     super();
 
     this.query = query;
     this.repository = repository;
     this.numberFormat = this.query.numberFormat;
-    this.baseCurrency = baseCurrency;
+    this.baseCurrency = meta.baseCurrency;
+    this.dateFormat = meta.dateFormat || DEFAULT_REPORT_META.dateFormat;
   }
 
   /**
@@ -172,8 +174,11 @@ export class TrialBalanceSheet extends FinancialSheet {
   private filterNoneTransactions = (
     accountNode: ITrialBalanceAccount
   ): boolean => {
-    const accountLedger = this.repository.totalAccountsLedger.whereAccountId(
-      accountNode.id,
+    const depsAccountsIds =
+      this.repository.accountsDepGraph.dependenciesOf(accountNode.id);
+
+    const accountLedger = this.repository.totalAccountsLedger.whereAccountsIds(
+      [accountNode.id, ...depsAccountsIds]
     );
     return !accountLedger.isEmpty();
   };
@@ -241,8 +246,8 @@ export class TrialBalanceSheet extends FinancialSheet {
    */
   private accountsSection(accounts: ModelObject<Account>[]) {
     return R.compose(
-      this.nestedAccountsNode,
       this.accountsFilter,
+      this.nestedAccountsNode,
       this.accountsMapper
     )(accounts);
   }
@@ -250,7 +255,6 @@ export class TrialBalanceSheet extends FinancialSheet {
   /**
    * Retrieve trial balance sheet statement data.
    * Note: Retruns null in case there is no transactions between the given date periods.
-   *
    * @return {ITrialBalanceSheetData}
    */
   public reportData(): ITrialBalanceSheetData {

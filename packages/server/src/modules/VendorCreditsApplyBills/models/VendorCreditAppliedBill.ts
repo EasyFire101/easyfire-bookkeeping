@@ -26,7 +26,7 @@ export class VendorCreditAppliedBill extends BaseModel {
    * Timestamps columns.
    */
   public get timestamps() {
-    return ['created_at', 'updated_at'];
+    return ['createdAt', 'updatedAt'];
   }
 
   /**

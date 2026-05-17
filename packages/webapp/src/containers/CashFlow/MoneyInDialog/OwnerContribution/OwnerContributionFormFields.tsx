@@ -17,6 +17,7 @@ import {
   FTextArea,
   FInputGroup,
   FDateInput,
+  Icon,
 } from '@/components';
 import { ACCOUNT_TYPE, CLASSES, Features } from '@/constants';
 import {

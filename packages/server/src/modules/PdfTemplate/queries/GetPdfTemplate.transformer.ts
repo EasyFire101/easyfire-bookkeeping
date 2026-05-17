@@ -7,7 +7,7 @@ export class GetPdfTemplateTransformer extends Transformer {
    * @returns {string[]}
    */
   public includeAttributes = (): string[] => {
-    return ['createdAtFormatted', 'resourceFormatted', 'attributes'];
+    return ['createdAtFormatted', 'resourceFormatted', 'attributes', 'companyLogoUri'];
   };
 
   /**
@@ -26,6 +26,15 @@ export class GetPdfTemplateTransformer extends Transformer {
    */
   protected resourceFormatted = (template) => {
     // return getTransactionTypeLabel(template.resource);
+  };
+
+  /**
+   * Retrieves the company logo URI.
+   * @param {Object} template
+   * @returns {string | null}
+   */
+  protected companyLogoUri = (template) => {
+    return template.companyLogoUri;
   };
 
   /**

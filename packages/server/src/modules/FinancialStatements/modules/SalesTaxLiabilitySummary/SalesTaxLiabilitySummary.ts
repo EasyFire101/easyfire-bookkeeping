@@ -10,6 +10,7 @@ import { FinancialSheet } from '../../common/FinancialSheet';
 import { ModelObject } from 'objection';
 import { TaxRateModel } from '@/modules/TaxRates/models/TaxRate.model';
 import { SalesTaxLiabilitySummaryRepository } from './SalesTaxLiabilitySummaryRepository';
+import { IFinancialReportMeta, DEFAULT_REPORT_META } from '../../types/Report.types';
 
 export class SalesTaxLiabilitySummary extends FinancialSheet {
   private query: SalesTaxLiabilitySummaryQuery;
@@ -18,18 +19,20 @@ export class SalesTaxLiabilitySummary extends FinancialSheet {
   /**
    * Sales tax liability summary constructor.
    * @param {SalesTaxLiabilitySummaryQuery} query
-   * @param {ITaxRate[]} taxRates
-   * @param {SalesTaxLiabilitySummaryPayableById} payableTaxesById
-   * @param {SalesTaxLiabilitySummarySalesById} salesTaxesById
+   * @param {SalesTaxLiabilitySummaryRepository} repository
+   * @param {IFinancialReportMeta} meta
    */
   constructor(
     query: SalesTaxLiabilitySummaryQuery,
     repository: SalesTaxLiabilitySummaryRepository,
+    meta: IFinancialReportMeta,
   ) {
     super();
 
     this.query = query;
     this.repository = repository;
+    this.baseCurrency = meta.baseCurrency;
+    this.dateFormat = meta.dateFormat || DEFAULT_REPORT_META.dateFormat;
   }
 
   /**

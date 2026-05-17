@@ -18,7 +18,7 @@ const mailReceiptCss = css`
 
 export function PaymentReceivedMailPreviewReceipt() {
   return (
-    <Stack flex={1}>
+    <Stack flex={1} spacing={0}>
       <PaymentReceivedMailPreviewHeader />
 
       <Stack px={4} py={6}>

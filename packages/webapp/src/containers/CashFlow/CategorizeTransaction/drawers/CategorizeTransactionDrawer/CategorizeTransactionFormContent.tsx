@@ -92,7 +92,7 @@ function CategorizeTransactionFormSubContent() {
   } else if (values.transactionType === 'transfer_to_account') {
     return <CategorizeTransactionToAccount />;
     // Owner drawings.
-  } else if (values.transactionType === 'OwnerDrawing') {
+  } else if (values.transactionType === 'owner_drawing') {
     return <CategorizeTransactionOwnerDrawings />;
   }
   return null;

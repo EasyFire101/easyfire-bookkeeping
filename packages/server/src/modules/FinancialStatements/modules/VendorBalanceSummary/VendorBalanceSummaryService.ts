@@ -31,13 +31,15 @@ export class VendorBalanceSummaryService {
     this.vendorBalanceSummaryRepository.setFilter(filter);
     await this.vendorBalanceSummaryRepository.asyncInit();
 
+    // Retrieve the vendor balance summary meta first to get date format.
+    const meta = await this.vendorBalanceSummaryMeta.meta(filter);
+
     // Report instance.
     const reportInstance = new VendorBalanceSummaryReport(
       this.vendorBalanceSummaryRepository,
       filter,
+      { baseCurrency: meta.baseCurrency, dateFormat: meta.dateFormat },
     );
-    // Retrieve the vendor balance summary meta.
-    const meta = await this.vendorBalanceSummaryMeta.meta(filter);
 
     // Triggers `onVendorBalanceSummaryViewed` event.
     await this.eventEmitter.emitAsync(

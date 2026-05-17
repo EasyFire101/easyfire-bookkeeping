@@ -10,6 +10,10 @@ export class Setting extends BaseModel {
     return 'settings';
   }
 
+  get timestamps() {
+    return [];
+  }
+
   /**
    * Extra metadata query to query with the current authenticate user.
    * @param {Object} query

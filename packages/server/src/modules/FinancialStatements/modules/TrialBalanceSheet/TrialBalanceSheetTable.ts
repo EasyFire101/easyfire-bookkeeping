@@ -141,10 +141,10 @@ export class TrialBalanceSheetTable extends R.compose(
     return R.compose(
       this.tableColumnsCellIndexing,
       R.concat([
-        { key: 'account', label: 'Account' },
-        { key: 'debit', label: 'Debit' },
-        { key: 'credit', label: 'Credit' },
-        { key: 'total', label: 'Total' },
+        { key: 'account', label: this.i18n.t('trial_balance_sheet.account') },
+        { key: 'debit', label: this.i18n.t('trial_balance_sheet.debit') },
+        { key: 'credit', label: this.i18n.t('trial_balance_sheet.credit') },
+        { key: 'total', label: this.i18n.t('trial_balance_sheet.total') },
       ]),
     )([]);
   };

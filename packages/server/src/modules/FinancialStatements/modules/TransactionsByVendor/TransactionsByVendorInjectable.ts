@@ -36,13 +36,16 @@ export class TransactionsByVendorsInjectable {
     // Initialize the repository.
     await this.transactionsByVendorRepository.asyncInit();
 
-    // Transactions by customers data mapper.
+    // Retrieve the meta first to get date format.
+    const meta = await this.transactionsByVendorMeta.meta(filter);
+
+    // Transactions by vendors data mapper.
     const reportInstance = new TransactionsByVendor(
       this.transactionsByVendorRepository,
       filter,
       this.i18n,
+      { baseCurrency: meta.baseCurrency, dateFormat: meta.dateFormat },
     );
-    const meta = await this.transactionsByVendorMeta.meta(filter);
 
     // Triggers `onVendorTransactionsViewed` event.
     await this.eventPublisher.emitAsync(

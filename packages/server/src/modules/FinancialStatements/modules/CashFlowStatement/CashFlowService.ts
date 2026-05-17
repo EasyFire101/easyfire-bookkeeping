@@ -85,6 +85,9 @@ export class CashFlowStatementService {
     const cashLedger = Ledger.fromTransactions(cashAtBeginningTransactions);
     const netIncomeLedger = Ledger.fromTransactions(netIncome);
 
+    // Retrieve the cashflow sheet meta first to get date format.
+    const meta = await this.cashflowSheetMeta.meta(filter);
+
     // Cash flow statement.
     const cashFlowInstance = new CashFlowStatement(
       accounts,
@@ -92,11 +95,9 @@ export class CashFlowStatementService {
       cashLedger,
       netIncomeLedger,
       filter,
-      tenant.metadata.baseCurrency,
       this.i18n,
+      { baseCurrency: tenant.metadata.baseCurrency, dateFormat: meta.dateFormat },
     );
-    // Retrieve the cashflow sheet meta.
-    const meta = await this.cashflowSheetMeta.meta(filter);
 
     return {
       data: cashFlowInstance.reportData(),

@@ -38,6 +38,14 @@ export class StripePaymentApplication {
   }
 
   /**
+   * Creates a Stripe account session for the Connect embedded component.
+   * @param {string} accountId - Stripe Connect account ID.
+   */
+  public createAccountSession(accountId: string) {
+    return this.createStripeAccountLinkService.createAccountSession(accountId);
+  }
+
+  /**
    * Retrieves Stripe OAuth2 connect link.
    * @returns {string}
    */

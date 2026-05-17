@@ -19,12 +19,13 @@ import {
   Put,
   Query,
   Res,
+  UseGuards,
 } from '@nestjs/common';
 import { PaymentReceivesApplication } from './PaymentReceived.application';
 import {
-  IPaymentsReceivedFilter,
   PaymentReceiveMailOptsDTO,
 } from './types/PaymentReceived.types';
+import { GetPaymentsReceivedQueryDto } from './dtos/GetPaymentsReceivedQuery.dto';
 import {
   CreatePaymentReceivedDto,
   EditPaymentReceivedDto,
@@ -38,6 +39,11 @@ import {
   BulkDeleteDto,
   ValidateBulkDeleteResponseDto,
 } from '@/common/dtos/BulkDelete.dto';
+import { RequirePermission } from '@/modules/Roles/RequirePermission.decorator';
+import { PermissionGuard } from '@/modules/Roles/Permission.guard';
+import { AuthorizationGuard } from '@/modules/Roles/Authorization.guard';
+import { AbilitySubject } from '@/modules/Roles/Roles.types';
+import { PaymentReceiveAction } from './types/PaymentReceived.types';
 
 @Controller('payments-received')
 @ApiTags('Payments Received')
@@ -46,6 +52,7 @@ import {
 @ApiExtraModels(PaymentReceivedStateResponseDto)
 @ApiExtraModels(ValidateBulkDeleteResponseDto)
 @ApiCommonHeaders()
+@UseGuards(AuthorizationGuard, PermissionGuard)
 export class PaymentReceivesController {
   constructor(private paymentReceivesApplication: PaymentReceivesApplication) { }
 
@@ -94,6 +101,7 @@ export class PaymentReceivesController {
   }
 
   @Post()
+  @RequirePermission(PaymentReceiveAction.Create, AbilitySubject.PaymentReceive)
   @ApiOperation({ summary: 'Create a new payment received.' })
   public createPaymentReceived(
     @Body() paymentReceiveDTO: CreatePaymentReceivedDto,
@@ -104,6 +112,7 @@ export class PaymentReceivesController {
   }
 
   @Put(':id')
+  @RequirePermission(PaymentReceiveAction.Edit, AbilitySubject.PaymentReceive)
   @ApiOperation({ summary: 'Edit the given payment received.' })
   public editPaymentReceive(
     @Param('id', ParseIntPipe) paymentReceiveId: number,
@@ -116,6 +125,7 @@ export class PaymentReceivesController {
   }
 
   @Delete(':id')
+  @RequirePermission(PaymentReceiveAction.Delete, AbilitySubject.PaymentReceive)
   @ApiOperation({ summary: 'Delete the given payment received.' })
   public deletePaymentReceive(
     @Param('id', ParseIntPipe) paymentReceiveId: number,
@@ -126,6 +136,7 @@ export class PaymentReceivesController {
   }
 
   @Get()
+  @RequirePermission(PaymentReceiveAction.View, AbilitySubject.PaymentReceive)
   @ApiOperation({ summary: 'Retrieves the payment received list.' })
   @ApiResponse({
     status: 200,
@@ -145,12 +156,13 @@ export class PaymentReceivesController {
     },
   })
   public getPaymentsReceived(
-    @Query() filterDTO: Partial<IPaymentsReceivedFilter>,
+    @Query() filterDTO: GetPaymentsReceivedQueryDto,
   ) {
     return this.paymentReceivesApplication.getPaymentsReceived(filterDTO);
   }
 
   @Post('validate-bulk-delete')
+  @RequirePermission(PaymentReceiveAction.Delete, AbilitySubject.PaymentReceive)
   @ApiOperation({
     summary:
       'Validates which payments received can be deleted and returns the results.',
@@ -172,6 +184,7 @@ export class PaymentReceivesController {
   }
 
   @Post('bulk-delete')
+  @RequirePermission(PaymentReceiveAction.Delete, AbilitySubject.PaymentReceive)
   @ApiOperation({ summary: 'Deletes multiple payments received.' })
   @ApiResponse({
     status: 200,
@@ -187,6 +200,7 @@ export class PaymentReceivesController {
   }
 
   @Get('state')
+  @RequirePermission(PaymentReceiveAction.View, AbilitySubject.PaymentReceive)
   @ApiOperation({ summary: 'Retrieves the payment received state.' })
   @ApiResponse({
     status: 200,
@@ -200,6 +214,7 @@ export class PaymentReceivesController {
   }
 
   @Get(':id/invoices')
+  @RequirePermission(PaymentReceiveAction.View, AbilitySubject.PaymentReceive)
   @ApiOperation({ summary: 'Retrieves the payment received invoices.' })
   @ApiResponse({
     status: 200,
@@ -215,6 +230,7 @@ export class PaymentReceivesController {
   }
 
   @Get(':id')
+  @RequirePermission(PaymentReceiveAction.View, AbilitySubject.PaymentReceive)
   @ApiOperation({ summary: 'Retrieves the payment received details.' })
   @ApiResponse({
     status: 200,

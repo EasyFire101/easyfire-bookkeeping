@@ -28,6 +28,7 @@ import { FinancialSheetStructure } from '../../common/FinancialSheetStructure';
 import { FinancialSheet } from '../../common/FinancialSheet';
 import { Account } from '@/modules/Accounts/models/Account.model';
 import { flatToNestedArray } from '@/utils/flat-to-nested-array';
+import { IFinancialReportMeta, DEFAULT_REPORT_META } from '../../types/Report.types';
 
 export default class ProfitLossSheet extends R.pipe(
   ProfitLossSheetPreviousYear,
@@ -71,20 +72,24 @@ export default class ProfitLossSheet extends R.pipe(
 
   /**
    * Constructor method.
+   * @param {ProfitLossSheetRepository} repository -
    * @param {IProfitLossSheetQuery} query -
-   * @param {IAccount[]} accounts -
-   * @param {IJournalPoster} transactionsJournal -
+   * @param {I18nService} i18n -
+   * @param {IFinancialReportMeta} meta -
    */
   constructor(
     repository: ProfitLossSheetRepository,
     query: IProfitLossSheetQuery,
     i18n: I18nService,
+    meta: IFinancialReportMeta,
   ) {
     super();
 
     this.query = new ProfitLossSheetQuery(query);
     this.repository = repository;
+    this.baseCurrency = meta.baseCurrency;
     this.numberFormat = this.query.query.numberFormat;
+    this.dateFormat = meta.dateFormat || DEFAULT_REPORT_META.dateFormat;
     this.i18n = i18n;
   }
 

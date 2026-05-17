@@ -7,17 +7,13 @@ import {
 import { GetAuthenticatedAccount } from './queries/GetAuthedAccount.service';
 import { Controller, Get, Post } from '@nestjs/common';
 import { Throttle } from '@nestjs/throttler';
-import { IgnoreTenantSeededRoute } from '../Tenancy/EnsureTenantIsSeeded.guards';
-import { IgnoreTenantInitializedRoute } from '../Tenancy/EnsureTenantIsInitialized.guard';
+import { TenantAgnosticRoute } from '../Tenancy/TenancyGlobal.guard';
 import { AuthenticationApplication } from './AuthApplication.sevice';
-import { TenancyContext } from '../Tenancy/TenancyContext.service';
 import { IgnoreUserVerifiedRoute } from './guards/EnsureUserVerified.guard';
 
 @Controller('/auth')
 @ApiTags('Auth')
-@ApiExcludeController()
-@IgnoreTenantSeededRoute()
-@IgnoreTenantInitializedRoute()
+@TenantAgnosticRoute()
 @IgnoreUserVerifiedRoute()
 @Throttle({ auth: {} })
 export class AuthedController {

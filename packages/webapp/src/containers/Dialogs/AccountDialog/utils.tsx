@@ -15,10 +15,16 @@ export const AccountDialogAction = {
  */
 export const transformApiErrors = (errors) => {
   const fields = {};
+  if (errors.find((e) => e.type === 'account_code_required')) {
+    fields.code = intl.get('account_code_is_required');
+  }
   if (errors.find((e) => e.type === 'NOT_UNIQUE_CODE')) {
     fields.code = intl.get('account_code_is_not_unique');
   }
-  if (errors.find((e) => e.type === 'ACCOUNT.NAME.NOT.UNIQUE')) {
+  if (errors.find((e) => e.type === 'account_code_not_unique')) {
+    fields.code = intl.get('account_code_is_not_unique');
+  }
+  if (errors.find((e) => e.type === 'account_name_not_unqiue')) {
     fields.name = intl.get('account_name_is_already_used');
   }
   if (

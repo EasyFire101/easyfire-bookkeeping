@@ -1,16 +1,13 @@
 import { Inject, Injectable } from '@nestjs/common';
+import { TransformerInjectable } from '@/modules/Transformer/TransformerInjectable.service';
 import { RefundCreditNote } from '../models/RefundCreditNote';
 import { RefundCreditNoteTransformer } from '../../CreditNotes/queries/RefundCreditNoteTransformer';
 import { TenantModelProxy } from '@/modules/System/models/TenantBaseModel';
 
 @Injectable()
 export class GetRefundCreditNoteTransaction {
-  /**
-   * @param {RefundCreditNoteTransformer} transformer
-   * @param {typeof RefundCreditNote} refundCreditNoteModel
-   */
   constructor(
-    private readonly transformer: RefundCreditNoteTransformer,
+    private readonly transformer: TransformerInjectable,
 
     @Inject(RefundCreditNote.name)
     private readonly refundCreditNoteModel: TenantModelProxy<
@@ -33,6 +30,9 @@ export class GetRefundCreditNoteTransaction {
       .withGraphFetched('creditNote')
       .throwIfNotFound();
 
-    return this.transformer.transform(refundCreditNote);
+    return this.transformer.transform(
+      refundCreditNote,
+      new RefundCreditNoteTransformer(),
+    );
   }
 }

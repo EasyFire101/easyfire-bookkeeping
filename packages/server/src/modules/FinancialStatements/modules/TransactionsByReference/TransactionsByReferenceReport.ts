@@ -4,7 +4,7 @@ import {
 import { FinancialSheet } from '../../common/FinancialSheet';
 import { ModelObject } from 'objection';
 import { AccountTransaction } from '@/modules/Accounts/models/AccountTransaction.model';
-import { INumberFormatQuery } from '../../types/Report.types';
+import { INumberFormatQuery, IFinancialReportMeta, DEFAULT_REPORT_META } from '../../types/Report.types';
 import { TransactionsByReferenceQueryDto } from './TransactionsByReferenceQuery.dto';
 
 export class TransactionsByReference extends FinancialSheet {
@@ -17,18 +17,19 @@ export class TransactionsByReference extends FinancialSheet {
    * Constructor method.
    * @param {ModelObject<AccountTransaction>[]} transactions
    * @param {TransactionsByVendorQueryDto} query
-   * @param {string} baseCurrency
+   * @param {IFinancialReportMeta} meta
    */
   constructor(
     transactions: ModelObject<AccountTransaction>[],
     query: TransactionsByReferenceQueryDto,
-    baseCurrency: string
+    meta: IFinancialReportMeta,
   ) {
     super();
 
     this.transactions = transactions;
     this.query = query;
-    this.baseCurrency = baseCurrency;
+    this.baseCurrency = meta.baseCurrency;
+    this.dateFormat = meta.dateFormat || DEFAULT_REPORT_META.dateFormat;
     // this.numberFormat = this.query.numberFormat;
   }
 

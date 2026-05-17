@@ -17,6 +17,8 @@ import { Item } from '@/modules/Items/models/Item';
 import {
   IFormatNumberSettings,
   INumberFormatQuery,
+  IFinancialReportMeta,
+  DEFAULT_REPORT_META,
 } from '../../types/Report.types';
 import { InventoryTransaction } from '@/modules/InventoryCost/models/InventoryTransaction';
 import { InventoryItemDetailsRepository } from './InventoryItemDetailsRepository';
@@ -35,11 +37,13 @@ export class InventoryDetails extends FinancialSheet {
    * Constructor method.
    * @param {InventoryItemDetailsRepository} repository - The repository.
    * @param {I18nService} i18n - The i18n service.
+   * @param {IFinancialReportMeta} meta - Report meta.
    */
   constructor(
     filter: IInventoryDetailsQuery,
     repository: InventoryItemDetailsRepository,
     i18n: I18nService,
+    meta: IFinancialReportMeta,
   ) {
     super();
 
@@ -48,6 +52,7 @@ export class InventoryDetails extends FinancialSheet {
     this.query = filter;
     this.numberFormat = this.query.numberFormat;
     this.i18n = i18n;
+    this.dateFormat = meta.dateFormat || DEFAULT_REPORT_META.dateFormat;
   }
 
   /**
@@ -89,7 +94,7 @@ export class InventoryDetails extends FinancialSheet {
    */
   public getDateMeta(date: Date | string): IInventoryDetailsDate {
     return {
-      formattedDate: moment(date).format('YYYY-MM-DD'),
+      formattedDate: moment(date).format(this.dateFormat),
       date: moment(date).toDate(),
     };
   }

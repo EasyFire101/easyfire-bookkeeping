@@ -46,4 +46,8 @@ export const BranchRowDivider = styled.div`
   height: 1px;
   background: #ebf1f6;
   margin-bottom: 15px;
+
+  .bp4-dark & {
+    background: var(--color-dark-gray5);
+  }
 `;

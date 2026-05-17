@@ -1,6 +1,7 @@
 import { Inject, Injectable } from '@nestjs/common';
 import * as moment from 'moment';
 import { EventEmitter2 } from '@nestjs/event-emitter';
+import { ClsService } from 'nestjs-cls';
 import {
   IAcceptInviteEventPayload,
   ICheckInviteEventPayload,
@@ -15,6 +16,11 @@ import { UserInvite } from '../models/InviteUser.model';
 import { ModelObject } from 'objection';
 import { InviteUserDto } from '../dtos/InviteUser.dto';
 
+interface InviteAcceptResponseDto {
+  inviteToken: { email: string, token: string, createdAt: Date };
+  orgName: string 
+}
+
 @Injectable()
 export class AcceptInviteUserService {
   constructor(
@@ -27,6 +33,7 @@ export class AcceptInviteUserService {
     @Inject(UserInvite.name)
     private readonly userInviteModel: typeof UserInvite,
     private readonly eventEmitter: EventEmitter2,
+    private readonly cls: ClsService,
   ) {}
 
   /**
@@ -62,6 +69,16 @@ export class AcceptInviteUserService {
     // Clear invite token by the given user id.
     await this.clearInviteTokensByUserId(inviteToken.userId);
 
+    // Retrieve the tenant to get the organizationId for CLS.
+    const tenant = await this.tenantModel
+      .query()
+      .findById(inviteToken.tenantId);
+
+    // Set CLS values for tenant context before triggering sync events.
+    this.cls.set('tenantId', inviteToken.tenantId);
+    this.cls.set('userId', systemUser.id);
+    this.cls.set('organizationId', tenant.organizationId);
+
     // Triggers `onUserAcceptInvite` event.
     await this.eventEmitter.emitAsync(events.inviteUser.acceptInvite, {
       inviteToken,
@@ -77,7 +94,7 @@ export class AcceptInviteUserService {
    */
   public async checkInvite(
     token: string,
-  ): Promise<{ inviteToken: ModelObject<UserInvite>; orgName: string }> {
+  ): Promise<InviteAcceptResponseDto> {
     const inviteToken = await this.getInviteTokenOrThrowError(token);
 
     // Find the tenant that associated to the given token.
@@ -92,7 +109,16 @@ export class AcceptInviteUserService {
       tenant,
     } as ICheckInviteEventPayload);
 
-    return { inviteToken, orgName: tenant.metadata.name };
+    // Explicitly convert to plain object to ensure all fields are serialized
+    const result = {
+      inviteToken: {
+        email: inviteToken.email,
+        token: inviteToken.token,
+        createdAt: inviteToken.createdAt,
+      },
+      orgName: tenant.metadata.name,
+    };
+    return result;
   }
 
   /**

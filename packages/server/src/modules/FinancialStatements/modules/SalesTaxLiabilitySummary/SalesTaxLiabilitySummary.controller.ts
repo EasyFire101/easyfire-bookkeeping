@@ -1,19 +1,26 @@
 import { Response } from 'express';
 import {
+  ApiExtraModels,
   ApiOperation,
   ApiProduces,
   ApiResponse,
   ApiTags,
+  getSchemaPath,
 } from '@nestjs/swagger';
 import { Controller, Get, Headers, Query, Res } from '@nestjs/common';
 import { AcceptType } from '@/constants/accept-type';
 import { SalesTaxLiabilitySummaryApplication } from './SalesTaxLiabilitySummaryApplication';
 import { SalesTaxLiabilitySummaryQueryDto } from './dtos/SalesTaxLiabilityQuery.dto';
+import {
+  SalesTaxLiabilitySummaryResponseDto,
+  SalesTaxLiabilitySummaryTableResponseDto,
+} from './SalesTaxLiabilitySummaryResponse.dto';
 import { ApiCommonHeaders } from '@/common/decorators/ApiCommonHeaders';
 
 @Controller('/reports/sales-tax-liability-summary')
 @ApiTags('Reports')
 @ApiCommonHeaders()
+@ApiExtraModels(SalesTaxLiabilitySummaryResponseDto, SalesTaxLiabilitySummaryTableResponseDto)
 export class SalesTaxLiabilitySummaryController {
   constructor(
     private readonly salesTaxLiabilitySummaryApp: SalesTaxLiabilitySummaryApplication,
@@ -23,6 +30,14 @@ export class SalesTaxLiabilitySummaryController {
   @ApiResponse({
     status: 200,
     description: 'Sales tax liability summary report',
+    content: {
+      [AcceptType.ApplicationJson]: {
+        schema: { $ref: getSchemaPath(SalesTaxLiabilitySummaryResponseDto) },
+      },
+      [AcceptType.ApplicationJsonTable]: {
+        schema: { $ref: getSchemaPath(SalesTaxLiabilitySummaryTableResponseDto) },
+      },
+    },
   })
   @ApiOperation({ summary: 'Get sales tax liability summary report' })
   @ApiProduces(

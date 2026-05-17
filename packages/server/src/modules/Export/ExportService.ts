@@ -12,6 +12,7 @@ import { ServiceError } from '../Items/ServiceError';
 import { ResourceService } from '../Resource/ResourceService';
 import { getExportableService } from './decorators/ExportableModel.decorator';
 import { ContextIdFactory, ModuleRef } from '@nestjs/core';
+import { I18nService } from 'nestjs-i18n';
 
 @Injectable()
 export class ExportResourceService {
@@ -20,6 +21,7 @@ export class ExportResourceService {
     private readonly exportPdf: ExportPdf,
     private readonly resourceService: ResourceService,
     private readonly moduleRef: ModuleRef,
+    private readonly i18nService: I18nService,
   ) {}
 
   /**
@@ -147,7 +149,7 @@ export class ExportResourceService {
             const group = parent;
             return [
               {
-                name: value.name,
+                name: this.i18nService.t(value.name, { defaultValue: value.name }),
                 type: value.type || 'text',
                 accessor: value.accessor || key,
                 group,
@@ -174,7 +176,7 @@ export class ExportResourceService {
             const group = parent;
             return [
               {
-                name: value.name,
+                name: this.i18nService.t(value.name, { defaultValue: value.name }),
                 type: value.type || 'text',
                 accessor: value.accessor || key,
                 group,

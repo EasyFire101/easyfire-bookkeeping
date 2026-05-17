@@ -1,4 +1,9 @@
 {
+  "view.draft": "Draft",
+  "view.published": "Published",
+  "view.open": "Open",
+  "view.closed": "Closed",
+
   "field.customer": "Customer",
   "field.exchange_rate": "Exchange Rate",
   "field.credit_note_date": "Credit Note Date",

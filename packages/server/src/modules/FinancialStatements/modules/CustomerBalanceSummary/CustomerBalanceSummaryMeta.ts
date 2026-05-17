@@ -19,7 +19,7 @@ export class CustomerBalanceSummaryMeta {
     query: ICustomerBalanceSummaryQuery,
   ): Promise<ICustomerBalanceSummaryMeta> {
     const commonMeta = await this.financialSheetMeta.meta();
-    const formattedAsDate = moment(query.asDate).format('YYYY/MM/DD');
+    const formattedAsDate = moment(query.asDate).format(commonMeta.dateFormat);
     const formattedDateRange = `As ${formattedAsDate}`;
 
     return {

@@ -58,16 +58,13 @@ export function useCreateCreditNote(props) {
   const queryClient = useQueryClient();
   const apiRequest = useApiRequest();
 
-  return useMutation(
-    (values) => apiRequest.post('credit-notes', values),
-    {
-      onSuccess: (res, values) => {
-        // Common invalidate queries.
-        commonInvalidateQueries(queryClient);
-      },
-      ...props,
+  return useMutation((values) => apiRequest.post('credit-notes', values), {
+    onSuccess: (res, values) => {
+      // Common invalidate queries.
+      commonInvalidateQueries(queryClient);
     },
-  );
+    ...props,
+  });
 }
 
 /**
@@ -218,8 +215,7 @@ export function useCreateRefundCreditNote(props) {
   const apiRequest = useApiRequest();
 
   return useMutation(
-    ([id, values]) =>
-      apiRequest.post(`credit-notes/${id}/refunds`, values),
+    ([id, values]) => apiRequest.post(`credit-notes/${id}/refunds`, values),
     {
       onSuccess: (res, [id, values]) => {
         // Common invalidate queries.
@@ -240,19 +236,16 @@ export function useDeleteRefundCreditNote(props) {
   const queryClient = useQueryClient();
   const apiRequest = useApiRequest();
 
-  return useMutation(
-    (id) => apiRequest.delete(`credit-notes/refunds/${id}`),
-    {
-      onSuccess: (res, id) => {
-        // Common invalidate queries.
-        commonInvalidateQueries(queryClient);
+  return useMutation((id) => apiRequest.delete(`credit-notes/refunds/${id}`), {
+    onSuccess: (res, id) => {
+      // Common invalidate queries.
+      commonInvalidateQueries(queryClient);
 
-        // Invalidate vendor credit query.
-        queryClient.invalidateQueries([t.CREDIT_NOTE, id]);
-      },
-      ...props,
+      // Invalidate vendor credit query.
+      queryClient.invalidateQueries([t.CREDIT_NOTE, id]);
     },
-  );
+    ...props,
+  });
 }
 
 /**
@@ -301,7 +294,7 @@ export function useReconcileCreditNote(id, props, requestProps) {
     [t.RECONCILE_CREDIT_NOTE, id],
     {
       method: 'get',
-      url: `credit-notes/${id}/applied-invoices`,
+      url: `credit-notes/${id}/apply-invoices`,
       ...requestProps,
     },
     {

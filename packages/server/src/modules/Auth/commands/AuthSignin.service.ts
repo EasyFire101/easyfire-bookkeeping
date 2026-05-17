@@ -2,6 +2,7 @@ import { ClsService } from 'nestjs-cls';
 import { Inject, Injectable } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { SystemUser } from '@/modules/System/models/SystemUser';
+import { TenantModel } from '@/modules/System/models/TenantModel';
 import { ModelObject } from 'objection';
 import { JwtPayload } from '../Auth.interfaces';
 import { InvalidEmailPasswordException } from '../exceptions/InvalidEmailPassword.exception';
@@ -12,6 +13,10 @@ export class AuthSigninService {
   constructor(
     @Inject(SystemUser.name)
     private readonly systemUserModel: typeof SystemUser,
+
+    @Inject(TenantModel.name)
+    private readonly tenantModel: typeof TenantModel,
+
     private readonly jwtService: JwtService,
     private readonly clsService: ClsService,
   ) { }
@@ -49,6 +54,7 @@ export class AuthSigninService {
    */
   async verifyPayload(payload: JwtPayload): Promise<any> {
     let user: SystemUser;
+    let tenant: TenantModel | undefined;
 
     try {
       user = await this.systemUserModel
@@ -56,8 +62,14 @@ export class AuthSigninService {
         .findOne({ email: payload.sub })
         .throwIfNotFound();
 
+      tenant = await this.tenantModel
+        .query()
+        .findById(user.tenantId)
+        .throwIfNotFound();
+
       this.clsService.set('tenantId', user.tenantId);
       this.clsService.set('userId', user.id);
+      this.clsService.set('organizationId', tenant.organizationId);
     } catch (error) {
       throw new UserNotFoundException(String(payload.sub));
     }

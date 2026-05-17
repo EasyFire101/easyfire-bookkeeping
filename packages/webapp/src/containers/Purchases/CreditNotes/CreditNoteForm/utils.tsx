@@ -156,25 +156,25 @@ export const useObserveVendorCreditNoSettings = (prefix, nextNumber) => {
 
 export const useSetPrimaryBranchToForm = () => {
   const { setFieldValue } = useFormikContext();
-  const { branches, isBranchesSuccess } = useVendorCreditNoteFormContext();
+  const { branches, isBranchesSuccess, isNewMode } = useVendorCreditNoteFormContext();
 
   React.useEffect(() => {
-    if (isBranchesSuccess) {
+    if (isBranchesSuccess && isNewMode) {
       const primaryBranch = branches.find((b) => b.primary) || first(branches);
 
       if (primaryBranch) {
         setFieldValue('branch_id', primaryBranch.id);
       }
     }
-  }, [isBranchesSuccess, setFieldValue, branches]);
+  }, [isBranchesSuccess, setFieldValue, branches, isNewMode]);
 };
 
 export const useSetPrimaryWarehouseToForm = () => {
   const { setFieldValue } = useFormikContext();
-  const { warehouses, isWarehousesSuccess } = useVendorCreditNoteFormContext();
+  const { warehouses, isWarehousesSuccess, isNewMode } = useVendorCreditNoteFormContext();
 
   React.useEffect(() => {
-    if (isWarehousesSuccess) {
+    if (isWarehousesSuccess && isNewMode) {
       const primaryWarehouse =
         warehouses.find((b) => b.primary) || first(warehouses);
 
@@ -182,7 +182,7 @@ export const useSetPrimaryWarehouseToForm = () => {
         setFieldValue('warehouse_id', primaryWarehouse.id);
       }
     }
-  }, [isWarehousesSuccess, setFieldValue, warehouses]);
+  }, [isWarehousesSuccess, setFieldValue, warehouses, isNewMode]);
 };
 
 /**

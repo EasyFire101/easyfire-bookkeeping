@@ -1,27 +1,52 @@
 // @ts-nocheck
 import React from 'react';
 import intl from 'react-intl-universal';
-import classNames from 'classnames';
-import { Radio } from '@blueprintjs/core';
-import { FormattedMessage as T, FFormGroup, FRadioGroup } from '@/components';
-
-import { handleStringChange, saveInvoke } from '@/utils';
+import { Button, ButtonGroup } from '@blueprintjs/core';
+import { FastField } from 'formik';
+import { FormattedMessage as T, FFormGroup } from '@/components';
 
 /**
- * Customer type radio field.
+ * Customer type selector (button group).
  */
-export default function RadioCustomer() {
+export function CustomerTypeRadioField() {
   return (
     <FFormGroup
       name={'customer_type'}
       label={<T id={'customer_type'} />}
       inline
+      fill
       fastField
     >
-      <FRadioGroup name={'customer_type'} inline>
-        <Radio label={intl.get('business')} value="business" />
-        <Radio label={intl.get('individual')} value="individual" />
-      </FRadioGroup>
+      <FastField name="customer_type">
+        {({ field, form }) => (
+          <ButtonGroup>
+            <Button
+              type="button"
+              outlined
+              small
+              active={field.value === 'business'}
+              onClick={() => {
+                form.setFieldValue('customer_type', 'business');
+                form.setFieldTouched('customer_type', true);
+              }}
+            >
+              {intl.get('business')}
+            </Button>
+            <Button
+              type="button"
+              outlined
+              small
+              active={field.value === 'individual'}
+              onClick={() => {
+                form.setFieldValue('customer_type', 'individual');
+                form.setFieldTouched('customer_type', true);
+              }}
+            >
+              {intl.get('individual')}
+            </Button>
+          </ButtonGroup>
+        )}
+      </FastField>
     </FFormGroup>
   );
 }

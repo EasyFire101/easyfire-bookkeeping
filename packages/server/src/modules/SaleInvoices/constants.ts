@@ -1,8 +1,5 @@
-// import config from '@/config';
-
 export const SendSaleInvoiceQueue = 'SendSaleInvoiceQueue';
 export const SendSaleInvoiceMailJob = 'SendSaleInvoiceMailJob';
-
 
 export const DEFAULT_INVOICE_MAIL_SUBJECT =
 'Invoice {Invoice Number} from {Company Name} for {Customer Name}';

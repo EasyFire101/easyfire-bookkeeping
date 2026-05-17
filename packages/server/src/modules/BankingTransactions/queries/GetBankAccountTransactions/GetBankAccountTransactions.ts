@@ -24,17 +24,20 @@ export class GetBankAccountTransactions extends FinancialSheet {
    * @param {IAccountTransaction[]} transactions -
    * @param {number} openingBalance -
    * @param {ICashflowAccountTransactionsQuery} query -
+   * @param {string} dateFormat - The date format from organization settings.
    */
   constructor(
     repo: GetBankAccountTransactionsRepository,
     query: ICashflowAccountTransactionsQuery,
     i18n: I18nService,
+    dateFormat?: string,
   ) {
     super();
 
     this.repo = repo;
     this.query = query;
     this.i18n = i18n;
+    this.dateFormat = dateFormat || this.dateFormat;
 
     this.runningBalance = runningBalance(this.repo.openingBalance);
   }
@@ -98,7 +101,7 @@ export class GetBankAccountTransactions extends FinancialSheet {
 
     return {
       date: transaction.date,
-      formattedDate: moment(transaction.date).format('YYYY-MM-DD'),
+      formattedDate: this.getDateFormatted(transaction.date),
 
       withdrawal: transaction.credit,
       deposit: transaction.debit,

@@ -17,8 +17,8 @@ export class JournalSheetMeta {
   ): Promise<IJournalSheetMeta> {
     const common = await this.financialSheetMeta.meta();
 
-    const formattedToDate = moment(query.toDate).format('YYYY/MM/DD');
-    const formattedFromDate = moment(query.fromDate).format('YYYY/MM/DD');
+    const formattedToDate = moment(query.toDate).format(common.dateFormat);
+    const formattedFromDate = moment(query.fromDate).format(common.dateFormat);
     const formattedDateRange = `From ${formattedFromDate} | To ${formattedToDate}`;
 
     return {

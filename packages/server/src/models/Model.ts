@@ -1,5 +1,6 @@
-import { QueryBuilder, Model } from 'objection';
+import { QueryBuilder, Model, mixin } from 'objection';
 import { ModelHasRelationsError } from '@/common/exceptions/ModelHasRelations.exception';
+import { withDateSessionMixin } from './withDateSessionMixin';
 
 interface PaginationResult<M extends Model> {
   results: M[];
@@ -69,6 +70,7 @@ export class PaginationQueryBuilder<
     dependentRelationNames.forEach((relationName: string) => {
       recordQuery.withGraphFetched(relationName);
     });
+
     const record = await recordQuery;
 
     const hasRelations = dependentRelationNames.some((name) => {
@@ -97,7 +99,7 @@ export class BaseQueryBuilder<
   }
 }
 
-export class BaseModel extends Model {
+export class BaseModel extends mixin(Model, [withDateSessionMixin]) {
   public readonly id: number;
   public readonly tableName: string;
 

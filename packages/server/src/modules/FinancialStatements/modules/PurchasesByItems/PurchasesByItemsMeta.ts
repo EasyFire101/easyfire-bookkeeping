@@ -21,8 +21,8 @@ export class PurchasesByItemsMeta {
     query: IPurchasesByItemsReportQuery
   ): Promise<IPurchasesByItemsSheetMeta> {
     const commonMeta = await this.financialSheetMetaModel.meta();
-    const formattedToDate = moment(query.toDate).format('YYYY/MM/DD');
-    const formattedFromDate = moment(query.fromDate).format('YYYY/MM/DD');
+    const formattedToDate = moment(query.toDate).format(commonMeta.dateFormat);
+    const formattedFromDate = moment(query.fromDate).format(commonMeta.dateFormat);
     const formattedDateRange = `From ${formattedFromDate} | To ${formattedToDate}`;
 
     return {

@@ -5,7 +5,7 @@ import { Dragzone, FormattedMessage as T } from '@/components';
 /**
  * Vendor Attachment Tab.
  */
-function VendorAttachmentTab() {
+export function VendorAttachmentTab() {
   return (
     <div>
       <Dragzone
@@ -17,5 +17,3 @@ function VendorAttachmentTab() {
     </div>
   );
 }
-
-export default VendorAttachmentTab;

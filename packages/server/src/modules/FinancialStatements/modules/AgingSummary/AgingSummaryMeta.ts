@@ -13,7 +13,7 @@ export class AgingSummaryMeta {
    */
   public async meta(query: IAgingSummaryQuery): Promise<IAgingSummaryMeta> {
     const commonMeta = await this.financialSheetMeta.meta();
-    const formattedAsDate = moment(query.asDate).format('YYYY/MM/DD');
+    const formattedAsDate = moment(query.asDate).format(commonMeta.dateFormat);
     const formattedDateRange = `As ${formattedAsDate}`;
 
     return {

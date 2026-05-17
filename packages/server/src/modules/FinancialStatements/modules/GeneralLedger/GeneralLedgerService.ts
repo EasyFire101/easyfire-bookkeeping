@@ -37,17 +37,18 @@ export class GeneralLedgerService {
     this.generalLedgerRepository.setFilter(filter);
     await this.generalLedgerRepository.asyncInitialize();
 
+    // Retrieve general ledger report metadata first to get the date format.
+    const meta = await this.generalLedgerMeta.meta(filter);
+
     // General ledger report instance.
     const generalLedgerInstance = new GeneralLedgerSheet(
       filter,
       this.generalLedgerRepository,
       this.i18n,
+      { baseCurrency: meta.baseCurrency, dateFormat: meta.dateFormat },
     );
     // Retrieve general ledger report data.
     const reportData = generalLedgerInstance.reportData();
-
-    // Retrieve general ledger report metadata.
-    const meta = await this.generalLedgerMeta.meta(filter);
 
     // Triggers `onGeneralLedgerViewed` event.
     await this.eventEmitter.emitAsync(events.reports.onGeneralLedgerViewed, {});

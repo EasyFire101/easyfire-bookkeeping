@@ -32,17 +32,18 @@ export class APAgingSummaryService {
     this.APAgingSummaryRepository.setFilter(filter);
     await this.APAgingSummaryRepository.load();
 
+    // Retrieve the aging summary report meta first to get date format.
+    const meta = await this.APAgingSummaryMeta.meta(filter);
+
     // A/P aging summary report instance.
     const APAgingSummaryReport = new APAgingSummarySheet(
       filter,
       this.APAgingSummaryRepository,
+      { baseCurrency: meta.baseCurrency, dateFormat: meta.dateFormat },
     );
     // A/P aging summary report data and columns.
     const data = APAgingSummaryReport.reportData();
     const columns = APAgingSummaryReport.reportColumns();
-
-    // Retrieve the aging summary report meta.
-    const meta = await this.APAgingSummaryMeta.meta(filter);
 
     // Triggers `onPayableAgingViewed` event.
     await this.eventPublisher.emitAsync(events.reports.onPayableAgingViewed, {

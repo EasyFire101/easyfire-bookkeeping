@@ -1,5 +1,6 @@
-import { IsEmail, IsOptional, IsString } from 'class-validator';
+import { IsEmail, IsString } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
+import { IsOptional } from '@/common/decorators/Validators';
 
 export class ContactAddressDto {
   @ApiProperty({ required: false, description: 'Billing address line 1' })
@@ -27,10 +28,10 @@ export class ContactAddressDto {
   @IsEmail()
   billingAddressEmail?: string;
 
-  @ApiProperty({ required: false, description: 'Billing address zipcode' })
+  @ApiProperty({ required: false, description: 'Billing address postcode' })
   @IsOptional()
   @IsString()
-  billingAddressZipcode?: string;
+  billingAddressPostcode?: string;
 
   @ApiProperty({ required: false, description: 'Billing address phone' })
   @IsOptional()
@@ -67,10 +68,10 @@ export class ContactAddressDto {
   @IsEmail()
   shippingAddressEmail?: string;
 
-  @ApiProperty({ required: false, description: 'Shipping address zipcode' })
+  @ApiProperty({ required: false, description: 'Shipping address postcode' })
   @IsOptional()
   @IsString()
-  shippingAddressZipcode?: string;
+  shippingAddressPostcode?: string;
 
   @ApiProperty({ required: false, description: 'Shipping address phone' })
   @IsOptional()

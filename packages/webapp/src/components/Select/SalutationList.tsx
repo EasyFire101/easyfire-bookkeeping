@@ -28,6 +28,7 @@ export function SalutationList({ ...restProps }: SalutationListProps) {
       items={items}
       valueAccessor={'key'}
       textAccessor={'label'}
+      labelAccessor={'_label'}
       placeholder={intl.get('salutation')}
       filterable={false}
       {...restProps}

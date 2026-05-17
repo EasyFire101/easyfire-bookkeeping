@@ -2,10 +2,8 @@ import * as R from 'ramda';
 import { DynamicListService } from '@/modules/DynamicListing/DynamicList.service';
 import { ItemCategory } from '../models/ItemCategory.model';
 import { Inject } from '@nestjs/common';
-import {
-  GetItemCategoriesResponse,
-  IItemCategoriesFilter,
-} from '../ItemCategory.interfaces';
+import { GetItemCategoriesResponse } from '../ItemCategory.interfaces';
+import { GetItemCategoriesQueryDto } from '../dtos/GetItemCategoriesQuery.dto';
 import { TenantModelProxy } from '@/modules/System/models/TenantBaseModel';
 import { ISortOrder } from '@/modules/DynamicListing/DynamicFilter/DynamicFilter.types';
 
@@ -31,11 +29,11 @@ export class GetItemCategoriesService {
 
   /**
    * Retrieve item categories list.
-   * @param {IItemCategoriesFilter} filterDTO
+   * @param {GetItemCategoriesQueryDto} filterDTO
    * @returns {Promise<GetItemCategoriesResponse>}
    */
   public async getItemCategories(
-    filterDto: Partial<IItemCategoriesFilter>,
+    filterDto: GetItemCategoriesQueryDto,
   ): Promise<GetItemCategoriesResponse> {
     const _filterDto = {
       sortOrder: ISortOrder.ASC,

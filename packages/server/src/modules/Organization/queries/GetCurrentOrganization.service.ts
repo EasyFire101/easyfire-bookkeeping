@@ -3,14 +3,20 @@ import { throwIfTenantNotExists } from '../Organization/_utils';
 import { TenantModel } from '@/modules/System/models/TenantModel';
 import { Injectable } from '@nestjs/common';
 import { ModelObject } from 'objection';
+import { GetAttachmentPresignedUrl } from '@/modules/Attachments/GetAttachmentPresignedUrl';
+import { TransformerInjectable } from '@/modules/Transformer/TransformerInjectable.service';
+import { GetCurrentOrganizationTransformer } from './GetCurrentOrganization.transformer';
 
 @Injectable()
 export class GetCurrentOrganizationService {
-  constructor(private readonly tenancyContext: TenancyContext) {}
+  constructor(
+    private readonly tenancyContext: TenancyContext,
+    private readonly getPresignedUrlService: GetAttachmentPresignedUrl,
+    private readonly transformer: TransformerInjectable,
+  ) {}
 
   /**
    * Retrieve the current organization metadata.
-   * @param {number} tenantId
    * @returns {Promise<ITenant[]>}
    */
   async getCurrentOrganization(): Promise<ModelObject<TenantModel>> {
@@ -21,6 +27,13 @@ export class GetCurrentOrganizationService {
 
     throwIfTenantNotExists(tenant);
 
-    return tenant;
+    const logoUri = tenant.metadata?.logoKey ?
+      await this.getPresignedUrlService.getPresignedUrl(tenant.metadata.logoKey) : null;
+
+    return await this.transformer.transform(
+      tenant,
+      new GetCurrentOrganizationTransformer(),
+      { logoUri },
+    );
   }
 }

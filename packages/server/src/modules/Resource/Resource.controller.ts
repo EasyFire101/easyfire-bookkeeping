@@ -1,21 +1,41 @@
 import { Controller, Get, Param } from '@nestjs/common';
-import { GetResourceViewsService } from '../Views/GetResourceViews.service';
 import { ResourceService } from './ResourceService';
-import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
+import {
+  ApiExtraModels,
+  ApiOperation,
+  ApiParam,
+  ApiResponse,
+  ApiTags,
+  getSchemaPath,
+} from '@nestjs/swagger';
+import { ResourceMetaResponseDto } from './dtos/ResourceMetaResponse.dto';
 
 @Controller('resources')
 @ApiTags('resources')
+@ApiExtraModels(ResourceMetaResponseDto)
 export class ResourceController {
   constructor(private readonly resourcesService: ResourceService) {}
 
   @Get('/:resourceModel/meta')
-  @ApiResponse({ status: 200, description: 'Retrieves the resource meta' })
   @ApiOperation({ summary: 'Retrieves the resource meta' })
-  getResourceMeta(@Param('resourceModel') resourceModel: string) {
+  @ApiParam({
+    name: 'resourceModel',
+    description: 'The resource model name (e.g., SaleInvoice, Customer, Item)',
+    example: 'SaleInvoice',
+    required: true,
+  })
+  @ApiResponse({
+    status: 200,
+    description: 'Retrieves the resource meta',
+    schema: {
+      $ref: getSchemaPath(ResourceMetaResponseDto),
+    },
+  })
+  getResourceMeta(
+    @Param('resourceModel') resourceModel: string,
+  ): ResourceMetaResponseDto {
     const resourceMeta = this.resourcesService.getResourceMeta(resourceModel);
 
-    return {
-      resourceMeta,
-    };
+    return resourceMeta as ResourceMetaResponseDto;
   }
 }

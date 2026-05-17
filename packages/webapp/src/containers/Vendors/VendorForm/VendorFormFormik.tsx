@@ -1,5 +1,5 @@
 // @ts-nocheck
-import React, { useMemo } from 'react';
+import { useMemo } from 'react';
 import intl from 'react-intl-universal';
 import { Formik, Form } from 'formik';
 import { Intent } from '@blueprintjs/core';
@@ -7,29 +7,24 @@ import classNames from 'classnames';
 import styled from 'styled-components';
 
 import { CLASSES } from '@/constants/classes';
-import { AppToaster } from '@/components';
+import { AppToaster, Box } from '@/components';
 import {
   CreateVendorFormSchema,
   EditVendorFormSchema,
 } from './VendorForm.schema';
 
-import VendorTabs from './VendorsTabs';
-import VendorFormPrimarySection from './VendorFormPrimarySection';
-import VendorFormAfterPrimarySection from './VendorFormAfterPrimarySection';
-import VendorFloatingActions from './VendorFloatingActions';
+import { VendorFormContent } from './VendorFormContent';
 
 import { withCurrentOrganization } from '@/containers/Organization/withCurrentOrganization';
 
 import { useVendorFormContext } from './VendorFormProvider';
-import { compose, transformToForm, safeInvoke } from '@/utils';
+import { compose, transformToForm, safeInvoke, parseBoolean } from '@/utils';
 import { defaultInitialValues } from './utils';
-
-import '@/style/pages/Vendors/Form.scss';
 
 /**
  * Vendor form.
  */
-function VendorFormFormik({
+function VendorFormFormikBase({
   // #withCurrentOrganization
   organization: { base_currency },
 
@@ -52,9 +47,6 @@ function VendorFormFormik({
     isNewMode,
   } = useVendorFormContext();
 
-  /**
-   * Initial values in create and edit mode.
-   */
   const initialFormValues = useMemo(
     () => ({
       ...defaultInitialValues,
@@ -69,7 +61,10 @@ function VendorFormFormik({
   // Handles the form submit.
   const handleFormSubmit = (values, form) => {
     const { setSubmitting, resetForm } = form;
-    const requestForm = { ...values };
+    const requestForm = {
+      ...values,
+      active: parseBoolean(values.active, true),
+    };
 
     setSubmitting(true);
 
@@ -103,51 +98,34 @@ function VendorFormFormik({
   };
 
   return (
-    <div
-      className={classNames(
-        CLASSES.PAGE_FORM,
-        CLASSES.PAGE_FORM_VENDOR,
-        className,
-      )}
-    >
       <Formik
         validationSchema={
           isNewMode ? CreateVendorFormSchema : EditVendorFormSchema
         }
         initialValues={initialFormValues}
         onSubmit={handleFormSubmit}
-      >
+        >
         <Form>
-          <VendorFormHeaderPrimary>
-            <VendorFormPrimarySection />
-          </VendorFormHeaderPrimary>
-
-          <div className={'page-form__after-priamry-section'}>
-            <VendorFormAfterPrimarySection />
-          </div>
-
-          <div className={classNames(CLASSES.PAGE_FORM_TABS)}>
-            <VendorTabs vendor={vendorId} />
-          </div>
-
-          <VendorFloatingActions onCancel={onCancel} />
+          <VendorFormFields>
+            <VendorFormContent onCancel={onCancel} />
+          </VendorFormFields>
         </Form>
-      </Formik>
-    </div>
+      </Formik>    
   );
 }
 
-export const VendorFormHeaderPrimary = styled.div`
-  --x-color-border: #e4e4e4;
 
-  .bp4-dark & {
-    --x-color-border: var(--color-dark-gray3);
+const VendorFormFields = styled.div`
+  .bp4-form-content,
+  .bp6-form-content {
+    min-width: 300px;
   }
-  padding: 10px 0 0;
-  margin: 0 0 20px;
-  overflow: hidden;
-  border-bottom: 1px solid var(--x-color-border);
-  max-width: 1000px;
+  .bp4-form-group{
+    margin-bottom: 20px;
+  }
+  .bp4-form-group.bp4-inline label.bp4-label {
+    min-width: 140px;
+  }
 `;
 
-export default compose(withCurrentOrganization())(VendorFormFormik);
+export const VendorFormFormik = compose(withCurrentOrganization())(VendorFormFormikBase);

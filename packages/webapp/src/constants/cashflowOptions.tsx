@@ -19,7 +19,7 @@ export const getAddMoneyInOptions = () => [
 export const getAddMoneyOutOptions = () => [
   {
     name: intl.get('banking.owner_drawings'),
-    value: 'OwnerDrawing',
+    value: 'owner_drawing',
   },
   {
     name: intl.get('banking.expenses'),
@@ -31,11 +31,11 @@ export const getAddMoneyOutOptions = () => [
   },
 ];
 
-export const TRANSACRIONS_TYPE = [
+export const TRANSACTIONS_TYPE = [
   'OwnerContribution',
   'OtherIncome',
   'TransferFromAccount',
-  'OnwersDrawing',
+  'OwnerDrawing',
   'OtherExpense',
   'TransferToAccount',
 ];

@@ -3,13 +3,18 @@ import { ITransactionsByVendorsFilter } from './TransactionsByVendor.types';
 import { AcceptType } from '@/constants/accept-type';
 import { Response } from 'express';
 import { TransactionsByVendorApplication } from './TransactionsByVendorApplication';
-import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
+import { ApiExtraModels, ApiOperation, ApiResponse, ApiTags, getSchemaPath } from '@nestjs/swagger';
+import {
+  TransactionsByVendorResponseDto,
+  TransactionsByVendorTableResponseDto,
+} from './TransactionsByVendorResponse.dto';
 import { TransactionsByVendorQueryDto } from './TransactionsByVendorQuery.dto';
 import { ApiCommonHeaders } from '@/common/decorators/ApiCommonHeaders';
 
 @Controller('/reports/transactions-by-vendors')
 @ApiTags('Reports')
 @ApiCommonHeaders()
+@ApiExtraModels(TransactionsByVendorResponseDto, TransactionsByVendorTableResponseDto)
 export class TransactionsByVendorController {
   constructor(
     private readonly transactionsByVendorsApp: TransactionsByVendorApplication,
@@ -17,7 +22,18 @@ export class TransactionsByVendorController {
 
   @Get()
   @ApiOperation({ summary: 'Get transactions by vendor' })
-  @ApiResponse({ status: 200, description: 'Transactions by vendor' })
+  @ApiResponse({
+    status: 200,
+    description: 'Transactions by vendor',
+    content: {
+      [AcceptType.ApplicationJson]: {
+        schema: { $ref: getSchemaPath(TransactionsByVendorResponseDto) },
+      },
+      [AcceptType.ApplicationJsonTable]: {
+        schema: { $ref: getSchemaPath(TransactionsByVendorTableResponseDto) },
+      },
+    },
+  })
   async transactionsByVendor(
     @Query() filter: TransactionsByVendorQueryDto,
     @Res({ passthrough: true }) res: Response,

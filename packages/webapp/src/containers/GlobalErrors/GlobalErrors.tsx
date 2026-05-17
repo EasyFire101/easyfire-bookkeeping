@@ -57,7 +57,7 @@ function GlobalErrors({
   if (globalErrors.access_denied) {
     toastKeySomethingWrong = AppToaster.show(
       {
-        message: intl.get('global_error.you_dont_have_permissions'),
+        message: globalErrors.access_denied.message || intl.get('global_error.you_dont_have_permissions'),
         intent: Intent.DANGER,
         onDismiss: () => {
           globalErrorsSet({ access_denied: false });

@@ -16,8 +16,8 @@ export class TrialBalanceSheetMeta {
   ): Promise<ITrialBalanceSheetMeta> {
     const commonMeta = await this.financialSheetMeta.meta();
 
-    const formattedFromDate = moment(query.fromDate).format('YYYY/MM/DD');
-    const formattedToDate = moment(query.toDate).format('YYYY/MM/DD');
+    const formattedFromDate = moment(query.fromDate).format(commonMeta.dateFormat);
+    const formattedToDate = moment(query.toDate).format(commonMeta.dateFormat);
     const formattedDateRange = `From ${formattedFromDate} to ${formattedToDate}`;
 
     const sheetName = 'Trial Balance Sheet';

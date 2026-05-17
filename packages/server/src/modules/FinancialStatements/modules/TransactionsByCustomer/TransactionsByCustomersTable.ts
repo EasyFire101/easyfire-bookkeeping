@@ -22,10 +22,12 @@ export class TransactionsByCustomersTable extends TransactionsByContactsTableRow
   constructor(
     customersTransactions: ITransactionsByCustomersCustomer[],
     i18n: I18nService,
+    dateFormat: string,
   ) {
     super();
     this.customersTransactions = customersTransactions;
     this.i18n = i18n;
+    this.dateFormat = dateFormat;
   }
 
   /**

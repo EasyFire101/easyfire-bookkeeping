@@ -68,16 +68,16 @@ export class SalesByItemsReportService {
         // Filter the date range of the sheet.
         builder.modify('filterDateRange', filter.fromDate, filter.toDate);
       });
+    // Retrieve the sales by items meta first to get date format.
+    const meta = await this.salesByItemsMeta.meta(query);
+
     const sheet = new SalesByItemsReport(
       filter,
       inventoryItems,
       inventoryTransactions,
-      tenantMetadata.baseCurrency,
+      { baseCurrency: tenantMetadata.baseCurrency, dateFormat: meta.dateFormat },
     );
     const salesByItemsData = sheet.reportData();
-
-    // Retrieve the sales by items meta.
-    const meta = await this.salesByItemsMeta.meta(query);
 
     // Triggers `onSalesByItemViewed` event.
     await this.eventPublisher.emitAsync(events.reports.onSalesByItemViewed, {

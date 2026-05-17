@@ -21,6 +21,7 @@ import { AccountsExportable } from './AccountsExportable.service';
 import { AccountsImportable } from './AccountsImportable.service';
 import { BulkDeleteAccountsService } from './BulkDeleteAccounts.service';
 import { ValidateBulkDeleteAccountsService } from './ValidateBulkDeleteAccounts.service';
+import { AccountsSettingsService } from './AccountsSettings.service';
 
 const models = [RegisterTenancyModel(BankAccount)];
 
@@ -29,6 +30,7 @@ const models = [RegisterTenancyModel(BankAccount)];
   controllers: [AccountsController],
   providers: [
     AccountsApplication,
+    AccountsSettingsService,
     CreateAccountService,
     TenancyContext,
     CommandAccountValidators,
@@ -49,9 +51,10 @@ const models = [RegisterTenancyModel(BankAccount)];
   exports: [
     AccountRepository,
     CreateAccountService,
+    AccountsSettingsService,
     ...models,
     AccountsExportable,
-    AccountsImportable
+    AccountsImportable,
   ],
 })
 export class AccountsModule {}

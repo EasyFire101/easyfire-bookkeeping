@@ -20,7 +20,7 @@ export class AuthenticationMailMesssages {
    * @returns {Mail}
    */
   resetPasswordMessage(user: ModelObject<SystemUser>, token: string) {
-    const baseURL = this.configService.get('baseURL');
+    const baseURL = this.configService.get('app.baseUrl');
 
     return new Mail()
       .setSubject('Bigcapital - Password Reset')
@@ -54,7 +54,7 @@ export class AuthenticationMailMesssages {
    * @returns {Mail}
    */
   signupVerificationMail(email: string, fullName: string, token: string) {
-    const baseURL = this.configService.get('baseURL');
+    const baseURL = this.configService.get('app.baseUrl');
     const verifyUrl = `${baseURL}/auth/email_confirmation?token=${token}&email=${email}`;
 
     return new Mail()

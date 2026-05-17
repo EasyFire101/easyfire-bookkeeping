@@ -40,17 +40,18 @@ export class ProfitLossSheetService {
     this.profitLossRepository.setFilter(filter);
     await this.profitLossRepository.asyncInitialize();
 
+    // Retrieve the profit/loss sheet meta first to get date format.
+    const meta = await this.profitLossSheetMeta.meta(filter);
+
     // Profit/Loss report instance.
     const profitLossInstance = new ProfitLossSheet(
       this.profitLossRepository,
       filter,
       this.i18nService,
+      { baseCurrency: meta.baseCurrency, dateFormat: meta.dateFormat },
     );
     // Profit/loss report data and columns.
     const data = profitLossInstance.reportData();
-
-    // Retrieve the profit/loss sheet meta.
-    const meta = await this.profitLossSheetMeta.meta(filter);
 
     // Triggers `onProfitLossSheetViewed` event.
     await this.eventPublisher.emitAsync(

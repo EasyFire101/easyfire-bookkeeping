@@ -5,7 +5,7 @@ import { TransformerInjectable } from '@/modules/Transformer/TransformerInjectab
 import { DynamicListService } from '@/modules/DynamicListing/DynamicList.service';
 import { PaymentReceived } from '../models/PaymentReceived';
 import { IFilterMeta, IPaginationMeta } from '@/interfaces/Model';
-import { IPaymentsReceivedFilter } from '../types/PaymentReceived.types';
+import { GetPaymentsReceivedQueryDto } from '../dtos/GetPaymentsReceivedQuery.dto';
 import { TenantModelProxy } from '@/modules/System/models/TenantBaseModel';
 
 @Injectable()
@@ -22,10 +22,10 @@ export class GetPaymentsReceivedService {
 
   /**
    * Retrieve payment receives paginated and filterable list.
-   * @param {IPaymentsReceivedFilter} filterDTO
+   * @param {GetPaymentsReceivedQueryDto} filterDTO
    */
   public async getPaymentReceives(
-    filterDTO: Partial<IPaymentsReceivedFilter>,
+    filterDTO: GetPaymentsReceivedQueryDto,
   ): Promise<{
     paymentReceives: PaymentReceived[];
     pagination: IPaginationMeta;

@@ -5,13 +5,17 @@ import {
   ApiResponse,
   ApiParam,
   ApiQuery,
+  ApiExtraModels,
+  getSchemaPath,
 } from '@nestjs/swagger';
 import { GetUncategorizedTransactionsQueryDto } from '../dtos/GetUncategorizedTransactionsQuery.dto';
+import { GetAutofillCategorizeTransactionResponseDto } from '../dtos/GetAutofillCategorizeTransactionResponse.dto';
 import { BankingTransactionsApplication } from '../BankingTransactionsApplication.service';
 import { ApiCommonHeaders } from '@/common/decorators/ApiCommonHeaders';
 
 @Controller('banking/uncategorized')
 @ApiTags('Banking Uncategorized Transactions')
+@ApiExtraModels(GetAutofillCategorizeTransactionResponseDto)
 @ApiCommonHeaders()
 export class BankingUncategorizedTransactionsController {
   constructor(
@@ -20,29 +24,29 @@ export class BankingUncategorizedTransactionsController {
 
   @Get('autofill')
   @ApiOperation({ summary: 'Get autofill values for categorize transactions' })
+  @ApiQuery({
+    name: 'uncategorizedTransactionIds',
+    required: true,
+    type: [Number],
+    isArray: true,
+    description: 'Uncategorized transaction IDs to get autofill for',
+  })
   @ApiResponse({
     status: 200,
     description: 'Returns autofill values for categorize transactions',
-  })
-  @ApiParam({
-    name: 'accountId',
-    required: true,
-    type: Number,
-    description: 'Bank account ID',
-  })
-  @ApiQuery({
-    name: 'uncategorizeTransactionsId',
-    required: true,
-    type: Number,
-    description: 'Uncategorize transactions ID',
+    schema: { $ref: getSchemaPath(GetAutofillCategorizeTransactionResponseDto) },
   })
   async getAutofillCategorizeTransaction(
     @Query('uncategorizedTransactionIds')
     uncategorizedTransactionIds: Array<number> | number,
   ) {
-    console.log(uncategorizedTransactionIds);
+    const ids = Array.isArray(uncategorizedTransactionIds)
+      ? uncategorizedTransactionIds
+      : uncategorizedTransactionIds != null
+        ? [uncategorizedTransactionIds]
+        : [];
     return this.bankingTransactionsApplication.getAutofillCategorizeTransaction(
-      uncategorizedTransactionIds,
+      ids,
     );
   }
 

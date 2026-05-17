@@ -1,20 +1,33 @@
 import { Response } from 'express';
-import { Controller, Get, Headers, Query, Res } from '@nestjs/common';
+import { Controller, Get, Headers, Query, Res, UseGuards } from '@nestjs/common';
 import { ProfitLossSheetApplication } from './ProfitLossSheetApplication';
 import { AcceptType } from '@/constants/accept-type';
 import {
+  ApiExtraModels,
   ApiOperation,
   ApiProduces,
   ApiResponse,
   ApiTags,
+  getSchemaPath,
 } from '@nestjs/swagger';
 import { ProfitLossSheetQueryDto } from './ProfitLossSheetQuery.dto';
 import { ProfitLossSheetResponseExample } from './ProfitLossSheet.swagger';
+import {
+  ProfitLossSheetResponseDto,
+  ProfitLossSheetTableResponseDto,
+} from './ProfitLossSheetResponse.dto';
 import { ApiCommonHeaders } from '@/common/decorators/ApiCommonHeaders';
+import { RequirePermission } from '@/modules/Roles/RequirePermission.decorator';
+import { PermissionGuard } from '@/modules/Roles/Permission.guard';
+import { AuthorizationGuard } from '@/modules/Roles/Authorization.guard';
+import { AbilitySubject } from '@/modules/Roles/Roles.types';
+import { ReportsAction } from '../../types/Report.types';
 
 @Controller('/reports/profit-loss-sheet')
 @ApiTags('Reports')
 @ApiCommonHeaders()
+@UseGuards(AuthorizationGuard, PermissionGuard)
+@ApiExtraModels(ProfitLossSheetResponseDto, ProfitLossSheetTableResponseDto)
 export class ProfitLossSheetController {
   constructor(
     private readonly profitLossSheetApp: ProfitLossSheetApplication,
@@ -27,10 +40,19 @@ export class ProfitLossSheetController {
    * @param {string} acceptHeader
    */
   @Get('/')
+  @RequirePermission(ReportsAction.READ_PROFIT_LOSS, AbilitySubject.Report)
   @ApiResponse({
     status: 200,
     description: 'Profit & loss statement',
-    example: ProfitLossSheetResponseExample,
+    content: {
+      [AcceptType.ApplicationJson]: {
+        schema: { $ref: getSchemaPath(ProfitLossSheetResponseDto) },
+        example: ProfitLossSheetResponseExample,
+      },
+      [AcceptType.ApplicationJsonTable]: {
+        schema: { $ref: getSchemaPath(ProfitLossSheetTableResponseDto) },
+      },
+    },
   })
   @ApiOperation({ summary: 'Get profit/loss statement report' })
   @ApiProduces(

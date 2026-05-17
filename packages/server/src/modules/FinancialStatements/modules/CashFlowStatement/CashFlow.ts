@@ -27,7 +27,7 @@ import { DISPLAY_COLUMNS_BY } from './constants';
 import { FinancialSheetStructure } from '../../common/FinancialSheetStructure';
 import { Account } from '@/modules/Accounts/models/Account.model';
 import { ILedger } from '@/modules/Ledger/types/Ledger.types';
-import { INumberFormatQuery } from '../../types/Report.types';
+import { INumberFormatQuery, IFinancialReportMeta, DEFAULT_REPORT_META } from '../../types/Report.types';
 import { transformToMapBy } from '@/utils/transform-to-map-by';
 import { accumSum } from '@/utils/accum-sum';
 import { ModelObject } from 'objection';
@@ -62,12 +62,12 @@ export class CashFlowStatement extends R.pipe(
     cashLedger: ILedger,
     netIncomeLedger: ILedger,
     query: ICashFlowStatementQuery,
-    baseCurrency: string,
     i18n: I18nService,
+    meta: IFinancialReportMeta,
   ) {
     super();
 
-    this.baseCurrency = baseCurrency;
+    this.baseCurrency = meta.baseCurrency;
     this.i18n = i18n;
     this.ledger = ledger;
     this.cashLedger = cashLedger;
@@ -76,6 +76,7 @@ export class CashFlowStatement extends R.pipe(
     this.accountsByRootType = transformToMapBy(accounts, 'accountRootType');
     this.query = query;
     this.numberFormat = this.query.numberFormat;
+    this.dateFormat = meta.dateFormat || DEFAULT_REPORT_META.dateFormat;
     this.dateRangeSet = [];
     this.comparatorDateType =
       query.displayColumnsType === 'total' ? 'day' : query.displayColumnsBy;

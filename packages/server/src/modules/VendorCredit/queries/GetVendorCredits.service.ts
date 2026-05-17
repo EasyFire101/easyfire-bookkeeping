@@ -4,7 +4,7 @@ import { VendorCreditTransformer } from './VendorCreditTransformer';
 import { DynamicListService } from '@/modules/DynamicListing/DynamicList.service';
 import { TransformerInjectable } from '@/modules/Transformer/TransformerInjectable.service';
 import { VendorCredit } from '../models/VendorCredit';
-import { IVendorCreditsQueryDTO } from '../types/VendorCredit.types';
+import { GetVendorCreditsQueryDto } from '../dtos/GetVendorCreditsQuery.dto';
 import { TenantModelProxy } from '@/modules/System/models/TenantBaseModel';
 
 @Injectable()
@@ -19,19 +19,19 @@ export class GetVendorCreditsService {
 
   /**
    * Parses the sale invoice list filter DTO.
-   * @param {IVendorCreditsQueryDTO} filterDTO
+   * @param {GetVendorCreditsQueryDto} filterDTO
    * @returns
    */
-  private parseListFilterDTO = (filterDTO: IVendorCreditsQueryDTO) => {
+  private parseListFilterDTO = (filterDTO: GetVendorCreditsQueryDto) => {
     return R.compose(this.dynamicListService.parseStringifiedFilter)(filterDTO);
   };
 
   /**
    * Retrieve the vendor credits list.
-   * @param {IVendorCreditsQueryDTO} vendorCreditQuery -
+   * @param {GetVendorCreditsQueryDto} vendorCreditQuery -
    */
   public getVendorCredits = async (
-    vendorCreditQuery: IVendorCreditsQueryDTO,
+    vendorCreditQuery: GetVendorCreditsQueryDto,
   ) => {
     const filterDto = {
       sortOrder: 'desc',
@@ -58,7 +58,7 @@ export class GetVendorCreditsService {
         // Gives ability to inject custom query to filter results.
         filterDto?.filterQuery && filterDto?.filterQuery(builder);
       })
-      .pagination(filter.page - 1, filter.pageSize);
+      .pagination(filterDto.page - 1, filterDto.pageSize);
 
     // Transformes the vendor credits models to POJO.
     const vendorCredits = await this.transformer.transform(

@@ -7,12 +7,14 @@ import {
   Post,
   Put,
   Query,
+  UseGuards,
 } from '@nestjs/common';
 import { BillPaymentsApplication } from './BillPaymentsApplication.service';
 import {
   ApiExtraModels,
   ApiOperation,
   ApiParam,
+  ApiQuery,
   ApiResponse,
   ApiTags,
   getSchemaPath,
@@ -26,12 +28,18 @@ import { BillPaymentsPages } from './commands/BillPaymentsPages.service';
 import { BillPaymentResponseDto } from './dtos/BillPaymentResponse.dto';
 import { PaginatedResponseDto } from '@/common/dtos/PaginatedResults.dto';
 import { ApiCommonHeaders } from '@/common/decorators/ApiCommonHeaders';
+import { RequirePermission } from '@/modules/Roles/RequirePermission.decorator';
+import { PermissionGuard } from '@/modules/Roles/Permission.guard';
+import { AuthorizationGuard } from '@/modules/Roles/Authorization.guard';
+import { AbilitySubject } from '@/modules/Roles/Roles.types';
+import { IPaymentMadeAction } from './types/BillPayments.types';
 
 @Controller('bill-payments')
 @ApiTags('Bill Payments')
 @ApiExtraModels(BillPaymentResponseDto)
 @ApiExtraModels(PaginatedResponseDto)
 @ApiCommonHeaders()
+@UseGuards(AuthorizationGuard, PermissionGuard)
 export class BillPaymentsController {
   constructor(
     private billPaymentsApplication: BillPaymentsApplication,
@@ -39,12 +47,14 @@ export class BillPaymentsController {
   ) {}
 
   @Post()
+  @RequirePermission(IPaymentMadeAction.Create, AbilitySubject.PaymentMade)
   @ApiOperation({ summary: 'Create a new bill payment.' })
   public createBillPayment(@Body() billPaymentDTO: CreateBillPaymentDto) {
     return this.billPaymentsApplication.createBillPayment(billPaymentDTO);
   }
 
   @Delete(':billPaymentId')
+  @RequirePermission(IPaymentMadeAction.Delete, AbilitySubject.PaymentMade)
   @ApiOperation({ summary: 'Delete the given bill payment.' })
   @ApiParam({
     name: 'billPaymentId',
@@ -59,6 +69,7 @@ export class BillPaymentsController {
   }
 
   @Put(':billPaymentId')
+  @RequirePermission(IPaymentMadeAction.Edit, AbilitySubject.PaymentMade)
   @ApiOperation({ summary: 'Edit the given bill payment.' })
   @ApiParam({
     name: 'billPaymentId',
@@ -77,11 +88,12 @@ export class BillPaymentsController {
   }
 
   @Get('/new-page/entries')
+  @RequirePermission(IPaymentMadeAction.View, AbilitySubject.PaymentMade)
   @ApiOperation({
     summary:
       'Retrieves the payable entries of the new page once vendor be selected.',
   })
-  @ApiParam({
+  @ApiQuery({
     name: 'vendorId',
     required: true,
     type: Number,
@@ -95,6 +107,7 @@ export class BillPaymentsController {
   }
 
   @Get(':billPaymentId/bills')
+  @RequirePermission(IPaymentMadeAction.View, AbilitySubject.PaymentMade)
   @ApiOperation({ summary: 'Retrieves the bills of the given bill payment.' })
   @ApiParam({
     name: 'billPaymentId',
@@ -107,6 +120,7 @@ export class BillPaymentsController {
   }
 
   @Get('/:billPaymentId/edit-page')
+  @RequirePermission(IPaymentMadeAction.View, AbilitySubject.PaymentMade)
   @ApiOperation({
     summary: 'Retrieves the edit page of the given bill payment.',
   })
@@ -126,6 +140,7 @@ export class BillPaymentsController {
   }
 
   @Get(':billPaymentId')
+  @RequirePermission(IPaymentMadeAction.View, AbilitySubject.PaymentMade)
   @ApiOperation({ summary: 'Retrieves the bill payment details.' })
   @ApiResponse({
     status: 200,
@@ -145,6 +160,7 @@ export class BillPaymentsController {
   }
 
   @Get()
+  @RequirePermission(IPaymentMadeAction.View, AbilitySubject.PaymentMade)
   @ApiOperation({ summary: 'Retrieves the bill payments list.' })
   @ApiResponse({
     status: 200,

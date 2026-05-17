@@ -155,4 +155,13 @@ export class CreateCustomerDto extends ContactAddressDto {
   @IsOptional()
   @IsBoolean()
   active?: boolean;
+
+  @ApiProperty({
+    required: false,
+    description: 'Customer code',
+    example: 'CUST-001',
+  })
+  @IsOptional()
+  @IsString()
+  code?: string;
 }

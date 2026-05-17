@@ -11,12 +11,6 @@ export class BankAccountsController {
 
   @Get()
   @ApiOperation({ summary: 'Retrieve the bank accounts.' })
-  @ApiQuery({
-    name: 'query',
-    description: 'Query parameters for the bank accounts list.',
-    type: BankAccountsQueryDto,
-    required: false,
-  })
   @ApiResponse({
     status: 200,
     description: 'List of bank accounts retrieved successfully.',

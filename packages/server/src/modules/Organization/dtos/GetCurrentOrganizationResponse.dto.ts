@@ -80,6 +80,13 @@ export class OrganizationMetadataResponseDto {
   logoKey: string;
 
   @ApiPropertyOptional({
+    description: 'Logo URL (presigned or public) for display',
+    example: 'https://...',
+    nullable: true,
+  })
+  logoUri: string;
+
+  @ApiPropertyOptional({
     description: 'Organization address details',
     example: '123 Main St, New York, NY',
     nullable: true,

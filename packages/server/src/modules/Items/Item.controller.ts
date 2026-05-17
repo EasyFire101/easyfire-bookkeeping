@@ -9,6 +9,7 @@ import {
   Put,
   Query,
   HttpCode,
+  UseGuards,
 } from '@nestjs/common';
 import { TenantController } from '../Tenancy/Tenant.controller';
 import { ItemsApplicationService } from './ItemsApplication.service';
@@ -35,6 +36,11 @@ import {
   ValidateBulkDeleteItemsResponseDto,
 } from './dtos/BulkDeleteItems.dto';
 import { ItemApiErrorResponseDto } from './dtos/ItemErrorResponse.dto';
+import { RequirePermission } from '@/modules/Roles/RequirePermission.decorator';
+import { PermissionGuard } from '@/modules/Roles/Permission.guard';
+import { AuthorizationGuard } from '@/modules/Roles/Authorization.guard';
+import { AbilitySubject } from '@/modules/Roles/Roles.types';
+import { ItemAction } from '@/interfaces/Item';
 
 @Controller('/items')
 @ApiTags('Items')
@@ -48,12 +54,14 @@ import { ItemApiErrorResponseDto } from './dtos/ItemErrorResponse.dto';
 @ApiExtraModels(ValidateBulkDeleteItemsResponseDto)
 @ApiExtraModels(ItemApiErrorResponseDto)
 @ApiCommonHeaders()
+@UseGuards(AuthorizationGuard, PermissionGuard)
 export class ItemsController extends TenantController {
   constructor(private readonly itemsApplication: ItemsApplicationService) {
     super();
   }
 
   @Get()
+  @RequirePermission(ItemAction.VIEW, AbilitySubject.Item)
   @ApiOperation({ summary: 'Retrieves the item list.' })
   @ApiResponse({
     status: 200,
@@ -144,6 +152,7 @@ export class ItemsController extends TenantController {
    * @returns The updated item id.
    */
   @Put(':id')
+  @RequirePermission(ItemAction.EDIT, AbilitySubject.Item)
   @ApiOperation({ summary: 'Edit the given item (product or service).' })
   @ApiResponse({
     status: 200,
@@ -174,6 +183,7 @@ export class ItemsController extends TenantController {
 
   @Post('validate-bulk-delete')
   @HttpCode(200)
+  @RequirePermission(ItemAction.DELETE, AbilitySubject.Item)
   @ApiOperation({
     summary:
       'Validates which items can be deleted and returns counts of deletable and non-deletable items.',
@@ -194,6 +204,7 @@ export class ItemsController extends TenantController {
 
   @Post('bulk-delete')
   @HttpCode(200)
+  @RequirePermission(ItemAction.DELETE, AbilitySubject.Item)
   @ApiOperation({ summary: 'Deletes multiple items in bulk.' })
   @ApiResponse({
     status: 200,
@@ -208,6 +219,7 @@ export class ItemsController extends TenantController {
   }
 
   @Post()
+  @RequirePermission(ItemAction.CREATE, AbilitySubject.Item)
   @ApiOperation({ summary: 'Create a new item (product or service).' })
   @ApiResponse({
     status: 200,
@@ -230,6 +242,7 @@ export class ItemsController extends TenantController {
   }
 
   @Delete(':id')
+  @RequirePermission(ItemAction.DELETE, AbilitySubject.Item)
   @ApiOperation({ summary: 'Delete the given item (product or service).' })
   @ApiResponse({
     status: 200,
@@ -255,6 +268,7 @@ export class ItemsController extends TenantController {
   }
 
   @Patch(':id/inactivate')
+  @RequirePermission(ItemAction.EDIT, AbilitySubject.Item)
   @ApiOperation({ summary: 'Inactivate the given item (product or service).' })
   @ApiResponse({
     status: 200,
@@ -273,6 +287,7 @@ export class ItemsController extends TenantController {
   }
 
   @Patch(':id/activate')
+  @RequirePermission(ItemAction.EDIT, AbilitySubject.Item)
   @ApiOperation({ summary: 'Activate the given item (product or service).' })
   @ApiResponse({
     status: 200,
@@ -291,6 +306,7 @@ export class ItemsController extends TenantController {
   }
 
   @Get(':id')
+  @RequirePermission(ItemAction.VIEW, AbilitySubject.Item)
   @ApiOperation({ summary: 'Get the given item (product or service).' })
   @ApiResponse({
     status: 200,
@@ -312,6 +328,7 @@ export class ItemsController extends TenantController {
   }
 
   @Get(':id/invoices')
+  @RequirePermission(ItemAction.VIEW, AbilitySubject.Item)
   @ApiOperation({
     summary: 'Retrieves the item associated invoices transactions.',
   })
@@ -337,6 +354,7 @@ export class ItemsController extends TenantController {
   }
 
   @Get(':id/bills')
+  @RequirePermission(ItemAction.VIEW, AbilitySubject.Item)
   @ApiOperation({
     summary: 'Retrieves the item associated bills transactions.',
   })
@@ -362,6 +380,7 @@ export class ItemsController extends TenantController {
   }
 
   @Get(':id/estimates')
+  @RequirePermission(ItemAction.VIEW, AbilitySubject.Item)
   @ApiOperation({
     summary: 'Retrieves the item associated estimates transactions.',
   })
@@ -387,6 +406,7 @@ export class ItemsController extends TenantController {
   }
 
   @Get(':id/receipts')
+  @RequirePermission(ItemAction.VIEW, AbilitySubject.Item)
   @ApiOperation({
     summary: 'Retrieves the item associated receipts transactions.',
   })

@@ -29,6 +29,7 @@ export interface IApplyCreditToInvoicesDeletedPayload {
 export interface ICreditNoteAppliedToInvoice {
   amount: number;
   creditNoteId: number;
+  invoiceId: number;
 }
 export interface ICreditNoteAppliedToInvoiceModel {
   amount: number;

@@ -1,5 +1,6 @@
 import { ContactAddressDto } from '@/modules/Customers/dtos/ContactAddress.dto';
-import { IsEmail, IsString, IsBoolean, IsOptional } from 'class-validator';
+import { IsEmail, IsString, IsBoolean } from 'class-validator';
+import { IsOptional } from '@/common/decorators/Validators';
 import { ApiProperty } from '@nestjs/swagger';
 
 export class EditVendorDto extends ContactAddressDto {
@@ -48,7 +49,10 @@ export class EditVendorDto extends ContactAddressDto {
   @IsString()
   personalPhone?: string;
 
-  @ApiProperty({ required: false, description: 'Additional notes about the vendor' })
+  @ApiProperty({
+    required: false,
+    description: 'Additional notes about the vendor',
+  })
   @IsOptional()
   @IsString()
   note?: string;
@@ -57,4 +61,9 @@ export class EditVendorDto extends ContactAddressDto {
   @IsOptional()
   @IsBoolean()
   active?: boolean;
+
+  @ApiProperty({ required: false, description: 'Vendor code' })
+  @IsOptional()
+  @IsString()
+  code?: string;
 }

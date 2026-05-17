@@ -28,17 +28,18 @@ export class ARAgingSummaryService {
     this.ARAgingSummaryRepository.setFilter(filter);
     await this.ARAgingSummaryRepository.load();
 
+    // Retrieve the aging summary report meta first to get date format.
+    const meta = await this.ARAgingSummaryMeta.meta(filter);
+
     // A/R aging summary report instance.
     const ARAgingSummaryReport = new ARAgingSummarySheet(
       filter,
       this.ARAgingSummaryRepository,
+      { baseCurrency: meta.baseCurrency, dateFormat: meta.dateFormat },
     );
     // A/R aging summary report data and columns.
     const data = ARAgingSummaryReport.reportData();
     const columns = ARAgingSummaryReport.reportColumns();
-
-    // Retrieve the aging summary report meta.
-    const meta = await this.ARAgingSummaryMeta.meta(filter);
 
     // Triggers `onReceivableAgingViewed` event.
     await this.eventPublisher.emitAsync(

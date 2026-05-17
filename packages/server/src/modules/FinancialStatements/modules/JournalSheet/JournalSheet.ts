@@ -11,6 +11,7 @@ import { FinancialSheet } from '../../common/FinancialSheet';
 import { JournalSheetRepository } from './JournalSheetRepository';
 import { ILedgerEntry } from '@/modules/Ledger/types/Ledger.types';
 import { getTransactionTypeLabel } from '@/modules/BankingTransactions/utils';
+import { IFinancialReportMeta, DEFAULT_REPORT_META } from '../../types/Report.types';
 
 export class JournalSheet extends FinancialSheet {
   readonly query: IJournalReportQuery;
@@ -22,20 +23,24 @@ export class JournalSheet extends FinancialSheet {
    * @param {IJournalReportQuery} query -
    * @param {JournalSheetRepository} repository -
    * @param {I18nService} i18n -
+   * @param {IFinancialReportMeta} meta -
    */
   constructor(
     query: IJournalReportQuery,
     repository: JournalSheetRepository,
     i18n: I18nService,
+    meta: IFinancialReportMeta,
   ) {
     super();
 
     this.query = query;
     this.repository = repository;
+    this.baseCurrency = meta.baseCurrency;
     this.numberFormat = {
       ...this.numberFormat,
       ...this.query.numberFormat,
     };
+    this.dateFormat = meta.dateFormat || DEFAULT_REPORT_META.dateFormat;
     this.i18n = i18n;
   }
 
@@ -94,7 +99,7 @@ export class JournalSheet extends FinancialSheet {
 
     return {
       date: moment(groupEntry.date).toDate(),
-      dateFormatted: moment(groupEntry.date).format('YYYY MMM DD'),
+      dateFormatted: moment(groupEntry.date).format(this.dateFormat),
 
       transactionType: groupEntry.transactionType,
       referenceId: groupEntry.transactionId,

@@ -4,17 +4,24 @@ import { VendorBalanceSummaryApplication } from './VendorBalanceSummaryApplicati
 import { Response } from 'express';
 import { AcceptType } from '@/constants/accept-type';
 import {
+  ApiExtraModels,
   ApiOperation,
   ApiProduces,
   ApiResponse,
   ApiTags,
+  getSchemaPath,
 } from '@nestjs/swagger';
 import { VendorBalanceSummaryQueryDto } from './VendorBalanceSummaryQuery.dto';
+import {
+  VendorBalanceSummaryResponseDto,
+  VendorBalanceSummaryTableResponseDto,
+} from './VendorBalanceSummaryResponse.dto';
 import { ApiCommonHeaders } from '@/common/decorators/ApiCommonHeaders';
 
 @Controller('/reports/vendor-balance-summary')
 @ApiTags('Reports')
 @ApiCommonHeaders()
+@ApiExtraModels(VendorBalanceSummaryResponseDto, VendorBalanceSummaryTableResponseDto)
 export class VendorBalanceSummaryController {
   constructor(
     private readonly vendorBalanceSummaryApp: VendorBalanceSummaryApplication,
@@ -22,7 +29,18 @@ export class VendorBalanceSummaryController {
 
   @Get()
   @ApiOperation({ summary: 'Get vendor balance summary' })
-  @ApiResponse({ status: 200, description: 'Vendor balance summary' })
+  @ApiResponse({
+    status: 200,
+    description: 'Vendor balance summary',
+    content: {
+      [AcceptType.ApplicationJson]: {
+        schema: { $ref: getSchemaPath(VendorBalanceSummaryResponseDto) },
+      },
+      [AcceptType.ApplicationJsonTable]: {
+        schema: { $ref: getSchemaPath(VendorBalanceSummaryTableResponseDto) },
+      },
+    },
+  })
   @ApiProduces(
     AcceptType.ApplicationJson,
     AcceptType.ApplicationJsonTable,

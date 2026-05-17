@@ -35,7 +35,7 @@ export class PaymentReceivedEntryDto {
   invoiceId: number;
 
   @ToNumber()
-  @IsInt()
+  @IsNumber()
   @IsNotEmpty()
   paymentAmount: number;
 }

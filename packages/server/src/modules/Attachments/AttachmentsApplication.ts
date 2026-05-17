@@ -4,7 +4,7 @@ import { DeleteAttachment } from './DeleteAttachment';
 import { GetAttachment } from './GetAttachment';
 import { LinkAttachment } from './LinkAttachment';
 import { UnlinkAttachment } from './UnlinkAttachment';
-import { getAttachmentPresignedUrl } from './GetAttachmentPresignedUrl';
+import { GetAttachmentPresignedUrl } from './GetAttachmentPresignedUrl';
 
 @Injectable()
 export class AttachmentsApplication {
@@ -14,7 +14,7 @@ export class AttachmentsApplication {
     private readonly getDocumentService: GetAttachment,
     private readonly linkDocumentService: LinkAttachment,
     private readonly unlinkDocumentService: UnlinkAttachment,
-    private readonly getPresignedUrlService: getAttachmentPresignedUrl,
+    private readonly getPresignedUrlService: GetAttachmentPresignedUrl,
   ) {}
 
   /**

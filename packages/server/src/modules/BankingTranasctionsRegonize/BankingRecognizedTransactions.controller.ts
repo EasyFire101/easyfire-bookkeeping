@@ -8,13 +8,14 @@ import {
   ApiExtraModels,
   getSchemaPath,
 } from '@nestjs/swagger';
+import { PaginatedResponseDto } from '@/common/dtos/PaginatedResults.dto';
+import { ApiCommonHeaders } from '@/common/decorators/ApiCommonHeaders';
 import { RecognizedTransactionsApplication } from './RecognizedTransactions.application';
 import { GetRecognizedTransactionResponseDto } from './dtos/GetRecognizedTransactionResponse.dto';
-import { ApiCommonHeaders } from '@/common/decorators/ApiCommonHeaders';
 
 @Controller('banking/recognized')
 @ApiTags('Banking Recognized Transactions')
-@ApiExtraModels(GetRecognizedTransactionResponseDto)
+@ApiExtraModels(GetRecognizedTransactionResponseDto, PaginatedResponseDto)
 @ApiCommonHeaders()
 export class BankingRecognizedTransactionsController {
   constructor(
@@ -58,10 +59,17 @@ export class BankingRecognizedTransactionsController {
     status: 200,
     description: 'Returns a list of recognized transactions',
     schema: {
-      type: 'array',
-      items: {
-        $ref: getSchemaPath(GetRecognizedTransactionResponseDto),
-      },
+      allOf: [
+        { $ref: getSchemaPath(PaginatedResponseDto) },
+        {
+          properties: {
+            data: {
+              type: 'array',
+              items: { $ref: getSchemaPath(GetRecognizedTransactionResponseDto) },
+            },
+          },
+        },
+      ],
     },
   })
   async getRecognizedTransactions(@Query() query: any) {

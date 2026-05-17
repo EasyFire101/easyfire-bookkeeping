@@ -1,12 +1,13 @@
 // @ts-nocheck
 import { Button, Intent } from '@blueprintjs/core';
+import { x } from '@xstyled/emotion';
 import AuthInsider from './AuthInsider';
 import { AuthInsiderCard } from './_components';
-import styles from './RegisterVerify.module.scss';
 import { AppToaster, Stack } from '@/components';
 import { useAuthActions, useAuthUserVerifyEmail } from '@/hooks/state';
 import { useAuthSignUpVerifyResendMail } from '@/hooks/query';
 import { AuthContainer } from './AuthContainer';
+import { useIsDarkMode } from '@/hooks/useDarkMode';
 
 export default function RegisterVerify() {
   const { setLogout } = useAuthActions();
@@ -14,6 +15,7 @@ export default function RegisterVerify() {
     useAuthSignUpVerifyResendMail();
 
   const emailAddress = useAuthUserVerifyEmail();
+  const isDarkMode = useIsDarkMode();
 
   const handleResendMailBtnClick = () => {
     resendSignUpVerifyMail()
@@ -37,12 +39,24 @@ export default function RegisterVerify() {
   return (
     <AuthContainer>
       <AuthInsider>
-        <AuthInsiderCard className={styles.root}>
-          <h2 className={styles.title}>Please verify your email</h2>
-          <p className={styles.description}>
+        <AuthInsiderCard textAlign="center">
+          <x.h2
+            fontSize="18px"
+            fontWeight={600}
+            mb="0.5rem"
+            color={isDarkMode ? 'rgba(255, 255, 255, 0.85)' : '#252A31'}
+          >
+            Please verify your email
+          </x.h2>
+          <x.p
+            mb="1rem"
+            fontSize="15px"
+            lineHeight="1.45"
+            color={isDarkMode ? 'rgba(255, 255, 255, 0.7)' : '#404854'}
+          >
             We sent an email to <strong>{emailAddress}</strong> Click the link
             inside to get started.
-          </p>
+          </x.p>
 
           <Stack spacing={4}>
             <Button

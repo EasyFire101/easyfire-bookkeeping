@@ -19,7 +19,7 @@ import { BalanceSheetFiltering } from './BalanceSheetFiltering';
 import { BalanceSheetNetIncome } from './BalanceSheetNetIncome';
 import { BalanceSheetAggregators } from './BalanceSheetAggregators';
 import { BalanceSheetAccounts } from './BalanceSheetAccounts';
-import { INumberFormatQuery } from '../../types/Report.types';
+import { INumberFormatQuery, IFinancialReportMeta, DEFAULT_REPORT_META } from '../../types/Report.types';
 import { FinancialSheet } from '../../common/FinancialSheet';
 
 export class BalanceSheet extends R.pipe(
@@ -66,21 +66,23 @@ export class BalanceSheet extends R.pipe(
   /**
    * Constructor method.
    * @param {IBalanceSheetQuery} query -
-   * @param {IAccount[]} accounts -
-   * @param {string} baseCurrency -
+   * @param {BalanceSheetRepository} repository -
+   * @param {I18nService} i18n -
+   * @param {IFinancialReportMeta} meta -
    */
   constructor(
     query: IBalanceSheetQuery,
     repository: BalanceSheetRepository,
-    baseCurrency: string,
     i18n: I18nService,
+    meta: IFinancialReportMeta,
   ) {
     super();
 
     this.query = new BalanceSheetQuery(query);
     this.repository = repository;
-    this.baseCurrency = baseCurrency;
+    this.baseCurrency = meta.baseCurrency;
     this.numberFormat = this.query.query.numberFormat;
+    this.dateFormat = meta.dateFormat || DEFAULT_REPORT_META.dateFormat;
     this.i18n = i18n;
   }
 

@@ -12,6 +12,6 @@ export const transformBuildDto = (
 ): BuildOrganizationDto => {
   return {
     ...buildDTO,
-    dateFormat: defaultTo(buildDTO.dateFormat, 'DD MMM yyyy'),
+    dateFormat: defaultTo(buildDTO.dateFormat, 'DD MMM YYYY'),
   };
 };

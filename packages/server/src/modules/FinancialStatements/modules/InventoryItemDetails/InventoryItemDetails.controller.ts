@@ -1,14 +1,19 @@
 import { Response } from 'express';
-import { ApiOperation, ApiTags } from '@nestjs/swagger';
+import { ApiExtraModels, ApiOperation, ApiTags, ApiResponse, ApiProduces, getSchemaPath } from '@nestjs/swagger';
 import { Controller, Get, Headers, Query, Res } from '@nestjs/common';
 import { InventoryItemDetailsApplication } from './InventoryItemDetailsApplication';
 import { AcceptType } from '@/constants/accept-type';
 import { InventoryItemDetailsQueryDto } from './InventoryItemDetailsQuery.dto';
+import {
+  InventoryItemDetailsResponseDto,
+  InventoryItemDetailsTableResponseDto,
+} from './InventoryItemDetailsResponse.dto';
 import { ApiCommonHeaders } from '@/common/decorators/ApiCommonHeaders';
 
 @Controller('reports/inventory-item-details')
 @ApiTags('Reports')
 @ApiCommonHeaders()
+@ApiExtraModels(InventoryItemDetailsResponseDto, InventoryItemDetailsTableResponseDto)
 export class InventoryItemDetailsController {
   constructor(
     private readonly inventoryItemDetailsApp: InventoryItemDetailsApplication,
@@ -16,6 +21,25 @@ export class InventoryItemDetailsController {
 
   @Get('/')
   @ApiOperation({ summary: 'Get inventory item details' })
+  @ApiResponse({
+    status: 200,
+    description: 'Inventory item details report',
+    content: {
+      [AcceptType.ApplicationJson]: {
+        schema: { $ref: getSchemaPath(InventoryItemDetailsResponseDto) },
+      },
+      [AcceptType.ApplicationJsonTable]: {
+        schema: { $ref: getSchemaPath(InventoryItemDetailsTableResponseDto) },
+      },
+    },
+  })
+  @ApiProduces(
+    AcceptType.ApplicationJson,
+    AcceptType.ApplicationJsonTable,
+    AcceptType.ApplicationPdf,
+    AcceptType.ApplicationXlsx,
+    AcceptType.ApplicationCsv,
+  )
   async inventoryItemDetails(
     @Query() query: InventoryItemDetailsQueryDto,
     @Res({ passthrough: true }) res: Response,

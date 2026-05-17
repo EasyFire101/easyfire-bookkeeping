@@ -5,7 +5,7 @@ import { TransformerInjectable } from '@/modules/Transformer/TransformerInjectab
 import { DynamicListService } from '@/modules/DynamicListing/DynamicList.service';
 import { ManualJournal } from '../models/ManualJournal';
 import { IFilterMeta, IPaginationMeta } from '@/interfaces/Model';
-import { IManualJournalsFilter } from '../types/ManualJournals.types';
+import { GetManualJournalsQueryDto } from '../dtos/GetManualJournalsQuery.dto';
 import { TenantModelProxy } from '@/modules/System/models/TenantBaseModel';
 
 @Injectable()
@@ -28,10 +28,10 @@ export class GetManualJournals {
 
   /**
    * Retrieve manual journals datatable list.
-   * @param {IManualJournalsFilter} filter -
+   * @param {GetManualJournalsQueryDto} filter -
    */
   public getManualJournals = async (
-    filterDTO: Partial<IManualJournalsFilter>,
+    filterDTO: GetManualJournalsQueryDto,
   ): Promise<{
     manualJournals: ManualJournal[];
     pagination: IPaginationMeta;

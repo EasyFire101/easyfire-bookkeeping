@@ -1,28 +1,50 @@
 import { Response } from 'express';
-import { Controller, Get, Headers, Query, Res } from '@nestjs/common';
+import { Controller, Get, Headers, Query, Res, UseGuards } from '@nestjs/common';
 import { AcceptType } from '@/constants/accept-type';
 import { CashflowSheetApplication } from './CashflowSheetApplication';
 import {
+  ApiExtraModels,
   ApiOperation,
   ApiProduces,
   ApiResponse,
   ApiTags,
+  getSchemaPath,
 } from '@nestjs/swagger';
 import { CashFlowStatementQueryDto } from './CashFlowStatementQuery.dto';
 import { CashflowStatementResponseExample } from './CashflowStatement.swagger';
+import {
+  CashflowStatementResponseDto,
+  CashflowStatementTableResponseDto,
+} from './CashflowStatementResponse.dto';
 import { ApiCommonHeaders } from '@/common/decorators/ApiCommonHeaders';
+import { RequirePermission } from '@/modules/Roles/RequirePermission.decorator';
+import { PermissionGuard } from '@/modules/Roles/Permission.guard';
+import { AuthorizationGuard } from '@/modules/Roles/Authorization.guard';
+import { AbilitySubject } from '@/modules/Roles/Roles.types';
+import { ReportsAction } from '../../types/Report.types';
 
 @Controller('reports/cashflow-statement')
 @ApiTags('Reports')
 @ApiCommonHeaders()
+@UseGuards(AuthorizationGuard, PermissionGuard)
+@ApiExtraModels(CashflowStatementResponseDto, CashflowStatementTableResponseDto)
 export class CashflowController {
   constructor(private readonly cashflowSheetApp: CashflowSheetApplication) { }
 
   @Get()
+  @RequirePermission(ReportsAction.READ_CASHFLOW, AbilitySubject.Report)
   @ApiResponse({
     status: 200,
     description: 'Cashflow statement report',
-    example: CashflowStatementResponseExample,
+    content: {
+      [AcceptType.ApplicationJson]: {
+        schema: { $ref: getSchemaPath(CashflowStatementResponseDto) },
+        example: CashflowStatementResponseExample,
+      },
+      [AcceptType.ApplicationJsonTable]: {
+        schema: { $ref: getSchemaPath(CashflowStatementTableResponseDto) },
+      },
+    },
   })
   @ApiOperation({ summary: 'Get cashflow statement report' })
   @ApiProduces(

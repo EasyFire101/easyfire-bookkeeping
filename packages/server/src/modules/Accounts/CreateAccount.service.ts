@@ -15,6 +15,7 @@ import { events } from '@/common/events/events';
 import { CreateAccountDTO } from './CreateAccount.dto';
 import { PartialModelObject } from 'objection';
 import { TenantModelProxy } from '../System/models/TenantBaseModel';
+import { AccountsSettingsService } from './AccountsSettings.service';
 
 @Injectable()
 export class CreateAccountService {
@@ -32,6 +33,7 @@ export class CreateAccountService {
     private readonly uow: UnitOfWork,
     private readonly validator: CommandAccountValidators,
     private readonly tenancyContext: TenancyContext,
+    private readonly accountsSettings: AccountsSettingsService,
   ) {}
 
   /**
@@ -43,13 +45,20 @@ export class CreateAccountService {
     baseCurrency: string,
     params?: CreateAccountParams,
   ) => {
+    const { accountCodeRequired, accountCodeUnique } =
+      await this.accountsSettings.getAccountsSettings();
+
+    // Validate account code required when setting is enabled.
+    if (accountCodeRequired) {
+      this.validator.validateAccountCodeRequiredOrThrow(accountDTO.code);
+    }
+    // Validate the account code uniquiness when setting is enabled.
+    if (accountCodeUnique && accountDTO.code?.trim()) {
+      await this.validator.isAccountCodeUniqueOrThrowError(accountDTO.code);
+    }
     // Validate account name uniquiness.
     if (!params.ignoreUniqueName) {
       await this.validator.validateAccountNameUniquiness(accountDTO.name);
-    }
-    // Validate the account code uniquiness.
-    if (accountDTO.code) {
-      await this.validator.isAccountCodeUniqueOrThrowError(accountDTO.code);
     }
     // Retrieve the account type meta or throw service error if not found.
     this.validator.getAccountTypeOrThrowError(accountDTO.accountType);

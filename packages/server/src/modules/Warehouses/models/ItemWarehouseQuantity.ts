@@ -10,6 +10,13 @@ export class ItemWarehouseQuantity extends BaseModel{
   }
 
   /**
+   * Timestamps columns.
+   */
+  get timestamps() {
+    return [];
+  }
+
+  /**
    * Relation mappings.
    */
   static get relationMappings() {

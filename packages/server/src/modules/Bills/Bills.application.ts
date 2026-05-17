@@ -2,7 +2,8 @@ import { CreateBill } from './commands/CreateBill.service';
 import { EditBillService } from './commands/EditBill.service';
 import { GetBill } from './queries/GetBill';
 import { DeleteBill } from './commands/DeleteBill.service';
-import { IBillDTO, IBillEditDTO, IBillsFilter } from './Bills.types';
+import { IBillDTO, IBillEditDTO } from './Bills.types';
+import { GetBillsQueryDto } from './dtos/GetBillsQuery.dto';
 import { GetDueBills } from './queries/GetDueBills.service';
 import { OpenBillService } from './commands/OpenBill.service';
 import { Injectable } from '@nestjs/common';
@@ -78,9 +79,9 @@ export class BillsApplication {
 
   /**
    * Retrieve bills data table list.
-   * @param {IBillsFilter} billsFilter -
+   * @param {GetBillsQueryDto} filterDTO -
    */
-  public getBills(filterDTO: Partial<IBillsFilter>) {
+  public getBills(filterDTO: GetBillsQueryDto) {
     return this.getBillsService.getBills(filterDTO);
   }
 

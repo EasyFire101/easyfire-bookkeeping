@@ -12,6 +12,7 @@ import { TransactionsByContact } from '../TransactionsByContact/TransactionsByCo
 import { Customer } from '@/modules/Customers/models/Customer';
 import { INumberFormatQuery } from '../../types/Report.types';
 import { TransactionsByCustomersRepository } from './TransactionsByCustomersRepository';
+import { IFinancialReportMeta, DEFAULT_REPORT_META } from '../../types/Report.types';
 
 const CUSTOMER_NORMAL = 'debit';
 
@@ -25,12 +26,14 @@ export class TransactionsByCustomers extends TransactionsByContact {
    * Constructor method.
    * @param {ICustomer} customers
    * @param {Map<number, IAccountTransaction[]>} transactionsLedger
-   * @param {string} baseCurrency
+   * @param {I18nService} i18n
+   * @param {IFinancialReportMeta} meta
    */
   constructor(
     filter: ITransactionsByCustomersFilter,
     transactionsByCustomersRepository: TransactionsByCustomersRepository,
-    i18n: I18nService
+    i18n: I18nService,
+    meta: IFinancialReportMeta,
   ) {
     super();
 
@@ -38,6 +41,8 @@ export class TransactionsByCustomers extends TransactionsByContact {
     this.repository = transactionsByCustomersRepository;
     this.numberFormat = this.filter.numberFormat;
     this.i18n = i18n;
+    this.baseCurrency = meta.baseCurrency;
+    this.dateFormat = meta.dateFormat || DEFAULT_REPORT_META.dateFormat;
   }
 
   /**

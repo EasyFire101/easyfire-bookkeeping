@@ -7,6 +7,7 @@ import { CreditNotesRefundsApplication } from './CreditNotesRefundsApplication.s
 import { CreditNoteRefundsController } from './CreditNoteRefunds.controller';
 import { CreditNotesModule } from '../CreditNotes/CreditNotes.module';
 import { GetCreditNoteRefundsService } from './queries/GetCreditNoteRefunds.service';
+import { GetRefundCreditNoteTransaction } from './queries/GetRefundCreditNoteTransaction.service';
 import { RefundCreditNoteGLEntries } from './commands/RefundCreditNoteGLEntries';
 import { RefundCreditNoteGLEntriesSubscriber } from '../CreditNotes/subscribers/RefundCreditNoteGLEntriesSubscriber';
 import { LedgerModule } from '../Ledger/Ledger.module';
@@ -21,6 +22,7 @@ import { AccountsModule } from '../Accounts/Accounts.module';
     RefundSyncCreditNoteBalanceService,
     CreditNotesRefundsApplication,
     GetCreditNoteRefundsService,
+    GetRefundCreditNoteTransaction,
     RefundCreditNoteGLEntries,
     RefundCreditNoteGLEntriesSubscriber,
   ],

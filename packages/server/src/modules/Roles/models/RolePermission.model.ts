@@ -14,6 +14,13 @@ export class RolePermission extends TenantBaseModel {
   }
 
   /**
+   * Timestamps columns.
+   */
+  get timestamps() {
+    return [];
+  }
+
+  /**
    * Relationship mapping.
    */
   static get relationMappings() {

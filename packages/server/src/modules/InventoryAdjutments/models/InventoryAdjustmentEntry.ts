@@ -21,6 +21,13 @@ export class InventoryAdjustmentEntry extends BaseModel {
   }
 
   /**
+   * Timestamps columns.
+   */
+  get timestamps() {
+    return [];
+  }
+
+  /**
    * Relationship mapping.
    */
   static get relationMappings() {

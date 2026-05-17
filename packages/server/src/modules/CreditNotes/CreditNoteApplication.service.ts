@@ -4,9 +4,9 @@ import { DeleteCreditNoteService } from './commands/DeleteCreditNote.service';
 import { EditCreditNoteService } from './commands/EditCreditNote.service';
 import { OpenCreditNoteService } from './commands/OpenCreditNote.service';
 import { GetCreditNotePdf } from './queries/GetCreditNotePdf.serivce';
-import { ICreditNotesQueryDTO } from './types/CreditNotes.types';
 import { GetCreditNotesService } from './queries/GetCreditNotes.service';
 import { CreateCreditNoteDto, EditCreditNoteDto } from './dtos/CreditNote.dto';
+import { GetCreditNotesQueryDto } from './dtos/GetCreditNotesQuery.dto';
 import { GetCreditNoteState } from './queries/GetCreditNoteState.service';
 import { GetCreditNoteService } from './queries/GetCreditNote.service';
 import { BulkDeleteCreditNotesService } from './BulkDeleteCreditNotes.service';
@@ -78,10 +78,10 @@ export class CreditNoteApplication {
 
   /**
    * Retrieves the credit notes list.
-   * @param {ICreditNotesQueryDTO} creditNotesQuery
+   * @param {GetCreditNotesQueryDto} creditNotesQuery
    * @returns {Promise<GetCreditNotesResponse>}
    */
-  getCreditNotes(creditNotesQuery: ICreditNotesQueryDTO) {
+  getCreditNotes(creditNotesQuery: GetCreditNotesQueryDto) {
     return this.getCreditNotesService.getCreditNotesList(creditNotesQuery);
   }
 

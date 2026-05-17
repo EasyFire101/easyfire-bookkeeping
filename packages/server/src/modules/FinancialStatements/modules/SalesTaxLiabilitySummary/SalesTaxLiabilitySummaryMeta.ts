@@ -14,8 +14,8 @@ export class SalesTaxLiabilitySummaryMeta {
    */
   public async meta(query: SalesTaxLiabilitySummaryQuery) {
     const commonMeta = await this.financialSheetMeta.meta();
-    const formattedToDate = moment(query.toDate).format('YYYY/MM/DD');
-    const formattedFromDate = moment(query.fromDate).format('YYYY/MM/DD');
+    const formattedToDate = moment(query.toDate).format(commonMeta.dateFormat);
+    const formattedFromDate = moment(query.fromDate).format(commonMeta.dateFormat);
     const formattedDateRange = `From ${formattedFromDate} | To ${formattedToDate}`;
 
     const sheetName = 'Sales Tax Liability Summary';

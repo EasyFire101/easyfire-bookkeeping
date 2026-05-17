@@ -13,7 +13,6 @@ import {
   IAuthSignedUpEventPayload,
   IAuthSigningUpEventPayload,
 } from '../Auth.interfaces';
-import { defaultTo } from 'ramda';
 import { ERRORS } from '../Auth.constants';
 import { hashPassword } from '../Auth.utils';
 import { ClsService } from 'nestjs-cls';
@@ -51,10 +50,10 @@ export class AuthSignupService {
     const signupConfirmation = this.configService.get('signupConfirmation');
 
     const verifyTokenCrypto = crypto.randomBytes(64).toString('hex');
-    const verifiedEnabed = defaultTo(signupConfirmation.enabled, false);
+    const verifiedEnabed = signupConfirmation.enabled ?? false;
     const verifyToken = verifiedEnabed ? verifyTokenCrypto : '';
     const verified = !verifiedEnabed;
-
+    
     const inviteAcceptedAt = moment().format('YYYY-MM-DD');
 
     // Triggers signin up event.

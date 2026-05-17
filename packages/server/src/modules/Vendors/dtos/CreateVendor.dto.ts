@@ -115,4 +115,13 @@ export class CreateVendorDto extends ContactAddressDto {
   @IsOptional()
   @IsBoolean()
   active?: boolean;
+
+  @ApiProperty({
+    required: false,
+    description: 'Vendor code',
+    example: 'VEND-001',
+  })
+  @IsOptional()
+  @IsString()
+  code?: string;
 }

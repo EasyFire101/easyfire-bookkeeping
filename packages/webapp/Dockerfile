@@ -4,7 +4,7 @@ FROM node:18.16.0-alpine AS builder
 WORKDIR /app
 
 # Install pnpm
-RUN npm install -g pnpm@8.10.2
+RUN npm install -g pnpm@9.0.5
 
 # Install build dependencies
 RUN apk add --no-cache python3 build-base chromium
@@ -15,18 +15,13 @@ ENV PYTHON=/usr/bin/python3
 # Copy package files for dependency installation
 COPY --chown=node:node package.json pnpm-lock.yaml pnpm-workspace.yaml lerna.json ./
 COPY --chown=node:node packages/webapp/package.json ./packages/webapp/
-COPY --chown=node:node shared/bigcapital-utils/package.json ./shared/bigcapital-utils/
-COPY --chown=node:node shared/pdf-templates/package.json ./shared/pdf-templates/
-COPY --chown=node:node shared/email-components/package.json ./shared/email-components/
+COPY --chown=node:node shared ./shared
 
 # Install all dependencies (including devDependencies for build)
 RUN pnpm install
 
 # Copy source code for webapp and dependencies
 COPY --chown=node:node ./packages/webapp ./packages/webapp
-COPY --chown=node:node ./shared/bigcapital-utils ./shared/bigcapital-utils
-COPY --chown=node:node ./shared/pdf-templates ./shared/pdf-templates
-COPY --chown=node:node ./shared/email-components ./shared/email-components
 
 # Build webapp package
 RUN pnpm run build:webapp

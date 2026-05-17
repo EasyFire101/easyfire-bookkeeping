@@ -13,7 +13,7 @@ export class BalanceSheetMetaInjectable {
    */
   public async meta(query: IBalanceSheetQuery): Promise<IBalanceSheetMeta> {
     const commonMeta = await this.financialSheetMeta.meta();
-    const formattedAsDate = moment(query.toDate).format('YYYY/MM/DD');
+    const formattedAsDate = moment(query.toDate).format(commonMeta.dateFormat);
     const formattedDateRange = `As ${formattedAsDate}`;
     const sheetName = 'Balance Sheet Statement';
 

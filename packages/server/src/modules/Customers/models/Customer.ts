@@ -70,6 +70,8 @@ export class Customer extends TenantBaseModel {
   note: string;
   active: boolean;
 
+  code?: string;
+
   /**
    * Query builder.
    */

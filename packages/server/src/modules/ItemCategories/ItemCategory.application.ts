@@ -1,8 +1,8 @@
 import { Injectable } from '@nestjs/common';
 import {
-  IItemCategoriesFilter,
   IItemCategoryOTD,
 } from './ItemCategory.interfaces';
+import { GetItemCategoriesQueryDto } from './dtos/GetItemCategoriesQuery.dto';
 import { CreateItemCategoryService } from './commands/CreateItemCategory.service';
 import { DeleteItemCategoryService } from './commands/DeleteItemCategory.service';
 import { EditItemCategoryService } from './commands/EditItemCategory.service';
@@ -75,10 +75,10 @@ export class ItemCategoryApplication {
 
   /**
    * Retrieves the item categories list.
-   * @param {IItemCategoriesFilter} filterDTO - The item categories filter DTO.
+   * @param {GetItemCategoriesQueryDto} filterDTO - The item categories filter DTO.
    * @returns {Promise<GetItemCategoriesResponse>}
    */
-  public getItemCategories(filterDTO: Partial<IItemCategoriesFilter>) {
+  public getItemCategories(filterDTO: GetItemCategoriesQueryDto) {
     return this.getItemCategoriesService.getItemCategories(filterDTO);
   }
 }

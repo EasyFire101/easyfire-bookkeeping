@@ -128,7 +128,7 @@ export const useAuthMetadata = (props = {}) => {
  * Resend the mail of signup verification.
  */
 export const useAuthSignUpVerifyResendMail = (props) => {
-  const apiRequest = useAuthApiRequest();
+  const apiRequest = useApiRequest();
 
   return useMutation(
     () => apiRequest.post(AuthRoute.SignupVerifyResend),

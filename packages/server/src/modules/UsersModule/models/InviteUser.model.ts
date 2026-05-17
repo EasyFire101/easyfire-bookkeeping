@@ -6,6 +6,7 @@ export class UserInvite extends BaseModel {
   userId!: number;
   tenantId!: number;
   email!: string;
+  createdAt!: Date;
 
   /**
    * Table name.
@@ -31,5 +32,12 @@ export class UserInvite extends BaseModel {
         query.where('created_at', '>=', comp);
       },
     };
+  }
+
+  /**
+   * Called before inserting a new record.
+   */
+  $beforeInsert() {
+    this.createdAt = new Date();
   }
 }

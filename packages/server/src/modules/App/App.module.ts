@@ -18,7 +18,7 @@ import { createBullBoardAuthMiddleware } from '@/middleware/bull-board-auth.midd
 import { BullModule } from '@nestjs/bullmq';
 import { ScheduleModule } from '@nestjs/schedule';
 import { PassportModule } from '@nestjs/passport';
-import { ClsModule, ClsService } from 'nestjs-cls';
+import { ClsModule } from 'nestjs-cls';
 import { AppController } from './App.controller';
 import { AppService } from './App.service';
 import { ItemsModule } from '../Items/Items.module';
@@ -99,6 +99,7 @@ import { UsersModule } from '../UsersModule/Users.module';
 import { ContactsModule } from '../Contacts/Contacts.module';
 import { BankingPlaidModule } from '../BankingPlaid/BankingPlaid.module';
 import { BankingCategorizeModule } from '../BankingCategorize/BankingCategorize.module';
+import { ExchangeRatesModule } from '../ExchangeRates/ExchangeRates.module';
 import { TenantModelsInitializeModule } from '../Tenancy/TenantModelsInitialize.module';
 import { BillLandedCostsModule } from '../BillLandedCosts/BillLandedCosts.module';
 import { SocketModule } from '../Socket/Socket.module';
@@ -124,7 +125,7 @@ import { AppThrottleModule } from './AppThrottle.module';
       useFactory: () => ({
         fallbackLanguage: 'en',
         loaderOptions: {
-          path: join(__dirname, '/../../i18n/'),
+          path: join(__dirname, '../../i18n/'),
           watch: true,
         },
       }),
@@ -169,9 +170,6 @@ import { AppThrottleModule } from './AppThrottle.module';
       global: true,
       middleware: {
         mount: true,
-        setup: (cls: ClsService, req: Request, res: Response) => {
-          cls.set('organizationId', req.headers['organization-id']);
-        },
         generateId: true,
         saveReq: true,
       },
@@ -258,6 +256,7 @@ import { AppThrottleModule } from './AppThrottle.module';
     ContactsModule,
     SocketModule,
     EEModule,
+    ExchangeRatesModule,
   ],
   controllers: [AppController],
   providers: [

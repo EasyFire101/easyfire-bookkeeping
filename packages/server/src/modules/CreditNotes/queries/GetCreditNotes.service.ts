@@ -2,10 +2,8 @@ import { Inject, Injectable } from '@nestjs/common';
 import * as R from 'ramda';
 import { TransformerInjectable } from '@/modules/Transformer/TransformerInjectable.service';
 import { DynamicListService } from '@/modules/DynamicListing/DynamicList.service';
-import {
-  GetCreditNotesResponse,
-  ICreditNotesQueryDTO,
-} from '../types/CreditNotes.types';
+import { GetCreditNotesResponse } from '../types/CreditNotes.types';
+import { GetCreditNotesQueryDto } from '../dtos/GetCreditNotesQuery.dto';
 import { CreditNote } from '../models/CreditNote';
 import { CreditNoteTransformer } from './CreditNoteTransformer';
 import { TenantModelProxy } from '@/modules/System/models/TenantBaseModel';
@@ -32,10 +30,10 @@ export class GetCreditNotesService {
   /**
    * Retrieves the paginated and filterable credit notes list.
    * @param {number} tenantId -
-   * @param {ICreditNotesQueryDTO} creditNotesQuery -
+   * @param {GetCreditNotesQueryDto} creditNotesQuery -
    */
   public async getCreditNotesList(
-    filterDto: ICreditNotesQueryDTO,
+    filterDto: GetCreditNotesQueryDto,
   ): Promise<GetCreditNotesResponse> {
     const _filterDto = {
       sortOrder: 'desc',

@@ -25,7 +25,7 @@ export class ReportsEventsTracker {
   constructor(private readonly posthog: EventTrackerService) {}
 
   @OnEvent(events.reports.onBalanceSheetViewed)
-  handleTrackBalanceSheetViewedEvent({ tenantId }: ReportsEvents) {
+  handleTrackBalanceSheetViewedEvent() {
     this.posthog.trackEvent({
       event: BALANCE_SHEET_VIEWED,
       properties: {},
@@ -33,7 +33,7 @@ export class ReportsEventsTracker {
   }
 
   @OnEvent(events.reports.onTrialBalanceSheetView)
-  handleTrackTrialBalanceSheetViewedEvent({ tenantId }: ReportsEvents) {
+  handleTrackTrialBalanceSheetViewedEvent() {
     this.posthog.trackEvent({
       event: TRIAL_BALANCE_SHEET_VIEWED,
       properties: {},
@@ -41,7 +41,7 @@ export class ReportsEventsTracker {
   }
 
   @OnEvent(events.reports.onProfitLossSheetViewed)
-  handleTrackProfitLossSheetViewedEvent({ tenantId }: ReportsEvents) {
+  handleTrackProfitLossSheetViewedEvent() {
     this.posthog.trackEvent({
       event: PROFIT_LOSS_SHEET_VIEWED,
       properties: {},
@@ -49,7 +49,7 @@ export class ReportsEventsTracker {
   }
 
   @OnEvent(events.reports.onCashflowStatementViewed)
-  handleTrackCashflowStatementViewedEvent({ tenantId }: ReportsEvents) {
+  handleTrackCashflowStatementViewedEvent() {
     this.posthog.trackEvent({
       event: CASHFLOW_STATEMENT_VIEWED,
       properties: {},
@@ -57,7 +57,7 @@ export class ReportsEventsTracker {
   }
 
   @OnEvent(events.reports.onGeneralLedgerViewed)
-  handleTrackGeneralLedgerViewedEvent({ tenantId }: ReportsEvents) {
+  handleTrackGeneralLedgerViewedEvent() {
     this.posthog.trackEvent({
       event: GENERAL_LEDGER_VIEWED,
       properties: {},
@@ -65,7 +65,7 @@ export class ReportsEventsTracker {
   }
 
   @OnEvent(events.reports.onJournalViewed)
-  handleTrackJournalViewedEvent({ tenantId }: ReportsEvents) {
+  handleTrackJournalViewedEvent() {
     this.posthog.trackEvent({
       event: JOURNAL_VIEWED,
       properties: {},
@@ -73,7 +73,7 @@ export class ReportsEventsTracker {
   }
 
   @OnEvent(events.reports.onReceivableAgingViewed)
-  handleTrackReceivableAgingViewedEvent({ tenantId }: ReportsEvents) {
+  handleTrackReceivableAgingViewedEvent() {
     this.posthog.trackEvent({
       event: RECEIVABLE_AGING_VIEWED,
       properties: {},
@@ -81,7 +81,7 @@ export class ReportsEventsTracker {
   }
 
   @OnEvent(events.reports.onPayableAgingViewed)
-  handleTrackPayableAgingViewedEvent({ tenantId }: ReportsEvents) {
+  handleTrackPayableAgingViewedEvent() {
     this.posthog.trackEvent({
       event: PAYABLE_AGING_VIEWED,
       properties: {},
@@ -89,7 +89,7 @@ export class ReportsEventsTracker {
   }
 
   @OnEvent(events.reports.onCustomerBalanceSummaryViewed)
-  handleTrackCustomerBalanceSummaryViewedEvent({ tenantId }: ReportsEvents) {
+  handleTrackCustomerBalanceSummaryViewedEvent() {
     this.posthog.trackEvent({
       event: CUSTOMER_BALANCE_SUMMARY_VIEWED,
       properties: {},
@@ -97,7 +97,7 @@ export class ReportsEventsTracker {
   }
 
   @OnEvent(events.reports.onVendorBalanceSummaryViewed)
-  handleTrackVendorBalanceSummaryViewedEvent({ tenantId }: ReportsEvents) {
+  handleTrackVendorBalanceSummaryViewedEvent() {
     this.posthog.trackEvent({
       event: VENDOR_BALANCE_SUMMARY_VIEWED,
       properties: {},
@@ -105,7 +105,7 @@ export class ReportsEventsTracker {
   }
 
   @OnEvent(events.reports.onInventoryValuationViewed)
-  handleTrackInventoryValuationViewedEvent({ tenantId }: ReportsEvents) {
+  handleTrackInventoryValuationViewedEvent() {
     this.posthog.trackEvent({
       event: INVENTORY_VALUATION_VIEWED,
       properties: {},
@@ -113,7 +113,7 @@ export class ReportsEventsTracker {
   }
 
   @OnEvent(events.reports.onCustomerTransactionsViewed)
-  handleTrackCustomerTransactionsViewedEvent({ tenantId }: ReportsEvents) {
+  handleTrackCustomerTransactionsViewedEvent() {
     this.posthog.trackEvent({
       event: CUSTOMER_TRANSACTIONS_VIEWED,
       properties: {},
@@ -121,7 +121,7 @@ export class ReportsEventsTracker {
   }
 
   @OnEvent(events.reports.onVendorTransactionsViewed)
-  handleTrackVendorTransactionsViewedEvent({ tenantId }: ReportsEvents) {
+  handleTrackVendorTransactionsViewedEvent() {
     this.posthog.trackEvent({
       event: VENDOR_TRANSACTIONS_VIEWED,
       properties: {},
@@ -129,7 +129,7 @@ export class ReportsEventsTracker {
   }
 
   @OnEvent(events.reports.onSalesByItemViewed)
-  handleTrackSalesByItemViewedEvent({ tenantId }: ReportsEvents) {
+  handleTrackSalesByItemViewedEvent() {
     this.posthog.trackEvent({
       event: SALES_BY_ITEM_VIEWED,
       properties: {},
@@ -137,7 +137,7 @@ export class ReportsEventsTracker {
   }
 
   @OnEvent(events.reports.onPurchasesByItemViewed)
-  handleTrackPurchasesByItemViewedEvent({ tenantId }: ReportsEvents) {
+  handleTrackPurchasesByItemViewedEvent() {
     this.posthog.trackEvent({
       event: PURCHASES_BY_ITEM_VIEWED,
       properties: {},

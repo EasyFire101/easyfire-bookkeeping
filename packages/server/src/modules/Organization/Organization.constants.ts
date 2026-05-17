@@ -1,18 +1,15 @@
 import currencies from 'js-money/lib/currency';
 
 export const DATE_FORMATS = [
-  'MM.dd.yy',
-  'dd.MM.yy',
-  'yy.MM.dd',
-  'MM.dd.yyyy',
-  'dd.MM.yyyy',
-  'yyyy.MM.dd',
-  'MM/DD/YYYY',
-  'M/D/YYYY',
-  'dd MMM YYYY',
-  'dd MMMM YYYY',
-  'MMMM dd, YYYY',
-  'EEE, MMMM dd, YYYY',
+  'MM/DD/YY',
+  'DD/MM/YY',
+  'YY/MM/DD',
+  'MM/DD/yyyy',
+  'DD/MM/yyyy',
+  'yyyy/MM/DD',
+  'DD MMM YYYY',
+  'DD MMMM YYYY',
+  'MMMM DD, YYYY',
 ];
 export const MONTHS = [
   'january',

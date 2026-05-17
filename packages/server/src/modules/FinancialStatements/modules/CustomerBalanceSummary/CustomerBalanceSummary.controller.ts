@@ -1,26 +1,44 @@
 import { Response } from 'express';
 import {
+  ApiExtraModels,
   ApiOperation,
   ApiProduces,
   ApiResponse,
   ApiTags,
+  getSchemaPath,
 } from '@nestjs/swagger';
 import { Controller, Get, Headers, Query, Res } from '@nestjs/common';
 import { CustomerBalanceSummaryApplication } from './CustomerBalanceSummaryApplication';
 import { CustomerBalanceSummaryQueryDto } from './CustomerBalanceSummaryQuery.dto';
 import { AcceptType } from '@/constants/accept-type';
+import {
+  CustomerBalanceSummaryResponseDto,
+  CustomerBalanceSummaryTableResponseDto,
+} from './CustomerBalanceSummaryResponse.dto';
 import { ApiCommonHeaders } from '@/common/decorators/ApiCommonHeaders';
 
 @Controller('/reports/customer-balance-summary')
 @ApiTags('Reports')
 @ApiCommonHeaders()
+@ApiExtraModels(CustomerBalanceSummaryResponseDto, CustomerBalanceSummaryTableResponseDto)
 export class CustomerBalanceSummaryController {
   constructor(
     private readonly customerBalanceSummaryApp: CustomerBalanceSummaryApplication,
   ) {}
 
   @Get()
-  @ApiResponse({ status: 200, description: 'Customer balance summary report' })
+  @ApiResponse({
+    status: 200,
+    description: 'Customer balance summary report',
+    content: {
+      [AcceptType.ApplicationJson]: {
+        schema: { $ref: getSchemaPath(CustomerBalanceSummaryResponseDto) },
+      },
+      [AcceptType.ApplicationJsonTable]: {
+        schema: { $ref: getSchemaPath(CustomerBalanceSummaryTableResponseDto) },
+      },
+    },
+  })
   @ApiOperation({ summary: 'Get customer balance summary report' })
   @ApiProduces(
     AcceptType.ApplicationJson,

@@ -9,6 +9,7 @@ import {
   ParseIntPipe,
   Put,
   HttpCode,
+  UseGuards,
 } from '@nestjs/common';
 import { AccountsApplication } from './AccountsApplication.service';
 import { CreateAccountDTO } from './CreateAccount.dto';
@@ -32,6 +33,11 @@ import {
   BulkDeleteDto,
   ValidateBulkDeleteResponseDto,
 } from '@/common/dtos/BulkDelete.dto';
+import { RequirePermission } from '@/modules/Roles/RequirePermission.decorator';
+import { PermissionGuard } from '@/modules/Roles/Permission.guard';
+import { AuthorizationGuard } from '@/modules/Roles/Authorization.guard';
+import { AbilitySubject } from '@/modules/Roles/Roles.types';
+import { AccountAction } from './Accounts.types';
 
 @Controller('accounts')
 @ApiTags('Accounts')
@@ -40,11 +46,13 @@ import {
 @ApiExtraModels(GetAccountTransactionResponseDto)
 @ApiExtraModels(ValidateBulkDeleteResponseDto)
 @ApiCommonHeaders()
+@UseGuards(AuthorizationGuard, PermissionGuard)
 export class AccountsController {
   constructor(private readonly accountsApplication: AccountsApplication) { }
 
   @Post('validate-bulk-delete')
   @HttpCode(200)
+  @RequirePermission(AccountAction.DELETE, AbilitySubject.Account)
   @ApiOperation({
     summary:
       'Validates which accounts can be deleted and returns counts of deletable and non-deletable accounts.',
@@ -67,6 +75,7 @@ export class AccountsController {
 
   @Post('bulk-delete')
   @HttpCode(200)
+  @RequirePermission(AccountAction.DELETE, AbilitySubject.Account)
   @ApiOperation({ summary: 'Deletes multiple accounts in bulk.' })
   @ApiResponse({
     status: 200,
@@ -81,6 +90,7 @@ export class AccountsController {
   }
 
   @Post()
+  @RequirePermission(AccountAction.CREATE, AbilitySubject.Account)
   @ApiOperation({ summary: 'Create an account' })
   @ApiResponse({
     status: 200,
@@ -91,6 +101,7 @@ export class AccountsController {
   }
 
   @Put(':id')
+  @RequirePermission(AccountAction.EDIT, AbilitySubject.Account)
   @ApiOperation({ summary: 'Edit the given account.' })
   @ApiResponse({
     status: 200,
@@ -111,6 +122,7 @@ export class AccountsController {
   }
 
   @Delete(':id')
+  @RequirePermission(AccountAction.DELETE, AbilitySubject.Account)
   @ApiOperation({ summary: 'Delete the given account.' })
   @ApiResponse({
     status: 200,
@@ -129,6 +141,7 @@ export class AccountsController {
 
   @Post(':id/activate')
   @HttpCode(200)
+  @RequirePermission(AccountAction.EDIT, AbilitySubject.Account)
   @ApiOperation({ summary: 'Activate the given account.' })
   @ApiResponse({
     status: 200,
@@ -147,6 +160,7 @@ export class AccountsController {
 
   @Post(':id/inactivate')
   @HttpCode(200)
+  @RequirePermission(AccountAction.EDIT, AbilitySubject.Account)
   @ApiOperation({ summary: 'Inactivate the given account.' })
   @ApiResponse({
     status: 200,
@@ -164,6 +178,7 @@ export class AccountsController {
   }
 
   @Get('types')
+  @RequirePermission(AccountAction.VIEW, AbilitySubject.Account)
   @ApiOperation({ summary: 'Retrieves the account types.' })
   @ApiResponse({
     status: 200,
@@ -180,6 +195,7 @@ export class AccountsController {
   }
 
   @Get('transactions')
+  @RequirePermission(AccountAction.VIEW, AbilitySubject.Account)
   @ApiOperation({ summary: 'Retrieves the account transactions.' })
   @ApiResponse({
     status: 200,
@@ -198,6 +214,7 @@ export class AccountsController {
   }
 
   @Get(':id')
+  @RequirePermission(AccountAction.VIEW, AbilitySubject.Account)
   @ApiOperation({ summary: 'Retrieves the account details.' })
   @ApiResponse({
     status: 200,
@@ -216,6 +233,7 @@ export class AccountsController {
   }
 
   @Get()
+  @RequirePermission(AccountAction.VIEW, AbilitySubject.Account)
   @ApiOperation({ summary: 'Retrieves the accounts.' })
   @ApiResponse({
     status: 200,

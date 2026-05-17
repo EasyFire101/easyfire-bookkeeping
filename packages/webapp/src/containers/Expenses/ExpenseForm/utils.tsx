@@ -152,17 +152,17 @@ export const transformFormValuesToRequest = (values) => {
 
 export const useSetPrimaryBranchToForm = () => {
   const { setFieldValue } = useFormikContext();
-  const { branches, isBranchesSuccess } = useExpenseFormContext();
+  const { branches, isBranchesSuccess, isNewMode } = useExpenseFormContext();
 
   React.useEffect(() => {
-    if (isBranchesSuccess) {
+    if (isBranchesSuccess && isNewMode) {
       const primaryBranch = branches.find((b) => b.primary) || first(branches);
 
       if (primaryBranch) {
         setFieldValue('branch_id', primaryBranch.id);
       }
     }
-  }, [isBranchesSuccess, setFieldValue, branches]);
+  }, [isBranchesSuccess, setFieldValue, branches, isNewMode]);
 };
 
 /**

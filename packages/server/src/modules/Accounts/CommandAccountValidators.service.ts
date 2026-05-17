@@ -107,6 +107,20 @@ export class CommandAccountValidators {
   }
 
   /**
+   * Throws error if account code is missing or blank when required.
+   * @param {string|undefined} code - Account code.
+   */
+  public validateAccountCodeRequiredOrThrow(code: string | undefined) {
+    const trimmed = typeof code === 'string' ? code.trim() : '';
+    if (!trimmed) {
+      throw new ServiceError(
+        ERRORS.ACCOUNT_CODE_REQUIRED,
+        'Account code is required.',
+      );
+    }
+  }
+
+  /**
    * Validates the account name uniquiness.
    * @param {string} accountName - Account name.
    * @param {number} notAccountId - Ignore the account id.

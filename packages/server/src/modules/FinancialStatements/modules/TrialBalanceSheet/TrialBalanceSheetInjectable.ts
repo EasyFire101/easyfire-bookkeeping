@@ -39,17 +39,17 @@ export class TrialBalanceSheetService {
     // Loads the resources.
     await this.trialBalanceSheetRepository.asyncInitialize();
 
+    // Trial balance sheet meta first to get date format.
+    const meta = await this.trialBalanceSheetMetaService.meta(filter);
+
     // Trial balance report instance.
     const trialBalanceInstance = new TrialBalanceSheet(
       filter,
       this.trialBalanceSheetRepository,
-      tenantMetadata.baseCurrency,
+      { baseCurrency: tenantMetadata.baseCurrency, dateFormat: meta.dateFormat },
     );
     // Trial balance sheet data.
     const trialBalanceSheetData = trialBalanceInstance.reportData();
-
-    // Trial balance sheet meta.
-    const meta = await this.trialBalanceSheetMetaService.meta(filter);
 
     // Triggers `onTrialBalanceSheetViewed` event.
     await this.eventPublisher.emitAsync(

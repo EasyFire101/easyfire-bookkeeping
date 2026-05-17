@@ -19,12 +19,10 @@ import {
   Put,
   Query,
   Res,
+  UseGuards,
 } from '@nestjs/common';
 import { SaleEstimatesApplication } from './SaleEstimates.application';
-import {
-  ISalesEstimatesFilter,
-  SaleEstimateMailOptionsDTO,
-} from './types/SaleEstimates.types';
+import { SaleEstimateMailOptionsDTO } from './types/SaleEstimates.types';
 import { SaleEstimate } from './models/SaleEstimate';
 import {
   CreateSaleEstimateDto,
@@ -33,6 +31,7 @@ import {
 import { AcceptType } from '@/constants/accept-type';
 import { Response } from 'express';
 import { SaleEstimateResponseDto } from './dtos/SaleEstimateResponse.dto';
+import { GetSaleEstimatesQueryDto } from './dtos/GetSaleEstimatesQuery.dto';
 import { PaginatedResponseDto } from '@/common/dtos/PaginatedResults.dto';
 import { SaleEstiamteStateResponseDto } from './dtos/SaleEstimateStateResponse.dto';
 import { ApiCommonHeaders } from '@/common/decorators/ApiCommonHeaders';
@@ -40,6 +39,11 @@ import {
   BulkDeleteDto,
   ValidateBulkDeleteResponseDto,
 } from '@/common/dtos/BulkDelete.dto';
+import { RequirePermission } from '@/modules/Roles/RequirePermission.decorator';
+import { PermissionGuard } from '@/modules/Roles/Permission.guard';
+import { AuthorizationGuard } from '@/modules/Roles/Authorization.guard';
+import { AbilitySubject } from '@/modules/Roles/Roles.types';
+import { SaleEstimateAction } from './types/SaleEstimates.types';
 
 @Controller('sale-estimates')
 @ApiTags('Sale Estimates')
@@ -48,8 +52,10 @@ import {
 @ApiExtraModels(SaleEstiamteStateResponseDto)
 @ApiCommonHeaders()
 @ApiExtraModels(ValidateBulkDeleteResponseDto)
+@UseGuards(AuthorizationGuard, PermissionGuard)
 export class SaleEstimatesController {
   @Post('validate-bulk-delete')
+  @RequirePermission(SaleEstimateAction.Delete, AbilitySubject.SaleEstimate)
   @ApiOperation({
     summary:
       'Validates which sale estimates can be deleted and returns the results.',
@@ -71,6 +77,7 @@ export class SaleEstimatesController {
   }
 
   @Post('bulk-delete')
+  @RequirePermission(SaleEstimateAction.Delete, AbilitySubject.SaleEstimate)
   @ApiOperation({ summary: 'Deletes multiple sale estimates.' })
   @ApiResponse({
     status: 200,
@@ -93,6 +100,7 @@ export class SaleEstimatesController {
   ) { }
 
   @Post()
+  @RequirePermission(SaleEstimateAction.Create, AbilitySubject.SaleEstimate)
   @ApiOperation({ summary: 'Create a new sale estimate.' })
   @ApiResponse({
     status: 200,
@@ -105,6 +113,7 @@ export class SaleEstimatesController {
   }
 
   @Put(':id')
+  @RequirePermission(SaleEstimateAction.Edit, AbilitySubject.SaleEstimate)
   @ApiOperation({ summary: 'Edit the given sale estimate.' })
   @ApiResponse({
     status: 200,
@@ -131,6 +140,7 @@ export class SaleEstimatesController {
   }
 
   @Delete(':id')
+  @RequirePermission(SaleEstimateAction.Delete, AbilitySubject.SaleEstimate)
   @ApiOperation({ summary: 'Delete the given sale estimate.' })
   @ApiResponse({
     status: 200,
@@ -153,6 +163,7 @@ export class SaleEstimatesController {
   }
 
   @Get('state')
+  @RequirePermission(SaleEstimateAction.View, AbilitySubject.SaleEstimate)
   @ApiOperation({ summary: 'Retrieves the sale estimate state.' })
   @ApiResponse({
     status: 200,
@@ -166,6 +177,7 @@ export class SaleEstimatesController {
   }
 
   @Get()
+  @RequirePermission(SaleEstimateAction.View, AbilitySubject.SaleEstimate)
   @ApiOperation({ summary: 'Retrieves the sale estimates.' })
   @ApiResponse({
     status: 200,
@@ -184,11 +196,12 @@ export class SaleEstimatesController {
       ],
     },
   })
-  public getSaleEstimates(@Query() filterDTO: ISalesEstimatesFilter) {
+  public getSaleEstimates(@Query() filterDTO: GetSaleEstimatesQueryDto) {
     return this.saleEstimatesApplication.getSaleEstimates(filterDTO);
   }
 
   @Post(':id/deliver')
+  @RequirePermission(SaleEstimateAction.Edit, AbilitySubject.SaleEstimate)
   @ApiOperation({ summary: 'Deliver the given sale estimate.' })
   @ApiResponse({
     status: 200,
@@ -207,6 +220,7 @@ export class SaleEstimatesController {
   }
 
   @Put(':id/approve')
+  @RequirePermission(SaleEstimateAction.Edit, AbilitySubject.SaleEstimate)
   @ApiOperation({ summary: 'Approve the given sale estimate.' })
   @ApiParam({
     name: 'id',
@@ -221,6 +235,7 @@ export class SaleEstimatesController {
   }
 
   @Put(':id/reject')
+  @RequirePermission(SaleEstimateAction.Edit, AbilitySubject.SaleEstimate)
   @ApiOperation({ summary: 'Reject the given sale estimate.' })
   @ApiParam({
     name: 'id',
@@ -235,6 +250,7 @@ export class SaleEstimatesController {
   }
 
   @Post(':id/notify-sms')
+  @RequirePermission(SaleEstimateAction.NotifyBySms, AbilitySubject.SaleEstimate)
   @ApiOperation({ summary: 'Notify the given sale estimate by SMS.' })
   @ApiParam({
     name: 'id',
@@ -251,6 +267,7 @@ export class SaleEstimatesController {
   }
 
   @Get(':id/sms-details')
+  @RequirePermission(SaleEstimateAction.View, AbilitySubject.SaleEstimate)
   @ApiOperation({ summary: 'Retrieves the sale estimate SMS details.' })
   public getSaleEstimateSmsDetails(
     @Param('id', ParseIntPipe) saleEstimateId: number,
@@ -262,6 +279,7 @@ export class SaleEstimatesController {
 
   @Post(':id/mail')
   @HttpCode(200)
+  @RequirePermission(SaleEstimateAction.Edit, AbilitySubject.SaleEstimate)
   @ApiOperation({ summary: 'Send the given sale estimate by mail.' })
   @ApiParam({
     name: 'id',
@@ -280,6 +298,7 @@ export class SaleEstimatesController {
   }
 
   @Get(':id/mail')
+  @RequirePermission(SaleEstimateAction.View, AbilitySubject.SaleEstimate)
   @ApiOperation({ summary: 'Retrieves the sale estimate mail state.' })
   @ApiParam({
     name: 'id',
@@ -296,6 +315,7 @@ export class SaleEstimatesController {
   }
 
   @Get(':id')
+  @RequirePermission(SaleEstimateAction.View, AbilitySubject.SaleEstimate)
   @ApiOperation({
     summary: 'Retrieves the sale estimate details.',
   })

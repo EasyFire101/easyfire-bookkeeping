@@ -9,7 +9,9 @@ import { BillPaymentMeta } from './BillPayment.meta';
 import { TenantBaseModel } from '@/modules/System/models/TenantBaseModel';
 import { InjectModelDefaultViews } from '@/modules/Views/decorators/InjectModelDefaultViews.decorator';
 import { BillPaymentDefaultViews } from '../constants';
+import { InjectAttachable } from '@/modules/Attachments/decorators/InjectAttachable.decorator';
 
+@InjectAttachable()
 @ImportableModel()
 @ExportableModel()
 @InjectModelMeta(BillPaymentMeta)

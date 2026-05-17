@@ -17,7 +17,7 @@ function MoneyOutContentFields() {
 
   const transactionType = useMemo(() => {
     switch (values.transaction_type) {
-      case 'OwnerDrawing':
+      case 'owner_drawing':
         return <OwnerDrawingsFormFields />;
 
       case 'other_expense':

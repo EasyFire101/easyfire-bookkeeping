@@ -6,6 +6,7 @@ import { RefundCreditNoteService } from './commands/RefundCreditNote.service';
 import { RefundSyncCreditNoteBalanceService } from './commands/RefundSyncCreditNoteBalance';
 import { CreditNoteRefundDto } from './dto/CreditNoteRefund.dto';
 import { GetCreditNoteRefundsService } from './queries/GetCreditNoteRefunds.service';
+import { GetRefundCreditNoteTransaction } from './queries/GetRefundCreditNoteTransaction.service';
 
 @Injectable()
 export class CreditNotesRefundsApplication {
@@ -13,6 +14,7 @@ export class CreditNotesRefundsApplication {
     private readonly createRefundCreditNoteService: CreateRefundCreditNoteService,
     private readonly deleteRefundCreditNoteService: DeleteRefundCreditNoteService,
     private readonly getCreditNoteRefundsService: GetCreditNoteRefundsService,
+    private readonly getRefundCreditNoteTransactionService: GetRefundCreditNoteTransaction,
     private readonly refundCreditNoteService: RefundCreditNoteService,
     private readonly refundSyncCreditNoteBalanceService: RefundSyncCreditNoteBalanceService,
   ) {}
@@ -24,6 +26,12 @@ export class CreditNotesRefundsApplication {
    */
   public getCreditNoteRefunds(creditNoteId: number) {
     return this.getCreditNoteRefundsService.getCreditNoteRefunds(creditNoteId);
+  }
+
+  public getRefundCreditNoteTransaction(refundCreditId: number) {
+    return this.getRefundCreditNoteTransactionService.getRefundCreditTransaction(
+      refundCreditId,
+    );
   }
 
   /**

@@ -7,14 +7,15 @@ import {
   getSchemaPath,
   ApiExtraModels,
 } from '@nestjs/swagger';
+import { PaginatedResponseDto } from '@/common/dtos/PaginatedResults.dto';
+import { ApiCommonHeaders } from '@/common/decorators/ApiCommonHeaders';
 import { BankingTransactionsApplication } from '../BankingTransactionsApplication.service';
 import { GetPendingTransactionsQueryDto } from '../dtos/GetPendingTransactionsQuery.dto';
 import { GetPendingTransactionResponseDto } from '../dtos/GetPendingTransactionResponse.dto';
-import { ApiCommonHeaders } from '@/common/decorators/ApiCommonHeaders';
 
 @Controller('banking/pending')
 @ApiTags('Banking Pending Transactions')
-@ApiExtraModels(GetPendingTransactionResponseDto)
+@ApiExtraModels(GetPendingTransactionResponseDto, PaginatedResponseDto)
 @ApiCommonHeaders()
 export class BankingPendingTransactionsController {
   constructor(
@@ -27,7 +28,17 @@ export class BankingPendingTransactionsController {
     status: 200,
     description: 'Returns a list of pending bank account transactions',
     schema: {
-      $ref: getSchemaPath(GetPendingTransactionResponseDto),
+      allOf: [
+        { $ref: getSchemaPath(PaginatedResponseDto) },
+        {
+          properties: {
+            data: {
+              type: 'array',
+              items: { $ref: getSchemaPath(GetPendingTransactionResponseDto) },
+            },
+          },
+        },
+      ],
     },
   })
   @ApiQuery({

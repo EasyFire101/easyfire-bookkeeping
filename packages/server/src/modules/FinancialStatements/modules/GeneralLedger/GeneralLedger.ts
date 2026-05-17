@@ -19,6 +19,7 @@ import { Account } from '@/modules/Accounts/models/Account.model';
 import { ModelObject } from 'objection';
 import { flatToNestedArray } from '@/utils/flat-to-nested-array';
 import { getTransactionTypeLabel } from '@/modules/BankingTransactions/utils';
+import { IFinancialReportMeta, DEFAULT_REPORT_META } from '../../types/Report.types';
 
 export class GeneralLedgerSheet extends R.compose(FinancialSheetStructure)(
   FinancialSheet,
@@ -33,18 +34,21 @@ export class GeneralLedgerSheet extends R.compose(FinancialSheetStructure)(
    * @param {IGeneralLedgerSheetQuery} query -
    * @param {GeneralLedgerRepository} repository -
    * @param {I18nService} i18n -
+   * @param {IFinancialReportMeta} meta -
    */
   constructor(
     query: IGeneralLedgerSheetQuery,
     repository: GeneralLedgerRepository,
     i18n: I18nService,
+    meta: IFinancialReportMeta,
   ) {
     super();
 
     this.query = query;
     this.numberFormat = this.query.numberFormat;
+    this.dateFormat = meta.dateFormat || DEFAULT_REPORT_META.dateFormat;
     this.repository = repository;
-    this.baseCurrency = this.repository.tenant.metadata.baseCurrency;
+    this.baseCurrency = meta.baseCurrency;
     this.i18n = i18n;
   }
 
@@ -87,7 +91,7 @@ export class GeneralLedgerSheet extends R.compose(FinancialSheetStructure)(
     return {
       id: entry.id,
       date: entry.date,
-      dateFormatted: moment(entry.date).format('YYYY MMM DD'),
+      dateFormatted: moment(entry.date).format(this.dateFormat),
 
       referenceType: entry.transactionType,
       referenceId: entry.transactionId,

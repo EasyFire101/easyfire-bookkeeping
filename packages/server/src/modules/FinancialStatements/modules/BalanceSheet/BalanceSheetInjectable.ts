@@ -40,18 +40,18 @@ export class BalanceSheetInjectable {
     // Loads all resources.
     await this.balanceSheetRepository.asyncInitialize(filter);
 
+    // Balance sheet meta first to get date format.
+    const meta = await this.balanceSheetMeta.meta(filter);
+
     // Balance sheet report instance.
     const balanceSheetInstanace = new BalanceSheet(
       filter,
       this.balanceSheetRepository,
-      tenantMetadata.baseCurrency,
       this.i18n,
+      { baseCurrency: tenantMetadata.baseCurrency, dateFormat: meta.dateFormat },
     );
     // Balance sheet data.
     const data = balanceSheetInstanace.reportData();
-
-    // Balance sheet meta.
-    const meta = await this.balanceSheetMeta.meta(filter);
 
     // Triggers `onBalanceSheetViewed` event.
     await this.eventPublisher.emitAsync(events.reports.onBalanceSheetViewed, {

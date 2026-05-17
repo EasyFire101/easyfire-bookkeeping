@@ -13,6 +13,7 @@ export const defaultInitialValues = {
   last_name: '',
   company_name: '',
   display_name: '',
+  code: '',
 
   email: '',
   work_phone: '',
@@ -22,16 +23,16 @@ export const defaultInitialValues = {
   active: true,
 
   billing_address_country: '',
-  billing_address_1: '',
-  billing_address_2: '',
+  billing_address1: '',
+  billing_address2: '',
   billing_address_city: '',
   billing_address_state: '',
   billing_address_postcode: '',
   billing_address_phone: '',
 
   shipping_address_country: '',
-  shipping_address_1: '',
-  shipping_address_2: '',
+  shipping_address1: '',
+  shipping_address2: '',
   shipping_address_city: '',
   shipping_address_state: '',
   shipping_address_postcode: '',

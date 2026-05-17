@@ -1,7 +1,5 @@
-import {
-  IPaymentsReceivedFilter,
-  PaymentReceiveMailOptsDTO,
-} from './types/PaymentReceived.types';
+import { PaymentReceiveMailOptsDTO } from './types/PaymentReceived.types';
+import { GetPaymentsReceivedQueryDto } from './dtos/GetPaymentsReceivedQuery.dto';
 import { Injectable } from '@nestjs/common';
 import { CreatePaymentReceivedService } from './commands/CreatePaymentReceived.serivce';
 import { EditPaymentReceivedService } from './commands/EditPaymentReceived.service';
@@ -103,11 +101,11 @@ export class PaymentReceivesApplication {
   /**
    * Retrieve payment receives paginated and filterable.
    * @param {number} tenantId
-   * @param {IPaymentsReceivedFilter} filterDTO
+   * @param {GetPaymentsReceivedQueryDto} filterDTO
    * @returns
    */
   public async getPaymentsReceived(
-    filterDTO: Partial<IPaymentsReceivedFilter>,
+    filterDTO: GetPaymentsReceivedQueryDto,
   ) {
     return this.getPaymentsReceivedService.getPaymentReceives(filterDTO);
   }

@@ -22,7 +22,10 @@
     "system:migrate:latest": "lerna run cli:system:migrate:latest --scope \"@bigcapital/server\"",
     "tenants:migrate:latest": "lerna run cli:tenants:migrate:latest --scope \"@bigcapital/server\"",
     "system:seed:latest": "lerna run cli:system:seed:latest --scope \"@bigcapital/server\"",
-    "tenants:seed:latest": "lerna run cli:tenants:seed:latest --scope \"@bigcapital/server\""
+    "tenants:seed:latest": "lerna run cli:tenants:seed:latest --scope \"@bigcapital/server\"",
+    "generate:sdk-types": "lerna run openapi:export --scope \"@bigcapital/server\" && lerna run generate --scope \"@bigcapital/sdk-ts\" && lerna run build --scope \"@bigcapital/sdk-ts\"",
+    "format": "lerna run format",
+    "format:check": "lerna run format:check"
   },
   "devDependencies": {
     "@commitlint/cli": "^17.4.2",

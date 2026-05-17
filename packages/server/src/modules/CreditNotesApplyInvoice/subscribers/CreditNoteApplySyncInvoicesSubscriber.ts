@@ -8,7 +8,7 @@ import { CreditNoteApplySyncInvoicesCreditedAmount } from '../commands/CreditNot
 import { events } from '@/common/events/events';
 
 @Injectable()
-export default class CreditNoteApplySyncInvoicesCreditedAmountSubscriber {
+export class CreditNoteApplySyncInvoicesCreditedAmountSubscriber {
   constructor(
     private readonly syncInvoicesWithCreditNote: CreditNoteApplySyncInvoicesCreditedAmount,
   ) {}

@@ -11,6 +11,7 @@ import { FinancialSheet } from '../../common/FinancialSheet';
 import { transformToMapBy } from '@/utils/transform-to-map-by';
 import { Item } from '@/modules/Items/models/Item';
 import { InventoryTransaction } from '@/modules/InventoryCost/models/InventoryTransaction';
+import { IFinancialReportMeta, DEFAULT_REPORT_META } from '../../types/Report.types';
 
 export class PurchasesByItems extends FinancialSheet{
   readonly baseCurrency: string;
@@ -29,14 +30,15 @@ export class PurchasesByItems extends FinancialSheet{
     query: IPurchasesByItemsReportQuery,
     items: Item[],
     itemsTransactions: InventoryTransaction[],
-    baseCurrency: string
+    meta: IFinancialReportMeta,
   ) {
     super();
-    this.baseCurrency = baseCurrency;
+    this.baseCurrency = meta.baseCurrency;
     this.items = items;
     this.itemsTransactions = transformToMapBy(itemsTransactions, 'itemId');
     this.query = query;
     this.numberFormat = this.query.numberFormat;
+    this.dateFormat = meta.dateFormat || DEFAULT_REPORT_META.dateFormat;
   }
 
   /**

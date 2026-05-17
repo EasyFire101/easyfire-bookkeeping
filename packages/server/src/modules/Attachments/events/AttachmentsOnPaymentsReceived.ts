@@ -55,7 +55,7 @@ export class AttachmentsOnPaymentsReceived {
     );
     await this.linkAttachmentService.bulkLink(
       keys,
-      'PaymentReceive',
+      'PaymentReceived',
       paymentReceive.id,
       trx,
     );
@@ -76,7 +76,7 @@ export class AttachmentsOnPaymentsReceived {
     );
     await this.unlinkAttachmentService.unlinkUnpresentedKeys(
       keys,
-      'PaymentReceive',
+      'PaymentReceived',
       oldPaymentReceive.id,
       trx,
     );
@@ -100,7 +100,7 @@ export class AttachmentsOnPaymentsReceived {
     );
     await this.linkAttachmentService.bulkLink(
       keys,
-      'PaymentReceive',
+      'PaymentReceived',
       oldPaymentReceive.id,
       trx,
     );
@@ -117,7 +117,7 @@ export class AttachmentsOnPaymentsReceived {
     trx,
   }: IPaymentReceivedDeletingPayload) {
     await this.unlinkAttachmentService.unlinkAllModelKeys(
-      'PaymentReceive',
+      'PaymentReceived',
       oldPaymentReceive.id,
       trx,
     );

@@ -8,9 +8,10 @@ import { SalesTaxLiabilitySummaryController } from './SalesTaxLiabilitySummary.c
 import { FinancialSheetCommonModule } from '../../common/FinancialSheetCommon.module';
 import { SalesTaxLiabilitySummaryRepository } from './SalesTaxLiabilitySummaryRepository';
 import { SalesTaxLiabilitySummaryMeta } from './SalesTaxLiabilitySummaryMeta';
+import { TenancyModule } from '@/modules/Tenancy/Tenancy.module';
 
 @Module({
-  imports: [FinancialSheetCommonModule],
+  imports: [FinancialSheetCommonModule, TenancyModule],
   providers: [
     SalesTaxLiabiltiySummaryPdf,
     SalesTaxLiabilitySummaryTableInjectable,

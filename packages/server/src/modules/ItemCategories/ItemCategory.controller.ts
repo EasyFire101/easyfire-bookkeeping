@@ -9,10 +9,7 @@ import {
   Query,
 } from '@nestjs/common';
 import { ItemCategoryApplication } from './ItemCategory.application';
-import {
-  GetItemCategoriesResponse,
-  IItemCategoriesFilter,
-} from './ItemCategory.interfaces';
+import { GetItemCategoriesResponse } from './ItemCategory.interfaces';
 import {
   ApiExtraModels,
   ApiOperation,
@@ -24,6 +21,7 @@ import {
   CreateItemCategoryDto,
   EditItemCategoryDto,
 } from './dtos/ItemCategory.dto';
+import { GetItemCategoriesQueryDto } from './dtos/GetItemCategoriesQuery.dto';
 import { ItemCategoryResponseDto } from './dtos/ItemCategoryResponse.dto';
 import { ApiCommonHeaders } from '@/common/decorators/ApiCommonHeaders';
 
@@ -53,7 +51,7 @@ export class ItemCategoryController {
     },
   })
   async getItemCategories(
-    @Query() filterDTO: Partial<IItemCategoriesFilter>,
+    @Query() filterDTO: GetItemCategoriesQueryDto,
   ): Promise<GetItemCategoriesResponse> {
     return this.itemCategoryApplication.getItemCategories(filterDTO);
   }

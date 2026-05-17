@@ -73,16 +73,16 @@ export class PurchasesByItemsService {
         // Filter the date range of the sheet.
         builder.modify('filterDateRange', filter.fromDate, filter.toDate);
       });
+    // Retrieve the purchases by items meta first to get date format.
+    const meta = await this.purchasesByItemsMeta.meta(query);
+
     const purchasesByItemsInstance = new PurchasesByItems(
       filter,
       inventoryItems,
       inventoryTransactions,
-      tenantMetadata.baseCurrency,
+      { baseCurrency: tenantMetadata.baseCurrency, dateFormat: meta.dateFormat },
     );
     const purchasesByItemsData = purchasesByItemsInstance.reportData();
-
-    // Retrieve the purchases by items meta.
-    const meta = await this.purchasesByItemsMeta.meta(query);
 
     // Triggers `onPurchasesByItemViewed` event.
     await this.eventPublisher.emitAsync(

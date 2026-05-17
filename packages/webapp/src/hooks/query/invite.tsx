@@ -2,6 +2,7 @@
 import { useMutation } from 'react-query';
 import { useRequestQuery } from '../useQueryRequest';
 import useApiRequest from '../useRequest';
+import { transformToCamelCase } from '@/utils';
 
 /**
  * Authentication invite accept.
@@ -22,9 +23,9 @@ export const useAuthInviteAccept = (props) => {
 export const useInviteMetaByToken = (token, props) => {
   return useRequestQuery(
     ['INVITE_META', token],
-    { method: 'get', url: `invite/invited/${token}` },
+    { method: 'get', url: `invite/check/${token}` },
     {
-      select: (res) => res.data,
+      select: (res) => transformToCamelCase(res.data),
       ...props
     }
   );

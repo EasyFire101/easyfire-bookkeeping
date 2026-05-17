@@ -91,7 +91,7 @@ export class CustomerBalanceSummaryTable {
    */
   private getTotalColumnsAccessor = (): IColumnMapperMeta[] => {
     const columns = [
-      { key: 'name', value: this.i18n.t('Total') },
+      { key: 'name', value: this.i18n.t('contact_summary_balance.total') },
       { key: 'total', accessor: 'total.formattedAmount' },
     ];
     // @ts-ignore

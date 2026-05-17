@@ -1,5 +1,9 @@
 import { Controller, Get, Headers, Query, Res } from '@nestjs/common';
-import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
+import { ApiExtraModels, ApiOperation, ApiResponse, ApiTags, getSchemaPath } from '@nestjs/swagger';
+import {
+  TransactionsByCustomerResponseDto,
+  TransactionsByCustomerTableResponseDto,
+} from './TransactionsByCustomerResponse.dto';
 import { ITransactionsByCustomersFilter } from './TransactionsByCustomer.types';
 import { TransactionsByCustomerApplication } from './TransactionsByCustomersApplication';
 import { AcceptType } from '@/constants/accept-type';
@@ -10,6 +14,7 @@ import { ApiCommonHeaders } from '@/common/decorators/ApiCommonHeaders';
 @Controller('/reports/transactions-by-customers')
 @ApiTags('Reports')
 @ApiCommonHeaders()
+@ApiExtraModels(TransactionsByCustomerResponseDto, TransactionsByCustomerTableResponseDto)
 export class TransactionsByCustomerController {
   constructor(
     private readonly transactionsByCustomersApp: TransactionsByCustomerApplication,
@@ -17,7 +22,18 @@ export class TransactionsByCustomerController {
 
   @Get()
   @ApiOperation({ summary: 'Get transactions by customer' })
-  @ApiResponse({ status: 200, description: 'Transactions by customer' })
+  @ApiResponse({
+    status: 200,
+    description: 'Transactions by customer',
+    content: {
+      [AcceptType.ApplicationJson]: {
+        schema: { $ref: getSchemaPath(TransactionsByCustomerResponseDto) },
+      },
+      [AcceptType.ApplicationJsonTable]: {
+        schema: { $ref: getSchemaPath(TransactionsByCustomerTableResponseDto) },
+      },
+    },
+  })
   async transactionsByCustomer(
     @Query() filter: TransactionsByCustomerQueryDto,
     @Res({ passthrough: true }) res: Response,

@@ -14,6 +14,7 @@ import { ARAgingSummaryRepository } from './ARAgingSummaryRepository';
 import { Customer } from '@/modules/Customers/models/Customer';
 import { SaleInvoice } from '@/modules/SaleInvoices/models/SaleInvoice';
 import { ARAgingSummaryQueryDto } from './ARAgingSummaryQuery.dto';
+import { IFinancialReportMeta, DEFAULT_REPORT_META } from '../../types/Report.types';
 
 export class ARAgingSummarySheet extends AgingSummaryReport {
   readonly query: ARAgingSummaryQueryDto;
@@ -32,16 +33,20 @@ export class ARAgingSummarySheet extends AgingSummaryReport {
    * Constructor method.
    * @param {ARAgingSummaryQueryDto} query - Query
    * @param {ARAgingSummaryRepository} repository - Repository.
+   * @param {IFinancialReportMeta} meta - Report meta.
    */
   constructor(
     query: ARAgingSummaryQueryDto,
     repository: ARAgingSummaryRepository,
+    meta: IFinancialReportMeta,
   ) {
     super();
 
     this.query = query;
     this.repository = repository;
+    this.baseCurrency = meta.baseCurrency;
     this.numberFormat = this.query.numberFormat;
+    this.dateFormat = meta.dateFormat || DEFAULT_REPORT_META.dateFormat;
 
     this.overdueInvoicesByContactId =
       this.repository.overdueInvoicesByContactId;

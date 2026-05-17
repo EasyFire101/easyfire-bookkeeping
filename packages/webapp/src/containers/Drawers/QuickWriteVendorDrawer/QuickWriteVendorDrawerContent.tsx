@@ -18,7 +18,6 @@ export default function QuickWriteVendorDrawerContent({ displayName, autofillRef
       <DrawerHeaderContent
         name={DRAWERS.QUICK_CREATE_CUSTOMER}
         title={<T id={'create_a_new_vendor'} />}
-
       />
       <DrawerBody>
         <QuickVendorFormDrawer displayName={displayName} autofillRef={autofillRef} />

@@ -9,7 +9,7 @@ import { CommonMailOptionsDTO } from '@/modules/MailNotification/MailNotificatio
 import { CommonMailOptions } from '@/modules/MailNotification/MailNotification.types';
 import { EditSaleEstimateDto } from '../dtos/SaleEstimate.dto';
 
-export const SendSaleEstimateMailQueue = 'SendSaleEstimateMailProcessor';
+export const SendSaleEstimateMailQueue = 'SendSaleEstimateMailQueue';
 export const SendSaleEstimateMailJob = 'SendSaleEstimateMailProcess';
 
 export interface ISaleEstimateDTO {

@@ -58,7 +58,7 @@ export default function InviteAcceptForm() {
             data: { errors },
           },
         }) => {
-          if (errors.find((e) => e.type === 'INVITE.TOKEN.NOT.FOUND')) {
+          if (errors.find((e) => e.type === 'INVITE_TOKEN_INVALID')) {
             AppToaster.show({
               message: intl.get('an_unexpected_error_occurred'),
               intent: Intent.DANGER,
@@ -70,14 +70,6 @@ export default function InviteAcceptForm() {
             setErrors({
               phone_number: 'This phone number is used in another account.',
             });
-          }
-          if (errors.find((e) => e.type === 'INVITE.TOKEN.NOT.FOUND')) {
-            AppToaster.show({
-              message: intl.get('an_unexpected_error_occurred'),
-              intent: Intent.DANGER,
-              position: Position.BOTTOM,
-            });
-            history.push('/auth/login');
           }
           setSubmitting(false);
         },

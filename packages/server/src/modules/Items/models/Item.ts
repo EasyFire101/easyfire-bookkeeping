@@ -45,6 +45,13 @@ export class Item extends TenantBaseModel {
   }
 
   /**
+   * Timestamps columns.
+   */
+  get timestamps() {
+    return ['createdAt', 'updatedAt'];
+  }
+
+  /**
    * Model modifiers.
    */
   static get modifiers() {
@@ -68,6 +75,16 @@ export class Item extends TenantBaseModel {
         query.where('items.active', !active);
       },
     };
+  }
+
+  /**
+   * Model search roles.
+   */
+  static get searchRoles() {
+    return [
+      { condition: 'or', fieldKey: 'name', comparator: 'contains' },
+      { condition: 'or', fieldKey: 'code', comparator: 'like' },
+    ];
   }
 
   /**

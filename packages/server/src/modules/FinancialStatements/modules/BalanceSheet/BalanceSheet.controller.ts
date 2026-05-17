@@ -1,20 +1,36 @@
 import { Response } from 'express';
-import { Controller, Get, Headers, Query, Res } from '@nestjs/common';
+import { Controller, Get, Headers, Query, Res, UseGuards } from '@nestjs/common';
 import { AcceptType } from '@/constants/accept-type';
 import { BalanceSheetApplication } from './BalanceSheetApplication';
 import {
+  ApiExtraModels,
   ApiOperation,
   ApiProduces,
   ApiResponse,
   ApiTags,
+  getSchemaPath,
 } from '@nestjs/swagger';
 import { BalanceSheetQueryDto } from './BalanceSheet.dto';
-import { BalanceSheetResponseExample } from './BalanceSheet.swagger';
+import {
+  BalanceSheetResponseExample,
+  BalanceSheetTableResponseExample,
+} from './BalanceSheet.swagger';
+import {
+  BalanceSheetResponseDto,
+  BalanceSheetTableResponseDto,
+} from './BalanceSheetResponse.dto';
 import { ApiCommonHeaders } from '@/common/decorators/ApiCommonHeaders';
+import { RequirePermission } from '@/modules/Roles/RequirePermission.decorator';
+import { PermissionGuard } from '@/modules/Roles/Permission.guard';
+import { AuthorizationGuard } from '@/modules/Roles/Authorization.guard';
+import { AbilitySubject } from '@/modules/Roles/Roles.types';
+import { ReportsAction } from '../../types/Report.types';
 
 @Controller('/reports/balance-sheet')
 @ApiTags('Reports')
 @ApiCommonHeaders()
+@UseGuards(AuthorizationGuard, PermissionGuard)
+@ApiExtraModels(BalanceSheetResponseDto, BalanceSheetTableResponseDto)
 export class BalanceSheetStatementController {
   constructor(private readonly balanceSheetApp: BalanceSheetApplication) {}
 
@@ -25,11 +41,21 @@ export class BalanceSheetStatementController {
    * @param {string} acceptHeader - Accept header.
    */
   @Get('')
+  @RequirePermission(ReportsAction.READ_BALANCE_SHEET, AbilitySubject.Report)
   @ApiOperation({ summary: 'Get balance sheet statement' })
   @ApiResponse({
     status: 200,
     description: 'Balance sheet statement',
-    example: BalanceSheetResponseExample,
+    content: {
+      [AcceptType.ApplicationJson]: {
+        schema: { $ref: getSchemaPath(BalanceSheetResponseDto) },
+        example: BalanceSheetResponseExample,
+      },
+      [AcceptType.ApplicationJsonTable]: {
+        schema: { $ref: getSchemaPath(BalanceSheetTableResponseDto) },
+        example: BalanceSheetTableResponseExample,
+      },
+    },
   })
   @ApiProduces(
     AcceptType.ApplicationJson,

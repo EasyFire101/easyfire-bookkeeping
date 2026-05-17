@@ -32,7 +32,7 @@ export class InventoryAdjustment extends TenantBaseModel {
    * Timestamps columns.
    */
   get timestamps(): Array<string> {
-    return ['created_at'];
+    return ['createdAt'];
   }
 
   /**

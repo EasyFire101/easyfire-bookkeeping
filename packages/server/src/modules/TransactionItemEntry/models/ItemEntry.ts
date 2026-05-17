@@ -53,7 +53,7 @@ export class ItemEntry extends BaseModel {
    * @returns {string[]}
    */
   get timestamps() {
-    return ['created_at', 'updated_at'];
+    return ['createdAt', 'updatedAt'];
   }
 
   /**

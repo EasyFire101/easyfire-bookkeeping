@@ -6,13 +6,16 @@ import { ExportableModel } from '@/modules/Export/decorators/ExportableModel.dec
 import { ImportableModel } from '@/modules/Import/decorators/Import.decorator';
 import { InjectModelMeta } from '@/modules/Tenancy/TenancyModels/decorators/InjectModelMeta.decorator';
 import { SaleEstimateMeta } from './SaleEstimate.meta';
+import { sanitizeSortDirection } from '@/modules/DynamicListing/DynamicFilter/sanitizeSortDirection';
 import { ItemEntry } from '@/modules/TransactionItemEntry/models/ItemEntry';
 import { Document } from '@/modules/ChromiumlyTenancy/models/Document';
 import { Customer } from '@/modules/Customers/models/Customer';
 import { DiscountType } from '@/common/types/Discount';
 import { InjectModelDefaultViews } from '@/modules/Views/decorators/InjectModelDefaultViews.decorator';
 import { SaleEstimateDefaultViews } from '../constants';
+import { InjectAttachable } from '@/modules/Attachments/decorators/InjectAttachable.decorator';
 
+@InjectAttachable()
 @ExportableModel()
 @ImportableModel()
 @InjectModelMeta(SaleEstimateMeta)
@@ -248,7 +251,8 @@ export class SaleEstimate extends TenantBaseModel {
        * Sorting the estimates orders by delivery status.
        */
       orderByStatus(query, order) {
-        query.orderByRaw(`delivered_at is null ${order}`);
+        const dir = sanitizeSortDirection(order);
+        query.orderByRaw(`delivered_at is null ${dir}`);
       },
       /**
        * Filtering the estimates oreders by status field.

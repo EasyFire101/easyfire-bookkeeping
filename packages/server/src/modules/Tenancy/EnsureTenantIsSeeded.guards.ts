@@ -9,6 +9,7 @@ import {
 import { TenancyContext } from './TenancyContext.service';
 import { Reflector } from '@nestjs/core';
 import { IS_PUBLIC_ROUTE } from '../Auth/Auth.constants';
+import { IS_TENANT_AGNOSTIC } from './TenancyGlobal.guard';
 
 export const IS_IGNORE_TENANT_SEEDED = 'IS_IGNORE_TENANT_SEEDED';
 export const IgnoreTenantSeededRoute = () =>
@@ -36,7 +37,12 @@ export class EnsureTenantIsSeededGuard implements CanActivate {
         context.getHandler(),
         context.getClass(),
       ]);
-    if (isPublic || isIgnoreEnsureTenantSeeded) {
+    const isTenantAgnostic = this.reflector.getAllAndOverride<boolean>(
+      IS_TENANT_AGNOSTIC,
+      [context.getHandler(), context.getClass()],
+    );
+    // Skip the guard early if the route marked as public, tenant agnostic or ignored.
+    if (isPublic || isIgnoreEnsureTenantSeeded || isTenantAgnostic) {
       return true;
     }
     const tenant = await this.tenancyContext.getTenant();

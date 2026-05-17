@@ -28,7 +28,7 @@ export class DocumentLink extends BaseModel{
    * Relationship mapping.
    */
   static get relationMappings() {
-    const Document = require('./Document');
+    const { Document } = require('./Document');
 
     return {
       /**
@@ -36,7 +36,7 @@ export class DocumentLink extends BaseModel{
        */
       document: {
         relation: Model.HasOneRelation,
-        modelClass: Document.default,
+        modelClass: Document,
         join: {
           from: 'document_links.documentId',
           to: 'documents.id',

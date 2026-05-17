@@ -31,6 +31,7 @@ export interface IVendorNewDTO extends IContactAddressDTO {
 
   note?: string;
   active?: boolean;
+  code?: string;
 }
 export interface IVendorEditDTO extends IContactAddressDTO {
   salutation?: string;
@@ -46,6 +47,7 @@ export interface IVendorEditDTO extends IContactAddressDTO {
 
   note?: string;
   active?: boolean;
+  code?: string;
 }
 
 export interface IVendorsFilter extends IDynamicListFilter {

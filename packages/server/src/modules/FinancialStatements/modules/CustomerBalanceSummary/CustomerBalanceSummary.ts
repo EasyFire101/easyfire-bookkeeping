@@ -8,7 +8,7 @@ import {
 import { ContactBalanceSummaryReport } from '../ContactBalanceSummary/ContactBalanceSummary';
 import { ILedger } from '@/modules/Ledger/types/Ledger.types';
 import { ModelObject } from 'objection';
-import { INumberFormatQuery } from '../../types/Report.types';
+import { INumberFormatQuery, IFinancialReportMeta, DEFAULT_REPORT_META } from '../../types/Report.types';
 import { Customer } from '@/modules/Customers/models/Customer';
 
 export class CustomerBalanceSummaryReport extends ContactBalanceSummaryReport {
@@ -23,21 +23,22 @@ export class CustomerBalanceSummaryReport extends ContactBalanceSummaryReport {
    * @param {IJournalPoster} receivableLedger
    * @param {ICustomer[]} customers
    * @param {ICustomerBalanceSummaryQuery} filter
-   * @param {string} baseCurrency
+   * @param {IFinancialReportMeta} meta
    */
   constructor(
     ledger: ILedger,
     customers: ModelObject<Customer>[],
     filter: ICustomerBalanceSummaryQuery,
-    baseCurrency: string
+    meta: IFinancialReportMeta,
   ) {
     super();
 
     this.ledger = ledger;
-    this.baseCurrency = baseCurrency;
+    this.baseCurrency = meta.baseCurrency;
     this.customers = customers;
     this.filter = filter;
     this.numberFormat = this.filter.numberFormat;
+    this.dateFormat = meta.dateFormat || DEFAULT_REPORT_META.dateFormat;
   }
 
   /**

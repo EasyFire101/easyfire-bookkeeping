@@ -18,11 +18,13 @@ import {
   Put,
   Query,
   Res,
+  UseGuards,
 } from '@nestjs/common';
 import { CreditNoteApplication } from './CreditNoteApplication.service';
-import { ICreditNotesQueryDTO } from './types/CreditNotes.types';
 import { CreateCreditNoteDto, EditCreditNoteDto } from './dtos/CreditNote.dto';
+import { GetCreditNotesQueryDto } from './dtos/GetCreditNotesQuery.dto';
 import { CreditNoteResponseDto } from './dtos/CreditNoteResponse.dto';
+import { CreditNoteStateResponseDto } from './dtos/CreditNoteStateResponse.dto';
 import { PaginatedResponseDto } from '@/common/dtos/PaginatedResults.dto';
 import { ApiCommonHeaders } from '@/common/decorators/ApiCommonHeaders';
 import {
@@ -30,6 +32,11 @@ import {
   ValidateBulkDeleteResponseDto,
 } from '@/common/dtos/BulkDelete.dto';
 import { AcceptType } from '@/constants/accept-type';
+import { RequirePermission } from '@/modules/Roles/RequirePermission.decorator';
+import { PermissionGuard } from '@/modules/Roles/Permission.guard';
+import { AuthorizationGuard } from '@/modules/Roles/Authorization.guard';
+import { AbilitySubject } from '@/modules/Roles/Roles.types';
+import { CreditNoteAction } from './types/CreditNotes.types';
 
 @Controller('credit-notes')
 @ApiTags('Credit Notes')
@@ -37,6 +44,7 @@ import { AcceptType } from '@/constants/accept-type';
 @ApiExtraModels(PaginatedResponseDto)
 @ApiExtraModels(ValidateBulkDeleteResponseDto)
 @ApiCommonHeaders()
+@UseGuards(AuthorizationGuard, PermissionGuard)
 export class CreditNotesController {
   /**
    * @param {CreditNoteApplication} creditNoteApplication - The credit note application service.
@@ -44,6 +52,7 @@ export class CreditNotesController {
   constructor(private creditNoteApplication: CreditNoteApplication) { }
 
   @Post()
+  @RequirePermission(CreditNoteAction.Create, AbilitySubject.CreditNote)
   @ApiOperation({ summary: 'Create a new credit note' })
   @ApiResponse({ status: 201, description: 'Credit note successfully created' })
   @ApiResponse({ status: 400, description: 'Invalid input data' })
@@ -52,13 +61,19 @@ export class CreditNotesController {
   }
 
   @Get('state')
+  @RequirePermission(CreditNoteAction.View, AbilitySubject.CreditNote)
   @ApiOperation({ summary: 'Get credit note state' })
-  @ApiResponse({ status: 200, description: 'Returns the credit note state' })
+  @ApiResponse({
+    status: 200,
+    description: 'Returns the credit note state',
+    type: CreditNoteStateResponseDto,
+  })
   getCreditNoteState() {
     return this.creditNoteApplication.getCreditNoteState();
   }
 
   @Get(':id')
+  @RequirePermission(CreditNoteAction.View, AbilitySubject.CreditNote)
   @ApiOperation({ summary: 'Get a specific credit note by ID' })
   @ApiParam({ name: 'id', description: 'Credit note ID', type: 'number' })
   @ApiResponse({
@@ -92,6 +107,7 @@ export class CreditNotesController {
   }
 
   @Get()
+  @RequirePermission(CreditNoteAction.View, AbilitySubject.CreditNote)
   @ApiOperation({ summary: 'Get all credit notes' })
   @ApiResponse({
     status: 200,
@@ -110,11 +126,12 @@ export class CreditNotesController {
       ],
     },
   })
-  getCreditNotes(@Query() creditNotesQuery: ICreditNotesQueryDTO) {
+  getCreditNotes(@Query() creditNotesQuery: GetCreditNotesQueryDto) {
     return this.creditNoteApplication.getCreditNotes(creditNotesQuery);
   }
 
   @Put(':id')
+  @RequirePermission(CreditNoteAction.Edit, AbilitySubject.CreditNote)
   @ApiOperation({ summary: 'Update a credit note' })
   @ApiParam({ name: 'id', description: 'Credit note ID', type: 'number' })
   @ApiResponse({ status: 200, description: 'Credit note successfully updated' })
@@ -131,6 +148,7 @@ export class CreditNotesController {
   }
 
   @Put(':id/open')
+  @RequirePermission(CreditNoteAction.Edit, AbilitySubject.CreditNote)
   @ApiOperation({ summary: 'Open a credit note' })
   @ApiParam({ name: 'id', description: 'Credit note ID', type: 'number' })
   @ApiResponse({ status: 200, description: 'Credit note successfully opened' })
@@ -140,6 +158,7 @@ export class CreditNotesController {
   }
 
   @Post('validate-bulk-delete')
+  @RequirePermission(CreditNoteAction.Delete, AbilitySubject.CreditNote)
   @ApiOperation({
     summary:
       'Validates which credit notes can be deleted and returns the results.',
@@ -161,6 +180,7 @@ export class CreditNotesController {
   }
 
   @Post('bulk-delete')
+  @RequirePermission(CreditNoteAction.Delete, AbilitySubject.CreditNote)
   @ApiOperation({ summary: 'Deletes multiple credit notes.' })
   @ApiResponse({
     status: 200,
@@ -173,6 +193,7 @@ export class CreditNotesController {
   }
 
   @Delete(':id')
+  @RequirePermission(CreditNoteAction.Delete, AbilitySubject.CreditNote)
   @ApiOperation({ summary: 'Delete a credit note' })
   @ApiParam({ name: 'id', description: 'Credit note ID', type: 'number' })
   @ApiResponse({ status: 200, description: 'Credit note successfully deleted' })

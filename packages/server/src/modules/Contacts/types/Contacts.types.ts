@@ -10,7 +10,7 @@ export interface IContactAddress {
   billingAddressCity: string;
   billingAddressCountry: string;
   billingAddressEmail: string;
-  billingAddressZipcode: string;
+  billingAddressPostcode: string;
   billingAddressPhone: string;
   billingAddressState: string;
 
@@ -19,7 +19,7 @@ export interface IContactAddress {
   shippingAddressCity: string;
   shippingAddressCountry: string;
   shippingAddressEmail: string;
-  shippingAddressZipcode: string;
+  shippingAddressPostcode: string;
   shippingAddressPhone: string;
   shippingAddressState: string;
 }
@@ -29,7 +29,7 @@ export interface IContactAddressDTO {
   billingAddressCity?: string;
   billingAddressCountry?: string;
   billingAddressEmail?: string;
-  billingAddressZipcode?: string;
+  billingAddressPostcode?: string;
   billingAddressPhone?: string;
   billingAddressState?: string;
 
@@ -38,7 +38,7 @@ export interface IContactAddressDTO {
   shippingAddressCity?: string;
   shippingAddressCountry?: string;
   shippingAddressEmail?: string;
-  shippingAddressZipcode?: string;
+  shippingAddressPostcode?: string;
   shippingAddressPhone?: string;
   shippingAddressState?: string;
 }

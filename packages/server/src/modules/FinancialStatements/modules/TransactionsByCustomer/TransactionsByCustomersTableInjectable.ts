@@ -28,6 +28,7 @@ export class TransactionsByCustomersTableInjectable {
     const table = new TransactionsByCustomersTable(
       customersTransactions.data,
       this.i18n,
+      customersTransactions.meta.dateFormat,
     );
     return {
       table: {

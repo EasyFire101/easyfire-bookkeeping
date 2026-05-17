@@ -37,8 +37,8 @@ export function useUncategorizeTransactionsBulkAction(
     UncategorizeTransactionsBulkValues
   >(
     (value) =>
-      apiRequest.post(`/cashflow/transactions/uncategorize/bulk`, {
-        ids: value.ids,
+      apiRequest.delete(`/banking/categorize/bulk`, {
+        params: { uncategorizedTransactionIds: value.ids },
       }),
     {
       onSuccess: (res, values) => {

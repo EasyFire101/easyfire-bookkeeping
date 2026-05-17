@@ -33,7 +33,6 @@ function VendorFormProvider({ query, vendorId, ...props }) {
   const { data: vendor, isLoading: isVendorLoading } = useVendor(vendorId, {
     enabled: !!vendorId,
   });
-
   // Handle fetch contact duplicate details.
   const { data: contactDuplicate, isLoading: isContactLoading } = useContact(
     contactId,

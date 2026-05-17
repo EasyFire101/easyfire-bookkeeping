@@ -2,7 +2,7 @@
 import React from 'react';
 import intl from 'react-intl-universal';
 import { Intent, Menu, MenuItem, Tag } from '@blueprintjs/core';
-import { FormatDateCell, Icon } from '@/components';
+import { Icon } from '@/components';
 import { safeCallback } from '@/utils';
 import { useAccountTransactionsContext } from './AccountTransactionsProvider';
 import FinancialLoadingBar from '@/containers/FinancialStatements/FinancialLoadingBar';
@@ -75,8 +75,7 @@ export function useAccountTransactionsColumns() {
       {
         id: 'date',
         Header: intl.get('date'),
-        accessor: 'date',
-        Cell: FormatDateCell,
+        accessor: 'formatted_date',
         width: 110,
         className: 'date',
         clickable: true,

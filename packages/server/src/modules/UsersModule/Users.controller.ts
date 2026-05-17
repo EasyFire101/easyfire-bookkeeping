@@ -22,7 +22,7 @@ export class UsersController {
   /**
    * Edit details of the given user.
    */
-  @Post(':id')
+  @Put(':id')
   @ApiOperation({ summary: 'Edit details of the given user.' })
   @ApiResponse({
     status: 200,

@@ -18,7 +18,7 @@ export class InventoryValuationMetaInjectable {
     query: IInventoryValuationReportQuery,
   ): Promise<IInventoryValuationSheetMeta> {
     const commonMeta = await this.financialSheetMeta.meta();
-    const formattedAsDate = moment(query.asDate).format('YYYY/MM/DD');
+    const formattedAsDate = moment(query.asDate).format(commonMeta.dateFormat);
     const formattedDateRange = `As ${formattedAsDate}`;
 
     return {

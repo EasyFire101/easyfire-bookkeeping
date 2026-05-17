@@ -1,4 +1,5 @@
 import { Module } from '@nestjs/common';
+import { GetRefundVendorCreditService } from './queries/GetRefundVendorCredit.service';
 import { GetRefundVendorCreditsService } from './queries/GetRefundVendorCredits.service';
 import { DeleteRefundVendorCreditService } from './commands/DeleteRefundVendorCredit.service';
 import { VendorCreditsRefundController } from './VendorCreditsRefund.controller';
@@ -14,6 +15,7 @@ import { AccountsModule } from '../Accounts/Accounts.module';
 @Module({
   imports: [WarehousesModule, BranchesModule, LedgerModule, AccountsModule],
   providers: [
+    GetRefundVendorCreditService,
     GetRefundVendorCreditsService,
     DeleteRefundVendorCreditService,
     CreateRefundVendorCredit,

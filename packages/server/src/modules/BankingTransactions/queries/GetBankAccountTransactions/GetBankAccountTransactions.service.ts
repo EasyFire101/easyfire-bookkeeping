@@ -4,12 +4,14 @@ import { GetBankAccountTransactionsRepository } from './GetBankAccountTransactio
 import { GetBankAccountTransactions } from './GetBankAccountTransactions';
 import { GetBankTransactionsQueryDto } from '../../dtos/GetBankTranasctionsQuery.dto';
 import { I18nService } from 'nestjs-i18n';
+import { TenancyContext } from '@/modules/Tenancy/TenancyContext.service';
 
 @Injectable()
 export class GetBankAccountTransactionsService {
   constructor(
     private readonly getBankAccountTransactionsRepository: GetBankAccountTransactionsRepository,
-    private readonly i18nService: I18nService
+    private readonly i18nService: I18nService,
+    private readonly tenancyContext: TenancyContext,
   ) {}
 
   /**
@@ -28,11 +30,16 @@ export class GetBankAccountTransactionsService {
 
     await this.getBankAccountTransactionsRepository.asyncInit();
 
+    // Retrieve the tenant metadata to get the date format.
+    const tenantMetadata = await this.tenancyContext.getTenantMetadata();
+    const dateFormat = tenantMetadata?.dateFormat;
+
     // Retrieve the computed report.
     const report = new GetBankAccountTransactions(
       this.getBankAccountTransactionsRepository,
       parsedQuery,
-      this.i18nService
+      this.i18nService,
+      dateFormat,
     );
     const transactions = report.reportData();
     const pagination = this.getBankAccountTransactionsRepository.pagination;

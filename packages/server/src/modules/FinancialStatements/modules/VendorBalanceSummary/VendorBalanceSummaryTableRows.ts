@@ -91,7 +91,7 @@ export class VendorBalanceSummaryTable {
    */
   private getTotalColumnsAccessor = (): IColumnMapperMeta[] => {
     const columns = [
-      { key: 'name', value: this.i18n.t('Total') },
+      { key: 'name', value: this.i18n.t('contact_summary_balance.total') },
       { key: 'total', accessor: 'total.formattedAmount' },
     ];
     return R.compose(

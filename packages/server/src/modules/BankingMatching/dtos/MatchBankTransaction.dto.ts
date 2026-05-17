@@ -30,7 +30,12 @@ export class MatchTransactionEntryDto {
 export class MatchBankTransactionDto {
   @IsArray()
   @ArrayMinSize(1)
-  uncategorizedTransactions: Array<number>
+  @ApiProperty({
+    description: 'Uncategorized transaction IDs to match',
+    type: [Number],
+    example: [1, 2],
+  })
+  uncategorizedTransactions: Array<number>;
 
   @IsArray()
   @ValidateNested({ each: true })

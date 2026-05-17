@@ -38,7 +38,7 @@ export class TransactionsByReferenceService {
     const report = new TransactionsByReference(
       transactions,
       filter,
-      tenantMetadata.baseCurrency
+      { baseCurrency: tenantMetadata.baseCurrency, dateFormat: tenantMetadata.dateFormat }
     );
 
     return {

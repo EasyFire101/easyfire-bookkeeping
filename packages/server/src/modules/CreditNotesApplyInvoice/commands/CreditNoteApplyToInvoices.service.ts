@@ -2,6 +2,7 @@ import { Inject, Injectable } from '@nestjs/common';
 import { Knex } from 'knex';
 import { sumBy } from 'lodash';
 import {
+  ICreditNoteAppliedToInvoice,
   ICreditNoteAppliedToInvoiceModel,
   IApplyCreditToInvoicesDTO,
   IApplyCreditToInvoicesCreatedPayload,
@@ -17,6 +18,7 @@ import { CreditNote } from '@/modules/CreditNotes/models/CreditNote';
 import { CreditNoteAppliedInvoice } from '../models/CreditNoteAppliedInvoice';
 import { CommandCreditNoteDTOTransform } from '@/modules/CreditNotes/commands/CommandCreditNoteDTOTransform.service';
 import { TenantModelProxy } from '@/modules/System/models/TenantBaseModel';
+import { ApplyCreditNoteToInvoicesDto } from '../dtos/ApplyCreditNoteToInvoices.dto';
 
 @Injectable()
 export class CreditNoteApplyToInvoices {
@@ -48,7 +50,7 @@ export class CreditNoteApplyToInvoices {
    */
   public async applyCreditNoteToInvoices(
     creditNoteId: number,
-    applyCreditToInvoicesDTO: IApplyCreditToInvoicesDTO,
+    applyCreditToInvoicesDTO: ApplyCreditNoteToInvoicesDto,
   ): Promise<CreditNoteAppliedInvoice[]> {
     // Saves the credit note or throw not found service error.
     const creditNote = await this.creditNoteModel()
@@ -71,7 +73,7 @@ export class CreditNoteApplyToInvoices {
     // Validate invoices has remaining amount to apply.
     this.validateInvoicesRemainingAmount(
       appliedInvoicesEntries,
-      creditNoteAppliedModel.amount,
+      creditNoteAppliedModel.entries,
     );
     // Validate the credit note remaining amount.
     this.creditNoteDTOTransform.validateCreditRemainingAmount(
@@ -122,18 +124,20 @@ export class CreditNoteApplyToInvoices {
   };
 
   /**
-   * Validate the invoice remaining amount.
+   * Validate each invoice has sufficient remaining amount for the applied credit.
    * @param {ISaleInvoice[]} invoices
-   * @param {number} amount
+   * @param {ICreditNoteAppliedToInvoice[]} entries
    */
   private validateInvoicesRemainingAmount = (
     invoices: SaleInvoice[],
-    amount: number,
+    entries: ICreditNoteAppliedToInvoice[],
   ) => {
-    const invalidInvoices = invoices.filter(
-      (invoice) => invoice.dueAmount < amount,
-    );
-    if (invalidInvoices.length > 0) {
+    const invoiceMap = new Map(invoices.map((inv) => [inv.id, inv]));
+    const invalidEntries = entries.filter((entry) => {
+      const invoice = invoiceMap.get(entry.invoiceId);
+      return invoice != null && invoice.dueAmount < entry.amount;
+    });
+    if (invalidEntries.length > 0) {
       throw new ServiceError(ERRORS.INVOICES_HAS_NO_REMAINING_AMOUNT);
     }
   };

@@ -29,14 +29,22 @@ function InviteAcceptProvider({ token, ...props }) {
     if (inviteMetaError) { history.push('/auth/login'); }
   }, [history, inviteMetaError]);
 
+  // Transform the backend response to match frontend expectations.
+  const transformedInviteMeta = inviteMeta
+    ? {
+        email: inviteMeta.inviteToken?.email,
+        organizationName: inviteMeta.orgName,
+      }
+    : null;
+
   // Provider payload.
   const provider = {
     token,
-    inviteMeta,
+    inviteMeta: transformedInviteMeta,
     inviteMetaError,
     isInviteMetaError,
     isInviteMetaLoading,
-    inviteAcceptMutate
+    inviteAcceptMutate,
   };
 
   if (inviteMetaError) {
@@ -45,7 +53,6 @@ function InviteAcceptProvider({ token, ...props }) {
 
   return (
     <InviteAcceptLoading isLoading={isInviteMetaLoading}>
-      { isInviteMetaError }
       <InviteAcceptContext.Provider value={provider} {...props} />
     </InviteAcceptLoading>
   );

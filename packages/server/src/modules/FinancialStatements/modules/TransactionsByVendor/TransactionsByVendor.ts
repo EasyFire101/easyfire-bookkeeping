@@ -12,6 +12,7 @@ import { TransactionsByContact } from '../TransactionsByContact/TransactionsByCo
 import { Vendor } from '@/modules/Vendors/models/Vendor';
 import { INumberFormatQuery } from '../../types/Report.types';
 import { TransactionsByVendorRepository } from './TransactionsByVendorRepository';
+import { IFinancialReportMeta, DEFAULT_REPORT_META } from '../../types/Report.types';
 
 const VENDOR_NORMAL = 'credit';
 
@@ -26,11 +27,13 @@ export class TransactionsByVendor extends TransactionsByContact {
    * @param {TransactionsByVendorRepository} transactionsByVendorRepository - Transactions by vendor repository.
    * @param {ITransactionsByVendorsFilter} filter - Transactions by vendors filter.
    * @param {I18nService} i18n - Internationalization service.
+   * @param {IFinancialReportMeta} meta - Report meta.
    */
   constructor(
     transactionsByVendorRepository: TransactionsByVendorRepository,
     filter: ITransactionsByVendorsFilter,
     i18n: I18nService,
+    meta: IFinancialReportMeta,
   ) {
     super();
 
@@ -38,6 +41,8 @@ export class TransactionsByVendor extends TransactionsByContact {
     this.filter = filter;
     this.numberFormat = this.filter.numberFormat;
     this.i18n = i18n;
+    this.baseCurrency = meta.baseCurrency;
+    this.dateFormat = meta.dateFormat || DEFAULT_REPORT_META.dateFormat;
   }
 
   /**

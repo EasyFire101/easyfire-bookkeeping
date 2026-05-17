@@ -7,6 +7,7 @@ import {
   SetMetadata,
 } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
+import { ClsService } from 'nestjs-cls';
 import { IS_PUBLIC_ROUTE } from '../Auth/Auth.constants';
 import { getAuthApiKey } from '../Auth/Auth.utils';
 
@@ -16,7 +17,10 @@ export const TenantAgnosticRoute = () => SetMetadata(IS_TENANT_AGNOSTIC, true);
 
 @Injectable()
 export class TenancyGlobalGuard implements CanActivate {
-  constructor(private reflector: Reflector) {}
+  constructor(
+    private readonly reflector: Reflector,
+    private readonly clsService: ClsService,
+  ) {}
 
   /**
    * Validates the organization ID in the request headers.
@@ -42,6 +46,14 @@ export class TenancyGlobalGuard implements CanActivate {
     }
     if (!organizationId) {
       throw new UnauthorizedException('Organization ID is required.');
+    }
+    const authenticatedOrganizationId =
+      this.clsService.get('organizationId');
+    if (
+      authenticatedOrganizationId &&
+      authenticatedOrganizationId !== organizationId
+    ) {
+      throw new UnauthorizedException('Organization mismatch.');
     }
     return true;
   }

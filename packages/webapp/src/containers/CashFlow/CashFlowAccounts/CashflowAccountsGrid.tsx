@@ -82,7 +82,7 @@ function CashflowBankAccount({
   const handleEditAccount = () => {
     openDialog(DialogsName.AccountForm, {
       action: AccountDialogAction.Edit,
-      id: account.id,
+      accountId: account.id,
     });
   };
   // Handle money in menu item actions.

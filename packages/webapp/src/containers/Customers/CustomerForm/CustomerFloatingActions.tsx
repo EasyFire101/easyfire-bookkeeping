@@ -1,4 +1,3 @@
-// @ts-nocheck
 import React from 'react';
 import styled from 'styled-components';
 import {
@@ -11,52 +10,36 @@ import {
   Menu,
   MenuItem,
 } from '@blueprintjs/core';
-import classNames from 'classnames';
 import { useFormikContext } from 'formik';
 import { Group, Icon, FormattedMessage as T } from '@/components';
-import { CLASSES } from '@/constants/classes';
 import { useCustomerFormContext } from './CustomerFormProvider';
-import { safeInvoke } from '@/utils';
 
-/**
- * Customer floating actions bar.
- */
-export default function CustomerFloatingActions({ onCancel }) {
+export function CustomerFloatingActions() {
   // Customer form context.
-  const { isNewMode, setSubmitPayload } = useCustomerFormContext();
+  const { isNewMode, setSubmitPayload } = useCustomerFormContext() as {
+    isNewMode: boolean;
+    setSubmitPayload: (payload: { noRedirect: boolean }) => void;
+  };
 
   // Formik context.
-  const { resetForm, submitForm, isSubmitting } = useFormikContext();
+  const { submitForm, isSubmitting } = useFormikContext();
 
   // Handle submit button click.
-  const handleSubmitBtnClick = (event) => {
+  const handleSubmitBtnClick = (_event: React.MouseEvent<HTMLElement>) => {
     setSubmitPayload({ noRedirect: false });
   };
 
-  // Handle cancel button click.
-  const handleCancelBtnClick = (event) => {
-    safeInvoke(onCancel, event);
-  };
-
-  // handle clear button clicl.
-  const handleClearBtnClick = (event) => {
-    resetForm();
-  };
-
   // Handle submit & new button click.
-  const handleSubmitAndNewClick = (event) => {
+  const handleSubmitAndNewClick = (_event: React.MouseEvent<HTMLElement>) => {
     submitForm();
     setSubmitPayload({ noRedirect: true });
   };
 
   return (
-    <Group
-      spacing={10}
-      className={classNames(CLASSES.PAGE_FORM_FLOATING_ACTIONS)}
-    >
+    <FloatingActionsGroup spacing={10}>
       <ButtonGroup>
         {/* ----------- Save and New ----------- */}
-        <SaveButton
+        <Button
           disabled={isSubmitting}
           loading={isSubmitting}
           intent={Intent.PRIMARY}
@@ -73,9 +56,9 @@ export default function CustomerFloatingActions({ onCancel }) {
               />
             </Menu>
           }
-          minimal={true}
           interactionKind={PopoverInteractionKind.CLICK}
-          position={Position.BOTTOM_LEFT}
+          position={Position.BOTTOM_RIGHT}
+          minimal
         >
           <Button
             disabled={isSubmitting}
@@ -84,24 +67,16 @@ export default function CustomerFloatingActions({ onCancel }) {
           />
         </Popover>
       </ButtonGroup>
-
-      {/* ----------- Clear & Reset----------- */}
-      <Button
-        className={'ml1'}
-        disabled={isSubmitting}
-        onClick={handleClearBtnClick}
-        text={!isNewMode ? <T id={'reset'} /> : <T id={'clear'} />}
-      />
-      {/* ----------- Cancel  ----------- */}
-      <Button
-        className={'ml1'}
-        onClick={handleCancelBtnClick}
-        text={<T id={'cancel'} />}
-      />
-    </Group>
+    </FloatingActionsGroup>
   );
 }
 
-const SaveButton = styled(Button)`
-  min-width: 100px;
+const FloatingActionsGroup = styled(Group)`
+  padding: 10px 0;
+  padding-left: 165px;
+  border-top: 1px solid #50555a;
+  position: sticky;
+  bottom: 0;
+  background: var(--color-card-background);
+  z-index: 1;
 `;

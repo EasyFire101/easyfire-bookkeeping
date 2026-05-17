@@ -7,7 +7,7 @@ import { useDrawerContext } from '@/components/Drawer/DrawerProvider';
 
 export function EstimateSendPdfPreviewConnected() {
   return (
-    <Stack>
+    <Stack spacing={0}>
       <EstimateSendMailPreviewHeader />
 
       <Stack px={4} py={6}>

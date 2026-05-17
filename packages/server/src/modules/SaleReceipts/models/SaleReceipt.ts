@@ -5,6 +5,7 @@ import { BaseModel } from '@/models/Model';
 import { ItemEntry } from '@/modules/TransactionItemEntry/models/ItemEntry';
 import { Customer } from '@/modules/Customers/models/Customer';
 import { AccountTransaction } from '@/modules/Accounts/models/AccountTransaction.model';
+import { Document } from '@/modules/ChromiumlyTenancy/models/Document';
 import { Branch } from '@/modules/Branches/models/Branch.model';
 import { Warehouse } from '@/modules/Warehouses/models/Warehouse.model';
 import { DiscountType } from '@/common/types/Discount';
@@ -15,7 +16,9 @@ import { SearchableBaseModelMixin } from '@/modules/DynamicListing/models/Search
 import { ExportableModel } from '@/modules/Export/decorators/ExportableModel.decorator';
 import { ImportableModel } from '@/modules/Import/decorators/Import.decorator';
 import { InjectModelMeta } from '@/modules/Tenancy/TenancyModels/decorators/InjectModelMeta.decorator';
+import { InjectAttachable } from '@/modules/Attachments/decorators/InjectAttachable.decorator';
 import { SaleReceiptMeta } from './SaleReceipt.meta';
+import { sanitizeSortDirection } from '@/modules/DynamicListing/DynamicFilter/sanitizeSortDirection';
 import { InjectModelDefaultViews } from '@/modules/Views/decorators/InjectModelDefaultViews.decorator';
 import { SaleReceiptDefaultViews } from '../constants';
 
@@ -26,6 +29,7 @@ const ExtendedModel = R.pipe(
   MetadataModelMixin,
 )(BaseModel);
 
+@InjectAttachable()
 @ExportableModel()
 @ImportableModel()
 @InjectModelMeta(SaleReceiptMeta)
@@ -58,6 +62,7 @@ export class SaleReceipt extends ExtendedModel {
   public customer!: Customer;
   public entries!: ItemEntry[];
   public transactions!: AccountTransaction[];
+  public attachments!: Document[];
   public branch!: Branch;
   public warehouse!: Warehouse;
 
@@ -72,7 +77,7 @@ export class SaleReceipt extends ExtendedModel {
    * Timestamps columns.
    */
   get timestamps() {
-    return ['created_at', 'updated_at'];
+    return ['createdAt', 'updatedAt'];
   }
 
   /**
@@ -234,7 +239,8 @@ export class SaleReceipt extends ExtendedModel {
        * Sorting the receipts order by status.
        */
       sortByStatus(query, order) {
-        query.orderByRaw(`CLOSED_AT IS NULL ${order}`);
+        const dir = sanitizeSortDirection(order);
+        query.orderByRaw(`CLOSED_AT IS NULL ${dir}`);
       },
 
       /**

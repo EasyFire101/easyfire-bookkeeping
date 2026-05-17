@@ -3,6 +3,10 @@ import { Controller, Get, Param, Post, Res } from '@nestjs/common';
 import { PaymentLinksApplication } from './PaymentLinksApplication';
 import { ApiOperation, ApiParam, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { ApiCommonHeaders } from '@/common/decorators/ApiCommonHeaders';
+import {
+  GetInvoicePaymentLinkResponseWrapperDto,
+} from './dtos/GetInvoicePaymentLinkResponse.dto';
+import { CreateStripeCheckoutSessionResponseDto } from './dtos/CreateStripeCheckoutSessionResponse.dto';
 
 @Controller('payment-links')
 @ApiTags('Payment Links')
@@ -24,12 +28,7 @@ export class PaymentLinksController {
   @ApiResponse({
     status: 200,
     description: 'Successfully retrieved payment link metadata',
-    schema: {
-      type: 'object',
-      properties: {
-        data: { type: 'object', description: 'Payment link metadata' },
-      },
-    },
+    type: GetInvoicePaymentLinkResponseWrapperDto,
   })
   @ApiResponse({ status: 404, description: 'Payment link not found' })
   public async getPaymentLinkPublicMeta(
@@ -55,19 +54,7 @@ export class PaymentLinksController {
   @ApiResponse({
     status: 200,
     description: 'Successfully created Stripe checkout session',
-    schema: {
-      type: 'object',
-      properties: {
-        id: {
-          type: 'string',
-          description: 'Stripe checkout session ID',
-        },
-        url: {
-          type: 'string',
-          description: 'Stripe checkout session URL',
-        },
-      },
-    },
+    type: CreateStripeCheckoutSessionResponseDto,
   })
   @ApiResponse({ status: 404, description: 'Payment link not found' })
   public async createInvoicePaymentLinkCheckoutSession(

@@ -2,20 +2,36 @@ import { Response } from 'express';
 import { Controller, Get, Headers, Query, Res } from '@nestjs/common';
 import { PurchasesByItemsApplication } from './PurchasesByItemsApplication';
 import { AcceptType } from '@/constants/accept-type';
-import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
+import { ApiExtraModels, ApiOperation, ApiResponse, ApiTags, getSchemaPath } from '@nestjs/swagger';
 import { PurchasesByItemsQueryDto } from './PurchasesByItemsQuery.dto';
+import {
+  PurchasesByItemsResponseDto,
+  PurchasesByItemsTableResponseDto,
+} from './PurchasesByItemsResponse.dto';
 import { ApiCommonHeaders } from '@/common/decorators/ApiCommonHeaders';
 
 @Controller('/reports/purchases-by-items')
 @ApiTags('Reports')
 @ApiCommonHeaders()
+@ApiExtraModels(PurchasesByItemsResponseDto, PurchasesByItemsTableResponseDto)
 export class PurchasesByItemReportController {
   constructor(
     private readonly purchasesByItemsApp: PurchasesByItemsApplication,
   ) {}
 
   @Get()
-  @ApiResponse({ status: 200, description: 'Purchases by items report' })
+  @ApiResponse({
+    status: 200,
+    description: 'Purchases by items report',
+    content: {
+      [AcceptType.ApplicationJson]: {
+        schema: { $ref: getSchemaPath(PurchasesByItemsResponseDto) },
+      },
+      [AcceptType.ApplicationJsonTable]: {
+        schema: { $ref: getSchemaPath(PurchasesByItemsTableResponseDto) },
+      },
+    },
+  })
   @ApiOperation({ summary: 'Get purchases by items report' })
   async purchasesByItems(
     @Query() filter: PurchasesByItemsQueryDto,

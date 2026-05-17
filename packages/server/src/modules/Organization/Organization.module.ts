@@ -15,6 +15,8 @@ import { OrganizationBaseCurrencyLocking } from './Organization/OrganizationBase
 import { SyncSystemUserToTenantService } from './commands/SyncSystemUserToTenant.service';
 import { SyncSystemUserToTenantSubscriber } from './subscribers/SyncSystemUserToTenant.subscriber';
 import { GetBuildOrganizationBuildJob } from './commands/GetBuildOrganizationJob.service';
+import { AttachmentsModule } from '../Attachments/Attachment.module';
+import { TransformerModule } from '../Transformer/Transformer.module';
 
 @Module({
   providers: [
@@ -36,6 +38,8 @@ import { GetBuildOrganizationBuildJob } from './commands/GetBuildOrganizationJob
       adapter: BullMQAdapter,
     }),
     TenantDBManagerModule,
+    AttachmentsModule,
+    TransformerModule,
   ],
   controllers: [OrganizationController],
 })

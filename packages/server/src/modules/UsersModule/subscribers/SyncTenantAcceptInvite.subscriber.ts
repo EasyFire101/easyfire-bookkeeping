@@ -1,4 +1,4 @@
-import { omit } from 'lodash';
+import { pick } from 'lodash';
 import * as moment from 'moment';
 import { Inject, Injectable } from '@nestjs/common';
 import { OnEvent } from '@nestjs/event-emitter';
@@ -22,13 +22,12 @@ export class SyncTenantAcceptInviteSubscriber {
   async syncTenantAcceptInvite({
     inviteToken,
     user,
-    inviteUserDTO,
   }: IAcceptInviteEventPayload) {
     await this.tenantUserModel()
       .query()
       .where('systemUserId', inviteToken.userId)
       .update({
-        ...omit(inviteUserDTO, ['password']),
+        ...pick(user, ['firstName', 'lastName', 'email', 'active']),
         inviteAcceptedAt: moment().format('YYYY-MM-DD'),
       });
   }

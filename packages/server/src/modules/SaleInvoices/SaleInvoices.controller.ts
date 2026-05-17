@@ -12,10 +12,10 @@ import {
   Put,
   Query,
   Res,
+  UseGuards,
 } from '@nestjs/common';
 import {
   ISaleInvoiceWriteoffDTO,
-  ISalesInvoicesFilter,
   SaleInvoiceMailState,
   SendInvoiceMailDTO,
 } from './SaleInvoice.types';
@@ -33,6 +33,7 @@ import {
   CreateSaleInvoiceDto,
   EditSaleInvoiceDto,
 } from './dtos/SaleInvoice.dto';
+import { GetSaleInvoicesQueryDto } from './dtos/GetSaleInvoicesQuery.dto';
 import { AcceptType } from '@/constants/accept-type';
 import { SaleInvoiceResponseDto } from './dtos/SaleInvoiceResponse.dto';
 import { PaginatedResponseDto } from '@/common/dtos/PaginatedResults.dto';
@@ -43,6 +44,11 @@ import {
   BulkDeleteDto,
   ValidateBulkDeleteResponseDto,
 } from '@/common/dtos/BulkDelete.dto';
+import { RequirePermission } from '@/modules/Roles/RequirePermission.decorator';
+import { PermissionGuard } from '@/modules/Roles/Permission.guard';
+import { AuthorizationGuard } from '@/modules/Roles/Authorization.guard';
+import { AbilitySubject } from '@/modules/Roles/Roles.types';
+import { SaleInvoiceAction } from './SaleInvoice.types';
 
 @Controller('sale-invoices')
 @ApiTags('Sale Invoices')
@@ -52,10 +58,12 @@ import {
 @ApiExtraModels(GenerateSaleInvoiceSharableLinkResponseDto)
 @ApiCommonHeaders()
 @ApiExtraModels(ValidateBulkDeleteResponseDto)
+@UseGuards(AuthorizationGuard, PermissionGuard)
 export class SaleInvoicesController {
   constructor(private saleInvoiceApplication: SaleInvoiceApplication) { }
 
   @Post('validate-bulk-delete')
+  @RequirePermission(SaleInvoiceAction.Delete, AbilitySubject.SaleInvoice)
   @ApiOperation({
     summary:
       'Validates which sale invoices can be deleted and returns the results.',
@@ -77,6 +85,7 @@ export class SaleInvoicesController {
   }
 
   @Post('bulk-delete')
+  @RequirePermission(SaleInvoiceAction.Delete, AbilitySubject.SaleInvoice)
   @ApiOperation({ summary: 'Deletes multiple sale invoices.' })
   @ApiResponse({
     status: 200,
@@ -90,6 +99,7 @@ export class SaleInvoicesController {
   }
 
   @Post()
+  @RequirePermission(SaleInvoiceAction.Create, AbilitySubject.SaleInvoice)
   @ApiOperation({ summary: 'Create a new sale invoice.' })
   @ApiResponse({
     status: 201,
@@ -121,6 +131,7 @@ export class SaleInvoicesController {
   }
 
   @Put(':id')
+  @RequirePermission(SaleInvoiceAction.Edit, AbilitySubject.SaleInvoice)
   @ApiOperation({ summary: 'Edit the given sale invoice.' })
   @ApiResponse({
     status: 200,
@@ -141,6 +152,7 @@ export class SaleInvoicesController {
   }
 
   @Delete(':id')
+  @RequirePermission(SaleInvoiceAction.Delete, AbilitySubject.SaleInvoice)
   @ApiOperation({ summary: 'Delete the given sale invoice.' })
   @ApiResponse({
     status: 200,
@@ -158,6 +170,7 @@ export class SaleInvoicesController {
   }
 
   @Get('receivable')
+  @RequirePermission(SaleInvoiceAction.View, AbilitySubject.SaleInvoice)
   @ApiOperation({ summary: 'Retrieves the receivable sale invoices.' })
   @ApiResponse({
     status: 200,
@@ -176,6 +189,7 @@ export class SaleInvoicesController {
   }
 
   @Get('state')
+  @RequirePermission(SaleInvoiceAction.View, AbilitySubject.SaleInvoice)
   @ApiOperation({ summary: 'Retrieves the sale invoice state.' })
   @ApiResponse({
     status: 200,
@@ -190,6 +204,7 @@ export class SaleInvoicesController {
   }
 
   @Get(':id')
+  @RequirePermission(SaleInvoiceAction.View, AbilitySubject.SaleInvoice)
   @ApiOperation({ summary: 'Retrieves the sale invoice details.' })
   @ApiResponse({
     status: 200,
@@ -228,6 +243,7 @@ export class SaleInvoicesController {
   }
 
   @Get()
+  @RequirePermission(SaleInvoiceAction.View, AbilitySubject.SaleInvoice)
   @ApiOperation({ summary: 'Retrieves the sale invoices.' })
   @ApiResponse({
     status: 200,
@@ -246,11 +262,12 @@ export class SaleInvoicesController {
       ],
     },
   })
-  getSaleInvoices(@Query() filterDTO: Partial<ISalesInvoicesFilter>) {
+  getSaleInvoices(@Query() filterDTO: GetSaleInvoicesQueryDto) {
     return this.saleInvoiceApplication.getSaleInvoices(filterDTO);
   }
 
   @Put(':id/deliver')
+  @RequirePermission(SaleInvoiceAction.Edit, AbilitySubject.SaleInvoice)
   @ApiOperation({ summary: 'Deliver the given sale invoice.' })
   @ApiResponse({
     status: 200,
@@ -269,6 +286,7 @@ export class SaleInvoicesController {
   }
 
   @Post(':id/writeoff')
+  @RequirePermission(SaleInvoiceAction.Writeoff, AbilitySubject.SaleInvoice)
   @ApiOperation({ summary: 'Write off the given sale invoice.' })
   @HttpCode(200)
   @ApiResponse({
@@ -290,6 +308,7 @@ export class SaleInvoicesController {
   }
 
   @Post(':id/cancel-writeoff')
+  @RequirePermission(SaleInvoiceAction.Writeoff, AbilitySubject.SaleInvoice)
   @ApiOperation({ summary: 'Cancel the written off sale invoice.' })
   @ApiResponse({
     status: 200,
@@ -309,6 +328,7 @@ export class SaleInvoicesController {
   }
 
   @Get(':id/payments')
+  @RequirePermission(SaleInvoiceAction.View, AbilitySubject.SaleInvoice)
   @ApiOperation({ summary: 'Retrieves the sale invoice payments.' })
   @ApiResponse({ status: 404, description: 'The sale invoice not found.' })
   @ApiParam({
@@ -322,6 +342,7 @@ export class SaleInvoicesController {
   }
 
   @Get(':id/html')
+  @RequirePermission(SaleInvoiceAction.View, AbilitySubject.SaleInvoice)
   @ApiOperation({ summary: 'Retrieves the sale invoice HTML.' })
   @ApiResponse({ status: 404, description: 'The sale invoice not found.' })
   @ApiParam({
@@ -335,6 +356,7 @@ export class SaleInvoicesController {
   }
 
   @Get(':id/mail')
+  @RequirePermission(SaleInvoiceAction.View, AbilitySubject.SaleInvoice)
   @ApiOperation({ summary: 'Retrieves the sale invoice mail state.' })
   @ApiResponse({
     status: 200,
@@ -354,6 +376,7 @@ export class SaleInvoicesController {
   }
 
   @Post(':id/generate-link')
+  @RequirePermission(SaleInvoiceAction.Edit, AbilitySubject.SaleInvoice)
   @ApiOperation({
     summary: 'Generate sharable sale invoice link (private or public)',
   })

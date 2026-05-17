@@ -3,7 +3,8 @@ import { ExpenseTransfromer } from './Expense.transformer';
 import { DynamicListService } from '@/modules/DynamicListing/DynamicList.service';
 import { TransformerInjectable } from '@/modules/Transformer/TransformerInjectable.service';
 import { Inject, Injectable } from '@nestjs/common';
-import { IExpensesFilter, IPaginationMeta } from '../Expenses.types';
+import { IPaginationMeta } from '../Expenses.types';
+import { GetExpensesQueryDto } from '../dtos/GetExpensesQuery.dto';
 import { Expense } from '../models/Expense.model';
 import { IFilterMeta } from '@/interfaces/Model';
 import { TenantModelProxy } from '@/modules/System/models/TenantBaseModel';
@@ -20,10 +21,10 @@ export class GetExpensesService {
 
   /**
    * Retrieve expenses paginated list.
-   * @param  {IExpensesFilter} expensesFilter
+   * @param  {GetExpensesQueryDto} filterDTO
    * @return {IExpense[]}
    */
-  public async getExpensesList(filterDto: Partial<IExpensesFilter>): Promise<{
+  public async getExpensesList(filterDTO: GetExpensesQueryDto): Promise<{
     expenses: Expense[];
     pagination: IPaginationMeta;
     filterMeta: IFilterMeta;
@@ -33,7 +34,7 @@ export class GetExpensesService {
       columnSortBy: 'created_at',
       page: 1,
       pageSize: 12,
-      ...filterDto,
+      ...filterDTO,
     };
     // Parses list filter DTO.
     const filter = this.parseListFilterDTO(_filterDto);

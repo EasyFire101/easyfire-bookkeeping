@@ -4,11 +4,11 @@ import { EditManualJournal } from './commands/EditManualJournal.service';
 import { PublishManualJournal } from './commands/PublishManualJournal.service';
 import { GetManualJournal } from './queries/GetManualJournal.service';
 import { DeleteManualJournalService } from './commands/DeleteManualJournal.service';
-import { IManualJournalsFilter } from './types/ManualJournals.types';
 import {
   CreateManualJournalDto,
   EditManualJournalDto,
 } from './dtos/ManualJournal.dto';
+import { GetManualJournalsQueryDto } from './dtos/GetManualJournalsQuery.dto';
 import { GetManualJournals } from './queries/GetManualJournals.service';
 import { BulkDeleteManualJournalsService } from './BulkDeleteManualJournals.service';
 import { ValidateBulkDeleteManualJournalsService } from './ValidateBulkDeleteManualJournals.service';
@@ -105,9 +105,9 @@ export class ManualJournalsApplication {
 
   /**
    * Retrieves the paginated manual journals.
-   * @param {IManualJournalsFilter} filterDTO
+   * @param {GetManualJournalsQueryDto} filterDTO
    */
-  public getManualJournals = (filterDTO: Partial<IManualJournalsFilter>) => {
+  public getManualJournals = (filterDTO: GetManualJournalsQueryDto) => {
     return this.getManualJournalsService.getManualJournals(filterDTO);
   };
 }

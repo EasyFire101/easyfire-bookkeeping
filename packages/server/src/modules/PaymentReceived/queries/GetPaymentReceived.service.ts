@@ -32,6 +32,7 @@ export class GetPaymentReceivedService {
       .withGraphFetched('entries.invoice')
       .withGraphFetched('transactions')
       .withGraphFetched('branch')
+      .withGraphFetched('attachments')
       .findById(paymentReceiveId);
 
     if (!paymentReceive) {

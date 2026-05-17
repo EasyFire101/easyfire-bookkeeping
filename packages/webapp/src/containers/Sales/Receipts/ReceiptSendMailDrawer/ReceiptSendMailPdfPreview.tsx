@@ -7,7 +7,7 @@ import { SendMailViewPreviewPdfIframe } from '../../Estimates/SendMailViewDrawer
 
 export function ReceiptSendMailPdfPreview() {
   return (
-    <Stack>
+    <Stack spacing={0}>
       <ReceiptSendMailPreviewHeader />
 
       <Stack px={4} py={6}>
@@ -25,8 +25,6 @@ function ReceiptSendPdfPreviewIframe() {
     return <Spinner size={20} />;
   }
   const iframeSrcDoc = data?.htmlContent;
-
-  console.log(data, 'data');
 
   return <SendMailViewPreviewPdfIframe srcDoc={iframeSrcDoc} />;
 }

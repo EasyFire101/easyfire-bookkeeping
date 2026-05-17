@@ -34,15 +34,16 @@ export class InventoryValuationSheetService {
     this.inventoryValuationSheetRepository.setFilter(filter);
     await this.inventoryValuationSheetRepository.asyncInit();
 
+    // Retrieves the inventorty valuation meta first to get date format.
+    const meta = await this.inventoryValuationMeta.meta(filter);
+
     const inventoryValuationInstance = new InventoryValuationSheet(
       filter,
       this.inventoryValuationSheetRepository,
+      { baseCurrency: meta.baseCurrency, dateFormat: meta.dateFormat },
     );
     // Retrieve the inventory valuation report data.
     const inventoryValuationData = inventoryValuationInstance.reportData();
-
-    // Retrieves the inventorty valuation meta.
-    const meta = await this.inventoryValuationMeta.meta(filter);
 
     // Triggers `onInventoryValuationViewed` event.
     await this.eventPublisher.emitAsync(

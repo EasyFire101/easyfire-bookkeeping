@@ -63,15 +63,16 @@ export class CustomerBalanceSummaryService {
     // Ledger query.
     const ledger = new Ledger(customersEntries);
 
+    // Retrieve the customer balance summary meta first to get date format.
+    const meta = await this.customerBalanceSummaryMeta.meta(filter);
+
     // Report instance.
     const report = new CustomerBalanceSummaryReport(
       ledger,
       customers,
       filter,
-      tenantMetadata.baseCurrency,
+      { baseCurrency: tenantMetadata.baseCurrency, dateFormat: meta.dateFormat },
     );
-    // Retrieve the customer balance summary meta.
-    const meta = await this.customerBalanceSummaryMeta.meta(filter);
 
     // Triggers `onCustomerBalanceSummaryViewed` event.
     await this.eventPublisher.emitAsync(

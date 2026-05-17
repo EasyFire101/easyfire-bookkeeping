@@ -19,7 +19,7 @@ import { useMoneyInDailogContext } from './MoneyInDialogProvider';
  */
 export default function TransactionTypeFields() {
   // Money in dialog context.
-  const { cashflowAccounts, setAccountId } = useMoneyInDailogContext();
+  const { cashflowAccounts, setAccountId, accountId } = useMoneyInDailogContext();
 
   // Retrieves the add money in button options.
   const addMoneyInOptions = useMemo(() => getAddMoneyInOptions(), []);
@@ -55,8 +55,8 @@ export default function TransactionTypeFields() {
             <FAccountsSuggestField
               name={'cashflow_account_id'}
               items={cashflowAccounts}
-              onItemSelect={({ id }) => {
-                setAccountId(id);
+              onItemChange={(value) => {
+                setAccountId(value);
               }}
             />
           </FFormGroup>

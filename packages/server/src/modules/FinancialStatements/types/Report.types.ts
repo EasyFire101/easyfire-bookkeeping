@@ -52,6 +52,22 @@ export interface IFinancialSheetCommonMeta {
   sheetName: string;
 }
 
+/**
+ * Report meta interface for sheet constructors.
+ * Combines baseCurrency and dateFormat for a cleaner API.
+ */
+export interface IFinancialReportMeta {
+  baseCurrency: string;
+  dateFormat: string;
+}
+
+/**
+ * Default report meta values.
+ */
+export const DEFAULT_REPORT_META: Omit<IFinancialReportMeta, 'baseCurrency'> = {
+  dateFormat: 'YYYY MMM DD',
+};
+
 export enum IFinancialDatePeriodsUnit {
   Day = 'day',
   Month = 'month',

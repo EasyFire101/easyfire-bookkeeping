@@ -4,12 +4,10 @@ import {
   Delete,
   Get,
   Param,
-  Post,
   Put,
   Query,
 } from '@nestjs/common';
 import { ExcludeBankTransactionsApplication } from './ExcludeBankTransactionsApplication';
-import { ExcludedBankTransactionsQuery } from './types/BankTransactionsExclude.types';
 import {
   ApiExtraModels,
   ApiOperation,
@@ -17,12 +15,15 @@ import {
   ApiTags,
   getSchemaPath,
 } from '@nestjs/swagger';
-import { GetExcludedBankTransactionResponseDto } from './dtos/GetExcludedBankTransactionResponse.dto';
+import { PaginatedResponseDto } from '@/common/dtos/PaginatedResults.dto';
 import { ApiCommonHeaders } from '@/common/decorators/ApiCommonHeaders';
+import { GetExcludedBankTransactionResponseDto } from './dtos/GetExcludedBankTransactionResponse.dto';
+import { ExcludeBankTransactionsBulkDto } from './dtos/ExcludeBankTransactionsBulk.dto';
+import { GetExcludedBankTransactionsQueryDto } from './dtos/GetExcludedBankTransactionsQuery.dto';
 
 @Controller('banking/exclude')
 @ApiTags('Banking Transactions')
-@ApiExtraModels(GetExcludedBankTransactionResponseDto)
+@ApiExtraModels(GetExcludedBankTransactionResponseDto, ExcludeBankTransactionsBulkDto, PaginatedResponseDto)
 @ApiCommonHeaders()
 export class BankingTransactionsExcludeController {
   constructor(
@@ -31,15 +32,19 @@ export class BankingTransactionsExcludeController {
 
   @Put('bulk')
   @ApiOperation({ summary: 'Exclude the given bank transactions.' })
-  public excludeBankTransactions(@Body('ids') ids: number[]) {
-    return this.excludeBankTransactionsApplication.excludeBankTransactions(ids);
+  @ApiResponse({ status: 200, description: 'Bank transactions excluded successfully.' })
+  public excludeBankTransactions(@Body() body: ExcludeBankTransactionsBulkDto) {
+    return this.excludeBankTransactionsApplication.excludeBankTransactions(
+      body.ids,
+    );
   }
 
   @Delete('bulk')
   @ApiOperation({ summary: 'Unexclude the given bank transactions.' })
-  public unexcludeBankTransactions(@Body('ids') ids: number[]) {
+  @ApiResponse({ status: 200, description: 'Bank transactions unexcluded successfully.' })
+  public unexcludeBankTransactions(@Body() body: ExcludeBankTransactionsBulkDto) {
     return this.excludeBankTransactionsApplication.unexcludeBankTransactions(
-      ids,
+      body.ids,
     );
   }
 
@@ -50,17 +55,24 @@ export class BankingTransactionsExcludeController {
     description:
       'The excluded bank transactions has been retrieved successfully.',
     schema: {
-      type: 'array',
-      items: {
-        $ref: getSchemaPath(GetExcludedBankTransactionResponseDto),
-      },
+      allOf: [
+        { $ref: getSchemaPath(PaginatedResponseDto) },
+        {
+          properties: {
+            data: {
+              type: 'array',
+              items: { $ref: getSchemaPath(GetExcludedBankTransactionResponseDto) },
+            },
+          },
+        },
+      ],
     },
   })
   public getExcludedBankTransactions(
-    @Query() query: ExcludedBankTransactionsQuery,
+    @Query() query: GetExcludedBankTransactionsQueryDto,
   ) {
     return this.excludeBankTransactionsApplication.getExcludedBankTransactions(
-      query,
+      query as any,
     );
   }
 

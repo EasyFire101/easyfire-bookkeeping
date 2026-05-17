@@ -1,4 +1,5 @@
 import * as R from 'ramda';
+import { I18nService } from 'nestjs-i18n';
 import { ITransactionsByVendorsVendor } from './TransactionsByVendor.types';
 import { TransactionsByContactsTableRows } from '../TransactionsByContact/TransactionsByContactTableRows';
 import { tableRowMapper } from '../../utils/Table.utils';
@@ -19,11 +20,16 @@ export class TransactionsByVendorsTable extends TransactionsByContactsTableRows 
    * @param {ITransactionsByVendorsVendor[]} vendorsTransactions -
    * @param {any} i18n
    */
-  constructor(vendorsTransactions: ITransactionsByVendorsVendor[], i18n) {
+  constructor(
+    vendorsTransactions: ITransactionsByVendorsVendor[],
+    i18n: I18nService,
+    dateFormat: string,
+  ) {
     super();
 
     this.vendorsTransactions = vendorsTransactions;
     this.i18n = i18n;
+    this.dateFormat = dateFormat;
   }
 
   /**

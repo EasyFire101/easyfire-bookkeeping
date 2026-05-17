@@ -6,6 +6,7 @@ export interface IGeneralLedgerSheetQuery {
   toDate: Date | string;
   basis: string;
   numberFormat: IGeneralLedgerNumberFormat;
+  dateFormat?: string;
   noneTransactions: boolean;
   accountsIds: number[];
   branchesIds?: number[];

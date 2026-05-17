@@ -111,12 +111,12 @@ export default function PreferencesGeneralForm({ isSubmitting }) {
       >
         <Stack>
           <FInputGroup
-            name={'address.address_1'}
+            name={'address.address1'}
             placeholder={'Address 1'}
             fastField
           />
           <FInputGroup
-            name={'address.address_2'}
+            name={'address.address2'}
             placeholder={'Address 2'}
             fastField
           />

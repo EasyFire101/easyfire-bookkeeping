@@ -35,11 +35,16 @@ function UncategorizeBankTransactionsBulkAlert({
     uncategorizeTransactions({ ids: uncategorizeTransactionsIds })
       .then(() => {
         AppToaster.show({
-          message: 'The bank feeds of the bank account has been resumed.',
+          message: 'The selected transactions have been uncategorized.',
           intent: Intent.SUCCESS,
         });
       })
-      .catch((error) => {})
+      .catch((error) => {
+        AppToaster.show({
+          message: 'Something went wrong while uncategorizing transactions.',
+          intent: Intent.DANGER,
+        });
+      })
       .finally(() => {
         closeAlert(name);
       });

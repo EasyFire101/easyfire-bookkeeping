@@ -2,6 +2,7 @@ import { Transformer } from '../../Transformer/Transformer';
 import { PaymentReceived } from '../models/PaymentReceived';
 import { PaymentReceivedEntry } from '../models/PaymentReceivedEntry';
 import { PaymentReceivedEntryTransfromer } from './PaymentReceivedEntryTransformer';
+import { AttachmentTransformer } from '@/modules/Attachments/Attachment.transformer';
 
 export class PaymentReceiveTransfromer extends Transformer {
   /**
@@ -17,6 +18,7 @@ export class PaymentReceiveTransfromer extends Transformer {
       'formattedAmount',
       'formattedExchangeRate',
       'entries',
+      'attachments',
     ];
   };
 
@@ -88,5 +90,14 @@ export class PaymentReceiveTransfromer extends Transformer {
    */
   protected entries = (payment: PaymentReceived): PaymentReceivedEntry[] => {
     return this.item(payment.entries, new PaymentReceivedEntryTransfromer());
+  };
+
+  /**
+   * Retrieves the payment received attachments.
+   * @param {PaymentReceived} payment
+   * @returns
+   */
+  protected attachments = (payment: PaymentReceived) => {
+    return this.item(payment.attachments, new AttachmentTransformer());
   };
 }

@@ -32,6 +32,7 @@ export interface ICustomerNewDTO extends IContactAddressDTO {
 
   note?: string;
   active?: boolean;
+  code?: string;
 }
 
 export interface ICustomerEditDTO extends IContactAddressDTO {
@@ -50,6 +51,7 @@ export interface ICustomerEditDTO extends IContactAddressDTO {
 
   note?: string;
   active?: boolean;
+  code?: string;
 }
 
 export interface ICustomersFilter extends IDynamicListFilter {

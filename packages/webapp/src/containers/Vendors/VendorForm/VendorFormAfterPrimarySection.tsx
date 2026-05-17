@@ -2,21 +2,22 @@
 import React from 'react';
 import intl from 'react-intl-universal';
 import { ControlGroup } from '@blueprintjs/core';
-import { FormattedMessage as T, FFormGroup, FInputGroup } from '@/components';
+import { FormattedMessage as T, FFormGroup, FInputGroup, Box } from '@/components';
 
 /**
  * Vendor form  after primary section.
  */
-function VendorFormAfterPrimarySection() {
+export function VendorFormAfterPrimarySection() {
   return (
-    <div className={'customer-form__after-primary-section-content'}>
+    <Box>
       {/*------------ Vendor email -----------*/}
       <FFormGroup
         name={'email'}
         label={<T id={'vendor_email'} />}
-        inline={true}
+        inline
+        fastField
       >
-        <FInputGroup name={'email'} />
+        <FInputGroup name={'email'} fastField />
       </FFormGroup>
 
       {/*------------ Phone number -----------*/}
@@ -24,23 +25,23 @@ function VendorFormAfterPrimarySection() {
         name={'work_phone'}
         className={'form-group--phone-number'}
         label={<T id={'phone_number'} />}
-        inline={true}
+        inline
+        fastField
       >
         <ControlGroup>
-          <FInputGroup name={'work_phone'} placeholder={intl.get('work')} />
+          <FInputGroup name={'work_phone'} placeholder={intl.get('work')} fastField />
           <FInputGroup
             name={'personal_phone'}
             placeholder={intl.get('mobile')}
+            fastField
           />
         </ControlGroup>
       </FFormGroup>
 
       {/*------------ Vendor website -----------*/}
-      <FFormGroup name={'website'} label={<T id={'website'} />} inline={true}>
-        <FInputGroup name={'website'} placeholder={'http://'} />
+      <FFormGroup name={'website'} label={<T id={'website'} />} inline fastField>
+        <FInputGroup name={'website'} placeholder={'http://'} fastField />
       </FFormGroup>
-    </div>
+    </Box>
   );
 }
-
-export default VendorFormAfterPrimarySection;

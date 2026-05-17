@@ -58,7 +58,7 @@ export default function useApiRequest() {
           setLogout();
         }
         if (status === 403) {
-          setGlobalErrors({ access_denied: true });
+          setGlobalErrors({ access_denied: { message: data.message } });
         }
         if (status === 429) {
           setGlobalErrors({ too_many_requests: true });

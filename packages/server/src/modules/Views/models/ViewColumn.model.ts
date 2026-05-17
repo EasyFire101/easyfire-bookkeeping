@@ -9,6 +9,13 @@ export class ViewColumn extends BaseModel {
   }
 
   /**
+   * Timestamps columns.
+   */
+  get timestamps() {
+    return [];
+  }
+
+  /**
    * Relationship mapping.
    */
   static get relationMappings() {

@@ -311,6 +311,13 @@ export const AbilitySchema: ISubjectAbilitiesSchema[] = [
     subjectLabel: 'ability.audit_log',
     abilities: [
       { key: AuditLogAction.View, label: 'ability.view' },
+  },
+  {
+    subject: AbilitySubject.Attachment,
+    subjectLabel: 'ability.attachments',
+    abilities: [
+      { key: AttachmentAction.View, label: 'ability.view', default: true },
+      { key: AttachmentAction.Delete, label: 'ability.delete', default: true },
     ],
   },
 ];

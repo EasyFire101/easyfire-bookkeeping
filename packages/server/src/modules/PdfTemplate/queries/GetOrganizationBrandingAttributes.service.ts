@@ -1,10 +1,14 @@
 import { Injectable } from '@nestjs/common';
 import { CommonOrganizationBrandingAttributes } from '../types';
 import { TenancyContext } from '../../Tenancy/TenancyContext.service';
+import { GetAttachmentPresignedUrl } from '@/modules/Attachments/GetAttachmentPresignedUrl';
 
 @Injectable()
 export class GetOrganizationBrandingAttributesService {
-  constructor(private readonly tenancyContext: TenancyContext) {}
+  constructor(
+    private readonly tenancyContext: TenancyContext,
+    private readonly getPresignedUrlService: GetAttachmentPresignedUrl,
+  ) {}
 
   /**
    * Retrieves the given organization branding attributes initial state.
@@ -17,13 +21,22 @@ export class GetOrganizationBrandingAttributesService {
     const companyName = tenantMetadata?.name;
     const primaryColor = tenantMetadata?.primaryColor;
     const companyLogoKey = tenantMetadata?.logoKey;
-    const companyLogoUri = tenantMetadata?.logoUri;
     const companyAddress = tenantMetadata?.addressTextFormatted;
+
+    let companyLogoUri: string | null = null;
+    if (companyLogoKey) {
+      try {
+        companyLogoUri =
+          await this.getPresignedUrlService.getPresignedUrl(companyLogoKey);
+      } catch {
+        companyLogoUri = null;
+      }
+    }
 
     return {
       companyName,
       companyAddress,
-      companyLogoUri,
+      companyLogoUri: companyLogoUri ?? undefined,
       companyLogoKey,
       primaryColor,
     };

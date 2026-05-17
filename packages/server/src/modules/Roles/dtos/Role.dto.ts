@@ -1,3 +1,4 @@
+import { IsOptional } from '@/common/decorators/Validators';
 import { ApiProperty } from '@nestjs/swagger';
 import { Type } from 'class-transformer';
 import {
@@ -41,7 +42,7 @@ export class CommandRolePermissionDto {
 export class CreateRolePermissionDto extends CommandRolePermissionDto { }
 export class EditRolePermissionDto extends CommandRolePermissionDto {
   @IsNumber()
-  @IsNotEmpty()
+  @IsOptional()
   @ApiProperty({
     example: 1,
     description: 'The permission ID',
@@ -59,7 +60,6 @@ class CommandRoleDto {
   roleName: string;
 
   @IsString()
-  @IsNotEmpty()
   @ApiProperty({
     example: 'Administrator',
     description: 'The description of the role',
@@ -71,9 +71,9 @@ export class CreateRoleDto extends CommandRoleDto {
   @IsArray()
   @ArrayMinSize(1)
   @ValidateNested({ each: true })
-  @Type(() => CommandRolePermissionDto)
+  @Type(() => CreateRolePermissionDto)
   @ApiProperty({
-    type: [CommandRolePermissionDto],
+    type: [CreateRolePermissionDto],
     description: 'The permissions of the role',
   })
   permissions: Array<CreateRolePermissionDto>;

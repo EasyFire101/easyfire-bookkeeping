@@ -1,5 +1,4 @@
 // @ts-nocheck
-import React from 'react';
 import {
   Intent,
   Button,
@@ -11,53 +10,37 @@ import {
   MenuItem,
 } from '@blueprintjs/core';
 import styled from 'styled-components';
-import classNames from 'classnames';
 import { useFormikContext } from 'formik';
 
 import { Group, Icon, FormattedMessage as T } from '@/components';
-import { CLASSES } from '@/constants/classes';
 import { useVendorFormContext } from './VendorFormProvider';
-import { safeInvoke } from '@/utils';
 
 /**
  * Vendor floating actions bar.
  */
-export default function VendorFloatingActions({ onCancel }) {
+export function VendorFloatingActions() {
   // Formik context.
-  const { resetForm, isSubmitting, submitForm } = useFormikContext();
+  const { isSubmitting, submitForm } = useFormikContext();
 
   // Vendor form context.
   const { isNewMode, setSubmitPayload } = useVendorFormContext();
 
   // Handle the submit button.
-  const handleSubmitBtnClick = (event) => {
+  const handleSubmitBtnClick = () => {
     setSubmitPayload({ noRedirect: false });
   };
 
   // Handle the submit & new button click.
-  const handleSubmitAndNewClick = (event) => {
+  const handleSubmitAndNewClick = () => {
     submitForm();
     setSubmitPayload({ noRedirect: true });
   };
 
-  // Handle cancel button click.
-  const handleCancelBtnClick = (event) => {
-    safeInvoke(onCancel, event);
-  };
-
-  // Handle clear button click.
-  const handleClearBtnClick = (event) => {
-    resetForm();
-  };
-
   return (
-    <Group
-      spacing={10}
-      className={classNames(CLASSES.PAGE_FORM_FLOATING_ACTIONS)}
-    >
+    <FloatingActionsGroup spacing={10}>
       <ButtonGroup>
         {/* ----------- Save and New ----------- */}
-        <SaveButton
+        <Button
           disabled={isSubmitting}
           loading={isSubmitting}
           intent={Intent.PRIMARY}
@@ -74,9 +57,9 @@ export default function VendorFloatingActions({ onCancel }) {
               />
             </Menu>
           }
-          minimal={true}
           interactionKind={PopoverInteractionKind.CLICK}
-          position={Position.BOTTOM_LEFT}
+          position={Position.BOTTOM_RIGHT}
+          minimal
         >
           <Button
             disabled={isSubmitting}
@@ -85,24 +68,16 @@ export default function VendorFloatingActions({ onCancel }) {
           />
         </Popover>
       </ButtonGroup>
-      {/* ----------- Clear & Reset----------- */}
-      <Button
-        className={'ml1'}
-        disabled={isSubmitting}
-        onClick={handleClearBtnClick}
-        text={!isNewMode ? <T id={'reset'} /> : <T id={'clear'} />}
-      />
-      {/* ----------- Cancel  ----------- */}
-      <Button
-        className={'ml1'}
-        disabled={isSubmitting}
-        onClick={handleCancelBtnClick}
-        text={<T id={'cancel'} />}
-      />
-    </Group>
+    </FloatingActionsGroup>
   );
 }
 
-const SaveButton = styled(Button)`
-  min-width: 100px;
+const FloatingActionsGroup = styled(Group)`
+  padding: 10px 0;
+  padding-left: 165px;
+  border-top: 1px solid #50555a;
+  position: sticky;
+  bottom: 0;
+  background: var(--color-card-background);
+  z-index: 1;
 `;

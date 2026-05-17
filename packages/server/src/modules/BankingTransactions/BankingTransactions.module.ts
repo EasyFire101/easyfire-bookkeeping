@@ -24,6 +24,7 @@ import { GetBankAccountsService } from './queries/GetBankAccounts.service';
 import { DynamicListModule } from '../DynamicListing/DynamicList.module';
 import { BankAccount } from './models/BankAccount';
 import { LedgerModule } from '../Ledger/Ledger.module';
+import { TenancyModule } from '../Tenancy/Tenancy.module';
 import { GetBankAccountTransactionsService } from './queries/GetBankAccountTransactions/GetBankAccountTransactions.service';
 import { GetBankAccountTransactionsRepository } from './queries/GetBankAccountTransactions/GetBankAccountTransactionsRepo.service';
 import { GetUncategorizedTransactions } from './queries/GetUncategorizedTransactions';
@@ -46,6 +47,7 @@ const models = [
     LedgerModule,
     BranchesModule,
     DynamicListModule,
+    TenancyModule,
     ...models,
   ],
   controllers: [
