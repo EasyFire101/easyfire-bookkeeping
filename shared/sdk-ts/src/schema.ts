@@ -4643,6 +4643,40 @@ export interface paths {
         patch: operations["ContactsController_inactivateContact"];
         trace?: never;
     };
+    "/api/audit-logs/filter-options": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Distinct subject and action values for audit log filters. */
+        get: operations["AuditLogsController_getAuditLogFilterOptions"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/audit-logs": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** List financial audit log entries for the tenant. */
+        get: operations["AuditLogsController_getAuditLogs"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/exchange-rates/latest": {
         parameters: {
             query?: never;
@@ -14185,6 +14219,58 @@ export interface components {
              * @example StrongPassword123!
              */
             password: string;
+        };
+        AuditLogFilterOptionDto: {
+            /** @example SaleInvoice */
+            key: string;
+            /** @example Sale Invoice */
+            label: string;
+        };
+        GetAuditLogFilterOptionsResponseDto: {
+            subjects: components["schemas"]["AuditLogFilterOptionDto"][];
+            actions: components["schemas"]["AuditLogFilterOptionDto"][];
+        };
+        AuditLogListItemDto: {
+            /** @example 1 */
+            id: number;
+            /** @example 5 */
+            userId?: number | null;
+            /** @example John Doe */
+            userName?: string | null;
+            /** @example john@example.com */
+            userEmail?: string | null;
+            /** @example created */
+            action: string;
+            /** @example sale_invoice */
+            subject: string;
+            /** @example 42 */
+            subjectId?: number | null;
+            /**
+             * @example {
+             *       "invoiceNumber": "INV-001"
+             *     }
+             */
+            metadata?: Record<string, never> | null;
+            /** @example Invoice INV-001 was created for $500.00 */
+            summary: string;
+            /** @example 192.168.1.1 */
+            ip?: string | null;
+            /** @example 2025-04-12T18:30:00.000Z */
+            createdAt: string;
+            /** @example Apr 12, 2025 at 06:30 PM */
+            createdAtFormatted: string;
+        };
+        PaginationMetaDto: {
+            /** @example 100 */
+            total: number;
+            /** @example 1 */
+            page: number;
+            /** @example 20 */
+            pageSize: number;
+        };
+        GetAuditLogsResponseDto: {
+            data: components["schemas"]["AuditLogListItemDto"][];
+            pagination: components["schemas"]["PaginationMetaDto"];
         };
         ExchangeRateLatestResponseDto: {
             /**
@@ -29044,6 +29130,65 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content?: never;
+            };
+        };
+    };
+    AuditLogsController_getAuditLogFilterOptions: {
+        parameters: {
+            query?: never;
+            header: {
+                /** @description Value must be 'Bearer <token>' where <token> is an API key prefixed with 'bc_' or a JWT token. */
+                Authorization: string;
+                /** @description Required if Authorization is a JWT token. The organization ID to operate within. */
+                "organization-id": string;
+            };
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["GetAuditLogFilterOptionsResponseDto"];
+                };
+            };
+        };
+    };
+    AuditLogsController_getAuditLogs: {
+        parameters: {
+            query?: {
+                page?: number;
+                pageSize?: number;
+                subject?: Record<string, never>[][];
+                action?: Record<string, never>[][];
+                /** @description System user id */
+                userId?: number;
+                /** @description ISO date (inclusive), start of day */
+                from?: string;
+                /** @description ISO date (inclusive), end of day */
+                to?: string;
+            };
+            header: {
+                /** @description Value must be 'Bearer <token>' where <token> is an API key prefixed with 'bc_' or a JWT token. */
+                Authorization: string;
+                /** @description Required if Authorization is a JWT token. The organization ID to operate within. */
+                "organization-id": string;
+            };
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["GetAuditLogsResponseDto"];
+                };
             };
         };
     };

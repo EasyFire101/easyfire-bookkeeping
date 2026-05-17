@@ -23964,6 +23964,166 @@
         ]
       }
     },
+    "/api/audit-logs/filter-options": {
+      "get": {
+        "operationId": "AuditLogsController_getAuditLogFilterOptions",
+        "summary": "Distinct subject and action values for audit log filters.",
+        "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "Value must be 'Bearer <token>' where <token> is an API key prefixed with 'bc_' or a JWT token.",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "example": "Bearer bc_1234567890abcdef"
+            }
+          },
+          {
+            "name": "organization-id",
+            "in": "header",
+            "description": "Required if Authorization is a JWT token. The organization ID to operate within.",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GetAuditLogFilterOptionsResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "Audit logs"
+        ]
+      }
+    },
+    "/api/audit-logs": {
+      "get": {
+        "operationId": "AuditLogsController_getAuditLogs",
+        "summary": "List financial audit log entries for the tenant.",
+        "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "Value must be 'Bearer <token>' where <token> is an API key prefixed with 'bc_' or a JWT token.",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "example": "Bearer bc_1234567890abcdef"
+            }
+          },
+          {
+            "name": "organization-id",
+            "in": "header",
+            "description": "Required if Authorization is a JWT token. The organization ID to operate within.",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "page",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "minimum": 1,
+              "default": 1,
+              "type": "number"
+            }
+          },
+          {
+            "name": "pageSize",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "minimum": 1,
+              "maximum": 100,
+              "default": 20,
+              "type": "number"
+            }
+          },
+          {
+            "name": "subject",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "array",
+                "items": {
+                  "type": "a"
+                }
+              }
+            }
+          },
+          {
+            "name": "action",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "array",
+                "items": {
+                  "type": "a"
+                }
+              }
+            }
+          },
+          {
+            "name": "userId",
+            "required": false,
+            "in": "query",
+            "description": "System user id",
+            "schema": {
+              "type": "number"
+            }
+          },
+          {
+            "name": "from",
+            "required": false,
+            "in": "query",
+            "description": "ISO date (inclusive), start of day",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "to",
+            "required": false,
+            "in": "query",
+            "description": "ISO date (inclusive), end of day",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GetAuditLogsResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "Audit logs"
+        ]
+      }
+    },
     "/api/exchange-rates/latest": {
       "get": {
         "operationId": "ExchangeRatesController_getLatestExchangeRate",
@@ -40069,6 +40229,153 @@
           "firstName",
           "lastName",
           "password"
+        ]
+      },
+      "AuditLogFilterOptionDto": {
+        "type": "object",
+        "properties": {
+          "key": {
+            "type": "string",
+            "example": "SaleInvoice"
+          },
+          "label": {
+            "type": "string",
+            "example": "Sale Invoice"
+          }
+        },
+        "required": [
+          "key",
+          "label"
+        ]
+      },
+      "GetAuditLogFilterOptionsResponseDto": {
+        "type": "object",
+        "properties": {
+          "subjects": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/AuditLogFilterOptionDto"
+            }
+          },
+          "actions": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/AuditLogFilterOptionDto"
+            }
+          }
+        },
+        "required": [
+          "subjects",
+          "actions"
+        ]
+      },
+      "AuditLogListItemDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "number",
+            "example": 1
+          },
+          "userId": {
+            "type": "number",
+            "example": 5,
+            "nullable": true
+          },
+          "userName": {
+            "type": "string",
+            "example": "John Doe",
+            "nullable": true
+          },
+          "userEmail": {
+            "type": "string",
+            "example": "john@example.com",
+            "nullable": true
+          },
+          "action": {
+            "type": "string",
+            "example": "created"
+          },
+          "subject": {
+            "type": "string",
+            "example": "sale_invoice"
+          },
+          "subjectId": {
+            "type": "number",
+            "example": 42,
+            "nullable": true
+          },
+          "metadata": {
+            "type": "object",
+            "nullable": true,
+            "example": {
+              "invoiceNumber": "INV-001"
+            }
+          },
+          "summary": {
+            "type": "string",
+            "example": "Invoice INV-001 was created for $500.00"
+          },
+          "ip": {
+            "type": "string",
+            "example": "192.168.1.1",
+            "nullable": true
+          },
+          "createdAt": {
+            "type": "string",
+            "example": "2025-04-12T18:30:00.000Z"
+          },
+          "createdAtFormatted": {
+            "type": "string",
+            "example": "Apr 12, 2025 at 06:30 PM"
+          }
+        },
+        "required": [
+          "id",
+          "action",
+          "subject",
+          "summary",
+          "createdAt",
+          "createdAtFormatted"
+        ]
+      },
+      "PaginationMetaDto": {
+        "type": "object",
+        "properties": {
+          "total": {
+            "type": "number",
+            "example": 100
+          },
+          "page": {
+            "type": "number",
+            "example": 1
+          },
+          "pageSize": {
+            "type": "number",
+            "example": 20
+          }
+        },
+        "required": [
+          "total",
+          "page",
+          "pageSize"
+        ]
+      },
+      "GetAuditLogsResponseDto": {
+        "type": "object",
+        "properties": {
+          "data": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/AuditLogListItemDto"
+            }
+          },
+          "pagination": {
+            "$ref": "#/components/schemas/PaginationMetaDto"
+          }
+        },
+        "required": [
+          "data",
+          "pagination"
         ]
       },
       "ExchangeRateLatestResponseDto": {
