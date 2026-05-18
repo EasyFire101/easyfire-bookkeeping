@@ -72,18 +72,18 @@ export default function BuildingWorkspaceStep({
   }
 
   return (
-    <x.div w="95%" mx="auto" pt="16%">
+    <x.div w="100%" maxW="700px" mx="auto" pt="80px">
       <x.div className={progressBarStyles}>
         <ProgressBar intent={Intent.NONE} value={null} />
       </x.div>
 
-      <x.div textAlign="center" mt={35}>
+      <x.div textAlign="center" mt={26}>
         <x.h1
-          fontSize={'22px'}
+          fontSize={'18px'}
           fontWeight={500}
           color={isDarkMode ? 'rgba(255, 255, 255, 0.85)' : '#454c59'}
           mt={0}
-          mb={'14px'}
+          mb={'8px'}
         >
           <T id={'create_workspace.building.title'} />
         </x.h1>

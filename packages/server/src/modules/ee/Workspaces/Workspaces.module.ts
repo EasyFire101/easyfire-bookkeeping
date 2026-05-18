@@ -22,6 +22,7 @@ import { TenantDBManagerModule } from '@/modules/TenantDBManager/TenantDBManager
 import { GetBuildOrganizationBuildJob } from '@/modules/Organization/commands/GetBuildOrganizationJob.service';
 import { TenantRepository } from '@/modules/System/repositories/Tenant.repository';
 import { SocketModule } from '@/modules/Socket/Socket.module';
+import { S3Module } from '@/modules/S3/S3.module';
 import { WorkspaceDeletedSubscriber } from './subscribers/WorkspaceDeleted.subscriber';
 
 @Module({
@@ -33,6 +34,7 @@ import { WorkspaceDeletedSubscriber } from './subscribers/WorkspaceDeleted.subsc
     TenantDBManagerModule,
     OrganizationModule,
     SocketModule,
+    S3Module,
   ],
   controllers: [WorkspacesController],
   providers: [

@@ -1,10 +1,16 @@
 import { Inject, Injectable } from '@nestjs/common';
+import { InjectQueue } from '@nestjs/bullmq';
+import { Queue } from 'bullmq';
 import { Knex } from 'knex';
 import { EventEmitter2 } from '@nestjs/event-emitter';
 import { UserTenant } from '@/modules/System/models/UserTenant.model';
 import { TenantRepository } from '@/modules/System/repositories/Tenant.repository';
-import { BuildOrganizationService } from '@/modules/Organization/commands/BuildOrganization.service';
 import { transformBuildDto } from '@/modules/Organization/Organization.utils';
+import {
+  OrganizationBuildQueue,
+  OrganizationBuildQueueJob,
+  OrganizationBuildQueueJobPayload,
+} from '@/modules/Organization/Organization.types';
 import { SystemKnexConnection } from '@/modules/System/SystemDB/SystemDB.constants';
 import { events } from '@/common/events/events';
 import { CreateWorkspaceDto } from '../dtos/CreateWorkspace.dto';
@@ -20,7 +26,8 @@ export class CreateWorkspaceService {
     private readonly systemKnex: Knex,
     private readonly tenantRepository: TenantRepository,
     private readonly eventEmitter: EventEmitter2,
-    private readonly buildOrganizationService: BuildOrganizationService,
+    @InjectQueue(OrganizationBuildQueue)
+    private readonly organizationBuildQueue: Queue,
   ) {}
 
   /**
@@ -53,7 +60,6 @@ export class CreateWorkspaceService {
 
       return tenant;
     });
-
     // Emit workspace created event for subscribers to handle any post-creation setup.
     await this.eventEmitter.emitAsync(events.workspace.created, {
       tenantId: tenant.id,
@@ -62,17 +68,19 @@ export class CreateWorkspaceService {
       buildDTO: transformedDto,
     } as IWorkspaceCreatedEventPayload);
 
-    // Build the organization for the newly created tenant.
-    // This creates the tenant database and seeds initial data.
-    await this.buildOrganizationService.buildForTenant(
-      tenant.id,
-      userId,
-      transformedDto,
+    // Enqueue the organization build job for the newly created tenant.
+    const jobMeta = await this.organizationBuildQueue.add(
+      OrganizationBuildQueueJob,
+      {
+        organizationId: tenant.organizationId,
+        userId,
+        buildDto: transformedDto,
+      } as OrganizationBuildQueueJobPayload,
     );
 
     return {
       organizationId: tenant.organizationId,
-      jobId: null,
+      jobId: jobMeta.id!,
     };
   }
 }

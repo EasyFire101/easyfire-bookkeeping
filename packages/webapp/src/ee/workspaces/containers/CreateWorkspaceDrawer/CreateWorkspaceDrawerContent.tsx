@@ -16,7 +16,7 @@ function CreateWorkspaceDrawerContentRoot({ closeDrawer }) {
   };
 
   return (
-    <x.div display="flex" flexDirection="column" height="100%" minHeight={0}>
+    <x.div display="flex" flex={1} flexDirection="column" height="100%" minHeight={0}>
       <DrawerHeaderContent
         name={DRAWERS.CREATE_WORKSPACE}
         title={<T id={'workspace.create_new_workspace'} />}

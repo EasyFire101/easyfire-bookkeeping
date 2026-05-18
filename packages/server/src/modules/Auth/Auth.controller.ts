@@ -2,7 +2,6 @@ import {
   Body,
   Controller,
   Get,
-  Inject,
   Param,
   Post,
   Request,
@@ -30,7 +29,6 @@ import { AuthSigninResponseDto } from './dtos/AuthSigninResponse.dto';
 import { AuthMetaResponseDto } from './dtos/AuthMetaResponse.dto';
 import { LocalAuthGuard } from './guards/Local.guard';
 import { AuthSigninService } from './commands/AuthSignin.service';
-import { TenantModel } from '../System/models/TenantModel';
 import { SystemUser } from '../System/models/SystemUser';
 
 @Controller('/auth')
@@ -42,9 +40,6 @@ export class AuthController {
   constructor(
     private readonly authApp: AuthenticationApplication,
     private readonly authSignin: AuthSigninService,
-
-    @Inject(TenantModel.name)
-    private readonly tenantModel: typeof TenantModel,
   ) { }
 
   @Post('/signin')
@@ -61,11 +56,11 @@ export class AuthController {
     @Body() signinDto: AuthSigninDto,
   ): Promise<AuthSigninResponseDto> {
     const { user } = req;
-    const tenant = await this.tenantModel.query().findById(user.tenantId);
+    const tenant = await this.authSignin.resolveSigninTenant(user);
 
-    if (tenant.isInactive) {
+    if (!tenant) {
       throw new UnauthorizedException({
-        message: 'Organization is inactive. Please contact the administrator.',
+        message: 'No active workspace available. Please contact the administrator.',
         errors: [{ type: 'ORGANIZATION.INACTIVE' }],
       });
     }

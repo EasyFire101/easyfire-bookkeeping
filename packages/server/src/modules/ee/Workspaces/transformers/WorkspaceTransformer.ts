@@ -77,6 +77,11 @@ export class WorkspaceTransformer extends Transformer<UserTenant> {
     const metadata = membership.tenant?.metadata;
     if (!metadata) return undefined;
 
+    const organizationId = membership.tenant?.organizationId;
+    const logoUri = organizationId
+      ? this.options?.logoUris?.[organizationId]
+      : null;
+
     return {
       name: metadata.name,
       baseCurrency: metadata.baseCurrency,
@@ -84,6 +89,8 @@ export class WorkspaceTransformer extends Transformer<UserTenant> {
       location: metadata.location,
       timezone: metadata.timezone,
       language: metadata.language,
+      logoKey: metadata.logoKey || null,
+      logoUri,
     };
   };
 

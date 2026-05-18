@@ -109,8 +109,8 @@ export default function CreateWorkspaceForm({
     >
       {(formikProps) => (
         <>
-          <DrawerBody className="">
-            <x.div maxWidth={'600px'} w="100%" mx="auto" pt="30px" pb="20px" px="25px">
+        <x.div flex={1} pt={'22px'} overflow={'auto'}>
+            <x.div maxWidth={'600px'} w="100%" mx="auto">
               <Form>
                 {/* ---------- Organization name ----------  */}
                 <FFormGroupField name={'name'} label={<T id={'legal_organization_name'} />} fastField>
@@ -197,20 +197,14 @@ export default function CreateWorkspaceForm({
                   />
                 </FFormGroupField>
 
-                <x.p
-                  fontSize={14}
-                  lineHeight="2.7rem"
-                  mb={6}
-                  borderBottom={`1px solid ${isDarkMode ? 'rgba(255, 255, 255, 0.1)' : '#f5f5f5'}`}
-                  className={Classes.TEXT_MUTED}
-                >
+                <x.p fontSize={12} mb={6} className={Classes.TEXT_MUTED}>
                   <T id={'setup.organization.note_you_can_change_your_preferences'} />
                 </x.p>
               </Form>
             </x.div>
-          </DrawerBody>
+          </x.div>
 
-          <DrawerActionsBar>
+          <x.div borderTop={"1px solid rgba(255, 255, 255, 0.1)"} pt={'12px'} pb={'12px'}>
             <x.div
               display="flex"
               justifyContent="flex-end"
@@ -223,6 +217,7 @@ export default function CreateWorkspaceForm({
               <Button onClick={onCancel}>
                 <T id={'cancel'} />
               </Button>
+
               <Button
                 intent={Intent.PRIMARY}
                 loading={formikProps.isSubmitting}
@@ -231,10 +226,10 @@ export default function CreateWorkspaceForm({
                   formikProps.handleSubmit();
                 }}
               >
-                <T id={'create'} />
+                <T id={'workspaces.create_workspace'} />
               </Button>
             </x.div>
-          </DrawerActionsBar>
+          </x.div>
         </>
       )}
     </Formik>

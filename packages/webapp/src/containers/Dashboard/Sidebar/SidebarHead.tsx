@@ -112,19 +112,30 @@ function SidebarHeadJSX({
                 backgroundColor="rgba(255, 255, 255, 0.05)"
                 borderRadius={4}
               >
-                <x.div
-                  h={'60px'}
-                  w={'60px'}
-                  lineHeight="60px"
-                  borderRadius={10}
-                  backgroundColor="#CB22E5"
-                  textAlign="center"
-                  fontWeight={400}
-                  fontSize={16}
-                  color="#fff"
-                >
-                  {firstLettersArgs(...(organization.name || '').split(' '))}
-                </x.div>
+                {organization.metadata?.logoUri ? (
+                  <x.img
+                    src={organization.metadata.logoUri}
+                    alt={organization.name}
+                    h={'60px'}
+                    w={'60px'}
+                    borderRadius={10}
+                    objectFit="cover"
+                  />
+                ) : (
+                  <x.div
+                    h={'60px'}
+                    w={'60px'}
+                    lineHeight="60px"
+                    borderRadius={10}
+                    backgroundColor="#CB22E5"
+                    textAlign="center"
+                    fontWeight={400}
+                    fontSize={16}
+                    color="#fff"
+                  >
+                    {firstLettersArgs(...(organization.name || '').split(' '))}
+                  </x.div>
+                )}
                 <x.div fontWeight={600} color="#fff">
                   {organization.name}
                 </x.div>
@@ -160,20 +171,32 @@ function SidebarHeadJSX({
                           gap={3}
                           w="100%"
                         >
-                          <x.div
-                            w={'28px'}
-                            h={'28px'}
-                            borderRadius={'10px'}
-                            backgroundColor="#5c7c99"
-                            display="flex"
-                            alignItems="center"
-                            justifyContent="center"
-                            fontSize={12}
-                            color="#fff"
-                            flexShrink={0}
-                          >
-                            {initials}
-                          </x.div>
+                          {workspace.metadata?.logoUri ? (
+                            <x.img
+                              src={workspace.metadata.logoUri}
+                              alt={name}
+                              w={'28px'}
+                              h={'28px'}
+                              borderRadius={'10px'}
+                              objectFit="cover"
+                              flexShrink={0}
+                            />
+                          ) : (
+                            <x.div
+                              w={'28px'}
+                              h={'28px'}
+                              borderRadius={'10px'}
+                              backgroundColor="#5c7c99"
+                              display="flex"
+                              alignItems="center"
+                              justifyContent="center"
+                              fontSize={12}
+                              color="#fff"
+                              flexShrink={0}
+                            >
+                              {initials}
+                            </x.div>
+                          )}
                           <x.span
                             flex={1}
                             overflow="hidden"
@@ -204,6 +227,7 @@ function SidebarHeadJSX({
                 text={<T id={'workspaces.create_workspace'} />}
                 onClick={() => openDrawer(DRAWERS.CREATE_WORKSPACE)}
               />
+              <MenuDivider />
               <MenuItem
                 icon={<Icon icon={'log-out'} size={16} />}
                 text={<T id={'logout'} />}

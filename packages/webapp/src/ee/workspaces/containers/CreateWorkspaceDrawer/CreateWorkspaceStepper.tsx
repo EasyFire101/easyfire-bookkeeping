@@ -21,14 +21,14 @@ const createWorkspaceStepperRootCss = css`
   flex: 1;
   flex-direction: column;
   min-height: 0;
-  padding: 16px 25px 0;
 `;
 
 const createWorkspaceStepperItemsCss = css`
   width: 100%;
-  max-width: 600px;
+  max-width: 700px;
   margin: 0 auto;
   flex-shrink: 0;
+  padding-top: 24px;
 `;
 
 const createWorkspaceStepperContentCss = css`
@@ -44,7 +44,6 @@ const createWorkspaceStepperContentCss = css`
     min-height: 0;
     overflow: auto;
   }
-
   > .bp4-navbar {
     flex-shrink: 0;
   }

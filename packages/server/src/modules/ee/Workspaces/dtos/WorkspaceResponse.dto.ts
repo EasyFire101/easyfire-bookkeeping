@@ -7,6 +7,8 @@ export class WorkspaceMetadataDto {
   @ApiPropertyOptional() location?: string;
   @ApiPropertyOptional() timezone?: string;
   @ApiPropertyOptional() language?: string;
+  @ApiPropertyOptional() logoKey?: string;
+  @ApiPropertyOptional() logoUri?: string;
 }
 
 export class WorkspaceDto {

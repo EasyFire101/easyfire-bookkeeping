@@ -6,7 +6,7 @@ import { firstLettersArgs } from '@/utils';
 /** Workspace row shape used by the organizations list table (camelCase API). */
 export type OrganizationsListWorkspaceRow = {
   organizationId: string;
-  metadata?: { name?: string } | null;
+  metadata?: { name?: string; logoUri?: string } | null;
   isBuildRunning?: boolean;
   isDefault?: boolean;
 };
@@ -23,32 +23,46 @@ export function OrganizationsListWorkspaceCell({
   const name = workspace.metadata?.name || workspace.organizationId;
   const initials = firstLettersArgs(...(name || '').split(' '));
   const isActive = workspace.organizationId === activeOrganizationId;
+  const logoUri = workspace.metadata?.logoUri;
 
   return (
     <x.div display="flex" alignItems="center" gap="10px" minWidth={0} w="100%">
-      <x.div
-        boxSizing="border-box"
-        w="28px"
-        h="28px"
-        minWidth="28px"
-        minHeight="28px"
-        backgroundColor="#5c7c99"
-        borderRadius="10px"
-        color="#ffffff"
-        display="flex"
-        alignItems="center"
-        justifyContent="center"
-        fontSize="12px"
-        lineHeight={1}
-        letterSpacing="0.02em"
-        className={isActive ? 'is-active' : undefined}
-      >
-        {workspace.isBuildRunning ? (
-          <Spinner size={14} />
-        ) : (
-          <x.span>{initials}</x.span>
-        )}
-      </x.div>
+      {logoUri ? (
+        <x.img
+          src={logoUri}
+          alt={name}
+          w="28px"
+          h="28px"
+          minWidth="28px"
+          minHeight="28px"
+          borderRadius="10px"
+          objectFit="cover"
+        />
+      ) : (
+        <x.div
+          boxSizing="border-box"
+          w="28px"
+          h="28px"
+          minWidth="28px"
+          minHeight="28px"
+          backgroundColor="#5c7c99"
+          borderRadius="10px"
+          color="#ffffff"
+          display="flex"
+          alignItems="center"
+          justifyContent="center"
+          fontSize="12px"
+          lineHeight={1}
+          letterSpacing="0.02em"
+          className={isActive ? 'is-active' : undefined}
+        >
+          {workspace.isBuildRunning ? (
+            <Spinner size={14} />
+          ) : (
+            <x.span>{initials}</x.span>
+          )}
+        </x.div>
+      )}
       <x.div
         display="flex"
         flexDirection="column"

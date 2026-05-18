@@ -20,6 +20,7 @@ function WorkspaceIcon({ workspace, isActive, onClick }) {
   const name = workspace.metadata?.name || workspace.organizationId;
   const initials = firstLettersArgs(...(name || '').split(' '));
   const isDisabled = !workspace.isReady || workspace.isBuildRunning;
+  const logoUri = workspace.metadata?.logoUri;
 
   return (
     <Tooltip
@@ -40,6 +41,12 @@ function WorkspaceIcon({ workspace, isActive, onClick }) {
       >
         {workspace.isBuildRunning ? (
           <Spinner size={16} />
+        ) : logoUri ? (
+          <img
+            src={logoUri}
+            alt={name}
+            className="workspaces-sidebar__item-logo"
+          />
         ) : (
           <span className="workspaces-sidebar__item-initials">{initials}</span>
         )}

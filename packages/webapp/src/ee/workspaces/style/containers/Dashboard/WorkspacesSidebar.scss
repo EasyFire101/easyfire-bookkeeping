@@ -116,6 +116,13 @@
     line-height: 1;
   }
 
+  &__item-logo {
+    width: 28px;
+    height: 28px;
+    border-radius: 8px;
+    object-fit: cover;
+  }
+
   &__add-btn {
     background: transparent;
     border: 2px dashed rgba(255, 255, 255, 0.3);
