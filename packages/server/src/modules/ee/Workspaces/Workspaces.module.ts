@@ -7,7 +7,6 @@ import { DeleteWorkspaceJobService } from './commands/DeleteWorkspaceJob.service
 import { InactivateWorkspaceService } from './commands/InactivateWorkspace.service';
 import { SetDefaultWorkspaceService } from './commands/SetDefaultWorkspace.service';
 import { GetWorkspacesService } from './queries/GetWorkspaces.service';
-import { GetWorkspacesFinancialService } from './queries/GetWorkspacesFinancial.service';
 import { GetWorkspaceBuildJobService } from './queries/GetWorkspaceBuildJob.service';
 import { CreateUserTenantOnSignupSubscriber } from './subscribers/CreateUserTenantOnSignup.subscriber';
 import { WorkspaceCreatedSubscriber } from './subscribers/WorkspaceCreated.subscriber';
@@ -47,7 +46,6 @@ import { WorkspaceDeletedSubscriber } from './subscribers/WorkspaceDeleted.subsc
     InactivateWorkspaceService,
     SetDefaultWorkspaceService,
     GetWorkspacesService,
-    GetWorkspacesFinancialService,
     GetWorkspaceBuildJobService,
     CreateUserTenantOnSignupSubscriber,
     WorkspaceCreatedSubscriber,

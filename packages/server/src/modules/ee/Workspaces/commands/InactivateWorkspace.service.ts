@@ -68,7 +68,6 @@ export class InactivateWorkspaceService {
     if (!membership) {
       throw new ServiceError(WorkspacesError.WORKSPACE_NOT_FOUND, 'Workspace not found');
     }
-
     if (membership.role !== 'owner') {
       throw new ServiceError(
         WorkspacesError.NOT_WORKSPACE_OWNER,

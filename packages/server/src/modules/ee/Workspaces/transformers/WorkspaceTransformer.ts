@@ -1,15 +1,6 @@
 import { Transformer } from '@/modules/Transformer/Transformer';
 import { UserTenant } from '@/modules/System/models/UserTenant.model';
 import { WorkspaceDto } from '../dtos/WorkspaceResponse.dto';
-import { formatNumber } from '@/utils/format-number';
-
-interface FinancialData {
-  tenantId: number;
-  totalIncome: number;
-  totalExpenses: number;
-  totalAssets: number;
-  totalLiabilities: number;
-}
 
 /**
  * Transforms UserTenant (workspace membership) to WorkspaceDto.
@@ -108,67 +99,49 @@ export class WorkspaceTransformer extends Transformer<UserTenant> {
   /**
    * Get total income from financial data.
    */
-  protected totalIncome = (financialData?: FinancialData): number => {
-    return financialData?.totalIncome ?? 0;
+  protected totalIncome = (): undefined => {
+    return undefined;
   };
 
   /**
    * Get total expenses from financial data.
    */
-  protected totalExpenses = (financialData?: FinancialData): number => {
-    return financialData?.totalExpenses ?? 0;
+  protected totalExpenses = (): undefined => {
+    return undefined;
   };
 
   /**
    * Get total assets from financial data.
    */
-  protected totalAssets = (financialData?: FinancialData): number => {
-    return financialData?.totalAssets ?? 0;
+  protected totalAssets = (): undefined => {
+    return undefined;
   };
 
   /**
    * Get total liabilities from financial data.
    */
-  protected totalLiabilities = (financialData?: FinancialData): number => {
-    return financialData?.totalLiabilities ?? 0;
+  protected totalLiabilities = (): undefined => {
+    return undefined;
   };
 
   /**
    * Get formatted total assets.
    */
-  protected formattedTotalAssets = (
-    membership: UserTenant,
-    financialData?: FinancialData,
-  ): string => {
-    const currencyCode = membership.tenant?.metadata?.baseCurrency;
-    return formatNumber(financialData?.totalAssets ?? 0, {
-      currencyCode,
-      money: true,
-    });
+  protected formattedTotalAssets = (): string => {
+    return '-';
   };
 
   /**
    * Get formatted total liabilities.
    */
-  protected formattedTotalLiabilities = (
-    membership: UserTenant,
-    financialData?: FinancialData,
-  ): string => {
-    const currencyCode = membership.tenant?.metadata?.baseCurrency;
-    return formatNumber(financialData?.totalLiabilities ?? 0, {
-      currencyCode,
-      money: true,
-    });
+  protected formattedTotalLiabilities = (): string => {
+    return '-';
   };
 
   /**
    * Transform single membership to WorkspaceDto.
    */
   transform = (membership: UserTenant): WorkspaceDto => {
-    const financialData = (
-      this.options?.financialDataMap as Map<number, FinancialData>
-    )?.get(membership.tenantId);
-
     return {
       organizationId: this.organizationId(membership),
       isReady: this.isReady(membership),
@@ -179,15 +152,12 @@ export class WorkspaceTransformer extends Transformer<UserTenant> {
       role: membership.role,
       isDefault: this.isDefault(membership),
       metadata: this.metadata(membership),
-      totalIncome: this.totalIncome(financialData),
-      totalExpenses: this.totalExpenses(financialData),
-      totalAssets: this.totalAssets(financialData),
-      totalLiabilities: this.totalLiabilities(financialData),
-      formattedTotalAssets: this.formattedTotalAssets(membership, financialData),
-      formattedTotalLiabilities: this.formattedTotalLiabilities(
-        membership,
-        financialData,
-      ),
+      totalIncome: this.totalIncome(),
+      totalExpenses: this.totalExpenses(),
+      totalAssets: this.totalAssets(),
+      totalLiabilities: this.totalLiabilities(),
+      formattedTotalAssets: this.formattedTotalAssets(),
+      formattedTotalLiabilities: this.formattedTotalLiabilities(),
     };
   };
 

@@ -3,7 +3,6 @@ import { UserTenant } from '@/modules/System/models/UserTenant.model';
 import { SystemUser } from '@/modules/System/models/SystemUser';
 import { WorkspaceDto } from '../dtos/WorkspaceResponse.dto';
 import { WorkspaceTransformer } from '../transformers/WorkspaceTransformer';
-import { GetWorkspacesFinancialService } from './GetWorkspacesFinancial.service';
 import { TransformerInjectable } from '@/modules/Transformer/TransformerInjectable.service';
 
 @Injectable()
@@ -15,7 +14,6 @@ export class GetWorkspacesService {
     @Inject(SystemUser.name)
     private readonly systemUserModel: typeof SystemUser,
 
-    private readonly financialService: GetWorkspacesFinancialService,
     private readonly transformer: TransformerInjectable,
   ) {}
 
@@ -44,22 +42,11 @@ export class GetWorkspacesService {
 
     const defaultTenantId = user?.defaultTenantId;
 
-    // Fetch financial data for all workspaces
-    const workspaceInfos = memberships.map((m) => ({
-      tenantId: m.tenantId,
-      organizationId: m.tenant?.organizationId,
-      isReady: m.tenant?.isReady ?? false,
-    }));
-
-    const financialDataMap =
-      await this.financialService.getWorkspacesFinancial(workspaceInfos);
-
     return this.transformer.transform(
       memberships,
       new WorkspaceTransformer(),
       {
         defaultTenantId,
-        financialDataMap,
         includeInactive,
         currentOrganizationId,
       },
