@@ -11,7 +11,6 @@ import t from '@/store/types';
 const initialState = {
   token: getCookie('token') || null,
   organizationId: getCookie('organization_id') || null,
-  tenantId: getCookie('tenant_id') || null,
   userId: getCookie('authenticated_user_id') || null,
   locale: getCookie('locale') || 'en',
   verified: true, // Let's be optimistic and assume the user's email is confirmed.
@@ -58,10 +57,6 @@ const reducerInstance = createReducer(initialState, {
     payload: PayloadAction<{ organizationId: string }>,
   ) => {
     state.organizationId = payload.action.organizationId;
-  },
-
-  [t.SET_TENANT_ID]: (state, payload: PayloadAction<{ tenantId: string }>) => {
-    state.tenantId = payload.action.tenantId;
   },
 
   [t.SET_USER_ID]: (state, payload: PayloadAction<{ userId: string }>) => {

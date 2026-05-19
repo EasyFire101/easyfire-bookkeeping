@@ -4254,6 +4254,58 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/workspaces": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** List workspaces the authenticated user belongs to */
+        get: operations["WorkspacesController_listWorkspaces"];
+        put?: never;
+        /** Create a new workspace */
+        post: operations["WorkspacesController_createWorkspace"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/workspaces/{organizationId}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post?: never;
+        /** Delete a workspace (owner only) */
+        delete: operations["WorkspacesController_deleteWorkspace"];
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/workspaces/build/{buildJobId}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Get workspace build job status */
+        get: operations["WorkspacesController_buildJobStatus"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/payment-services": {
         parameters: {
             query?: never;
@@ -14056,6 +14108,84 @@ export interface components {
              * @example 12-3456789
              */
             taxNumber?: string;
+        };
+        WorkspaceMetadataDto: {
+            name: string;
+            baseCurrency: string;
+            industry?: string;
+            location?: string;
+            timezone?: string;
+            language?: string;
+        };
+        WorkspaceDto: {
+            organizationId: string;
+            isReady: boolean;
+            isBuildRunning: boolean;
+            buildJobId?: string;
+            role: string;
+            metadata?: components["schemas"]["WorkspaceMetadataDto"];
+        };
+        CreateWorkspaceResponseDto: {
+            organizationId: string;
+            jobId: string;
+        };
+        WorkspaceBuildJobResponseDto: {
+            /** @example 123 */
+            id: string;
+            /** @example active */
+            state: string;
+            /** @example 50 */
+            progress: Record<string, never>;
+            /** @example false */
+            isCompleted: boolean;
+            /** @example true */
+            isRunning: boolean;
+            /** @example false */
+            isWaiting: boolean;
+            /** @example false */
+            isFailed: boolean;
+        };
+        CreateWorkspaceDto: {
+            /**
+             * @description Organization name
+             * @example Acme Inc.
+             */
+            name: string;
+            /**
+             * @description Industry of the organization
+             * @example Technology
+             */
+            industry?: string;
+            /**
+             * @description Country location in ISO 3166-1 alpha-2 format
+             * @example US
+             */
+            location: string;
+            /**
+             * @description Base currency in ISO 4217 format
+             * @example USD
+             */
+            baseCurrency: string;
+            /**
+             * @description Timezone of the organization
+             * @example America/New_York
+             */
+            timezone: string;
+            /**
+             * @description Starting month of fiscal year
+             * @example January
+             */
+            fiscalYear: string;
+            /**
+             * @description Language/locale of the organization
+             * @example en-US
+             */
+            language: string;
+            /**
+             * @description Date format used by the organization
+             * @example MM/DD/YYYY
+             */
+            dateFormat?: string;
         };
         EditPaymentMethodOptionsDto: Record<string, never>;
         EditPaymentMethodDTO: {
@@ -28476,6 +28606,92 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content?: never;
+            };
+        };
+    };
+    WorkspacesController_listWorkspaces: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Returns the list of workspaces */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["WorkspaceDto"][];
+                };
+            };
+        };
+    };
+    WorkspacesController_createWorkspace: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["CreateWorkspaceDto"];
+            };
+        };
+        responses: {
+            /** @description Returns the created workspace details */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["CreateWorkspaceResponseDto"];
+                };
+            };
+        };
+    };
+    WorkspacesController_deleteWorkspace: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                organizationId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Workspace deleted successfully */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    WorkspacesController_buildJobStatus: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                buildJobId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Returns the workspace build job details */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["WorkspaceBuildJobResponseDto"];
+                };
             };
         };
     };

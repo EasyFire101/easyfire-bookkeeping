@@ -52,6 +52,7 @@ export * from './cashflow-accounts';
 export * from './bank-rules';
 export * from './misc';
 export * from './reports';
+export * from './workspaces';
 
 /**
  * Utility types for request/response types from schema paths.

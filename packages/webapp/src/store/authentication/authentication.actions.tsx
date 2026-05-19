@@ -16,10 +16,6 @@ export const setAuthToken = (token: string) => ({
   type: t.SET_AUTH_TOKEN,
   action: { token },
 });
-export const setAuthTenantId = (tenantId: string) => ({
-  type: t.SET_TENANT_ID,
-  action: { tenantId },
-});
 export const setAuthUserId = (userId: string) => ({
   type: t.SET_USER_ID,
   action: { userId },

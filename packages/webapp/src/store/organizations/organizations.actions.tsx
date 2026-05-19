@@ -30,7 +30,8 @@ export const fetchOrganizations = () => (dispatch) =>
 
 export const setOrganizationSetupCompleted =
   (congrats) => (dispatch, getState) => {
-    const tenantId = getState().authentication.tenantId;
+    const organizationId = getState().authentication.organizationId;
+    const tenantId = getState().organizations.byOrganizationId?.[organizationId];
 
     dispatch({
       type: t.SET_ORGANIZATION_CONGRATS,

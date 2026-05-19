@@ -23,6 +23,7 @@ export * from './exchangeRates';
 export * from './contacts';
 export * from './subscriptions';
 export * from './organization';
+export * from '@/ee/workspaces/hooks/query/workspaces';
 export * from './landedCost';
 export * from './UniversalSearch/UniversalSearch';
 export * from './GenericResource';

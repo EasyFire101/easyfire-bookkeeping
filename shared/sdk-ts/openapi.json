@@ -23004,6 +23004,116 @@
         ]
       }
     },
+    "/api/workspaces": {
+      "get": {
+        "operationId": "WorkspacesController_listWorkspaces",
+        "summary": "List workspaces the authenticated user belongs to",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Returns the list of workspaces",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/WorkspaceDto"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "Workspaces"
+        ]
+      },
+      "post": {
+        "operationId": "WorkspacesController_createWorkspace",
+        "summary": "Create a new workspace",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateWorkspaceDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Returns the created workspace details",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CreateWorkspaceResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "Workspaces"
+        ]
+      }
+    },
+    "/api/workspaces/{organizationId}": {
+      "delete": {
+        "operationId": "WorkspacesController_deleteWorkspace",
+        "summary": "Delete a workspace (owner only)",
+        "parameters": [
+          {
+            "name": "organizationId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Workspace deleted successfully"
+          }
+        },
+        "tags": [
+          "Workspaces"
+        ]
+      }
+    },
+    "/api/workspaces/build/{buildJobId}": {
+      "get": {
+        "operationId": "WorkspacesController_buildJobStatus",
+        "summary": "Get workspace build job status",
+        "parameters": [
+          {
+            "name": "buildJobId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Returns the workspace build job details",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/WorkspaceBuildJobResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "Workspaces"
+        ]
+      }
+    },
     "/api/payment-services": {
       "get": {
         "operationId": "PaymentServicesController_getPaymentServicesSpecificInvoice",
@@ -39948,6 +40058,172 @@
             "example": "12-3456789"
           }
         }
+      },
+      "WorkspaceMetadataDto": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "baseCurrency": {
+            "type": "string"
+          },
+          "industry": {
+            "type": "string"
+          },
+          "location": {
+            "type": "string"
+          },
+          "timezone": {
+            "type": "string"
+          },
+          "language": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "name",
+          "baseCurrency"
+        ]
+      },
+      "WorkspaceDto": {
+        "type": "object",
+        "properties": {
+          "organizationId": {
+            "type": "string"
+          },
+          "isReady": {
+            "type": "boolean"
+          },
+          "isBuildRunning": {
+            "type": "boolean"
+          },
+          "buildJobId": {
+            "type": "string"
+          },
+          "role": {
+            "type": "string"
+          },
+          "metadata": {
+            "$ref": "#/components/schemas/WorkspaceMetadataDto"
+          }
+        },
+        "required": [
+          "organizationId",
+          "isReady",
+          "isBuildRunning",
+          "role"
+        ]
+      },
+      "CreateWorkspaceResponseDto": {
+        "type": "object",
+        "properties": {
+          "organizationId": {
+            "type": "string"
+          },
+          "jobId": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "organizationId",
+          "jobId"
+        ]
+      },
+      "WorkspaceBuildJobResponseDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "example": "123"
+          },
+          "state": {
+            "type": "string",
+            "example": "active"
+          },
+          "progress": {
+            "type": "object",
+            "example": 50
+          },
+          "isCompleted": {
+            "type": "boolean",
+            "example": false
+          },
+          "isRunning": {
+            "type": "boolean",
+            "example": true
+          },
+          "isWaiting": {
+            "type": "boolean",
+            "example": false
+          },
+          "isFailed": {
+            "type": "boolean",
+            "example": false
+          }
+        },
+        "required": [
+          "id",
+          "state",
+          "progress",
+          "isCompleted",
+          "isRunning",
+          "isWaiting",
+          "isFailed"
+        ]
+      },
+      "CreateWorkspaceDto": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "Organization name",
+            "example": "Acme Inc."
+          },
+          "industry": {
+            "type": "string",
+            "description": "Industry of the organization",
+            "example": "Technology"
+          },
+          "location": {
+            "type": "string",
+            "description": "Country location in ISO 3166-1 alpha-2 format",
+            "example": "US"
+          },
+          "baseCurrency": {
+            "type": "string",
+            "description": "Base currency in ISO 4217 format",
+            "example": "USD"
+          },
+          "timezone": {
+            "type": "string",
+            "description": "Timezone of the organization",
+            "example": "America/New_York"
+          },
+          "fiscalYear": {
+            "type": "string",
+            "description": "Starting month of fiscal year",
+            "example": "January"
+          },
+          "language": {
+            "type": "string",
+            "description": "Language/locale of the organization",
+            "example": "en-US"
+          },
+          "dateFormat": {
+            "type": "string",
+            "description": "Date format used by the organization",
+            "example": "MM/DD/YYYY"
+          }
+        },
+        "required": [
+          "name",
+          "location",
+          "baseCurrency",
+          "timezone",
+          "fiscalYear",
+          "language"
+        ]
       },
       "EditPaymentMethodOptionsDto": {
         "type": "object",
