@@ -1,7 +1,11 @@
 import { createReducer } from '@reduxjs/toolkit';
-import { createTableQueryReducers } from '@/store/query-reducers';
 import { USERS_LIST_SET, USERS_TABLE_LOADING, USER_DELETE, USER_DETAILS_SET } from '@/store/types';;
 import type { UsersState } from './users.types';
+
+interface UserRecord {
+  id: string | number;
+  [key: string]: unknown;
+}
 
 const initialState: UsersState = {
   items: {},
@@ -10,9 +14,9 @@ const initialState: UsersState = {
 };
 
 export const usersReducer = createReducer(initialState, {
-  [USERS_LIST_SET]: (state, action: { type: string; payload: { users: Array<Record<string, unknown>> } }) => {
+  [USERS_LIST_SET]: (state, action: { type: string; payload: { users: Array<UserRecord> } }) => {
     const { users } = action.payload;
-    const _users = {};
+    const _users: Record<string, UserRecord> = {};
 
     users.forEach((user) => {
       _users[user.id] = {
@@ -27,7 +31,7 @@ export const usersReducer = createReducer(initialState, {
 
   [USER_DETAILS_SET]: (state, action: { type: string; payload: { id: string | number; user: Record<string, unknown> } }) => {
     const { id, user } = action.payload;
-    const _user = state.items[id] || {};
+    const _user = (state.items[id] as Record<string, unknown>) || {};
     state.items[id] = { ..._user, ...user };
   },
 
@@ -41,8 +45,6 @@ export const usersReducer = createReducer(initialState, {
       delete state.items[id];
     }
   },
-
-  ...createTableQueryReducers('USERS'),
 });
 
 /**
