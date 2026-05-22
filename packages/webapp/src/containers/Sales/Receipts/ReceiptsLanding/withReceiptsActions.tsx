@@ -1,15 +1,23 @@
-// @ts-nocheck
 import { connect } from 'react-redux';
+import { Dispatch } from 'redux';
+import type { TableQuery } from '@/store/store.types';
 import {
   setReceiptsTableState,
   resetReceiptsTableState,
   setReceiptsSelectedRows,
 } from '@/store/receipts/receipts.actions';
 
-const mapDispatchToProps = (dispatch) => ({
-  setReceiptsTableState: (queries) => dispatch(setReceiptsTableState(queries)),
+export interface WithReceiptsActionsProps {
+  setReceiptsTableState: (queries: Partial<TableQuery>) => void;
+  resetReceiptsTableState: () => void;
+  setReceiptsSelectedRows: (selectedRows: Array<unknown>) => void;
+}
+
+export const mapDispatchToProps = (dispatch: Dispatch): WithReceiptsActionsProps => ({
+  setReceiptsTableState: (queries: Partial<TableQuery>) =>
+    dispatch(setReceiptsTableState(queries)),
   resetReceiptsTableState: () => dispatch(resetReceiptsTableState()),
-  setReceiptsSelectedRows: (selectedRows) =>
+  setReceiptsSelectedRows: (selectedRows: Array<unknown>) =>
     dispatch(setReceiptsSelectedRows(selectedRows)),
 });
 

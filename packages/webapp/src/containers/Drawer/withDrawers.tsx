@@ -1,20 +1,30 @@
-// @ts-nocheck
-import { connect } from 'react-redux';
+import { connect, MapStateToProps } from 'react-redux';
 import {
   isDrawerOpenFactory,
   getDrawerPayloadFactory,
 } from '@/store/dashboard/dashboard.selectors';
+import { ApplicationState } from '@/store/reducers';
+import type { MapState } from '@/containers/hoc.types';
 
-export const withDrawers = (mapState) => {
+export interface WithDrawersProps {
+  isOpen: ReturnType<ReturnType<typeof isDrawerOpenFactory>>;
+  payload: ReturnType<ReturnType<typeof getDrawerPayloadFactory>>;
+}
+
+export function withDrawers<Props extends { name: string }>(mapState?: MapState<WithDrawersProps, Props>) {
   const isDrawerOpen = isDrawerOpenFactory();
   const getDrawerPayload = getDrawerPayloadFactory();
 
-  const mapStateToProps = (state, props) => {
-    const mapped = {
+  const mapStateToProps: MapStateToProps<
+    WithDrawersProps,
+    Props,
+    ApplicationState
+  > = (state, props) => {
+    const mapped: WithDrawersProps = {
       isOpen: isDrawerOpen(state, props),
       payload: getDrawerPayload(state, props),
     };
-    return mapState ? mapState(mapped) : mapped;
+    return mapState ? (mapState(mapped, state, props) as WithDrawersProps) : mapped;
   };
   return connect(mapStateToProps);
-};
+}

@@ -1,11 +1,21 @@
-// @ts-nocheck
-import { connect } from 'react-redux';
-import { getVendorByIdFactory } from '@/store/vendors/vendors.selectors';
+import { connect, MapStateToProps } from 'react-redux';
+import type { ApplicationState } from '@/store/reducers';
+
+interface OwnProps {
+  vendorId?: number | string;
+}
+
+export interface WithVendorDetailProps {
+  vendor: unknown;
+}
 
 export const withVendorDetail = () => {
-  const getVendorById = getVendorByIdFactory();
-  const mapStateToProps = (state, props) => ({
-    vendor: getVendorById(state, props),
+  const mapStateToProps: MapStateToProps<
+    WithVendorDetailProps,
+    OwnProps,
+    ApplicationState
+  > = (_state, _props) => ({
+    vendor: undefined,
   });
   return connect(mapStateToProps);
 };

@@ -6,8 +6,10 @@ interface AutoExchangeRateProviderProps {
 }
 
 interface AutoExchangeRateProviderValue {
-  autoExRateCurrency: string;
+  autoExRateCurrency: string | null;
+  setAutoExRateCurrency: (currency: string | null) => void;
   isAutoExchangeRateLoading: boolean;
+  autoExchangeRate?: { exchange_rate?: number } | null;
 }
 
 const AutoExchangeRateContext = React.createContext(
@@ -16,12 +18,12 @@ const AutoExchangeRateContext = React.createContext(
 
 function AutoExchangeRateProvider({ children }: AutoExchangeRateProviderProps) {
   const [autoExRateCurrency, setAutoExRateCurrency] =
-    React.useState<string>('');
+    React.useState<string | null>('');
 
   // Retrieves the exchange rate.
   const { data: autoExchangeRate, isLoading: isAutoExchangeRateLoading } =
     useLatestExchangeRate(
-      { fromCurrency: autoExRateCurrency },
+      { fromCurrency: autoExRateCurrency ?? undefined },
       {
         enabled: Boolean(autoExRateCurrency),
         refetchOnWindowFocus: false,

@@ -1,66 +1,85 @@
-// @ts-nocheck
+import { ComponentType, useCallback, useEffect } from 'react';
 import { useFormikContext } from 'formik';
 import { useUpdateEntriesOnExchangeRateChange } from './useUpdateEntriesOnExchangeRateChange';
 import { useAutoExRateContext } from './AutoExchangeProvider';
-import { useCallback, useEffect } from 'react';
 import { useCurrentOrganization } from '@/hooks/state';
+
+export interface WithExchangeRateItemEntriesPriceRecalcProps {
+  onRecalcConfirm: (args: {
+    exchangeRate: number;
+    oldExchangeRate: number;
+  }) => void;
+}
 
 /**
  * Re-calculate the item entries prices based on the old exchange rate.
- * @param {InvoiceExchangeRateInputFieldRoot} Component
- * @returns {JSX.Element}
  */
-export const withExchangeRateItemEntriesPriceRecalc =
-  (Component) => (props) => {
-    const { setFieldValue } = useFormikContext();
+export function withExchangeRateItemEntriesPriceRecalc<P>(
+  Component: ComponentType<P & WithExchangeRateItemEntriesPriceRecalcProps>,
+): ComponentType<P> {
+  return (props: P) => {
+    const { setFieldValue } = useFormikContext<{ entries: unknown[] }>();
     const updateChangeExRate = useUpdateEntriesOnExchangeRateChange();
 
     return (
       <Component
+        {...(props as P & WithExchangeRateItemEntriesPriceRecalcProps)}
         onRecalcConfirm={({ exchangeRate, oldExchangeRate }) => {
           setFieldValue(
             'entries',
             updateChangeExRate(oldExchangeRate, exchangeRate),
           );
         }}
-        {...props}
       />
     );
   };
+}
+
+export interface WithExchangeRateFetchingLoadingProps {
+  isLoading: boolean;
+  inputGroupProps: { disabled: boolean };
+}
 
 /**
  * Injects the loading props to the exchange rate field.
- * @param Component
- * @returns {}
  */
-export const withExchangeRateFetchingLoading = (Component) => (props) => {
-  const { isAutoExchangeRateLoading } = useAutoExRateContext();
+export function withExchangeRateFetchingLoading<P>(
+  Component: ComponentType<P & WithExchangeRateFetchingLoadingProps>,
+): ComponentType<P> {
+  return (_props: P) => {
+    const { isAutoExchangeRateLoading } = useAutoExRateContext();
 
-  return (
-    <Component
-      isLoading={isAutoExchangeRateLoading}
-      inputGroupProps={{
-        disabled: isAutoExchangeRateLoading,
-      }}
-    />
-  );
-};
+    return (
+      <Component
+        {...(_props as P & WithExchangeRateFetchingLoadingProps)}
+        isLoading={isAutoExchangeRateLoading}
+        inputGroupProps={{
+          disabled: isAutoExchangeRateLoading,
+        }}
+      />
+    );
+  };
+}
+
+interface CustomerWithCurrency {
+  currency_code: string;
+}
 
 /**
  * Updates the customer currency code and exchange rate once you update the customer
  * then change the state to fetch the realtime exchange rate of the new selected currency.
  */
 export const useCustomerUpdateExRate = () => {
-  const { setFieldValue, values } = useFormikContext();
+  const { setFieldValue, values } = useFormikContext<{ exchange_rate: number | string }>();
   const { setAutoExRateCurrency } = useAutoExRateContext();
 
   const updateEntriesOnExChange = useUpdateEntriesOnExchangeRateChange();
-  const currentCompany = useCurrentOrganization();
+  const currentCompany = useCurrentOrganization() as { base_currency: string };
 
   const DEFAULT_EX_RATE = 1;
 
   return useCallback(
-    (customer) => {
+    (customer: CustomerWithCurrency) => {
       // Reset the auto exchange rate currency cycle.
       setAutoExRateCurrency(null);
 
@@ -69,7 +88,7 @@ export const useCustomerUpdateExRate = () => {
         setFieldValue('exchange_rate', DEFAULT_EX_RATE + '');
         setFieldValue(
           'entries',
-          updateEntriesOnExChange(values.exchange_rate, DEFAULT_EX_RATE),
+          updateEntriesOnExChange(Number(values.exchange_rate), DEFAULT_EX_RATE),
         );
       } else {
         // Sets the currency code to fetch exchange rate of the given currency code.
@@ -93,11 +112,9 @@ interface UseSyncExRateToFormProps {
 /**
  * Syncs the realtime exchange rate to the Formik form and then re-calculates
  * the entries rate based on the given new and old ex. rate.
- * @param {UseSyncExRateToFormProps} props -
- * @returns {React.ReactNode}
  */
 export const useSyncExRateToForm = ({ onSynced }: UseSyncExRateToFormProps) => {
-  const { setFieldValue, values } = useFormikContext();
+  const { setFieldValue, values } = useFormikContext<{ exchange_rate: number | string }>();
   const { autoExRateCurrency, autoExchangeRate, isAutoExchangeRateLoading } =
     useAutoExRateContext();
   const updateEntriesOnExChange = useUpdateEntriesOnExchangeRateChange();
@@ -112,7 +129,7 @@ export const useSyncExRateToForm = ({ onSynced }: UseSyncExRateToFormProps) => {
       setFieldValue('exchange_rate', exchangeRate + '');
       setFieldValue(
         'entries',
-        updateEntriesOnExChange(values.exchange_rate, exchangeRate),
+        updateEntriesOnExChange(Number(values.exchange_rate), exchangeRate),
       );
       onSynced?.();
     }

@@ -21,7 +21,7 @@ export const withReceiptMailReceiptPreviewProps = <
 
     const items = useMemo(
       () =>
-        receiptMailState?.entries?.map((entry: any) => ({
+        receiptMailState?.entries?.map((entry: { quantity?: number; totalFormatted?: string; name?: string }) => ({
           quantity: entry.quantity,
           total: entry.totalFormatted,
           label: entry.name,

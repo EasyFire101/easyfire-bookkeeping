@@ -1,10 +1,14 @@
-// @ts-nocheck
 import { connect } from 'react-redux';
-import {
-  toggleBalanceSheetFilterDrawer,
-} from '@/store/financial-statement/financial-statements.actions';
+import { Dispatch } from 'redux';
+import { toggleBalanceSheetFilterDrawer } from '@/store/financial-statement/financial-statements.actions';
 
-const mapDispatchToProps = (dispatch) => ({
+export interface WithBalanceSheetActionsProps {
+  toggleBalanceSheetFilterDrawer: (toggle?: boolean) => void;
+}
+
+export const mapDispatchToProps = (
+  dispatch: Dispatch,
+): WithBalanceSheetActionsProps => ({
   toggleBalanceSheetFilterDrawer: (toggle) =>
     dispatch(toggleBalanceSheetFilterDrawer(toggle)),
 });

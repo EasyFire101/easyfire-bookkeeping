@@ -10,7 +10,7 @@ export const submitOptions = ({ form }: { form: { options?: Array<SettingOption>
     });
 };
 
-export const FetchOptions = ({ form }: { form: unknown }) => {
+export const FetchOptions = () => {
   return (dispatch: any) =>
     new Promise((resolve, reject) => {
       ApiService.get('settings')

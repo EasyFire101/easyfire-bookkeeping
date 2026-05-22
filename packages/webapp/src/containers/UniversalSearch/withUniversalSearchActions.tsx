@@ -1,6 +1,6 @@
-// @ts-nocheck
 import { connect } from 'react-redux';
-import { CLOSE_SEARCH, OPEN_SEARCH } from '@/store/types';;
+import { Dispatch } from 'redux';
+import { CLOSE_SEARCH, OPEN_SEARCH } from '@/store/types';
 import {
   universalSearchResetResourceType,
   universalSearchSetResourceType,
@@ -8,17 +8,26 @@ import {
   universalSearchResetSelectedItem,
 } from '@/store/search/search.actions';
 
-export const mapDispatchToProps = (dispatch) => ({
+export interface WithUniversalSearchActionsProps {
+  openGlobalSearch: () => void;
+  closeGlobalSearch: () => void;
+  setResourceTypeUniversalSearch: (resourceType: string) => void;
+  resetResourceTypeUniversalSearch: () => void;
+  setSelectedItemUniversalSearch: (resourceType: string, resourceId: number | string) => void;
+  resetSelectedItemUniversalSearch: () => void;
+}
+
+export const mapDispatchToProps = (dispatch: Dispatch): WithUniversalSearchActionsProps => ({
   openGlobalSearch: () => dispatch({ type: OPEN_SEARCH }),
   closeGlobalSearch: () => dispatch({ type: CLOSE_SEARCH }),
 
-  setResourceTypeUniversalSearch: (resourceType) =>
+  setResourceTypeUniversalSearch: (resourceType: string) =>
     dispatch(universalSearchSetResourceType(resourceType)),
 
   resetResourceTypeUniversalSearch: () =>
     dispatch(universalSearchResetResourceType()),
 
-  setSelectedItemUniversalSearch: (resourceType, resourceId) =>
+  setSelectedItemUniversalSearch: (resourceType: string, resourceId: number | string) =>
     dispatch(universalSearchSetSelectedItem(resourceType, resourceId)),
 
   resetSelectedItemUniversalSearch: () =>

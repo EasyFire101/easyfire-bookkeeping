@@ -1,15 +1,26 @@
-// @ts-nocheck
-import { connect } from 'react-redux';
+import { MapStateToProps, connect } from 'react-redux';
 import { getPlanSelector } from '@/store/plans/plans.selectors';
+import type { ApplicationState } from '@/store/reducers';
+import type { MapState } from '@/containers/hoc.types';
 
-export const withPlan = (mapState) => {
-  const mapStateToProps = (state, props) => {
+export interface WithPlanProps {
+  plan: ReturnType<ReturnType<typeof getPlanSelector>>;
+}
+
+export const withPlan = <Props = unknown>(mapState?: MapState<WithPlanProps, Props>) => {
+  const mapStateToProps: MapStateToProps<
+    WithPlanProps,
+    Props,
+    ApplicationState
+  > = (state, props) => {
     const getPlan = getPlanSelector();
 
-    const mapped = {
-      plan: getPlan(state, props),
+    const mapped: WithPlanProps = {
+      plan: getPlan(state, props as never),
     };
-    return mapState ? mapState(mapped, state, props) : mapped;
+    return mapState
+      ? (mapState(mapped, state, props) as WithPlanProps)
+      : mapped;
   };
   return connect(mapStateToProps);
 };

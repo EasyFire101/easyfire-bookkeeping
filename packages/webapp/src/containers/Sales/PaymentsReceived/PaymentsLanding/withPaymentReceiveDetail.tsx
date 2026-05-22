@@ -1,17 +1,19 @@
-// @ts-nocheck
-import { connect } from 'react-redux';
-import {
-  getPaymentReceiveByIdFactory,
-  getPaymentReceiveEntriesFactory,
-} from '@/store/payment-receives/payment-receives.selector';
+import { connect, MapStateToProps } from 'react-redux';
+import { ApplicationState } from '@/store/reducers';
 
-export const withPaymentReceiveDetail = () => {
-  const getPaymentReceiveById = getPaymentReceiveByIdFactory();
-  const getPaymentReceiveEntries = getPaymentReceiveEntriesFactory();
+export interface WithPaymentReceiveDetailProps {
+  paymentReceive: unknown;
+  paymentReceiveEntries: unknown;
+}
 
-  const mapStateToProps = (state, props) => ({
-    paymentReceive: getPaymentReceiveById(state, props),
-    paymentReceiveEntries: getPaymentReceiveEntries(state, props),
+export function withPaymentReceiveDetail<Props = unknown>() {
+  const mapStateToProps: MapStateToProps<
+    WithPaymentReceiveDetailProps,
+    Props,
+    ApplicationState
+  > = () => ({
+    paymentReceive: undefined,
+    paymentReceiveEntries: undefined,
   });
   return connect(mapStateToProps);
-};
+}

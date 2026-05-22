@@ -1,9 +1,13 @@
-// @ts-nocheck
 import { connect } from 'react-redux';
+import { Dispatch } from 'redux';
 import { toggleVendorsTransactionsFilterDrawer } from '@/store/financial-statement/financial-statements.actions';
 
-const mapActionsToProps = (dispatch) => ({
-  toggleVendorsTransactionsFilterDrawer: (toggle) =>
+export interface WithVendorsTransactionsActionsProps {
+  toggleVendorsTransactionsFilterDrawer: (toggle: boolean) => void;
+}
+
+export const mapActionsToProps = (dispatch: Dispatch): WithVendorsTransactionsActionsProps => ({
+  toggleVendorsTransactionsFilterDrawer: (toggle: boolean) =>
     dispatch(toggleVendorsTransactionsFilterDrawer(toggle)),
 });
 

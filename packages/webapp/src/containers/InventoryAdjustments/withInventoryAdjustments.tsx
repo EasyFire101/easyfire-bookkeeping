@@ -1,12 +1,22 @@
-// @ts-nocheck
 import { connect } from 'react-redux';
 import { getInventroyAdjsTableStateFactory } from '@/store/inventory-adjustments/inventory-adjustment.selector';
+import { ApplicationState } from '@/store/reducers';
+import type { MapState } from '@/containers/hoc.types';
 
-export const withInventoryAdjustments = (mapState) => {
+export interface WithInventoryAdjustmentsProps {
+  inventoryAdjustmentTableState: ReturnType<ReturnType<typeof getInventroyAdjsTableStateFactory>>;
+  inventoryAdjustmentsSelectedRows: unknown[];
+}
+
+export const withInventoryAdjustments = <
+  Props extends { location?: { search: string } },
+>(
+  mapState?: MapState<WithInventoryAdjustmentsProps, Props>,
+) => {
   const getInventoryAdjustmentTableState = getInventroyAdjsTableStateFactory();
 
-  const mapStateToProps = (state, props) => {
-    const mapped = {
+  const mapStateToProps = (state: ApplicationState, props: Props) => {
+    const mapped: WithInventoryAdjustmentsProps = {
       inventoryAdjustmentTableState: getInventoryAdjustmentTableState(
         state,
         props,

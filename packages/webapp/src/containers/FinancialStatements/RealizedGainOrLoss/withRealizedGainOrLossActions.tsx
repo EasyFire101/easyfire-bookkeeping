@@ -1,9 +1,13 @@
-// @ts-nocheck
 import { connect } from 'react-redux';
+import { Dispatch } from 'redux';
 import { toggleRealizedGainOrLossFilterDrawer } from '@/store/financial-statement/financial-statements.actions';
 
-const mapDispatchToProps = (dispatch) => ({
-  toggleRealizedGainOrLossFilterDrawer: (toggle) =>
+export interface WithRealizedGainOrLossActionsProps {
+  toggleRealizedGainOrLossFilterDrawer: (toggle: boolean) => void;
+}
+
+export const mapDispatchToProps = (dispatch: Dispatch): WithRealizedGainOrLossActionsProps => ({
+  toggleRealizedGainOrLossFilterDrawer: (toggle: boolean) =>
     dispatch(toggleRealizedGainOrLossFilterDrawer(toggle)),
 });
 

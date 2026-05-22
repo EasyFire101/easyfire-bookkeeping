@@ -1,5 +1,6 @@
-// @ts-nocheck
 import { connect } from 'react-redux';
+import { Dispatch } from 'redux';
+import type { TableQuery } from '@/store/store.types';
 import {
   setInvoicesTableState,
   resetInvoicesTableState,
@@ -7,10 +8,19 @@ import {
   resetInvoicesSelectedRows,
 } from '@/store/invoice/invoices.actions';
 
-const mapDipatchToProps = (dispatch) => ({
-  setInvoicesTableState: (queries) => dispatch(setInvoicesTableState(queries)),
+export interface WithInvoiceActionsProps {
+  setInvoicesTableState: (queries: Partial<TableQuery>) => void;
+  resetInvoicesTableState: () => void;
+  setInvoicesSelectedRows: (selectedRows: Array<unknown>) => void;
+  resetInvoicesSelectedRows: () => void;
+}
+
+export const mapDipatchToProps = (dispatch: Dispatch): WithInvoiceActionsProps => ({
+  setInvoicesTableState: (queries: Partial<TableQuery>) =>
+    dispatch(setInvoicesTableState(queries)),
   resetInvoicesTableState: () => dispatch(resetInvoicesTableState()),
-  setInvoicesSelectedRows: (selectedRows) => dispatch(setInvoicesSelectedRows(selectedRows)),
+  setInvoicesSelectedRows: (selectedRows: Array<unknown>) =>
+    dispatch(setInvoicesSelectedRows(selectedRows)),
   resetInvoicesSelectedRows: () => dispatch(resetInvoicesSelectedRows()),
 });
 

@@ -1,15 +1,24 @@
-// @ts-nocheck
 import { connect } from 'react-redux';
+import { Dispatch } from 'redux';
+import type { TableQuery } from '@/store/store.types';
 import {
   setEstimatesTableState,
   resetEstimatesTableState,
   setEstimatesSelectedRows,
 } from '@/store/estimate/estimates.actions';
 
-const mapDispatchToProps = (dispatch) => ({
-  setEstimatesTableState: (state) => dispatch(setEstimatesTableState(state)),
+export interface WithEstimatesActionsProps {
+  setEstimatesTableState: (state: Partial<TableQuery>) => void;
+  resetEstimatesTableState: () => void;
+  setEstimatesSelectedRows: (selectedRows: Array<unknown>) => void;
+}
+
+export const mapDispatchToProps = (dispatch: Dispatch): WithEstimatesActionsProps => ({
+  setEstimatesTableState: (state: Partial<TableQuery>) =>
+    dispatch(setEstimatesTableState(state)),
   resetEstimatesTableState: () => dispatch(resetEstimatesTableState()),
-  setEstimatesSelectedRows: (selectedRows) => dispatch(setEstimatesSelectedRows(selectedRows)),
+  setEstimatesSelectedRows: (selectedRows: Array<unknown>) =>
+    dispatch(setEstimatesSelectedRows(selectedRows)),
 });
 
 export const withEstimatesActions = connect(null, mapDispatchToProps);

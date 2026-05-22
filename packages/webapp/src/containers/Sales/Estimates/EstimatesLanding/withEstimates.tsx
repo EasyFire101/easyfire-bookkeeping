@@ -1,21 +1,32 @@
-// @ts-nocheck
 import { connect } from 'react-redux';
 import {
   getEstimatesTableStateFactory,
   isEstimatesTableStateChangedFactory,
   getEstimatesSelectedRowsFactory,
 } from '@/store/estimate/estimates.selectors';
+import { ApplicationState } from '@/store/reducers';
+import type { MapState } from '@/containers/hoc.types';
 
-export const withEstimates = (mapState) => {
+export interface WithEstimatesProps {
+  estimatesTableState: ReturnType<ReturnType<typeof getEstimatesTableStateFactory>>;
+  estimatesTableStateChanged: ReturnType<ReturnType<typeof isEstimatesTableStateChangedFactory>>;
+  estimatesSelectedRows: ReturnType<ReturnType<typeof getEstimatesSelectedRowsFactory>>;
+}
+
+export const withEstimates = <
+  Props extends { location?: { search: string } },
+>(
+  mapState?: MapState<WithEstimatesProps, Props>,
+) => {
   const getEstimatesTableState = getEstimatesTableStateFactory();
   const getSelectedRows = getEstimatesSelectedRowsFactory();
   const isEstimatesTableStateChanged = isEstimatesTableStateChangedFactory();
 
-  const mapStateToProps = (state, props) => {
-    const mapped = {
+  const mapStateToProps = (state: ApplicationState, props: Props) => {
+    const mapped: WithEstimatesProps = {
       estimatesTableState: getEstimatesTableState(state, props),
-      estimatesTableStateChanged: isEstimatesTableStateChanged(state, props),
-      estimatesSelectedRows: getSelectedRows(state, props),
+      estimatesTableStateChanged: isEstimatesTableStateChanged(state),
+      estimatesSelectedRows: getSelectedRows(state),
     };
     return mapState ? mapState(mapped, state, props) : mapped;
   };

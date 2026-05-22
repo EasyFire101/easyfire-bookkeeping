@@ -1,10 +1,14 @@
-// @ts-nocheck
 import { connect } from 'react-redux';
-import {
-  toggleGeneralLedgerFilterDrawer,
-} from '@/store/financial-statement/financial-statements.actions';
+import { Dispatch } from 'redux';
+import { toggleGeneralLedgerFilterDrawer } from '@/store/financial-statement/financial-statements.actions';
 
-const mapDispatchToProps = (dispatch) => ({
+export interface WithGeneralLedgerActionsProps {
+  toggleGeneralLedgerFilterDrawer: (toggle?: boolean) => void;
+}
+
+const mapDispatchToProps = (
+  dispatch: Dispatch,
+): WithGeneralLedgerActionsProps => ({
   toggleGeneralLedgerFilterDrawer: (toggle) =>
     dispatch(toggleGeneralLedgerFilterDrawer(toggle)),
 });

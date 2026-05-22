@@ -1,10 +1,15 @@
-// @ts-nocheck
 import { connect } from 'react-redux';
 import { getSalesTaxLiabilitySummaryFilterDrawer } from '@/store/financial-statement/financial-statements.selectors';
+import { ApplicationState } from '@/store/reducers';
+import type { MapState } from '@/containers/hoc.types';
 
-export const withSalesTaxLiabilitySummary = (mapState) => {
-  const mapStateToProps = (state, props) => {
-    const mapped = {
+export interface WithSalesTaxLiabilitySummaryProps {
+  salesTaxLiabilitySummaryFilter: ReturnType<typeof getSalesTaxLiabilitySummaryFilterDrawer>;
+}
+
+export const withSalesTaxLiabilitySummary = <Props,>(mapState?: MapState<WithSalesTaxLiabilitySummaryProps, Props>) => {
+  const mapStateToProps = (state: ApplicationState, props: Props) => {
+    const mapped: WithSalesTaxLiabilitySummaryProps = {
       salesTaxLiabilitySummaryFilter:
         getSalesTaxLiabilitySummaryFilterDrawer(state),
     };

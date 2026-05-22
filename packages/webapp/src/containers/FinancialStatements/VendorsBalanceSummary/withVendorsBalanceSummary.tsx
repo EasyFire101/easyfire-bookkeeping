@@ -1,13 +1,17 @@
-// @ts-nocheck
 import { connect } from 'react-redux';
 import { getVendorsBalanceSummaryFilterDrawer } from '@/store/financial-statement/financial-statements.selectors';
+import { ApplicationState } from '@/store/reducers';
+import type { MapState } from '@/containers/hoc.types';
 
-export const withVendorsBalanceSummary = (mapState) => {
-  const mapStateToProps = (state, props) => {
-    const mapped = {
+export interface WithVendorsBalanceSummaryProps {
+  VendorsSummaryFilterDrawer: ReturnType<typeof getVendorsBalanceSummaryFilterDrawer>;
+}
+
+export const withVendorsBalanceSummary = <Props,>(mapState?: MapState<WithVendorsBalanceSummaryProps, Props>) => {
+  const mapStateToProps = (state: ApplicationState, props: Props) => {
+    const mapped: WithVendorsBalanceSummaryProps = {
       VendorsSummaryFilterDrawer: getVendorsBalanceSummaryFilterDrawer(
         state,
-        props,
       ),
     };
     return mapState ? mapState(mapped, state, props) : mapped;

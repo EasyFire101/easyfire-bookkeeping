@@ -1,13 +1,16 @@
-// @ts-nocheck
 import { connect } from 'react-redux';
-import { CLOSE_DIALOG, OPEN_DIALOG } from '@/store/types';;
+import { Dispatch } from 'redux';
+import { CLOSE_DIALOG, OPEN_DIALOG } from '@/store/types';
 
-export const mapStateToProps = (state, props) => {};
+export interface WithUserPreferencesProps {
+  openDialog: (name: string, payload?: Record<string, unknown>) => void;
+  closeDialog: (name: string, payload?: Record<string, unknown>) => void;
+}
 
-export const mapDispatchToProps = (dispatch) => ({
-  openDialog: (name, payload) =>
+export const mapDispatchToProps = (dispatch: Dispatch): WithUserPreferencesProps => ({
+  openDialog: (name: string, payload?: Record<string, unknown>) =>
     dispatch({ type: OPEN_DIALOG, name, payload }),
-  closeDialog: (name, payload) =>
+  closeDialog: (name: string, payload?: Record<string, unknown>) =>
     dispatch({ type: CLOSE_DIALOG, name, payload }),
 });
 

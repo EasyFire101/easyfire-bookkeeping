@@ -1,4 +1,7 @@
 import { connect } from 'react-redux';
+import { AnyAction } from 'redux';
+import { ThunkDispatch } from 'redux-thunk';
+import type { RootState } from '@/store/reducers';
 import {
   closeMatchingTransactionAside,
   setUncategorizedTransactionIdForMatching,
@@ -18,6 +21,11 @@ import {
   setUncategorizedTransactionsFilter,
   resetUncategorizedTranasctionsFilter,
 } from '@/store/banking/banking.reducer';
+
+export interface UncategorizedTransactionsFilter {
+  fromDate?: string;
+  toDate?: string;
+}
 
 export interface WithBankingActionsProps {
   closeMatchingTransactionAside: () => void;
@@ -43,11 +51,15 @@ export interface WithBankingActionsProps {
   setCategorizedTransactionsSelected: (ids: Array<string | number>) => void;
   resetCategorizedTransactionsSelected: () => void;
 
-  setUncategorizedTransactionsFilter: (filter: any) => void;
+  setUncategorizedTransactionsFilter: (
+    filter: UncategorizedTransactionsFilter,
+  ) => void;
   resetUncategorizedTranasctionsFilter: () => void;
 }
 
-const mapDipatchToProps = (dispatch: any): WithBankingActionsProps => ({
+const mapDipatchToProps = (
+  dispatch: ThunkDispatch<RootState, unknown, AnyAction>,
+): WithBankingActionsProps => ({
   closeMatchingTransactionAside: () =>
     dispatch(closeMatchingTransactionAside()),
   setUncategorizedTransactionIdForMatching: (
@@ -61,10 +73,6 @@ const mapDipatchToProps = (dispatch: any): WithBankingActionsProps => ({
   closeReconcileMatchingTransaction: () =>
     dispatch(closeReconcileMatchingTransaction()),
 
-  /**
-   * Sets the selected uncategorized transactions.
-   * @param {Array<string | number>} ids
-   */
   setUncategorizedTransactionsSelected: (ids: Array<string | number>) =>
     dispatch(
       setUncategorizedTransactionsSelected({
@@ -72,16 +80,9 @@ const mapDipatchToProps = (dispatch: any): WithBankingActionsProps => ({
       }),
     ),
 
-  /**
-   * Resets the selected uncategorized transactions.
-   */
   resetUncategorizedTransactionsSelected: () =>
     dispatch(resetUncategorizedTransactionsSelected()),
 
-  /**
-   * Sets excluded selected transactions.
-   * @param {Array<string | number>} ids
-   */
   setExcludedTransactionsSelected: (ids: Array<string | number>) =>
     dispatch(
       setExcludedTransactionsSelected({
@@ -89,78 +90,35 @@ const mapDipatchToProps = (dispatch: any): WithBankingActionsProps => ({
       }),
     ),
 
-  /**
-   * Resets the excluded selected transactions.
-   */
   resetExcludedTransactionsSelected: () =>
     dispatch(resetExcludedTransactionsSelected()),
 
-  /**
-   * Sets the selected transactions to categorize or match.
-   * @param {Array<string | number>} ids
-   */
   setTransactionsToCategorizeSelected: (ids: Array<string | number>) =>
     dispatch(setTransactionsToCategorizeSelected({ ids })),
 
-  /**
-   * Adds selected transactions to categorize.
-   * @param {string | number} id
-   * @returns
-   */
   addTransactionsToCategorizeSelected: (id: string | number) =>
     dispatch(addTransactionsToCategorizeSelected({ id })),
 
-  /**
-   * Removes the selected transactions.
-   * @param {string | number} id
-   * @returns
-   */
   removeTransactionsToCategorizeSelected: (id: string | number) =>
     dispatch(removeTransactionsToCategorizeSelected({ id })),
 
-  /**
-   * Resets the selected transactions to categorize or match.
-   */
   resetTransactionsToCategorizeSelected: () =>
     dispatch(resetTransactionsToCategorizeSelected()),
 
-  /**
-   * Enables/Disables the multiple selection to categorize or match.
-   * @param {boolean} enable
-   */
   enableMultipleCategorization: (enable: boolean) =>
     dispatch(enableMultipleCategorization({ enable })),
 
-  /**
-   * Sets the selected ids of the categorized transactions.
-   * @param {Array<string | number>} ids
-   */
   setCategorizedTransactionsSelected: (ids: Array<string | number>) =>
     dispatch(setCategorizedTransactionsSelected({ ids })),
 
-  /**
-   * Resets the selected categorized transcations.
-   */
   resetCategorizedTransactionsSelected: () =>
     dispatch(resetCategorizedTransactionsSelected()),
 
-  /**
-   * Sets the uncategorized transactions filter.
-   * @param {any} filter -
-   */
-  setUncategorizedTransactionsFilter: (filter: any) =>
+  setUncategorizedTransactionsFilter: (filter: UncategorizedTransactionsFilter) =>
     dispatch(setUncategorizedTransactionsFilter({ filter })),
 
-  /**
-   * Resets the uncategorized transactions filter.
-   */
   resetUncategorizedTranasctionsFilter: () =>
     dispatch(resetUncategorizedTranasctionsFilter()),
 });
 
-export const withBankingActions = connect<
-  null,
-  WithBankingActionsProps,
-  {},
-  any
->(null, mapDipatchToProps);
+export const withBankingActions = connect(null, mapDipatchToProps);

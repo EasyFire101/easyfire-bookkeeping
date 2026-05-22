@@ -1,14 +1,25 @@
-// @ts-nocheck
-import { connect } from 'react-redux';
+import { connect, MapStateToProps } from 'react-redux';
 import { getInventoryItemDetailsFilterDrawer } from '@/store/financial-statement/financial-statements.selectors';
+import { ApplicationState } from '@/store/reducers';
+import type { MapState } from '@/containers/hoc.types';
 
-export const withInventoryItemDetails = (mapState) => {
-  const mapStateToProps = (state, props) => {
-    const mapped = {
-      inventoryItemDetailDrawerFilter: getInventoryItemDetailsFilterDrawer(
-        state,
-        props,
-      ),
+export interface WithInventoryItemDetailsProps {
+  inventoryItemDetailDrawerFilter: ReturnType<
+    typeof getInventoryItemDetailsFilterDrawer
+  >;
+}
+
+export const withInventoryItemDetails = <Props = unknown,>(
+  mapState?: MapState<WithInventoryItemDetailsProps, Props>,
+) => {
+  const mapStateToProps: MapStateToProps<
+    WithInventoryItemDetailsProps | Record<string, unknown>,
+    Props,
+    ApplicationState
+  > = (state, props) => {
+    const mapped: WithInventoryItemDetailsProps = {
+      inventoryItemDetailDrawerFilter:
+        getInventoryItemDetailsFilterDrawer(state),
     };
     return mapState ? mapState(mapped, state, props) : mapped;
   };

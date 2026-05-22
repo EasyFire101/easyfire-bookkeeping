@@ -1,4 +1,5 @@
-import { MapDispatchToProps, connect } from 'react-redux';
+import { Dispatch, AnyAction } from 'redux';
+import { connect } from 'react-redux';
 import {
   SubscriptionPlansPeriod,
   changePlansPeriod,
@@ -10,13 +11,15 @@ export interface WithSubscriptionPlansActionsProps {
   changeSubscriptionPlansPeriod: (period: SubscriptionPlansPeriod) => void;
 }
 
-export const mapDispatchToProps: MapDispatchToProps<
-  WithSubscriptionPlansActionsProps,
-  {}
-> = (dispatch: any) => ({
-  initSubscriptionPlans: () => dispatch(initSubscriptionPlans()),
-  changeSubscriptionPlansPeriod: (period: SubscriptionPlansPeriod) =>
-    dispatch(changePlansPeriod({ period })),
+export const mapDispatchToProps = (
+  dispatch: Dispatch<AnyAction>,
+): WithSubscriptionPlansActionsProps => ({
+  initSubscriptionPlans: () => {
+    dispatch(initSubscriptionPlans());
+  },
+  changeSubscriptionPlansPeriod: (period: SubscriptionPlansPeriod) => {
+    dispatch(changePlansPeriod({ period }));
+  },
 });
 
 export const withSubscriptionPlansActions = connect(null, mapDispatchToProps);

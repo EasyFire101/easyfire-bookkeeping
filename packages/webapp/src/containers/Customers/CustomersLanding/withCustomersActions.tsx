@@ -1,4 +1,5 @@
-// @ts-nocheck
+import { ComponentType } from 'react';
+import { Dispatch } from 'redux';
 import { connect } from 'react-redux';
 import {
   setCustomersTableState,
@@ -6,8 +7,18 @@ import {
   setCustomersSelectedRows,
   resetCustomersSelectedRows,
 } from '@/store/customers/customers.actions';
+import type { TableQuery } from '@/store/store.types';
 
-export const mapDispatchToProps = (dispatch) => ({
+export interface WithCustomersActionsProps {
+  setCustomersTableState: (state: Partial<TableQuery>) => void;
+  resetCustomersTableState: () => void;
+  setCustomersSelectedRows: (selectedRows: Array<unknown>) => void;
+  resetCustomersSelectedRows: () => void;
+}
+
+export const mapDispatchToProps = (
+  dispatch: Dispatch,
+): WithCustomersActionsProps => ({
   setCustomersTableState: (state) => dispatch(setCustomersTableState(state)),
   resetCustomersTableState: () => dispatch(resetCustomersTableState()),
   setCustomersSelectedRows: (selectedRows) =>
@@ -15,4 +26,13 @@ export const mapDispatchToProps = (dispatch) => ({
   resetCustomersSelectedRows: () => dispatch(resetCustomersSelectedRows()),
 });
 
-export const withCustomersActions = connect(null, mapDispatchToProps);
+export function withCustomersActions<P>(
+  WrappedComponent: ComponentType<P>,
+): ComponentType<Omit<P, keyof WithCustomersActionsProps>> {
+  const Connected = connect(null, mapDispatchToProps)(
+    WrappedComponent as ComponentType<any>,
+  );
+  return Connected as unknown as ComponentType<
+    Omit<P, keyof WithCustomersActionsProps>
+  >;
+}

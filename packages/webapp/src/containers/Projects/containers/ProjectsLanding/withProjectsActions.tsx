@@ -1,13 +1,19 @@
-// @ts-nocheck
 import { connect } from 'react-redux';
-
+import { Dispatch } from 'redux';
+import type { TableQuery } from '@/store/store.types';
 import {
   setProjectsTableState,
   resetProjectsTableState,
 } from '@/store/project/projects.actions';
 
-const mapDispatchToProps = (dispatch) => ({
-  setProjectsTableState: (state) => dispatch(setProjectsTableState(state)),
+export interface WithProjectsActionsProps {
+  setProjectsTableState: (state: Partial<TableQuery>) => void;
+  resetProjectsTableState: () => void;
+}
+
+export const mapDispatchToProps = (dispatch: Dispatch): WithProjectsActionsProps => ({
+  setProjectsTableState: (state: Partial<TableQuery>) =>
+    dispatch(setProjectsTableState(state)),
   resetProjectsTableState: () => dispatch(resetProjectsTableState()),
 });
 

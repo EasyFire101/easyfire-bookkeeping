@@ -1,13 +1,22 @@
-// @ts-nocheck
-import { connect } from 'react-redux';
-import {
-  getGeneralLedgerFilterDrawer
-} from '@/store/financial-statement/financial-statements.selectors';
+import { connect, MapStateToProps } from 'react-redux';
+import { getGeneralLedgerFilterDrawer } from '@/store/financial-statement/financial-statements.selectors';
+import { ApplicationState } from '@/store/reducers';
+import type { MapState } from '@/containers/hoc.types';
 
-export const withGeneralLedger = (mapState) => {
-  const mapStateToProps = (state, props) => {
-    const mapped = {
-      generalLedgerFilterDrawer: getGeneralLedgerFilterDrawer(state, props),
+export interface WithGeneralLedgerProps {
+  generalLedgerFilterDrawer: ReturnType<typeof getGeneralLedgerFilterDrawer>;
+}
+
+export const withGeneralLedger = <Props = unknown,>(
+  mapState?: MapState<WithGeneralLedgerProps, Props>,
+) => {
+  const mapStateToProps: MapStateToProps<
+    WithGeneralLedgerProps | Record<string, unknown>,
+    Props,
+    ApplicationState
+  > = (state, props) => {
+    const mapped: WithGeneralLedgerProps = {
+      generalLedgerFilterDrawer: getGeneralLedgerFilterDrawer(state),
     };
     return mapState ? mapState(mapped, state, props) : mapped;
   };

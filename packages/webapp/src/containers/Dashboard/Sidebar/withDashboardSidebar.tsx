@@ -1,14 +1,26 @@
-// @ts-nocheck
+import { connect, MapStateToProps } from 'react-redux';
+import { ApplicationState } from '@/store/reducers';
+import type { MapState } from '@/containers/hoc.types';
 
-import { connect } from 'react-redux';
+export interface WithDashboardSidebarProps {
+  sidebarSubmenuOpen: boolean;
+  sidebarSubmenuId: unknown;
+}
 
-export const withDashboardSidebar = (mapState) => {
-  const mapStateToProps = (state, props) => {
-    const mapped = {
-      sidebarSubmenuOpen: state.dashboard.sidebarSubmenu.isOpen,
-      sidebarSubmenuId: state.dashboard.sidebarSubmenu.submenuId,
+export function withDashboardSidebar<Props = unknown>(mapState?: MapState<WithDashboardSidebarProps, Props>) {
+  const mapStateToProps: MapStateToProps<
+    WithDashboardSidebarProps,
+    Props,
+    ApplicationState
+  > = (state, props) => {
+    const submenu = state.dashboard.sidebarSubmenu;
+    const mapped: WithDashboardSidebarProps = {
+      sidebarSubmenuOpen: submenu.isOpen,
+      sidebarSubmenuId: submenu.submenuId,
     };
-    return mapState ? mapState(mapped, state, props) : mapped;
+    return mapState
+      ? ({ ...mapped, ...mapState(mapped, state, props) } as WithDashboardSidebarProps)
+      : mapped;
   };
   return connect(mapStateToProps);
 }

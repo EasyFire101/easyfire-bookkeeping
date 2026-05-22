@@ -1,14 +1,22 @@
-// @ts-nocheck
+import { ComponentType } from 'react';
+import { Dispatch } from 'redux';
 import { connect } from 'react-redux';
 
-const mapDispatchToProps = (dispatch) => ({
-  // requestLogin: (form) => dispatch(login({ form })),
-  // requestLogout: () => dispatch({ type: t.LOGOUT }),
-  // requestRegister: (form) => dispatch(register({ form })),
-  // requestSendResetPassword: (email) => dispatch(sendResetPassword({ email })),
-  // requestResetPassword: (form, token) => dispatch(resetPassword({ form, token })),
-  // requestInviteAccept: (form, token) => dispatch(inviteAccept({ form, token })),
-  // requestInviteMetaByToken: (token) => dispatch(inviteMetaByToken({ token })),
-});
+export interface WithAuthenticationActionsProps {
+  // Reserved for future authentication actions (login/logout/register/etc.).
+}
 
-export const withAuthenticationActions = connect(null, mapDispatchToProps);
+export const mapDispatchToProps = (
+  _dispatch: Dispatch,
+): WithAuthenticationActionsProps => ({});
+
+export function withAuthenticationActions<P>(
+  WrappedComponent: ComponentType<P>,
+): ComponentType<Omit<P, keyof WithAuthenticationActionsProps>> {
+  const Connected = connect(null, mapDispatchToProps)(
+    WrappedComponent as ComponentType<any>,
+  );
+  return Connected as unknown as ComponentType<
+    Omit<P, keyof WithAuthenticationActionsProps>
+  >;
+}

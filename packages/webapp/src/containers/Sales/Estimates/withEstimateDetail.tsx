@@ -1,12 +1,17 @@
-// @ts-nocheck
-import { connect } from 'react-redux';
-import { getEstimateByIdFactory } from '@/store/estimate/estimates.selectors';
+import { connect, MapStateToProps } from 'react-redux';
+import { ApplicationState } from '@/store/reducers';
 
-export const withEstimateDetail = () => {
-  const getEstimateById = getEstimateByIdFactory();
+export interface WithEstimateDetailProps {
+  estimate: unknown;
+}
 
-  const mapStateToProps = (state, props) => ({
-    estimate: getEstimateById(state, props),
+export function withEstimateDetail<Props = unknown>() {
+  const mapStateToProps: MapStateToProps<
+    WithEstimateDetailProps,
+    Props,
+    ApplicationState
+  > = () => ({
+    estimate: undefined,
   });
   return connect(mapStateToProps);
-};
+}

@@ -1,16 +1,26 @@
-// @ts-nocheck
+import { ComponentType } from 'react';
 import { connect } from 'react-redux';
+import { Dispatch } from 'redux';
 import {
   setAccountsTableState,
   resetAccountsTableState,
   setAccountsSelectedRows,
 } from '@/store/accounts/accounts.actions';
+import type { TableQuery } from '@/store/store.types';
 
-const mapActionsToProps = (dispatch) => ({
+export interface WithAccountsTableActionsProps {
+  setAccountsTableState: (queries: Partial<TableQuery>) => void;
+  resetAccountsTableState: () => void;
+  setAccountsSelectedRows: (selectedRows: Array<unknown>) => void;
+}
+
+export const mapDispatchToProps = (
+  dispatch: Dispatch,
+): WithAccountsTableActionsProps => ({
   setAccountsTableState: (queries) => dispatch(setAccountsTableState(queries)),
   resetAccountsTableState: () => dispatch(resetAccountsTableState()),
   setAccountsSelectedRows: (selectedRows) =>
     dispatch(setAccountsSelectedRows(selectedRows)),
 });
 
-export const withAccountsTableActions = connect(null, mapActionsToProps);
+export const withAccountsTableActions = connect(null, mapDispatchToProps);

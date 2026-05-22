@@ -1,23 +1,33 @@
-// @ts-nocheck
-import { connect } from 'react-redux';
+import { connect, MapStateToProps } from 'react-redux';
 import {
   expensesTableStateChangedFactory,
   getExpensesSelectedRowsFactory,
   getExpensesTableStateFactory,
 } from '@/store/expenses/expenses.selectors';
+import { ApplicationState } from '@/store/reducers';
+import type { MapState } from '@/containers/hoc.types';
 
-export const withExpenses = (mapState) => {
+export interface WithExpensesProps {
+  expensesTableState: ReturnType<ReturnType<typeof getExpensesTableStateFactory>>;
+  expensesTableStateChanged: ReturnType<ReturnType<typeof expensesTableStateChangedFactory>>;
+  expensesSelectedRows: ReturnType<ReturnType<typeof getExpensesSelectedRowsFactory>>;
+}
+
+export function withExpenses<Props = unknown>(mapState?: MapState<WithExpensesProps, Props>) {
   const getExpensesTableState = getExpensesTableStateFactory();
   const expensesTableStateChanged = expensesTableStateChangedFactory();
   const getSelectedRows = getExpensesSelectedRowsFactory();
 
-  const mapStateToProps = (state, props) => {
-    const mapped = {
-      expensesTableState: getExpensesTableState(state, props),
-      expensesTableStateChanged: expensesTableStateChanged(state, props),
-      expensesSelectedRows: getSelectedRows(state, props),
+  const mapStateToProps: MapStateToProps<WithExpensesProps, Props, ApplicationState> = (
+    state,
+    props,
+  ) => {
+    const mapped: WithExpensesProps = {
+      expensesTableState: getExpensesTableState(state, props as never),
+      expensesTableStateChanged: expensesTableStateChanged(state),
+      expensesSelectedRows: getSelectedRows(state),
     };
-    return mapState ? mapState(mapped, state, props) : mapped;
+    return mapState ? (mapState(mapped, state, props) as WithExpensesProps) : mapped;
   };
   return connect(mapStateToProps);
-};
+}

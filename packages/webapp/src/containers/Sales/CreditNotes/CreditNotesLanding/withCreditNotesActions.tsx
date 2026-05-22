@@ -1,16 +1,24 @@
-// @ts-nocheck
 import { connect } from 'react-redux';
+import { Dispatch } from 'redux';
+import type { TableQuery } from '@/store/store.types';
 import {
   setCreditNoteTableState,
   resetCreditNoteTableState,
   setCreditNotesSelectedRows,
 } from '@/store/credit-note/credit-note.actions';
 
-const mapDipatchToProps = (dispatch) => ({
-  setCreditNotesTableState: (queries) =>
+export interface WithCreditNotesActionsProps {
+  setCreditNotesTableState: (queries: Partial<TableQuery>) => void;
+  resetCreditNotesTableState: () => void;
+  setCreditNotesSelectedRows: (selectedRows: Array<unknown>) => void;
+}
+
+export const mapDipatchToProps = (dispatch: Dispatch): WithCreditNotesActionsProps => ({
+  setCreditNotesTableState: (queries: Partial<TableQuery>) =>
     dispatch(setCreditNoteTableState(queries)),
   resetCreditNotesTableState: () => dispatch(resetCreditNoteTableState()),
-  setCreditNotesSelectedRows: (selectedRows) => dispatch(setCreditNotesSelectedRows(selectedRows)),
+  setCreditNotesSelectedRows: (selectedRows: Array<unknown>) =>
+    dispatch(setCreditNotesSelectedRows(selectedRows)),
 });
 
 export const withCreditNotesActions = connect(null, mapDipatchToProps);

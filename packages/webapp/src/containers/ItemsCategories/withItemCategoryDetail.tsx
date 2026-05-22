@@ -1,14 +1,17 @@
-// @ts-nocheck
-import { connect } from 'react-redux';
-import { getItemCategoryByIdFactory } from '@/store/item-categories/items-categories.selectors';
+import { connect, MapStateToProps } from 'react-redux';
+import { ApplicationState } from '@/store/reducers';
 
-export const withItemCategoryDetail = () => {
-  const getCategoryId = getItemCategoryByIdFactory();
+export interface WithItemCategoryDetailProps {
+  itemCategoryDetail: unknown;
+}
 
-  const mapStateToProps = (state, props) => {
-    return {
-      itemCategoryDetail: getCategoryId(state, props),
-    };
-  };
+export function withItemCategoryDetail<Props = unknown>() {
+  const mapStateToProps: MapStateToProps<
+    WithItemCategoryDetailProps,
+    Props,
+    ApplicationState
+  > = () => ({
+    itemCategoryDetail: undefined,
+  });
   return connect(mapStateToProps);
-};
+}
