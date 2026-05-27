@@ -8375,6 +8375,17 @@ export interface components {
              */
             nonDeletableIds: number[];
         };
+        CustomersListResponseDto: {
+            data: components["schemas"]["CustomerResponseDto"][];
+            pagination: {
+                /** @example 1 */
+                page: number;
+                /** @example 12 */
+                pageSize: number;
+                /** @example 42 */
+                total: number;
+            };
+        };
         CustomerResponseDto: {
             /** @example 1500 */
             balance: number;
@@ -19109,7 +19120,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["CustomerResponseDto"][];
+                    "application/json": components["schemas"]["CustomersListResponseDto"];
                 };
             };
         };

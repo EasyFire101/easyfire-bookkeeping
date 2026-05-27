@@ -21,6 +21,7 @@ import {
 import { CreateCustomerDto } from './dtos/CreateCustomer.dto';
 import { EditCustomerDto } from './dtos/EditCustomer.dto';
 import { CustomerResponseDto } from './dtos/CustomerResponse.dto';
+import { CustomersListResponseDto } from './dtos/CustomersListResponse.dto';
 import { GetCustomersQueryDto } from './dtos/GetCustomersQuery.dto';
 import {
   BulkDeleteCustomersDto,
@@ -36,6 +37,7 @@ import { CustomerAction } from './types/Customers.types';
 @Controller('customers')
 @ApiTags('Customers')
 @ApiExtraModels(CustomerResponseDto)
+@ApiExtraModels(CustomersListResponseDto)
 @ApiExtraModels(ValidateBulkDeleteCustomersResponseDto)
 @ApiCommonHeaders()
 @UseGuards(AuthorizationGuard, PermissionGuard)
@@ -60,10 +62,7 @@ export class CustomersController {
   @ApiResponse({
     status: 200,
     description: 'The customers have been successfully retrieved.',
-    schema: {
-      type: 'array',
-      items: { $ref: getSchemaPath(CustomerResponseDto) },
-    },
+    schema: { $ref: getSchemaPath(CustomersListResponseDto) },
   })
   getCustomers(@Query() filterDTO: GetCustomersQueryDto) {
     return this.customersApplication.getCustomers(filterDTO);

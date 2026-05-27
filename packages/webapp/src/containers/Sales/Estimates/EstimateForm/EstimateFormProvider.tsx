@@ -1,4 +1,5 @@
 import React, { createContext, useContext } from 'react';
+import type { Item, Customer } from '@bigcapital/sdk-ts';
 
 import {
   useEstimate,
@@ -30,11 +31,11 @@ type EstimateFormSubmitPayload = Record<string, unknown>;
 interface EstimateFormContextValue {
   estimateId?: number;
   estimate: UseEstimateResult['data'];
-  items: any;
-  customers: any;
+  items: Item[];
+  customers: Customer[];
   branches: UseBranchesResult['data'];
   warehouses: UseWarehousesResult['data'];
-  projects: any;
+  projects: unknown[];
   isNewMode: boolean;
 
   isItemsFetching: boolean;
@@ -163,11 +164,11 @@ function EstimateFormProvider({
   const provider: EstimateFormContextValue = {
     estimateId,
     estimate,
-    items: (itemsData as any)?.items,
-    customers: (customersData as any)?.customers,
+    items: itemsData?.data ?? [],
+    customers: customersData?.data ?? [],
     branches,
     warehouses,
-    projects: (projectsData as any)?.projects,
+    projects: (projectsData as { data?: { projects?: unknown[] } })?.data?.projects ?? [],
     isNewMode,
 
     isItemsFetching,

@@ -1,10 +1,21 @@
-// @ts-nocheck
 import React, { createContext, useState } from 'react';
+import type {
+  SaleInvoice,
+  CreateSaleInvoiceBody,
+  EditSaleInvoiceBody,
+  SaleInvoiceStateResponse,
+  Item,
+  Customer,
+  Warehouse,
+  Branch,
+  TaxRate,
+  PdfTemplateResponse,
+  GetPaymentServicesResponse,
+} from '@bigcapital/sdk-ts';
 import { isEmpty, pick } from 'lodash';
 import { useLocation } from 'react-router-dom';
 import { Features } from '@/constants';
 import { useFeatureCan } from '@/hooks/state';
-import { DashboardInsider } from '@/components/Dashboard';
 import { transformToEditForm, ITEMS_FILTER_ROLES_QUERY } from './utils';
 import {
   useInvoice,
@@ -17,28 +28,77 @@ import {
   useSettingsInvoices,
   useEstimate,
   useGetSaleInvoiceState,
-  GetSaleInvoiceStateResponse,
 } from '@/hooks/query';
 import { useProjects } from '@/containers/Projects/hooks';
 import { useTaxRates } from '@/hooks/query/tax-rates';
 import { useGetPdfTemplates } from '@/hooks/query/pdf-templates';
 import { useGetPaymentServices } from '@/hooks/query/payment-services';
 
-interface InvoiceFormContextValue {
-  saleInvoiceState: GetSaleInvoiceStateResponse | null;
-  isInvoiceStateLoading: boolean;
-}
+type InvoiceFormSubmitPayload = {
+  redirect?: boolean;
+};
 
-const InvoiceFormContext = createContext<InvoiceFormContextValue>(
-  {} as InvoiceFormContextValue,
+type InvoiceFormContextValue = {
+  invoice: SaleInvoice | undefined;
+  items: Item[];
+  customers: Customer[];
+  newInvoice: ReturnType<typeof transformToEditForm> | [];
+  estimateId: string | undefined;
+  invoiceId: number | undefined;
+  submitPayload: InvoiceFormSubmitPayload | undefined;
+  branches: Branch[];
+  warehouses: Warehouse[];
+  projects: unknown[];
+  taxRates: TaxRate[];
+  brandingTemplates: PdfTemplateResponse[];
+  paymentServices: GetPaymentServicesResponse | undefined;
+
+  isInvoiceLoading: boolean;
+  isItemsLoading: boolean;
+  isCustomersLoading: boolean;
+  isSettingsLoading: boolean;
+  isWarehouesLoading: boolean;
+  isBranchesLoading: boolean;
+  isFeatureLoading: boolean;
+  isBranchesSuccess: boolean;
+  isWarehousesSuccess: boolean;
+  isTaxRatesLoading: boolean;
+  isBrandingTemplatesLoading: boolean;
+  isInvoiceStateLoading: boolean;
+  isPaymentServicesLoading: boolean;
+  isBootLoading: boolean;
+  isNewMode: boolean;
+
+  createInvoiceMutate: (values: CreateSaleInvoiceBody) => Promise<void>;
+  editInvoiceMutate: (args: [number, EditSaleInvoiceBody]) => Promise<void>;
+  setSubmitPayload: React.Dispatch<
+    React.SetStateAction<InvoiceFormSubmitPayload | undefined>
+  >;
+
+  saleInvoiceState: SaleInvoiceStateResponse | undefined;
+};
+
+const InvoiceFormContext = createContext<InvoiceFormContextValue | undefined>(
+  undefined,
 );
 
+type InvoiceFormProviderProps = {
+  invoiceId?: number;
+  baseCurrency?: string;
+  children?: React.ReactNode;
+};
+
 /**
- * Accounts chart data provider.
+ * Invoice form data provider.
  */
-function InvoiceFormProvider({ invoiceId, baseCurrency, ...props }) {
+function InvoiceFormProvider({
+  invoiceId,
+  baseCurrency,
+  ...props
+}: InvoiceFormProviderProps) {
   const { state } = useLocation();
-  const estimateId = state?.action;
+  const estimateId = (state as { action?: string })?.action;
+  const estimateIdNum = estimateId ? Number(estimateId) : undefined;
 
   // Features guard.
   const { featureCan } = useFeatureCan();
@@ -47,9 +107,7 @@ function InvoiceFormProvider({ invoiceId, baseCurrency, ...props }) {
   const isProjectsFeatureCan = featureCan(Features.Projects);
 
   // Fetch invoice data.
-  const { data: invoice, isLoading: isInvoiceLoading } = useInvoice(invoiceId, {
-    enabled: !!invoiceId,
-  });
+  const { data: invoice, isLoading: isInvoiceLoading } = useInvoice(invoiceId);
 
   // Fetch tax rates.
   const { data: taxRates, isLoading: isTaxRatesLoading } = useTaxRates();
@@ -62,8 +120,8 @@ function InvoiceFormProvider({ invoiceId, baseCurrency, ...props }) {
 
   // Fetches the estimate by the given id.
   const { data: estimate, isLoading: isEstimateLoading } = useEstimate(
-    estimateId,
-    { enabled: !!estimateId },
+    estimateIdNum,
+    { enabled: !!estimateIdNum },
   );
 
   // Fetches branding templates of invoice.
@@ -78,7 +136,7 @@ function InvoiceFormProvider({ invoiceId, baseCurrency, ...props }) {
     ? transformToEditForm({
         ...pick(estimate, ['customer_id', 'currency_code', 'entries']),
       })
-    : [];
+    : ([] as []);
 
   // Handle fetching the items table based on the given query.
   const {
@@ -120,7 +178,9 @@ function InvoiceFormProvider({ invoiceId, baseCurrency, ...props }) {
   const { mutateAsync: editInvoiceMutate } = useEditInvoice();
 
   // Form submit payload.
-  const [submitPayload, setSubmitPayload] = useState();
+  const [submitPayload, setSubmitPayload] = useState<
+    InvoiceFormSubmitPayload | undefined
+  >();
 
   // Detarmines whether the form in new mode.
   const isNewMode = !invoiceId;
@@ -140,19 +200,19 @@ function InvoiceFormProvider({ invoiceId, baseCurrency, ...props }) {
     isSettingsLoading ||
     isInvoiceStateLoading;
 
-  const provider = {
+  const provider: InvoiceFormContextValue = {
     invoice,
-    items: itemsData?.items,
-    customers: customersData?.customers,
+    items: itemsData?.data ?? [],
+    customers: customersData?.data ?? [],
     newInvoice,
     estimateId,
     invoiceId,
     submitPayload,
-    branches,
-    warehouses,
-    projects: projectsData?.projects,
-    taxRates,
-    brandingTemplates,
+    branches: branches ?? [],
+    warehouses: warehouses ?? [],
+    projects: (projectsData as { data?: { projects?: unknown[] } })?.data?.projects ?? [],
+    taxRates: taxRates?.data ?? [],
+    brandingTemplates: brandingTemplates?.templates ?? [],
 
     isInvoiceLoading,
     isItemsLoading,
@@ -166,16 +226,18 @@ function InvoiceFormProvider({ invoiceId, baseCurrency, ...props }) {
     isTaxRatesLoading,
     isBrandingTemplatesLoading,
 
-    createInvoiceMutate,
-    editInvoiceMutate,
+    createInvoiceMutate: createInvoiceMutate as (
+      values: CreateSaleInvoiceBody,
+    ) => Promise<void>,
+    editInvoiceMutate: editInvoiceMutate as (
+      args: [number, EditSaleInvoiceBody],
+    ) => Promise<void>,
     setSubmitPayload,
     isNewMode,
 
-    // Payment Services
     paymentServices,
     isPaymentServicesLoading,
 
-    // Invoice state
     saleInvoiceState,
     isInvoiceStateLoading,
 
@@ -185,7 +247,14 @@ function InvoiceFormProvider({ invoiceId, baseCurrency, ...props }) {
   return <InvoiceFormContext.Provider value={provider} {...props} />;
 }
 
-const useInvoiceFormContext = () =>
-  React.useContext<InvoiceFormContextValue>(InvoiceFormContext);
+const useInvoiceFormContext = (): InvoiceFormContextValue => {
+  const ctx = React.useContext(InvoiceFormContext);
+  if (!ctx) {
+    throw new Error(
+      'useInvoiceFormContext must be used within an InvoiceFormProvider',
+    );
+  }
+  return ctx;
+};
 
 export { InvoiceFormProvider, useInvoiceFormContext };

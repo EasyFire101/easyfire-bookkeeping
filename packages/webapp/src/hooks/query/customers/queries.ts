@@ -37,11 +37,7 @@ export function useCustomers(
   return useQuery({
     ...props,
     queryKey: customersKeys.list(query),
-    queryFn: () =>
-      (fetchCustomers as (f: ReturnType<typeof useApiFetcher>, q?: Record<string, unknown>) => Promise<CustomersListResponse>)(
-        fetcher,
-        query
-      ),
+    queryFn: () => fetchCustomers(fetcher, query),
   });
 }
 
