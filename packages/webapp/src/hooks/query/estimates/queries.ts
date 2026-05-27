@@ -36,13 +36,10 @@ import {
   fetchSaleEstimateHtmlContent,
 } from '@bigcapital/sdk-ts';
 import { useApiFetcher } from '../../useRequest';
-import { estimatesKeys, EstimatesQueryKeys } from './query-keys';
+import { estimatesKeys } from './query-keys';
 import { itemsKeys } from '../items/query-keys';
 import { useRequestPdf } from '../../useRequestPdf';
-
-// Keys that don't have factory methods yet - keeping inline
-const SETTING = 'SETTING';
-const SETTING_ESTIMATES = 'SETTING_ESTIMATES';
+import { settingsKeys } from '../settings/query-keys';
 
 const commonInvalidateQueries = (queryClient: ReturnType<typeof useQueryClient>) => {
   queryClient.invalidateQueries({ queryKey: estimatesKeys.all() });
@@ -61,7 +58,7 @@ export function useCreateEstimate(
       createSaleEstimate(fetcher, values),
     onSuccess: () => {
       commonInvalidateQueries(queryClient);
-      queryClient.invalidateQueries({ queryKey: [SETTING, SETTING_ESTIMATES] });
+      queryClient.invalidateQueries({ queryKey: settingsKeys.estimates() });
     },
   });
 }
@@ -225,7 +222,7 @@ export function useCreateNotifyEstimateBySMS(
     mutationFn: ([id, values]: [number, Record<string, unknown>]) =>
       notifySaleEstimateBySms(fetcher, id, values),
     onSuccess: (_data, [id]) => {
-      queryClient.invalidateQueries({ queryKey: [EstimatesQueryKeys.NOTIFY_SALE_ESTIMATE_BY_SMS, id] });
+      queryClient.invalidateQueries({ queryKey: estimatesKeys.notifyBySms(id) });
       commonInvalidateQueries(queryClient);
     },
   });
@@ -267,7 +264,7 @@ export function useSaleEstimateMailState(
   const fetcher = useApiFetcher({ enableCamelCaseTransform: true });
   return useQuery({
     ...props,
-    queryKey: [EstimatesQueryKeys.SALE_ESTIMATE_MAIL_OPTIONS, estimateId],
+    queryKey: estimatesKeys.mailOptions(estimateId),
     queryFn: () => fetchSaleEstimateMail(fetcher, estimateId),
   });
 }
@@ -279,7 +276,7 @@ export function useGetSaleEstimatesState(
 
   return useQuery({
     ...options,
-    queryKey: ['SALE_ESTIMATE_STATE'],
+    queryKey: estimatesKeys.state(),
     queryFn: () => fetchSaleEstimatesState(fetcher),
   });
 }
@@ -295,7 +292,7 @@ export const useGetSaleEstimateHtml = (
 
   return useQuery({
     ...options,
-    queryKey: ['SALE_ESTIMATE_HTML', estimateId],
+    queryKey: estimatesKeys.html(estimateId),
     queryFn: () => fetchSaleEstimateHtmlContent(fetcher, estimateId),
   });
 };

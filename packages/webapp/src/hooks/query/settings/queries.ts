@@ -5,7 +5,7 @@ import {
   UseMutationOptions,
   UseQueryOptions,
 } from '@tanstack/react-query';
-import type { SaveSettingsBody } from '@bigcapital/sdk-ts';
+import type { SaveSettingsBody, SettingsResponse } from '@bigcapital/sdk-ts';
 import {
   fetchSettings,
   fetchSettingsInvoices,
@@ -42,7 +42,7 @@ export function useSaveSettings(
 }
 
 export function useSettings(
-  props?: Omit<UseQueryOptions<unknown>, 'queryKey' | 'queryFn'>
+  props?: Omit<UseQueryOptions<SettingsResponse>, 'queryKey' | 'queryFn'>
 ) {
   const fetcher = useApiFetcher();
 
@@ -54,7 +54,7 @@ export function useSettings(
 }
 
 export function useSettingsInvoices(
-  props?: Omit<UseQueryOptions<unknown>, 'queryKey' | 'queryFn'>
+  props?: Omit<UseQueryOptions<SettingsResponse>, 'queryKey' | 'queryFn'>
 ) {
   const fetcher = useApiFetcher();
 
@@ -66,7 +66,7 @@ export function useSettingsInvoices(
 }
 
 export function useSettingsEstimates(
-  props?: Omit<UseQueryOptions<unknown>, 'queryKey' | 'queryFn'>
+  props?: Omit<UseQueryOptions<SettingsResponse>, 'queryKey' | 'queryFn'>
 ) {
   const fetcher = useApiFetcher();
 
@@ -78,7 +78,7 @@ export function useSettingsEstimates(
 }
 
 export function useSettingsPaymentReceives(
-  props?: Omit<UseQueryOptions<unknown>, 'queryKey' | 'queryFn'>
+  props?: Omit<UseQueryOptions<SettingsResponse>, 'queryKey' | 'queryFn'>
 ) {
   const fetcher = useApiFetcher();
 
@@ -90,7 +90,7 @@ export function useSettingsPaymentReceives(
 }
 
 export function useSettingsReceipts(
-  props?: Omit<UseQueryOptions<unknown>, 'queryKey' | 'queryFn'>
+  props?: Omit<UseQueryOptions<SettingsResponse>, 'queryKey' | 'queryFn'>
 ) {
   const fetcher = useApiFetcher();
 
@@ -102,7 +102,7 @@ export function useSettingsReceipts(
 }
 
 export function useSettingsManualJournals(
-  props?: Omit<UseQueryOptions<unknown>, 'queryKey' | 'queryFn'>
+  props?: Omit<UseQueryOptions<SettingsResponse>, 'queryKey' | 'queryFn'>
 ) {
   const fetcher = useApiFetcher();
 
@@ -113,7 +113,7 @@ export function useSettingsManualJournals(
   });
 }
 export function useSettingsItems(
-  props?: Omit<UseQueryOptions<unknown>, 'queryKey' | 'queryFn'>
+  props?: Omit<UseQueryOptions<SettingsResponse>, 'queryKey' | 'queryFn'>
 ) {
   const fetcher = useApiFetcher();
 
@@ -125,7 +125,7 @@ export function useSettingsItems(
 }
 
 export function useSettingCashFlow(
-  props?: Omit<UseQueryOptions<unknown>, 'queryKey' | 'queryFn'>
+  props?: Omit<UseQueryOptions<SettingsResponse>, 'queryKey' | 'queryFn'>
 ) {
   const fetcher = useApiFetcher();
 
@@ -137,7 +137,7 @@ export function useSettingCashFlow(
 }
 
 export function useSettingsCreditNotes(
-  props?: Omit<UseQueryOptions<unknown>, 'queryKey' | 'queryFn'>
+  props?: Omit<UseQueryOptions<SettingsResponse>, 'queryKey' | 'queryFn'>
 ) {
   const fetcher = useApiFetcher();
 
@@ -149,7 +149,7 @@ export function useSettingsCreditNotes(
 }
 
 export function useSettingsVendorCredits(
-  props?: Omit<UseQueryOptions<unknown>, 'queryKey' | 'queryFn'>
+  props?: Omit<UseQueryOptions<SettingsResponse>, 'queryKey' | 'queryFn'>
 ) {
   const fetcher = useApiFetcher();
 
@@ -161,7 +161,7 @@ export function useSettingsVendorCredits(
 }
 
 export function useSettingsWarehouseTransfers(
-  props?: Omit<UseQueryOptions<unknown>, 'queryKey' | 'queryFn'>
+  props?: Omit<UseQueryOptions<SettingsResponse>, 'queryKey' | 'queryFn'>
 ) {
   const fetcher = useApiFetcher();
 
@@ -199,7 +199,7 @@ export function useSettingSMSNotification(
 }
 
 export function useSettingEditSMSNotification(
-  props?: UseMutationOptions<void, Error, { key: string; values: Record<string, unknown> }>
+  props?: UseMutationOptions<unknown, Error, { key: string; values: Record<string, unknown> }>
 ) {
   const queryClient = useQueryClient();
   const fetcher = useApiFetcher();

@@ -16,7 +16,7 @@ import { DashboardInsider } from '@/components';
  */
 export default function EstimateFormPage() {
   const { id } = useParams();
-  const idInteger = parseInt(id, 10);
+  const idInteger = id ? parseInt(id, 10) : undefined;
 
   return (
     <EstimateFormProvider estimateId={idInteger}>

@@ -1,4 +1,4 @@
-import { useMutation, useQueryClient } from 'react-query';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useRequestQuery } from '@/hooks/useQueryRequest';
 import useApiRequest from '@/hooks/useRequest';
 import { useAuthOrganizationId } from '@/hooks/state';
@@ -56,7 +56,7 @@ export function useCreateWorkspace() {
       return transformToCamelCase(response.data) as CreateWorkspaceResponse;
     },
     onSuccess: () => {
-      queryClient.invalidateQueries(['workspaces']);
+      queryClient.invalidateQueries({ queryKey: ['workspaces'] });
     },
   });
 }
@@ -68,17 +68,15 @@ export function useSetDefaultWorkspace() {
   const apiRequest = useApiRequest();
   const queryClient = useQueryClient();
 
-  return useMutation(
-    async (values: { organizationId: string }) => {
+  return useMutation({
+    mutationFn: async (values: { organizationId: string }) => {
       const response = await apiRequest.put('workspaces/default', values);
       return response.data;
     },
-    {
-      onSuccess: () => {
-        queryClient.invalidateQueries(['workspaces']);
-      },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['workspaces'] });
     },
-  );
+  });
 }
 
 /**
@@ -88,21 +86,19 @@ export function useDeleteWorkspace(props?: Record<string, unknown>) {
   const apiRequest = useApiRequest();
   const queryClient = useQueryClient();
 
-  return useMutation(
-    async (organizationId: string) => {
+  return useMutation({
+    mutationFn: async (organizationId: string) => {
       const response = await apiRequest.delete(
         `workspaces/${organizationId}`,
         undefined,
       );
       return transformToCamelCase(response.data);
     },
-    {
-      onSuccess: () => {
-        queryClient.invalidateQueries(['workspaces']);
-      },
-      ...props,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['workspaces'] });
     },
-  );
+    ...props,
+  });
 }
 
 /**
@@ -112,21 +108,19 @@ export function useInactivateWorkspace(props?: Record<string, unknown>) {
   const apiRequest = useApiRequest();
   const queryClient = useQueryClient();
 
-  return useMutation(
-    async (organizationId: string) => {
+  return useMutation({
+    mutationFn: async (organizationId: string) => {
       const response = await apiRequest.put(
         `workspaces/${organizationId}/inactivate`,
         undefined,
       );
       return response.data;
     },
-    {
-      onSuccess: () => {
-        queryClient.invalidateQueries(['workspaces']);
-      },
-      ...props,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['workspaces'] });
     },
-  );
+    ...props,
+  });
 }
 
 /**
@@ -136,19 +130,17 @@ export function useActivateWorkspace(props?: Record<string, unknown>) {
   const apiRequest = useApiRequest();
   const queryClient = useQueryClient();
 
-  return useMutation(
-    async (organizationId: string) => {
+  return useMutation({
+    mutationFn: async (organizationId: string) => {
       const response = await apiRequest.put(
         `workspaces/${organizationId}/activate`,
         undefined,
       );
       return response.data;
     },
-    {
-      onSuccess: () => {
-        queryClient.invalidateQueries(['workspaces']);
-      },
-      ...props,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['workspaces'] });
     },
-  );
+    ...props,
+  });
 }

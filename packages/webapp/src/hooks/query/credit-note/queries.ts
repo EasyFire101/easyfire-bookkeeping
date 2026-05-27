@@ -36,19 +36,15 @@ import {
 } from '@bigcapital/sdk-ts';
 import { useApiFetcher } from '../../useRequest';
 import { useRequestPdf } from '../../useRequestPdf';
-import { creditNotesKeys, CreditNotesQueryKeys } from './query-keys';
+import { creditNotesKeys } from './query-keys';
 import { itemsKeys } from '../items/query-keys';
 import { customersKeys } from '../customers/query-keys';
 import { accountsKeys } from '../accounts/query-keys';
 import { invoicesKeys } from '../invoices/query-keys';
-
-// Keys that don't have factory methods yet - keeping inline
-const FINANCIAL_REPORT = 'FINANCIAL-REPORT';
-const TRANSACTIONS_BY_REFERENCE = 'TRANSACTIONS_BY_REFERENCE';
-const CASHFLOW_ACCOUNT_TRANSACTIONS_INFINITY = 'CASHFLOW_ACCOUNT_TRANSACTIONS_INFINITY';
-const ORGANIZATION_MUTATE_BASE_CURRENCY_ABILITIES = 'ORGANIZATION_MUTATE_BASE_CURRENCY_ABILITIES';
-const SETTING = 'SETTING';
-const SETTING_CREDIT_NOTES = 'SETTING_CREDIT_NOTES';
+import { financialReportsKeys } from '../FinancialReports/query-keys';
+import { settingsKeys } from '../settings/query-keys';
+import { organizationKeys } from '../organization/query-keys';
+import { cashflowAccountsKeys } from '../cashflow-accounts/query-keys';
 
 const commonInvalidateQueries = (queryClient: ReturnType<typeof useQueryClient>) => {
   // Invalidate credit note.
@@ -64,7 +60,7 @@ const commonInvalidateQueries = (queryClient: ReturnType<typeof useQueryClient>)
   queryClient.invalidateQueries({ queryKey: accountsKeys.all() });
 
   // Invalidate settings.
-  queryClient.invalidateQueries({ queryKey: [SETTING, SETTING_CREDIT_NOTES] });
+  queryClient.invalidateQueries({ queryKey: settingsKeys.creditNotes() });
 
   // Invalidate refund credit
   queryClient.invalidateQueries({ queryKey: creditNotesKeys.refund(null).slice(0, 1) });
@@ -78,16 +74,16 @@ const commonInvalidateQueries = (queryClient: ReturnType<typeof useQueryClient>)
   queryClient.invalidateQueries({ queryKey: invoicesKeys.all() });
 
   // Invalidate cashflow accounts.
-  queryClient.invalidateQueries({ queryKey: [CASHFLOW_ACCOUNT_TRANSACTIONS_INFINITY] });
+  queryClient.invalidateQueries({ queryKey: cashflowAccountsKeys.transactionsInfinity().slice(0, 1) });
 
   // Invalidate financial reports.
-  queryClient.invalidateQueries({ queryKey: [FINANCIAL_REPORT] });
+  queryClient.invalidateQueries({ queryKey: financialReportsKeys.all() });
 
   // Invalidate transactions by reference.
-  queryClient.invalidateQueries({ queryKey: [TRANSACTIONS_BY_REFERENCE] });
+  queryClient.invalidateQueries({ queryKey: financialReportsKeys.transactionsByReference().slice(0, 1) });
 
   // Invalidate mutate base currency abilities.
-  queryClient.invalidateQueries({ queryKey: [ORGANIZATION_MUTATE_BASE_CURRENCY_ABILITIES] });
+  queryClient.invalidateQueries({ queryKey: organizationKeys.mutateAbilities() });
 };
 
 export function useCreateCreditNote(
@@ -367,7 +363,7 @@ export function useGetCreditNoteState(
 
   return useQuery<CreditNoteStateResponse, Error>({
     ...options,
-    queryKey: ['CREDIT_NOTE_STATE'],
+    queryKey: creditNotesKeys.state(),
     queryFn: () => fetchCreditNoteState(fetcher) as Promise<CreditNoteStateResponse>,
   });
 }

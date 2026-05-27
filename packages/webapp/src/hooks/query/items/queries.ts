@@ -12,6 +12,10 @@ import type {
   BulkDeleteItemsBody,
   ValidateBulkDeleteItemsResponse,
   ItemsListResponse,
+  ItemAssociatedInvoicesResponse,
+  ItemAssociatedBillsResponse,
+  ItemAssociatedEstimatesResponse,
+  ItemAssociatedReceiptsResponse,
 } from '@bigcapital/sdk-ts';
 import {
   fetchItems,
@@ -190,7 +194,7 @@ export function useItem(
 
 export function useItemAssociatedInvoiceTransactions(
   id: number | null | undefined,
-  props?: Omit<UseQueryOptions<unknown[]>, 'queryKey' | 'queryFn'>
+  props?: Omit<UseQueryOptions<ItemAssociatedInvoicesResponse>, 'queryKey' | 'queryFn'>
 ) {
   const fetcher = useApiFetcher();
   return useQuery({
@@ -203,7 +207,7 @@ export function useItemAssociatedInvoiceTransactions(
 
 export function useItemAssociatedEstimateTransactions(
   id: number | null | undefined,
-  props?: Omit<UseQueryOptions<unknown[]>, 'queryKey' | 'queryFn'>
+  props?: Omit<UseQueryOptions<ItemAssociatedEstimatesResponse>, 'queryKey' | 'queryFn'>
 ) {
   const fetcher = useApiFetcher();
   return useQuery({
@@ -216,7 +220,7 @@ export function useItemAssociatedEstimateTransactions(
 
 export function useItemAssociatedReceiptTransactions(
   id: number | null | undefined,
-  props?: Omit<UseQueryOptions<unknown[]>, 'queryKey' | 'queryFn'>
+  props?: Omit<UseQueryOptions<ItemAssociatedReceiptsResponse>, 'queryKey' | 'queryFn'>
 ) {
   const fetcher = useApiFetcher();
   return useQuery({
@@ -229,7 +233,7 @@ export function useItemAssociatedReceiptTransactions(
 
 export function useItemAssociatedBillTransactions(
   id: number | null | undefined,
-  props?: Omit<UseQueryOptions<unknown[]>, 'queryKey' | 'queryFn'>
+  props?: Omit<UseQueryOptions<ItemAssociatedBillsResponse>, 'queryKey' | 'queryFn'>
 ) {
   const fetcher = useApiFetcher();
   return useQuery({
@@ -255,14 +259,14 @@ export function useItemWarehouseLocation(
 
 export function useItemInventoryCost(
   query?: GetInventoryItemsCostQuery,
-  props?: Omit<UseQueryOptions<unknown[]>, 'queryKey' | 'queryFn'>
+  props?: Omit<UseQueryOptions<GetInventoryItemsCostResponse['costs']>, 'queryKey' | 'queryFn'>
 ) {
   const fetcher = useApiFetcher();
   return useQuery({
     ...props,
     queryKey: itemsKeys.inventoryCost(query),
     queryFn: () =>
-      fetchInventoryCostItems(fetcher, query ?? {}).then(
+      fetchInventoryCostItems(fetcher, query as GetInventoryItemsCostQuery).then(
         (res: GetInventoryItemsCostResponse) => res.costs ?? []
       ),
   });

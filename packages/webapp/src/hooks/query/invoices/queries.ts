@@ -15,6 +15,8 @@ import type {
   GetSaleInvoicesQuery,
   ValidateBulkDeleteSaleInvoicesResponse,
   SaleInvoiceStateResponse,
+  InvoicePaymentTransactionsResponse,
+  SaleInvoiceHtmlContentResponse,
 } from '@bigcapital/sdk-ts';
 import {
   fetchSaleInvoices,
@@ -39,31 +41,26 @@ import { useRequestQuery } from '../../useQueryRequest';
 import { transformToCamelCase } from '@/utils';
 import useApiRequest from '../../useRequest';
 import { useRequestPdf } from '../../useRequestPdf';
-import { invoicesKeys, InvoicesQueryKeys } from './query-keys';
+import { invoicesKeys } from './query-keys';
 import { customersKeys } from '../customers/query-keys';
 import { itemsKeys } from '../items/query-keys';
 import { accountsKeys } from '../accounts/query-keys';
 import { estimatesKeys } from '../estimates/query-keys';
 import { organizationKeys } from '../organization/query-keys';
-
-// Keys that don't have factory methods yet - keeping inline
-const FINANCIAL_REPORT = 'FINANCIAL-REPORT';
-const TRANSACTIONS_BY_REFERENCE = 'TRANSACTIONS_BY_REFERENCE';
-const RECONCILE_CREDIT_NOTE = 'RECONCILE_CREDIT_NOTE';
-const RECONCILE_CREDIT_NOTES = 'RECONCILE_CREDIT_NOTES';
-const SETTING = 'SETTING';
-const SETTING_INVOICES = 'SETTING_INVOICES';
+import { financialReportsKeys } from '../FinancialReports/query-keys';
+import { creditNotesKeys } from '../credit-note/query-keys';
+import { settingsKeys } from '../settings/query-keys';
 
 function commonInvalidateQueries(queryClient: ReturnType<typeof useQueryClient>) {
   queryClient.invalidateQueries({ queryKey: invoicesKeys.all() });
   queryClient.invalidateQueries({ queryKey: customersKeys.all() });
   queryClient.invalidateQueries({ queryKey: itemsKeys.all() });
-  queryClient.invalidateQueries({ queryKey: [SETTING, SETTING_INVOICES] });
-  queryClient.invalidateQueries({ queryKey: [FINANCIAL_REPORT] });
-  queryClient.invalidateQueries({ queryKey: [TRANSACTIONS_BY_REFERENCE] });
+  queryClient.invalidateQueries({ queryKey: settingsKeys.invoices() });
+  queryClient.invalidateQueries({ queryKey: financialReportsKeys.all() });
+  queryClient.invalidateQueries({ queryKey: financialReportsKeys.transactionsByReference().slice(0, 1) });
   queryClient.invalidateQueries({ queryKey: accountsKeys.all() });
-  queryClient.invalidateQueries({ queryKey: [RECONCILE_CREDIT_NOTE] });
-  queryClient.invalidateQueries({ queryKey: [RECONCILE_CREDIT_NOTES] });
+  queryClient.invalidateQueries({ queryKey: creditNotesKeys.reconcile(null).slice(0, 1) });
+  queryClient.invalidateQueries({ queryKey: creditNotesKeys.reconciles(null).slice(0, 1) });
   queryClient.invalidateQueries({ queryKey: organizationKeys.mutateAbilities() });
 }
 
@@ -206,12 +203,12 @@ export function usePdfInvoice(invoiceId: number) {
 export function useInvoiceHtml(
   invoiceId: number,
   options?: UseQueryOptions<SaleInvoiceHtmlContentResponse, Error>
-): UseQueryResult<GetInvoiceHtmlResponse, Error> {
+): UseQueryResult<SaleInvoiceHtmlContentResponse, Error> {
   const fetcher = useApiFetcher({ enableCamelCaseTransform: true });
 
   return useQuery({
     ...options,
-    queryKey: ['SALE_INVOICE_HTML', invoiceId],
+    queryKey: invoicesKeys.html(invoiceId),
     queryFn: () => fetchSaleInvoiceHtml(fetcher, invoiceId),
   });
 }
@@ -251,7 +248,7 @@ export function useCreateBadDebt(
     mutationFn: ([id, values]: [number, Record<string, unknown>]) =>
       writeOffSaleInvoice(fetcher, id, values),
     onSuccess: (_data, [id]) => {
-      queryClient.invalidateQueries({ queryKey: [InvoicesQueryKeys.BAD_DEBT, id] });
+      queryClient.invalidateQueries({ queryKey: invoicesKeys.badDebt(id) });
       commonInvalidateQueries(queryClient);
     },
   });
@@ -265,7 +262,7 @@ export function useCancelBadDebt(props?: UseMutationOptions<void, Error, number>
     ...props,
     mutationFn: (id: number) => cancelWrittenOffSaleInvoice(fetcher, id),
     onSuccess: (_data, id) => {
-      queryClient.invalidateQueries({ queryKey: [InvoicesQueryKeys.CANCEL_BAD_DEBT, id] });
+      queryClient.invalidateQueries({ queryKey: invoicesKeys.cancelBadDebt(id) });
       commonInvalidateQueries(queryClient);
     },
   });
@@ -283,7 +280,7 @@ export function useCreateNotifyInvoiceBySMS(
     mutationFn: ([id, values]: [number, Record<string, unknown>]) =>
       apiRequest.post(`sale-invoices/${id}/notify-by-sms`, values, {}),
     onSuccess: (_data, [id]) => {
-      queryClient.invalidateQueries({ queryKey: [InvoicesQueryKeys.NOTIFY_SALE_INVOICE_BY_SMS, id] });
+      queryClient.invalidateQueries({ queryKey: invoicesKeys.notifyBySms(id) });
       commonInvalidateQueries(queryClient);
     },
   });
@@ -312,7 +309,7 @@ export function useInvoiceSMSDetail(
 
 export function useInvoicePaymentTransactions(
   invoiceId: number,
-  props?: UseQueryOptions<unknown, Error>
+  props?: UseQueryOptions<InvoicePaymentTransactionsResponse, Error>
 ) {
   const fetcher = useApiFetcher();
 
@@ -408,7 +405,7 @@ export function useSaleInvoiceMailState(
 
   return useQuery({
     ...options,
-    queryKey: [InvoicesQueryKeys.SALE_INVOICE_DEFAULT_OPTIONS, invoiceId],
+    queryKey: invoicesKeys.defaultOptions(invoiceId),
     queryFn: () => fetchSaleInvoiceMailState(fetcher, invoiceId) as Promise<GetSaleInvoiceDefaultOptionsResponse>,
   });
 }
@@ -423,7 +420,7 @@ export function useGetSaleInvoiceState(
 
   return useQuery({
     ...options,
-    queryKey: ['SALE_INVOICE_STATE'],
+    queryKey: invoicesKeys.state(),
     queryFn: () =>
       fetchSaleInvoiceState(fetcher).then((data: GetSaleInvoiceStateResponse & { data?: unknown }) =>
         (data?.data ?? data) as GetSaleInvoiceStateResponse
@@ -487,7 +484,7 @@ export function useGetSaleInvoiceBrandingTemplate(
 
   return useQuery({
     ...options,
-    queryKey: ['SALE_INVOICE_BRANDING_TEMPLATE', invoiceId],
+    queryKey: invoicesKeys.brandingTemplate(invoiceId),
     queryFn: () =>
       apiRequest
         .get(`/sale-invoices/${invoiceId}/template`, {})

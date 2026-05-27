@@ -6,6 +6,8 @@ export const USER = 'USER';
 export const usersKeys = {
   all: () => [USERS] as const,
   detail: (id: number | null | undefined) => [USER, id] as const,
+  authenticatedAccount: () => ['AuthenticatedAccount'] as const,
+  dashboardMeta: () => ['DASHBOARD_META'] as const,
 };
 
 // Grouped object for use in components/hooks

@@ -1,7 +1,7 @@
 // @ts-nocheck
 import { useCallback } from 'react';
 import { useDispatch } from 'react-redux';
-import { useQueryClient } from 'react-query';
+import { useQueryClient } from '@tanstack/react-query';
 import { setCookie } from '@/utils';
 import { setOrganizationId } from '@/store/authentication/authentication.actions';
 

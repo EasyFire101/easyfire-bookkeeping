@@ -14,6 +14,8 @@ export type BillPaymentsListResponse = OpResponseBody<OpForPath<typeof BILL_PAYM
 export type BillPayment = OpResponseBody<OpForPath<typeof BILL_PAYMENTS_ROUTES.BY_ID, 'get'>>;
 export type CreateBillPaymentBody = OpRequestBody<OpForPath<typeof BILL_PAYMENTS_ROUTES.LIST, 'post'>>;
 export type EditBillPaymentBody = OpRequestBody<OpForPath<typeof BILL_PAYMENTS_ROUTES.BY_ID, 'put'>>;
+export type BillPaymentEditPageResponse = OpResponseBody<OpForPath<typeof BILL_PAYMENTS_ROUTES.EDIT_PAGE, 'get'>>;
+export type BillPaymentNewPageEntriesResponse = OpResponseBody<OpForPath<typeof BILL_PAYMENTS_ROUTES.NEW_PAGE_ENTRIES, 'get'>>;
 
 export async function fetchBillPayments(fetcher: ApiFetcher): Promise<BillPaymentsListResponse> {
   const get = fetcher.path(BILL_PAYMENTS_ROUTES.LIST).method('get').create();
@@ -52,13 +54,12 @@ export async function deleteBillPayment(fetcher: ApiFetcher, billPaymentId: numb
 export async function fetchBillPaymentEditPage(
   fetcher: ApiFetcher,
   billPaymentId: number
-): Promise<unknown> {
+): Promise<BillPaymentEditPageResponse> {
   const get = fetcher.path(BILL_PAYMENTS_ROUTES.EDIT_PAGE).method('get').create();
   const { data } = await get({ billPaymentId });
   return data;
 }
 
-export type BillPaymentNewPageEntriesResponse = unknown;
 
 export async function fetchBillPaymentNewPageEntries(
   fetcher: ApiFetcher,
@@ -68,10 +69,8 @@ export async function fetchBillPaymentNewPageEntries(
     .path(BILL_PAYMENTS_ROUTES.NEW_PAGE_ENTRIES)
     .method('get')
     .create();
-
-    const { data } = await (
-    // @ts-ignore
-    get as (params: { query?: { vendorId: number } }) => Promise<{ data: BillPaymentNewPageEntriesResponse }>
-  )({ query: { vendorId } });
+  const { data } = await (get as (params: { vendorId: number }) => Promise<{ data: BillPaymentNewPageEntriesResponse }>)(
+    { vendorId }
+  );
   return data;
 }

@@ -1,5 +1,15 @@
-// @ts-nocheck
 import React, { createContext, useState } from 'react';
+import type {
+  Bill,
+  CreateBillBody,
+  EditBillBody,
+  AccountsList,
+  VendorsListResponse,
+  ItemsListResponse,
+  WarehousesListResponse,
+  BranchesListResponse,
+  TaxRatesListResponse,
+} from '@bigcapital/sdk-ts';
 import { Features } from '@/constants';
 import { useFeatureCan } from '@/hooks/state';
 import { DashboardInsider } from '@/components/Dashboard';
@@ -17,7 +27,42 @@ import {
 } from '@/hooks/query';
 import { useTaxRates } from '@/hooks/query/tax-rates';
 
-const BillFormContext = createContext();
+type BillFormSubmitPayload = {
+  redirect?: boolean;
+};
+
+type BillFormContextValue = {
+  accounts: AccountsList | undefined;
+  vendors: any[] | undefined;
+  items: any[] | undefined;
+  bill: Bill | undefined;
+  warehouses: WarehousesListResponse | undefined;
+  branches: BranchesListResponse | undefined;
+  projects: any[] | undefined;
+  taxRates: TaxRatesListResponse | undefined;
+  submitPayload: BillFormSubmitPayload;
+  isNewMode: boolean;
+
+  isSettingLoading: boolean;
+  isBillLoading: boolean;
+  isAccountsLoading: boolean;
+  isItemsLoading: boolean;
+  isVendorsLoading: boolean;
+  isFeatureLoading: boolean;
+  isBranchesSuccess: boolean;
+  isWarehousesSuccess: boolean;
+  isTaxRatesLoading: boolean;
+
+  createBillMutate: (values: CreateBillBody) => Promise<void>;
+  editBillMutate: (args: [number, EditBillBody]) => Promise<void>;
+  setSubmitPayload: React.Dispatch<
+    React.SetStateAction<BillFormSubmitPayload>
+  >;
+};
+
+const BillFormContext = createContext<BillFormContextValue | undefined>(
+  undefined,
+);
 
 // Filter all purchasable items only.
 const stringifiedFilterRoles = JSON.stringify([
@@ -37,10 +82,15 @@ const stringifiedFilterRoles = JSON.stringify([
   },
 ]);
 
+type BillFormProviderProps = {
+  billId?: number;
+  children?: React.ReactNode;
+};
+
 /**
  * Bill form provider.
  */
-function BillFormProvider({ billId, ...props }) {
+function BillFormProvider({ billId, ...props }: BillFormProviderProps) {
   // Features guard.
   const { featureCan } = useFeatureCan();
   const isWarehouseFeatureCan = featureCan(Features.Warehouses);
@@ -97,7 +147,7 @@ function BillFormProvider({ billId, ...props }) {
   const { isFetching: isSettingLoading } = useSettings();
 
   // Form submit payload.
-  const [submitPayload, setSubmitPayload] = useState({});
+  const [submitPayload, setSubmitPayload] = useState<BillFormSubmitPayload>({});
 
   // Create and edit bills mutations.
   const { mutateAsync: createBillMutate } = useCreateBill();
@@ -112,10 +162,10 @@ function BillFormProvider({ billId, ...props }) {
     isProjectsLoading ||
     isTaxRatesLoading;
 
-  const provider = {
+  const provider: BillFormContextValue = {
     accounts,
-    vendors: vendorsData?.vendors,
-    items: itemsData?.items,
+    vendors: (vendorsData as any)?.vendors,
+    items: (itemsData as any)?.items,
     bill,
     warehouses,
     branches,
@@ -134,8 +184,12 @@ function BillFormProvider({ billId, ...props }) {
     isWarehousesSuccess,
     isTaxRatesLoading,
 
-    createBillMutate,
-    editBillMutate,
+    createBillMutate: createBillMutate as (
+      values: CreateBillBody,
+    ) => Promise<void>,
+    editBillMutate: editBillMutate as (
+      args: [number, EditBillBody],
+    ) => Promise<void>,
     setSubmitPayload,
   };
 
@@ -151,6 +205,14 @@ function BillFormProvider({ billId, ...props }) {
   );
 }
 
-const useBillFormContext = () => React.useContext(BillFormContext);
+const useBillFormContext = (): BillFormContextValue => {
+  const ctx = React.useContext(BillFormContext);
+  if (!ctx) {
+    throw new Error(
+      'useBillFormContext must be used within a BillFormProvider',
+    );
+  }
+  return ctx;
+};
 
 export { BillFormProvider, useBillFormContext };

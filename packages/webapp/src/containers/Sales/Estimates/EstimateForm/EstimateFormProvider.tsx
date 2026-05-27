@@ -1,7 +1,5 @@
-// @ts-nocheck
 import React, { createContext, useContext } from 'react';
 
-import { DashboardInsider } from '@/components/Dashboard';
 import {
   useEstimate,
   useCustomers,
@@ -12,7 +10,6 @@ import {
   useCreateEstimate,
   useEditEstimate,
   useGetSaleEstimatesState,
-  ISaleEstimatesStateResponse,
 } from '@/hooks/query';
 import { useProjects } from '@/containers/Projects/hooks';
 import { useGetPdfTemplates } from '@/hooks/query/pdf-templates';
@@ -20,17 +17,71 @@ import { Features } from '@/constants';
 import { useFeatureCan } from '@/hooks/state';
 import { ITEMS_FILTER_ROLES } from './utils';
 
-interface EstimateFormProviderValues {
-  saleEstimateState: ISaleEstimatesStateResponse;
+type UseEstimateResult = ReturnType<typeof useEstimate>;
+type UseBranchesResult = ReturnType<typeof useBranches>;
+type UseWarehousesResult = ReturnType<typeof useWarehouses>;
+type UseGetPdfTemplatesResult = ReturnType<typeof useGetPdfTemplates>;
+type UseCreateEstimateResult = ReturnType<typeof useCreateEstimate>;
+type UseEditEstimateResult = ReturnType<typeof useEditEstimate>;
+type UseGetSaleEstimatesStateResult = ReturnType<typeof useGetSaleEstimatesState>;
+
+type EstimateFormSubmitPayload = Record<string, unknown>;
+
+interface EstimateFormContextValue {
+  estimateId?: number;
+  estimate: UseEstimateResult['data'];
+  items: any;
+  customers: any;
+  branches: UseBranchesResult['data'];
+  warehouses: UseWarehousesResult['data'];
+  projects: any;
+  isNewMode: boolean;
+
+  isItemsFetching: boolean;
+  isEstimateFetching: boolean;
+
+  isCustomersLoading: boolean;
+  isItemsLoading: boolean;
+  isEstimateLoading: boolean;
+  isFeatureLoading: boolean;
+  isBranchesSuccess: boolean;
+  isWarehousesSuccess: boolean;
+
+  submitPayload: EstimateFormSubmitPayload;
+  setSubmitPayload: React.Dispatch<
+    React.SetStateAction<EstimateFormSubmitPayload>
+  >;
+
+  createEstimateMutate: UseCreateEstimateResult['mutateAsync'];
+  editEstimateMutate: UseEditEstimateResult['mutateAsync'];
+
+  brandingTemplates: UseGetPdfTemplatesResult['data'];
+  isBrandingTemplatesLoading: boolean;
+
+  saleEstimateState: UseGetSaleEstimatesStateResult['data'];
   isSaleEstimateStateLoading: boolean;
+
+  isBootLoading: boolean;
 }
 
-const EstimateFormContext = createContext({} as EstimateFormProviderValues);
+type EstimateFormProviderProps = {
+  query?: Record<string, unknown>;
+  estimateId?: number;
+  children?: React.ReactNode;
+};
+
+const EstimateFormContext = createContext<
+  EstimateFormContextValue | undefined
+>(undefined);
 
 /**
  * Estimate form provider.
  */
-function EstimateFormProvider({ query, estimateId, ...props }) {
+function EstimateFormProvider({
+  query,
+  estimateId,
+  ...props
+}: EstimateFormProviderProps) {
   // Features guard.
   const { featureCan } = useFeatureCan();
   const isWarehouseFeatureCan = featureCan(Features.Warehouses);
@@ -54,10 +105,9 @@ function EstimateFormProvider({ query, estimateId, ...props }) {
   });
 
   // Handle fetch customers data table or list
-  const {
-    data: customersData,
-    isLoading: isCustomersLoading,
-  } = useCustomers({ page_size: 10000 });
+  const { data: customersData, isLoading: isCustomersLoading } = useCustomers({
+    page_size: 10000,
+  });
 
   // Fetch warehouses list.
   const {
@@ -74,10 +124,10 @@ function EstimateFormProvider({ query, estimateId, ...props }) {
   } = useBranches(query, { enabled: isBranchFeatureCan });
 
   // Fetches the projects list.
-  const {
-    data: projectsData,
-    isLoading: isProjectsLoading,
-  } = useProjects({}, { enabled: !!isProjectsFeatureCan });
+  const { data: projectsData, isLoading: isProjectsLoading } = useProjects(
+    {},
+    { enabled: !!isProjectsFeatureCan },
+  );
 
   // Fetches branding templates of invoice.
   const { data: brandingTemplates, isLoading: isBrandingTemplatesLoading } =
@@ -91,7 +141,8 @@ function EstimateFormProvider({ query, estimateId, ...props }) {
   useSettingsEstimates();
 
   // Form submit payload.
-  const [submitPayload, setSubmitPayload] = React.useState({});
+  const [submitPayload, setSubmitPayload] =
+    React.useState<EstimateFormSubmitPayload>({});
 
   // Create and edit estimate form.
   const { mutateAsync: createEstimateMutate } = useCreateEstimate();
@@ -99,7 +150,6 @@ function EstimateFormProvider({ query, estimateId, ...props }) {
 
   const isNewMode = !estimateId;
 
-  // Determines whether the warehouse and branches are loading.
   const isFeatureLoading =
     isWarehouesLoading || isBranchesLoading || isProjectsLoading;
 
@@ -110,15 +160,14 @@ function EstimateFormProvider({ query, estimateId, ...props }) {
     isBrandingTemplatesLoading ||
     isSaleEstimateStateLoading;
 
-  // Provider payload.
-  const provider = {
+  const provider: EstimateFormContextValue = {
     estimateId,
     estimate,
-    items: itemsData?.items,
-    customers: customersData?.customers,
+    items: (itemsData as any)?.items,
+    customers: (customersData as any)?.customers,
     branches,
     warehouses,
-    projects: projectsData?.projects,
+    projects: (projectsData as any)?.projects,
     isNewMode,
 
     isItemsFetching,
@@ -136,11 +185,9 @@ function EstimateFormProvider({ query, estimateId, ...props }) {
     createEstimateMutate,
     editEstimateMutate,
 
-    // Branding templates
     brandingTemplates,
     isBrandingTemplatesLoading,
 
-    // Estimate state
     saleEstimateState,
     isSaleEstimateStateLoading,
 
@@ -150,7 +197,14 @@ function EstimateFormProvider({ query, estimateId, ...props }) {
   return <EstimateFormContext.Provider value={provider} {...props} />;
 }
 
-const useEstimateFormContext = () =>
-  useContext<EstimateFormProviderValues>(EstimateFormContext);
+const useEstimateFormContext = (): EstimateFormContextValue => {
+  const ctx = useContext(EstimateFormContext);
+  if (!ctx) {
+    throw new Error(
+      'useEstimateFormContext must be used within an EstimateFormProvider',
+    );
+  }
+  return ctx;
+};
 
 export { EstimateFormProvider, useEstimateFormContext };

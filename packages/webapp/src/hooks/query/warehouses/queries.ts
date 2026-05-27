@@ -23,13 +23,12 @@ import {
 import { useApiFetcher } from '../../useRequest';
 import { warehousesKeys } from './query-keys';
 import { warehousesTransfersKeys } from '../warehouses-transfers/query-keys';
-
-const DASHBOARD_META = 'DASHBOARD_META';
+import { usersKeys } from '../users/query-keys';
 
 const commonInvalidateQueries = (queryClient: ReturnType<typeof useQueryClient>) => {
   queryClient.invalidateQueries({ queryKey: warehousesKeys.all() });
   queryClient.invalidateQueries({ queryKey: warehousesTransfersKeys.all() });
-  queryClient.invalidateQueries({ queryKey: [DASHBOARD_META] });
+  queryClient.invalidateQueries({ queryKey: usersKeys.dashboardMeta() });
 };
 
 export function useCreateWarehouse(

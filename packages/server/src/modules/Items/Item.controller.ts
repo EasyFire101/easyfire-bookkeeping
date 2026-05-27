@@ -415,7 +415,8 @@ export class ItemsController extends TenantController {
     description:
       'The item associated receipts transactions have been successfully retrieved.',
     schema: {
-      $ref: getSchemaPath(ItemReceiptsResponseDto),
+      type: 'array',
+      items: { $ref: getSchemaPath(ItemReceiptsResponseDto) },
     },
   })
   @ApiResponse({ status: 404, description: 'The item not found.' })

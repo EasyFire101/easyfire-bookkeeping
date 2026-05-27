@@ -11,6 +11,10 @@ export const estimatesKeys = {
   list: (query?: Record<string, unknown>) => [SALE_ESTIMATES, query] as const,
   detail: (id: number | null | undefined) => [SALE_ESTIMATE, id] as const,
   smsDetail: (id: number | null | undefined) => [SALE_ESTIMATE_SMS_DETAIL, id] as const,
+  html: (id: number | null | undefined) => ['SALE_ESTIMATE_HTML', id] as const,
+  state: () => ['SALE_ESTIMATE_STATE'] as const,
+  mailOptions: (id: number | null | undefined) => [SALE_ESTIMATE_MAIL_OPTIONS, id] as const,
+  notifyBySms: (id: number | null | undefined) => [NOTIFY_SALE_ESTIMATE_BY_SMS, id] as const,
 };
 
 // Grouped object for use in components/hooks

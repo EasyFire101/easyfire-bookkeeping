@@ -1,6 +1,6 @@
 import { useMutation, useQuery, UseMutationOptions, UseQueryOptions } from '@tanstack/react-query';
-import type { AcceptInviteBody } from '@bigcapital/sdk-ts';
-import { acceptInvite, fetchInviteCheck, resendInvite } from '@bigcapital/sdk-ts';
+import type { AcceptInviteBody, BulkInviteBody } from '@bigcapital/sdk-ts';
+import { acceptInvite, bulkSendInviteUsers, fetchInviteCheck, resendInvite } from '@bigcapital/sdk-ts';
 import { useApiFetcher } from '../../useRequest';
 import { inviteKeys } from './query-keys';
 
@@ -35,5 +35,15 @@ export function useResendInvitation(
   return useMutation({
     ...props,
     mutationFn: (userId: number) => resendInvite(fetcher, userId),
+  });
+}
+
+export function useBulkCreateInviteUsers(
+  props?: UseMutationOptions<unknown, Error, BulkInviteBody>
+) {
+  const fetcher = useApiFetcher();
+  return useMutation({
+    ...props,
+    mutationFn: (body: BulkInviteBody) => bulkSendInviteUsers(fetcher, body),
   });
 }

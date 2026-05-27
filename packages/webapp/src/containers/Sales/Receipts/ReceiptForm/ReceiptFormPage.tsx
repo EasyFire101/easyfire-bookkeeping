@@ -16,7 +16,7 @@ import { ReceiptForm } from './ReceiptForm';
  */
 export default function ReceiptFormPage() {
   const { id } = useParams();
-  const receiptId = parseInt(id, 10);
+  const receiptId = id ? parseInt(id, 10) : undefined;
 
   return (
     <ReceiptFormProvider receiptId={receiptId}>

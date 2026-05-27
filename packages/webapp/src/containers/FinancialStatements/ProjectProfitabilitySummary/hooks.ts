@@ -1,13 +1,13 @@
 // @ts-nocheck
 import { useRequestQuery } from '@/hooks/useQueryRequest';
-import t from '@/hooks/query/types';
+import { FINANCIAL_REPORT, PROJECT_PROFITABILITY_SUMMARY } from '@/hooks/query/FinancialReports/query-keys';
 
 /**
  * Retrieve the profitability summary for the project
  */
 export function useProjectProfitabilitySummary(query, props) {
   return useRequestQuery(
-    [t.FINANCIAL_REPORT, t.PROJECT_PROFITABILITY_SUMMARY, query],
+    [FINANCIAL_REPORT, PROJECT_PROFITABILITY_SUMMARY, query],
     {
       method: 'get',
       url: '/financial_statements/project-profitability-summary',

@@ -1,5 +1,6 @@
 import type { OpArgType } from 'openapi-typescript-fetch';
 import type { ApiFetcher } from '../fetch-utils';
+import { withNestedQuery } from "../fetch-utils";
 import type { paths } from '../schema';
 import {
   OpForPath,
@@ -22,7 +23,8 @@ export async function fetchGeneralLedgerTable(
   query: GeneralLedgerTableQuery
 ): Promise<GeneralLedgerTableResponse> {
   const get = fetcher.path(GENERAL_LEDGER_ROUTE).method('get').create();
-  const { data } = await get(query as Arg);
+  const { payload, init } = withNestedQuery(query);
+  const { data } = await get(payload as Arg, init);
   return data as unknown as GeneralLedgerTableResponse;
 }
 
@@ -36,7 +38,8 @@ export async function fetchGeneralLedgerJson(
   query: GeneralLedgerJsonQuery
 ): Promise<GeneralLedgerJsonResponse> {
   const get = fetcher.path(GENERAL_LEDGER_ROUTE).method('get').create();
-  const { data } = await get(query as Arg);
+  const { payload, init } = withNestedQuery(query);
+  const { data } = await get(payload as Arg, init);
   return data as unknown as GeneralLedgerJsonResponse;
 }
 
@@ -49,7 +52,8 @@ export async function fetchGeneralLedgerCsv(
   query: GeneralLedgerCsvQuery
 ): Promise<GeneralLedgerCsvResponse> {
   const get = fetcher.path(GENERAL_LEDGER_ROUTE).method('get').create();
-  const response = await get({ ...query, Accept: 'application/csv' } as Arg);
+  const { payload, init } = withNestedQuery({ ...query, Accept: "application/csv" } as Record<string, unknown>);
+  const response = await get(payload as Arg, init);
   return response.data as unknown as GeneralLedgerCsvResponse;
 }
 
@@ -62,7 +66,8 @@ export async function fetchGeneralLedgerXlsx(
   query: GeneralLedgerXlsxQuery
 ): Promise<GeneralLedgerXlsxResponse> {
   const get = fetcher.path(GENERAL_LEDGER_ROUTE).method('get').create();
-  const response = await get({ ...query, Accept: 'application/xlsx' } as Arg);
+  const { payload, init } = withNestedQuery({ ...query, Accept: "application/xlsx" } as Record<string, unknown>);
+  const response = await get(payload as Arg, init);
   return response.data as unknown as GeneralLedgerXlsxResponse;
 }
 
@@ -75,6 +80,7 @@ export async function fetchGeneralLedgerPdf(
   query: GeneralLedgerPdfQuery
 ): Promise<GeneralLedgerPdfResponse> {
   const get = fetcher.path(GENERAL_LEDGER_ROUTE).method('get').create();
-  const response = await get({ ...query, Accept: 'application/pdf' } as Arg);
+  const { payload, init } = withNestedQuery({ ...query, Accept: "application/pdf" } as Record<string, unknown>);
+  const response = await get(payload as Arg, init);
   return response.data as unknown as GeneralLedgerPdfResponse;
 }

@@ -13,8 +13,7 @@ import {
   useSetOrganizationId,
   useSetTenantId,
 } from '../../state';
-import { setAuthLoginCookies } from '../authentication/queries';
-import { setAuthLoginCookies } from './authentication';
+import { setAuthLoginCookies } from '../authentication';
 import { batch } from 'react-redux';
 
 interface CreateOneClickDemoValues { }

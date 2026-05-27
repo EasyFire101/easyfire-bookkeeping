@@ -8,6 +8,7 @@ import {
 import type {
   ItemCategory,
   ItemCategoriesListResponse,
+  ItemsCategoriesListResult,
   CreateItemCategoryBody,
   EditItemCategoryBody,
 } from '@bigcapital/sdk-ts';
@@ -25,10 +26,6 @@ const commonInvalidateQueries = (queryClient: ReturnType<typeof useQueryClient>)
   queryClient.invalidateQueries({ queryKey: itemsCategoriesKeys.all() });
 };
 
-export type ItemsCategoriesListResult = {
-  itemsCategories: unknown[];
-  pagination: Record<string, unknown>;
-};
 
 /**
  * Creates a new item category.
@@ -87,10 +84,10 @@ export function useDeleteItemCategory(
 }
 
 function transformCategories(data: ItemCategoriesListResponse): ItemsCategoriesListResult {
-  const arr = Array.isArray(data) ? data : (data as { data?: unknown[] })?.data ?? [];
+  const arr = Array.isArray(data) ? data : (data as { data?: ItemCategory[] })?.data ?? [];
   const pagination = (data as { pagination?: Record<string, unknown> })?.pagination ?? {};
   return {
-    itemsCategories: arr,
+    itemsCategories: arr as ItemCategory[],
     pagination,
   };
 }

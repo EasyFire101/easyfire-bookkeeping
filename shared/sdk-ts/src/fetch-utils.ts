@@ -1,7 +1,53 @@
 import { Fetcher } from 'openapi-typescript-fetch';
 import type { paths } from './schema';
 import { createCamelCaseMiddleware } from './middleware/camel-case-middleware';
-import { createSnakeCaseRequestMiddleware } from './middleware/snake-case-request-middleware';
+import {
+  createSnakeCaseRequestMiddleware,
+  NESTED_QUERY_HEADER,
+} from './middleware/snake-case-request-middleware';
+
+/**
+ * Splits a query object into a primitive-only payload and a per-call `init`
+ * carrying any nested object values via the SDK's sentinel header. The
+ * snake-case request middleware reads that header and re-serializes the
+ * nested values as bracket-style query params (`number_format[no_cents]=true`)
+ * so Express's `extended` qs parser can reconstruct them server-side.
+ *
+ * openapi-typescript-fetch's built-in query serializer calls `String(value)`,
+ * which would otherwise turn nested objects into the literal `[object Object]`.
+ */
+export function withNestedQuery<T>(
+  query: T,
+): { payload: T; init?: RequestInit } {
+  const sanitized: Record<string, unknown> = {};
+  const nested: Record<string, unknown> = {};
+
+  for (const [key, value] of Object.entries(query as Record<string, unknown>)) {
+    if (
+      value !== null &&
+      typeof value === 'object' &&
+      !Array.isArray(value) &&
+      !(value instanceof Date) &&
+      !(value instanceof Blob)
+    ) {
+      nested[key] = value;
+    } else {
+      sanitized[key] = value;
+    }
+  }
+
+  if (Object.keys(nested).length === 0) {
+    return { payload: sanitized as T };
+  }
+  return {
+    payload: sanitized as T,
+    init: {
+      headers: {
+        [NESTED_QUERY_HEADER]: encodeURIComponent(JSON.stringify(nested)),
+      },
+    },
+  };
+}
 
 export type ApiFetcher = ReturnType<typeof Fetcher.for<paths>>;
 

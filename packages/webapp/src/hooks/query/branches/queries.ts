@@ -22,12 +22,11 @@ import {
 } from '@bigcapital/sdk-ts';
 import { useApiFetcher } from '../../useRequest';
 import { branchesKeys } from './query-keys';
-
-const DASHBOARD_META = 'DASHBOARD_META';
+import { usersKeys } from '../users/query-keys';
 
 const commonInvalidateQueries = (queryClient: ReturnType<typeof useQueryClient>) => {
   queryClient.invalidateQueries({ queryKey: branchesKeys.all() });
-  queryClient.invalidateQueries({ queryKey: [DASHBOARD_META] });
+  queryClient.invalidateQueries({ queryKey: usersKeys.dashboardMeta() });
 };
 
 export function useCreateBranch(

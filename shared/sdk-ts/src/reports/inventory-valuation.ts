@@ -1,5 +1,6 @@
 import type { OpArgType } from 'openapi-typescript-fetch';
 import type { ApiFetcher } from '../fetch-utils';
+import { withNestedQuery } from "../fetch-utils";
 import type { paths } from '../schema';
 import {
   OpForPath,
@@ -22,7 +23,8 @@ export async function fetchInventoryValuationTable(
   query: InventoryValuationTableQuery
 ): Promise<InventoryValuationTableResponse> {
   const get = fetcher.path(INVENTORY_VALUATION_ROUTE).method('get').create();
-  const { data } = await get(query as Arg);
+  const { payload, init } = withNestedQuery(query);
+  const { data } = await get(payload as Arg, init);
   return data as unknown as InventoryValuationTableResponse;
 }
 
@@ -36,7 +38,8 @@ export async function fetchInventoryValuationJson(
   query: InventoryValuationJsonQuery
 ): Promise<InventoryValuationJsonResponse> {
   const get = fetcher.path(INVENTORY_VALUATION_ROUTE).method('get').create();
-  const { data } = await get(query as Arg);
+  const { payload, init } = withNestedQuery(query);
+  const { data } = await get(payload as Arg, init);
   return data as unknown as InventoryValuationJsonResponse;
 }
 
@@ -49,7 +52,8 @@ export async function fetchInventoryValuationCsv(
   query: InventoryValuationCsvQuery
 ): Promise<InventoryValuationCsvResponse> {
   const get = fetcher.path(INVENTORY_VALUATION_ROUTE).method('get').create();
-  const response = await get({ ...query, Accept: 'application/csv' } as Arg);
+  const { payload, init } = withNestedQuery({ ...query, Accept: "application/csv" } as Record<string, unknown>);
+  const response = await get(payload as Arg, init);
   return response.data as unknown as InventoryValuationCsvResponse;
 }
 
@@ -62,7 +66,8 @@ export async function fetchInventoryValuationXlsx(
   query: InventoryValuationXlsxQuery
 ): Promise<InventoryValuationXlsxResponse> {
   const get = fetcher.path(INVENTORY_VALUATION_ROUTE).method('get').create();
-  const response = await get({ ...query, Accept: 'application/xlsx' } as Arg);
+  const { payload, init } = withNestedQuery({ ...query, Accept: "application/xlsx" } as Record<string, unknown>);
+  const response = await get(payload as Arg, init);
   return response.data as unknown as InventoryValuationXlsxResponse;
 }
 
@@ -75,6 +80,7 @@ export async function fetchInventoryValuationPdf(
   query: InventoryValuationPdfQuery
 ): Promise<InventoryValuationPdfResponse> {
   const get = fetcher.path(INVENTORY_VALUATION_ROUTE).method('get').create();
-  const response = await get({ ...query, Accept: 'application/pdf' } as Arg);
+  const { payload, init } = withNestedQuery({ ...query, Accept: "application/pdf" } as Record<string, unknown>);
+  const response = await get(payload as Arg, init);
   return response.data as unknown as InventoryValuationPdfResponse;
 }

@@ -1,7 +1,7 @@
 // @ts-nocheck
 import * as R from 'ramda';
 import { displayColumnsByOptions } from './constants';
-import { transfromToSnakeCase, flatten } from '@/utils';
+import { transfromToSnakeCase } from '@/utils';
 
 /**
  * Associate display columns by and type properties to query object.

@@ -29,9 +29,7 @@ import { cashflowAccountsKeys } from './query-keys';
 import { accountsKeys } from '../accounts/query-keys';
 import { customersKeys } from '../customers/query-keys';
 import { vendorsKeys } from '../vendors/query-keys';
-
-// Keys that don't have factory methods yet - keeping inline
-const FINANCIAL_REPORT = 'FINANCIAL-REPORT';
+import { financialReportsKeys } from '../FinancialReports/query-keys';
 
 const commonInvalidateQueries = (queryClient: ReturnType<typeof useQueryClient>) => {
   // Invalidate cashflow accounts.
@@ -47,7 +45,7 @@ const commonInvalidateQueries = (queryClient: ReturnType<typeof useQueryClient>)
   queryClient.invalidateQueries({ queryKey: accountsKeys.transactions(null).slice(0, 1) });
 
   // Invalidate financial reports.
-  queryClient.invalidateQueries({ queryKey: [FINANCIAL_REPORT] });
+  queryClient.invalidateQueries({ queryKey: financialReportsKeys.all() });
 
   // Invalidate customers.
   queryClient.invalidateQueries({ queryKey: customersKeys.all() });

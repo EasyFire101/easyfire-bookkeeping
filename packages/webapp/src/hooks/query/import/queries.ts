@@ -10,7 +10,20 @@ import useApiRequest from '../../useRequest';
 import { useApiFetcher } from '../../useRequest';
 import { downloadFile } from '../../useDownloadFile';
 import { importKeys } from './query-keys';
-import { BANK_QUERY_KEY } from '@/constants/query-keys/banking';
+import { itemsKeys } from '../items/query-keys';
+import { invoicesKeys } from '../invoices/query-keys';
+import { estimatesKeys } from '../estimates/query-keys';
+import { receiptsKeys } from '../receipts/query-keys';
+import { creditNotesKeys } from '../credit-note/query-keys';
+import { vendorCreditsKeys } from '../vendor-credit/query-keys';
+import { paymentReceivesKeys } from '../payment-receives/query-keys';
+import { billsKeys } from '../bills/query-keys';
+import { customersKeys } from '../customers/query-keys';
+import { vendorsKeys } from '../vendors/query-keys';
+import { expensesKeys } from '../expenses/query-keys';
+import { manualJournalsKeys } from '../manual-journals/query-keys';
+import { cashflowAccountsKeys } from '../cashflow-accounts/query-keys';
+import { bankingKeys } from '../banking/query-keys';
 import type {
   ImportMappingBody,
   ImportPreviewResponse,
@@ -143,83 +156,83 @@ const invalidateResourcesOnImport = (
 ) => {
   switch (resource) {
     case 'Item':
-      queryClient.invalidateQueries({ queryKey: ['ITEMS'] });
-      queryClient.invalidateQueries({ queryKey: ['ITEM'] });
+      queryClient.invalidateQueries({ queryKey: itemsKeys.all() });
+      queryClient.invalidateQueries({ queryKey: itemsKeys.detail(null).slice(0, 1) });
       break;
 
     case 'ItemCategory':
-      queryClient.invalidateQueries({ queryKey: ['ITEMS_CATEGORIES'] });
+      queryClient.invalidateQueries({ queryKey: itemsKeys.categories() });
       break;
 
     case 'Bill':
-      queryClient.invalidateQueries({ queryKey: ['BILLS'] });
-      queryClient.invalidateQueries({ queryKey: ['BILL'] });
-      queryClient.invalidateQueries({ queryKey: ['ITEMS_ASSOCIATED_WITH_BILLS'] });
+      queryClient.invalidateQueries({ queryKey: billsKeys.all() });
+      queryClient.invalidateQueries({ queryKey: billsKeys.detail(null).slice(0, 1) });
+      queryClient.invalidateQueries({ queryKey: itemsKeys.associatedBills(null).slice(0, 1) });
       break;
 
     case 'SaleInvoice':
-      queryClient.invalidateQueries({ queryKey: ['SALE_INVOICE'] });
-      queryClient.invalidateQueries({ queryKey: ['SALE_INVOICES'] });
-      queryClient.invalidateQueries({ queryKey: ['ITEM_ASSOCIATED_WITH_INVOICES'] });
+      queryClient.invalidateQueries({ queryKey: invoicesKeys.detail(null).slice(0, 1) });
+      queryClient.invalidateQueries({ queryKey: invoicesKeys.all() });
+      queryClient.invalidateQueries({ queryKey: itemsKeys.associatedInvoices(null).slice(0, 1) });
       break;
 
     case 'SaleEstimate':
-      queryClient.invalidateQueries({ queryKey: ['SALE_ESTIMATE'] });
-      queryClient.invalidateQueries({ queryKey: ['SALE_ESTIMATES'] });
-      queryClient.invalidateQueries({ queryKey: ['ITEM_ASSOCIATED_WITH_ESTIMATES'] });
+      queryClient.invalidateQueries({ queryKey: estimatesKeys.detail(null).slice(0, 1) });
+      queryClient.invalidateQueries({ queryKey: estimatesKeys.all() });
+      queryClient.invalidateQueries({ queryKey: itemsKeys.associatedEstimates(null).slice(0, 1) });
       break;
 
     case 'SaleReceipt':
-      queryClient.invalidateQueries({ queryKey: ['SALE_RECEIPT'] });
-      queryClient.invalidateQueries({ queryKey: ['SALE_RECEIPTS'] });
-      queryClient.invalidateQueries({ queryKey: ['ITEM_ASSOCIATED_WITH_RECEIPTS'] });
+      queryClient.invalidateQueries({ queryKey: receiptsKeys.detail(null).slice(0, 1) });
+      queryClient.invalidateQueries({ queryKey: receiptsKeys.all() });
+      queryClient.invalidateQueries({ queryKey: itemsKeys.associatedReceipts(null).slice(0, 1) });
       break;
 
     case 'CreditNote':
-      queryClient.invalidateQueries({ queryKey: ['CREDIT_NOTE'] });
-      queryClient.invalidateQueries({ queryKey: ['CREDIT_NOTES'] });
+      queryClient.invalidateQueries({ queryKey: creditNotesKeys.detail(null).slice(0, 1) });
+      queryClient.invalidateQueries({ queryKey: creditNotesKeys.all() });
       break;
 
     case 'VendorCredit':
-      queryClient.invalidateQueries({ queryKey: ['VENDOR_CREDIT'] });
-      queryClient.invalidateQueries({ queryKey: ['VENDOR_CREDITS'] });
+      queryClient.invalidateQueries({ queryKey: vendorCreditsKeys.detail(null).slice(0, 1) });
+      queryClient.invalidateQueries({ queryKey: vendorCreditsKeys.all() });
       break;
 
     case 'PaymentReceive':
-      queryClient.invalidateQueries({ queryKey: ['PAYMENT_RECEIVE'] });
-      queryClient.invalidateQueries({ queryKey: ['PAYMENT_RECEIVES'] });
+      queryClient.invalidateQueries({ queryKey: paymentReceivesKeys.detail(null).slice(0, 1) });
+      queryClient.invalidateQueries({ queryKey: paymentReceivesKeys.all() });
       break;
 
     case 'BillPayment':
-      queryClient.invalidateQueries({ queryKey: ['BILLS_PAYMENT_TRANSACTIONS'] });
+      queryClient.invalidateQueries({ queryKey: billsKeys.paymentTransactions(null).slice(0, 1) });
       break;
 
     case 'Customer':
-      queryClient.invalidateQueries({ queryKey: ['CUSTOMERS'] });
-      queryClient.invalidateQueries({ queryKey: ['CUSTOMER'] });
+      queryClient.invalidateQueries({ queryKey: customersKeys.all() });
+      queryClient.invalidateQueries({ queryKey: customersKeys.detail(null).slice(0, 1) });
       break;
 
     case 'Vendor':
-      queryClient.invalidateQueries({ queryKey: ['VENDOR'] });
-      queryClient.invalidateQueries({ queryKey: ['VENDORS'] });
+      queryClient.invalidateQueries({ queryKey: vendorsKeys.detail(null).slice(0, 1) });
+      queryClient.invalidateQueries({ queryKey: vendorsKeys.all() });
       break;
 
     case 'Expense':
-      queryClient.invalidateQueries({ queryKey: ['EXPENSE'] });
-      queryClient.invalidateQueries({ queryKey: ['EXPENSES'] });
+      queryClient.invalidateQueries({ queryKey: expensesKeys.detail(null).slice(0, 1) });
+      queryClient.invalidateQueries({ queryKey: expensesKeys.all() });
       break;
 
     case 'ManualJournal':
-      queryClient.invalidateQueries({ queryKey: ['MANUAL_JOURNAL'] });
-      queryClient.invalidateQueries({ queryKey: ['MANUAL_JOURNALS'] });
+      queryClient.invalidateQueries({ queryKey: manualJournalsKeys.detail(null).slice(0, 1) });
+      queryClient.invalidateQueries({ queryKey: manualJournalsKeys.all() });
       break;
 
     case 'UncategorizedBankTransaction':
-      queryClient.invalidateQueries({ queryKey: ['CASH_FLOW_TRANSACTIONS'] });
-      queryClient.invalidateQueries({ queryKey: ['CASHFLOW_ACCOUNT_TRANSACTIONS_INFINITY'] });
-      queryClient.invalidateQueries({ queryKey: ['CASHFLOW_ACCOUNT_UNCATEGORIZED_TRANSACTIONS_INFINITY'] });
-      queryClient.invalidateQueries({ queryKey: ['CASHFLOW_UNCAATEGORIZED_TRANSACTION'] });
-      queryClient.invalidateQueries({ queryKey: [BANK_QUERY_KEY.BANK_ACCOUNT_SUMMARY_META] });
+      queryClient.invalidateQueries({ queryKey: cashflowAccountsKeys.transactions().slice(0, 1) });
+      queryClient.invalidateQueries({ queryKey: cashflowAccountsKeys.transactionsInfinity().slice(0, 1) });
+      queryClient.invalidateQueries({ queryKey: cashflowAccountsKeys.uncategorizedInfinity().slice(0, 1) });
+      queryClient.invalidateQueries({ queryKey: cashflowAccountsKeys.uncategorizedTransaction().slice(0, 1) });
+      queryClient.invalidateQueries({ queryKey: bankingKeys.summaryMeta().slice(0, 1) });
       break;
   }
 };

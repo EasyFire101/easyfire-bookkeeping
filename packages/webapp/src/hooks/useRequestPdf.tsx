@@ -2,6 +2,7 @@
 import React from 'react';
 import useApiRequest from './useRequest';
 import { normalizeApiPath } from '../utils';
+import { useApiFetcher } from './useRequest';
 
 export const useRequestPdf = (httpProps) => {
   const apiRequest = useApiRequest();
@@ -52,4 +53,19 @@ export const useRequestPdf = (httpProps) => {
     response,
     filename
   };
+};
+
+export const useFetcherPdf = (fetchFn: () => Promise<Blob>) => {
+  const [isLoading, setIsLoading] = React.useState(false);
+  const [pdfUrl, setPdfUrl] = React.useState('');
+
+  React.useEffect(() => {
+    setIsLoading(true);
+    fetchFn().then((blob) => {
+      setPdfUrl(URL.createObjectURL(blob));
+      setIsLoading(false);
+    });
+  }, []);
+
+  return { isLoading, pdfUrl };
 };

@@ -14,6 +14,10 @@ export const paymentReceivesKeys = {
   detail: (id: number | null | undefined) => [PAYMENT_RECEIVE, id] as const,
   editPage: (id: number | null | undefined) => [PAYMENT_RECEIVE_EDIT_PAGE, id] as const,
   smsDetail: (id: number | null | undefined) => [PAYMENT_RECEIVE_SMS_DETAIL, id] as const,
+  html: (id: number | null | undefined) => ['PAYMENT_RECEIVED_HTML', id] as const,
+  state: () => ['PAYMENT_RECEIVED_STATE'] as const,
+  mailOptions: (id: number | null | undefined) => [PAYMENT_RECEIVE_MAIL_OPTIONS, id] as const,
+  notifyBySms: (id: number | null | undefined) => [NOTIFY_PAYMENT_RECEIVE_BY_SMS, id] as const,
 };
 
 // Grouped object for use in components/hooks

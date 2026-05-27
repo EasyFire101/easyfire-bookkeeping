@@ -33,11 +33,15 @@ import { PermissionGuard } from '@/modules/Roles/Permission.guard';
 import { AuthorizationGuard } from '@/modules/Roles/Authorization.guard';
 import { AbilitySubject } from '@/modules/Roles/Roles.types';
 import { IPaymentMadeAction } from './types/BillPayments.types';
+import { BillPaymentPageEntryDto } from './dtos/BillPaymentPageEntry.dto';
+import { BillPaymentEditPageResponseDto } from './dtos/BillPaymentEditPageResponse.dto';
 
 @Controller('bill-payments')
 @ApiTags('Bill Payments')
 @ApiExtraModels(BillPaymentResponseDto)
 @ApiExtraModels(PaginatedResponseDto)
+@ApiExtraModels(BillPaymentPageEntryDto)
+@ApiExtraModels(BillPaymentEditPageResponseDto)
 @ApiCommonHeaders()
 @UseGuards(AuthorizationGuard, PermissionGuard)
 export class BillPaymentsController {
@@ -99,6 +103,14 @@ export class BillPaymentsController {
     type: Number,
     description: 'The vendor id',
   })
+  @ApiResponse({
+    status: 200,
+    description: 'List of payable bill entries for the new payment page.',
+    schema: {
+      type: 'array',
+      items: { $ref: getSchemaPath(BillPaymentPageEntryDto) },
+    },
+  })
   async getBillPaymentNewPageEntries(@Query('vendorId') vendorId: number) {
     const entries =
       await this.billPaymentsPagesService.getNewPageEntries(vendorId);
@@ -129,6 +141,11 @@ export class BillPaymentsController {
     required: true,
     type: Number,
     description: 'The bill payment id',
+  })
+  @ApiResponse({
+    status: 200,
+    description: 'The bill payment edit page data.',
+    schema: { $ref: getSchemaPath(BillPaymentEditPageResponseDto) },
   })
   public async getBillPaymentEditPage(
     @Param('billPaymentId') billPaymentId: number,

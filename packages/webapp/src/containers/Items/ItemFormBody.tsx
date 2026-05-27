@@ -112,7 +112,7 @@ function ItemFormBody({ organization: { base_currency } }) {
           >
             <TaxRatesSelect
               name={'sell_tax_rate_id'}
-              items={taxRates}
+              items={taxRates?.data}
               allowCreate
             />
           </FFormGroup>
@@ -213,7 +213,7 @@ function ItemFormBody({ organization: { base_currency } }) {
           >
             <TaxRatesSelect
               name={'purchase_tax_rate_id'}
-              items={taxRates}
+              items={taxRates?.data}
               allowCreate={true}
               fastField={true}
               shouldUpdateDeps={{ taxRates }}

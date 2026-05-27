@@ -1,7 +1,8 @@
 import { useEffect, useRef } from 'react';
 import { useQueryClient } from '@tanstack/react-query';
 import { io } from 'socket.io-client';
-import t from '@/hooks/query/types';
+import { AccountsQueryKeys } from '@/hooks/query/accounts';
+import { CashflowAccountsQueryKeys } from '@/hooks/query/cashflow-accounts';
 import { AppToaster } from '@/components';
 import { Intent } from '@blueprintjs/core';
 
@@ -13,10 +14,10 @@ export function DashboardSockets() {
     socket.current = io('/', { path: '/socket' });
   
     socket.current.on('NEW_TRANSACTIONS_DATA', () => {
-      client.invalidateQueries({ queryKey: [t.ACCOUNTS] });
-      client.invalidateQueries({ queryKey: [t.ACCOUNT_TRANSACTION] });
-      client.invalidateQueries({ queryKey: [t.CASH_FLOW_ACCOUNTS] });
-      client.invalidateQueries({ queryKey: [t.CASH_FLOW_TRANSACTIONS] });
+      client.invalidateQueries({ queryKey: [AccountsQueryKeys.ACCOUNTS] });
+      client.invalidateQueries({ queryKey: [AccountsQueryKeys.ACCOUNT_TRANSACTION] });
+      client.invalidateQueries({ queryKey: [CashflowAccountsQueryKeys.CASH_FLOW_ACCOUNTS] });
+      client.invalidateQueries({ queryKey: [CashflowAccountsQueryKeys.CASH_FLOW_TRANSACTIONS] });
 
       AppToaster.show({
         message: 'The Plaid connected accounts have been updated.',

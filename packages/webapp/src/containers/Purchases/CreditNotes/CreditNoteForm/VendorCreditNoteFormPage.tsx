@@ -10,7 +10,7 @@ import { VendorCreditNoteFormProvider } from './VendorCreditNoteFormProvider';
  */
 export default function VendorCreditNoteFormPage() {
   const { id } = useParams();
-  const idAsInteger = parseInt(id, 10);
+  const idAsInteger = id ? parseInt(id, 10) : undefined;
 
   return (
     <VendorCreditNoteFormProvider vendorCreditId={idAsInteger}>

@@ -1,4 +1,3 @@
-// @ts-nocheck
 import React, { createContext } from 'react';
 import { isEmpty } from 'lodash';
 import {
@@ -9,13 +8,43 @@ import { transformItemsTableState } from './utils';
 import { DashboardInsider } from '@/components';
 import { useResourceViews, useResourceMeta, useItems } from '@/hooks/query';
 
+type UseItemsResult = ReturnType<typeof useItems>;
+type UseResourceViewsResult = ReturnType<typeof useResourceViews>;
 
-const ItemsContext = createContext();
+type ItemsListContextValue = {
+  itemsViews: UseResourceViewsResult['data'];
+  items: NonNullable<UseItemsResult['data']>['data'] | undefined;
+  pagination: NonNullable<UseItemsResult['data']>['pagination'] | undefined;
+
+  fields: ReturnType<typeof getFieldsFromResourceMeta> | [];
+
+  isViewsLoading: boolean;
+  isItemsLoading: boolean;
+  isItemsFetching: boolean;
+  isResourceLoading: boolean;
+  isResourceFetching: boolean;
+
+  isEmptyStatus: boolean;
+};
+
+type ItemsListProviderProps = {
+  tableState: any;
+  tableStateChanged: boolean;
+  children?: React.ReactNode;
+};
+
+const ItemsContext = createContext<ItemsListContextValue | undefined>(
+  undefined,
+);
 
 /**
  * Items list provider.
  */
-function ItemsListProvider({ tableState, tableStateChanged, ...props }) {
+function ItemsListProvider({
+  tableState,
+  tableStateChanged,
+  ...props
+}: ItemsListProviderProps) {
   const tableQuery = transformItemsTableState(tableState);
 
   // Fetch accounts resource views and fields.
@@ -36,24 +65,27 @@ function ItemsListProvider({ tableState, tableStateChanged, ...props }) {
     isLoading: isItemsLoading,
   } = useItems(
     {
-      ...transformTableQueryToParams(tableQuery),
+      ...(transformTableQueryToParams(tableQuery) as Record<string, unknown>),
     },
-    { keepPreviousData: true },
+    { keepPreviousData: true } as any,
   );
 
   // Detarmines the datatable empty status.
-  const isEmptyStatus = !tableStateChanged && !isItemsLoading && isEmpty(itemsData?.data);
+  const isEmptyStatus =
+    !tableStateChanged && !isItemsLoading && isEmpty(itemsData?.data);
 
-  const state = {
+  const state: ItemsListContextValue = {
     itemsViews,
     items: itemsData?.data,
     pagination: itemsData?.pagination,
 
-    fields: resourceMeta?.fields ? getFieldsFromResourceMeta(resourceMeta.fields) : [],
+    fields: resourceMeta?.fields
+      ? getFieldsFromResourceMeta(resourceMeta.fields)
+      : [],
 
     isViewsLoading,
     isItemsLoading,
-    isItemsFetching: isItemsFetching,
+    isItemsFetching,
     isResourceLoading,
     isResourceFetching,
 
@@ -70,6 +102,14 @@ function ItemsListProvider({ tableState, tableStateChanged, ...props }) {
   );
 }
 
-const useItemsListContext = () => React.useContext(ItemsContext);
+const useItemsListContext = (): ItemsListContextValue => {
+  const ctx = React.useContext(ItemsContext);
+  if (!ctx) {
+    throw new Error(
+      'useItemsListContext must be used within an ItemsListProvider',
+    );
+  }
+  return ctx;
+};
 
 export { ItemsListProvider, useItemsListContext };

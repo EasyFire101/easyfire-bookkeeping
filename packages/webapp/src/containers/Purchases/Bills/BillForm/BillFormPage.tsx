@@ -9,7 +9,7 @@ import '@/style/pages/Bills/PageForm.scss';
 
 export default function BillFormPage() {
   const { id } = useParams();
-  const billId = parseInt(id, 10);
+  const billId = id ? parseInt(id, 10) : undefined;
 
   return (
     <BillFormProvider billId={billId}>

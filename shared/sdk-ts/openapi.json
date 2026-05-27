@@ -1156,7 +1156,10 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/ItemReceiptsResponseDto"
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/ItemReceiptsResponseDto"
+                  }
                 }
               }
             }
@@ -3637,6 +3640,19 @@
           }
         ],
         "responses": {
+          "200": {
+            "description": "List of payment transactions for the invoice.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/InvoicePaymentTransactionDto"
+                  }
+                }
+              }
+            }
+          },
           "404": {
             "description": "The sale invoice not found."
           }
@@ -7980,27 +7996,7 @@
       "post": {
         "operationId": "SaleEstimatesController_validateBulkDeleteSaleEstimates",
         "summary": "Validates which sale estimates can be deleted and returns the results.",
-        "parameters": [
-          {
-            "name": "Authorization",
-            "in": "header",
-            "description": "Value must be 'Bearer <token>' where <token> is an API key prefixed with 'bc_' or a JWT token.",
-            "required": true,
-            "schema": {
-              "type": "string",
-              "example": "Bearer bc_1234567890abcdef"
-            }
-          },
-          {
-            "name": "organization-id",
-            "in": "header",
-            "description": "Required if Authorization is a JWT token. The organization ID to operate within.",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
+        "parameters": [],
         "requestBody": {
           "required": true,
           "content": {
@@ -8032,27 +8028,7 @@
       "post": {
         "operationId": "SaleEstimatesController_bulkDeleteSaleEstimates",
         "summary": "Deletes multiple sale estimates.",
-        "parameters": [
-          {
-            "name": "Authorization",
-            "in": "header",
-            "description": "Value must be 'Bearer <token>' where <token> is an API key prefixed with 'bc_' or a JWT token.",
-            "required": true,
-            "schema": {
-              "type": "string",
-              "example": "Bearer bc_1234567890abcdef"
-            }
-          },
-          {
-            "name": "organization-id",
-            "in": "header",
-            "description": "Required if Authorization is a JWT token. The organization ID to operate within.",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
+        "parameters": [],
         "requestBody": {
           "required": true,
           "content": {
@@ -8077,27 +8053,7 @@
       "post": {
         "operationId": "SaleEstimatesController_createSaleEstimate",
         "summary": "Create a new sale estimate.",
-        "parameters": [
-          {
-            "name": "Authorization",
-            "in": "header",
-            "description": "Value must be 'Bearer <token>' where <token> is an API key prefixed with 'bc_' or a JWT token.",
-            "required": true,
-            "schema": {
-              "type": "string",
-              "example": "Bearer bc_1234567890abcdef"
-            }
-          },
-          {
-            "name": "organization-id",
-            "in": "header",
-            "description": "Required if Authorization is a JWT token. The organization ID to operate within.",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
+        "parameters": [],
         "requestBody": {
           "required": true,
           "content": {
@@ -8121,25 +8077,6 @@
         "operationId": "SaleEstimatesController_getSaleEstimates",
         "summary": "Retrieves the sale estimates.",
         "parameters": [
-          {
-            "name": "Authorization",
-            "in": "header",
-            "description": "Value must be 'Bearer <token>' where <token> is an API key prefixed with 'bc_' or a JWT token.",
-            "required": true,
-            "schema": {
-              "type": "string",
-              "example": "Bearer bc_1234567890abcdef"
-            }
-          },
-          {
-            "name": "organization-id",
-            "in": "header",
-            "description": "Required if Authorization is a JWT token. The organization ID to operate within.",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          },
           {
             "name": "page",
             "required": false,
@@ -8262,25 +8199,6 @@
         "summary": "Edit the given sale estimate.",
         "parameters": [
           {
-            "name": "Authorization",
-            "in": "header",
-            "description": "Value must be 'Bearer <token>' where <token> is an API key prefixed with 'bc_' or a JWT token.",
-            "required": true,
-            "schema": {
-              "type": "string",
-              "example": "Bearer bc_1234567890abcdef"
-            }
-          },
-          {
-            "name": "organization-id",
-            "in": "header",
-            "description": "Required if Authorization is a JWT token. The organization ID to operate within.",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
             "name": "id",
             "required": true,
             "in": "path",
@@ -8317,25 +8235,6 @@
         "summary": "Delete the given sale estimate.",
         "parameters": [
           {
-            "name": "Authorization",
-            "in": "header",
-            "description": "Value must be 'Bearer <token>' where <token> is an API key prefixed with 'bc_' or a JWT token.",
-            "required": true,
-            "schema": {
-              "type": "string",
-              "example": "Bearer bc_1234567890abcdef"
-            }
-          },
-          {
-            "name": "organization-id",
-            "in": "header",
-            "description": "Required if Authorization is a JWT token. The organization ID to operate within.",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
             "name": "id",
             "required": true,
             "in": "path",
@@ -8361,25 +8260,6 @@
         "operationId": "SaleEstimatesController_getSaleEstimate",
         "summary": "Retrieves the sale estimate details.",
         "parameters": [
-          {
-            "name": "Authorization",
-            "in": "header",
-            "description": "Value must be 'Bearer <token>' where <token> is an API key prefixed with 'bc_' or a JWT token.",
-            "required": true,
-            "schema": {
-              "type": "string",
-              "example": "Bearer bc_1234567890abcdef"
-            }
-          },
-          {
-            "name": "organization-id",
-            "in": "header",
-            "description": "Required if Authorization is a JWT token. The organization ID to operate within.",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          },
           {
             "name": "id",
             "required": true,
@@ -8424,27 +8304,7 @@
       "get": {
         "operationId": "SaleEstimatesController_getSaleEstimateState",
         "summary": "Retrieves the sale estimate state.",
-        "parameters": [
-          {
-            "name": "Authorization",
-            "in": "header",
-            "description": "Value must be 'Bearer <token>' where <token> is an API key prefixed with 'bc_' or a JWT token.",
-            "required": true,
-            "schema": {
-              "type": "string",
-              "example": "Bearer bc_1234567890abcdef"
-            }
-          },
-          {
-            "name": "organization-id",
-            "in": "header",
-            "description": "Required if Authorization is a JWT token. The organization ID to operate within.",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
+        "parameters": [],
         "responses": {
           "200": {
             "description": "Sale estimate state retrieved successfully",
@@ -8467,25 +8327,6 @@
         "operationId": "SaleEstimatesController_deliverSaleEstimate",
         "summary": "Deliver the given sale estimate.",
         "parameters": [
-          {
-            "name": "Authorization",
-            "in": "header",
-            "description": "Value must be 'Bearer <token>' where <token> is an API key prefixed with 'bc_' or a JWT token.",
-            "required": true,
-            "schema": {
-              "type": "string",
-              "example": "Bearer bc_1234567890abcdef"
-            }
-          },
-          {
-            "name": "organization-id",
-            "in": "header",
-            "description": "Required if Authorization is a JWT token. The organization ID to operate within.",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          },
           {
             "name": "id",
             "required": true,
@@ -8512,25 +8353,6 @@
         "summary": "Approve the given sale estimate.",
         "parameters": [
           {
-            "name": "Authorization",
-            "in": "header",
-            "description": "Value must be 'Bearer <token>' where <token> is an API key prefixed with 'bc_' or a JWT token.",
-            "required": true,
-            "schema": {
-              "type": "string",
-              "example": "Bearer bc_1234567890abcdef"
-            }
-          },
-          {
-            "name": "organization-id",
-            "in": "header",
-            "description": "Required if Authorization is a JWT token. The organization ID to operate within.",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
             "name": "id",
             "required": true,
             "in": "path",
@@ -8555,25 +8377,6 @@
         "operationId": "SaleEstimatesController_rejectSaleEstimate",
         "summary": "Reject the given sale estimate.",
         "parameters": [
-          {
-            "name": "Authorization",
-            "in": "header",
-            "description": "Value must be 'Bearer <token>' where <token> is an API key prefixed with 'bc_' or a JWT token.",
-            "required": true,
-            "schema": {
-              "type": "string",
-              "example": "Bearer bc_1234567890abcdef"
-            }
-          },
-          {
-            "name": "organization-id",
-            "in": "header",
-            "description": "Required if Authorization is a JWT token. The organization ID to operate within.",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          },
           {
             "name": "id",
             "required": true,
@@ -8600,25 +8403,6 @@
         "summary": "Notify the given sale estimate by SMS.",
         "parameters": [
           {
-            "name": "Authorization",
-            "in": "header",
-            "description": "Value must be 'Bearer <token>' where <token> is an API key prefixed with 'bc_' or a JWT token.",
-            "required": true,
-            "schema": {
-              "type": "string",
-              "example": "Bearer bc_1234567890abcdef"
-            }
-          },
-          {
-            "name": "organization-id",
-            "in": "header",
-            "description": "Required if Authorization is a JWT token. The organization ID to operate within.",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
             "name": "id",
             "required": true,
             "in": "path",
@@ -8644,25 +8428,6 @@
         "summary": "Retrieves the sale estimate SMS details.",
         "parameters": [
           {
-            "name": "Authorization",
-            "in": "header",
-            "description": "Value must be 'Bearer <token>' where <token> is an API key prefixed with 'bc_' or a JWT token.",
-            "required": true,
-            "schema": {
-              "type": "string",
-              "example": "Bearer bc_1234567890abcdef"
-            }
-          },
-          {
-            "name": "organization-id",
-            "in": "header",
-            "description": "Required if Authorization is a JWT token. The organization ID to operate within.",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
             "name": "id",
             "required": true,
             "in": "path",
@@ -8687,25 +8452,6 @@
         "summary": "Send the given sale estimate by mail.",
         "parameters": [
           {
-            "name": "Authorization",
-            "in": "header",
-            "description": "Value must be 'Bearer <token>' where <token> is an API key prefixed with 'bc_' or a JWT token.",
-            "required": true,
-            "schema": {
-              "type": "string",
-              "example": "Bearer bc_1234567890abcdef"
-            }
-          },
-          {
-            "name": "organization-id",
-            "in": "header",
-            "description": "Required if Authorization is a JWT token. The organization ID to operate within.",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
             "name": "id",
             "required": true,
             "in": "path",
@@ -8729,25 +8475,6 @@
         "summary": "Retrieves the sale estimate mail state.",
         "parameters": [
           {
-            "name": "Authorization",
-            "in": "header",
-            "description": "Value must be 'Bearer <token>' where <token> is an API key prefixed with 'bc_' or a JWT token.",
-            "required": true,
-            "schema": {
-              "type": "string",
-              "example": "Bearer bc_1234567890abcdef"
-            }
-          },
-          {
-            "name": "organization-id",
-            "in": "header",
-            "description": "Required if Authorization is a JWT token. The organization ID to operate within.",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
             "name": "id",
             "required": true,
             "in": "path",
@@ -8759,7 +8486,14 @@
         ],
         "responses": {
           "200": {
-            "description": ""
+            "description": "Retrieves the sale estimate mail state.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SaleEstimateMailStateResponseDto"
+                }
+              }
+            }
           }
         },
         "tags": [
@@ -9845,7 +9579,17 @@
         ],
         "responses": {
           "200": {
-            "description": "List of payment transactions for the bill."
+            "description": "List of payment transactions for the bill.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/BillPaymentTransactionDto"
+                  }
+                }
+              }
+            }
           }
         },
         "tags": [
@@ -12461,7 +12205,17 @@
         ],
         "responses": {
           "200": {
-            "description": ""
+            "description": "List of payable bill entries for the new payment page.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/BillPaymentPageEntryDto"
+                  }
+                }
+              }
+            }
           }
         },
         "tags": [
@@ -12549,7 +12303,14 @@
         ],
         "responses": {
           "200": {
-            "description": ""
+            "description": "The bill payment edit page data.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BillPaymentEditPageResponseDto"
+                }
+              }
+            }
           }
         },
         "tags": [
@@ -13046,7 +12807,16 @@
       "post": {
         "operationId": "BankingPlaidWebhooksController_webhooks",
         "summary": "Listen to Plaid webhooks",
-        "parameters": [],
+        "parameters": [
+          {
+            "name": "plaid-verification",
+            "required": true,
+            "in": "header",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
         "requestBody": {
           "required": true,
           "content": {
@@ -13058,7 +12828,7 @@
           }
         },
         "responses": {
-          "201": {
+          "200": {
             "description": ""
           }
         },
@@ -14924,7 +14694,17 @@
         "parameters": [],
         "responses": {
           "200": {
-            "description": ""
+            "description": "The settings list.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/SettingItemDto"
+                  }
+                }
+              }
+            }
           }
         },
         "tags": [
@@ -22938,6 +22718,7 @@
     "/api/organization/base-currency-mutate": {
       "get": {
         "operationId": "OrganizationController_baseCurrencyMutate",
+        "summary": "Retrieves the base currency mutation lock abilities.",
         "parameters": [
           {
             "name": "Authorization",
@@ -22961,7 +22742,14 @@
         ],
         "responses": {
           "200": {
-            "description": ""
+            "description": "The base currency mutation abilities.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/OrgBaseCurrencyMutateAbilitiesResponseDto"
+                }
+              }
+            }
           }
         },
         "tags": [
@@ -23018,7 +22806,24 @@
       "get": {
         "operationId": "WorkspacesController_listWorkspaces",
         "summary": "List workspaces the authenticated user belongs to",
-        "parameters": [],
+        "parameters": [
+          {
+            "name": "includeInactive",
+            "required": true,
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "currentOrganizationId",
+            "required": true,
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
         "responses": {
           "200": {
             "description": "Returns the list of workspaces",
@@ -23085,7 +22890,69 @@
         ],
         "responses": {
           "200": {
-            "description": "Workspace deleted successfully"
+            "description": "Workspace deletion initiated successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "jobId": {
+                      "type": "string"
+                    },
+                    "organizationId": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "Workspaces"
+        ]
+      }
+    },
+    "/api/workspaces/{organizationId}/inactivate": {
+      "put": {
+        "operationId": "WorkspacesController_inactivateWorkspace",
+        "summary": "Inactivate a workspace (owner only)",
+        "parameters": [
+          {
+            "name": "organizationId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Workspace inactivated successfully"
+          }
+        },
+        "tags": [
+          "Workspaces"
+        ]
+      }
+    },
+    "/api/workspaces/{organizationId}/activate": {
+      "put": {
+        "operationId": "WorkspacesController_activateWorkspace",
+        "summary": "Reactivate a workspace (owner only)",
+        "parameters": [
+          {
+            "name": "organizationId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Workspace reactivated successfully"
           }
         },
         "tags": [
@@ -23117,6 +22984,31 @@
                 }
               }
             }
+          }
+        },
+        "tags": [
+          "Workspaces"
+        ]
+      }
+    },
+    "/api/workspaces/default": {
+      "put": {
+        "operationId": "WorkspacesController_setDefaultWorkspace",
+        "summary": "Set default workspace",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SetDefaultWorkspaceDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Default workspace set successfully"
           }
         },
         "tags": [
@@ -23722,7 +23614,14 @@
         ],
         "responses": {
           "200": {
-            "description": "User details retrieved successfully."
+            "description": "User details retrieved successfully.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UserDto"
+                }
+              }
+            }
           }
         },
         "tags": [
@@ -23773,7 +23672,17 @@
         ],
         "responses": {
           "200": {
-            "description": "List of users retrieved successfully."
+            "description": "List of users retrieved successfully.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/UserDto"
+                  }
+                }
+              }
+            }
           }
         },
         "tags": [
@@ -23926,6 +23835,31 @@
             }
           }
         ],
+        "responses": {
+          "201": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "Users"
+        ]
+      }
+    },
+    "/api/invite/bulk": {
+      "post": {
+        "operationId": "UsersInviteController_sendBulkInvites",
+        "summary": "Send invitations to multiple users.",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/BulkSendInviteUserDto"
+              }
+            }
+          }
+        },
         "responses": {
           "201": {
             "description": ""
@@ -26547,6 +26481,99 @@
         },
         "required": [
           "costs"
+        ]
+      },
+      "InvoicePaymentTransactionDto": {
+        "type": "object",
+        "properties": {
+          "invoiceId": {
+            "type": "number",
+            "description": "The invoice ID",
+            "example": 1
+          },
+          "paymentReceiveId": {
+            "type": "number",
+            "description": "The payment receive ID",
+            "example": 1
+          },
+          "paymentDate": {
+            "type": "string",
+            "description": "The payment date",
+            "example": "2024-03-15"
+          },
+          "formattedPaymentDate": {
+            "type": "string",
+            "description": "The formatted payment date",
+            "example": "15/03/2024"
+          },
+          "paymentAmount": {
+            "type": "number",
+            "description": "The payment amount",
+            "example": 1000
+          },
+          "formattedPaymentAmount": {
+            "type": "string",
+            "description": "The formatted payment amount",
+            "example": "$1,000.00"
+          },
+          "currencyCode": {
+            "type": "string",
+            "description": "The currency code",
+            "example": "USD"
+          },
+          "paymentNumber": {
+            "type": "string",
+            "description": "The payment receive number",
+            "example": "RCV-001"
+          },
+          "paymentReferenceNo": {
+            "type": "string",
+            "description": "The payment reference no.",
+            "example": "REF-001",
+            "nullable": true
+          },
+          "invoiceNumber": {
+            "type": "string",
+            "description": "The invoice number",
+            "example": "INV-001"
+          },
+          "invoiceReferenceNo": {
+            "type": "string",
+            "description": "The invoice reference no.",
+            "example": "REF-002",
+            "nullable": true
+          },
+          "depositAccountId": {
+            "type": "number",
+            "description": "The deposit account ID",
+            "example": 5
+          },
+          "depositAccountName": {
+            "type": "string",
+            "description": "The deposit account name",
+            "example": "Undeposited Funds"
+          },
+          "depositAccountSlug": {
+            "type": "string",
+            "description": "The deposit account slug",
+            "example": "undeposited-funds"
+          }
+        },
+        "required": [
+          "invoiceId",
+          "paymentReceiveId",
+          "paymentDate",
+          "formattedPaymentDate",
+          "paymentAmount",
+          "formattedPaymentAmount",
+          "currencyCode",
+          "paymentNumber",
+          "paymentReferenceNo",
+          "invoiceNumber",
+          "invoiceReferenceNo",
+          "depositAccountId",
+          "depositAccountName",
+          "depositAccountSlug"
         ]
       },
       "GenerateSaleInvoiceSharableLinkResponseDto": {
@@ -30117,33 +30144,6 @@
           "ids"
         ]
       },
-      "SaleEstimateHtmlContentResponseDto": {
-        "type": "object",
-        "properties": {
-          "htmlContent": {
-            "type": "string",
-            "description": "The HTML content of the estimate",
-            "example": "<html>...</html>"
-          }
-        },
-        "required": [
-          "htmlContent"
-        ]
-      },
-      "SaleEstiamteStateResponseDto": {
-        "type": "object",
-        "properties": {
-          "defaultTemplateId": {
-            "type": "number",
-            "description": "The ID of the default PDF template for sale estimates",
-            "example": 1,
-            "nullable": true
-          }
-        },
-        "required": [
-          "defaultTemplateId"
-        ]
-      },
       "SaleEstimateResponseDto": {
         "type": "object",
         "properties": {
@@ -30378,6 +30378,230 @@
           "formattedCreatedAt",
           "entries",
           "attachments"
+        ]
+      },
+      "SaleEstiamteStateResponseDto": {
+        "type": "object",
+        "properties": {
+          "defaultTemplateId": {
+            "type": "number",
+            "description": "The ID of the default PDF template for sale estimates",
+            "example": 1,
+            "nullable": true
+          }
+        },
+        "required": [
+          "defaultTemplateId"
+        ]
+      },
+      "SaleEstimateHtmlContentResponseDto": {
+        "type": "object",
+        "properties": {
+          "htmlContent": {
+            "type": "string",
+            "description": "The HTML content of the estimate",
+            "example": "<html>...</html>"
+          }
+        },
+        "required": [
+          "htmlContent"
+        ]
+      },
+      "AddressItemDto": {
+        "type": "object",
+        "properties": {
+          "label": {
+            "type": "string"
+          },
+          "mail": {
+            "type": "string"
+          },
+          "primary": {
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "label",
+          "mail"
+        ]
+      },
+      "SaleEstimateEntryMailDto": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "quantity": {
+            "type": "number"
+          },
+          "unitPrice": {
+            "type": "number"
+          },
+          "unitPriceFormatted": {
+            "type": "string"
+          },
+          "total": {
+            "type": "number"
+          },
+          "totalFormatted": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "name",
+          "quantity",
+          "unitPrice",
+          "unitPriceFormatted",
+          "total",
+          "totalFormatted"
+        ]
+      },
+      "SaleEstimateMailStateResponseDto": {
+        "type": "object",
+        "properties": {
+          "from": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "to": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "cc": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "bcc": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "subject": {
+            "type": "string"
+          },
+          "message": {
+            "type": "string"
+          },
+          "formatArgs": {
+            "type": "object"
+          },
+          "toOptions": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/AddressItemDto"
+            }
+          },
+          "fromOptions": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/AddressItemDto"
+            }
+          },
+          "attachEstimate": {
+            "type": "boolean"
+          },
+          "estimateDate": {
+            "type": "string"
+          },
+          "estimateDateFormatted": {
+            "type": "string"
+          },
+          "expirationDate": {
+            "type": "string"
+          },
+          "expirationDateFormatted": {
+            "type": "string"
+          },
+          "total": {
+            "type": "number"
+          },
+          "totalFormatted": {
+            "type": "string"
+          },
+          "subtotal": {
+            "type": "number"
+          },
+          "subtotalFormatted": {
+            "type": "string"
+          },
+          "discountAmount": {
+            "type": "number"
+          },
+          "discountAmountFormatted": {
+            "type": "string"
+          },
+          "discountPercentage": {
+            "type": "number"
+          },
+          "discountPercentageFormatted": {
+            "type": "string"
+          },
+          "discountLabel": {
+            "type": "string"
+          },
+          "adjustment": {
+            "type": "number"
+          },
+          "adjustmentFormatted": {
+            "type": "string"
+          },
+          "estimateNumber": {
+            "type": "string"
+          },
+          "entries": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/SaleEstimateEntryMailDto"
+            }
+          },
+          "companyName": {
+            "type": "string"
+          },
+          "companyLogoUri": {
+            "type": "string"
+          },
+          "primaryColor": {
+            "type": "string"
+          },
+          "customerName": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "from",
+          "to",
+          "subject",
+          "message",
+          "toOptions",
+          "fromOptions",
+          "estimateDate",
+          "estimateDateFormatted",
+          "expirationDate",
+          "expirationDateFormatted",
+          "total",
+          "totalFormatted",
+          "subtotal",
+          "subtotalFormatted",
+          "discountAmount",
+          "discountAmountFormatted",
+          "discountPercentage",
+          "discountPercentageFormatted",
+          "discountLabel",
+          "adjustment",
+          "adjustmentFormatted",
+          "estimateNumber",
+          "entries",
+          "companyName",
+          "companyLogoUri",
+          "primaryColor",
+          "customerName"
         ]
       },
       "CreateSaleEstimateDto": {
@@ -31141,6 +31365,99 @@
           "discount",
           "discountType",
           "adjustment"
+        ]
+      },
+      "BillPaymentTransactionDto": {
+        "type": "object",
+        "properties": {
+          "billId": {
+            "type": "number",
+            "description": "The bill ID",
+            "example": 1
+          },
+          "billPaymentId": {
+            "type": "number",
+            "description": "The bill payment ID",
+            "example": 1
+          },
+          "paymentDate": {
+            "type": "string",
+            "description": "The payment date",
+            "example": "2024-03-15"
+          },
+          "formattedPaymentDate": {
+            "type": "string",
+            "description": "The formatted payment date",
+            "example": "15/03/2024"
+          },
+          "paymentAmount": {
+            "type": "number",
+            "description": "The payment amount",
+            "example": 1000
+          },
+          "formattedPaymentAmount": {
+            "type": "string",
+            "description": "The formatted payment amount",
+            "example": "$1,000.00"
+          },
+          "currencyCode": {
+            "type": "string",
+            "description": "The currency code",
+            "example": "USD"
+          },
+          "paymentNumber": {
+            "type": "string",
+            "description": "The payment reference number",
+            "example": "PAY-001"
+          },
+          "paymentReferenceNo": {
+            "type": "string",
+            "description": "The payment reference no.",
+            "example": "REF-001",
+            "nullable": true
+          },
+          "billNumber": {
+            "type": "string",
+            "description": "The bill number",
+            "example": "BILL-001"
+          },
+          "billReferenceNo": {
+            "type": "string",
+            "description": "The bill reference no.",
+            "example": "REF-002",
+            "nullable": true
+          },
+          "paymentAccountId": {
+            "type": "number",
+            "description": "The payment account ID",
+            "example": 5
+          },
+          "paymentAccountName": {
+            "type": "string",
+            "description": "The payment account name",
+            "example": "Accounts Payable"
+          },
+          "paymentAccountSlug": {
+            "type": "string",
+            "description": "The payment account slug",
+            "example": "accounts-payable"
+          }
+        },
+        "required": [
+          "billId",
+          "billPaymentId",
+          "paymentDate",
+          "formattedPaymentDate",
+          "paymentAmount",
+          "formattedPaymentAmount",
+          "currencyCode",
+          "paymentNumber",
+          "paymentReferenceNo",
+          "billNumber",
+          "billReferenceNo",
+          "paymentAccountId",
+          "paymentAccountName",
+          "paymentAccountSlug"
         ]
       },
       "BillResponseDto": {
@@ -33218,6 +33535,91 @@
           "entries"
         ]
       },
+      "BillPaymentPageEntryDto": {
+        "type": "object",
+        "properties": {
+          "billId": {
+            "type": "number",
+            "description": "The bill ID",
+            "example": 1
+          },
+          "entryType": {
+            "type": "string",
+            "description": "The entry type",
+            "example": "invoice"
+          },
+          "billNo": {
+            "type": "string",
+            "description": "The bill number",
+            "example": "BILL-001"
+          },
+          "amount": {
+            "type": "number",
+            "description": "The total bill amount",
+            "example": 2000
+          },
+          "dueAmount": {
+            "type": "number",
+            "description": "The outstanding due amount",
+            "example": 1500
+          },
+          "totalPaymentAmount": {
+            "type": "number",
+            "description": "The total payment amount applied",
+            "example": 500
+          },
+          "paymentAmount": {
+            "type": "number",
+            "description": "The payment amount for this entry",
+            "example": 500
+          },
+          "currencyCode": {
+            "type": "string",
+            "description": "The currency code",
+            "example": "USD"
+          },
+          "date": {
+            "type": "string",
+            "description": "The bill date",
+            "example": "2024-03-15"
+          }
+        },
+        "required": [
+          "billId",
+          "entryType",
+          "billNo",
+          "amount",
+          "dueAmount",
+          "totalPaymentAmount",
+          "paymentAmount",
+          "currencyCode",
+          "date"
+        ]
+      },
+      "BillPaymentEditPageResponseDto": {
+        "type": "object",
+        "properties": {
+          "billPayment": {
+            "description": "The bill payment details",
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/BillPaymentResponseDto"
+              }
+            ]
+          },
+          "entries": {
+            "description": "The payable bill entries",
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/BillPaymentPageEntryDto"
+            }
+          }
+        },
+        "required": [
+          "billPayment",
+          "entries"
+        ]
+      },
       "CreateBillPaymentDto": {
         "type": "object",
         "properties": {
@@ -34875,6 +35277,31 @@
       "CancelTransactionsLockingDto": {
         "type": "object",
         "properties": {}
+      },
+      "SettingItemDto": {
+        "type": "object",
+        "properties": {
+          "key": {
+            "type": "string",
+            "description": "The setting key",
+            "example": "invoices_from_name"
+          },
+          "value": {
+            "type": "object",
+            "description": "The setting value",
+            "example": "My Company"
+          },
+          "group": {
+            "type": "string",
+            "description": "The settings group",
+            "example": "sale_invoices"
+          }
+        },
+        "required": [
+          "key",
+          "value",
+          "group"
+        ]
       },
       "NumberFormatQueryDto": {
         "type": "object",
@@ -39760,6 +40187,39 @@
           "permissions"
         ]
       },
+      "OrgBaseCurrencyMutateLockDto": {
+        "type": "object",
+        "properties": {
+          "modelName": {
+            "type": "string",
+            "description": "The model name that prevents base currency mutation",
+            "example": "SaleInvoice"
+          },
+          "pluralName": {
+            "type": "string",
+            "description": "The plural display name of the model",
+            "example": "Sale Invoices"
+          }
+        },
+        "required": [
+          "modelName"
+        ]
+      },
+      "OrgBaseCurrencyMutateAbilitiesResponseDto": {
+        "type": "object",
+        "properties": {
+          "abilities": {
+            "description": "List of models preventing base currency mutation",
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/OrgBaseCurrencyMutateLockDto"
+            }
+          }
+        },
+        "required": [
+          "abilities"
+        ]
+      },
       "OrganizationBuildJobResponseDto": {
         "type": "object",
         "properties": {
@@ -40115,6 +40575,12 @@
           },
           "language": {
             "type": "string"
+          },
+          "logoKey": {
+            "type": "string"
+          },
+          "logoUri": {
+            "type": "string"
           }
         },
         "required": [
@@ -40134,20 +40600,49 @@
           "isBuildRunning": {
             "type": "boolean"
           },
+          "isDeleting": {
+            "type": "boolean"
+          },
+          "isActive": {
+            "type": "boolean"
+          },
           "buildJobId": {
             "type": "string"
           },
           "role": {
             "type": "string"
           },
+          "isDefault": {
+            "type": "boolean"
+          },
           "metadata": {
             "$ref": "#/components/schemas/WorkspaceMetadataDto"
+          },
+          "totalIncome": {
+            "type": "number"
+          },
+          "totalExpenses": {
+            "type": "number"
+          },
+          "totalAssets": {
+            "type": "number"
+          },
+          "totalLiabilities": {
+            "type": "number"
+          },
+          "formattedTotalAssets": {
+            "type": "string"
+          },
+          "formattedTotalLiabilities": {
+            "type": "string"
           }
         },
         "required": [
           "organizationId",
           "isReady",
           "isBuildRunning",
+          "isDeleting",
+          "isActive",
           "role"
         ]
       },
@@ -40259,6 +40754,18 @@
           "timezone",
           "fiscalYear",
           "language"
+        ]
+      },
+      "SetDefaultWorkspaceDto": {
+        "type": "object",
+        "properties": {
+          "organizationId": {
+            "type": "string",
+            "description": "The organization ID to set as default"
+          }
+        },
+        "required": [
+          "organizationId"
         ]
       },
       "EditPaymentMethodOptionsDto": {
@@ -40468,6 +40975,67 @@
           "key"
         ]
       },
+      "UserDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "number",
+            "description": "The user ID",
+            "example": 1
+          },
+          "firstName": {
+            "type": "string",
+            "description": "The first name",
+            "example": "John"
+          },
+          "lastName": {
+            "type": "string",
+            "description": "The last name",
+            "example": "Doe"
+          },
+          "email": {
+            "type": "string",
+            "description": "The email address",
+            "example": "john@example.com"
+          },
+          "active": {
+            "type": "boolean",
+            "description": "Whether the user is active",
+            "example": true
+          },
+          "systemUserId": {
+            "type": "number",
+            "description": "The system user ID",
+            "example": 10
+          },
+          "roleName": {
+            "type": "string",
+            "description": "The role name",
+            "example": "Administrator"
+          },
+          "roleDescription": {
+            "type": "string",
+            "description": "The role description",
+            "example": "Full access to all features"
+          },
+          "roleSlug": {
+            "type": "string",
+            "description": "The role slug",
+            "example": "administrator"
+          }
+        },
+        "required": [
+          "id",
+          "firstName",
+          "lastName",
+          "email",
+          "active",
+          "systemUserId",
+          "roleName",
+          "roleDescription",
+          "roleSlug"
+        ]
+      },
       "EditUserDto": {
         "type": "object",
         "properties": {
@@ -40516,6 +41084,40 @@
         "required": [
           "email",
           "roleId"
+        ]
+      },
+      "BulkInviteItemDto": {
+        "type": "object",
+        "properties": {
+          "email": {
+            "type": "string",
+            "description": "Email address of the user to invite",
+            "example": "john.doe@example.com"
+          },
+          "roleId": {
+            "type": "number",
+            "description": "Role ID to assign to the invited user",
+            "example": 2
+          }
+        },
+        "required": [
+          "email",
+          "roleId"
+        ]
+      },
+      "BulkSendInviteUserDto": {
+        "type": "object",
+        "properties": {
+          "invites": {
+            "description": "List of users to invite",
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/BulkInviteItemDto"
+            }
+          }
+        },
+        "required": [
+          "invites"
         ]
       },
       "InviteUserDto": {

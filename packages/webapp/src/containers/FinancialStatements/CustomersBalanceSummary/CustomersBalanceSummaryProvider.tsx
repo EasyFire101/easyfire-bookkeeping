@@ -1,21 +1,42 @@
-// @ts-nocheck
 import React, { createContext, useContext } from 'react';
 import FinancialReportPage from '../FinancialReportPage';
 import { useCustomerBalanceSummaryReport } from '@/hooks/query';
 import { transformFilterFormToQuery } from '../common';
 
-const CustomersBalanceSummaryContext = createContext();
+type UseCustomerBalanceSummaryResult = ReturnType<
+  typeof useCustomerBalanceSummaryReport
+>;
+
+type CustomersBalanceSummaryContextValue = {
+  CustomerBalanceSummary: UseCustomerBalanceSummaryResult['data'];
+  isCustomersBalanceFetching: boolean;
+  isCustomersBalanceLoading: boolean;
+  refetch: UseCustomerBalanceSummaryResult['refetch'];
+  query: Record<string, unknown>;
+  httpQuery: Record<string, unknown>;
+};
+
+type CustomersBalanceSummaryProviderProps = {
+  filter: Record<string, unknown>;
+  children?: React.ReactNode;
+};
+
+const CustomersBalanceSummaryContext = createContext<
+  CustomersBalanceSummaryContextValue | undefined
+>(undefined);
 
 /**
  * Customers balance summary provider.
  */
-function CustomersBalanceSummaryProvider({ filter, ...props }) {
+function CustomersBalanceSummaryProvider({
+  filter,
+  ...props
+}: CustomersBalanceSummaryProviderProps) {
   const query = React.useMemo(
-    () => transformFilterFormToQuery(filter),
+    () => transformFilterFormToQuery(filter) as Record<string, unknown>,
     [filter],
   );
 
-  // Fetches customers balance summary report based on the given report.
   const {
     data: CustomerBalanceSummary,
     isLoading: isCustomersBalanceLoading,
@@ -23,15 +44,15 @@ function CustomersBalanceSummaryProvider({ filter, ...props }) {
     refetch,
   } = useCustomerBalanceSummaryReport(query, {
     keepPreviousData: true,
-  });
+  } as any);
 
-  const provider = {
+  const provider: CustomersBalanceSummaryContextValue = {
     CustomerBalanceSummary,
     isCustomersBalanceFetching,
     isCustomersBalanceLoading,
     refetch,
     query,
-    httpQuery: query
+    httpQuery: query,
   };
   return (
     <FinancialReportPage name={'customers-balance-summary'}>
@@ -40,7 +61,15 @@ function CustomersBalanceSummaryProvider({ filter, ...props }) {
   );
 }
 
-const useCustomersBalanceSummaryContext = () =>
-  useContext(CustomersBalanceSummaryContext);
+const useCustomersBalanceSummaryContext =
+  (): CustomersBalanceSummaryContextValue => {
+    const ctx = useContext(CustomersBalanceSummaryContext);
+    if (!ctx) {
+      throw new Error(
+        'useCustomersBalanceSummaryContext must be used within a CustomersBalanceSummaryProvider',
+      );
+    }
+    return ctx;
+  };
 
 export { CustomersBalanceSummaryProvider, useCustomersBalanceSummaryContext };

@@ -8,13 +8,15 @@ import {
   Put,
   Query,
 } from '@nestjs/common';
-import { ApiOperation, ApiTags, ApiResponse } from '@nestjs/swagger';
+import { ApiExtraModels, ApiOperation, ApiTags, ApiResponse, getSchemaPath } from '@nestjs/swagger';
 import { UsersApplication } from './Users.application';
 import { EditUserDto } from './dtos/EditUser.dto';
 import { ApiCommonHeaders } from '@/common/decorators/ApiCommonHeaders';
+import { UserDto } from './dtos/UserResponse.dto';
 
 @Controller('users')
 @ApiTags('Users')
+@ApiExtraModels(UserDto)
 @ApiCommonHeaders()
 export class UsersController {
   constructor(private readonly usersApplication: UsersApplication) {}
@@ -72,6 +74,7 @@ export class UsersController {
   @ApiResponse({
     status: 200,
     description: 'User details retrieved successfully.',
+    schema: { $ref: getSchemaPath(UserDto) },
   })
   async getUser(@Param('id') userId: number) {
     return this.usersApplication.getUser(userId);
@@ -85,6 +88,10 @@ export class UsersController {
   @ApiResponse({
     status: 200,
     description: 'List of users retrieved successfully.',
+    schema: {
+      type: 'array',
+      items: { $ref: getSchemaPath(UserDto) },
+    },
   })
   async listUsers(
     @Query('page_size') pageSize?: number,

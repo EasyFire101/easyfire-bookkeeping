@@ -22,10 +22,8 @@ import {
   FInputGroup,
 } from '@/components';
 import classNames from 'classnames';
-
 import { useItemFormContext } from './ItemFormProvider';
 import { handleStringChange, inputIntent } from '@/utils';
-// import { categoriesFieldShouldUpdate } from './utils';
 
 /**
  * Item form primary section.

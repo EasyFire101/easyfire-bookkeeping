@@ -30,11 +30,8 @@ import { accountsKeys } from '../accounts/query-keys';
 import { customersKeys } from '../customers/query-keys';
 import { vendorsKeys } from '../vendors/query-keys';
 import { cashflowAccountsKeys } from '../cashflow-accounts/query-keys';
-
-// Keys that don't have factory methods yet - keeping inline
-const FINANCIAL_REPORT = 'FINANCIAL-REPORT';
-const SETTING = 'SETTING';
-const SETTING_MANUAL_JOURNALS = 'SETTING_MANUAL_JOURNALS';
+import { financialReportsKeys } from '../FinancialReports/query-keys';
+import { settingsKeys } from '../settings/query-keys';
 
 const commonInvalidateQueries = (queryClient: ReturnType<typeof useQueryClient>) => {
   // Invalidate manual journals.
@@ -50,10 +47,10 @@ const commonInvalidateQueries = (queryClient: ReturnType<typeof useQueryClient>)
   queryClient.invalidateQueries({ queryKey: accountsKeys.all() });
 
   // Invalidate settings.
-  queryClient.invalidateQueries({ queryKey: [SETTING, SETTING_MANUAL_JOURNALS] });
+  queryClient.invalidateQueries({ queryKey: settingsKeys.manualJournals() });
 
   // Invalidate financial reports.
-  queryClient.invalidateQueries({ queryKey: [FINANCIAL_REPORT] });
+  queryClient.invalidateQueries({ queryKey: financialReportsKeys.all() });
 
   // Invalidate the cashflow transactions.
   queryClient.invalidateQueries({ queryKey: cashflowAccountsKeys.transactions() });

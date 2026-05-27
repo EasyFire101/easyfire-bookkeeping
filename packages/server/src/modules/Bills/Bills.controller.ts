@@ -35,6 +35,7 @@ import { PermissionGuard } from '@/modules/Roles/Permission.guard';
 import { AuthorizationGuard } from '@/modules/Roles/Authorization.guard';
 import { AbilitySubject } from '@/modules/Roles/Roles.types';
 import { BillAction } from './Bills.types';
+import { BillPaymentTransactionDto } from './dtos/BillPaymentTransactionResponse.dto';
 
 @Controller('bills')
 @ApiTags('Bills')
@@ -42,6 +43,7 @@ import { BillAction } from './Bills.types';
 @ApiExtraModels(PaginatedResponseDto)
 @ApiCommonHeaders()
 @ApiExtraModels(ValidateBulkDeleteResponseDto)
+@ApiExtraModels(BillPaymentTransactionDto)
 @UseGuards(AuthorizationGuard, PermissionGuard)
 export class BillsController {
   constructor(private billsApplication: BillsApplication) { }
@@ -159,6 +161,10 @@ export class BillsController {
   @ApiResponse({
     status: 200,
     description: 'List of payment transactions for the bill.',
+    schema: {
+      type: 'array',
+      items: { $ref: getSchemaPath(BillPaymentTransactionDto) },
+    },
   })
   getBillPaymentTransactions(@Param('id') billId: number) {
     return this.billsApplication.getBillPaymentTransactions(billId);

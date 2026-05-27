@@ -49,6 +49,7 @@ import { PermissionGuard } from '@/modules/Roles/Permission.guard';
 import { AuthorizationGuard } from '@/modules/Roles/Authorization.guard';
 import { AbilitySubject } from '@/modules/Roles/Roles.types';
 import { SaleInvoiceAction } from './SaleInvoice.types';
+import { InvoicePaymentTransactionDto } from './dtos/InvoicePaymentTransactionResponse.dto';
 
 @Controller('sale-invoices')
 @ApiTags('Sale Invoices')
@@ -58,6 +59,7 @@ import { SaleInvoiceAction } from './SaleInvoice.types';
 @ApiExtraModels(GenerateSaleInvoiceSharableLinkResponseDto)
 @ApiCommonHeaders()
 @ApiExtraModels(ValidateBulkDeleteResponseDto)
+@ApiExtraModels(InvoicePaymentTransactionDto)
 @UseGuards(AuthorizationGuard, PermissionGuard)
 export class SaleInvoicesController {
   constructor(private saleInvoiceApplication: SaleInvoiceApplication) { }
@@ -330,6 +332,14 @@ export class SaleInvoicesController {
   @Get(':id/payments')
   @RequirePermission(SaleInvoiceAction.View, AbilitySubject.SaleInvoice)
   @ApiOperation({ summary: 'Retrieves the sale invoice payments.' })
+  @ApiResponse({
+    status: 200,
+    description: 'List of payment transactions for the invoice.',
+    schema: {
+      type: 'array',
+      items: { $ref: getSchemaPath(InvoicePaymentTransactionDto) },
+    },
+  })
   @ApiResponse({ status: 404, description: 'The sale invoice not found.' })
   @ApiParam({
     name: 'id',

@@ -1,15 +1,44 @@
-// @ts-nocheck
 import React, { createContext } from 'react';
+import type {
+  AccountsList,
+  ResourceMetaResponse,
+  ResourceViewResponse,
+  GetAccountsQuery,
+} from '@bigcapital/sdk-ts';
 import { DashboardInsider } from '@/components';
 import { useResourceViews, useResourceMeta, useAccounts } from '@/hooks/query';
 import { getFieldsFromResourceMeta } from '@/utils';
 
-const AccountsChartContext = createContext();
+type AccountsChartContextValue = {
+  accounts: AccountsList | undefined;
+  resourceMeta: ResourceMetaResponse | undefined;
+  resourceViews: ResourceViewResponse | undefined;
+  fields: any[];
+  isAccountsLoading: boolean;
+  isAccountsFetching: boolean;
+  isResourceMetaFetching: boolean;
+  isResourceMetaLoading: boolean;
+  isViewsLoading: boolean;
+};
+
+const AccountsChartContext = createContext<
+  AccountsChartContextValue | undefined
+>(undefined);
+
+type AccountsChartProviderProps = {
+  query?: GetAccountsQuery;
+  tableStateChanged?: boolean;
+  children?: React.ReactNode;
+};
 
 /**
  * Accounts chart data provider.
  */
-function AccountsChartProvider({ query, tableStateChanged, ...props }) {
+function AccountsChartProvider({
+  query,
+  tableStateChanged,
+  ...props
+}: AccountsChartProviderProps) {
   // Fetch accounts resource views and fields.
   const { data: resourceViews, isLoading: isViewsLoading } =
     useResourceViews('accounts');
@@ -26,16 +55,18 @@ function AccountsChartProvider({ query, tableStateChanged, ...props }) {
     data: accounts,
     isFetching: isAccountsFetching,
     isLoading: isAccountsLoading,
-  } = useAccounts(query, { keepPreviousData: true });
+  } = useAccounts(query, { keepPreviousData: true } as any);
 
   // Provider payload.
-  const provider = {
+  const provider: AccountsChartContextValue = {
     accounts,
 
     resourceMeta,
     resourceViews,
 
-    fields: resourceMeta ? getFieldsFromResourceMeta(resourceMeta.fields) : [],
+    fields: resourceMeta
+      ? getFieldsFromResourceMeta(resourceMeta.fields)
+      : [],
 
     isAccountsLoading,
     isAccountsFetching,
@@ -54,6 +85,14 @@ function AccountsChartProvider({ query, tableStateChanged, ...props }) {
   );
 }
 
-const useAccountsChartContext = () => React.useContext(AccountsChartContext);
+const useAccountsChartContext = (): AccountsChartContextValue => {
+  const ctx = React.useContext(AccountsChartContext);
+  if (!ctx) {
+    throw new Error(
+      'useAccountsChartContext must be used within an AccountsChartProvider',
+    );
+  }
+  return ctx;
+};
 
 export { AccountsChartProvider, useAccountsChartContext };

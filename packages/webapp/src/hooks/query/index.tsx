@@ -8,8 +8,6 @@ export * from './misc';
 export * from './attachments';
 export * from './import';
 export * from './oneclick-demo';
-
-// Batch 2 - Core entity modules (completed)
 export * from './accounts';
 export * from './items';
 export * from './items-categories';
@@ -20,8 +18,6 @@ export * from './contacts';
 export * from './users';
 export * from './roles';
 export * from './invite';
-
-// Batch 3 - Transaction modules (completed)
 export * from './invoices';
 export * from './bills';
 export * from './estimates';
@@ -41,8 +37,6 @@ export * from './organization';
 export * from './landed-cost';
 export * from './views';
 export * from '@/ee/workspaces/hooks/query/workspaces';
-export * from './landedCost';
-export * from './UniversalSearch/UniversalSearch';
 export * from './GenericResource';
 export * from './jobs';
 export * from './cashflow-accounts';
@@ -65,7 +59,5 @@ export * from './base';
 
 // Subdirectories (already in nested structure)
 export * from './UniversalSearch/universal-search';
-export * from './GenericResource';
 export * from './FinancialReports';
-export * from './apiKeys';
-export * from './auditLogs';
+export * from './audit-logs';

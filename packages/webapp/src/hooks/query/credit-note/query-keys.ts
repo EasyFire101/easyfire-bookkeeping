@@ -15,6 +15,7 @@ export const creditNotesKeys = {
   refundTransaction: (id: number | null | undefined) => [REFUND_CREDIT_NOTE_TRANSACTION, id] as const,
   reconcile: (id: number | null | undefined) => [RECONCILE_CREDIT_NOTE, id] as const,
   reconciles: (id: number | null | undefined) => [RECONCILE_CREDIT_NOTES, id] as const,
+  state: () => ['CREDIT_NOTE_STATE'] as const,
 };
 
 // Grouped object for use in components/hooks

@@ -26,6 +26,11 @@ import type {
 } from '@bigcapital/sdk-ts';
 import { useApiFetcher } from '../../useRequest';
 import { pdfTemplatesKeys } from './query-keys';
+import { invoicesKeys } from '../invoices/query-keys';
+import { estimatesKeys } from '../estimates/query-keys';
+import { receiptsKeys } from '../receipts/query-keys';
+import { creditNotesKeys } from '../credit-note/query-keys';
+import { paymentReceivesKeys } from '../payment-receives/query-keys';
 
 // Re-export types for consumers (aliases for SDK types)
 export type CreatePdfTemplateValues = CreatePdfTemplateBody;
@@ -153,11 +158,11 @@ export function useAssignPdfTemplateAsDefault(
       assignPdfTemplateAsDefault(fetcher, templateId),
     onSuccess: () => {
       invalidatePdfTemplateQueries(queryClient);
-      queryClient.invalidateQueries({ queryKey: ['SALE_INVOICE_STATE'] });
-      queryClient.invalidateQueries({ queryKey: ['SALE_ESTIMATE_STATE'] });
-      queryClient.invalidateQueries({ queryKey: ['SALE_RECEIPT_STATE'] });
-      queryClient.invalidateQueries({ queryKey: ['CREDIT_NOTE_STATE'] });
-      queryClient.invalidateQueries({ queryKey: ['PAYMENT_RECEIVED_STATE'] });
+      queryClient.invalidateQueries({ queryKey: invoicesKeys.state() });
+      queryClient.invalidateQueries({ queryKey: estimatesKeys.state() });
+      queryClient.invalidateQueries({ queryKey: receiptsKeys.state() });
+      queryClient.invalidateQueries({ queryKey: creditNotesKeys.state() });
+      queryClient.invalidateQueries({ queryKey: paymentReceivesKeys.state() });
     },
     ...options,
   });

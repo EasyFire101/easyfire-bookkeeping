@@ -17,8 +17,9 @@ export type WorkspaceBuildJob = OpResponseBody<OpForPath<typeof WORKSPACES_ROUTE
 
 export async function fetchWorkspaces(fetcher: ApiFetcher): Promise<WorkspacesListResponse> {
   const get = fetcher.path(WORKSPACES_ROUTES.LIST).method('get').create();
-  const { data } = await get({});
-  return data;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const { data } = await (get as any)({});
+  return data as WorkspacesListResponse;
 }
 
 export async function createWorkspace(

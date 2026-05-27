@@ -1,25 +1,44 @@
-// @ts-nocheck
-import { createContext, useContext, useMemo } from 'react';
-
+import React, { createContext, useContext, useMemo } from 'react';
 import FinancialReportPage from '../FinancialReportPage';
 import { useBalanceSheet } from '@/hooks/query';
 import { transformFilterFormToQuery } from '../common';
+import type { BalanceSheetTableQuery } from '@bigcapital/sdk-ts';
 
-const BalanceSheetContext = createContext();
+type UseBalanceSheetResult = ReturnType<typeof useBalanceSheet>;
 
-function BalanceSheetProvider({ filter, ...props }) {
-  // Transformes the given filter to query.
-  const httpQuery = useMemo(() => transformFilterFormToQuery(filter), [filter]);
+type BalanceSheetContextValue = {
+  balanceSheet: UseBalanceSheetResult['data'];
+  isFetching: boolean;
+  isLoading: boolean;
+  refetchBalanceSheet: UseBalanceSheetResult['refetch'];
+  httpQuery: Record<string, unknown>;
+  filter: Record<string, unknown>;
+};
 
-  // Fetches the balance sheet report.
+type BalanceSheetProviderProps = {
+  filter: Record<string, unknown>;
+  children?: React.ReactNode;
+};
+
+const BalanceSheetContext = createContext<BalanceSheetContextValue | undefined>(
+  undefined,
+);
+
+function BalanceSheetProvider({ filter, ...props }: BalanceSheetProviderProps) {
+  const httpQuery = useMemo(
+    () => transformFilterFormToQuery(filter) as Record<string, unknown>,
+    [filter],
+  );
   const {
     data: balanceSheet,
     isFetching,
     isLoading,
     refetch,
-  } = useBalanceSheet(httpQuery, { keepPreviousData: true });
+  } = useBalanceSheet(httpQuery as BalanceSheetTableQuery, {
+    placeholderData: (previousData) => previousData,
+  });
 
-  const provider = {
+  const provider: BalanceSheetContextValue = {
     balanceSheet,
     isFetching,
     isLoading,
@@ -34,6 +53,14 @@ function BalanceSheetProvider({ filter, ...props }) {
   );
 }
 
-const useBalanceSheetContext = () => useContext(BalanceSheetContext);
+const useBalanceSheetContext = (): BalanceSheetContextValue => {
+  const ctx = useContext(BalanceSheetContext);
+  if (!ctx) {
+    throw new Error(
+      'useBalanceSheetContext must be used within a BalanceSheetProvider',
+    );
+  }
+  return ctx;
+};
 
 export { BalanceSheetProvider, useBalanceSheetContext };

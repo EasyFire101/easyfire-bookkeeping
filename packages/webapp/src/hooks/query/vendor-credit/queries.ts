@@ -33,34 +33,30 @@ import {
   deleteAppliedBillToVendorCredit,
 } from '@bigcapital/sdk-ts';
 import { useApiFetcher } from '../../useRequest';
-import { vendorCreditsKeys, VendorCreditsQueryKeys } from './query-keys';
+import { vendorCreditsKeys } from './query-keys';
 import { vendorsKeys } from '../vendors/query-keys';
 import { itemsKeys } from '../items/query-keys';
 import { accountsKeys } from '../accounts/query-keys';
 import { billsKeys } from '../bills/query-keys';
 import { organizationKeys } from '../organization/query-keys';
-
-// Keys that don't have factory methods yet - keeping inline
-const SETTING = 'SETTING';
-const SETTING_VENDOR_CREDITS = 'SETTING_VENDOR_CREDITS';
-const CASHFLOW_ACCOUNT_TRANSACTIONS_INFINITY = 'CASHFLOW_ACCOUNT_TRANSACTIONS_INFINITY';
-const FINANCIAL_REPORT = 'FINANCIAL-REPORT';
-const TRANSACTIONS_BY_REFERENCE = 'TRANSACTIONS_BY_REFERENCE';
+import { financialReportsKeys } from '../FinancialReports/query-keys';
+import { settingsKeys } from '../settings/query-keys';
+import { cashflowAccountsKeys } from '../cashflow-accounts/query-keys';
 
 const commonInvalidateQueries = (queryClient: ReturnType<typeof useQueryClient>) => {
   queryClient.invalidateQueries({ queryKey: vendorCreditsKeys.all() });
   queryClient.invalidateQueries({ queryKey: itemsKeys.all() });
   queryClient.invalidateQueries({ queryKey: vendorsKeys.all() });
   queryClient.invalidateQueries({ queryKey: accountsKeys.all() });
-  queryClient.invalidateQueries({ queryKey: [SETTING, SETTING_VENDOR_CREDITS] });
+  queryClient.invalidateQueries({ queryKey: settingsKeys.vendorCredits() });
   queryClient.invalidateQueries({ queryKey: vendorCreditsKeys.refund(null).slice(0, 1) });
   queryClient.invalidateQueries({ queryKey: vendorCreditsKeys.refundTransaction(null).slice(0, 1) });
   queryClient.invalidateQueries({ queryKey: vendorCreditsKeys.reconcile(null).slice(0, 1) });
   queryClient.invalidateQueries({ queryKey: vendorCreditsKeys.reconciles(null).slice(0, 1) });
   queryClient.invalidateQueries({ queryKey: billsKeys.all() });
-  queryClient.invalidateQueries({ queryKey: [CASHFLOW_ACCOUNT_TRANSACTIONS_INFINITY] });
-  queryClient.invalidateQueries({ queryKey: [FINANCIAL_REPORT] });
-  queryClient.invalidateQueries({ queryKey: [TRANSACTIONS_BY_REFERENCE] });
+  queryClient.invalidateQueries({ queryKey: cashflowAccountsKeys.transactionsInfinity().slice(0, 1) });
+  queryClient.invalidateQueries({ queryKey: financialReportsKeys.all() });
+  queryClient.invalidateQueries({ queryKey: financialReportsKeys.transactionsByReference().slice(0, 1) });
   queryClient.invalidateQueries({ queryKey: organizationKeys.mutateAbilities() });
 };
 

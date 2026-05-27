@@ -10,6 +10,8 @@ import type {
   BillPayment,
   CreateBillPaymentBody,
   EditBillPaymentBody,
+  BillPaymentEditPageResponse,
+  BillPaymentNewPageEntriesResponse,
 } from '@bigcapital/sdk-ts';
 import {
   fetchBillPayments,
@@ -21,7 +23,7 @@ import {
   fetchBillPaymentNewPageEntries,
 } from '@bigcapital/sdk-ts';
 import { useApiFetcher } from '../../useRequest';
-import { paymentMadesKeys, PAYMENT_MADES, PAYMENT_MADE_NEW_ENTRIES, PAYMENT_MADE_EDIT_PAGE } from './query-keys';
+import { paymentMadesKeys } from './query-keys';
 
 const commonInvalidateQueries = (client: ReturnType<typeof useQueryClient>) => {
   client.invalidateQueries({ queryKey: paymentMadesKeys.all() });
@@ -37,7 +39,7 @@ export function usePaymentMades(
   return useQuery({
     ...props,
     queryKey: paymentMadesKeys.list(query),
-    queryFn: () => fetchBillPayments(fetcher, query),
+    queryFn: () => fetchBillPayments(fetcher),
   });
 }
 
@@ -90,7 +92,7 @@ export function useDeletePaymentMade(
 
 export function usePaymentMadeEditPage(
   id: number | null | undefined,
-  props?: Omit<UseQueryOptions<unknown>, 'queryKey' | 'queryFn'>
+  props?: Omit<UseQueryOptions<BillPaymentEditPageResponse>, 'queryKey' | 'queryFn'>
 ) {
   const fetcher = useApiFetcher();
   return useQuery({
@@ -105,7 +107,7 @@ export function usePaymentMadeEditPage(
 export function usePaymentMadeNewPageEntries(
   vendorId: number | null | undefined,
   props?: Omit<
-    UseQueryOptions<unknown, Error, unknown>,
+    UseQueryOptions<BillPaymentNewPageEntriesResponse, Error>,
     'queryKey' | 'queryFn' | 'enabled'
   >
 ) {

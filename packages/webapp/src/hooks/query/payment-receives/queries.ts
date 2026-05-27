@@ -36,30 +36,25 @@ import useApiRequest, { useApiFetcher } from '../../useRequest';
 import { useRequestQuery } from '../../useQueryRequest';
 import { saveInvoke, transformToCamelCase } from '@/utils';
 import { useRequestPdf } from '../../useRequestPdf';
-import { paymentReceivesKeys, PaymentReceivesQueryKeys } from './query-keys';
+import { paymentReceivesKeys } from './query-keys';
 import { invoicesKeys } from '../invoices/query-keys';
 import { accountsKeys } from '../accounts/query-keys';
 import { customersKeys } from '../customers/query-keys';
 import { creditNotesKeys } from '../credit-note/query-keys';
-
-// Keys that don't have factory methods yet - keeping inline
-const FINANCIAL_REPORT = 'FINANCIAL-REPORT';
-const TRANSACTIONS_BY_REFERENCE = 'TRANSACTIONS_BY_REFERENCE';
-const CASH_FLOW_TRANSACTIONS = 'CASH_FLOW_TRANSACTIONS';
-const CASHFLOW_ACCOUNT_TRANSACTIONS_INFINITY = 'CASHFLOW_ACCOUNT_TRANSACTIONS_INFINITY';
-const SETTING = 'SETTING';
-const SETTING_PAYMENT_RECEIVES = 'SETTING_PAYMENT_RECEIVES';
+import { financialReportsKeys } from '../FinancialReports/query-keys';
+import { settingsKeys } from '../settings/query-keys';
+import { cashflowAccountsKeys } from '../cashflow-accounts/query-keys';
 
 const commonInvalidateQueries = (client: ReturnType<typeof useQueryClient>) => {
   client.invalidateQueries({ queryKey: paymentReceivesKeys.all() });
   client.invalidateQueries({ queryKey: paymentReceivesKeys.editPage(null).slice(0, 1) });
   client.invalidateQueries({ queryKey: invoicesKeys.all() });
   client.invalidateQueries({ queryKey: accountsKeys.all() });
-  client.invalidateQueries({ queryKey: [FINANCIAL_REPORT] });
-  client.invalidateQueries({ queryKey: [TRANSACTIONS_BY_REFERENCE] });
+  client.invalidateQueries({ queryKey: financialReportsKeys.all() });
+  client.invalidateQueries({ queryKey: financialReportsKeys.transactionsByReference().slice(0, 1) });
   client.invalidateQueries({ queryKey: customersKeys.all() });
-  client.invalidateQueries({ queryKey: [CASH_FLOW_TRANSACTIONS] });
-  client.invalidateQueries({ queryKey: [CASHFLOW_ACCOUNT_TRANSACTIONS_INFINITY] });
+  client.invalidateQueries({ queryKey: cashflowAccountsKeys.transactions().slice(0, 1) });
+  client.invalidateQueries({ queryKey: cashflowAccountsKeys.transactionsInfinity().slice(0, 1) });
   client.invalidateQueries({ queryKey: creditNotesKeys.all() });
   client.invalidateQueries({ queryKey: creditNotesKeys.reconcile(null).slice(0, 1) });
   client.invalidateQueries({ queryKey: invoicesKeys.paymentTransactions(null).slice(0, 1) });
@@ -89,7 +84,7 @@ export function useCreatePaymentReceive(
       createPaymentReceived(fetcher, values),
     onSuccess: (data, _values) => {
       commonInvalidateQueries(client);
-      client.invalidateQueries({ queryKey: [SETTING, SETTING_PAYMENT_RECEIVES] });
+      client.invalidateQueries({ queryKey: settingsKeys.paymentReceives() });
       saveInvoke(props?.onSuccess, data);
     },
   });
@@ -200,7 +195,7 @@ export function useCreateNotifyPaymentReceiveBySMS(
     mutationFn: ([id, values]: [number, Record<string, unknown>]) =>
       apiRequest.post(`payments-received/${id}/notify-by-sms`, values, {}),
     onSuccess: (_res, [id]) => {
-      queryClient.invalidateQueries({ queryKey: [PaymentReceivesQueryKeys.NOTIFY_PAYMENT_RECEIVE_BY_SMS, id] });
+      queryClient.invalidateQueries({ queryKey: paymentReceivesKeys.notifyBySms(id) });
       commonInvalidateQueries(queryClient);
     },
   });
@@ -297,7 +292,7 @@ export function usePaymentReceivedMailState(
 
   return useQuery({
     ...props,
-    queryKey: [PaymentReceivesQueryKeys.PAYMENT_RECEIVE_MAIL_OPTIONS, paymentReceiveId],
+    queryKey: paymentReceivesKeys.mailOptions(paymentReceiveId),
     queryFn: () =>
       fetchPaymentReceiveMail(fetcher, paymentReceiveId) as Promise<GetPaymentReceivedMailStateResponse>,
   });
@@ -310,7 +305,7 @@ export function usePaymentReceivedState(
 
   return useQuery({
     ...options,
-    queryKey: ['PAYMENT_RECEIVED_STATE'],
+    queryKey: paymentReceivesKeys.state(),
     queryFn: () => fetchPaymentReceivedState(fetcher),
   });
 }
@@ -326,7 +321,7 @@ export function useGetPaymentReceiveHtml(
 
   return useQuery({
     ...options,
-    queryKey: ['PAYMENT_RECEIVED_HTML', paymentReceivedId],
+    queryKey: paymentReceivesKeys.html(paymentReceivedId),
     queryFn: () => fetchPaymentReceiveHtmlContent(fetcher, paymentReceivedId),
   });
 }

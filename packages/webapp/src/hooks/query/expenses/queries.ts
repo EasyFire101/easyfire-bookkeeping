@@ -31,11 +31,8 @@ import { customersKeys } from '../customers/query-keys';
 import { vendorsKeys } from '../vendors/query-keys';
 import { itemsKeys } from '../items/query-keys';
 import { cashflowAccountsKeys } from '../cashflow-accounts/query-keys';
-
-// Keys that don't have factory methods yet - keeping inline
-const FINANCIAL_REPORT = 'FINANCIAL-REPORT';
-const SETTING = 'SETTING';
-const SETTING_RECEIPTS = 'SETTING_RECEIPTS';
+import { financialReportsKeys } from '../FinancialReports/query-keys';
+import { settingsKeys } from '../settings/query-keys';
 
 const commonInvalidateQueries = (queryClient: ReturnType<typeof useQueryClient>) => {
   // Invalidate expenses.
@@ -58,10 +55,10 @@ const commonInvalidateQueries = (queryClient: ReturnType<typeof useQueryClient>)
   queryClient.invalidateQueries({ queryKey: cashflowAccountsKeys.transactionsInfinity() });
 
   // Invalidate settings.
-  queryClient.invalidateQueries({ queryKey: [SETTING, SETTING_RECEIPTS] });
+  queryClient.invalidateQueries({ queryKey: settingsKeys.receipts() });
 
   // Invalidate financial reports.
-  queryClient.invalidateQueries({ queryKey: [FINANCIAL_REPORT] });
+  queryClient.invalidateQueries({ queryKey: financialReportsKeys.all() });
 };
 
 export function useCreateExpense(

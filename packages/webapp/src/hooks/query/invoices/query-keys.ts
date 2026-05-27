@@ -17,6 +17,13 @@ export const invoicesKeys = {
   due: (customerId?: number | null) => [SALE_INVOICES, SALE_INVOICES_DUE, customerId] as const,
   paymentTransactions: (id: number | null | undefined) => [SALE_INVOICE_PAYMENT_TRANSACTIONS, id] as const,
   smsDetail: (id: number | null | undefined) => [SALE_INVOICE_SMS_DETAIL, id] as const,
+  html: (id: number | null | undefined) => ['SALE_INVOICE_HTML', id] as const,
+  state: () => ['SALE_INVOICE_STATE'] as const,
+  brandingTemplate: (id: number | null | undefined) => ['SALE_INVOICE_BRANDING_TEMPLATE', id] as const,
+  defaultOptions: (id: number | null | undefined) => [SALE_INVOICE_DEFAULT_OPTIONS, id] as const,
+  badDebt: (id: number | null | undefined) => [BAD_DEBT, id] as const,
+  cancelBadDebt: (id: number | null | undefined) => [CANCEL_BAD_DEBT, id] as const,
+  notifyBySms: (id: number | null | undefined) => [NOTIFY_SALE_INVOICE_BY_SMS, id] as const,
 };
 
 // Grouped object for use in components/hooks

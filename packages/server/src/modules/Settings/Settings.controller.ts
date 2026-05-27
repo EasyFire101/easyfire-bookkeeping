@@ -1,4 +1,4 @@
-import { ApiOperation, ApiTags } from '@nestjs/swagger';
+import { ApiExtraModels, ApiOperation, ApiResponse, ApiTags, getSchemaPath } from '@nestjs/swagger';
 import { Body, Controller, Get, Put, UseGuards } from '@nestjs/common';
 import { SettingsApplicationService } from './SettingsApplication.service';
 import { ISettingsDTO, PreferencesAction } from './Settings.types';
@@ -6,9 +6,11 @@ import { RequirePermission } from '@/modules/Roles/RequirePermission.decorator';
 import { PermissionGuard } from '@/modules/Roles/Permission.guard';
 import { AuthorizationGuard } from '@/modules/Roles/Authorization.guard';
 import { AbilitySubject } from '@/modules/Roles/Roles.types';
+import { SettingItemDto } from './dtos/SettingsResponse.dto';
 
 @Controller('settings')
 @ApiTags('Settings')
+@ApiExtraModels(SettingItemDto)
 @UseGuards(AuthorizationGuard, PermissionGuard)
 export class SettingsController {
   constructor(
@@ -24,6 +26,14 @@ export class SettingsController {
 
   @Get()
   @ApiOperation({ summary: 'Retrieves the settings.' })
+  @ApiResponse({
+    status: 200,
+    description: 'The settings list.',
+    schema: {
+      type: 'array',
+      items: { $ref: getSchemaPath(SettingItemDto) },
+    },
+  })
   async getSettings() {
     return this.settingsApplicationService.getSettings();
   }

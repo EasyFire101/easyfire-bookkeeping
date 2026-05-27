@@ -12,6 +12,7 @@ import type {
   EditBillBody,
   GetBillsQuery,
   BulkDeleteBillsBody,
+  BillPaymentTransactionsResponse,
 } from '@bigcapital/sdk-ts';
 import {
   fetchBills,
@@ -184,7 +185,7 @@ export function useRefreshBills() {
 
 export function useBillPaymentTransactions(
   id: number | null | undefined,
-  props?: Omit<UseQueryOptions<unknown[]>, 'queryKey' | 'queryFn'>
+  props?: Omit<UseQueryOptions<BillPaymentTransactionsResponse>, 'queryKey' | 'queryFn'>
 ) {
   const fetcher = useApiFetcher();
   return useQuery({

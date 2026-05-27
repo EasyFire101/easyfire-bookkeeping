@@ -12,6 +12,11 @@ export type ItemCategory = OpResponseBody<OpForPath<typeof ITEMS_CATEGORIES_ROUT
 export type CreateItemCategoryBody = OpRequestBody<OpForPath<typeof ITEMS_CATEGORIES_ROUTES.LIST, 'post'>>;
 export type EditItemCategoryBody = OpRequestBody<OpForPath<typeof ITEMS_CATEGORIES_ROUTES.BY_ID, 'put'>>;
 
+export type ItemsCategoriesListResult = {
+  itemsCategories: ItemCategory[];
+  pagination: Record<string, unknown>;
+};
+
 export async function fetchItemCategories(fetcher: ApiFetcher): Promise<ItemCategoriesListResponse> {
   const get = fetcher.path(ITEMS_CATEGORIES_ROUTES.LIST).method('get').create();
   const { data } = await get({});

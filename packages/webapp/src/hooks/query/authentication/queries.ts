@@ -23,12 +23,11 @@ import {
 } from '@bigcapital/sdk-ts';
 import { useAuthApiFetcher, useApiFetcher } from '../../useRequest';
 import { setCookie } from '../../../utils';
-import { AUTH_METADATA_PAGE } from './query-keys';
+import { authenticationKeys } from './query-keys';
 import {
   useSetAuthToken,
   useSetAuthUserId,
   useSetOrganizationId,
-  useSetTenantId,
 } from '../../state';
 
 /**
@@ -52,7 +51,6 @@ export function useAuthLogin(
   const setAuthToken = useSetAuthToken();
   const setOrganizationId = useSetOrganizationId();
   const setUserId = useSetAuthUserId();
-  const setTenantId = useSetTenantId();
 
   return useMutation({
     ...props,
@@ -64,8 +62,6 @@ export function useAuthLogin(
         setAuthToken(data.access_token ?? '');
         // @ts-ignore
         setOrganizationId(data.organization_id ?? '');
-        // @ts-ignore
-        setTenantId(String(data.tenant_id ?? ''));
         // @ts-ignore
         setUserId(String(data.user_id ?? ''));
       });
@@ -123,7 +119,7 @@ export function useAuthMetadata(
 
   return useQuery({
     ...props,
-    queryKey: [AUTH_METADATA_PAGE],
+    queryKey: authenticationKeys.metadata(),
     queryFn: () => fetchAuthMeta(fetcher),
   });
 }

@@ -15,7 +15,7 @@ import { DashboardInsider } from '@/components';
  */
 export default function CreditNoteFormPage() {
   const { id } = useParams();
-  const idAsInteger = parseInt(id, 10);
+  const idAsInteger = id ? parseInt(id, 10) : undefined;
 
   return (
     <CreditNoteFormProvider creditNoteId={idAsInteger}>

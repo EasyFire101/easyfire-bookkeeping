@@ -36,31 +36,26 @@ import {
 import useApiRequest, { useApiFetcher } from '../../useRequest';
 import { useRequestPdf } from '../../useRequestPdf';
 import { useRequestQuery } from '../../useQueryRequest';
-import { receiptsKeys, ReceiptsQueryKeys } from './query-keys';
+import { receiptsKeys } from './query-keys';
 import { itemsKeys } from '../items/query-keys';
 import { accountsKeys } from '../accounts/query-keys';
-
-// Keys that don't have factory methods yet - keeping inline
-const FINANCIAL_REPORT = 'FINANCIAL-REPORT';
-const TRANSACTIONS_BY_REFERENCE = 'TRANSACTIONS_BY_REFERENCE';
-const CASH_FLOW_TRANSACTIONS = 'CASH_FLOW_TRANSACTIONS';
-const CASHFLOW_ACCOUNT_TRANSACTIONS_INFINITY = 'CASHFLOW_ACCOUNT_TRANSACTIONS_INFINITY';
-const ORGANIZATION_MUTATE_BASE_CURRENCY_ABILITIES = 'ORGANIZATION_MUTATE_BASE_CURRENCY_ABILITIES';
-const SETTING = 'SETTING';
-const SETTING_RECEIPTS = 'SETTING_RECEIPTS';
+import { financialReportsKeys } from '../FinancialReports/query-keys';
+import { settingsKeys } from '../settings/query-keys';
+import { organizationKeys } from '../organization/query-keys';
+import { cashflowAccountsKeys } from '../cashflow-accounts/query-keys';
 
 function commonInvalidateQueries(queryClient: ReturnType<typeof useQueryClient>) {
   queryClient.invalidateQueries({ queryKey: receiptsKeys.all() });
   queryClient.invalidateQueries({ queryKey: itemsKeys.all() });
   queryClient.invalidateQueries({ queryKey: accountsKeys.all() });
-  queryClient.invalidateQueries({ queryKey: [FINANCIAL_REPORT] });
-  queryClient.invalidateQueries({ queryKey: [TRANSACTIONS_BY_REFERENCE] });
-  queryClient.invalidateQueries({ queryKey: [CASH_FLOW_TRANSACTIONS] });
-  queryClient.invalidateQueries({ queryKey: [CASHFLOW_ACCOUNT_TRANSACTIONS_INFINITY] });
+  queryClient.invalidateQueries({ queryKey: financialReportsKeys.all() });
+  queryClient.invalidateQueries({ queryKey: financialReportsKeys.transactionsByReference().slice(0, 1) });
+  queryClient.invalidateQueries({ queryKey: cashflowAccountsKeys.transactions().slice(0, 1) });
+  queryClient.invalidateQueries({ queryKey: cashflowAccountsKeys.transactionsInfinity().slice(0, 1) });
   queryClient.invalidateQueries({ queryKey: itemsKeys.associatedReceipts(null).slice(0, 1) });
   queryClient.invalidateQueries({ queryKey: itemsKeys.warehousesLocation(null).slice(0, 1) });
-  queryClient.invalidateQueries({ queryKey: [SETTING, SETTING_RECEIPTS] });
-  queryClient.invalidateQueries({ queryKey: [ORGANIZATION_MUTATE_BASE_CURRENCY_ABILITIES] });
+  queryClient.invalidateQueries({ queryKey: settingsKeys.receipts() });
+  queryClient.invalidateQueries({ queryKey: organizationKeys.mutateAbilities() });
 }
 
 export function useCreateReceipt(
@@ -199,7 +194,7 @@ export function useCreateNotifyReceiptBySMS(
     mutationFn: ([id, values]: [number, Record<string, unknown>]) =>
       apiRequest.post(`sale-receipts/${id}/notify-by-sms`, values),
     onSuccess: (_data, [id]) => {
-      queryClient.invalidateQueries({ queryKey: [ReceiptsQueryKeys.NOTIFY_SALE_RECEIPT_BY_SMS, id] });
+      queryClient.invalidateQueries({ queryKey: receiptsKeys.notifyBySms(id) });
       commonInvalidateQueries(queryClient);
     },
   });
@@ -247,7 +242,7 @@ export function useSaleReceiptMailState(
 
   return useQuery({
     ...props,
-    queryKey: [ReceiptsQueryKeys.SALE_RECEIPT_MAIL_OPTIONS, receiptId],
+    queryKey: receiptsKeys.mailOptions(receiptId),
     queryFn: () => fetchSaleReceiptMail(fetcher, receiptId),
   });
 }
@@ -259,7 +254,7 @@ export function useGetReceiptState(
 
   return useQuery({
     ...options,
-    queryKey: ['SALE_RECEIPT_STATE'],
+    queryKey: receiptsKeys.state(),
     queryFn: () => fetchSaleReceiptState(fetcher),
   });
 }
@@ -272,7 +267,7 @@ export function useGetSaleReceiptHtml(
 
   return useQuery({
     ...options,
-    queryKey: ['SALE_RECEIPT_HTML', receiptId],
+    queryKey: receiptsKeys.html(receiptId),
     queryFn: () => fetchSaleReceiptHtmlContent(fetcher, receiptId),
   });
 }

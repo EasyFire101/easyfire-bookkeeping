@@ -1,5 +1,6 @@
 import type { OpArgType } from 'openapi-typescript-fetch';
 import type { ApiFetcher } from '../fetch-utils';
+import { withNestedQuery } from "../fetch-utils";
 import type { paths } from '../schema';
 import {
   OpForPath,
@@ -22,7 +23,8 @@ export async function fetchPayableAgingTable(
   query: PayableAgingTableQuery
 ): Promise<PayableAgingTableResponse> {
   const get = fetcher.path(PAYABLE_AGING_ROUTE).method('get').create();
-  const { data } = await get(query as Arg);
+  const { payload, init } = withNestedQuery(query);
+  const { data } = await get(payload as Arg, init);
   return data as unknown as PayableAgingTableResponse;
 }
 
@@ -36,7 +38,8 @@ export async function fetchPayableAgingJson(
   query: PayableAgingJsonQuery
 ): Promise<PayableAgingJsonResponse> {
   const get = fetcher.path(PAYABLE_AGING_ROUTE).method('get').create();
-  const { data } = await get(query as Arg);
+  const { payload, init } = withNestedQuery(query);
+  const { data } = await get(payload as Arg, init);
   return data as unknown as PayableAgingJsonResponse;
 }
 
@@ -49,7 +52,8 @@ export async function fetchPayableAgingCsv(
   query: PayableAgingCsvQuery
 ): Promise<PayableAgingCsvResponse> {
   const get = fetcher.path(PAYABLE_AGING_ROUTE).method('get').create();
-  const response = await get({ ...query, Accept: 'application/csv' } as Arg);
+  const { payload, init } = withNestedQuery({ ...query, Accept: "application/csv" } as Record<string, unknown>);
+  const response = await get(payload as Arg, init);
   return response.data as unknown as PayableAgingCsvResponse;
 }
 
@@ -62,7 +66,8 @@ export async function fetchPayableAgingXlsx(
   query: PayableAgingXlsxQuery
 ): Promise<PayableAgingXlsxResponse> {
   const get = fetcher.path(PAYABLE_AGING_ROUTE).method('get').create();
-  const response = await get({ ...query, Accept: 'application/xlsx' } as Arg);
+  const { payload, init } = withNestedQuery({ ...query, Accept: "application/xlsx" } as Record<string, unknown>);
+  const response = await get(payload as Arg, init);
   return response.data as unknown as PayableAgingXlsxResponse;
 }
 
@@ -75,6 +80,7 @@ export async function fetchPayableAgingPdf(
   query: PayableAgingPdfQuery
 ): Promise<PayableAgingPdfResponse> {
   const get = fetcher.path(PAYABLE_AGING_ROUTE).method('get').create();
-  const response = await get({ ...query, Accept: 'application/pdf' } as Arg);
+  const { payload, init } = withNestedQuery({ ...query, Accept: "application/pdf" } as Record<string, unknown>);
+  const response = await get(payload as Arg, init);
   return response.data as unknown as PayableAgingPdfResponse;
 }
