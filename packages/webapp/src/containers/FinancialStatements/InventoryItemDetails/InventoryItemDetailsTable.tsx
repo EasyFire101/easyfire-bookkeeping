@@ -1,4 +1,3 @@
-// @ts-nocheck
 import React, { useMemo } from 'react';
 import intl from 'react-intl-universal';
 import styled from 'styled-components';
@@ -10,18 +9,25 @@ import { useInventoryItemDetailsContext } from './InventoryItemDetailsProvider';
 import { defaultExpanderReducer, tableRowTypesToClassnames } from '@/utils';
 import { TableStyle } from '@/constants';
 
+interface InventoryItemDetailsTableProps {
+  companyName: string;
+}
+
 /**
  * Inventory item detail table.
  */
 export function InventoryItemDetailsTable({
   // #ownProps
   companyName,
-}) {
+}: InventoryItemDetailsTableProps) {
   const {
-    inventoryItemDetails: { tableRows, meta },
+    inventoryItemDetails,
     isInventoryItemDetailsLoading,
-    query,
   } = useInventoryItemDetailsContext();
+
+  // Null-safe access for SDK opaque type.
+  const tableRows = (inventoryItemDetails as any)?.tableRows ?? [];
+  const meta = (inventoryItemDetails as any)?.meta;
 
   const columns = useInventoryItemDetailsColumns();
 

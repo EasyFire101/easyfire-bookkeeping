@@ -1,4 +1,3 @@
-// @ts-nocheck
 import React, { useRef } from 'react';
 import {
   Button,
@@ -19,7 +18,7 @@ import {
   AppToaster,
 } from '@/components';
 
-import FinancialLoadingBar from '../FinancialLoadingBar';
+import { FinancialLoadingBar } from '../FinancialLoadingBar';
 import { useBalanceSheetContext } from './BalanceSheetProvider';
 import { FinancialComputeAlert } from '../FinancialReportPage';
 import { dynamicColumns } from './dynamicColumns';
@@ -75,14 +74,11 @@ export function BalanceSheetLoadingBar() {
  * Retrieve balance sheet columns.
  */
 export const useBalanceSheetColumns = () => {
-  // Balance sheet context.
-  const {
-    balanceSheet: { table },
-  } = useBalanceSheetContext();
+  const { balanceSheet } = useBalanceSheetContext();
 
   return React.useMemo(
-    () => dynamicColumns(table.columns, table.rows),
-    [table],
+    () => dynamicColumns(balanceSheet?.table?.columns ?? [], balanceSheet?.table?.rows ?? []),
+    [balanceSheet?.table],
   );
 };
 

@@ -1,4 +1,3 @@
-// @ts-nocheck
 import React from 'react';
 import moment from 'moment';
 import * as Yup from 'yup';
@@ -14,12 +13,11 @@ export const getDefaultPurchasesByItemsQuery = () => ({
   fromDate: moment().startOf('month').format('YYYY-MM-DD'),
   toDate: moment().format('YYYY-MM-DD'),
   filterByOption: 'with-transactions',
-  itemsIds: [],
+  itemsIds: [] as string[],
 });
 
 /**
  * Retrieves the purchases by items query validation schema.
- * @returns {Yup}
  */
 export const getPurchasesByItemsQuerySchema = () => {
   return Yup.object().shape({
@@ -34,7 +32,7 @@ export const getPurchasesByItemsQuerySchema = () => {
 /**
  * Parses the purchases by items query.
  */
-const parsePurchasesByItemsQuery = (locationQuery) => {
+const parsePurchasesByItemsQuery = (locationQuery: Record<string, unknown>) => {
   const defaultQuery = getDefaultPurchasesByItemsQuery();
 
   const transformed = {

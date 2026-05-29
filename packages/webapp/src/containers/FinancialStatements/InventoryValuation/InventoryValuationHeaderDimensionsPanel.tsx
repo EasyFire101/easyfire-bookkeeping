@@ -1,4 +1,3 @@
-// @ts-nocheck
 import React from 'react';
 import intl from 'react-intl-universal';
 import { FormGroup, Classes } from '@blueprintjs/core';
@@ -19,7 +18,7 @@ import { Features } from '@/constants';
  * Inventory Valuation header dismension panel.
  * @returns {JSX.Element}
  */
-export default function InventoryValuationHeaderDimensionsPanel() {
+export function InventoryValuationHeaderDimensionsPanel() {
   return (
     <InventoryValuationHeaderDimensionsProvider>
       <InventoryValuationHeaderDimensionsPanelContent />

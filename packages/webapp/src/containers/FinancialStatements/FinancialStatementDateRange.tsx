@@ -1,8 +1,7 @@
-// @ts-nocheck
-import React, { useMemo } from 'react';
+import React from 'react';
 import intl from 'react-intl-universal';
 import moment from 'moment';
-import { FastField, ErrorMessage } from 'formik';
+import { FastField } from 'formik';
 import { HTMLSelect, FormGroup, Position } from '@blueprintjs/core';
 
 import { Row, Col, Hint, FDateInput, FFormGroup } from '@/components';
@@ -11,16 +10,13 @@ import { dateRangeOptions } from './constants';
 
 const FINANCIAL_REPORT_MAX_DATE = moment().add(5, 'years').toDate();
 
-/**
- * Financial statement - Date range select.
- */
-export default function FinancialStatementDateRange() {
+export function FinancialStatementDateRange() {
   return (
     <>
       <Row>
         <Col xs={4}>
           <FastField name={'date_range'}>
-            {({ form: { setFieldValue }, field: { value } }) => (
+            {({ form: { setFieldValue }, field: { value } }: any) => (
               <FormGroup
                 label={intl.get('report_date_range')}
                 labelInfo={<Hint />}

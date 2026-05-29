@@ -1,22 +1,21 @@
-// @ts-nocheck
 import React from 'react';
 import * as R from 'ramda';
 
-import CashFlowStatementTable from './CashFlowStatementTable';
+import { CashFlowStatementTable } from './CashFlowStatementTable';
 import { FinancialReportBody } from '../FinancialReportPage';
 import { FinancialSheetSkeleton } from '@/components/FinancialSheet';
 
 import { useCashFlowStatementContext } from './CashFlowStatementProvider';
-import { withCurrentOrganization } from '@/containers/Organization/withCurrentOrganization';
+import {
+  withCurrentOrganization,
+  WithCurrentOrganizationProps,
+} from '@/containers/Organization/withCurrentOrganization';
 
-/**
- * Cashflow stement body.
- * @returns {React.JSX}
- */
-function CashFlowStatementBodyJSX({
-  // #withPreferences
-  organizationName,
-}) {
+interface CashFlowStatementBodyProps {
+  organizationName: WithCurrentOrganizationProps['organization'];
+}
+
+function CashFlowStatementBodyJSX({ organizationName }: CashFlowStatementBodyProps) {
   const { isCashFlowLoading } = useCashFlowStatementContext();
 
   return (

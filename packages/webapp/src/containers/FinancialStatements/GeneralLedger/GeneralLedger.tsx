@@ -1,9 +1,8 @@
-// @ts-nocheck
 import React, { useCallback, useEffect } from 'react';
 import moment from 'moment';
 
-import GeneralLedgerHeader from './GeneralLedgerHeader';
-import GeneralLedgerActionsBar from './GeneralLedgerActionsBar';
+import { GeneralLedgerHeader } from './GeneralLedgerHeader';
+import { GeneralLedgerActionsBar } from './GeneralLedgerActionsBar';
 import { GeneralLedgerBody } from './GeneralLedgerBody';
 import { useGeneralLedgerQuery } from './common';
 import { GeneralLedgerProvider } from './GeneralLedgerProvider';
@@ -15,23 +14,30 @@ import {
 } from './components';
 
 import { withGeneralLedgerActions } from './withGeneralLedgerActions';
+import type { WithGeneralLedgerActionsProps } from './withGeneralLedgerActions';
 import { compose } from '@/utils';
 import { GeneralLedgerPdfDialog } from './dialogs/GeneralLedgerPdfDialog';
 import { DialogsName } from '@/constants/dialogs';
 
+interface GeneralLedgerFilterValues {
+  fromDate: Date | string;
+  toDate: Date | string;
+  [key: string]: unknown;
+}
+
 /**
  * General Ledger (GL) sheet.
  */
-function GeneralLedger({
+function GeneralLedgerInner({
   // #withGeneralLedgerActions
   toggleGeneralLedgerFilterDrawer,
-}) {
+}: WithGeneralLedgerActionsProps) {
   // General ledger query.
   const { query, setLocationQuery } = useGeneralLedgerQuery();
 
   // Handle financial statement filter change.
   const handleFilterSubmit = useCallback(
-    (filter) => {
+    (filter: GeneralLedgerFilterValues) => {
       const parsedFilter = {
         ...filter,
         fromDate: moment(filter.fromDate).format('YYYY-MM-DD'),
@@ -71,4 +77,4 @@ function GeneralLedger({
   );
 }
 
-export default compose(withGeneralLedgerActions)(GeneralLedger);
+export const GeneralLedger = compose(withGeneralLedgerActions)(GeneralLedgerInner);

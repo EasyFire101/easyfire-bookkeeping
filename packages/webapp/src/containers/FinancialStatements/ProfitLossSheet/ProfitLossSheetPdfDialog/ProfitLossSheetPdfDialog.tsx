@@ -1,4 +1,3 @@
-// @ts-nocheck
 import React, { lazy } from 'react';
 import classNames from 'classnames';
 
@@ -9,16 +8,23 @@ import withDialogRedux from '@/components/DialogReduxConnect';
 import { CLASSES } from '@/constants/classes';
 import { compose } from '@/utils';
 
-// Lazy loading the content.
 const ProfitLossSheetPdfDialogContent = lazy(
-  () => import('./ProfitLossSheetPdfDialogContent'),
+  () =>
+    import('./ProfitLossSheetPdfDialogContent').then((mod) => ({
+      default: mod.ProfitLossSheetPdfDialogContent,
+    })),
 );
 
-/**
- * Cashflow sheet pdf preview dialog.
- * @returns {React.ReactNode}
- */
-function ProfitLossSheetPdfDialogRoot({ dialogName, payload, isOpen }) {
+interface ProfitLossSheetPdfDialogRootProps {
+  dialogName: string;
+  payload?: Record<string, unknown>;
+  isOpen: boolean;
+}
+
+function ProfitLossSheetPdfDialogRoot({
+  dialogName,
+  isOpen,
+}: ProfitLossSheetPdfDialogRootProps) {
   return (
     <Dialog
       name={dialogName}

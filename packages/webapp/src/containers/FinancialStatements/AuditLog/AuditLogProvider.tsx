@@ -1,33 +1,76 @@
-// @ts-nocheck
-import React, { createContext, useCallback, useContext, useMemo } from 'react';
+import React, {
+  createContext,
+  useCallback,
+  useContext,
+  useMemo,
+} from 'react';
 import { flatten, map } from 'lodash';
 import { useAuditLogsInfinityQuery } from '@/hooks/query';
 import { IntersectionObserver } from '@/components';
 
-function flattenInfinityPagesData(data) {
+function flattenInfinityPagesData(data: {
+  pages: { data: Record<string, any>[] }[];
+}) {
   return flatten(map(data.pages, (page) => page.data));
 }
 
-// Context for Audit Log
-const AuditLogContext = React.createContext();
+interface AuditLogQuery {
+  subject?: string | string[];
+  action?: string | string[];
+  fromDate?: string;
+  toDate?: string;
+  [key: string]: unknown;
+}
 
-const useAuditLogContext = () => useContext(AuditLogContext);
+interface AuditLogContextValue {
+  auditLogs: Record<string, any>[];
+  isLoading: boolean;
+  isFetching: boolean;
+  isFetchingNextPage: boolean;
+  hasNextPage: boolean | undefined;
+  fetchNextPage: () => void;
+  handleObserverInteract: () => void;
+  sheetRefresh: () => void;
+  httpQuery: Record<string, unknown>;
+}
+
+interface AuditLogProviderProps {
+  query: AuditLogQuery;
+  children?: React.ReactNode;
+}
+
+// Context for Audit Log
+const AuditLogContext = createContext<AuditLogContextValue | undefined>(
+  undefined,
+);
+
+const useAuditLogContext = (): AuditLogContextValue => {
+  const ctx = useContext(AuditLogContext);
+  if (!ctx) {
+    throw new Error(
+      'useAuditLogContext must be used within an AuditLogProvider',
+    );
+  }
+  return ctx;
+};
 
 /**
  * Audit Log Provider
  */
-function toHttpStringList(value) {
+function toHttpStringList(
+  value: string | string[] | null | undefined,
+): string[] | undefined {
   if (value == null || value === '') return undefined;
   if (Array.isArray(value)) return value.length ? value : undefined;
   return [value];
 }
 
-function AuditLogProvider({ query, children }) {
+function AuditLogProvider({ query, children }: AuditLogProviderProps) {
   const httpQuery = useMemo(() => {
     return {
       pageSize: 20,
-      subject: toHttpStringList(query.subject),
-      action: toHttpStringList(query.action),
+      subject: toHttpStringList(query.subject as string | string[]),
+      action: toHttpStringList(query.action as string | string[]),
       from: query.fromDate || undefined,
       to: query.toDate || undefined,
     };
@@ -46,7 +89,11 @@ function AuditLogProvider({ query, children }) {
   const auditLogs = useMemo(
     () =>
       auditLogsPages
-        ? flattenInfinityPagesData(auditLogsPages)
+        ? flattenInfinityPagesData(
+            auditLogsPages as unknown as {
+              pages: { data: Record<string, any>[] }[];
+            },
+          )
         : [],
     [auditLogsPages],
   );
@@ -57,7 +104,7 @@ function AuditLogProvider({ query, children }) {
     }
   }, [isFetching, hasNextPage, fetchNextPage]);
 
-  const provider = {
+  const provider: AuditLogContextValue = {
     auditLogs,
     isLoading,
     isFetching,
@@ -65,16 +112,14 @@ function AuditLogProvider({ query, children }) {
     hasNextPage,
     fetchNextPage,
     handleObserverInteract,
-    sheetRefresh: refetch,
+    sheetRefresh: refetch as () => void,
     httpQuery,
   };
 
   return (
     <AuditLogContext.Provider value={provider}>
       {children}
-      <IntersectionObserver
-        onIntersect={handleObserverInteract}
-      />
+      <IntersectionObserver onIntersect={handleObserverInteract} />
     </AuditLogContext.Provider>
   );
 }

@@ -1,4 +1,3 @@
-// @ts-nocheck
 import {
   DialogContent,
   PdfDocumentPreview,
@@ -8,7 +7,7 @@ import { AnchorButton } from '@blueprintjs/core';
 import { useCustomerBalanceSummaryPdf } from '@/hooks/query';
 import { useCustomersBalanceSummaryContext } from '../CustomersBalanceSummaryProvider';
 
-export default function CustomerBalanceSummaryPdfDialogContent() {
+export function CustomerBalanceSummaryPdfDialogContent() {
   const { httpQuery } = useCustomersBalanceSummaryContext();
   const { isLoading, pdfUrl } = useCustomerBalanceSummaryPdf(httpQuery);
 

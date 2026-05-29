@@ -1,13 +1,16 @@
-// @ts-nocheck
 import React from 'react';
 import * as R from 'ramda';
 
-import VendorsBalanceSummaryTable from './VendorsBalanceSummaryTable';
+import { VendorsBalanceSummaryTable } from './VendorsBalanceSummaryTable';
 import { FinancialSheetSkeleton } from '@/components/FinancialSheet';
 import { FinancialReportBody } from '../FinancialReportPage';
 import { useVendorsBalanceSummaryContext } from './VendorsBalanceSummaryProvider';
 
-import { withCurrentOrganization } from '@/containers/Organization/withCurrentOrganization';
+import { withCurrentOrganization, WithCurrentOrganizationProps } from '@/containers/Organization/withCurrentOrganization';
+
+interface VendorsBalanceSummaryBodyJSXProps {
+  organizationName: WithCurrentOrganizationProps['organization'];
+}
 
 /**
  * Vendor balance summary body.
@@ -16,7 +19,7 @@ import { withCurrentOrganization } from '@/containers/Organization/withCurrentOr
 function VendorsBalanceSummaryBodyJSX({
   // #withCurrentOrganization
   organizationName,
-}) {
+}: VendorsBalanceSummaryBodyJSXProps) {
   const { isVendorsBalanceLoading } = useVendorsBalanceSummaryContext();
 
   return (

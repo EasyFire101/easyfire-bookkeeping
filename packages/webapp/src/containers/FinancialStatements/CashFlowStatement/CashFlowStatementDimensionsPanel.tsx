@@ -1,4 +1,3 @@
-// @ts-nocheck
 import React from 'react';
 import intl from 'react-intl-universal';
 import { FormGroup, Classes } from '@blueprintjs/core';
@@ -14,7 +13,7 @@ import { Features } from '@/constants';
  * Cash flow statement dismension panel.
  * @returns
  */
-export default function CashFlowStatementDimensionsPanel() {
+export function CashFlowStatementDimensionsPanel() {
   return (
     <CashFlowStatementDimensionsPanelProvider>
       <CashFlowStatementDimensionsPanelContent />

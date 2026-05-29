@@ -1,4 +1,3 @@
-// @ts-nocheck
 import React from 'react';
 import { Classes } from '@blueprintjs/core';
 
@@ -10,9 +9,9 @@ import {
   FFormGroup,
 } from '@/components';
 
-import RadiosAccountingBasis from '../RadiosAccountingBasis';
-import FinancialStatementsFilter from '../FinancialStatementsFilter';
-import FinancialStatementDateRange from '../FinancialStatementDateRange';
+import { RadiosAccountingBasis } from '../RadiosAccountingBasis';
+import { FinancialStatementsFilter } from '../FinancialStatementsFilter';
+import { FinancialStatementDateRange } from '../FinancialStatementDateRange';
 
 import { filterAccountsOptions } from './common';
 import { useGLGeneralPanelContext } from './GLHeaderGeneralPaneProvider';
@@ -21,7 +20,7 @@ import { GLHeaderGeneralPanelProvider } from './GLHeaderGeneralPaneProvider';
 /**
  * General ledger (GL) - Header - General panel.
  */
-export default function GLHeaderGeneralPane() {
+export function GLHeaderGeneralPane() {
   return (
     <GLHeaderGeneralPanelProvider>
       <GLHeaderGeneralPaneContent />

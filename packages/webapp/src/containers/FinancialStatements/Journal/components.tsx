@@ -1,4 +1,3 @@
-// @ts-nocheck
 import React, { useRef } from 'react';
 import classNames from 'classnames';
 import {
@@ -19,7 +18,7 @@ import {
   FormattedMessage as T,
 } from '@/components';
 import { useJournalSheetContext } from './JournalProvider';
-import FinancialLoadingBar from '../FinancialLoadingBar';
+import { FinancialLoadingBar } from '../FinancialLoadingBar';
 import { FinancialComputeAlert } from '../FinancialReportPage';
 
 import {
@@ -55,7 +54,7 @@ export function JournalSheetAlerts() {
     return null;
   }
   // Can't continue if the cost compute job is running.
-  if (!journalSheet.meta.is_cost_compute_running) {
+  if (!(journalSheet as any)?.meta?.is_cost_compute_running) {
     return null;
   }
   return (
@@ -75,7 +74,7 @@ export function JournalSheetAlerts() {
  * @returns {JSX.Element}
  */
 export const JournalSheetExportMenu = () => {
-  const toastKey = useRef(null);
+  const toastKey = useRef<string | number | undefined>(null);
   const commonToastConfig = {
     isCloseButtonShown: true,
     timeout: 2000,
@@ -97,43 +96,49 @@ export const JournalSheetExportMenu = () => {
     );
   };
   // Exports the report to xlsx.
-  const { mutateAsync: xlsxExport } = useJournalSheetXlsxExport(httpQuery, {
-    onDownloadProgress: (xlsxExportProgress: number) => {
-      if (!toastKey.current) {
-        toastKey.current = AppToaster.show({
-          message: openProgressToast(xlsxExportProgress),
-          ...commonToastConfig,
-        });
-      } else {
-        AppToaster.show(
-          {
+  const { mutateAsync: xlsxExport } = useJournalSheetXlsxExport(
+    httpQuery as any,
+    {
+      onDownloadProgress: (xlsxExportProgress: number) => {
+        if (!toastKey.current) {
+          toastKey.current = AppToaster.show({
             message: openProgressToast(xlsxExportProgress),
             ...commonToastConfig,
-          },
-          toastKey.current,
-        );
-      }
+          });
+        } else {
+          AppToaster.show(
+            {
+              message: openProgressToast(xlsxExportProgress),
+              ...commonToastConfig,
+            },
+            toastKey.current,
+          );
+        }
+      },
     },
-  });
+  );
   // Exports the report to csv.
-  const { mutateAsync: csvExport } = useJournalSheetCsvExport(httpQuery, {
-    onDownloadProgress: (xlsxExportProgress: number) => {
-      if (!toastKey.current) {
-        toastKey.current = AppToaster.show({
-          message: openProgressToast(xlsxExportProgress),
-          ...commonToastConfig,
-        });
-      } else {
-        AppToaster.show(
-          {
+  const { mutateAsync: csvExport } = useJournalSheetCsvExport(
+    httpQuery as any,
+    {
+      onDownloadProgress: (xlsxExportProgress: number) => {
+        if (!toastKey.current) {
+          toastKey.current = AppToaster.show({
             message: openProgressToast(xlsxExportProgress),
             ...commonToastConfig,
-          },
-          toastKey.current,
-        );
-      }
+          });
+        } else {
+          AppToaster.show(
+            {
+              message: openProgressToast(xlsxExportProgress),
+              ...commonToastConfig,
+            },
+            toastKey.current,
+          );
+        }
+      },
     },
-  });
+  );
   // Handle csv export button click.
   const handleCsvExportBtnClick = () => {
     csvExport();

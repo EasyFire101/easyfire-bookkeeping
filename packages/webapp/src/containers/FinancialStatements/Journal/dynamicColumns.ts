@@ -1,14 +1,17 @@
-// @ts-nocheck
 import React from 'react';
 import { Align, CLASSES } from '@/constants';
 import { getColumnWidth } from '@/utils';
 import * as R from 'ramda';
 import { useJournalSheetContext } from './JournalProvider';
 
+interface DescriptionCellProps {
+  cell: { value: string };
+}
+
 /**
- * Description cell – wraps value in a div with muted text class.
+ * Description cell - wraps value in a div with muted text class.
  */
-function DescriptionCell({ cell: { value } }) {
+function DescriptionCell({ cell: { value } }: DescriptionCellProps) {
   return React.createElement(
     'span',
     { className: `cell ${CLASSES.TEXT_MUTED}` },
@@ -16,9 +19,13 @@ function DescriptionCell({ cell: { value } }) {
   );
 }
 
-const getTableCellValueAccessor = (index) => `cells[${index}].value`;
+const getTableCellValueAccessor = (index: number) => `cells[${index}].value`;
 
-const getReportColWidth = (data, accessor, headerText) => {
+const getReportColWidth = (
+  data: unknown[],
+  accessor: string,
+  headerText: string,
+) => {
   return getColumnWidth(
     data,
     accessor,
@@ -27,10 +34,17 @@ const getReportColWidth = (data, accessor, headerText) => {
   );
 };
 
+interface DynamicColumn {
+  key: string;
+  label: string;
+  cell_index: number;
+  [key: string]: unknown;
+}
+
 /**
  * Common column mapper.
  */
-const commonAccessor = R.curry((data, column) => {
+const commonAccessor = R.curry((data: unknown[], column: DynamicColumn) => {
   const accessor = getTableCellValueAccessor(column.cell_index);
 
   return {
@@ -46,22 +60,24 @@ const commonAccessor = R.curry((data, column) => {
 /**
  * Numeric columns accessor.
  */
-const numericColumnAccessor = R.curry((data, column) => {
-  const accessor = getTableCellValueAccessor(column.cell_index);
-  const width = getReportColWidth(data, accessor, column.label);
+const numericColumnAccessor = R.curry(
+  (data: unknown[], column: DynamicColumn) => {
+    const accessor = getTableCellValueAccessor(column.cell_index);
+    const width = getReportColWidth(data, accessor, column.label);
 
-  return {
-    ...column,
-    align: Align.Right,
-    money: true,
-    width,
-  };
-});
+    return {
+      ...column,
+      align: Align.Right,
+      money: true,
+      width,
+    };
+  },
+);
 
 /**
  * Date column accessor.
  */
-const dateColumnAccessor = (column) => {
+const dateColumnAccessor = (column: DynamicColumn) => {
   return {
     ...column,
     width: 100,
@@ -71,7 +87,7 @@ const dateColumnAccessor = (column) => {
 /**
  * Transaction type column accessor.
  */
-const transactionTypeColumnAccessor = (column) => {
+const transactionTypeColumnAccessor = (column: DynamicColumn) => {
   return {
     ...column,
     width: 120,
@@ -81,7 +97,7 @@ const transactionTypeColumnAccessor = (column) => {
 /**
  * Transaction number column accessor.
  */
-const transactionNumberColumnAccessor = (column) => {
+const transactionNumberColumnAccessor = (column: DynamicColumn) => {
   return {
     ...column,
     width: 70,
@@ -91,7 +107,7 @@ const transactionNumberColumnAccessor = (column) => {
 /**
  * Account code column accessor.
  */
-const accountCodeColumnAccessor = (column) => {
+const accountCodeColumnAccessor = (column: DynamicColumn) => {
   return {
     ...column,
     width: 70,
@@ -101,7 +117,7 @@ const accountCodeColumnAccessor = (column) => {
 /**
  * Description column accessor (muted text in wrapped cell).
  */
-const descriptionColumnAccessor = (column) => {
+const descriptionColumnAccessor = (column: DynamicColumn) => {
   return {
     ...column,
     Cell: DescriptionCell,
@@ -110,36 +126,36 @@ const descriptionColumnAccessor = (column) => {
 
 /**
  * Dynamic column mapper.
- * @param {} data -
- * @param {} column -
  */
-const dynamicColumnMapper = R.curry((data, column) => {
-  const _commonAccessor = commonAccessor(data);
-  const _numericColumnAccessor = numericColumnAccessor(data);
+const dynamicColumnMapper = R.curry(
+  (data: unknown[], column: DynamicColumn) => {
+    const _commonAccessor = commonAccessor(data);
+    const _numericColumnAccessor = numericColumnAccessor(data);
 
-  return R.compose(
-    R.when(R.pathEq(['key'], 'date'), dateColumnAccessor),
-    R.when(
-      R.pathEq(['key'], 'transaction_type'),
-      transactionTypeColumnAccessor,
-    ),
-    R.when(
-      R.pathEq(['key'], 'transaction_number'),
-      transactionNumberColumnAccessor,
-    ),
-    R.when(R.pathEq(['key'], 'description'), descriptionColumnAccessor),
-    R.when(R.pathEq(['key'], 'account_code'), accountCodeColumnAccessor),
-    R.when(R.pathEq(['key'], 'credit'), _numericColumnAccessor),
-    R.when(R.pathEq(['key'], 'debit'), _numericColumnAccessor),
-    _commonAccessor,
-  )(column);
-});
+    return R.compose(
+      R.when(R.pathEq(['key'], 'date'), dateColumnAccessor),
+      R.when(
+        R.pathEq(['key'], 'transaction_type'),
+        transactionTypeColumnAccessor,
+      ),
+      R.when(
+        R.pathEq(['key'], 'transaction_number'),
+        transactionNumberColumnAccessor,
+      ),
+      R.when(R.pathEq(['key'], 'description'), descriptionColumnAccessor),
+      R.when(R.pathEq(['key'], 'account_code'), accountCodeColumnAccessor),
+      R.when(R.pathEq(['key'], 'credit'), _numericColumnAccessor),
+      R.when(R.pathEq(['key'], 'debit'), _numericColumnAccessor),
+      _commonAccessor,
+    )(column);
+  },
+);
 
 /**
  * Composes the fetched dynamic columns from the server to the columns to pass it
  * to the table component.
  */
-export const dynamicColumns = (columns, data) => {
+export const dynamicColumns = (columns: DynamicColumn[], data: unknown[]) => {
   return R.map(dynamicColumnMapper(data), columns);
 };
 
@@ -152,7 +168,7 @@ export const useJournalSheetColumns = () => {
   if (!journalSheet) {
     throw new Error('The journal sheet is not loaded');
   }
-  const { table } = journalSheet;
+  const table = (journalSheet as any)?.table;
 
   return dynamicColumns(table.columns, table.rows);
 };

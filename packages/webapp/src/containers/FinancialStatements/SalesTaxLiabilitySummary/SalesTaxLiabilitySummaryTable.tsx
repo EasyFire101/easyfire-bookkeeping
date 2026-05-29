@@ -1,4 +1,3 @@
-// @ts-nocheck
 import React from 'react';
 import styled from 'styled-components';
 import { compose } from 'ramda';
@@ -7,8 +6,12 @@ import { TableStyle } from '@/constants';
 import { ReportDataTable, FinancialSheet } from '@/components';
 import { defaultExpanderReducer, tableRowTypesToClassnames } from '@/utils';
 import { useSalesTaxLiabilitySummaryContext } from './SalesTaxLiabilitySummaryBoot';
-import { withCurrentOrganization } from '@/containers/Organization/withCurrentOrganization';
+import { withCurrentOrganization, WithCurrentOrganizationProps } from '@/containers/Organization/withCurrentOrganization';
 import { useSalesTaxLiabilitySummaryColumns } from './utils';
+
+interface SalesTaxLiabilitySummaryTableRootProps {
+  organizationName: WithCurrentOrganizationProps['organization'];
+}
 
 /**
  * Balance sheet table.
@@ -16,18 +19,19 @@ import { useSalesTaxLiabilitySummaryColumns } from './utils';
 function SalesTaxLiabilitySummaryTableRoot({
   // #ownProps
   organizationName,
-}) {
+}: SalesTaxLiabilitySummaryTableRootProps) {
   // Balance sheet context.
-  const {
-    salesTaxLiabilitySummary: { table, query, meta },
-  } = useSalesTaxLiabilitySummaryContext();
+  const { salesTaxLiabilitySummary } = useSalesTaxLiabilitySummaryContext();
+
+  const table = (salesTaxLiabilitySummary as any)?.table;
+  const meta = (salesTaxLiabilitySummary as any)?.meta;
 
   // Retrieve the database columns.
   const columns = useSalesTaxLiabilitySummaryColumns();
 
   // Retrieve default expanded rows of balance sheet.
   const expandedRows = React.useMemo(
-    () => defaultExpanderReducer(table.rows, 3),
+    () => defaultExpanderReducer(table?.rows, 3),
     [table],
   );
 
@@ -40,7 +44,7 @@ function SalesTaxLiabilitySummaryTableRoot({
     >
       <SalesTaxLiabilitySummaryDataTable
         columns={columns}
-        data={table.rows}
+        data={table?.rows}
         rowClassNames={tableRowTypesToClassnames}
         noInitialFetch={true}
         expandable={true}

@@ -1,4 +1,3 @@
-// @ts-nocheck
 import React from 'react';
 import intl from 'react-intl-universal';
 import { FormGroup, Classes } from '@blueprintjs/core';
@@ -11,10 +10,10 @@ import { useFeatureCan } from '@/hooks/state';
 import { Features } from '@/constants';
 
 /**
- * Trial balance sheet header dismension panel.
+ * Trial balance sheet header dimension panel.
  * @returns {JSX.Element}
  */
-export default function TrialBalanceSheetHeaderDimensionsPanel() {
+export function TrialBalanceSheetHeaderDimensionsPanel() {
   return (
     <TrialBLHeaderDimensionsPanelProvider>
       <TrialBLSheetHeaderDimensionsPanelContent />
@@ -23,7 +22,7 @@ export default function TrialBalanceSheetHeaderDimensionsPanel() {
 }
 
 /**
- * Trial balance sheet header dismension panel content.
+ * Trial balance sheet header dimension panel content.
  * @returns {JSX.Element}
  */
 function TrialBLSheetHeaderDimensionsPanelContent() {

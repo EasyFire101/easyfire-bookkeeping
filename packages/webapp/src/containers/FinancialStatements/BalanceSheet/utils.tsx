@@ -1,13 +1,17 @@
-// @ts-nocheck
 import React from 'react';
 import * as R from 'ramda';
 import moment from 'moment';
 import * as Yup from 'yup';
 import { castArray } from 'lodash';
 import intl from 'react-intl-universal';
+import type { FormikContextType } from 'formik';
 
 import { transformToForm } from '@/utils';
 import { useAppQueryString } from '@/hooks';
+
+interface FormSetFieldValue {
+  setFieldValue: FormikContextType<Record<string, unknown>>['setFieldValue'];
+}
 
 /**
  * Retrieves the default balance sheet query.
@@ -36,10 +40,7 @@ export const getDefaultBalanceSheetQuery = () => ({
   numberFormat: {},
 });
 
-/**
- * Parses balance sheet query.
- */
-const parseBalanceSheetQuery = (locationQuery) => {
+const parseBalanceSheetQuery = (locationQuery: Record<string, unknown>) => {
   const defaultQuery = getDefaultBalanceSheetQuery();
 
   const transformed = {
@@ -102,49 +103,43 @@ export const getBalanceSheetHeaderValidationSchema = () =>
     displayColumnsType: Yup.string(),
   });
 
-/**
- * Handles previous year checkbox change.
- */
-export const handlePreviousYearCheckBoxChange = R.curry((form, event) => {
-  const isChecked = event.currentTarget.checked;
-  form.setFieldValue('previousYear', isChecked);
+export const handlePreviousYearCheckBoxChange = R.curry(
+  (form: FormSetFieldValue, event: React.ChangeEvent<HTMLInputElement>) => {
+    const isChecked = event.currentTarget.checked;
+    form.setFieldValue('previousYear', isChecked);
 
-  if (!isChecked) {
-    form.setFieldValue('previousYearAmountChange', isChecked);
-    form.setFieldValue('previousYearPercentageChange', isChecked);
-  }
-});
+    if (!isChecked) {
+      form.setFieldValue('previousYearAmountChange', isChecked);
+      form.setFieldValue('previousYearPercentageChange', isChecked);
+    }
+  },
+);
 
-/**
- * Handles previous period checkbox change.
- */
-export const handlePreviousPeriodCheckBoxChange = R.curry((form, event) => {
-  const isChecked = event.currentTarget.checked;
-  form.setFieldValue('previousPeriod', isChecked);
+export const handlePreviousPeriodCheckBoxChange = R.curry(
+  (form: FormSetFieldValue, event: React.ChangeEvent<HTMLInputElement>) => {
+    const isChecked = event.currentTarget.checked;
+    form.setFieldValue('previousPeriod', isChecked);
 
-  if (!isChecked) {
-    form.setFieldValue('previousPeriodAmountChange', isChecked);
-    form.setFieldValue('previousPeriodPercentageChange', isChecked);
-  }
-});
+    if (!isChecked) {
+      form.setFieldValue('previousPeriodAmountChange', isChecked);
+      form.setFieldValue('previousPeriodPercentageChange', isChecked);
+    }
+  },
+);
 
-/**
- * Handles previous year change checkbox change.
- */
-export const handlePreviousYearChangeCheckboxChange = R.curry((form, event) => {
-  const isChecked = event.currentTarget.checked;
+export const handlePreviousYearChangeCheckboxChange = R.curry(
+  (form: FormSetFieldValue, event: React.ChangeEvent<HTMLInputElement>) => {
+    const isChecked = event.currentTarget.checked;
 
-  if (isChecked) {
-    form.setFieldValue('previousYear', event.currentTarget.checked);
-  }
-  form.setFieldValue('previousYearAmountChange', event.currentTarget.checked);
-});
+    if (isChecked) {
+      form.setFieldValue('previousYear', event.currentTarget.checked);
+    }
+    form.setFieldValue('previousYearAmountChange', event.currentTarget.checked);
+  },
+);
 
-/**
- * Handles preivous year percentage checkbox change.
- */
 export const handlePreviousYearPercentageCheckboxChange = R.curry(
-  (form, event) => {
+  (form: FormSetFieldValue, event: React.ChangeEvent<HTMLInputElement>) => {
     const isChecked = event.currentTarget.checked;
 
     if (isChecked) {
@@ -154,11 +149,8 @@ export const handlePreviousYearPercentageCheckboxChange = R.curry(
   },
 );
 
-/**
- * Handles previous period percentage checkbox change.
- */
 export const handlePreivousPeriodPercentageCheckboxChange = R.curry(
-  (form, event) => {
+  (form: FormSetFieldValue, event: React.ChangeEvent<HTMLInputElement>) => {
     const isChecked = event.currentTarget.checked;
 
     if (isChecked) {
@@ -168,11 +160,8 @@ export const handlePreivousPeriodPercentageCheckboxChange = R.curry(
   },
 );
 
-/**
- * Handle previous period change checkbox change.
- */
 export const handlePreviousPeriodChangeCheckboxChange = R.curry(
-  (form, event) => {
+  (form: FormSetFieldValue, event: React.ChangeEvent<HTMLInputElement>) => {
     const isChecked = event.currentTarget.checked;
 
     if (isChecked) {

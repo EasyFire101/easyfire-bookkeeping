@@ -1,4 +1,3 @@
-// @ts-nocheck
 import React, { useRef } from 'react';
 import intl from 'react-intl-universal';
 import * as R from 'ramda';
@@ -6,7 +5,7 @@ import classNames from 'classnames';
 
 import { AppToaster, If, Stack } from '@/components';
 import { Align } from '@/constants';
-import FinancialLoadingBar from '../FinancialLoadingBar';
+import { FinancialLoadingBar } from '../FinancialLoadingBar';
 import { useCustomersBalanceSummaryContext } from './CustomersBalanceSummaryProvider';
 import {
   Classes,
@@ -25,13 +24,11 @@ import {
  * Retrieve customers balance summary columns.
  */
 export const useCustomersSummaryColumns = () => {
-  const {
-    CustomerBalanceSummary: { table },
-  } = useCustomersBalanceSummaryContext();
+  const { CustomerBalanceSummary } = useCustomersBalanceSummaryContext();
 
   return React.useMemo(() => {
-    return dynamicColumns(table.columns || []);
-  }, [table.columns]);
+    return dynamicColumns((CustomerBalanceSummary as any)?.table?.columns ?? []);
+  }, [(CustomerBalanceSummary as any)?.table?.columns]);
 };
 
 /**

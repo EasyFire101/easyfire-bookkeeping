@@ -1,13 +1,16 @@
-// @ts-nocheck
 import React from 'react';
 import * as R from 'ramda';
 
 import { FinancialReportBody } from '../FinancialReportPage';
 import { FinancialSheetSkeleton } from '@/components/FinancialSheet';
 import { useVendorsTransactionsContext } from './VendorsTransactionsProvider';
-import VendorsTransactionsTable from './VendorsTransactionsTable';
+import { VendorsTransactionsTable } from './VendorsTransactionsTable';
 
-import { withCurrentOrganization } from '@/containers/Organization/withCurrentOrganization';
+import { withCurrentOrganization, WithCurrentOrganizationProps } from '@/containers/Organization/withCurrentOrganization';
+
+interface VendorsTransactionsBodyJSXProps {
+  organizationName: WithCurrentOrganizationProps['organization'];
+}
 
 /**
  * Vendors transactions body.
@@ -16,7 +19,7 @@ import { withCurrentOrganization } from '@/containers/Organization/withCurrentOr
 function VendorsTransactionsBodyJSX({
   // #withPreferences
   organizationName,
-}) {
+}: VendorsTransactionsBodyJSXProps) {
   const { isVendorsTransactionsLoading } = useVendorsTransactionsContext();
 
   return (

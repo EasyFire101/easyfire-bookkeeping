@@ -1,7 +1,6 @@
-// @ts-nocheck
 import React from 'react';
 import { useAuditLogContext } from './AuditLogProvider';
-import FinancialLoadingBar from '../FinancialLoadingBar';
+import { FinancialLoadingBar } from '../FinancialLoadingBar';
 
 /**
  * Audit Log Loading Bar

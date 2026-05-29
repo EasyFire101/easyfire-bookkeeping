@@ -1,12 +1,8 @@
-// @ts-nocheck
 import * as R from 'ramda';
 import { displayColumnsByOptions } from './constants';
 import { transfromToSnakeCase } from '@/utils';
 
-/**
- * Associate display columns by and type properties to query object.
- */
-export const transformDisplayColumnsType = (form) => {
+export const transformDisplayColumnsType = (form: Record<string, any>) => {
   const columnType = R.find(
     R.propEq('key', form.displayColumnsType),
     displayColumnsByOptions,
@@ -15,16 +11,13 @@ export const transformDisplayColumnsType = (form) => {
     R.mergeRight(form),
     R.when(
       () => R.pathOr(false, ['by'], columnType),
-      R.assoc('displayColumnsBy', columnType?.by),
+      R.assoc('displayColumnsBy', (columnType as any)?.by),
     ),
     R.assoc('displayColumnsType', R.propOr('total', 'type', columnType)),
   )({});
 };
 
-/**
- * Associate none zero and none transaction property to query.
- */
-const setNoneZeroTransactions = (form) => {
+const setNoneZeroTransactions = (form: Record<string, any>) => {
   return {
     ...form,
     noneZero: form.filterByOption === 'without-zero-balance',
@@ -32,15 +25,12 @@ const setNoneZeroTransactions = (form) => {
     onlyActive: form.filterByOption === 'with-only-active',
   };
 };
-// filterByOption
-export const transformAccountsFilter = (form) => {
+
+export const transformAccountsFilter = (form: Record<string, any>) => {
   return R.compose(R.omit(['filterByOption']), setNoneZeroTransactions)(form);
 };
 
-/**
- * Transform filter form to http query.
- */
-export const transformFilterFormToQuery = (form) => {
+export const transformFilterFormToQuery = (form: Record<string, unknown>) => {
   return R.compose(
     transfromToSnakeCase,
     transformAccountsFilter,

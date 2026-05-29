@@ -1,4 +1,3 @@
-// @ts-nocheck
 import React, { useEffect } from 'react';
 import moment from 'moment';
 
@@ -8,27 +7,28 @@ import {
 } from './components';
 import { FinancialStatement, DashboardPageContent } from '@/components';
 
-import ProjectProfitabilitySummaryHeader from './ProjectProfitabilitySummaryHeader';
-import ProjectProfitabilitySummaryActionsBar from './ProjectProfitabilitySummaryActionsBar';
+import { ProjectProfitabilitySummaryHeader } from './ProjectProfitabilitySummaryHeader';
+import { ProjectProfitabilitySummaryActionsBar } from './ProjectProfitabilitySummaryActionsBar';
 import { ProjectProfitabilitySummaryBody } from './ProjectProfitabilitySummaryBody';
 import { ProjectProfitabilitySummaryProvider } from './ProjectProfitabilitySummaryProvider';
 import { useProjectProfitabilitySummaryQuery } from './utils';
-import { withProjectProfitabilitySummaryActions } from './withProjectProfitabilitySummaryActions';
+import { withProjectProfitabilitySummaryActions, WithProjectProfitabilitySummaryActionsProps } from './withProjectProfitabilitySummaryActions';
 import { compose } from '@/utils';
+
+interface ProjectProfitabilitySummaryProps extends WithProjectProfitabilitySummaryActionsProps {}
 
 /**
  * Project profitability summary.
- * @returns {React.JSX}
  */
-function ProjectProfitabilitySummary({
+function ProjectProfitabilitySummaryInner({
   // #withProjectProfitabilitySummaryActions
   toggleProjectProfitabilitySummaryFilterDrawer,
-}) {
+}: ProjectProfitabilitySummaryProps) {
   // Project profitability summary query.
   const { query, setLocationQuery } = useProjectProfitabilitySummaryQuery();
 
   // Handle refetch project profitability summary filter changer.
-  const handleFilterSubmit = (filter) => {
+  const handleFilterSubmit = (filter: Record<string, any>) => {
     const newFilter = {
       ...filter,
       fromDate: moment(filter.fromDate).format('YYYY-MM-DD'),
@@ -37,7 +37,7 @@ function ProjectProfitabilitySummary({
     setLocationQuery({ ...newFilter });
   };
   // Handle number format submit.
-  const handleNumberFormatSubmit = (values) => {
+  const handleNumberFormatSubmit = (values: Record<string, unknown>) => {
     setLocationQuery({
       ...query,
       numberFormat: values,
@@ -73,6 +73,6 @@ function ProjectProfitabilitySummary({
   );
 }
 
-export default compose(withProjectProfitabilitySummaryActions)(
-  ProjectProfitabilitySummary,
+export const ProjectProfitabilitySummary = compose(withProjectProfitabilitySummaryActions)(
+  ProjectProfitabilitySummaryInner,
 );

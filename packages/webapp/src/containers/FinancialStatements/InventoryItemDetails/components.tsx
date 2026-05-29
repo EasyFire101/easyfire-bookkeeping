@@ -1,4 +1,3 @@
-// @ts-nocheck
 import React, { useRef } from 'react';
 import {
   Button,
@@ -19,7 +18,7 @@ import {
 } from '@/components';
 
 import { dynamicColumns } from './utils';
-import FinancialLoadingBar from '../FinancialLoadingBar';
+import { FinancialLoadingBar } from '../FinancialLoadingBar';
 import {
   useInventoryItemDetailsCsvExport,
   useInventoryItemDetailsXlsxExport,
@@ -32,9 +31,9 @@ import { useInventoryValuationHttpQuery } from './utils2';
  * Retrieve inventory item details columns.
  */
 export const useInventoryItemDetailsColumns = () => {
-  const {
-    inventoryItemDetails: { columns, tableRows },
-  } = useInventoryItemDetailsContext();
+  const { inventoryItemDetails } = useInventoryItemDetailsContext();
+  const columns = (inventoryItemDetails as any)?.columns ?? [];
+  const tableRows = (inventoryItemDetails as any)?.tableRows ?? [];
 
   return React.useMemo(
     () => dynamicColumns(columns, tableRows),
@@ -75,7 +74,7 @@ export function InventoryItemDetailsAlerts() {
     return null;
   }
   // Can't continue if the cost compute job is running.
-  if (!inventoryItemDetails.meta.is_cost_compute_running) {
+  if (!(inventoryItemDetails as any)?.meta?.is_cost_compute_running) {
     return null;
   }
 
@@ -96,7 +95,7 @@ export function InventoryItemDetailsAlerts() {
  * @returns {JSX.Element}
  */
 export function InventoryItemDetailsExportMenu() {
-  const toastKey = useRef(null);
+  const toastKey = useRef<string | number | undefined>(undefined);
   const commonToastConfig = {
     isCloseButtonShown: true,
     timeout: 2000,

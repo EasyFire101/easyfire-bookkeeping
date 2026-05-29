@@ -1,4 +1,3 @@
-// @ts-nocheck
 import React, { useRef } from 'react';
 import intl from 'react-intl-universal';
 import * as R from 'ramda';
@@ -7,24 +6,28 @@ import classNames from 'classnames';
 import { AppToaster, If, Stack } from '@/components';
 import { Align, CLASSES } from '@/constants';
 import { useVendorsBalanceSummaryContext } from './VendorsBalanceSummaryProvider';
-import FinancialLoadingBar from '../FinancialLoadingBar';
+import { FinancialLoadingBar } from '../FinancialLoadingBar';
 import { Intent, Menu, MenuItem, ProgressBar, Text } from '@blueprintjs/core';
 import {
   useVendorBalanceSummaryCsvExport,
   useVendorBalanceSummaryXlsxExport,
 } from '@/hooks/query';
 
+interface ColumnDef {
+  key: string;
+  [prop: string]: unknown;
+}
+
 /**
  * Retrieve vendors balance summary columns.
  */
 export const useVendorsBalanceColumns = () => {
-  const {
-    VendorBalanceSummary: { table },
-  } = useVendorsBalanceSummaryContext();
+  const { VendorBalanceSummary } = useVendorsBalanceSummaryContext();
+  const table = (VendorBalanceSummary as any)?.table;
 
   return React.useMemo(() => {
-    return dynamicColumns(table.columns || []);
-  }, [table.columns]);
+    return dynamicColumns(table?.columns || []);
+  }, [table?.columns]);
 };
 
 /**
@@ -68,7 +71,7 @@ const totalColumnAccessor = () => ({
 /**
  * Composes the response columns to table component columns.
  */
-const dynamicColumns = (columns) => {
+const dynamicColumns = (columns: ColumnDef[]) => {
   return R.map(
     R.compose(
       R.when(R.pathEq(['key'], 'name'), vendorColumnAccessor),
@@ -98,7 +101,7 @@ export function VendorsSummarySheetLoadingBar() {
  * @returns {JSX.Element}
  */
 export function VendorSummarySheetExportMenu() {
-  const toastKey = useRef(null);
+  const toastKey = useRef<string | undefined>(null);
   const commonToastConfig = {
     isCloseButtonShown: true,
     timeout: 2000,

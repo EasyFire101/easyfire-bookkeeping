@@ -1,8 +1,7 @@
-// @ts-nocheck
 import React from 'react';
 
-import FinancialStatementDateRange from '../FinancialStatementDateRange';
-import FinancialStatementsFilter from '../FinancialStatementsFilter';
+import { FinancialStatementDateRange } from '../FinancialStatementDateRange';
+import { FinancialStatementsFilter } from '../FinancialStatementsFilter';
 
 import {
   Row,
@@ -21,7 +20,7 @@ import {
 /**
  * Vendors transactions header - General panel
  */
-export default function VendorsTransactionsHeaderGeneralPanel() {
+export function VendorsTransactionsHeaderGeneralPanel() {
   return (
     <VendorsTransactionsGeneralPanelProvider>
       <VendorsTransactionsHeaderGeneralPanelContent />

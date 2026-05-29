@@ -1,10 +1,8 @@
-// @ts-nocheck
 import React, { useMemo } from 'react';
 import moment from 'moment';
 import { castArray } from 'lodash';
 
 import intl from 'react-intl-universal';
-import * as R from 'ramda';
 import * as Yup from 'yup';
 
 import { transformToForm } from '@/utils';
@@ -32,13 +30,13 @@ export const getDefaultProjectProfitabilitySummaryQuery = () => ({
   toDate: moment().endOf('year').format('YYYY-MM-DD'),
   basis: 'cash',
   filterByOption: 'without-zero-balance',
-  projectsIds: [],
+  projectsIds: [] as string[],
 });
 
 /**
  * Parses project profitability summary query.
  */
-const parseProjectProfitabilityQuery = (locationQuery) => {
+const parseProjectProfitabilityQuery = (locationQuery: Record<string, any>) => {
   const defaultQuery = getDefaultProjectProfitabilitySummaryQuery();
 
   const transformed = {

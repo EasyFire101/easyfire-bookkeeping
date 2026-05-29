@@ -1,4 +1,3 @@
-// @ts-nocheck
 import React from 'react';
 import { FastField } from 'formik';
 import { DateInput } from '@blueprintjs/datetime';
@@ -20,12 +19,12 @@ import {
   handleDateChange,
 } from '@/utils';
 import { useVendorsBalanceSummaryGeneralPanelContext } from './VendorsBalanceSummaryHeaderGeneralProvider';
-import FinancialStatementsFilter from '../FinancialStatementsFilter';
+import { FinancialStatementsFilter } from '../FinancialStatementsFilter';
 
 /**
  * Vendors balance header - General panel - Content.
  */
-export default function VendorsBalanceSummaryHeaderGeneralContent() {
+export function VendorsBalanceSummaryHeaderGeneralContent() {
   const { vendors } = useVendorsBalanceSummaryGeneralPanelContext();
 
   return (
@@ -33,7 +32,7 @@ export default function VendorsBalanceSummaryHeaderGeneralContent() {
       <Row>
         <Col xs={5}>
           <FastField name={'asDate'}>
-            {({ form, field: { value }, meta: { error } }) => (
+            {({ form, field: { value }, meta: { error } }: { form: any; field: { value: any }; meta: { error: any } }) => (
               <FormGroup
                 label={<T id={'as_date'} />}
                 labelInfo={<FieldHint />}
@@ -43,7 +42,7 @@ export default function VendorsBalanceSummaryHeaderGeneralContent() {
                 <DateInput
                   {...momentFormatter('YYYY/MM/DD')}
                   value={tansformDateValue(value)}
-                  onChange={handleDateChange((selectedDate) => {
+                  onChange={handleDateChange((selectedDate: Date) => {
                     form.setFieldValue('asDate', selectedDate);
                   })}
                   popoverProps={{ position: Position.BOTTOM, minimal: true }}
@@ -59,7 +58,7 @@ export default function VendorsBalanceSummaryHeaderGeneralContent() {
       <Row>
         <Col xs={5}>
           <FastField name={'percentage_column'} type={'checkbox'}>
-            {({ field }) => (
+            {({ field }: { field: any }) => (
               <FormGroup labelInfo={<FieldHint />}>
                 <Checkbox
                   inline={true}

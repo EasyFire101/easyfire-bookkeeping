@@ -1,22 +1,22 @@
-// @ts-nocheck
 import React from 'react';
-import * as R from 'ramda';
 
 import { useInventoryItemDetailsContext } from './InventoryItemDetailsProvider';
 import { InventoryItemDetailsTable } from './InventoryItemDetailsTable';
 
 import { FinancialReportBody } from '../FinancialReportPage';
-import { FinancialSheetSkeleton } from '@/components/FinancialSheet';
-import { withCurrentOrganization } from '@/containers/Organization/withCurrentOrganization';
+import { FinancialSheetSkeleton } from '@/components';
+import { withCurrentOrganization, WithCurrentOrganizationProps } from '@/containers/Organization/withCurrentOrganization';
+import { compose } from '@/utils';
+
+interface InventoryItemDetailsBodyProps {
+  organizationName: WithCurrentOrganizationProps['organization'];
+}
 
 /**
  * Inventory item details body.
  * @returns {JSX.Element}
  */
-function InventoryItemDetailsBodyJSX({
-  // #withCurrentOrganization
-  organizationName,
-}) {
+function InventoryItemDetailsBodyJSX({ organizationName }: InventoryItemDetailsBodyProps) {
   const { isInventoryItemDetailsLoading } = useInventoryItemDetailsContext();
 
   return (
@@ -30,7 +30,7 @@ function InventoryItemDetailsBodyJSX({
   );
 }
 
-export const InventoryItemDetailsBody = R.compose(
+export const InventoryItemDetailsBody = compose(
   withCurrentOrganization(({ organization }) => ({
     organizationName: organization.name,
   })),

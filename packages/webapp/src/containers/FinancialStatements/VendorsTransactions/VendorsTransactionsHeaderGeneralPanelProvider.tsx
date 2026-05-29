@@ -1,14 +1,19 @@
-// @ts-nocheck
 import React, { createContext, useContext } from 'react';
 import { useVendors } from '@/hooks/query';
 import { FinancialHeaderLoadingSkeleton } from '../FinancialHeaderLoadingSkeleton';
 
-const VendorsTransactionsGeneralPanelContext = createContext();
+interface VendorsTransactionsGeneralPanelContextValue {
+  vendors: any;
+  isVendorsLoading: boolean;
+  isVendorsFetching: boolean;
+}
+
+const VendorsTransactionsGeneralPanelContext = createContext<VendorsTransactionsGeneralPanelContextValue | undefined>(undefined);
 
 /**
- * Vendors transactions provider.
+ * Vendors transactions general panel provider.
  */
-function VendorsTransactionsGeneralPanelProvider({ ...props }) {
+function VendorsTransactionsGeneralPanelProvider({ ...props }: { children?: React.ReactNode }) {
   // Fetch vendors list based on the given query.
   const {
     data: vendorsData,
@@ -16,8 +21,8 @@ function VendorsTransactionsGeneralPanelProvider({ ...props }) {
     isFetching: isVendorsFetching,
   } = useVendors({ page_size: 100000 });
 
-  const provider = {
-    vendors: vendorsData?.vendors,
+  const provider: VendorsTransactionsGeneralPanelContextValue = {
+    vendors: (vendorsData as any)?.vendors,
     isVendorsLoading,
     isVendorsFetching,
   };
@@ -34,8 +39,13 @@ function VendorsTransactionsGeneralPanelProvider({ ...props }) {
   );
 }
 
-const useVendorsTransactionsGeneralPanelContext = () =>
-  useContext(VendorsTransactionsGeneralPanelContext);
+const useVendorsTransactionsGeneralPanelContext = (): VendorsTransactionsGeneralPanelContextValue => {
+  const ctx = useContext(VendorsTransactionsGeneralPanelContext);
+  if (!ctx) {
+    throw new Error('useVendorsTransactionsGeneralPanelContext must be used within a VendorsTransactionsGeneralPanelProvider');
+  }
+  return ctx;
+};
 
 export {
   VendorsTransactionsGeneralPanelProvider,

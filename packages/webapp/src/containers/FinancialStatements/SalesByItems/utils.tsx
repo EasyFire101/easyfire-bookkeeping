@@ -1,4 +1,3 @@
-// @ts-nocheck
 import React from 'react';
 import moment from 'moment';
 import * as Yup from 'yup';
@@ -9,7 +8,6 @@ import { transformToForm } from '@/utils';
 
 /**
  * Retrieves the validation schema.
- * @returns {Yup}
  */
 export const getSalesByItemsQueryShema = () => {
   return Yup.object().shape({
@@ -28,13 +26,13 @@ export const getDefaultSalesByItemsQuery = () => ({
   fromDate: moment().startOf('month').format('YYYY-MM-DD'),
   toDate: moment().format('YYYY-MM-DD'),
   filterByOption: 'with-transactions',
-  itemsIds: [],
+  itemsIds: [] as string[],
 });
 
 /**
  * Parses sales by items query of browser location.
  */
-const parseSalesByItemsQuery = (locationQuery) => {
+const parseSalesByItemsQuery = (locationQuery: Record<string, unknown>) => {
   const defaultQuery = getDefaultSalesByItemsQuery();
 
   const transformed = {

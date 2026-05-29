@@ -1,4 +1,3 @@
-// @ts-nocheck
 import React, { lazy } from 'react';
 import classNames from 'classnames';
 
@@ -9,14 +8,20 @@ import { compose } from '@/utils';
 
 // Lazy loading the content.
 const VendorBalancePdfDialogContent = lazy(
-  () => import('./VendorBalancePdfDialogContent'),
+  () => import('./VendorBalancePdfDialogContent').then((m) => ({ default: m.VendorBalancePdfDialogContent })),
 );
+
+interface VendorBalancePdfDialogRootProps {
+  dialogName: string;
+  payload?: Record<string, unknown>;
+  isOpen: boolean;
+}
 
 /**
  * Vendor balance sheet pdf preview dialog.
  * @returns {React.ReactNode}
  */
-function VendorBalancePdfDialogRoot({ dialogName, payload, isOpen }) {
+function VendorBalancePdfDialogRoot({ dialogName, payload, isOpen }: VendorBalancePdfDialogRootProps) {
   return (
     <Dialog
       name={dialogName}

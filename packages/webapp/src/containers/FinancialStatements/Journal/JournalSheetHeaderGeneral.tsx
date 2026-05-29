@@ -1,8 +1,7 @@
-// @ts-nocheck
 import React from 'react';
-import FinancialStatementDateRange from '../FinancialStatementDateRange';
+import { FinancialStatementDateRange } from '../FinancialStatementDateRange';
 
-export default function JournalSheetHeaderGeneralPanel({}) {
+export function JournalSheetHeaderGeneralPanel() {
   return (
     <div>
       <FinancialStatementDateRange />

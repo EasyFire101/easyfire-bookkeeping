@@ -1,4 +1,3 @@
-// @ts-nocheck
 import React, { lazy } from 'react';
 import classNames from 'classnames';
 
@@ -9,14 +8,21 @@ import { compose } from '@/utils';
 
 // Lazy loading the content.
 const SalesByItemsPdfDialogContent = lazy(
-  () => import('./SalesByItemsPdfDialogContent'),
+  () => import('./SalesByItemsPdfDialogContent').then((m) => ({
+    default: m.SalesByItemsPdfDialogContent,
+  })),
 );
+
+interface SalesByItemsPdfDialogRootProps {
+  dialogName: string;
+  payload?: Record<string, unknown>;
+  isOpen: boolean;
+}
 
 /**
  * Sales by items sheet pdf preview dialog.
- * @returns {React.ReactNode}
  */
-function SalesByItemsPdfDialogRoot({ dialogName, payload, isOpen }) {
+function SalesByItemsPdfDialogRoot({ dialogName, payload, isOpen }: SalesByItemsPdfDialogRootProps) {
   return (
     <Dialog
       name={dialogName}

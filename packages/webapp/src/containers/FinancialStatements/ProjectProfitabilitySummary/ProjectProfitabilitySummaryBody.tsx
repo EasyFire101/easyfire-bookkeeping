@@ -1,23 +1,25 @@
-// @ts-nocheck
 import React from 'react';
 
-import ProjectProfitabilitySummaryTable from './ProjectProfitabilitySummaryTable';
+import { ProjectProfitabilitySummaryTable } from './ProjectProfitabilitySummaryTable';
 import { FinancialReportBody } from '../FinancialReportPage';
 import { FinancialSheetSkeleton } from '@/components/FinancialSheet';
 import { useProjectProfitabilitySummaryContext } from './ProjectProfitabilitySummaryProvider';
 
-import { withCurrentOrganization } from '@/containers/Organization/withCurrentOrganization';
+import { withCurrentOrganization, WithCurrentOrganizationProps } from '@/containers/Organization/withCurrentOrganization';
 
 import { compose } from '@/utils';
 
+interface ProjectProfitabilitySummaryBodyProps {
+  organizationName: WithCurrentOrganizationProps['organization'];
+}
+
 /**
  * Project profitability summary body JSX.
- * @returns {JSX.Element}
  */
 function ProjectProfitabilitySummaryBodyJSX({
   // #withCurrentOrganization
   organizationName,
-}) {
+}: ProjectProfitabilitySummaryBodyProps) {
   const { isProjectProfitabilitySummaryLoading } =
     useProjectProfitabilitySummaryContext();
 

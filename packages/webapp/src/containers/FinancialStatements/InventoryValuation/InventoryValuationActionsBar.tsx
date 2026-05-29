@@ -1,4 +1,3 @@
-// @ts-nocheck
 import React from 'react';
 import {
   NavbarGroup,
@@ -14,16 +13,28 @@ import { DashboardActionsBar, Icon, FormattedMessage as T } from '@/components';
 
 import NumberFormatDropdown from '@/components/NumberFormatDropdown';
 
-import { withInventoryValuation } from './withInventoryValuation';
-import { withInventoryValuationActions } from './withInventoryValuationActions';
-import { withDialogActions } from '@/containers/Dialog/withDialogActions';
+import { withInventoryValuation, WithInventoryValuationProps } from './withInventoryValuation';
+import { withInventoryValuationActions, WithInventoryValuationActionsProps } from './withInventoryValuationActions';
+import { withDialogActions, WithDialogActionsProps } from '@/containers/Dialog/withDialogActions';
 import { useInventoryValuationContext } from './InventoryValuationProvider';
 
 import { compose, saveInvoke } from '@/utils';
 import { InventoryValuationExportMenu } from './components';
 import { DialogsName } from '@/constants/dialogs';
 
-function InventoryValuationActionsBar({
+interface InventoryValuationActionsBarOwnProps {
+  numberFormat: Record<string, unknown>;
+  onNumberFormatSubmit: (values: Record<string, unknown>) => void;
+}
+
+type InventoryValuationActionsBarProps = {
+  isFilterDrawerOpen: boolean;
+} &
+  Pick<WithInventoryValuationActionsProps, 'toggleInventoryValuationFilterDrawer'> &
+  WithDialogActionsProps &
+  InventoryValuationActionsBarOwnProps;
+
+function InventoryValuationActionsBarInner({
   // #withInventoryValuation
   isFilterDrawerOpen,
 
@@ -36,7 +47,7 @@ function InventoryValuationActionsBar({
   // #ownProps
   numberFormat,
   onNumberFormatSubmit,
-}) {
+}: InventoryValuationActionsBarProps) {
   const { refetchSheet, isLoading } = useInventoryValuationContext();
 
   // Handles filter toggle click.
@@ -50,8 +61,8 @@ function InventoryValuationActionsBar({
   };
 
   // Handles number format submit.
-  const handleNumberFormatSubmit = (numberFormat) => {
-    saveInvoke(onNumberFormatSubmit, numberFormat);
+  const handleNumberFormatSubmit = (values: Record<string, unknown>) => {
+    saveInvoke(onNumberFormatSubmit, values);
   };
 
   // Handles the print button click.
@@ -126,10 +137,10 @@ function InventoryValuationActionsBar({
   );
 }
 
-export default compose(
+export const InventoryValuationActionsBar = compose(
   withInventoryValuation(({ inventoryValuationDrawerFilter }) => ({
     isFilterDrawerOpen: inventoryValuationDrawerFilter,
   })),
   withInventoryValuationActions,
   withDialogActions,
-)(InventoryValuationActionsBar);
+)(InventoryValuationActionsBarInner);

@@ -1,4 +1,3 @@
-// @ts-nocheck
 import * as R from 'ramda';
 import { Align } from '@/constants';
 import { getColumnWidth } from '@/utils';
@@ -9,7 +8,7 @@ const AMOUNT_COLUMNS_MAGIC_SPACING = 10;
 
 const getTableCellValueAccessor = (index: number) => `cells[${index}].value`;
 
-const accountNameAccessor = R.curry((data, column) => {
+const accountNameAccessor = R.curry((data: any, column: any) => {
   const accessor = getTableCellValueAccessor(column.cell_index);
 
   return {
@@ -21,7 +20,7 @@ const accountNameAccessor = R.curry((data, column) => {
   };
 });
 
-const amountAccessor = R.curry((data, column) => {
+const amountAccessor = R.curry((data: any, column: any) => {
   const accessor = getTableCellValueAccessor(column.cell_index);
 
   return {
@@ -38,7 +37,7 @@ const amountAccessor = R.curry((data, column) => {
   };
 });
 
-const dynamicColumnMapper = R.curry((data, column) => {
+const dynamicColumnMapper = R.curry((data: any, column: any) => {
   const accountNameColumn = accountNameAccessor(data);
   const creditColumn = amountAccessor(data);
   const debitColumn = amountAccessor(data);
@@ -52,6 +51,6 @@ const dynamicColumnMapper = R.curry((data, column) => {
   )(column);
 });
 
-export const trialBalancesheetDynamicColumns = (columns, data) => {
+export const trialBalancesheetDynamicColumns = (columns: any[], data: any[]) => {
   return R.map(dynamicColumnMapper(data), columns);
 };

@@ -1,4 +1,3 @@
-// @ts-nocheck
 import React, { lazy } from 'react';
 import classNames from 'classnames';
 
@@ -11,14 +10,24 @@ import { compose } from '@/utils';
 
 // Lazy loading the content.
 const GeneralLedgerPdfDialogContent = lazy(
-  () => import('./GeneralLedgerPdfDialogContent'),
+  () => import('./GeneralLedgerPdfDialogContent').then((m) => ({ default: m.GeneralLedgerPdfDialogContent })),
 );
+
+interface GeneralLedgerPdfDialogRootProps {
+  dialogName: string;
+  payload?: Record<string, unknown>;
+  isOpen: boolean;
+}
 
 /**
  * General ledger pdf preview dialog.
  * @returns {React.ReactNode}
  */
-function GeneralLedgerPdfDialogRoot({ dialogName, payload, isOpen }) {
+function GeneralLedgerPdfDialogRoot({
+  dialogName,
+  payload,
+  isOpen,
+}: GeneralLedgerPdfDialogRootProps) {
   return (
     <Dialog
       name={dialogName}

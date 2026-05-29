@@ -1,4 +1,3 @@
-// @ts-nocheck
 import React from 'react';
 import {
   NavbarGroup,
@@ -15,34 +14,33 @@ import classNames from 'classnames';
 import NumberFormatDropdown from '@/components/NumberFormatDropdown';
 
 import { withRealizedGainOrLoss } from './withRealizedGainOrLoss';
-import { withRealizedGainOrLossActions } from './withRealizedGainOrLossActions';
+import { withRealizedGainOrLossActions, WithRealizedGainOrLossActionsProps } from './withRealizedGainOrLossActions';
 
 import { compose, saveInvoke } from '@/utils';
 
-/**
- * Realized Gain or Loss actions bar.
- */
-function RealizedGainOrLossActionsBar({
-  //#withRealizedGainOrLoss
+interface RealizedGainOrLossActionsBarOwnProps {
+  numberFormat?: Record<string, unknown>;
+  onNumberFormatSubmit?: (values: Record<string, unknown>) => void;
+}
+
+type RealizedGainOrLossActionsBarProps = {
+  isFilterDrawerOpen: boolean;
+} & Pick<WithRealizedGainOrLossActionsProps, 'toggleRealizedGainOrLossFilterDrawer'> &
+  RealizedGainOrLossActionsBarOwnProps;
+
+function RealizedGainOrLossActionsBarInner({
   isFilterDrawerOpen,
-
-  //#withRealizedGainOrLossActions
   toggleRealizedGainOrLossFilterDrawer,
-
-  //#ownProps
   numberFormat,
   onNumberFormatSubmit,
-}) {
-  // Handle filter toggle click.
+}: RealizedGainOrLossActionsBarProps) {
   const handleFilterToggleClick = () => {
     toggleRealizedGainOrLossFilterDrawer();
   };
 
-  // Handle recalculate report button.
   const handleRecalculateReport = () => {};
 
-  // handle number format form submit.
-  const handleNumberFormatSubmit = (values) =>
+  const handleNumberFormatSubmit = (values: Record<string, unknown>) =>
     saveInvoke(onNumberFormatSubmit, values);
 
   return (
@@ -108,9 +106,9 @@ function RealizedGainOrLossActionsBar({
   );
 }
 
-export default compose(
+export const RealizedGainOrLossActionsBar = compose(
   withRealizedGainOrLoss(({ realizedGainOrLossDrawerFilter }) => ({
     isFilterDrawerOpen: realizedGainOrLossDrawerFilter,
   })),
   withRealizedGainOrLossActions,
-)(RealizedGainOrLossActionsBar);
+)(RealizedGainOrLossActionsBarInner);

@@ -1,4 +1,3 @@
-// @ts-nocheck
 import {
   DialogContent,
   PdfDocumentPreview,
@@ -8,7 +7,7 @@ import { AnchorButton } from '@blueprintjs/core';
 import { useGeneralLedgerPdf } from '@/hooks/query';
 import { useGeneralLedgerContext } from '../../GeneralLedgerProvider';
 
-export default function GeneralLedgerPdfDialogContent() {
+export function GeneralLedgerPdfDialogContent() {
   const { httpQuery } = useGeneralLedgerContext();
   const { isLoading, pdfUrl } = useGeneralLedgerPdf(httpQuery);
 

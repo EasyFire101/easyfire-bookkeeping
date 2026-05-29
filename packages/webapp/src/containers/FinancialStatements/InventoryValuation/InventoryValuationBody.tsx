@@ -1,22 +1,22 @@
-// @ts-nocheck
 import React from 'react';
-import * as R from 'ramda';
 
-import InventoryValuationTable from './InventoryValuationTable';
+import { InventoryValuationTable } from './InventoryValuationTable';
 import { useInventoryValuationContext } from './InventoryValuationProvider';
 
 import { FinancialReportBody } from '../FinancialReportPage';
-import { FinancialSheetSkeleton } from '@/components/FinancialSheet';
-import { withCurrentOrganization } from '@/containers/Organization/withCurrentOrganization';
+import { FinancialSheetSkeleton } from '@/components';
+import { withCurrentOrganization, WithCurrentOrganizationProps } from '@/containers/Organization/withCurrentOrganization';
+import { compose } from '@/utils';
+
+interface InventoryValuationBodyProps {
+  organizationName: WithCurrentOrganizationProps['organization'];
+}
 
 /**
  * Inventory valuation body.
  * @returns {JSX.Element}
  */
-function InventoryValuationBodyJSX({
-  // #withCurrentOrganization
-  organizationName,
-}) {
+function InventoryValuationBodyJSX({ organizationName }: InventoryValuationBodyProps) {
   const { isLoading } = useInventoryValuationContext();
 
   return (
@@ -30,7 +30,7 @@ function InventoryValuationBodyJSX({
   );
 }
 
-export const InventoryValuationBody = R.compose(
+export const InventoryValuationBody = compose(
   withCurrentOrganization(({ organization }) => ({
     organizationName: organization.name,
   })),

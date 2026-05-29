@@ -1,17 +1,13 @@
-// @ts-nocheck
 import React from 'react';
 
 import { Row, Col } from '@/components';
 
-import RadiosAccountingBasis from '../RadiosAccountingBasis';
-import SelectDisplayColumnsBy from '../SelectDisplayColumnsBy';
-import FinancialStatementDateRange from '../FinancialStatementDateRange';
-import FinancialStatementsFilter from '../FinancialStatementsFilter';
+import { RadiosAccountingBasis } from '../RadiosAccountingBasis';
+import { SelectDisplayColumnsBy } from '../SelectDisplayColumnsBy';
+import { FinancialStatementDateRange } from '../FinancialStatementDateRange';
+import { FinancialStatementsFilter } from '../FinancialStatementsFilter';
 
-/**
- * Balance sheet header - General panal.
- */
-export default function BalanceSheetHeaderGeneralTab({}) {
+export function BalanceSheetHeaderGeneralPanal() {
   return (
     <div>
       <FinancialStatementDateRange />

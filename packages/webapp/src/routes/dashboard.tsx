@@ -201,7 +201,7 @@ export const getDashboardRoutes = () => [
     path: `/financial-reports/general-ledger`,
     component: lazy(
       () =>
-        import('@/containers/FinancialStatements/GeneralLedger/GeneralLedger'),
+        import('@/containers/FinancialStatements/GeneralLedger/GeneralLedger').then((m) => ({ default: m.GeneralLedger })),
     ),
     breadcrumb: intl.get('general_ledger'),
     hint: intl.get('reports_every_transaction_going_in_and_out_of_your'),
@@ -216,7 +216,7 @@ export const getDashboardRoutes = () => [
     path: `/financial-reports/balance-sheet`,
     component: lazy(
       () =>
-        import('@/containers/FinancialStatements/BalanceSheet/BalanceSheet'),
+        import('@/containers/FinancialStatements/BalanceSheet/BalanceSheet').then((m) => ({ default: m.BalanceSheet })),
     ),
     breadcrumb: intl.get('balance_sheet'),
     hint: intl.get('reports_a_company_s_assets_liabilities_and_shareholders'),
@@ -232,7 +232,7 @@ export const getDashboardRoutes = () => [
       () =>
         import(
           '@/containers/FinancialStatements/TrialBalanceSheet/TrialBalanceSheet'
-        ),
+        ).then((m) => ({ default: m.TrialBalanceSheet })),
     ),
     breadcrumb: intl.get('trial_balance_sheet'),
     hint: intl.get('summarizes_the_credit_and_debit_balance_of_each_account'),
@@ -248,7 +248,7 @@ export const getDashboardRoutes = () => [
       () =>
         import(
           '@/containers/FinancialStatements/ProfitLossSheet/ProfitLossSheet'
-        ),
+        ).then((mod) => ({ default: mod.ProfitLossSheet })),
     ),
     breadcrumb: intl.get('profit_loss_sheet'),
     hint: intl.get('reports_the_revenues_costs_and_expenses'),
@@ -264,7 +264,7 @@ export const getDashboardRoutes = () => [
       () =>
         import(
           '@/containers/FinancialStatements/ARAgingSummary/ARAgingSummary'
-        ),
+        ).then((m) => ({ default: m.ARAgingSummary })),
     ),
     breadcrumb: intl.get('receivable_aging_summary'),
     hint: intl.get('summarize_total_unpaid_balances_of_customers_invoices'),
@@ -279,7 +279,7 @@ export const getDashboardRoutes = () => [
       () =>
         import(
           '@/containers/FinancialStatements/APAgingSummary/APAgingSummary'
-        ),
+        ).then((m) => ({ default: m.APAgingSummary })),
     ),
     breadcrumb: intl.get('payable_aging_summary'),
     hint: intl.get('summarize_total_unpaid_balances_of_vendors_purchase'),
@@ -291,7 +291,7 @@ export const getDashboardRoutes = () => [
   {
     path: `/financial-reports/journal-sheet`,
     component: lazy(
-      () => import('@/containers/FinancialStatements/Journal/Journal'),
+      () => import('@/containers/FinancialStatements/Journal/Journal').then((m) => ({ default: m.Journal })),
     ),
     breadcrumb: intl.get('journal_sheet'),
     hint: intl.get('the_debit_and_credit_entries_of_system_transactions'),
@@ -307,7 +307,7 @@ export const getDashboardRoutes = () => [
       () =>
         import(
           '@/containers/FinancialStatements/PurchasesByItems/PurchasesByItems'
-        ),
+        ).then((m) => ({ default: m.PurchasesByItems })),
     ),
     breadcrumb: intl.get('purchases_by_items'),
     // hotkey: '',
@@ -320,7 +320,9 @@ export const getDashboardRoutes = () => [
     path: `/financial-reports/sales-by-items`,
     component: lazy(
       () =>
-        import('@/containers/FinancialStatements/SalesByItems/SalesByItems'),
+        import('@/containers/FinancialStatements/SalesByItems/SalesByItems').then(
+          (m) => ({ default: m.SalesByItems }),
+        ),
     ),
     breadcrumb: intl.get('sales_by_items'),
     pageTitle: intl.get('sales_by_items'),
@@ -337,7 +339,7 @@ export const getDashboardRoutes = () => [
       () =>
         import(
           '@/containers/FinancialStatements/InventoryValuation/InventoryValuation'
-        ),
+        ).then((m) => ({ default: m.InventoryValuation })),
     ),
     breadcrumb: intl.get('inventory_valuation'),
     hint: intl.get('summerize_your_transactions_for_each_inventory_item'),
@@ -352,7 +354,7 @@ export const getDashboardRoutes = () => [
       () =>
         import(
           '@/containers/FinancialStatements/CustomersBalanceSummary/CustomersBalanceSummary'
-        ),
+        ).then((m) => ({ default: m.CustomersBalanceSummary })),
     ),
     breadcrumb: intl.get('customers_balance_summary'),
     hint: intl.get('summerize_how_much_each_customer_owes_your_business'),
@@ -367,7 +369,7 @@ export const getDashboardRoutes = () => [
       () =>
         import(
           '@/containers/FinancialStatements/VendorsBalanceSummary/VendorsBalanceSummary'
-        ),
+        ).then((m) => ({ default: m.VendorsBalanceSummary })),
     ),
     breadcrumb: intl.get('vendors_balance_summary'),
     hint: intl.get('summerize_the_total_amount_your_business_owes_each_vendor'),
@@ -382,7 +384,7 @@ export const getDashboardRoutes = () => [
       () =>
         import(
           '@/containers/FinancialStatements/CustomersTransactions/CustomersTransactions'
-        ),
+        ).then((m) => ({ default: m.CustomersTransactions })),
     ),
     breadcrumb: intl.get('customers_transactions'),
     hint: intl.get(
@@ -399,7 +401,7 @@ export const getDashboardRoutes = () => [
       () =>
         import(
           '@/containers/FinancialStatements/VendorsTransactions/VendorsTransactions'
-        ),
+        ).then((m) => ({ default: m.VendorsTransactions })),
     ),
     breadcrumb: intl.get('vendors_transactions'),
     hint: intl.get(
@@ -416,7 +418,7 @@ export const getDashboardRoutes = () => [
       () =>
         import(
           '@/containers/FinancialStatements/CashFlowStatement/CashFlowStatement'
-        ),
+        ).then((m) => ({ default: m.CashFlowStatement })),
     ),
     breadcrumb: intl.get('cash_flow_statement'),
     hint: intl.get('reports_inflow_and_outflow_of_cash_and_cash_equivalents'),
@@ -431,7 +433,7 @@ export const getDashboardRoutes = () => [
       () =>
         import(
           '@/containers/FinancialStatements/InventoryItemDetails/InventoryItemDetails'
-        ),
+        ).then((m) => ({ default: m.InventoryItemDetails })),
     ),
     breadcrumb: intl.get('inventory_item_details'),
     hint: intl.get('reports_every_transaction_going_in_and_out_of_your_items'),
@@ -446,7 +448,7 @@ export const getDashboardRoutes = () => [
       () =>
         import(
           '@/containers/FinancialStatements/RealizedGainOrLoss/RealizedGainOrLoss'
-        ),
+        ).then((m) => ({ default: m.RealizedGainOrLoss })),
     ),
     breadcrumb: intl.get('realized_gain_or_loss.label'),
     pageTitle: intl.get('realized_gain_or_loss.label'),
@@ -460,7 +462,7 @@ export const getDashboardRoutes = () => [
       () =>
         import(
           '@/containers/FinancialStatements/UnrealizedGainOrLoss/UnrealizedGainOrLoss'
-        ),
+        ).then((m) => ({ default: m.UnrealizedGainOrLoss })),
     ),
     breadcrumb: intl.get('unrealized_gain_or_loss.label'),
     pageTitle: intl.get('unrealized_gain_or_loss.label'),
@@ -474,7 +476,7 @@ export const getDashboardRoutes = () => [
       () =>
         import(
           '@/containers/FinancialStatements/ProjectProfitabilitySummary/ProjectProfitabilitySummary'
-        ),
+        ).then((m) => ({ default: m.ProjectProfitabilitySummary })),
     ),
     breadcrumb: intl.get('project_profitability_summary'),
     pageTitle: intl.get('project_profitability_summary'),
@@ -488,7 +490,7 @@ export const getDashboardRoutes = () => [
       () =>
         import(
           '@/containers/FinancialStatements/SalesTaxLiabilitySummary/SalesTaxLiabilitySummary'
-        ),
+        ).then((m) => ({ default: m.SalesTaxLiabilitySummary })),
     ),
     breadcrumb: 'Sales Tax Liability Summary',
     pageTitle: 'Sales Tax Liability Summary',
@@ -499,7 +501,7 @@ export const getDashboardRoutes = () => [
   {
     path: `/financial-reports/audit-log`,
     component: lazy(
-      () => import('@/containers/FinancialStatements/AuditLog/AuditLogReport'),
+      () => import('@/containers/FinancialStatements/AuditLog/AuditLogReport').then((m) => ({ default: m.AuditLogReport })),
     ),
     breadcrumb: intl.get('audit_log_report'),
     pageTitle: intl.get('audit_log_report'),
@@ -510,7 +512,7 @@ export const getDashboardRoutes = () => [
   {
     path: '/financial-reports',
     component: lazy(
-      () => import('@/containers/FinancialStatements/FinancialReports'),
+      () => import('@/containers/FinancialStatements/FinancialReports').then((m) => ({ default: m.FinancialReports })),
     ),
     breadcrumb: intl.get('financial_reports'),
     pageTitle: intl.get('all_financial_reports'),

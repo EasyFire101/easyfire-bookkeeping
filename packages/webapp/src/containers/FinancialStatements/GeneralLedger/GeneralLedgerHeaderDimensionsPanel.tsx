@@ -1,4 +1,3 @@
-// @ts-nocheck
 import React from 'react';
 import intl from 'react-intl-universal';
 import { FormGroup, Classes } from '@blueprintjs/core';
@@ -14,7 +13,7 @@ import { Features } from '@/constants';
  * Gereral ledger sheet header dismension panel.
  * @returns
  */
-export default function GeneralLedgerHeaderDimensionsPanel() {
+export function GeneralLedgerHeaderDimensionsPanel() {
   return (
     <GeneralLedgerHeaderDimensionsPanelProvider>
       <GeneralLedgerHeaderDimensionsPanelContent />

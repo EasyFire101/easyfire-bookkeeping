@@ -1,4 +1,3 @@
-// @ts-nocheck
 import React from 'react';
 import styled from 'styled-components';
 
@@ -13,21 +12,20 @@ import { useProfitLossSheetColumns } from './hooks';
 import { useProfitLossSheetContext } from './ProfitLossProvider';
 import { tableRowTypesToClassnames, defaultExpanderReducer } from '@/utils';
 
-export default function ProfitLossSheetTable({
-  // #ownProps
-  companyName,
-}) {
-  // Profit/Loss sheet context.
-  const {
-    profitLossSheet: { table, query, meta },
-  } = useProfitLossSheetContext();
+interface ProfitLossSheetTableProps {
+  companyName: string;
+}
 
-  // Retrieves the profit/loss table columns.
+export function ProfitLossSheetTable({ companyName }: ProfitLossSheetTableProps) {
+  const { profitLossSheet } = useProfitLossSheetContext();
+  const table = profitLossSheet?.table;
+  const query = profitLossSheet?.query;
+  const meta = profitLossSheet?.meta;
+
   const columns = useProfitLossSheetColumns();
 
-  // Retrieve default expanded rows of balance sheet.
   const expandedRows = React.useMemo(
-    () => defaultExpanderReducer(table?.rows || [], 3),
+    () => defaultExpanderReducer(table?.rows ?? [], 3),
     [table],
   );
 
@@ -36,11 +34,11 @@ export default function ProfitLossSheetTable({
       companyName={companyName}
       sheetType={<T id={'profit_loss_sheet'} />}
       dateText={meta?.formatted_date_range ?? meta?.formatted_as_date}
-      basis={query.basis}
+      basis={query?.basis}
     >
       <ProfitLossDataTable
         columns={columns}
-        data={table.rows}
+        data={table?.rows ?? []}
         noInitialFetch={true}
         expanded={expandedRows}
         rowClassNames={tableRowTypesToClassnames}

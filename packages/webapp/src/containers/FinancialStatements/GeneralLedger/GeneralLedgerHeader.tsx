@@ -1,8 +1,8 @@
-// @ts-nocheck
 import React from 'react';
 import moment from 'moment';
 import styled from 'styled-components';
 import { Formik, Form } from 'formik';
+import type { FormikHelpers } from 'formik';
 import { Tabs, Tab, Button, Intent } from '@blueprintjs/core';
 
 import { FormattedMessage as T } from '@/components';
@@ -10,21 +10,40 @@ import {
   getDefaultGeneralLedgerQuery,
   getGeneralLedgerQuerySchema,
 } from './common';
-import { compose, transformToForm, saveInvoke } from '@/utils';
+import { compose, transformToForm } from '@/utils';
 
-import FinancialStatementHeader from '../FinancialStatementHeader';
-import GeneralLedgerHeaderGeneralPane from './GeneralLedgerHeaderGeneralPane';
-import GeneralLedgerHeaderDimensionsPanel from './GeneralLedgerHeaderDimensionsPanel';
+import { FinancialStatementHeader } from '../FinancialStatementHeader';
+import { GLHeaderGeneralPane as GeneralLedgerHeaderGeneralPane } from './GeneralLedgerHeaderGeneralPane';
+import { GeneralLedgerHeaderDimensionsPanel } from './GeneralLedgerHeaderDimensionsPanel';
 
 import { withGeneralLedger } from './withGeneralLedger';
+import type { WithGeneralLedgerProps } from './withGeneralLedger';
 import { withGeneralLedgerActions } from './withGeneralLedgerActions';
+import type { WithGeneralLedgerActionsProps } from './withGeneralLedgerActions';
 import { useFeatureCan } from '@/hooks/state';
 import { Features } from '@/constants';
+
+type GeneralLedgerFormValues = Omit<
+  ReturnType<typeof getDefaultGeneralLedgerQuery>,
+  'fromDate' | 'toDate'
+> & {
+  fromDate: Date;
+  toDate: Date;
+};
+
+interface GeneralLedgerHeaderOwnProps {
+  onSubmitFilter: (values: GeneralLedgerFormValues) => void;
+  pageFilter: ReturnType<typeof getDefaultGeneralLedgerQuery>;
+}
+
+type GeneralLedgerHeaderProps = GeneralLedgerHeaderOwnProps &
+  Pick<WithGeneralLedgerProps, 'generalLedgerFilterDrawer'> &
+  Pick<WithGeneralLedgerActionsProps, 'toggleGeneralLedgerFilterDrawer'>;
 
 /**
  * Geenral Ledger (GL) - Header.
  */
-function GeneralLedgerHeader({
+function GeneralLedgerHeaderInner({
   // #ownProps
   onSubmitFilter,
   pageFilter,
@@ -33,8 +52,8 @@ function GeneralLedgerHeader({
   toggleGeneralLedgerFilterDrawer: toggleDisplayFilterDrawer,
 
   // #withGeneralLedger
-  isFilterDrawerOpen,
-}) {
+  generalLedgerFilterDrawer,
+}: GeneralLedgerHeaderProps) {
   // Default values.
   const defaultValues = getDefaultGeneralLedgerQuery();
 
@@ -52,10 +71,13 @@ function GeneralLedgerHeader({
   const validationSchema = getGeneralLedgerQuerySchema();
 
   // Handle form submit.
-  const handleSubmit = (values, { setSubmitting }) => {
-    saveInvoke(onSubmitFilter, values);
+  const handleSubmit = (
+    values: GeneralLedgerFormValues,
+    actions: FormikHelpers<GeneralLedgerFormValues>,
+  ) => {
+    onSubmitFilter(values);
     toggleDisplayFilterDrawer(false);
-    setSubmitting(false);
+    actions.setSubmitting(false);
   };
   // Handle cancel button click.
   const handleCancelClick = () => {
@@ -73,7 +95,7 @@ function GeneralLedgerHeader({
 
   return (
     <GeneralLedgerDrawerHeader
-      isOpen={isFilterDrawerOpen}
+      isOpen={generalLedgerFilterDrawer}
       drawerProps={{ onClose: handleDrawerClose }}
     >
       <Formik
@@ -97,7 +119,7 @@ function GeneralLedgerHeader({
             )}
           </Tabs>
 
-          <div class="financial-header-drawer__footer">
+          <div className="financial-header-drawer__footer">
             <Button className={'mr1'} intent={Intent.PRIMARY} type={'submit'}>
               <T id={'calculate_report'} />
             </Button>
@@ -112,12 +134,12 @@ function GeneralLedgerHeader({
   );
 }
 
-export default compose(
+export const GeneralLedgerHeader = compose(
   withGeneralLedger(({ generalLedgerFilterDrawer }) => ({
-    isFilterDrawerOpen: generalLedgerFilterDrawer,
+    generalLedgerFilterDrawer,
   })),
   withGeneralLedgerActions,
-)(GeneralLedgerHeader);
+)(GeneralLedgerHeaderInner);
 
 const GeneralLedgerDrawerHeader = styled(FinancialStatementHeader)`
   .bp4-drawer {

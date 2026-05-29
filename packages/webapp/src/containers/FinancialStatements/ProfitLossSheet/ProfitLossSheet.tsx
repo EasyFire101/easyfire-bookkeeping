@@ -1,15 +1,17 @@
-// @ts-nocheck
 import React from 'react';
 import moment from 'moment';
 import * as R from 'ramda';
 
-import ProfitLossSheetHeader from './ProfitLossSheetHeader';
-import ProfitLossActionsBar from './ProfitLossActionsBar';
+import { ProfitLossSheetHeader } from './ProfitLossSheetHeader';
+import { ProfitLossActionsBar } from './ProfitLossActionsBar';
 
 import { DashboardPageContent } from '@/components';
 
 import { withDashboardActions } from '@/containers/Dashboard/withDashboardActions';
-import { withProfitLossActions } from './withProfitLossActions';
+import {
+  withProfitLossActions,
+  WithProfitLossActionsProps,
+} from './withProfitLossActions';
 
 import { useProfitLossSheetQuery } from './utils';
 import { ProfitLossSheetProvider } from './ProfitLossProvider';
@@ -17,34 +19,32 @@ import { ProfitLossSheetAlerts, ProfitLossSheetLoadingBar } from './components';
 import { ProfitLossBody } from './ProfitLossBody';
 import { ProfitLossSheetDialogs } from './ProfitLossSheetDialogs';
 
-/**
- * Profit/Loss financial statement sheet.
- * @returns {React.JSX}
- */
-function ProfitLossSheet({
-  // #withProfitLossActions
+type ProfitLossSheetProps = Pick<
+  WithProfitLossActionsProps,
+  'toggleProfitLossFilterDrawer'
+>;
+
+function ProfitLossSheetInner({
   toggleProfitLossFilterDrawer: toggleDisplayFilterDrawer,
-}) {
-  // Profit/loss sheet query.
+}: ProfitLossSheetProps) {
   const { query, setLocationQuery } = useProfitLossSheetQuery();
 
-  // Handle submit filter.
-  const handleSubmitFilter = (filter) => {
+  const handleSubmitFilter = (filter: Record<string, unknown>) => {
     const newFilter = {
       ...filter,
-      fromDate: moment(filter.fromDate).format('YYYY-MM-DD'),
-      toDate: moment(filter.toDate).format('YYYY-MM-DD'),
+      fromDate: moment(filter.fromDate as string).format('YYYY-MM-DD'),
+      toDate: moment(filter.toDate as string).format('YYYY-MM-DD'),
     };
     setLocationQuery(newFilter);
   };
-  // Handle number format submit.
-  const handleNumberFormatSubmit = (numberFormat) => {
+
+  const handleNumberFormatSubmit = (numberFormat: Record<string, unknown>) => {
     setLocationQuery({
       ...query,
       numberFormat,
     });
   };
-  // Hide the filter drawer once the page unmount.
+
   React.useEffect(
     () => () => {
       toggleDisplayFilterDrawer(false);
@@ -74,7 +74,7 @@ function ProfitLossSheet({
   );
 }
 
-export default R.compose(
+export const ProfitLossSheet = R.compose(
   withDashboardActions,
   withProfitLossActions,
-)(ProfitLossSheet);
+)(ProfitLossSheetInner);

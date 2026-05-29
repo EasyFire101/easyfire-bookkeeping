@@ -1,4 +1,4 @@
-// @ts-nocheck
+import React from 'react';
 import {
   DialogContent,
   PdfDocumentPreview,
@@ -8,7 +8,11 @@ import { useInventoryItemDetailsPdf } from '@/hooks/query';
 import { AnchorButton } from '@blueprintjs/core';
 import { useInventoryItemDetailsContext } from '../../InventoryItemDetailsProvider';
 
-export default function InventoryItemDetailsPdfDialogContent() {
+interface InventoryItemDetailsPdfDialogContentProps {
+  dialogName: string;
+}
+
+export function InventoryItemDetailsPdfDialogContent({ dialogName }: InventoryItemDetailsPdfDialogContentProps) {
   const { httpQuery } = useInventoryItemDetailsContext();
   const { isLoading, pdfUrl } = useInventoryItemDetailsPdf(httpQuery);
 

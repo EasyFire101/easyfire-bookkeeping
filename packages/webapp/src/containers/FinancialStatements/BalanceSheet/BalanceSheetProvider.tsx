@@ -1,5 +1,5 @@
 import React, { createContext, useContext, useMemo } from 'react';
-import FinancialReportPage from '../FinancialReportPage';
+import { FinancialReportPage } from '../FinancialReportPage';
 import { useBalanceSheet } from '@/hooks/query';
 import { transformFilterFormToQuery } from '../common';
 import type { BalanceSheetTableQuery } from '@bigcapital/sdk-ts';

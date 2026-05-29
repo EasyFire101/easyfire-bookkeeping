@@ -1,4 +1,3 @@
-// @ts-nocheck
 import React, { useRef } from 'react';
 import classNames from 'classnames';
 import {
@@ -19,7 +18,7 @@ import {
 } from '@/components';
 
 import { useGeneralLedgerContext } from './GeneralLedgerProvider';
-import FinancialLoadingBar from '../FinancialLoadingBar';
+import { FinancialLoadingBar } from '../FinancialLoadingBar';
 
 import { FinancialComputeAlert } from '../FinancialReportPage';
 import {
@@ -42,7 +41,8 @@ export function GeneralLedgerSheetAlerts() {
     return null;
   }
   // Can't continue if the cost compute job is not running.
-  if (!generalLedger.meta.is_cost_compute_running) {
+  const meta = (generalLedger as any)?.meta;
+  if (!meta?.is_cost_compute_running) {
     return null;
   }
   return (
@@ -74,7 +74,7 @@ export function GeneralLedgerSheetLoadingBar() {
  * @returns {JSX.Element}
  */
 export const GeneralLedgerSheetExportMenu = () => {
-  const toastKey = useRef(null);
+  const toastKey = useRef<string | number | undefined>(null);
   const commonToastConfig = {
     isCloseButtonShown: true,
     timeout: 2000,

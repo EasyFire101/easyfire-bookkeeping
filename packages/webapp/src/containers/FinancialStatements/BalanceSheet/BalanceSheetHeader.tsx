@@ -1,42 +1,49 @@
-// @ts-nocheck
 import React from 'react';
 import styled from 'styled-components';
 import moment from 'moment';
 import { Tabs, Tab, Button, Intent } from '@blueprintjs/core';
 import { Formik, Form } from 'formik';
-
+import type { FormikHelpers } from 'formik';
 import { FormattedMessage as T } from '@/components';
 import { useFeatureCan } from '@/hooks/state';
 import { Features } from '@/constants';
-
 import { withBalanceSheet } from './withBalanceSheet';
+import type { WithBalanceSheetProps } from './withBalanceSheet';
 import { withBalanceSheetActions } from './withBalanceSheetActions';
-
-import BalanceSheetHeaderGeneralPanal from './BalanceSheetHeaderGeneralPanal';
-import BalanceSheetHeaderComparisonPanal from './BalanceSheetHeaderComparisonPanal';
-import BalanceSheetHeaderDimensionsPanel from './BalanceSheetHeaderDimensionsPanel';
-import FinancialStatementHeader from '../../FinancialStatements/FinancialStatementHeader';
-
+import type { WithBalanceSheetActionsProps } from './withBalanceSheetActions';
+import { BalanceSheetHeaderGeneralPanal } from './BalanceSheetHeaderGeneralPanal';
+import { BalanceSheetHeaderComparisonPanal } from './BalanceSheetHeaderComparisonPanal';
+import { BalanceSheetHeaderDimensionsPanel } from './BalanceSheetHeaderDimensionsPanel';
+import { FinancialStatementHeader } from '../../FinancialStatements/FinancialStatementHeader';
 import { compose, transformToForm } from '@/utils';
 import {
   getBalanceSheetHeaderValidationSchema,
   getDefaultBalanceSheetQuery,
 } from './utils';
 
-/**
- * Balance sheet header.
- */
-function BalanceSheetHeader({
-  // #ownProps
+type BalanceSheetFormValues = Omit<
+  ReturnType<typeof getDefaultBalanceSheetQuery>,
+  'fromDate' | 'toDate'
+> & {
+  fromDate: Date;
+  toDate: Date;
+};
+
+interface BalanceSheetHeaderOwnProps {
+  onSubmitFilter: (values: BalanceSheetFormValues) => void;
+  pageFilter: ReturnType<typeof getDefaultBalanceSheetQuery>;
+}
+
+type BalanceSheetHeaderProps = BalanceSheetHeaderOwnProps &
+  Pick<WithBalanceSheetProps, 'balanceSheetDrawerFilter'> &
+  Pick<WithBalanceSheetActionsProps, 'toggleBalanceSheetFilterDrawer'>;
+
+function BalanceSheetHeaderInner({
   onSubmitFilter,
   pageFilter,
-
-  // #withBalanceSheet
   balanceSheetDrawerFilter,
-
-  // #withBalanceSheetActions
   toggleBalanceSheetFilterDrawer: toggleFilterDrawer,
-}) {
+}: BalanceSheetHeaderProps) {
   const defaultValues = getDefaultBalanceSheetQuery();
 
   // Filter form initial values.
@@ -48,12 +55,12 @@ function BalanceSheetHeader({
       toDate: moment(pageFilter.toDate).toDate(),
     },
     defaultValues,
-  );
+  ) as BalanceSheetFormValues;
   // Validation schema.
   const validationSchema = getBalanceSheetHeaderValidationSchema();
 
   // Handle form submit.
-  const handleSubmit = (values, actions) => {
+  const handleSubmit = (values: BalanceSheetFormValues, actions: FormikHelpers<BalanceSheetFormValues>) => {
     onSubmitFilter(values);
     toggleFilterDrawer(false);
     actions.setSubmitting(false);
@@ -77,7 +84,7 @@ function BalanceSheetHeader({
         onClose: handleDrawerClose,
       }}
     >
-      <Formik
+      <Formik<BalanceSheetFormValues>
         initialValues={initialValues}
         validationSchema={validationSchema}
         onSubmit={handleSubmit}
@@ -103,7 +110,7 @@ function BalanceSheetHeader({
             )}
           </Tabs>
 
-          <div class="financial-header-drawer__footer">
+          <div className="financial-header-drawer__footer">
             <Button className={'mr1'} intent={Intent.PRIMARY} type={'submit'}>
               <T id={'calculate_report'} />
             </Button>
@@ -117,12 +124,12 @@ function BalanceSheetHeader({
   );
 }
 
-export default compose(
+export const BalanceSheetHeader = compose(
   withBalanceSheet(({ balanceSheetDrawerFilter }) => ({
     balanceSheetDrawerFilter,
   })),
   withBalanceSheetActions,
-)(BalanceSheetHeader);
+)(BalanceSheetHeaderInner);
 
 const BalanceSheetFinancialHeader = styled(FinancialStatementHeader)`
   .bp4-drawer {

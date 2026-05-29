@@ -1,4 +1,3 @@
-// @ts-nocheck
 import * as Yup from 'yup';
 import intl from 'react-intl-universal';
 import moment from 'moment';
@@ -20,11 +19,11 @@ export const getCustomersTransactionsQuerySchema = () => {
 export const getCustomersTransactionsDefaultQuery = () => ({
   fromDate: moment().startOf('month').format('YYYY-MM-DD'),
   toDate: moment().format('YYYY-MM-DD'),
-  customersIds: [],
+  customersIds: [] as string[],
   filterByOption: 'with-transactions',
 });
 
-const parseCustomersTransactionsQuery = (query) => {
+const parseCustomersTransactionsQuery = (query: Record<string, any>) => {
   const defaultQuery = getCustomersTransactionsDefaultQuery();
 
   const transformedQuery = {
@@ -44,5 +43,5 @@ export const useCustomersTransactionsQuery = () => {
     () => parseCustomersTransactionsQuery(locationQuery),
     [locationQuery],
   );
-  return [query, setLocationQuery];
+  return [query, setLocationQuery] as const;
 };

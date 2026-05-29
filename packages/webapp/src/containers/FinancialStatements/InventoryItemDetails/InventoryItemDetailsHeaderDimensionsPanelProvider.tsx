@@ -1,18 +1,31 @@
-// @ts-nocheck
-import React from 'react';
+import React, { createContext, useContext } from 'react';
 
 import { useWarehouses, useBranches } from '@/hooks/query';
 import { useFeatureCan } from '@/hooks/state';
 import { FinancialHeaderLoadingSkeleton } from '../FinancialHeaderLoadingSkeleton';
 import { Features } from '@/constants';
 
-const InventoryItemDetailsHeaderDimensionsPanelContext = React.createContext();
+interface InventoryItemDetailsHeaderDimensionsPanelContextValue {
+  warehouses: Record<string, unknown> | undefined;
+  branches: Record<string, unknown> | undefined;
+  isWarehouesLoading: boolean;
+  isBranchesLoading: boolean;
+}
+
+interface InventoryItemDetailsHeaderDimensionsProviderProps {
+  query?: Record<string, unknown>;
+  children?: React.ReactNode;
+}
+
+const InventoryItemDetailsHeaderDimensionsPanelContext = createContext<
+  InventoryItemDetailsHeaderDimensionsPanelContextValue | undefined
+>(undefined);
 
 /**
  * Inventory Item details header provider.
  * @returns
  */
-function InventoryItemDetailsHeaderDimensionsProvider({ ...props }) {
+function InventoryItemDetailsHeaderDimensionsProvider({ ...props }: InventoryItemDetailsHeaderDimensionsProviderProps) {
   // Features guard.
   const { featureCan } = useFeatureCan();
 
@@ -34,7 +47,7 @@ function InventoryItemDetailsHeaderDimensionsProvider({ ...props }) {
   });
 
   // Provider
-  const provider = {
+  const provider: InventoryItemDetailsHeaderDimensionsPanelContextValue = {
     warehouses,
     branches,
     isWarehouesLoading,
@@ -51,8 +64,15 @@ function InventoryItemDetailsHeaderDimensionsProvider({ ...props }) {
   );
 }
 
-const useInventoryItemDetailsHeaderDimensionsPanelContext = () =>
-  React.useContext(InventoryItemDetailsHeaderDimensionsPanelContext);
+const useInventoryItemDetailsHeaderDimensionsPanelContext = (): InventoryItemDetailsHeaderDimensionsPanelContextValue => {
+  const ctx = useContext(InventoryItemDetailsHeaderDimensionsPanelContext);
+  if (!ctx) {
+    throw new Error(
+      'useInventoryItemDetailsHeaderDimensionsPanelContext must be used within InventoryItemDetailsHeaderDimensionsProvider',
+    );
+  }
+  return ctx;
+};
 
 export {
   InventoryItemDetailsHeaderDimensionsProvider,

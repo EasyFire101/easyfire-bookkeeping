@@ -1,5 +1,5 @@
 import React, { createContext, useContext } from 'react';
-import FinancialReportPage from '../FinancialReportPage';
+import { FinancialReportPage } from '../FinancialReportPage';
 import { useCustomerBalanceSummaryReport } from '@/hooks/query';
 import { transformFilterFormToQuery } from '../common';
 
@@ -43,8 +43,8 @@ function CustomersBalanceSummaryProvider({
     isFetching: isCustomersBalanceFetching,
     refetch,
   } = useCustomerBalanceSummaryReport(query, {
-    keepPreviousData: true,
-  } as any);
+    placeholderData: (prev) => prev,
+  });
 
   const provider: CustomersBalanceSummaryContextValue = {
     CustomerBalanceSummary,

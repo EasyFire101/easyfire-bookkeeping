@@ -1,10 +1,9 @@
-// @ts-nocheck
 import * as R from 'ramda';
 
 import { getColumnWidth } from '@/utils';
 import { Align } from '@/constants';
 
-const characterColumn = R.curry((data, index, column) => ({
+const characterColumn = R.curry((data: any[], index: number, column: Record<string, any>) => ({
   id: column.key,
   key: column.key,
   Header: column.label,
@@ -19,7 +18,7 @@ const characterColumn = R.curry((data, index, column) => ({
   sticky: Align.Left,
 }));
 
-const numericColumn = R.curry((data, index, column) => ({
+const numericColumn = R.curry((data: any[], index: number, column: Record<string, any>) => ({
   id: column.key,
   key: column.key,
   Header: column.label,
@@ -36,7 +35,7 @@ const numericColumn = R.curry((data, index, column) => ({
 /**
  *  columns mapper.
  */
-const columnsMapper = R.curry((data, index, column) => ({
+const columnsMapper = R.curry((data: any[], index: number, column: Record<string, any>) => ({
   id: column.key,
   key: column.key,
   Header: column.label,
@@ -53,8 +52,8 @@ const columnsMapper = R.curry((data, index, column) => ({
 /**
  * project profitability summary columns mapper.
  */
-export const dynamicColumns = (columns, data) => {
-  const mapper = (column, index) => {
+export const dynamicColumns = (columns: Record<string, any>[], data: any[]) => {
+  const mapper = (column: Record<string, any>, index: number) => {
     return R.compose(
       R.cond([
         [R.pathEq(['key'], 'name'), characterColumn(data, index)],

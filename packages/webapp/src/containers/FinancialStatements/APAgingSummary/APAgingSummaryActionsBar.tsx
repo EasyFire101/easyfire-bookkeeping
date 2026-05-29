@@ -1,4 +1,3 @@
-// @ts-nocheck
 import React from 'react';
 import {
   NavbarDivider,
@@ -17,47 +16,45 @@ import { useAPAgingSummaryContext } from './APAgingSummaryProvider';
 import NumberFormatDropdown from '@/components/NumberFormatDropdown';
 import { APAgingSummaryExportMenu } from './components';
 
-import { withAPAgingSummary } from './withAPAgingSummary';
-import { withAPAgingSummaryActions } from './withAPAgingSummaryActions';
+import { withAPAgingSummary, WithAPAgingSummaryProps } from './withAPAgingSummary';
+import { withAPAgingSummaryActions, WithAPAgingSummaryActionsProps } from './withAPAgingSummaryActions';
 
 import { saveInvoke, compose } from '@/utils';
 import { DialogsName } from '@/constants/dialogs';
-import { withDialogActions } from '@/containers/Dialog/withDialogActions';
+import { withDialogActions, WithDialogActionsProps } from '@/containers/Dialog/withDialogActions';
 
-/**
- * AP Aging summary sheet - Actions bar.
- */
-function APAgingSummaryActionsBar({
-  // #withPayableAgingSummary
+interface APAgingSummaryActionsBarOwnProps {
+  numberFormat: Record<string, unknown>;
+  onNumberFormatSubmit: (numberFormat: Record<string, unknown>) => void;
+}
+
+type APAgingSummaryActionsBarProps = {
+  isFilterDrawerOpen: boolean;
+} & Pick<WithAPAgingSummaryActionsProps, 'toggleAPAgingSummaryFilterDrawer'> &
+  WithDialogActionsProps &
+  APAgingSummaryActionsBarOwnProps;
+
+function APAgingSummaryActionsBarInner({
   isFilterDrawerOpen,
-
-  // #withARAgingSummaryActions
   toggleAPAgingSummaryFilterDrawer: toggleFilterDrawerDisplay,
-
-  // #withDialogActions
   openDialog,
-
-  //#ownProps
   numberFormat,
   onNumberFormatSubmit,
-}) {
+}: APAgingSummaryActionsBarProps) {
   const { isAPAgingFetching, refetch } = useAPAgingSummaryContext();
 
   const handleFilterToggleClick = () => {
     toggleFilterDrawerDisplay();
   };
 
-  // handle recalculate report button.
   const handleRecalculateReport = () => {
     refetch();
   };
 
-  // handle number format submit.
-  const handleNumberFormatSubmit = (numberFormat) => {
+  const handleNumberFormatSubmit = (numberFormat: Record<string, unknown>) => {
     saveInvoke(onNumberFormatSubmit, numberFormat);
   };
 
-  // Handle the print button click.
   const handlePrintBtnClick = () => {
     openDialog(DialogsName.APAgingSummaryPdfPreview);
   };
@@ -130,10 +127,10 @@ function APAgingSummaryActionsBar({
   );
 }
 
-export default compose(
+export const APAgingSummaryActionsBar = compose(
   withAPAgingSummaryActions,
   withAPAgingSummary(({ APAgingSummaryFilterDrawer }) => ({
     isFilterDrawerOpen: APAgingSummaryFilterDrawer,
   })),
-  withDialogActions
-)(APAgingSummaryActionsBar);
+  withDialogActions,
+)(APAgingSummaryActionsBarInner);

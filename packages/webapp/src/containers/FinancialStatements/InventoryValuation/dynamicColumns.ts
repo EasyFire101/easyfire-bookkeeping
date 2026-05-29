@@ -1,12 +1,11 @@
-// @ts-nocheck
 import { Align } from '@/constants';
 import { getColumnWidth } from '@/utils';
 import * as R from 'ramda';
 import { useInventoryValuationContext } from './InventoryValuationProvider';
 
-const getTableCellValueAccessor = (index) => `cells[${index}].value`;
+const getTableCellValueAccessor = (index: number) => `cells[${index}].value`;
 
-const getReportColWidth = (data, accessor, headerText) => {
+const getReportColWidth = (data: unknown[], accessor: string, headerText?: string) => {
   return getColumnWidth(
     data,
     accessor,
@@ -18,7 +17,7 @@ const getReportColWidth = (data, accessor, headerText) => {
 /**
  * Common column mapper.
  */
-const commonAccessor = R.curry((data, column) => {
+const commonAccessor = R.curry((data: unknown[], column: Record<string, any>) => {
   const accessor = getTableCellValueAccessor(column.cell_index);
 
   return {
@@ -34,7 +33,7 @@ const commonAccessor = R.curry((data, column) => {
 /**
  * Numeric columns accessor.
  */
-const numericColumnAccessor = R.curry((data, column) => {
+const numericColumnAccessor = R.curry((data: unknown[], column: Record<string, any>) => {
   const accessor = getTableCellValueAccessor(column.cell_index);
   const width = getReportColWidth(data, accessor, column.label);
 
@@ -49,19 +48,17 @@ const numericColumnAccessor = R.curry((data, column) => {
 /**
  * Item name column accessor.
  */
-const itemNameColumnAccessor = R.curry((data, column) => {
+const itemNameColumnAccessor = R.curry((data: unknown[], column: Record<string, any>) => {
   return {
     ...column,
     width: 240,
-  }
+  };
 });
 
 /**
  * Dynamic column mapper.
- * @param {} data -
- * @param {} column -
  */
-const dynamicColumnMapper = R.curry((data, column) => {
+const dynamicColumnMapper = R.curry((data: unknown[], column: Record<string, any>) => {
   const _commonAccessor = commonAccessor(data);
   const _numericColumnAccessor = numericColumnAccessor(data);
   const _itemNameColumnAccessor = itemNameColumnAccessor(data);
@@ -76,10 +73,10 @@ const dynamicColumnMapper = R.curry((data, column) => {
 });
 
 /**
- * Composes the fetched dynamic columns from the server to the columns to pass it 
+ * Composes the fetched dynamic columns from the server to the columns to pass it
  * to the table component.
  */
-export const dynamicColumns = (columns, data) => {
+export const dynamicColumns = (columns: Record<string, any>[], data: unknown[]) => {
   return R.map(dynamicColumnMapper(data), columns);
 };
 
@@ -92,7 +89,7 @@ export const useInventoryValuationColumns = () => {
   if (!inventoryValuation) {
     throw new Error('The inventory valuation is not loaded');
   }
-  const { table } = inventoryValuation;
+  const table = (inventoryValuation as any).table;
 
   return dynamicColumns(table.columns, table.rows);
 };

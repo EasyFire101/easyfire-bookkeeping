@@ -1,14 +1,23 @@
-// @ts-nocheck
-import React, { createContext, useContext } from 'react';
+import React, { createContext, useContext, ReactNode } from 'react';
 import { FinancialHeaderLoadingSkeleton } from '../FinancialHeaderLoadingSkeleton';
 import { useCustomers } from '@/hooks/query';
 
-const CustomersTransactionsGeneralPanelContext = createContext();
+interface CustomersTransactionsGeneralPanelContextValue {
+  customers: any;
+  isCustomersLoading: boolean;
+  isCustomersFetching: boolean;
+}
+
+interface CustomersTransactionsGeneralPanelProviderProps {
+  children?: ReactNode;
+}
+
+const CustomersTransactionsGeneralPanelContext = createContext<CustomersTransactionsGeneralPanelContextValue | undefined>(undefined);
 
 /**
  * Customers transactions provider.
  */
-function CustomersTransactionsGeneralPanelProvider({ ...props }) {
+function CustomersTransactionsGeneralPanelProvider({ ...props }: CustomersTransactionsGeneralPanelProviderProps) {
   // Fetches the customers list.
   const {
     data: customersData,
@@ -16,7 +25,7 @@ function CustomersTransactionsGeneralPanelProvider({ ...props }) {
     isLoading: isCustomersLoading,
   } = useCustomers();
 
-  const provider = {
+  const provider: CustomersTransactionsGeneralPanelContextValue = {
     customers: customersData?.customers,
     isCustomersLoading,
     isCustomersFetching,
@@ -33,8 +42,12 @@ function CustomersTransactionsGeneralPanelProvider({ ...props }) {
     />
   );
 }
-const useCustomersTransactionsGeneralPanelContext = () =>
-  useContext(CustomersTransactionsGeneralPanelContext);
+
+const useCustomersTransactionsGeneralPanelContext = (): CustomersTransactionsGeneralPanelContextValue => {
+  const ctx = useContext(CustomersTransactionsGeneralPanelContext);
+  if (!ctx) throw new Error('useCustomersTransactionsGeneralPanelContext must be used within a CustomersTransactionsGeneralPanelProvider');
+  return ctx;
+};
 
 export {
   CustomersTransactionsGeneralPanelProvider,

@@ -1,5 +1,4 @@
-// @ts-nocheck
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import moment from 'moment';
 
 import { FinancialStatement, DashboardPageContent } from '@/components';
@@ -7,36 +6,40 @@ import { VendorsTransactionsBody } from './VendorsTransactionsBody';
 import { VendorsTransactionsProvider } from './VendorsTransactionsProvider';
 import { VendorsTransactionsLoadingBar } from './components';
 
-import VendorsTransactionsHeader from './VendorsTransactionsHeader';
-import VendorsTransactionsActionsBar from './VendorsTransactionsActionsBar';
+import { VendorsTransactionsHeader } from './VendorsTransactionsHeader';
+import { VendorsTransactionsActionsBar } from './VendorsTransactionsActionsBar';
 
-import { withVendorsTransactionsActions } from './withVendorsTransactionsActions';
+import { withVendorsTransactionsActions, WithVendorsTransactionsActionsProps } from './withVendorsTransactionsActions';
 
 import { compose } from '@/utils';
 import { useVendorsTransactionsQuery } from './_utils';
 import { VendorTransactionsDialogs } from './VendorTransactionsDialogs';
 
+interface VendorsTransactionsProps {
+  toggleVendorsTransactionsFilterDrawer: WithVendorsTransactionsActionsProps['toggleVendorsTransactionsFilterDrawer'];
+}
+
 /**
  * Vendors transactions.
  */
-function VendorsTransactions({
+function VendorsTransactionsInner({
   //#withVendorsTransactionsActions
   toggleVendorsTransactionsFilterDrawer,
-}) {
+}: VendorsTransactionsProps) {
   // filter
   const [filter, setFilter] = useVendorsTransactionsQuery();
 
-  const handleFilterSubmit = (filter) => {
+  const handleFilterSubmit = (filter: Record<string, unknown>) => {
     const _filter = {
       ...filter,
-      fromDate: moment(filter.fromDate).format('YYYY-MM-DD'),
-      toDate: moment(filter.toDate).format('YYYY-MM-DD'),
+      fromDate: moment(filter.fromDate as string).format('YYYY-MM-DD'),
+      toDate: moment(filter.toDate as string).format('YYYY-MM-DD'),
     };
     setFilter({ ..._filter });
   };
 
   // Handle number format submit.
-  const handleNumberFormatSubmit = (values) => {
+  const handleNumberFormatSubmit = (values: Record<string, unknown>) => {
     setFilter({
       ...filter,
       numberFormat: values,
@@ -53,7 +56,7 @@ function VendorsTransactions({
   return (
     <VendorsTransactionsProvider filter={filter}>
       <VendorsTransactionsActionsBar
-        numberFormat={filter.numberFormat}
+        numberFormat={filter.numberFormat as Record<string, unknown>}
         onNumberFormatSubmit={handleNumberFormatSubmit}
       />
       <VendorsTransactionsLoadingBar />
@@ -71,4 +74,4 @@ function VendorsTransactions({
     </VendorsTransactionsProvider>
   );
 }
-export default compose(withVendorsTransactionsActions)(VendorsTransactions);
+export const VendorsTransactions = compose(withVendorsTransactionsActions)(VendorsTransactionsInner);

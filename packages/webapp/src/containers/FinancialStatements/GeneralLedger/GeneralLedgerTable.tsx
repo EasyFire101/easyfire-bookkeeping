@@ -1,5 +1,4 @@
-// @ts-nocheck
-import { useMemo } from 'react';
+import React, { useMemo } from 'react';
 import intl from 'react-intl-universal';
 import styled from 'styled-components';
 
@@ -15,23 +14,29 @@ import {
 import { useGeneralLedgerContext } from './GeneralLedgerProvider';
 import { useGeneralLedgerTableColumns } from './dynamicColumns';
 
+interface GeneralLedgerTableProps {
+  companyName: string;
+}
+
 /**
  * General ledger table.
  */
-export default function GeneralLedgerTable({ companyName }) {
+export function GeneralLedgerTable({
+  companyName,
+}: GeneralLedgerTableProps) {
   // General ledger context.
-  const {
-    generalLedger: { query, table, meta },
-    isLoading,
-  } = useGeneralLedgerContext();
+  const { generalLedger, isLoading } = useGeneralLedgerContext();
+
+  const table = (generalLedger as any)?.table;
+  const meta = (generalLedger as any)?.meta;
 
   // General ledger table columns.
   const columns = useGeneralLedgerTableColumns();
 
   // Default expanded rows of general ledger table.
   const expandedRows = useMemo(
-    () => defaultExpanderReducer(table.rows, 1),
-    [table.rows],
+    () => defaultExpanderReducer(table?.rows ?? [], 1),
+    [table?.rows],
   );
 
   return (
@@ -47,7 +52,7 @@ export default function GeneralLedgerTable({ companyName }) {
           'this_report_does_not_contain_any_data_between_date_period',
         )}
         columns={columns}
-        data={table.rows}
+        data={table?.rows ?? []}
         rowClassNames={tableRowTypesToClassnames}
         expanded={expandedRows}
         virtualizedRows={true}

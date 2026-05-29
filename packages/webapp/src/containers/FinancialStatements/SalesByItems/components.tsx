@@ -1,12 +1,10 @@
-// @ts-nocheck
 import { useRef } from 'react';
 import classNames from 'classnames';
-import { Classes } from '@blueprintjs/core';
+import { Classes, Intent, Menu, MenuItem, ProgressBar, Text } from '@blueprintjs/core';
 
 import { AppToaster, If, Stack } from '@/components';
 import { useSalesByItemsContext } from './SalesByItemProvider';
-import FinancialLoadingBar from '../FinancialLoadingBar';
-import { Intent, Menu, MenuItem, ProgressBar, Text } from '@blueprintjs/core';
+import { FinancialLoadingBar } from '../FinancialLoadingBar';
 import {
   useSalesByItemsCsvExport,
   useSalesByItemsXlsxExport,
@@ -26,11 +24,10 @@ export function SalesByItemsLoadingBar() {
 
 /**
  * Retrieves the sales by items export menu.
- * @returns {JSX.Element}
  */
 export const SalesByItemsSheetExportMenu = () => {
-  const toastKey = useRef(null);
-  const commonToastConfig = { isCloseButtonShown: true, timeout: 2000, };
+  const toastKey = useRef<string | number | undefined>(undefined);
+  const commonToastConfig = { isCloseButtonShown: true, timeout: 2000 };
   const { httpQuery } = useSalesByItemsContext();
 
   const openProgressToast = (amount: number) => {

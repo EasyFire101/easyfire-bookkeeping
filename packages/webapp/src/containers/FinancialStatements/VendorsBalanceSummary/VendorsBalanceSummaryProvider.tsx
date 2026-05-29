@@ -1,16 +1,29 @@
-// @ts-nocheck
-import React from 'react';
-import FinancialReportPage from '../FinancialReportPage';
+import React, { createContext, useContext, useMemo } from 'react';
+import { FinancialReportPage } from '../FinancialReportPage';
 import { useVendorsBalanceSummaryReport } from '@/hooks/query';
 import { transformFilterFormToQuery } from '../common';
 
-const VendorsBalanceSummaryContext = React.createContext();
+type UseVendorsBalanceSummaryResult = ReturnType<typeof useVendorsBalanceSummaryReport>;
+
+interface VendorsBalanceSummaryContextValue {
+  VendorBalanceSummary: UseVendorsBalanceSummaryResult['data'];
+  isVendorsBalanceLoading: boolean;
+  isVendorsBalanceFetching: boolean;
+  refetch: UseVendorsBalanceSummaryResult['refetch'];
+  httpQuery: Record<string, unknown>;
+}
+
+interface VendorsBalanceSummaryProviderProps {
+  filter: Record<string, unknown>;
+}
+
+const VendorsBalanceSummaryContext = createContext<VendorsBalanceSummaryContextValue | undefined>(undefined);
 
 /**
  * Vendors balance summary provider.
  */
-function VendorsBalanceSummaryProvider({ filter, ...props }) {
-  const httpQuery = React.useMemo(
+function VendorsBalanceSummaryProvider({ filter, ...props }: VendorsBalanceSummaryProviderProps & { children?: React.ReactNode }) {
+  const httpQuery = useMemo(
     () => transformFilterFormToQuery(filter),
     [filter],
   );
@@ -20,10 +33,12 @@ function VendorsBalanceSummaryProvider({ filter, ...props }) {
     isLoading: isVendorsBalanceLoading,
     isFetching: isVendorsBalanceFetching,
     refetch,
-  } = useVendorsBalanceSummaryReport(httpQuery, { keepPreviousData: true });
+  } = useVendorsBalanceSummaryReport(httpQuery, {
+    placeholderData: (prev) => prev,
+  });
 
   // Provider.
-  const provider = {
+  const provider: VendorsBalanceSummaryContextValue = {
     VendorBalanceSummary,
     isVendorsBalanceLoading,
     isVendorsBalanceFetching,
@@ -38,7 +53,12 @@ function VendorsBalanceSummaryProvider({ filter, ...props }) {
   );
 }
 
-const useVendorsBalanceSummaryContext = () =>
-  React.useContext(VendorsBalanceSummaryContext);
+const useVendorsBalanceSummaryContext = (): VendorsBalanceSummaryContextValue => {
+  const ctx = useContext(VendorsBalanceSummaryContext);
+  if (!ctx) {
+    throw new Error('useVendorsBalanceSummaryContext must be used within a VendorsBalanceSummaryProvider');
+  }
+  return ctx;
+};
 
 export { VendorsBalanceSummaryProvider, useVendorsBalanceSummaryContext };

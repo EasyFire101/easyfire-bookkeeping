@@ -1,4 +1,3 @@
-// @ts-nocheck
 import {
   DialogContent,
   PdfDocumentPreview,
@@ -8,7 +7,7 @@ import { useAPAgingSummaryPdf } from '@/hooks/query';
 import { AnchorButton } from '@blueprintjs/core';
 import { useAPAgingSummaryContext } from '../../APAgingSummaryProvider';
 
-export default function APAgingSummaryPdfDialogContent() {
+export function APAgingSummaryPdfDialogContent() {
   const { httpQuery } = useAPAgingSummaryContext();
   const { isLoading, pdfUrl } = useAPAgingSummaryPdf(httpQuery);
 

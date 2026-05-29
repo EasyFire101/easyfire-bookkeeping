@@ -1,4 +1,3 @@
-// @ts-nocheck
 import React, { useRef } from 'react';
 import {
   Button,
@@ -22,7 +21,7 @@ import {
   useCashFlowStatementCsvExport,
   useCashFlowStatementXlsxExport,
 } from '@/hooks/query';
-import FinancialLoadingBar from '../FinancialLoadingBar';
+import { FinancialLoadingBar } from '../FinancialLoadingBar';
 
 import { dynamicColumns } from './dynamicColumns';
 import { useCashFlowStatementContext } from './CashFlowStatementProvider';
@@ -32,13 +31,14 @@ import { FinancialComputeAlert } from '../FinancialReportPage';
  * Retrieve cash flow statement columns.
  */
 export const useCashFlowStatementColumns = () => {
-  const {
-    cashFlowStatement: { columns, tableRows },
-  } = useCashFlowStatementContext();
+  const { cashFlowStatement } = useCashFlowStatementContext();
 
   return React.useMemo(
-    () => dynamicColumns(columns, tableRows),
-    [columns, tableRows],
+    () => dynamicColumns(
+      cashFlowStatement?.columns ?? [],
+      cashFlowStatement?.tableRows ?? [],
+    ),
+    [cashFlowStatement],
   );
 };
 

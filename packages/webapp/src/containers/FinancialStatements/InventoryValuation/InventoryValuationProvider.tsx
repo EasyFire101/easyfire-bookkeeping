@@ -1,18 +1,35 @@
-// @ts-nocheck
-import React from 'react';
-import FinancialReportPage from '../FinancialReportPage';
+import React, { createContext, useContext, useMemo } from 'react';
+import { FinancialReportPage } from '../FinancialReportPage';
 import { useInventoryValuationTable } from '@/hooks/query';
 import { transformFilterFormToQuery } from '../common';
 
-const InventoryValuationContext = React.createContext();
+type UseInventoryValuationTableResult = ReturnType<typeof useInventoryValuationTable>;
+
+type InventoryValuationContextValue = {
+  inventoryValuation: UseInventoryValuationTableResult['data'];
+  isFetching: boolean;
+  isLoading: boolean;
+  refetchSheet: UseInventoryValuationTableResult['refetch'];
+  httpQuery: Record<string, unknown>;
+  query: Record<string, unknown>;
+};
+
+type InventoryValuationProviderProps = {
+  query: Record<string, unknown>;
+  children?: React.ReactNode;
+};
+
+const InventoryValuationContext = createContext<InventoryValuationContextValue | undefined>(
+  undefined,
+);
 
 /**
  * Inventory valuation sheet provider.
  */
-function InventoryValuationProvider({ query, ...props }) {
+function InventoryValuationProvider({ query, ...props }: InventoryValuationProviderProps) {
   // Transformes the filter form query to request query.
-  const httpQuery = React.useMemo(
-    () => transformFilterFormToQuery(query),
+  const httpQuery = useMemo(
+    () => transformFilterFormToQuery(query) as Record<string, unknown>,
     [query],
   );
 
@@ -21,15 +38,18 @@ function InventoryValuationProvider({ query, ...props }) {
     isFetching,
     isLoading,
     refetch,
-  } = useInventoryValuationTable(httpQuery, { keepPreviousData: true });
+  } = useInventoryValuationTable(httpQuery, {
+    placeholderData: (previousData) => previousData,
+  });
 
   // Provider data.
-  const provider = {
+  const provider: InventoryValuationContextValue = {
     inventoryValuation,
     isLoading,
     isFetching,
     refetchSheet: refetch,
-    httpQuery
+    httpQuery,
+    query,
   };
 
   return (
@@ -39,7 +59,14 @@ function InventoryValuationProvider({ query, ...props }) {
   );
 }
 
-const useInventoryValuationContext = () =>
-  React.useContext(InventoryValuationContext);
+const useInventoryValuationContext = (): InventoryValuationContextValue => {
+  const ctx = useContext(InventoryValuationContext);
+  if (!ctx) {
+    throw new Error(
+      'useInventoryValuationContext must be used within an InventoryValuationProvider',
+    );
+  }
+  return ctx;
+};
 
 export { InventoryValuationProvider, useInventoryValuationContext };

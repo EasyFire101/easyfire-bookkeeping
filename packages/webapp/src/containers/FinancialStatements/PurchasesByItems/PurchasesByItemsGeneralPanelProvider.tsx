@@ -1,10 +1,22 @@
-// @ts-nocheck
 import React, { createContext, useContext } from 'react';
 import { useItems } from '@/hooks/query';
 import { FinancialHeaderLoadingSkeleton } from '../FinancialHeaderLoadingSkeleton';
-const PurchasesByItemsGeneralPanelContext = createContext();
 
-function PurchasesByItemsGeneralPanelProvider({ ...props }) {
+type UseItemsResult = ReturnType<typeof useItems>;
+
+interface PurchasesByItemsGeneralPanelContextValue {
+  items: UseItemsResult['data'] extends { items?: infer I } | undefined ? I : unknown;
+  isItemsLoading: boolean;
+  isItemsFetching: boolean;
+}
+
+interface PurchasesByItemsGeneralPanelProviderProps {
+  children?: React.ReactNode;
+}
+
+const PurchasesByItemsGeneralPanelContext = createContext<PurchasesByItemsGeneralPanelContextValue | undefined>(undefined);
+
+function PurchasesByItemsGeneralPanelProvider({ ...props }: PurchasesByItemsGeneralPanelProviderProps) {
   // Handle fetching the items based on the given query.
   const {
     data: itemsData,
@@ -17,8 +29,8 @@ function PurchasesByItemsGeneralPanelProvider({ ...props }) {
     ]),
   });
 
-  const provider = {
-    items: itemsData?.items,
+  const provider: PurchasesByItemsGeneralPanelContextValue = {
+    items: (itemsData as any)?.items,
     isItemsLoading,
     isItemsFetching,
   };
@@ -32,8 +44,11 @@ function PurchasesByItemsGeneralPanelProvider({ ...props }) {
   );
 }
 
-const usePurchaseByItemsGeneralPanelContext = () =>
-  useContext(PurchasesByItemsGeneralPanelContext);
+const usePurchaseByItemsGeneralPanelContext = (): PurchasesByItemsGeneralPanelContextValue => {
+  const ctx = useContext(PurchasesByItemsGeneralPanelContext);
+  if (!ctx) throw new Error('PurchasesByItemsGeneralPanelContext is not provided');
+  return ctx;
+};
 
 export {
   PurchasesByItemsGeneralPanelProvider,

@@ -1,4 +1,3 @@
-// @ts-nocheck
 import React from 'react';
 import {
   NavbarGroup,
@@ -15,18 +14,29 @@ import classNames from 'classnames';
 import NumberFormatDropdown from '@/components/NumberFormatDropdown';
 
 import { useVendorsTransactionsContext } from './VendorsTransactionsProvider';
-import { withVendorsTransaction } from './withVendorsTransaction';
-import { withVendorsTransactionsActions } from './withVendorsTransactionsActions';
+import { withVendorsTransaction, WithVendorsTransactionProps } from './withVendorsTransaction';
+import { withVendorsTransactionsActions, WithVendorsTransactionsActionsProps } from './withVendorsTransactionsActions';
 
 import { compose, saveInvoke } from '@/utils';
 import { VendorTransactionsExportMenu } from './components';
-import { withDialogActions } from '@/containers/Dialog/withDialogActions';
+import { withDialogActions, WithDialogActionsProps } from '@/containers/Dialog/withDialogActions';
 import { DialogsName } from '@/constants/dialogs';
+
+interface VendorsTransactionsActionsBarOwnProps {
+  numberFormat: Record<string, unknown>;
+  onNumberFormatSubmit: (values: Record<string, unknown>) => void;
+}
+
+type VendorsTransactionsActionsBarProps = {
+  isFilterDrawerOpen: boolean;
+} & Pick<WithVendorsTransactionsActionsProps, 'toggleVendorsTransactionsFilterDrawer'> &
+  WithDialogActionsProps &
+  VendorsTransactionsActionsBarOwnProps;
 
 /**
  * vendors transactions actions bar.
  */
-function VendorsTransactionsActionsBar({
+function VendorsTransactionsActionsBarInner({
   // #ownProps
   numberFormat,
   onNumberFormatSubmit,
@@ -38,14 +48,14 @@ function VendorsTransactionsActionsBar({
   toggleVendorsTransactionsFilterDrawer,
 
   //#withDialogActions
-  openDialog
-}) {
+  openDialog,
+}: VendorsTransactionsActionsBarProps) {
   const { isVendorsTransactionsLoading, refetch } =
     useVendorsTransactionsContext();
 
   // Handle filter toggle click.
   const handleFilterToggleClick = () => {
-    toggleVendorsTransactionsFilterDrawer();
+    toggleVendorsTransactionsFilterDrawer(false);
   };
 
   // Handle recalculate the report button.
@@ -54,14 +64,14 @@ function VendorsTransactionsActionsBar({
   };
 
   // Handle number format form submit.
-  const handleNumberFormatSubmit = (values) => {
+  const handleNumberFormatSubmit = (values: Record<string, unknown>) => {
     saveInvoke(onNumberFormatSubmit, values);
   };
 
   // Handle the print button click.
   const handlePrintBtnClick = () => {
-    openDialog(DialogsName.VendorTransactionsPdfPreview)
-  }
+    openDialog(DialogsName.VendorTransactionsPdfPreview);
+  };
 
   return (
     <DashboardActionsBar>
@@ -130,10 +140,10 @@ function VendorsTransactionsActionsBar({
     </DashboardActionsBar>
   );
 }
-export default compose(
+export const VendorsTransactionsActionsBar = compose(
   withVendorsTransaction(({ vendorsTransactionsDrawerFilter }) => ({
     isFilterDrawerOpen: vendorsTransactionsDrawerFilter,
   })),
   withVendorsTransactionsActions,
-  withDialogActions
-)(VendorsTransactionsActionsBar);
+  withDialogActions,
+)(VendorsTransactionsActionsBarInner);

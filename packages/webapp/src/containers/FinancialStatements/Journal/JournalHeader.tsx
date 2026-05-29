@@ -1,25 +1,41 @@
-// @ts-nocheck
 import React from 'react';
 import * as Yup from 'yup';
 import styled from 'styled-components';
 import moment from 'moment';
-import { Formik, Form } from 'formik';
+import { Formik, Form, FormikHelpers } from 'formik';
 import { Tab, Tabs, Button, Intent } from '@blueprintjs/core';
 
 import { FormattedMessage as T } from '@/components';
 
-import JournalSheetHeaderGeneral from './JournalSheetHeaderGeneral';
-import FinancialStatementHeader from '@/containers/FinancialStatements/FinancialStatementHeader';
+import { JournalSheetHeaderGeneralPanel } from './JournalSheetHeaderGeneral';
+import { FinancialStatementHeader } from '@/containers/FinancialStatements/FinancialStatementHeader';
 
 import { withJournal } from './withJournal';
+import type { WithJournalProps } from './withJournal';
 import { withJournalActions } from './withJournalActions';
+import type { WithJournalActionsProps } from './withJournalActions';
 
 import { compose } from '@/utils';
+
+interface JournalHeaderFormValues {
+  fromDate: Date;
+  toDate: Date;
+  [key: string]: unknown;
+}
+
+interface JournalHeaderOwnProps {
+  pageFilter: Record<string, unknown>;
+  onSubmitFilter: (values: Record<string, unknown>) => void;
+}
+
+type JournalHeaderProps = JournalHeaderOwnProps &
+  Pick<WithJournalActionsProps, 'toggleJournalSheetFilter'> &
+  WithJournalProps;
 
 /**
  * Journal sheet header.
  */
-function JournalHeader({
+function JournalHeaderInner({
   pageFilter,
   onSubmitFilter,
 
@@ -28,11 +44,11 @@ function JournalHeader({
 
   // #withJournal
   journalSheetDrawerFilter,
-}) {
-  const initialValues = {
+}: JournalHeaderProps) {
+  const initialValues: JournalHeaderFormValues = {
     ...pageFilter,
-    fromDate: moment(pageFilter.fromDate).toDate(),
-    toDate: moment(pageFilter.toDate).toDate(),
+    fromDate: moment(pageFilter.fromDate as string).toDate(),
+    toDate: moment(pageFilter.toDate as string).toDate(),
   };
 
   // Validation schema.
@@ -42,7 +58,10 @@ function JournalHeader({
   });
 
   // Handle form submit.
-  const handleSubmit = (values, { setSubmitting }) => {
+  const handleSubmit = (
+    values: JournalHeaderFormValues,
+    { setSubmitting }: FormikHelpers<JournalHeaderFormValues>,
+  ) => {
     onSubmitFilter(values);
     setSubmitting(false);
     toggleJournalSheetFilter(false);
@@ -72,11 +91,11 @@ function JournalHeader({
             <Tab
               id="general"
               title={<T id={'general'} />}
-              panel={<JournalSheetHeaderGeneral />}
+              panel={<JournalSheetHeaderGeneralPanel />}
             />
           </Tabs>
 
-          <div class="financial-header-drawer__footer">
+          <div className="financial-header-drawer__footer">
             <Button className={'mr1'} intent={Intent.PRIMARY} type={'submit'}>
               <T id={'calculate_report'} />
             </Button>
@@ -90,12 +109,12 @@ function JournalHeader({
   );
 }
 
-export default compose(
+export const JournalHeader = compose(
   withJournal(({ journalSheetDrawerFilter }) => ({
     journalSheetDrawerFilter,
   })),
   withJournalActions,
-)(JournalHeader);
+)(JournalHeaderInner);
 
 const JournalDrawerHeader = styled(FinancialStatementHeader)`
   .bp4-drawer {

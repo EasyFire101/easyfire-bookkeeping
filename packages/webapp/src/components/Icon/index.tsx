@@ -25,6 +25,8 @@ export interface IconProps extends Props {
   htmlTitle?: string;
   icon: IconName | MaybeElement;
   iconSize?: number;
+  width?: number;
+  height?: number;
   style?: object;
   tagName?: keyof JSX.IntrinsicElements;
   title?: string;

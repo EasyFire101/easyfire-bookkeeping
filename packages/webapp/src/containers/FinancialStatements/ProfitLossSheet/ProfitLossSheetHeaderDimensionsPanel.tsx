@@ -1,4 +1,3 @@
-// @ts-nocheck
 import React from 'react';
 import intl from 'react-intl-universal';
 import { FormGroup, Classes } from '@blueprintjs/core';
@@ -14,7 +13,7 @@ import { Features } from '@/constants';
  * profit loss Sheet Header dimensions panel.
  * @returns {JSX.Element}
  */
-export default function ProfitLossSheetHeaderDimensionsPanel() {
+export function ProfitLossSheetHeaderDimensionsPanel() {
   return (
     <ProfitLossSheetHeaderDimensionsProvider>
       <ProfitLossSheetHeaderDimensionsPanelContent />

@@ -1,4 +1,3 @@
-// @ts-nocheck
 import React, { useMemo } from 'react';
 import styled from 'styled-components';
 import intl from 'react-intl-universal';
@@ -9,18 +8,25 @@ import { useProjectProfitabilitySummaryContext } from './ProjectProfitabilitySum
 import { useProjectProfitabilitySummaryColumns } from './components';
 import { defaultExpanderReducer, tableRowTypesToClassnames } from '@/utils';
 
+interface ProjectProfitabilitySummaryTableProps {
+  companyName: string;
+}
+
 /**
  * Project profitability summary table.
  */
-export default function ProjectProfitabilitySummaryTable({
+export function ProjectProfitabilitySummaryTable({
   // #ownProps
   companyName,
-}) {
+}: ProjectProfitabilitySummaryTableProps) {
   // Project profitability summary context.
   const {
-    projectProfitabilitySummary: { tableRows, meta },
+    projectProfitabilitySummary,
     query,
   } = useProjectProfitabilitySummaryContext();
+
+  const tableRows = (projectProfitabilitySummary as any)?.tableRows;
+  const meta = (projectProfitabilitySummary as any)?.meta;
 
   // Retrieve the database columns.
   const tableColumns = useProjectProfitabilitySummaryColumns();

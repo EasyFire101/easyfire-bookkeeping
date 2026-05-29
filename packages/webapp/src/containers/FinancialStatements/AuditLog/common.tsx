@@ -1,12 +1,11 @@
-// @ts-nocheck
 import React, { useMemo, useState } from 'react';
 import * as Yup from 'yup';
 import { transformToForm } from '@/utils';
 
 // Default query for audit log
 export const getDefaultAuditLogQuery = () => ({
-  subject: [],
-  action: [],
+  subject: [] as string[],
+  action: [] as string[],
   fromDate: '',
   toDate: '',
 });
@@ -20,7 +19,7 @@ export const getAuditLogQuerySchema = () => {
 };
 
 // Parse query from URL
-const parseAuditLogQuery = (locationQuery) => {
+const parseAuditLogQuery = (locationQuery: Record<string, unknown>) => {
   const defaultQuery = getDefaultAuditLogQuery();
   return {
     ...defaultQuery,
@@ -30,11 +29,13 @@ const parseAuditLogQuery = (locationQuery) => {
 
 // Hook for managing query state
 export const useAuditLogQuery = () => {
-  const [locationQuery, setLocationQuery] = useState({});
+  const [locationQuery, setLocationQuery] = useState<Record<string, unknown>>(
+    {},
+  );
 
   const query = useMemo(
     () => parseAuditLogQuery(locationQuery),
-    [locationQuery]
+    [locationQuery],
   );
 
   return { query, setLocationQuery };

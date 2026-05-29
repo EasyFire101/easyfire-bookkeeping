@@ -1,4 +1,3 @@
-// @ts-nocheck
 import React from 'react';
 import {
   NavbarGroup,
@@ -7,25 +6,32 @@ import {
   NavbarDivider,
   Popover,
   PopoverInteractionKind,
-  Position,
 } from '@blueprintjs/core';
 import classNames from 'classnames';
 
 import { DashboardActionsBar, FormattedMessage as T, Icon } from '@/components';
 
 import { withJournalActions } from './withJournalActions';
+import type { WithJournalActionsProps } from './withJournalActions';
 import { withJournal } from './withJournal';
+import type { WithJournalProps } from './withJournal';
 
 import { compose } from '@/utils';
 import { useJournalSheetContext } from './JournalProvider';
 import { JournalSheetExportMenu } from './components';
 import { withDialogActions } from '@/containers/Dialog/withDialogActions';
+import type { WithDialogActionsProps } from '@/containers/Dialog/withDialogActions';
 import { DialogsName } from '@/constants/dialogs';
+
+type JournalActionsBarProps = {
+  isFilterDrawerOpen: boolean;
+} & Pick<WithJournalActionsProps, 'toggleJournalSheetFilter'> &
+  WithDialogActionsProps;
 
 /**
  * Journal sheeet - Actions bar.
  */
-function JournalActionsBar({
+function JournalActionsBarInner({
   // #withJournal
   isFilterDrawerOpen,
 
@@ -34,7 +40,7 @@ function JournalActionsBar({
 
   // #withDialogActions
   openDialog,
-}) {
+}: JournalActionsBarProps) {
   const { refetchSheet } = useJournalSheetContext();
 
   // Handle filter toggle click.
@@ -101,10 +107,10 @@ function JournalActionsBar({
   );
 }
 
-export default compose(
+export const JournalActionsBar = compose(
   withJournal(({ journalSheetDrawerFilter }) => ({
     isFilterDrawerOpen: journalSheetDrawerFilter,
   })),
   withJournalActions,
   withDialogActions,
-)(JournalActionsBar);
+)(JournalActionsBarInner);

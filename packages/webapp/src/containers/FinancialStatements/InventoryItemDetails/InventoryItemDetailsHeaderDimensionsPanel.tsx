@@ -1,4 +1,3 @@
-// @ts-nocheck
 import React from 'react';
 import intl from 'react-intl-universal';
 import { FormGroup, Classes } from '@blueprintjs/core';
@@ -12,12 +11,14 @@ import {
   InventoryItemDetailsHeaderDimensionsProvider,
   useInventoryItemDetailsHeaderDimensionsPanelContext,
 } from './InventoryItemDetailsHeaderDimensionsPanelProvider';
+import { useFeatureCan } from '@/hooks/state';
+import { Features } from '@/constants';
 
 /**
  * Inventory Item deatil header dismension panel.
  * @returns {JSX.Element}
  */
-export default function InventoryItemDetailsHeaderDimensionsPanel() {
+export function InventoryItemDetailsHeaderDimensionsPanel() {
   return (
     <InventoryItemDetailsHeaderDimensionsProvider>
       <InventoryItemDetailsHeaderDimensionsPanelContent />
@@ -37,7 +38,7 @@ function InventoryItemDetailsHeaderDimensionsPanelContent() {
   const { featureCan } = useFeatureCan();
 
   const isBranchesFeatureCan = featureCan(Features.Branches);
-  const isWarehousesFeatureCan = featureCan(Features.warehouses);
+  const isWarehousesFeatureCan = featureCan(Features.Warehouses);
 
   return (
     <Row>

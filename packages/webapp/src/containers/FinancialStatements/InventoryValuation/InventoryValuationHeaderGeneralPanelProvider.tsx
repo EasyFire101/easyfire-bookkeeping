@@ -1,11 +1,23 @@
-// @ts-nocheck
-import React from 'react';
+import React, { createContext, useContext } from 'react';
 import { FinancialHeaderLoadingSkeleton } from '../FinancialHeaderLoadingSkeleton';
 import { useItems } from '@/hooks/query';
 
-const InventoryValuationGeneralPanelContext = React.createContext();
+interface InventoryValuationGeneralPanelContextValue {
+  items: Record<string, unknown>[] | undefined;
+  isItemsFetching: boolean;
+  isItemsLoading: boolean;
+}
 
-function InventoryValuationGeneralPanelProvider({ query, ...props }) {
+interface InventoryValuationGeneralPanelProviderProps {
+  query?: Record<string, unknown>;
+  children?: React.ReactNode;
+}
+
+const InventoryValuationGeneralPanelContext = createContext<
+  InventoryValuationGeneralPanelContextValue | undefined
+>(undefined);
+
+function InventoryValuationGeneralPanelProvider({ ...props }: InventoryValuationGeneralPanelProviderProps) {
   // Handle fetching the items based on the given query.
   const {
     data: itemsData,
@@ -19,8 +31,8 @@ function InventoryValuationGeneralPanelProvider({ query, ...props }) {
   });
 
   // Provider data.
-  const provider = {
-    items: itemsData?.items,
+  const provider: InventoryValuationGeneralPanelContextValue = {
+    items: (itemsData as any)?.items,
     isItemsFetching,
     isItemsLoading,
   };
@@ -37,8 +49,15 @@ function InventoryValuationGeneralPanelProvider({ query, ...props }) {
   );
 }
 
-const useInventoryValuationGeneralPanelContext = () =>
-  React.useContext(InventoryValuationGeneralPanelContext);
+const useInventoryValuationGeneralPanelContext = (): InventoryValuationGeneralPanelContextValue => {
+  const ctx = useContext(InventoryValuationGeneralPanelContext);
+  if (!ctx) {
+    throw new Error(
+      'useInventoryValuationGeneralPanelContext must be used within InventoryValuationGeneralPanelProvider',
+    );
+  }
+  return ctx;
+};
 
 export {
   InventoryValuationGeneralPanelProvider,

@@ -1,14 +1,24 @@
-// @ts-nocheck
 import React from 'react';
 import { getColumnWidth } from '@/utils';
 import * as R from 'ramda';
 import { useGeneralLedgerContext } from './GeneralLedgerProvider';
 import { Align, CLASSES } from '@/constants';
 
+interface CellProps {
+  cell: { value: React.ReactNode };
+}
+
+interface ColumnDef {
+  key: string;
+  label: string;
+  cell_index: number;
+  [key: string]: unknown;
+}
+
 /**
- * Description cell – wraps value in a div with muted text class.
+ * Description cell - wraps value in a div with muted text class.
  */
-function DescriptionCell({ cell: { value } }) {
+function DescriptionCell({ cell: { value } }: CellProps) {
   return React.createElement(
     'div',
     { className: `cell ${CLASSES.TEXT_MUTED}` },
@@ -16,9 +26,13 @@ function DescriptionCell({ cell: { value } }) {
   );
 }
 
-const getTableCellValueAccessor = (index) => `cells[${index}].value`;
+const getTableCellValueAccessor = (index: number) => `cells[${index}].value`;
 
-const getReportColWidth = (data, accessor, headerText) => {
+const getReportColWidth = (
+  data: unknown[],
+  accessor: string,
+  headerText: string,
+) => {
   return getColumnWidth(
     data,
     accessor,
@@ -30,7 +44,7 @@ const getReportColWidth = (data, accessor, headerText) => {
 /**
  * Account name column mapper.
  */
-const commonColumnMapper = R.curry((data, column) => {
+const commonColumnMapper = R.curry((data: unknown[], column: ColumnDef) => {
   const accessor = getTableCellValueAccessor(column.cell_index);
 
   return {
@@ -45,22 +59,24 @@ const commonColumnMapper = R.curry((data, column) => {
 /**
  * Numeric columns accessor.
  */
-const numericColumnAccessor = R.curry((data, column) => {
-  const accessor = getTableCellValueAccessor(column.cell_index);
-  const width = getReportColWidth(data, accessor, column.label);
+const numericColumnAccessor = R.curry(
+  (data: unknown[], column: ColumnDef) => {
+    const accessor = getTableCellValueAccessor(column.cell_index);
+    const width = getReportColWidth(data, accessor, column.label);
 
-  return {
-    ...column,
-    align: Align.Right,
-    width,
-    money: true,
-  };
-});
+    return {
+      ...column,
+      align: Align.Right,
+      width,
+      money: true,
+    };
+  },
+);
 
 /**
  * Date column accessor.
  */
-const dateColumnAccessor = R.curry((column) => {
+const dateColumnAccessor = R.curry((column: ColumnDef) => {
   return {
     ...column,
     width: 120,
@@ -70,7 +86,7 @@ const dateColumnAccessor = R.curry((column) => {
 /**
  * Transaction type column accessor.
  */
-const transactionTypeColumnAccessor = (column) => {
+const transactionTypeColumnAccessor = (column: ColumnDef) => {
   return {
     ...column,
     width: 125,
@@ -80,7 +96,7 @@ const transactionTypeColumnAccessor = (column) => {
 /**
  * Transaction number column accessor.
  */
-const transactionIdColumnAccessor = (column) => {
+const transactionIdColumnAccessor = (column: ColumnDef) => {
   return {
     ...column,
     width: 80,
@@ -90,14 +106,14 @@ const transactionIdColumnAccessor = (column) => {
 /**
  * Description column accessor (muted text in wrapped cell).
  */
-const descriptionColumnAccessor = (column) => {
+const descriptionColumnAccessor = (column: ColumnDef) => {
   return {
     ...column,
     Cell: DescriptionCell,
   };
 };
 
-const dynamiColumnMapper = R.curry((data, column) => {
+const dynamiColumnMapper = R.curry((data: unknown[], column: ColumnDef) => {
   const _numericColumnAccessor = numericColumnAccessor(data);
 
   return R.compose(
@@ -122,9 +138,11 @@ const dynamiColumnMapper = R.curry((data, column) => {
 /**
  * Composes the dynamic columns that fetched from request to columns to table component.
  */
-export const dynamicColumns = R.curry((data, columns) => {
-  return R.map(dynamiColumnMapper(data), columns);
-});
+export const dynamicColumns = R.curry(
+  (data: unknown[], columns: ColumnDef[]) => {
+    return R.map(dynamiColumnMapper(data), columns);
+  },
+);
 
 /**
  * Retrieves the G/L sheet table columns for table component.
@@ -133,9 +151,9 @@ export const useGeneralLedgerTableColumns = () => {
   const { generalLedger } = useGeneralLedgerContext();
 
   if (!generalLedger) {
-    throw new Error('asdfadsf');
+    throw new Error('General ledger data is not available');
   }
-  const { table } = generalLedger;
+  const table = (generalLedger as any)?.table;
 
   return dynamicColumns(table.rows, table.columns);
 };

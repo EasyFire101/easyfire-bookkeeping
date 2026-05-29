@@ -1,4 +1,3 @@
-// @ts-nocheck
 import React from 'react';
 import intl from 'react-intl-universal';
 import styled from 'styled-components';
@@ -10,18 +9,23 @@ import { tableRowTypesToClassnames } from '@/utils';
 import { useInventoryValuationContext } from './InventoryValuationProvider';
 import { useInventoryValuationColumns } from './dynamicColumns';
 
+interface InventoryValuationTableProps {
+  companyName: string;
+}
+
 /**
  * Inventory valuation data table.
  */
-export default function InventoryValuationTable({
+export function InventoryValuationTable({
   // #ownProps
   companyName,
-}) {
+}: InventoryValuationTableProps) {
   // Inventory valuation context.
-  const {
-    inventoryValuation: { table, query, meta },
-    isLoading,
-  } = useInventoryValuationContext();
+  const { inventoryValuation, isLoading } = useInventoryValuationContext();
+
+  // Null-safe access for SDK opaque type.
+  const table = (inventoryValuation as any)?.table;
+  const meta = (inventoryValuation as any)?.meta;
 
   // Inventory valuation table columns.
   const columns = useInventoryValuationColumns();
@@ -35,7 +39,7 @@ export default function InventoryValuationTable({
     >
       <InventoryValuationDataTable
         columns={columns}
-        data={table.rows}
+        data={table?.rows ?? []}
         expandable={true}
         expandToggleColumn={1}
         expandColumnSpace={1}

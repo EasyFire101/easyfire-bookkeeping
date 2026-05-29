@@ -1,4 +1,3 @@
-// @ts-nocheck
 import React from 'react';
 import {
   NavbarGroup,
@@ -14,46 +13,46 @@ import classNames from 'classnames';
 
 import NumberFormatDropdown from '@/components/NumberFormatDropdown';
 
-import { withProfitLossActions } from './withProfitLossActions';
-import { withProfitLoss } from './withProfitLoss';
+import { withProfitLossActions, WithProfitLossActionsProps } from './withProfitLossActions';
+import { withProfitLoss, WithProfitLossProps } from './withProfitLoss';
 
 import { compose, saveInvoke } from '@/utils';
 import { useProfitLossSheetContext } from './ProfitLossProvider';
 import { ProfitLossSheetExportMenu } from './components';
-import { withDialogActions } from '@/containers/Dialog/withDialogActions';
+import { withDialogActions, WithDialogActionsProps } from '@/containers/Dialog/withDialogActions';
 import { DialogsName } from '@/constants/dialogs';
 
-/**
- * Profit/Loss sheet actions bar.
- */
-function ProfitLossActionsBar({
-  // #withProfitLoss
+interface ProfitLossActionsBarOwnProps {
+  numberFormat: Record<string, unknown>;
+  onNumberFormatSubmit: (values: Record<string, unknown>) => void;
+}
+
+type ProfitLossActionsBarProps = Pick<WithProfitLossProps, 'profitLossDrawerFilter'> &
+  Pick<WithProfitLossActionsProps, 'toggleProfitLossFilterDrawer'> &
+  WithDialogActionsProps &
+  ProfitLossActionsBarOwnProps;
+
+function ProfitLossActionsBarInner({
   profitLossDrawerFilter,
-
-  // #withProfitLossActions
   toggleProfitLossFilterDrawer: toggleFilterDrawer,
-
-  // #withDialogActions
   openDialog,
-
-  // #ownProps
   numberFormat,
   onNumberFormatSubmit,
-}) {
+}: ProfitLossActionsBarProps) {
   const { sheetRefetch, isLoading } = useProfitLossSheetContext();
 
   const handleFilterClick = () => {
-    toggleFilterDrawer();
+    toggleFilterDrawer(false);
   };
 
   const handleRecalcReport = () => {
     sheetRefetch();
   };
-  // Handle number format submit.
-  const handleNumberFormatSubmit = (values) => {
+
+  const handleNumberFormatSubmit = (values: Record<string, unknown>) => {
     saveInvoke(onNumberFormatSubmit, values);
   };
-  // Handles the print button click.
+
   const handlePrintBtnClick = () => {
     openDialog(DialogsName.ProfitLossSheetPdfPreview);
   };
@@ -126,8 +125,8 @@ function ProfitLossActionsBar({
   );
 }
 
-export default compose(
+export const ProfitLossActionsBar = compose(
   withProfitLoss(({ profitLossDrawerFilter }) => ({ profitLossDrawerFilter })),
   withProfitLossActions,
   withDialogActions,
-)(ProfitLossActionsBar);
+)(ProfitLossActionsBarInner);

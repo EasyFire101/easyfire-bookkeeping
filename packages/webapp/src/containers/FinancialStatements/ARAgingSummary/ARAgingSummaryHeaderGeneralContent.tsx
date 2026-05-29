@@ -1,7 +1,6 @@
-// @ts-nocheck
 import React from 'react';
 import { Position } from '@blueprintjs/core';
-import FinancialStatementsFilter from '../FinancialStatementsFilter';
+import { FinancialStatementsFilter } from '../FinancialStatementsFilter';
 import {
   FormattedMessage as T,
   Row,
@@ -16,11 +15,7 @@ import { momentFormatter } from '@/utils';
 import { useARAgingSummaryGeneralContext } from './ARAgingSummaryGeneralProvider';
 import { filterCustomersOptions } from './constants';
 
-/**
- * AR Aging Summary - Drawer Header - General Fields.
- */
-export default function ARAgingSummaryHeaderGeneralContent() {
-  // AR Aging summary context.
+export function ARAgingSummaryHeaderGeneralContent() {
   const { customers } = useARAgingSummaryGeneralContext();
 
   return (

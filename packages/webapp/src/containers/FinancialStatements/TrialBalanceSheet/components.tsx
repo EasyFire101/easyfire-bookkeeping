@@ -1,4 +1,3 @@
-// @ts-nocheck
 import { useRef } from 'react';
 import {
   Button,
@@ -19,7 +18,7 @@ import {
 } from '@/components';
 import { useTrialBalanceSheetContext } from './TrialBalanceProvider';
 import { FinancialComputeAlert } from '../FinancialReportPage';
-import FinancialLoadingBar from '../FinancialLoadingBar';
+import { FinancialLoadingBar } from '../FinancialLoadingBar';
 import {
   useTrialBalanceSheetCsvExport,
   useTrialBalanceSheetXlsxExport,
@@ -55,7 +54,7 @@ export function TrialBalanceSheetAlerts() {
     return null;
   }
   // Can't continue if the cost compute job is not running.
-  if (!trialBalanceSheet?.meta.is_cost_compute_running) {
+  if (!(trialBalanceSheet as any)?.meta?.is_cost_compute_running) {
     return null;
   }
 
@@ -75,7 +74,7 @@ export function TrialBalanceSheetAlerts() {
  * Trial balance sheet export menu.
  */
 export const TrialBalanceSheetExportMenu = () => {
-  const toastKey = useRef(null);
+  const toastKey = useRef<string | number | undefined>(undefined);
   const commonToastConfig = {
     isCloseButtonShown: true,
     timeout: 2000,

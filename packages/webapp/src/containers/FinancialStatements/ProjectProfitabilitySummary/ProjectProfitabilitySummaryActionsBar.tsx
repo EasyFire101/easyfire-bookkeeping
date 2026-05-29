@@ -1,4 +1,3 @@
-// @ts-nocheck
 import React from 'react';
 import {
   NavbarGroup,
@@ -16,13 +15,23 @@ import NumberFormatDropdown from '@/components/NumberFormatDropdown';
 
 import { compose, saveInvoke } from '@/utils';
 import { useProjectProfitabilitySummaryContext } from './ProjectProfitabilitySummaryProvider';
-import { withProjectProfitabilitySummary } from './withProjectProfitabilitySummary';
-import { withProjectProfitabilitySummaryActions } from './withProjectProfitabilitySummaryActions';
+import { withProjectProfitabilitySummary, WithProjectProfitabilitySummaryProps } from './withProjectProfitabilitySummary';
+import { withProjectProfitabilitySummaryActions, WithProjectProfitabilitySummaryActionsProps } from './withProjectProfitabilitySummaryActions';
+
+interface ProjectProfitabilitySummaryActionsBarOwnProps {
+  numberFormat: Record<string, unknown>;
+  onNumberFormatSubmit: (values: Record<string, unknown>) => void;
+}
+
+type ProjectProfitabilitySummaryActionsBarProps = {
+  isFilterDrawerOpen: boolean;
+} & Pick<WithProjectProfitabilitySummaryActionsProps, 'toggleProjectProfitabilitySummaryFilterDrawer'> &
+  ProjectProfitabilitySummaryActionsBarOwnProps;
 
 /**
  * Project profitability summary actions bar.
  */
-function ProjectProfitabilitySummaryActionsBar({
+function ProjectProfitabilitySummaryActionsBarInner({
   // #withProjectProfitabilitySummary
   isFilterDrawerOpen,
 
@@ -32,7 +41,7 @@ function ProjectProfitabilitySummaryActionsBar({
   // #ownProps
   numberFormat,
   onNumberFormatSubmit,
-}) {
+}: ProjectProfitabilitySummaryActionsBarProps) {
   const { isLoading, refetchProjectProfitabilitySummary } =
     useProjectProfitabilitySummaryContext();
 
@@ -47,7 +56,7 @@ function ProjectProfitabilitySummaryActionsBar({
   };
 
   // Handle number format form submit.
-  const handleNumberFormatSubmit = (values) => {
+  const handleNumberFormatSubmit = (values: Record<string, unknown>) => {
     saveInvoke(onNumberFormatSubmit, values);
   };
 
@@ -111,11 +120,11 @@ function ProjectProfitabilitySummaryActionsBar({
   );
 }
 
-export default compose(
+export const ProjectProfitabilitySummaryActionsBar = compose(
   withProjectProfitabilitySummary(
     ({ projectProfitabilitySummaryDrawerFilter }) => ({
       isFilterDrawerOpen: projectProfitabilitySummaryDrawerFilter,
     }),
   ),
   withProjectProfitabilitySummaryActions,
-)(ProjectProfitabilitySummaryActionsBar);
+)(ProjectProfitabilitySummaryActionsBarInner);

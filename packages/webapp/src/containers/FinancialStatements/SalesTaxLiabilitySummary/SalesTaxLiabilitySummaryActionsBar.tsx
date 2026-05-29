@@ -1,4 +1,3 @@
-// @ts-nocheck
 import React from 'react';
 import {
   NavbarGroup,
@@ -16,16 +15,27 @@ import NumberFormatDropdown from '@/components/NumberFormatDropdown';
 
 import { compose, saveInvoke } from '@/utils';
 import { useSalesTaxLiabilitySummaryContext } from './SalesTaxLiabilitySummaryBoot';
-import { withSalesTaxLiabilitySummary } from './withSalesTaxLiabilitySummary';
-import { withSalesTaxLiabilitySummaryActions } from './withSalesTaxLiabilitySummaryActions';
+import { withSalesTaxLiabilitySummary, WithSalesTaxLiabilitySummaryProps } from './withSalesTaxLiabilitySummary';
+import { withSalesTaxLiabilitySummaryActions, WithSalesTaxLiabilitySummaryActionsProps } from './withSalesTaxLiabilitySummaryActions';
 import { SalesTaxLiabilityExportMenu } from './components';
 import { DialogsName } from '@/constants/dialogs';
-import { withDialogActions } from '@/containers/Dialog/withDialogActions';
+import { withDialogActions, WithDialogActionsProps } from '@/containers/Dialog/withDialogActions';
+
+interface SalesTaxLiabilitySummaryActionsBarOwnProps {
+  numberFormat: Record<string, unknown>;
+  onNumberFormatSubmit: (values: Record<string, unknown>) => void;
+}
+
+type SalesTaxLiabilitySummaryActionsBarProps =
+  Pick<WithSalesTaxLiabilitySummaryProps, 'salesTaxLiabilitySummaryFilter'> &
+  Pick<WithSalesTaxLiabilitySummaryActionsProps, 'toggleSalesTaxLiabilitySummaryFilterDrawer'> &
+  WithDialogActionsProps &
+  SalesTaxLiabilitySummaryActionsBarOwnProps;
 
 /**
  * Sales tax liability summary - actions bar.
  */
-function SalesTaxLiabilitySummaryActionsBar({
+function SalesTaxLiabilitySummaryActionsBarInner({
   // #withSalesTaxLiabilitySummary
   salesTaxLiabilitySummaryFilter,
 
@@ -38,7 +48,7 @@ function SalesTaxLiabilitySummaryActionsBar({
   // #ownProps
   numberFormat,
   onNumberFormatSubmit,
-}) {
+}: SalesTaxLiabilitySummaryActionsBarProps) {
   const { isLoading, refetchSalesTaxLiabilitySummary } =
     useSalesTaxLiabilitySummaryContext();
 
@@ -51,12 +61,12 @@ function SalesTaxLiabilitySummaryActionsBar({
     refetchSalesTaxLiabilitySummary();
   };
   // Handle number format form submit.
-  const handleNumberFormatSubmit = (values) => {
+  const handleNumberFormatSubmit = (values: Record<string, unknown>) => {
     saveInvoke(onNumberFormatSubmit, values);
   };
   // Handle the print button click.
   const handlePrintBtnClick = () => {
-    openDialog(DialogsName.SalesTaxLiabilitySummaryPdfPreview)    
+    openDialog(DialogsName.SalesTaxLiabilitySummaryPdfPreview);
   };
 
   return (
@@ -129,10 +139,10 @@ function SalesTaxLiabilitySummaryActionsBar({
   );
 }
 
-export default compose(
+export const SalesTaxLiabilitySummaryActionsBar = compose(
   withSalesTaxLiabilitySummary(({ salesTaxLiabilitySummaryFilter }) => ({
     salesTaxLiabilitySummaryFilter,
   })),
   withSalesTaxLiabilitySummaryActions,
-  withDialogActions
-)(SalesTaxLiabilitySummaryActionsBar);
+  withDialogActions,
+)(SalesTaxLiabilitySummaryActionsBarInner);

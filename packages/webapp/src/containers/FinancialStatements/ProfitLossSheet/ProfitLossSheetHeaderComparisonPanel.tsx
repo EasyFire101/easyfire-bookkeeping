@@ -1,4 +1,3 @@
-// @ts-nocheck
 import React from 'react';
 import styled from 'styled-components';
 import { useFormikContext } from 'formik';
@@ -160,7 +159,7 @@ function ProfitLossComaprsionPanelFields() {
 /**
  * ProfitLoss sheet header -comparison panel.
  */
-export default function ProfitLossSheetHeaderComparisonPanel() {
+export function ProfitLossSheetHeaderComparisonPanel() {
   return (
     <ProfitLossSheetComparisonWrap>
       <ProfitLossComaprsionFieldsWrap>

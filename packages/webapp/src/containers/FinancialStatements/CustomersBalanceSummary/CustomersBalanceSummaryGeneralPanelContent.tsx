@@ -1,4 +1,3 @@
-// @ts-nocheck
 import { Position } from '@blueprintjs/core';
 import {
   FormattedMessage as T,
@@ -13,12 +12,12 @@ import {
 import { momentFormatter } from '@/utils';
 import { filterCustomersOptions } from '../constants';
 import { useCustomersBalanceSummaryGeneralContext } from './CustomersBalanceSummaryGeneralProvider';
-import FinancialStatementsFilter from '../FinancialStatementsFilter';
+import { FinancialStatementsFilter } from '../FinancialStatementsFilter';
 
 /**
  * Customers balance header - General panel - Content
  */
-export default function CustomersBalanceSummaryGeneralPanelContent() {
+export function CustomersBalanceSummaryGeneralPanelContent() {
   const { customers } = useCustomersBalanceSummaryGeneralContext();
 
   return (

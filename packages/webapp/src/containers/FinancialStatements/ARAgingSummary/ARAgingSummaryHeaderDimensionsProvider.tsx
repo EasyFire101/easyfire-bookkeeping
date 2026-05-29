@@ -1,29 +1,33 @@
-// @ts-nocheck
 import React from 'react';
 import { Features } from '@/constants';
 import { useFeatureCan } from '@/hooks/state';
 import { useBranches } from '@/hooks/query';
 import { FinancialHeaderLoadingSkeleton } from '../FinancialHeaderLoadingSkeleton';
 
-const ARAgingSummaryHeaderDimensonsContext = React.createContext();
+type UseBranchesResult = ReturnType<typeof useBranches>;
 
-/**
- * ARAging summary header dismensions provider.
- * @returns {JSX.Element}
- */
-function ARAgingSummaryHeaderDimensionsProvider({ query, ...props }) {
-  // Features guard.
+type ARAgingSummaryHeaderDimensionsContextValue = {
+  branches: UseBranchesResult['data'];
+  isBranchesLoading: boolean;
+};
+
+type ARAgingSummaryHeaderDimensionsProviderProps = {
+  query?: Record<string, unknown>;
+  children?: React.ReactNode;
+};
+
+const ARAgingSummaryHeaderDimensonsContext = React.createContext<ARAgingSummaryHeaderDimensionsContextValue | undefined>(undefined);
+
+function ARAgingSummaryHeaderDimensionsProvider({ query, children, ...props }: ARAgingSummaryHeaderDimensionsProviderProps) {
   const { featureCan } = useFeatureCan();
   const isBranchFeatureCan = featureCan(Features.Branches);
 
-  // Fetches the branches list.
   const { isLoading: isBranchesLoading, data: branches } = useBranches(query, {
     enabled: isBranchFeatureCan,
-    keepPreviousData: true,
+    placeholderData: (prev) => prev,
   });
 
-  // Provider
-  const provider = {
+  const provider: ARAgingSummaryHeaderDimensionsContextValue = {
     branches,
     isBranchesLoading,
   };
@@ -34,12 +38,17 @@ function ARAgingSummaryHeaderDimensionsProvider({ query, ...props }) {
     <ARAgingSummaryHeaderDimensonsContext.Provider
       value={provider}
       {...props}
-    />
+    >
+      {children}
+    </ARAgingSummaryHeaderDimensonsContext.Provider>
   );
 }
 
-const useARAgingSummaryHeaderDimensonsContext = () =>
-  React.useContext(ARAgingSummaryHeaderDimensonsContext);
+const useARAgingSummaryHeaderDimensonsContext = (): ARAgingSummaryHeaderDimensionsContextValue => {
+  const ctx = React.useContext(ARAgingSummaryHeaderDimensonsContext);
+  if (!ctx) throw new Error('useARAgingSummaryHeaderDimensonsContext must be used within ARAgingSummaryHeaderDimensionsProvider');
+  return ctx;
+};
 
 export {
   ARAgingSummaryHeaderDimensionsProvider,

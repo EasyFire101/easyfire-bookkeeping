@@ -1,4 +1,3 @@
-// @ts-nocheck
 import React from 'react';
 import {
   NavbarGroup,
@@ -16,17 +15,29 @@ import NumberFormatDropdown from '@/components/NumberFormatDropdown';
 import { InventoryItemDetailsExportMenu } from './components';
 
 import { useInventoryItemDetailsContext } from './InventoryItemDetailsProvider';
-import { withInventoryItemDetails } from './withInventoryItemDetails';
-import { withInventoryItemDetailsActions } from './withInventoryItemDetailsActions';
+import { withInventoryItemDetails, WithInventoryItemDetailsProps } from './withInventoryItemDetails';
+import { withInventoryItemDetailsActions, WithInventoryItemDetailsActionsProps } from './withInventoryItemDetailsActions';
 
 import { compose, saveInvoke } from '@/utils';
 import { DialogsName } from '@/constants/dialogs';
-import { withDialogActions } from '@/containers/Dialog/withDialogActions';
+import { withDialogActions, WithDialogActionsProps } from '@/containers/Dialog/withDialogActions';
+
+interface InventoryItemDetailsActionsBarOwnProps {
+  numberFormat: Record<string, unknown>;
+  onNumberFormatSubmit: (values: Record<string, unknown>) => void;
+}
+
+type InventoryItemDetailsActionsBarProps = {
+  isFilterDrawerOpen: boolean;
+} &
+  Pick<WithInventoryItemDetailsActionsProps, 'toggleInventoryItemDetailsFilterDrawer'> &
+  WithDialogActionsProps &
+  InventoryItemDetailsActionsBarOwnProps;
 
 /**
  * Inventory item details actions bar.
  */
-function InventoryItemDetailsActionsBar({
+function InventoryItemDetailsActionsBarInner({
   // #ownProps
   numberFormat,
   onNumberFormatSubmit,
@@ -39,7 +50,7 @@ function InventoryItemDetailsActionsBar({
 
   //#withInventoryItemDetailsActions
   toggleInventoryItemDetailsFilterDrawer: toggleFilterDrawer,
-}) {
+}: InventoryItemDetailsActionsBarProps) {
   const { isInventoryItemDetailsLoading, inventoryItemDetailsRefetch } =
     useInventoryItemDetailsContext();
 
@@ -52,7 +63,7 @@ function InventoryItemDetailsActionsBar({
     inventoryItemDetailsRefetch();
   };
   // Handle number format form submit.
-  const handleNumberFormatSubmit = (values) => {
+  const handleNumberFormatSubmit = (values: Record<string, unknown>) => {
     saveInvoke(onNumberFormatSubmit, values);
   };
   // Handle print button click.
@@ -127,10 +138,10 @@ function InventoryItemDetailsActionsBar({
   );
 }
 
-export default compose(
+export const InventoryItemDetailsActionsBar = compose(
   withInventoryItemDetails(({ inventoryItemDetailDrawerFilter }) => ({
     isFilterDrawerOpen: inventoryItemDetailDrawerFilter,
   })),
   withInventoryItemDetailsActions,
   withDialogActions,
-)(InventoryItemDetailsActionsBar);
+)(InventoryItemDetailsActionsBarInner);

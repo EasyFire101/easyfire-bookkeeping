@@ -1,14 +1,26 @@
-// @ts-nocheck
-import React from 'react';
+import React, { createContext, useContext } from 'react';
 import { useItems } from '@/hooks/query';
 import { FinancialHeaderLoadingSkeleton } from '../FinancialHeaderLoadingSkeleton';
 
-const InventoryItemDetailsHeaderGeneralContext = React.createContext();
+interface InventoryItemDetailsHeaderGeneralContextValue {
+  items: Record<string, unknown>[] | undefined;
+  isItemsFetching: boolean;
+  isItemsLoading: boolean;
+}
+
+interface InventoryItemDetailsHeaderGeneralProviderProps {
+  query?: Record<string, unknown>;
+  children?: React.ReactNode;
+}
+
+const InventoryItemDetailsHeaderGeneralContext = createContext<
+  InventoryItemDetailsHeaderGeneralContextValue | undefined
+>(undefined);
 
 /**
  * Inventory item details provider.
  */
-function InventoryItemDetailsHeaderGeneralProvider({ ...props }) {
+function InventoryItemDetailsHeaderGeneralProvider({ ...props }: InventoryItemDetailsHeaderGeneralProviderProps) {
   // Handle fetching the items based on the given query.
   const {
     data: itemsData,
@@ -21,10 +33,10 @@ function InventoryItemDetailsHeaderGeneralProvider({ ...props }) {
     page_size: 10000,
   });
 
-  const provider = {
+  const provider: InventoryItemDetailsHeaderGeneralContextValue = {
     isItemsFetching,
     isItemsLoading,
-    items: itemsData?.items,
+    items: (itemsData as any)?.items,
   };
   // Loading state.
   const loading = isItemsLoading;
@@ -38,8 +50,16 @@ function InventoryItemDetailsHeaderGeneralProvider({ ...props }) {
     />
   );
 }
-const useInventoryItemDetailsHeaderGeneralContext = () =>
-  React.useContext(InventoryItemDetailsHeaderGeneralContext);
+
+const useInventoryItemDetailsHeaderGeneralContext = (): InventoryItemDetailsHeaderGeneralContextValue => {
+  const ctx = useContext(InventoryItemDetailsHeaderGeneralContext);
+  if (!ctx) {
+    throw new Error(
+      'useInventoryItemDetailsHeaderGeneralContext must be used within InventoryItemDetailsHeaderGeneralProvider',
+    );
+  }
+  return ctx;
+};
 
 export {
   InventoryItemDetailsHeaderGeneralProvider,

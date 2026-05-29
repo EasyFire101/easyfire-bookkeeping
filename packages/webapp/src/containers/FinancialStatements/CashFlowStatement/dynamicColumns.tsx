@@ -1,4 +1,3 @@
-// @ts-nocheck
 import * as R from 'ramda';
 import intl from 'react-intl-universal';
 
@@ -6,10 +5,14 @@ import { Align } from '@/constants';
 import { CellTextSpan } from '@/components/Datatable/Cells';
 import { getColumnWidth } from '@/utils';
 
-/**
- * Account name column mapper.
- */
-const accountNameMapper = (column) => ({
+interface ReportTableColumn {
+  key: string;
+  label: string;
+  cell_index?: number;
+  children?: ReportTableColumn[];
+}
+
+const accountNameMapper = (column: ReportTableColumn) => ({
   id: column.key,
   key: column.key,
   Header: intl.get('account_name'),
@@ -21,10 +24,7 @@ const accountNameMapper = (column) => ({
   sticky: Align.Left,
 });
 
-/**
- * Date range columns mapper.
- */
-const dateRangeMapper = (data, index, column) => ({
+const dateRangeMapper = (data: unknown[], index: number, column: ReportTableColumn) => ({
   id: column.key,
   Header: column.label,
   key: column.key,
@@ -40,10 +40,7 @@ const dateRangeMapper = (data, index, column) => ({
   money: true
 });
 
-/**
- * Total column mapper.
- */
-const totalMapper = (data, index, column) => ({
+const totalMapper = (data: unknown[], index: number, column: ReportTableColumn) => ({
   key: 'total',
   Header: intl.get('total'),
   accessor: `cells[${index}].value`,
@@ -59,15 +56,9 @@ const totalMapper = (data, index, column) => ({
   money: true
 });
 
-/**
- * Detarmines the given string starts with `date-range` string.
- */
-const isMatchesDateRange = (r) => R.match(/^date-range/g, r).length > 0;
+const isMatchesDateRange = (r: string) => R.match(/^date-range/g, r).length > 0;
 
-/**
- * Cash flow dynamic columns.
- */
-export const dynamicColumns = (columns, data) => {
+export const dynamicColumns = (columns: ReportTableColumn[], data: unknown[]) => {
   const mapper = (column, index) => {
     return R.compose(
       R.when(

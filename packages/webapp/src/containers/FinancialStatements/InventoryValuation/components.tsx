@@ -1,5 +1,4 @@
-// @ts-nocheck
-import { useMemo, useRef } from 'react';
+import React, { useMemo, useRef } from 'react';
 import intl from 'react-intl-universal';
 import classNames from 'classnames';
 import { AppToaster, If, Stack } from '@/components';
@@ -7,7 +6,7 @@ import { Align } from '@/constants';
 import { getColumnWidth } from '@/utils';
 import { CellTextSpan } from '@/components/Datatable/Cells';
 import { useInventoryValuationContext } from './InventoryValuationProvider';
-import FinancialLoadingBar from '../FinancialLoadingBar';
+import { FinancialLoadingBar } from '../FinancialLoadingBar';
 import {
   Classes,
   Intent,
@@ -26,15 +25,14 @@ import {
  */
 export const useInventoryValuationTableColumns = () => {
   // inventory valuation context
-  const {
-    inventoryValuation: { tableRows },
-  } = useInventoryValuationContext();
+  const { inventoryValuation } = useInventoryValuationContext();
+  const tableRows = (inventoryValuation as any)?.tableRows ?? [];
 
   return useMemo(
     () => [
       {
         Header: intl.get('item_name'),
-        accessor: (row) => (row.code ? `${row.name} - ${row.code}` : row.name),
+        accessor: (row: Record<string, unknown>) => (row.code ? `${row.name} - ${row.code}` : row.name),
         className: 'name',
         width: 240,
         textOverview: true,
@@ -95,7 +93,7 @@ export function InventoryValuationLoadingBar() {
  * @returns {JSX.Element}
  */
 export const InventoryValuationExportMenu = () => {
-  const toastKey = useRef(null);
+  const toastKey = useRef<string | number | undefined>(undefined);
   const commonToastConfig = {
     isCloseButtonShown: true,
     timeout: 2000,

@@ -1,14 +1,11 @@
-// @ts-nocheck
 import React, { useMemo } from 'react';
 import intl from 'react-intl-universal';
-import { Spinner } from '@blueprintjs/core';
 import styled from 'styled-components';
 import {
   FinancialSheet,
   ReportDataTable,
   TableFastCell,
   TableVirtualizedListRows,
-  IntersectionObserver,
 } from '@/components';
 import { TableStyle } from '@/constants';
 import { useAuditLogContext } from './AuditLogProvider';
@@ -46,7 +43,7 @@ const useAuditLogTableColumns = () => {
         accessor: 'summary',
         width: 350,
         textOverview: true,
-        Cell: ({ value }) => (
+        Cell: ({ value }: { value: string }) => (
           <div
             style={{
               maxWidth: 330,
@@ -65,10 +62,10 @@ const useAuditLogTableColumns = () => {
         accessor: 'ip',
         width: 120,
         textOverview: true,
-        Cell: ({ value }) => value || '—',
+        Cell: ({ value }: { value: string }) => value || '—',
       },
     ],
-    []
+    [],
   );
 };
 
@@ -98,18 +95,14 @@ const AuditLogDataTable = styled(ReportDataTable)`
 /**
  * Audit Log Table
  */
-function AuditLogTable() {
-  const { auditLogs, isLoading, isFetchingNextPage, handleObserverInteract } = useAuditLogContext();
+export function AuditLogTable() {
+  const { auditLogs, isLoading } = useAuditLogContext();
   const columns = useAuditLogTableColumns();
 
   return (
-    <FinancialSheet
-      loading={isLoading}
-      fullWidth={true}
-      currentDate={false}
-    >
+    <FinancialSheet loading={isLoading} fullWidth={true} currentDate={false}>
       <AuditLogDataTable
-        noResults={intl.get('audit_log.empty')}
+        noResults={'No audit log entries found'}
         columns={columns}
         data={auditLogs}
         virtualizedRows={true}
@@ -126,4 +119,3 @@ function AuditLogTable() {
   );
 }
 
-export default AuditLogTable;

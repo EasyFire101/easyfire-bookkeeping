@@ -1,4 +1,3 @@
-// @ts-nocheck
 import React from 'react';
 import {
   Row,
@@ -7,8 +6,8 @@ import {
   FormattedMessage as T,
   FFormGroup,
 } from '@/components';
-import FinancialStatementDateRange from '../FinancialStatementDateRange';
-import FinancialStatementsFilter from '../FinancialStatementsFilter';
+import { FinancialStatementDateRange } from '../FinancialStatementDateRange';
+import { FinancialStatementsFilter } from '../FinancialStatementsFilter';
 import { filterItemsOptions } from '../constants';
 import {
   SalesByItemGeneralPanelProvider,
@@ -18,7 +17,7 @@ import {
 /**
  * Sales by items - Drawer header - General panel.
  */
-export default function SalesByItemsHeaderGeneralPanel() {
+export function SalesByItemsHeaderGeneralPanel() {
   return (
     <SalesByItemGeneralPanelProvider>
       <SalesByItemsHeaderGeneralPanelContent />

@@ -1,16 +1,15 @@
-// @ts-nocheck
 import React from 'react';
 import styled from 'styled-components';
 import moment from 'moment';
-import { Formik, Form } from 'formik';
+import { Formik, Form, FormikHelpers } from 'formik';
 import { Tabs, Tab, Button, Intent } from '@blueprintjs/core';
 import { FormattedMessage as T } from '@/components';
 
-import { withProjectProfitabilitySummary } from './withProjectProfitabilitySummary';
-import { withProjectProfitabilitySummaryActions } from './withProjectProfitabilitySummaryActions';
+import { withProjectProfitabilitySummary, WithProjectProfitabilitySummaryProps } from './withProjectProfitabilitySummary';
+import { withProjectProfitabilitySummaryActions, WithProjectProfitabilitySummaryActionsProps } from './withProjectProfitabilitySummaryActions';
 
-import ProjectProfitabilitySummaryHeaderGeneralPanal from './ProjectProfitabilitySummaryHeaderGeneralPanal';
-import FinancialStatementHeader from '../FinancialStatementHeader';
+import { ProjectProfitabilitySummaryHeaderGeneralPanal } from './ProjectProfitabilitySummaryHeaderGeneralPanal';
+import { FinancialStatementHeader } from '../FinancialStatementHeader';
 
 import {
   getProjectProfitabilitySummaryValidationSchema,
@@ -18,10 +17,29 @@ import {
 } from './utils';
 import { compose, transformToForm } from '@/utils';
 
+interface ProjectProfitabilitySummaryFormValues {
+  fromDate: Date;
+  toDate: Date;
+  basis: string;
+  filterByOption: string;
+  projectsIds: string[];
+  [key: string]: unknown;
+}
+
+interface ProjectProfitabilitySummaryHeaderOwnProps {
+  onSubmitFilter: (values: Record<string, any>) => void;
+  pageFilter: Record<string, any>;
+}
+
+type ProjectProfitabilitySummaryHeaderProps = {
+  isFilterDrawerOpen: boolean;
+} & Pick<WithProjectProfitabilitySummaryActionsProps, 'toggleProjectProfitabilitySummaryFilterDrawer'> &
+  ProjectProfitabilitySummaryHeaderOwnProps;
+
 /**
  * Project profitability summary header.
  */
-function ProjectProfitabilitySummaryHeader({
+function ProjectProfitabilitySummaryHeaderInner({
   // #ownProps
   onSubmitFilter,
   pageFilter,
@@ -31,7 +49,7 @@ function ProjectProfitabilitySummaryHeader({
 
   // #withProjectProfitabilitySummaryActions
   toggleProjectProfitabilitySummaryFilterDrawer: toggleFilterDrawer,
-}) {
+}: ProjectProfitabilitySummaryHeaderProps) {
   // Filter form default values.
   const defaultValues = getDefaultProjectProfitabilitySummaryQuery();
 
@@ -49,7 +67,7 @@ function ProjectProfitabilitySummaryHeader({
   const validationSchema = getProjectProfitabilitySummaryValidationSchema();
 
   // Handle form submit.
-  const handleSubmit = (values, { setSubmitting }) => {
+  const handleSubmit = (values: ProjectProfitabilitySummaryFormValues, { setSubmitting }: FormikHelpers<ProjectProfitabilitySummaryFormValues>) => {
     onSubmitFilter(values);
     toggleFilterDrawer(false);
     setSubmitting(false);
@@ -99,14 +117,14 @@ function ProjectProfitabilitySummaryHeader({
   );
 }
 
-export default compose(
+export const ProjectProfitabilitySummaryHeader = compose(
   withProjectProfitabilitySummary(
     ({ projectProfitabilitySummaryDrawerFilter }) => ({
       isFilterDrawerOpen: projectProfitabilitySummaryDrawerFilter,
     }),
   ),
   withProjectProfitabilitySummaryActions,
-)(ProjectProfitabilitySummaryHeader);
+)(ProjectProfitabilitySummaryHeaderInner);
 
 const ProjectProfitabilityDrawerHeader = styled(FinancialStatementHeader)`
   .bp4-drawer {

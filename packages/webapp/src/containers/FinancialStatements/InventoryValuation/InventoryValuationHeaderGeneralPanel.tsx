@@ -1,4 +1,3 @@
-// @ts-nocheck
 import React from 'react';
 import { FastField, Field } from 'formik';
 import { DateInput } from '@blueprintjs/datetime';
@@ -23,12 +22,12 @@ import {
   InventoryValuationGeneralPanelProvider,
   useInventoryValuationGeneralPanelContext,
 } from './InventoryValuationHeaderGeneralPanelProvider';
-import FinancialStatementsFilter from '../FinancialStatementsFilter';
+import { FinancialStatementsFilter } from '../FinancialStatementsFilter';
 
 /**
  * Inventory valuation - Drawer Header - General panel.
  */
-export default function InventoryValuationHeaderGeneralPanel() {
+export function InventoryValuationHeaderGeneralPanel() {
   return (
     <InventoryValuationGeneralPanelProvider>
       <InventoryValuationHeaderGeneralPanelContent />
@@ -47,7 +46,7 @@ function InventoryValuationHeaderGeneralPanelContent() {
       <Row>
         <Col xs={4}>
           <FastField name={'asDate'}>
-            {({ form, field: { value }, meta: { error } }) => (
+            {({ form, field: { value }, meta: { error } }: any) => (
               <FormGroup
                 label={<T id={'as_date'} />}
                 labelInfo={<FieldHint />}
@@ -57,7 +56,7 @@ function InventoryValuationHeaderGeneralPanelContent() {
                 <DateInput
                   {...momentFormatter('YYYY/MM/DD')}
                   value={tansformDateValue(value)}
-                  onChange={handleDateChange((selectedDate) => {
+                  onChange={handleDateChange((selectedDate: Date) => {
                     form.setFieldValue('asDate', selectedDate);
                   })}
                   popoverProps={{ position: Position.BOTTOM, minimal: true }}

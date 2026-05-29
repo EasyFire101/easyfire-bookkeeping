@@ -1,4 +1,3 @@
-// @ts-nocheck
 import React from 'react';
 import {
   PopoverInteractionKind,
@@ -16,18 +15,30 @@ import {
 import { CLASSES } from '@/constants/classes';
 import { filterAccountsOptions } from './constants';
 
+interface FilterItem {
+  key: string;
+  name: string;
+  hint?: string;
+}
+
+interface FinancialStatementsFilterProps {
+  items?: FilterItem[];
+  label?: React.ReactNode;
+  [key: string]: unknown;
+}
+
 const SUBMENU_POPOVER_MODIFIERS = {
   flip: { boundariesElement: 'viewport', padding: 20 },
   offset: { offset: '0, 10' },
   preventOverflow: { boundariesElement: 'viewport', padding: 40 },
 };
 
-export default function FinancialStatementsFilter({
-  items = filterAccountsOptions,
+export function FinancialStatementsFilter({
+  items = filterAccountsOptions as FilterItem[],
   label = <T id={'filter_accounts'} />,
   ...restProps
-}) {
-  const filterRenderer = (item, { handleClick, modifiers, query }) => {
+}: FinancialStatementsFilterProps) {
+  const filterRenderer = (item: FilterItem, { handleClick }: { handleClick: () => void }) => {
     return (
       <Tooltip
         interactionKind={PopoverInteractionKind.HOVER}

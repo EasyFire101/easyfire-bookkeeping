@@ -1,9 +1,8 @@
-// @ts-nocheck
 import { useRef } from 'react';
 import classNames from 'classnames';
 
 import { AppToaster, If, Stack } from '@/components';
-import FinancialLoadingBar from '../FinancialLoadingBar';
+import { FinancialLoadingBar } from '../FinancialLoadingBar';
 import { useAPAgingSummaryContext } from './APAgingSummaryProvider';
 import { agingSummaryDynamicColumns } from '../AgingSummary/dynamicColumns';
 import {
@@ -19,20 +18,15 @@ import {
   useAPAgingSheetXlsxExport,
 } from '@/hooks/query';
 
-/**
- * Retrieve AP aging summary columns.
- */
 export const useAPAgingSummaryColumns = () => {
-  const {
-    APAgingSummary: { table },
-  } = useAPAgingSummaryContext();
+  const { APAgingSummary } = useAPAgingSummaryContext();
 
-  return agingSummaryDynamicColumns(table.columns, table.rows);
+  return agingSummaryDynamicColumns(
+    (APAgingSummary as any)?.table?.columns ?? [],
+    (APAgingSummary as any)?.table?.rows ?? [],
+  );
 };
 
-/**
- * A/P aging summary sheet loading bar.
- */
 export function APAgingSummarySheetLoadingBar() {
   const { isAPAgingFetching } = useAPAgingSummaryContext();
 
@@ -43,12 +37,8 @@ export function APAgingSummarySheetLoadingBar() {
   );
 }
 
-/**
- * A/P aging summary export menu.
- * @returns {JSX.Element}
- */
 export function APAgingSummaryExportMenu() {
-  const toastKey = useRef(null);
+  const toastKey = useRef<string | undefined>(undefined);
   const commonToastConfig = { isCloseButtonShown: true, timeout: 2000 };
   const { httpQuery } = useAPAgingSummaryContext();
 
@@ -66,7 +56,7 @@ export function APAgingSummaryExportMenu() {
       </Stack>
     );
   };
-  // Export the report to xlsx.
+
   const { mutateAsync: xlsxExport } = useAPAgingSheetXlsxExport(httpQuery, {
     onDownloadProgress: (xlsxExportProgress: number) => {
       if (!toastKey.current) {
@@ -85,7 +75,7 @@ export function APAgingSummaryExportMenu() {
       }
     },
   });
-  // Export the report to csv.
+
   const { mutateAsync: csvExport } = useAPAgingSheetCsvExport(httpQuery, {
     onDownloadProgress: (xlsxExportProgress: number) => {
       if (!toastKey.current) {
@@ -104,11 +94,11 @@ export function APAgingSummaryExportMenu() {
       }
     },
   });
-  // Handle csv export button click.
+
   const handleCsvExportBtnClick = () => {
     csvExport();
   };
-  // Handle xlsx export button click.
+
   const handleXlsxExportBtnClick = () => {
     xlsxExport();
   };

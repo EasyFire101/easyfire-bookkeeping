@@ -1,10 +1,9 @@
-// @ts-nocheck
 import React, { useMemo } from 'react';
-import intl from 'react-intl-universal';
+import * as Yup from 'yup';
 import moment from 'moment';
-import { Button, Tabs, Tab, DrawerSize, Position } from '@blueprintjs/core';
+import { Button, Tabs, Tab, Position } from '@blueprintjs/core';
 import styled from 'styled-components';
-import { Formik, Form } from 'formik';
+import { Formik, Form, FormikHelpers } from 'formik';
 import {
   FormattedMessage as T,
   FFormGroup,
@@ -13,14 +12,36 @@ import {
 import { FMultiSelect } from '@/components/Forms';
 import { useAuditLogFilterOptionsQuery } from '@/hooks/query';
 import { saveInvoke, transformToForm } from '@/utils';
-import FinancialStatementHeader from '../FinancialStatementHeader';
+import { FinancialStatementHeader } from '../FinancialStatementHeader';
 import { getDefaultAuditLogQuery, getAuditLogQuerySchema } from './common';
 
-function normalizeStringListField(value) {
-  return Array.isArray(value) ? value : value ? [value] : [];
+interface AuditLogHeaderFormValues {
+  subject: string[];
+  action: string[];
+  fromDate: Date | string;
+  toDate: Date | string;
 }
 
-const auditLogSelectItemPredicate = (query, item) => {
+interface AuditLogHeaderProps {
+  onSubmitFilter: (values: Record<string, unknown>) => void;
+  pageFilter: Record<string, unknown>;
+  isFilterDrawerOpen: boolean;
+  toggleFilterDrawer: (toggle?: boolean) => void;
+}
+
+function normalizeStringListField(
+  value: unknown,
+): string[] {
+  if (Array.isArray(value)) return value;
+  return value ? [value as string] : [];
+}
+
+interface SelectItem {
+  value: string;
+  name: string;
+}
+
+const auditLogSelectItemPredicate = (query: string, item: SelectItem) => {
   const q = (query || '').toLowerCase();
   const name = (item?.name ?? '').toLowerCase();
   return name.includes(q);
@@ -35,15 +56,26 @@ const AuditLogDrawerHeader = styled(FinancialStatementHeader)`
 /**
  * Audit Log Header - Filter drawer
  */
-function AuditLogHeader({ onSubmitFilter, pageFilter, isFilterDrawerOpen, toggleFilterDrawer }) {
+export function AuditLogHeader({
+  onSubmitFilter,
+  pageFilter,
+  isFilterDrawerOpen,
+  toggleFilterDrawer,
+}: AuditLogHeaderProps) {
   const { data: filterOptions, isLoading: isFilterOptionsLoading } =
     useAuditLogFilterOptionsQuery({
       enabled: isFilterDrawerOpen,
-    });
+    }) as {
+      data: {
+        subjects: { key: string; label: string }[];
+        actions: { key: string; label: string }[];
+      };
+      isLoading: boolean;
+    };
 
   const subjectSelectItems = useMemo(() => {
-    const byValue = new Map();
-    for (const s of filterOptions.subjects ?? []) {
+    const byValue = new Map<string, SelectItem>();
+    for (const s of filterOptions?.subjects ?? []) {
       byValue.set(s.key, { value: s.key, name: s.label });
     }
     for (const s of normalizeStringListField(pageFilter.subject)) {
@@ -54,11 +86,11 @@ function AuditLogHeader({ onSubmitFilter, pageFilter, isFilterDrawerOpen, toggle
     return Array.from(byValue.values()).sort((a, b) =>
       a.name.localeCompare(b.name),
     );
-  }, [filterOptions.subjects, pageFilter.subject]);
+  }, [filterOptions?.subjects, pageFilter.subject]);
 
   const actionSelectItems = useMemo(() => {
-    const byValue = new Map();
-    for (const a of filterOptions.actions ?? []) {
+    const byValue = new Map<string, SelectItem>();
+    for (const a of filterOptions?.actions ?? []) {
       byValue.set(a.key, { value: a.key, name: a.label });
     }
     for (const act of normalizeStringListField(pageFilter.action)) {
@@ -69,7 +101,7 @@ function AuditLogHeader({ onSubmitFilter, pageFilter, isFilterDrawerOpen, toggle
     return Array.from(byValue.values()).sort((a, b) =>
       a.name.localeCompare(b.name),
     );
-  }, [filterOptions.actions, pageFilter.action]);
+  }, [filterOptions?.actions, pageFilter.action]);
 
   const defaultValues = getDefaultAuditLogQuery();
 
@@ -77,21 +109,32 @@ function AuditLogHeader({ onSubmitFilter, pageFilter, isFilterDrawerOpen, toggle
     {
       ...defaultValues,
       ...pageFilter,
-      fromDate: pageFilter.fromDate ? moment(pageFilter.fromDate).toDate() : '',
-      toDate: pageFilter.toDate ? moment(pageFilter.toDate).toDate() : '',
+      fromDate: pageFilter.fromDate
+        ? moment(pageFilter.fromDate as string).toDate()
+        : '',
+      toDate: pageFilter.toDate
+        ? moment(pageFilter.toDate as string).toDate()
+        : '',
     },
-    defaultValues
-  );
+    defaultValues,
+  ) as AuditLogHeaderFormValues;
 
   const validationSchema = getAuditLogQuerySchema();
 
-  const handleSubmit = (values, { setSubmitting }) => {
+  const handleSubmit = (
+    values: AuditLogHeaderFormValues,
+    { setSubmitting }: FormikHelpers<AuditLogHeaderFormValues>,
+  ) => {
     const parsedFilter = {
       ...values,
       subject: normalizeStringListField(values.subject),
       action: normalizeStringListField(values.action),
-      fromDate: values.fromDate ? moment(values.fromDate).format('YYYY-MM-DD') : '',
-      toDate: values.toDate ? moment(values.toDate).format('YYYY-MM-DD') : '',
+      fromDate: values.fromDate
+        ? moment(values.fromDate as Date).format('YYYY-MM-DD')
+        : '',
+      toDate: values.toDate
+        ? moment(values.toDate as Date).format('YYYY-MM-DD')
+        : '',
     };
     saveInvoke(onSubmitFilter, parsedFilter);
     toggleFilterDrawer(false);
@@ -125,7 +168,7 @@ function AuditLogHeader({ onSubmitFilter, pageFilter, isFilterDrawerOpen, toggle
                 <div style={{ maxWidth: '400px' }}>
                   <FFormGroup
                     name="subject"
-                    label={intl.get('audit_log.filter_subject')}
+                    label={'Subject'}
                     fastField
                   >
                     <FMultiSelect
@@ -135,7 +178,7 @@ function AuditLogHeader({ onSubmitFilter, pageFilter, isFilterDrawerOpen, toggle
                       textAccessor="name"
                       tagAccessor="name"
                       itemPredicate={auditLogSelectItemPredicate}
-                      placeholder={intl.get('all')}
+                      placeholder={'All'}
                       popoverProps={{ minimal: true }}
                       disabled={isFilterOptionsLoading}
                       fill
@@ -146,7 +189,7 @@ function AuditLogHeader({ onSubmitFilter, pageFilter, isFilterDrawerOpen, toggle
 
                   <FFormGroup
                     name="action"
-                    label={intl.get('audit_log.filter_action')}
+                    label={'Action'}
                     fastField
                   >
                     <FMultiSelect
@@ -156,7 +199,7 @@ function AuditLogHeader({ onSubmitFilter, pageFilter, isFilterDrawerOpen, toggle
                       textAccessor="name"
                       tagAccessor="name"
                       itemPredicate={auditLogSelectItemPredicate}
-                      placeholder={intl.get('all')}
+                      placeholder={'All'}
                       popoverProps={{ minimal: true }}
                       disabled={isFilterOptionsLoading}
                       fill
@@ -167,14 +210,14 @@ function AuditLogHeader({ onSubmitFilter, pageFilter, isFilterDrawerOpen, toggle
 
                   <FFormGroup
                     name="fromDate"
-                    label={intl.get('audit_log.filter_from')}
+                    label={'From'}
                     fastField
                   >
                     <FDateInput
                       name="fromDate"
                       popoverProps={{ position: Position.BOTTOM, minimal: true }}
-                      formatDate={(date) => date.toLocaleDateString()}
-                      parseDate={(str) => new Date(str)}
+                      formatDate={(date: Date) => date.toLocaleDateString()}
+                      parseDate={(str: string) => new Date(str)}
                       inputProps={{ fill: true }}
                       fastField
                     />
@@ -182,7 +225,7 @@ function AuditLogHeader({ onSubmitFilter, pageFilter, isFilterDrawerOpen, toggle
 
                   <FFormGroup
                     name="toDate"
-                    label={intl.get('audit_log.filter_to')}
+                    label={'To'}
                     fill
                     fastField
                   >
@@ -190,8 +233,8 @@ function AuditLogHeader({ onSubmitFilter, pageFilter, isFilterDrawerOpen, toggle
                       name="toDate"
                       type="date"
                       popoverProps={{ position: Position.BOTTOM, minimal: true }}
-                      formatDate={(date) => date.toLocaleDateString()}
-                      parseDate={(str) => new Date(str)}
+                      formatDate={(date: Date) => date.toLocaleDateString()}
+                      parseDate={(str: string) => new Date(str)}
                       inputProps={{ fill: true }}
                       fastField
                     />
@@ -215,4 +258,3 @@ function AuditLogHeader({ onSubmitFilter, pageFilter, isFilterDrawerOpen, toggle
   );
 }
 
-export default AuditLogHeader;

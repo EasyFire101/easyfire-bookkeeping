@@ -1,4 +1,3 @@
-// @ts-nocheck
 import React from 'react';
 import {
   NavbarDivider,
@@ -15,18 +14,29 @@ import classNames from 'classnames';
 import NumberFormatDropdown from '@/components/NumberFormatDropdown';
 
 import { withVendorsBalanceSummary } from './withVendorsBalanceSummary';
-import { withVendorsBalanceSummaryActions } from './withVendorsBalanceSummaryActions';
+import { withVendorsBalanceSummaryActions, WithVendorsBalanceSummaryActionsProps } from './withVendorsBalanceSummaryActions';
 import { useVendorsBalanceSummaryContext } from './VendorsBalanceSummaryProvider';
 
 import { saveInvoke, compose } from '@/utils';
 import { VendorSummarySheetExportMenu } from './components';
-import { withDialogActions } from '@/containers/Dialog/withDialogActions';
+import { withDialogActions, WithDialogActionsProps } from '@/containers/Dialog/withDialogActions';
 import { DialogsName } from '@/constants/dialogs';
+
+interface VendorsBalanceSummaryActionsBarOwnProps {
+  numberFormat: Record<string, unknown>;
+  onNumberFormatSubmit: (values: Record<string, unknown>) => void;
+}
+
+type VendorsBalanceSummaryActionsBarProps = {
+  isFilterDrawerOpen: boolean;
+} & Pick<WithVendorsBalanceSummaryActionsProps, 'toggleVendorSummaryFilterDrawer'> &
+  WithDialogActionsProps &
+  VendorsBalanceSummaryActionsBarOwnProps;
 
 /**
  * Vendors balance summary action bar.
  */
-function VendorsBalanceSummaryActionsBar({
+function VendorsBalanceSummaryActionsBarInner({
   //#ownProps
   numberFormat,
   onNumberFormatSubmit,
@@ -39,12 +49,12 @@ function VendorsBalanceSummaryActionsBar({
 
   // #withDialogActions
   openDialog,
-}) {
+}: VendorsBalanceSummaryActionsBarProps) {
   const { isVendorsBalanceLoading, refetch } =
     useVendorsBalanceSummaryContext();
 
   const handleFilterToggleClick = () => {
-    toggleVendorSummaryFilterDrawer();
+    toggleVendorSummaryFilterDrawer(false);
   };
 
   // handle recalculate report button.
@@ -53,7 +63,7 @@ function VendorsBalanceSummaryActionsBar({
   };
 
   // handle number format submit.
-  const handleNumberFormatSubmit = (numberFormat) => {
+  const handleNumberFormatSubmit = (numberFormat: Record<string, unknown>) => {
     saveInvoke(onNumberFormatSubmit, numberFormat);
   };
 
@@ -129,10 +139,10 @@ function VendorsBalanceSummaryActionsBar({
     </DashboardActionsBar>
   );
 }
-export default compose(
+export const VendorsBalanceSummaryActionsBar = compose(
   withVendorsBalanceSummaryActions,
   withVendorsBalanceSummary(({ VendorsSummaryFilterDrawer }) => ({
     isFilterDrawerOpen: VendorsSummaryFilterDrawer,
   })),
   withDialogActions,
-)(VendorsBalanceSummaryActionsBar);
+)(VendorsBalanceSummaryActionsBarInner);

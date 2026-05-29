@@ -1,27 +1,23 @@
-// @ts-nocheck
 import React from 'react';
 import intl from 'react-intl-universal';
 import styled from 'styled-components';
-
 import { TableStyle } from '@/constants';
 import { ReportDataTable, FinancialSheet } from '@/components';
 import { tableRowTypesToClassnames } from '@/utils';
-
 import { useCustomersBalanceSummaryContext } from './CustomersBalanceSummaryProvider';
 import { useCustomersSummaryColumns } from './components';
 
-/**
- * Customers balance summary table.
- */
-export default function CustomersBalanceSummaryTable({
-  // #ownProps
-  companyName,
-}) {
-  const {
-    CustomerBalanceSummary: { table, query, meta },
-  } = useCustomersBalanceSummaryContext();
+interface CustomersBalanceSummaryTableProps {
+  companyName: string;
+}
 
-  // Retrieves the customers summary columns.
+export function CustomersBalanceSummaryTable({
+  companyName,
+}: CustomersBalanceSummaryTableProps) {
+  const { CustomerBalanceSummary } = useCustomersBalanceSummaryContext();
+  const table = (CustomerBalanceSummary as any)?.table;
+  const meta = (CustomerBalanceSummary as any)?.meta;
+
   const columns = useCustomersSummaryColumns();
 
   return (
@@ -32,7 +28,7 @@ export default function CustomersBalanceSummaryTable({
     >
       <CustomerBalanceDataTable
         columns={columns}
-        data={table.rows}
+        data={table?.rows ?? []}
         rowClassNames={tableRowTypesToClassnames}
         noInitialFetch={true}
         sticky={true}
@@ -62,8 +58,6 @@ const CustomerBalanceDataTable = styled(ReportDataTable)`
         }
         &.row_type--TOTAL {
           .td {
-            font-weight: 500;
-            border-top-width: 1px;
             font-weight: 500;
             border-top-width: 1px;
             border-top-style: solid;

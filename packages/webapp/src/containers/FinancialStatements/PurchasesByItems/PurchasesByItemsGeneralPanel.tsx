@@ -1,4 +1,3 @@
-// @ts-nocheck
 import React from 'react';
 import {
   Row,
@@ -7,8 +6,8 @@ import {
   ItemsMultiSelect,
   FFormGroup,
 } from '@/components';
-import FinancialStatementDateRange from '../FinancialStatementDateRange';
-import FinancialStatementsFilter from '../FinancialStatementsFilter';
+import { FinancialStatementDateRange } from '../FinancialStatementDateRange';
+import { FinancialStatementsFilter } from '../FinancialStatementsFilter';
 import { filterItemsOptions } from '../constants';
 
 import {
@@ -19,7 +18,7 @@ import {
 /**
  *
  */
-export default function PurchasesByItemsGeneralPanel() {
+export function PurchasesByItemsGeneralPanel() {
   return (
     <PurchasesByItemsGeneralPanelProvider>
       <PurchasesByItemsGeneralPanelContent />

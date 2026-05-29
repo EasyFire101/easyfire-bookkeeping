@@ -1,5 +1,5 @@
 import React from 'react';
-import FinancialReportPage from '../FinancialReportPage';
+import { FinancialReportPage } from '../FinancialReportPage';
 import { useCashFlowStatementReport } from '@/hooks/query';
 import { transformFilterFormToQuery } from '../common';
 
@@ -40,7 +40,7 @@ function CashFlowStatementProvider({
     isFetching: isCashFlowFetching,
     isLoading: isCashFlowLoading,
     refetch: refetchCashFlow,
-  } = useCashFlowStatementReport(httpQuery, { keepPreviousData: true } as any);
+  } = useCashFlowStatementReport(httpQuery, { placeholderData: (prev) => prev });
 
   const provider: CashFlowStatementContextValue = {
     cashFlowStatement,

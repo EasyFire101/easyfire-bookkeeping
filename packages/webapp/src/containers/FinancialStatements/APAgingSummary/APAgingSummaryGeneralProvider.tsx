@@ -1,36 +1,47 @@
-// @ts-nocheck
 import React, { createContext, useContext } from 'react';
 
 import { useVendors } from '@/hooks/query';
 import { FinancialHeaderLoadingSkeleton } from '../FinancialHeaderLoadingSkeleton';
 
-const APAgingSummaryGeneralContext = createContext();
+type UseVendorsResult = ReturnType<typeof useVendors>;
 
-/**
- * A/P aging summary provider.
- */
-function APAgingSummaryGeneralProvider({ filter, ...props }) {
-  // Retrieve the vendors list.
+type APAgingSummaryGeneralContextValue = {
+  vendors: UseVendorsResult['data'] extends { vendors?: infer V } | undefined ? V : undefined;
+  isVendorsLoading: boolean;
+};
+
+type APAgingSummaryGeneralProviderProps = {
+  children?: React.ReactNode;
+};
+
+const APAgingSummaryGeneralContext = createContext<APAgingSummaryGeneralContextValue | undefined>(undefined);
+
+function APAgingSummaryGeneralProvider({ children, ...props }: APAgingSummaryGeneralProviderProps) {
   const {
     data: vendorsData,
     isFetching: isVendorsLoading,
   } = useVendors();
 
-  const provider = {
-    vendors: vendorsData?.vendors,
+  const provider: APAgingSummaryGeneralContextValue = {
+    vendors: (vendorsData as any)?.vendors,
     isVendorsLoading,
   };
-  // Loading state.
+
   const loading = isVendorsLoading;
 
   return loading ? (
     <FinancialHeaderLoadingSkeleton />
   ) : (
-    <APAgingSummaryGeneralContext.Provider value={provider} {...props} />
+    <APAgingSummaryGeneralContext.Provider value={provider} {...props}>
+      {children}
+    </APAgingSummaryGeneralContext.Provider>
   );
 }
 
-const useAPAgingSummaryGeneralContext = () =>
-  useContext(APAgingSummaryGeneralContext);
+const useAPAgingSummaryGeneralContext = (): APAgingSummaryGeneralContextValue => {
+  const ctx = useContext(APAgingSummaryGeneralContext);
+  if (!ctx) throw new Error('useAPAgingSummaryGeneralContext must be used within APAgingSummaryGeneralProvider');
+  return ctx;
+};
 
 export { APAgingSummaryGeneralProvider, useAPAgingSummaryGeneralContext };

@@ -1,4 +1,3 @@
-// @ts-nocheck
 import React, { useRef } from 'react';
 import intl from 'react-intl-universal';
 import {
@@ -13,7 +12,7 @@ import classNames from 'classnames';
 
 import { AppToaster, If, Stack } from '@/components';
 import { useVendorsTransactionsContext } from './VendorsTransactionsProvider';
-import FinancialLoadingBar from '../FinancialLoadingBar';
+import { FinancialLoadingBar } from '../FinancialLoadingBar';
 import { getColumnWidth } from '@/utils';
 import {
   useVendorsTransactionsCsvExport,
@@ -25,9 +24,8 @@ import { Align } from '@/constants';
  * Retrieve vendors transactions columns.
  */
 export const useVendorsTransactionsColumns = () => {
-  const {
-    vendorsTransactions: { table },
-  } = useVendorsTransactionsContext();
+  const { vendorsTransactions } = useVendorsTransactionsContext();
+  const table = (vendorsTransactions as any)?.table;
 
   return React.useMemo(
     () => [
@@ -60,7 +58,7 @@ export const useVendorsTransactionsColumns = () => {
         accessor: 'cells[4].value',
         className: 'credit',
         textOverview: true,
-        width: getColumnWidth(table.rows, 'cells[5].value', {
+        width: getColumnWidth(table?.rows, 'cells[5].value', {
           minWidth: 100,
           magicSpacing: 10,
         }),
@@ -72,7 +70,7 @@ export const useVendorsTransactionsColumns = () => {
         accessor: 'cells[5].value',
         className: 'debit',
         textOverview: true,
-        width: getColumnWidth(table.rows, 'cells[6].value', {
+        width: getColumnWidth(table?.rows, 'cells[6].value', {
           minWidth: 100,
           magicSpacing: 10,
         }),
@@ -84,7 +82,7 @@ export const useVendorsTransactionsColumns = () => {
         accessor: 'cells[6].value',
         className: 'running_balance',
         textOverview: true,
-        width: getColumnWidth(table.rows, 'cells[7].value', {
+        width: getColumnWidth(table?.rows, 'cells[7].value', {
           minWidth: 120,
           magicSpacing: 10,
         }),
@@ -113,12 +111,12 @@ export function VendorsTransactionsLoadingBar() {
  * Vendor transactions export menu.
  */
 export function VendorTransactionsExportMenu() {
-  const toastKey = useRef(null);
+  const toastKey = useRef<string | undefined>(null);
   const commonToastConfig = {
     isCloseButtonShown: true,
     timeout: 2000,
   };
-  const { query } = useVendorsTransactionsContext();
+  const { filter: query } = useVendorsTransactionsContext();
 
   const openProgressToast = (amount: number) => {
     return (

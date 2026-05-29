@@ -1,4 +1,3 @@
-// @ts-nocheck
 import React from 'react';
 import intl from 'react-intl-universal';
 import styled from 'styled-components';
@@ -11,14 +10,19 @@ import { tableRowTypesToClassnames } from '@/utils';
 import { TableStyle } from '@/constants';
 import { usePurchasesByItemsTableColumns } from './dynamicColumns';
 
+interface PurchasesByItemsTableProps {
+  companyName: string;
+}
+
 /**
  * Purchases by items data table.
  */
-export default function PurchasesByItemsTable({ companyName }) {
+export function PurchasesByItemsTable({ companyName }: PurchasesByItemsTableProps) {
   // Purchases by items context.
-  const {
-    purchaseByItems: { table, query, meta },
-  } = usePurchaseByItemsContext();
+  const { purchaseByItems } = usePurchaseByItemsContext();
+
+  const table = (purchaseByItems as any)?.table;
+  const meta = (purchaseByItems as any)?.meta;
 
   // Purchases by items table columns.
   const columns = usePurchasesByItemsTableColumns();

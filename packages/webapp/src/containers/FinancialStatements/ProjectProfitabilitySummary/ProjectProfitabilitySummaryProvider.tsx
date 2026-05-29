@@ -1,14 +1,30 @@
-// @ts-nocheck
-import React, { createContext, useMemo, useContext } from 'react';
+import React, { createContext, useMemo, useContext, ReactNode } from 'react';
 
-import FinancialReportPage from '../FinancialReportPage';
+import { FinancialReportPage } from '../FinancialReportPage';
 import { useProjectProfitabilitySummary } from './hooks';
 import { useProjects } from '@/containers/Projects/hooks';
 import { transformFilterFormToQuery } from '../common';
 
-const ProjectProfitabilitySummaryContext = createContext();
+type UseProjectProfitabilitySummaryResult = ReturnType<typeof useProjectProfitabilitySummary>;
 
-function ProjectProfitabilitySummaryProvider({ filter, ...props }) {
+interface ProjectProfitabilitySummaryContextValue {
+  projectProfitabilitySummary: UseProjectProfitabilitySummaryResult['data'];
+  isProjectProfitabilitySummaryFetching: boolean;
+  isProjectProfitabilitySummaryLoading: boolean;
+  refetchProjectProfitabilitySummary: UseProjectProfitabilitySummaryResult['refetch'];
+  projects: any;
+  query: Record<string, unknown>;
+  filter: Record<string, unknown>;
+}
+
+interface ProjectProfitabilitySummaryProviderProps {
+  filter: Record<string, unknown>;
+  children?: ReactNode;
+}
+
+const ProjectProfitabilitySummaryContext = createContext<ProjectProfitabilitySummaryContextValue | undefined>(undefined);
+
+function ProjectProfitabilitySummaryProvider({ filter, ...props }: ProjectProfitabilitySummaryProviderProps) {
   // Transformes the given filter to query.
   const query = useMemo(() => transformFilterFormToQuery(filter), [filter]);
 
@@ -18,7 +34,7 @@ function ProjectProfitabilitySummaryProvider({ filter, ...props }) {
     isFetching: isProjectProfitabilitySummaryFetching,
     isLoading: isProjectProfitabilitySummaryLoading,
     refetch: refetchProjectProfitabilitySummary,
-  } = useProjectProfitabilitySummary(query, { keepPreviousData: true });
+  } = useProjectProfitabilitySummary(query, { placeholderData: (prev: any) => prev });
 
   // Fetch project list.
   const {
@@ -26,7 +42,7 @@ function ProjectProfitabilitySummaryProvider({ filter, ...props }) {
     isLoading: isProjectsLoading,
   } = useProjects();
 
-  const provider = {
+  const provider: ProjectProfitabilitySummaryContextValue = {
     projectProfitabilitySummary,
     isProjectProfitabilitySummaryFetching,
     isProjectProfitabilitySummaryLoading,
@@ -46,8 +62,11 @@ function ProjectProfitabilitySummaryProvider({ filter, ...props }) {
   );
 }
 
-const useProjectProfitabilitySummaryContext = () =>
-  useContext(ProjectProfitabilitySummaryContext);
+const useProjectProfitabilitySummaryContext = (): ProjectProfitabilitySummaryContextValue => {
+  const ctx = useContext(ProjectProfitabilitySummaryContext);
+  if (!ctx) throw new Error('useProjectProfitabilitySummaryContext must be used within a ProjectProfitabilitySummaryProvider');
+  return ctx;
+};
 
 export {
   ProjectProfitabilitySummaryProvider,

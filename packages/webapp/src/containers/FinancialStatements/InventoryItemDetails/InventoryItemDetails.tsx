@@ -1,13 +1,12 @@
-// @ts-nocheck
 import React, { useEffect } from 'react';
 import moment from 'moment';
 
 import { FinancialStatement, DashboardPageContent } from '@/components';
 
-import InventoryItemDetailsActionsBar from './InventoryItemDetailsActionsBar';
-import InventoryItemDetailsHeader from './InventoryItemDetailsHeader';
+import { InventoryItemDetailsActionsBar } from './InventoryItemDetailsActionsBar';
+import { InventoryItemDetailsHeader } from './InventoryItemDetailsHeader';
 
-import { withInventoryItemDetailsActions } from './withInventoryItemDetailsActions';
+import { withInventoryItemDetailsActions, WithInventoryItemDetailsActionsProps } from './withInventoryItemDetailsActions';
 import { InventoryItemDetailsProvider } from './InventoryItemDetailsProvider';
 import {
   InventoryItemDetailsLoadingBar,
@@ -19,26 +18,30 @@ import { InventoryItemDetailsDialogs } from './InventoryItemDetailsDialogs';
 import { useInventoryValuationQuery } from './utils2';
 import { compose } from '@/utils';
 
+interface InventoryItemDetailsProps {
+  toggleInventoryItemDetailsFilterDrawer: WithInventoryItemDetailsActionsProps['toggleInventoryItemDetailsFilterDrawer'];
+}
+
 /**
  * inventory item details.
  */
-function InventoryItemDetails({
+function InventoryItemDetailsInner({
   //#withInventoryItemDetailsActions
   toggleInventoryItemDetailsFilterDrawer: toggleFilterDrawer,
-}) {
+}: InventoryItemDetailsProps) {
   const { query, setLocationQuery } = useInventoryValuationQuery();
 
   // Handle filter submit.
-  const handleFilterSubmit = (filter) => {
+  const handleFilterSubmit = (filter: Record<string, unknown>) => {
     const _filter = {
       ...filter,
-      fromDate: moment(filter.fromDate).format('YYYY-MM-DD'),
-      toDate: moment(filter.toDate).format('YYYY-MM-DD'),
+      fromDate: moment(filter.fromDate as string).format('YYYY-MM-DD'),
+      toDate: moment(filter.toDate as string).format('YYYY-MM-DD'),
     };
     setLocationQuery({ ..._filter });
   };
   // Handle number format submit.
-  const handleNumberFormatSubmit = (values) => {
+  const handleNumberFormatSubmit = (values: Record<string, unknown>) => {
     setLocationQuery({
       ...query,
       numberFormat: values,
@@ -50,7 +53,7 @@ function InventoryItemDetails({
   return (
     <InventoryItemDetailsProvider query={query}>
       <InventoryItemDetailsActionsBar
-        numberFormat={query.numberFormat}
+        numberFormat={query.numberFormat as Record<string, unknown>}
         onNumberFormatSubmit={handleNumberFormatSubmit}
       />
       <InventoryItemDetailsLoadingBar />
@@ -71,4 +74,4 @@ function InventoryItemDetails({
   );
 }
 
-export default compose(withInventoryItemDetailsActions)(InventoryItemDetails);
+export const InventoryItemDetails = compose(withInventoryItemDetailsActions)(InventoryItemDetailsInner);

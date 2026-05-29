@@ -1,15 +1,31 @@
-// @ts-nocheck
-import { createContext, useContext, useMemo } from 'react';
-import FinancialReportPage from '../FinancialReportPage';
+import { createContext, useContext, useMemo, ReactNode } from 'react';
+import { FinancialReportPage } from '../FinancialReportPage';
 import { useCustomersTransactionsReport } from '@/hooks/query';
 import { transformFilterFormToQuery } from '../common';
 
-const CustomersTransactionsContext = createContext();
+type UseCustomersTransactionsResult = ReturnType<typeof useCustomersTransactionsReport>;
+
+interface CustomersTransactionsContextValue {
+  customersTransactions: UseCustomersTransactionsResult['data'];
+  isCustomersTransactionsFetching: boolean;
+  isCustomersTransactionsLoading: boolean;
+  CustomersTransactionsRefetch: UseCustomersTransactionsResult['refetch'];
+  filter: Record<string, unknown>;
+  query: Record<string, unknown>;
+  httpQuery: Record<string, unknown>;
+}
+
+interface CustomersTransactionsProviderProps {
+  filter: Record<string, unknown>;
+  children?: ReactNode;
+}
+
+const CustomersTransactionsContext = createContext<CustomersTransactionsContextValue | undefined>(undefined);
 
 /**
  * Customers transactions provider.
  */
-function CustomersTransactionsProvider({ filter, ...props }) {
+function CustomersTransactionsProvider({ filter, ...props }: CustomersTransactionsProviderProps) {
   const query = useMemo(() => transformFilterFormToQuery(filter), [filter]);
 
   // Fetches the customers transactions.
@@ -18,9 +34,9 @@ function CustomersTransactionsProvider({ filter, ...props }) {
     isFetching: isCustomersTransactionsFetching,
     isLoading: isCustomersTransactionsLoading,
     refetch: CustomersTransactionsRefetch,
-  } = useCustomersTransactionsReport(query, { keepPreviousData: true });
+  } = useCustomersTransactionsReport(query, { placeholderData: (prev) => prev });
 
-  const provider = {
+  const provider: CustomersTransactionsContextValue = {
     customersTransactions,
     isCustomersTransactionsFetching,
     isCustomersTransactionsLoading,
@@ -37,7 +53,11 @@ function CustomersTransactionsProvider({ filter, ...props }) {
     </FinancialReportPage>
   );
 }
-const useCustomersTransactionsContext = () =>
-  useContext(CustomersTransactionsContext);
+
+const useCustomersTransactionsContext = (): CustomersTransactionsContextValue => {
+  const ctx = useContext(CustomersTransactionsContext);
+  if (!ctx) throw new Error('useCustomersTransactionsContext must be used within a CustomersTransactionsProvider');
+  return ctx;
+};
 
 export { CustomersTransactionsProvider, useCustomersTransactionsContext };

@@ -1,24 +1,38 @@
-// @ts-nocheck
 import React from 'react';
 
 import moment from 'moment';
 import styled from 'styled-components';
-import { Formik, Form } from 'formik';
+import { Formik, Form, FormikHelpers } from 'formik';
 import { Tabs, Tab, Button, Intent } from '@blueprintjs/core';
 
 import { FormattedMessage as T } from '@/components';
 import { compose, transformToForm } from '@/utils';
 
-import FinancialStatementHeader from '../FinancialStatementHeader';
-import VendorsBalanceSummaryHeaderGeneral from './VendorsBalanceSummaryHeaderGeneral';
-import { withVendorsBalanceSummary } from './withVendorsBalanceSummary';
-import { withVendorsBalanceSummaryActions } from './withVendorsBalanceSummaryActions';
+import { FinancialStatementHeader } from '../FinancialStatementHeader';
+import { VendorsBalanceSummaryHeaderGeneral } from './VendorsBalanceSummaryHeaderGeneral';
+import { withVendorsBalanceSummary, WithVendorsBalanceSummaryProps } from './withVendorsBalanceSummary';
+import { withVendorsBalanceSummaryActions, WithVendorsBalanceSummaryActionsProps } from './withVendorsBalanceSummaryActions';
 import { getVendorsBalanceQuerySchema } from './utils';
+
+interface VendorsBalanceSummaryHeaderOwnProps {
+  pageFilter: Record<string, unknown>;
+  onSubmitFilter: (values: Record<string, unknown>) => void;
+}
+
+interface FormValues {
+  asDate: Date;
+  vendorsIds: string[];
+  [key: string]: unknown;
+}
+
+type VendorsBalanceSummaryHeaderProps = VendorsBalanceSummaryHeaderOwnProps &
+  WithVendorsBalanceSummaryProps &
+  WithVendorsBalanceSummaryActionsProps;
 
 /**
  * Vendors balance summary drawer header.
  */
-function VendorsBalanceSummaryHeader({
+function VendorsBalanceSummaryHeaderInner({
   // #ownProps
   pageFilter,
   onSubmitFilter,
@@ -28,12 +42,12 @@ function VendorsBalanceSummaryHeader({
 
   //#withVendorsBalanceSummaryActions
   toggleVendorSummaryFilterDrawer,
-}) {
+}: VendorsBalanceSummaryHeaderProps) {
   // Validation schema.
   const validationSchema = getVendorsBalanceQuerySchema();
 
   // filter form initial values.
-  const defaultValues = {
+  const defaultValues: FormValues = {
     ...pageFilter,
     asDate: moment().toDate(),
     vendorsIds: [],
@@ -42,15 +56,14 @@ function VendorsBalanceSummaryHeader({
   const initialValues = transformToForm(
     {
       ...defaultValues,
-
       ...pageFilter,
-      asDate: moment(pageFilter.asDate).toDate(),
+      asDate: moment(pageFilter.asDate as string).toDate(),
     },
     defaultValues,
   );
 
   // handle form submit.
-  const handleSubmit = (values, { setSubmitting }) => {
+  const handleSubmit = (values: FormValues, { setSubmitting }: FormikHelpers<FormValues>) => {
     onSubmitFilter(values);
     toggleVendorSummaryFilterDrawer(false);
     setSubmitting(false);
@@ -63,7 +76,7 @@ function VendorsBalanceSummaryHeader({
 
   return (
     <VendorBalanceDrawerHeader
-      isOpen={VendorsSummaryFilterDrawer}
+      isOpen={!!VendorsSummaryFilterDrawer}
       drawerProps={{ onClose: handleCancelClick }}
     >
       <Formik
@@ -94,12 +107,12 @@ function VendorsBalanceSummaryHeader({
   );
 }
 
-export default compose(
+export const VendorsBalanceSummaryHeader = compose(
   withVendorsBalanceSummary(({ VendorsSummaryFilterDrawer }) => ({
     VendorsSummaryFilterDrawer,
   })),
   withVendorsBalanceSummaryActions,
-)(VendorsBalanceSummaryHeader);
+)(VendorsBalanceSummaryHeaderInner);
 
 const VendorBalanceDrawerHeader = styled(FinancialStatementHeader)`
   .bp4-drawer {

@@ -1,4 +1,3 @@
-// @ts-nocheck
 import React from 'react';
 import { Position } from '@blueprintjs/core';
 import {
@@ -12,14 +11,11 @@ import {
   FInputGroup,
 } from '@/components';
 import { useAPAgingSummaryGeneralContext } from './APAgingSummaryGeneralProvider';
-import FinancialStatementsFilter from '../FinancialStatementsFilter';
+import { FinancialStatementsFilter } from '../FinancialStatementsFilter';
 import { filterVendorsOptions } from './constants';
 import { momentFormatter } from '@/utils';
 
-/**
- * AP Aging Summary - Drawer Header - General panel - Content.
- */
-export default function APAgingSummaryHeaderGeneralContent() {
+export function APAgingSummaryHeaderGeneralContent() {
   const { vendors } = useAPAgingSummaryGeneralContext();
 
   return (

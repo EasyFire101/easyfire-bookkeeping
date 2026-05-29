@@ -1,23 +1,20 @@
-// @ts-nocheck
 import React from 'react';
 import * as R from 'ramda';
 
-import APAgingSummaryTable from './APAgingSummaryTable';
+import { APAgingSummaryTable } from './APAgingSummaryTable';
 import { FinancialReportBody } from '../FinancialReportPage';
 import { FinancialSheetSkeleton } from '@/components/FinancialSheet';
 import { useAPAgingSummaryContext } from './APAgingSummaryProvider';
 
-import { withCurrentOrganization } from '@/containers/Organization/withCurrentOrganization';
+import { withCurrentOrganization, WithCurrentOrganizationProps } from '@/containers/Organization/withCurrentOrganization';
 
+interface APAgingSummaryBodyProps {
+  organizationName: WithCurrentOrganizationProps['organization'];
+}
 
-/**
- * AP aging summary body.
- * @returns {JSX.Element}
- */
 function APAgingSummaryBodyJSX({
-  // #withCurrentOrganization
   organizationName,
-}) {
+}: APAgingSummaryBodyProps) {
   const { isAPAgingLoading } = useAPAgingSummaryContext();
 
   return (

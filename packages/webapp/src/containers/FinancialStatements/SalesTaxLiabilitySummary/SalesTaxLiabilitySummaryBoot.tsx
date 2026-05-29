@@ -1,18 +1,32 @@
-// @ts-nocheck
-import React, { createContext, useContext } from 'react';
-import FinancialReportPage from '../FinancialReportPage';
+import React, { createContext, useContext, useMemo, ReactNode } from 'react';
+import { FinancialReportPage } from '../FinancialReportPage';
 import { transformFilterFormToQuery } from '../common';
 import { useSalesTaxLiabilitySummary } from '@/hooks/query';
 
-const SalesTaxLiabilitySummaryContext = createContext();
+type UseSalesTaxLiabilitySummaryResult = ReturnType<typeof useSalesTaxLiabilitySummary>;
+
+interface SalesTaxLiabilitySummaryContextValue {
+  salesTaxLiabilitySummary: UseSalesTaxLiabilitySummaryResult['data'];
+  refetchSalesTaxLiabilitySummary: UseSalesTaxLiabilitySummaryResult['refetch'];
+  isFetching: boolean;
+  isLoading: boolean;
+  query: Record<string, unknown>;
+  filter: Record<string, unknown>;
+}
+
+interface SalesTaxLiabilitySummaryBootProps {
+  filter: Record<string, unknown>;
+  children?: ReactNode;
+}
+
+const SalesTaxLiabilitySummaryContext = createContext<SalesTaxLiabilitySummaryContextValue | undefined>(undefined);
 
 /**
  * Sales tax liability summary boot.
- * @returns {JSX.Element}
  */
-function SalesTaxLiabilitySummaryBoot({ filter, ...props }) {
+function SalesTaxLiabilitySummaryBoot({ filter, ...props }: SalesTaxLiabilitySummaryBootProps) {
   // Transformes the given filter to query.
-  const query = React.useMemo(
+  const query = useMemo(
     () => transformFilterFormToQuery(filter),
     [filter],
   );
@@ -22,9 +36,9 @@ function SalesTaxLiabilitySummaryBoot({ filter, ...props }) {
     isFetching,
     isLoading,
     refetch,
-  } = useSalesTaxLiabilitySummary(query, { keepPreviousData: true });
+  } = useSalesTaxLiabilitySummary(query, { placeholderData: (prev) => prev });
 
-  const provider = {
+  const provider: SalesTaxLiabilitySummaryContextValue = {
     salesTaxLiabilitySummary,
     refetchSalesTaxLiabilitySummary: refetch,
     isFetching,
@@ -40,7 +54,10 @@ function SalesTaxLiabilitySummaryBoot({ filter, ...props }) {
   );
 }
 
-const useSalesTaxLiabilitySummaryContext = () =>
-  useContext(SalesTaxLiabilitySummaryContext);
+const useSalesTaxLiabilitySummaryContext = (): SalesTaxLiabilitySummaryContextValue => {
+  const ctx = useContext(SalesTaxLiabilitySummaryContext);
+  if (!ctx) throw new Error('useSalesTaxLiabilitySummaryContext must be used within a SalesTaxLiabilitySummaryBoot');
+  return ctx;
+};
 
 export { SalesTaxLiabilitySummaryBoot, useSalesTaxLiabilitySummaryContext };

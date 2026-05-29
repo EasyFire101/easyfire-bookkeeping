@@ -1,68 +1,70 @@
-// @ts-nocheck
 import React from 'react';
 import moment from 'moment';
 import styled from 'styled-components';
 import { Formik, Form } from 'formik';
+import type { FormikHelpers } from 'formik';
 import * as R from 'ramda';
 import { Tabs, Tab, Button, Intent } from '@blueprintjs/core';
 import { FormattedMessage as T } from '@/components';
 
-import FinancialStatementHeader from '../FinancialStatementHeader';
-import ProfitLossSheetHeaderGeneralPane from './ProfitLossSheetHeaderGeneralPane';
-import ProfitLossSheetHeaderComparisonPanel from './ProfitLossSheetHeaderComparisonPanel';
-import ProfitLossSheetHeaderDimensionsPanel from './ProfitLossSheetHeaderDimensionsPanel';
+import { FinancialStatementHeader } from '../FinancialStatementHeader';
+import { ProfitLossSheetHeaderGeneralPane } from './ProfitLossSheetHeaderGeneralPane';
+import { ProfitLossSheetHeaderComparisonPanel } from './ProfitLossSheetHeaderComparisonPanel';
+import { ProfitLossSheetHeaderDimensionsPanel } from './ProfitLossSheetHeaderDimensionsPanel';
 
-import { withProfitLoss } from './withProfitLoss';
-import { withProfitLossActions } from './withProfitLossActions';
+import { withProfitLoss, WithProfitLossProps } from './withProfitLoss';
+import { withProfitLossActions, WithProfitLossActionsProps } from './withProfitLossActions';
 
-import { useProfitLossHeaderValidationSchema } from './utils';
+import { useProfitLossHeaderValidationSchema, getDefaultProfitLossQuery } from './utils';
 import { useFeatureCan } from '@/hooks/state';
 import { Features } from '@/constants';
 
-/**
- * Profit/loss header.
- * @returns {React.JSX}
- */
-function ProfitLossHeader({
-  // #ownProps
+type ProfitLossFormValues = ReturnType<typeof getDefaultProfitLossQuery>;
+
+interface ProfitLossSheetHeaderOwnProps {
+  pageFilter: ProfitLossFormValues;
+  onSubmitFilter: (values: ProfitLossFormValues) => void;
+}
+
+type ProfitLossSheetHeaderProps = ProfitLossSheetHeaderOwnProps &
+  Pick<WithProfitLossProps, 'profitLossDrawerFilter'> &
+  Pick<WithProfitLossActionsProps, 'toggleProfitLossFilterDrawer'>;
+
+function ProfitLossSheetHeaderInner({
   pageFilter,
   onSubmitFilter,
-
-  // #withProfitLoss
   profitLossDrawerFilter,
-
-  // #withProfitLossActions
   toggleProfitLossFilterDrawer: toggleFilterDrawer,
-}) {
-  // Validation schema.
+}: ProfitLossSheetHeaderProps) {
   const validationSchema = useProfitLossHeaderValidationSchema();
 
-  // Initial values.
   const initialValues = {
     ...pageFilter,
     fromDate: moment(pageFilter.fromDate).toDate(),
     toDate: moment(pageFilter.toDate).toDate(),
   };
-  // Handle form submit.
-  const handleSubmit = (values, actions) => {
+
+  const handleSubmit = (
+    values: ProfitLossFormValues,
+    _actions: FormikHelpers<ProfitLossFormValues>,
+  ) => {
     onSubmitFilter(values);
     toggleFilterDrawer(false);
   };
-  // Handles the cancel button click.
+
   const handleCancelClick = () => {
     toggleFilterDrawer(false);
   };
-  // Handles the drawer close action.
+
   const handleDrawerClose = () => {
     toggleFilterDrawer(false);
   };
 
   const { featureCan } = useFeatureCan();
-
   const isBranchesFeatureCan = featureCan(Features.Branches);
 
   return (
-    <ProfitLossSheetHeader
+    <ProfitLossSheetHeaderStyled
       isOpen={profitLossDrawerFilter}
       drawerProps={{ onClose: handleDrawerClose }}
     >
@@ -92,7 +94,7 @@ function ProfitLossHeader({
             )}
           </Tabs>
 
-          <div class="financial-header-drawer__footer">
+          <div className="financial-header-drawer__footer">
             <Button className={'mr1'} intent={Intent.PRIMARY} type={'submit'}>
               <T id={'calculate_report'} />
             </Button>
@@ -102,18 +104,18 @@ function ProfitLossHeader({
           </div>
         </Form>
       </Formik>
-    </ProfitLossSheetHeader>
+    </ProfitLossSheetHeaderStyled>
   );
 }
 
-export default R.compose(
+export const ProfitLossSheetHeader = R.compose(
   withProfitLoss(({ profitLossDrawerFilter }) => ({
     profitLossDrawerFilter,
   })),
   withProfitLossActions,
-)(ProfitLossHeader);
+)(ProfitLossSheetHeaderInner);
 
-const ProfitLossSheetHeader = styled(FinancialStatementHeader)`
+const ProfitLossSheetHeaderStyled = styled(FinancialStatementHeader)`
   .bp4-drawer {
     max-height: 520px;
   }

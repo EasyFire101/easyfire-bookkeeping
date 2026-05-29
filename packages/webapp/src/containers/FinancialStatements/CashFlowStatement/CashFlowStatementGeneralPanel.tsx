@@ -1,15 +1,14 @@
-// @ts-nocheck
 import { Row, Col } from '@/components';
-import FinancialStatementDateRange from '../FinancialStatementDateRange';
-import FinancialStatementsFilter from '../FinancialStatementsFilter';
-import RadiosAccountingBasis from '../RadiosAccountingBasis';
-import SelectDisplayColumnsBy from '../SelectDisplayColumnsBy';
+import { FinancialStatementDateRange } from '../FinancialStatementDateRange';
+import { FinancialStatementsFilter } from '../FinancialStatementsFilter';
+import { RadiosAccountingBasis } from '../RadiosAccountingBasis';
+import { SelectDisplayColumnsBy } from '../SelectDisplayColumnsBy';
 
 /**
  * Cash flow statement header - General panel.
  */
 
-export default function CashFlowStatementHeaderGeneralPanel() {
+export function CashFlowStatementHeaderGeneralPanel() {
   return (
     <div>
       <FinancialStatementDateRange />

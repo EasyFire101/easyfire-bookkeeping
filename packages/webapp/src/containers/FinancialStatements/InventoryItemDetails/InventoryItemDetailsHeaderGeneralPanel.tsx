@@ -1,4 +1,3 @@
-// @ts-nocheck
 import React from 'react';
 import {
   ItemsMultiSelect,
@@ -7,7 +6,7 @@ import {
   FormattedMessage as T,
   FFormGroup,
 } from '@/components';
-import FinancialStatementDateRange from '../FinancialStatementDateRange';
+import { FinancialStatementDateRange } from '../FinancialStatementDateRange';
 
 import {
   InventoryItemDetailsHeaderGeneralProvider,
@@ -17,7 +16,7 @@ import {
 /**
  * Inventory item details header - General panel.
  */
-export default function InventoryItemDetailsHeaderGeneralPanel() {
+export function InventoryItemDetailsHeaderGeneralPanel() {
   return (
     <InventoryItemDetailsHeaderGeneralProvider>
       <InventoryItemDetailsHeaderGeneralPanelContent />

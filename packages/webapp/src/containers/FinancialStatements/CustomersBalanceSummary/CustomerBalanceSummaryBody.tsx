@@ -1,21 +1,21 @@
-// @ts-nocheck
 import React from 'react';
 import * as R from 'ramda';
-
 import { FinancialReportBody } from '../FinancialReportPage';
 import { FinancialSheetSkeleton } from '@/components/FinancialSheet';
 import { useCustomersBalanceSummaryContext } from './CustomersBalanceSummaryProvider';
-import CustomersBalanceSummaryTable from './CustomersBalanceSummaryTable';
-import { withCurrentOrganization } from '@/containers/Organization/withCurrentOrganization';
+import { CustomersBalanceSummaryTable } from './CustomersBalanceSummaryTable';
+import {
+  withCurrentOrganization,
+  WithCurrentOrganizationProps,
+} from '@/containers/Organization/withCurrentOrganization';
 
-/**
- * Customer balance summary body.
- * @returns {JSX.Element}
- */
+interface CustomerBalanceSummaryBodyProps {
+  organizationName: WithCurrentOrganizationProps['organization'];
+}
+
 function CustomerBalanceSummaryBodyJSX({
-  // #withPreferences
   organizationName,
-}) {
+}: CustomerBalanceSummaryBodyProps) {
   const { isCustomersBalanceLoading } = useCustomersBalanceSummaryContext();
 
   return (

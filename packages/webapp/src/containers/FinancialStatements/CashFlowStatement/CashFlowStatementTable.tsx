@@ -1,4 +1,3 @@
-// @ts-nocheck
 import React, { useMemo } from 'react';
 import intl from 'react-intl-universal';
 import styled from 'styled-components';
@@ -10,17 +9,14 @@ import { defaultExpanderReducer, tableRowTypesToClassnames } from '@/utils';
 import { useCashFlowStatementColumns } from './components';
 import { useCashFlowStatementContext } from './CashFlowStatementProvider';
 
-/**
- * Cash flow statement table.
- */
-export default function CashFlowStatementTable({
-  // #ownProps
-  companyName,
-}) {
-  const {
-    cashFlowStatement: { tableRows, meta },
-    query,
-  } = useCashFlowStatementContext();
+interface CashFlowStatementTableProps {
+  companyName: string;
+}
+
+export function CashFlowStatementTable({ companyName }: CashFlowStatementTableProps) {
+  const { cashFlowStatement, query } = useCashFlowStatementContext();
+  const tableRows = cashFlowStatement?.tableRows ?? [];
+  const meta = cashFlowStatement?.meta;
 
   const columns = useCashFlowStatementColumns();
 

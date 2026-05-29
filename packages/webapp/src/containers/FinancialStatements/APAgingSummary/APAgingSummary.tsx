@@ -1,51 +1,47 @@
-// @ts-nocheck
 import React, { useCallback, useEffect } from 'react';
 import moment from 'moment';
 
 import { useAPAgingSummaryQuery } from './common';
 import { FinancialStatement, DashboardPageContent } from '@/components';
 
-import APAgingSummaryHeader from './APAgingSummaryHeader';
-import APAgingSummaryActionsBar from './APAgingSummaryActionsBar';
+import { APAgingSummaryHeader } from './APAgingSummaryHeader';
+import { APAgingSummaryActionsBar } from './APAgingSummaryActionsBar';
 
 import { APAgingSummaryBody } from './APAgingSummaryBody';
 import { APAgingSummaryProvider } from './APAgingSummaryProvider';
 import { APAgingSummarySheetLoadingBar } from './components';
 
-import { withAPAgingSummaryActions } from './withAPAgingSummaryActions';
+import { withAPAgingSummaryActions, WithAPAgingSummaryActionsProps } from './withAPAgingSummaryActions';
 
 import { compose } from '@/utils';
 import { APAgingSummaryPdfDialog } from './dialogs/APAgingSummaryPdfDialog';
 import { DialogsName } from '@/constants/dialogs';
 
-/**
- * A/P aging summary report.
- */
-function APAgingSummary({
-  // #withSettings
-  organizationName,
+type APAgingSummaryProps = Pick<
+  WithAPAgingSummaryActionsProps,
+  'toggleAPAgingSummaryFilterDrawer'
+>;
 
-  // #withAPAgingSummaryActions
+function APAgingSummaryInner({
   toggleAPAgingSummaryFilterDrawer: toggleDisplayFilterDrawer,
-}) {
+}: APAgingSummaryProps) {
   const { query, setLocationQuery } = useAPAgingSummaryQuery();
 
-  // Handle filter submit.
   const handleFilterSubmit = useCallback(
-    (filter) => {
+    (filter: Record<string, unknown>) => {
       const _filter = {
         ...filter,
-        asDate: moment(filter.asDate).format('YYYY-MM-DD'),
+        asDate: moment(filter.asDate as string).format('YYYY-MM-DD'),
       };
       setLocationQuery(_filter);
     },
     [setLocationQuery],
   );
-  // Handle number format submit.
-  const handleNumberFormatSubmit = (numberFormat) => {
-    setLocationQuery({ ...filter, numberFormat });
+
+  const handleNumberFormatSubmit = (numberFormat: Record<string, unknown>) => {
+    setLocationQuery({ ...query, numberFormat });
   };
-  // Hide the report filter drawer once the page unmount.
+
   useEffect(
     () => () => {
       toggleDisplayFilterDrawer(false);
@@ -67,7 +63,7 @@ function APAgingSummary({
             pageFilter={query}
             onSubmitFilter={handleFilterSubmit}
           />
-          <APAgingSummaryBody organizationName={organizationName} />
+          <APAgingSummaryBody />
         </FinancialStatement>
       </DashboardPageContent>
 
@@ -78,4 +74,4 @@ function APAgingSummary({
   );
 }
 
-export default compose(withAPAgingSummaryActions)(APAgingSummary);
+export const APAgingSummary = compose(withAPAgingSummaryActions)(APAgingSummaryInner);

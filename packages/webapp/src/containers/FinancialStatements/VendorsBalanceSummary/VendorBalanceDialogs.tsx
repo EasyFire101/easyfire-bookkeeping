@@ -1,3 +1,4 @@
+import React from 'react';
 import { DialogsName } from '@/constants/dialogs';
 import { VendorBalancePdfDialog } from './dialogs/VendorBalancePdfDialog';
 

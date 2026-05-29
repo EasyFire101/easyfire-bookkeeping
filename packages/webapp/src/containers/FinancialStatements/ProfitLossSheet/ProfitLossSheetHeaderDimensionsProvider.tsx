@@ -1,4 +1,3 @@
-// @ts-nocheck
 import React from 'react';
 
 import { Features } from '@/constants';
@@ -6,25 +5,35 @@ import { useBranches } from '@/hooks/query';
 import { useFeatureCan } from '@/hooks/state';
 import { FinancialHeaderLoadingSkeleton } from '../FinancialHeaderLoadingSkeleton';
 
-const ProfitLossSheetHeaderDimensionsPanelContext = React.createContext();
+type UseBranchesResult = ReturnType<typeof useBranches>;
 
-/**
- * profit loss sheet header provider.
- * @returns
- */
-function ProfitLossSheetHeaderDimensionsProvider({ query, ...props }) {
-  // Features guard.
+type ProfitLossSheetHeaderDimensionsPanelContextValue = {
+  branches: UseBranchesResult['data'];
+  isBranchesLoading: boolean;
+};
+
+type ProfitLossSheetHeaderDimensionsProviderProps = {
+  query?: Record<string, unknown>;
+  children?: React.ReactNode;
+};
+
+const ProfitLossSheetHeaderDimensionsPanelContext = React.createContext<
+  ProfitLossSheetHeaderDimensionsPanelContextValue | undefined
+>(undefined);
+
+function ProfitLossSheetHeaderDimensionsProvider({
+  query,
+  ...props
+}: ProfitLossSheetHeaderDimensionsProviderProps) {
   const { featureCan } = useFeatureCan();
   const isBranchFeatureCan = featureCan(Features.Branches);
 
-  // Fetches the branches list.
   const { isLoading: isBranchesLoading, data: branches } = useBranches(query, {
     enabled: isBranchFeatureCan,
-    keepPreviousData: true,
+    placeholderData: (prev) => prev,
   });
 
-  // Provider
-  const provider = {
+  const provider: ProfitLossSheetHeaderDimensionsPanelContextValue = {
     branches,
     isBranchesLoading,
   };
@@ -39,8 +48,16 @@ function ProfitLossSheetHeaderDimensionsProvider({ query, ...props }) {
   );
 }
 
-const useProfitLossSheetPanelContext = () =>
-  React.useContext(ProfitLossSheetHeaderDimensionsPanelContext);
+const useProfitLossSheetPanelContext =
+  (): ProfitLossSheetHeaderDimensionsPanelContextValue => {
+    const ctx = React.useContext(ProfitLossSheetHeaderDimensionsPanelContext);
+    if (!ctx) {
+      throw new Error(
+        'useProfitLossSheetPanelContext must be used within ProfitLossSheetHeaderDimensionsProvider',
+      );
+    }
+    return ctx;
+  };
 
 export {
   ProfitLossSheetHeaderDimensionsProvider,

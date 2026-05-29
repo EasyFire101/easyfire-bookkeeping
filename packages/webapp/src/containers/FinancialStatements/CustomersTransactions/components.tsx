@@ -1,11 +1,10 @@
-// @ts-nocheck
 import React, { useRef } from 'react';
 import intl from 'react-intl-universal';
 import { AppToaster, If, Stack } from '@/components';
 import { Align } from '@/constants';
 import { getColumnWidth } from '@/utils';
 import { useCustomersTransactionsContext } from './CustomersTransactionsProvider';
-import FinancialLoadingBar from '../FinancialLoadingBar';
+import { FinancialLoadingBar } from '../FinancialLoadingBar';
 import {
   Classes,
   Intent,
@@ -24,9 +23,8 @@ import classNames from 'classnames';
  * Retrieve customers transactions columns.
  */
 export const useCustomersTransactionsColumns = () => {
-  const {
-    customersTransactions: { tableRows },
-  } = useCustomersTransactionsContext();
+  const { customersTransactions } = useCustomersTransactionsContext();
+  const tableRows = (customersTransactions as any)?.tableRows;
 
   return React.useMemo(
     () => [
@@ -110,10 +108,9 @@ export function CustomersTransactionsLoadingBar() {
 
 /**
  * Customers transactions export menu.
- * @returns {JSX.Element}
  */
 export function CustomersTransactionsExportMenu() {
-  const toastKey = useRef(null);
+  const toastKey = useRef<string | null>(null);
   const commonToastConfig = {
     isCloseButtonShown: true,
     timeout: 2000,

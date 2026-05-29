@@ -1,4 +1,3 @@
-// @ts-nocheck
 import * as Yup from 'yup';
 import intl from 'react-intl-universal';
 import moment from 'moment';
@@ -25,13 +24,13 @@ export const getVendorTransactionsQuerySchema = () => {
 export const getVendorsTransactionsDefaultQuery = () => ({
   fromDate: moment().startOf('month').format('YYYY-MM-DD'),
   toDate: moment().format('YYYY-MM-DD'),
-  vendorsIds: [],
+  vendorsIds: [] as string[],
 });
 
 /**
  * Parses the query of vendors transactions.
  */
-const parseVendorsTransactionsQuery = (query) => {
+const parseVendorsTransactionsQuery = (query: Record<string, unknown>) => {
   const defaultQuery = getVendorsTransactionsDefaultQuery();
   const transformed = {
     ...defaultQuery,
@@ -53,5 +52,5 @@ export const useVendorsTransactionsQuery = () => {
     () => parseVendorsTransactionsQuery(locationQuery),
     [locationQuery],
   );
-  return [query, setLocationQuery];
+  return [query, setLocationQuery] as const;
 };

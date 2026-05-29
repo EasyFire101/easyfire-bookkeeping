@@ -1,4 +1,3 @@
-// @ts-nocheck
 import React, { useCallback, useEffect } from 'react';
 import moment from 'moment';
 
@@ -6,41 +5,43 @@ import { FinancialStatement, DashboardPageContent } from '@/components';
 import { TrialBalanceSheetBody } from './TrialBalanceSheetBody';
 import { TrialBalanceSheetProvider } from './TrialBalanceProvider';
 import { useTrialBalanceSheetQuery } from './utils';
-import TrialBalanceActionsBar from './TrialBalanceActionsBar';
-import TrialBalanceSheetHeader from './TrialBalanceSheetHeader';
+import { TrialBalanceActionsBar } from './TrialBalanceActionsBar';
+import { TrialBalanceSheetHeader } from './TrialBalanceSheetHeader';
 
 import {
   TrialBalanceSheetAlerts,
   TrialBalanceSheetLoadingBar,
 } from './components';
 
-import { withTrialBalanceActions } from './withTrialBalanceActions';
+import { withTrialBalanceActions, WithTrialBalanceActionsProps } from './withTrialBalanceActions';
 import { compose } from '@/utils';
 import { TrialBalanceSheetDialogs } from './TrialBalanceSheetDialogs';
+
+type TrialBalanceSheetProps = Pick<WithTrialBalanceActionsProps, 'toggleTrialBalanceFilterDrawer'>;
 
 /**
  * Trial balance sheet.
  */
-function TrialBalanceSheet({
+function TrialBalanceSheetInner({
   // #withTrialBalanceSheetActions
   toggleTrialBalanceFilterDrawer: toggleFilterDrawer,
-}) {
+}: TrialBalanceSheetProps) {
   const { query, setLocationQuery } = useTrialBalanceSheetQuery();
 
   // Handle filter form submit.
   const handleFilterSubmit = useCallback(
-    (filter) => {
+    (filter: Record<string, unknown>) => {
       const parsedFilter = {
         ...filter,
-        fromDate: moment(filter.fromDate).format('YYYY-MM-DD'),
-        toDate: moment(filter.toDate).format('YYYY-MM-DD'),
+        fromDate: moment(filter.fromDate as Date).format('YYYY-MM-DD'),
+        toDate: moment(filter.toDate as Date).format('YYYY-MM-DD'),
       };
       setLocationQuery(parsedFilter);
     },
     [setLocationQuery],
   );
-  // Handle numebr format form submit.
-  const handleNumberFormatSubmit = (numberFormat) => {
+  // Handle number format form submit.
+  const handleNumberFormatSubmit = (numberFormat: Record<string, unknown>) => {
     setLocationQuery({
       ...query,
       numberFormat,
@@ -78,4 +79,4 @@ function TrialBalanceSheet({
   );
 }
 
-export default compose(withTrialBalanceActions)(TrialBalanceSheet);
+export const TrialBalanceSheet = compose(withTrialBalanceActions)(TrialBalanceSheetInner);

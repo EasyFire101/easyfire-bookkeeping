@@ -1,4 +1,3 @@
-// @ts-nocheck
 import { useRef } from 'react';
 import classNames from 'classnames';
 import {
@@ -10,13 +9,12 @@ import {
   Text,
 } from '@blueprintjs/core';
 import { useSalesTaxLiabilitySummaryContext } from './SalesTaxLiabilitySummaryBoot';
-import FinancialLoadingBar from '../FinancialLoadingBar';
+import { FinancialLoadingBar } from '../FinancialLoadingBar';
 import { AppToaster, Stack } from '@/components';
 import {
   useSalesTaxLiabilitySummaryCsvExport,
   useSalesTaxLiabilitySummaryXlsxExport,
 } from '@/hooks/query';
-import { useSalesByItemsContext } from '../SalesByItems/SalesByItemProvider';
 
 /**
  * Sales tax liability summary loading bar.
@@ -31,11 +29,10 @@ export function SalesTaxLiabilitySummaryLoadingBar() {
 }
 
 /**
- *
- * @returns {JSX.Element}
+ * Sales tax liability export menu.
  */
 export function SalesTaxLiabilityExportMenu() {
-  const toastKey = useRef(null);
+  const toastKey = useRef<string | null>(null);
   const commonToastConfig = {
     isCloseButtonShown: true,
     timeout: 2000,

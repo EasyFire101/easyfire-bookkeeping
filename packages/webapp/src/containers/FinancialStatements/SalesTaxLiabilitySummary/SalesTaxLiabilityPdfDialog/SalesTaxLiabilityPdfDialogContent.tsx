@@ -1,4 +1,3 @@
-// @ts-nocheck
 import {
   DialogContent,
   PdfDocumentPreview,
@@ -8,7 +7,7 @@ import { AnchorButton } from '@blueprintjs/core';
 import { useSalesTaxLiabilitySummaryPdf } from '@/hooks/query';
 import { useSalesTaxLiabilitySummaryContext } from '../SalesTaxLiabilitySummaryBoot';
 
-export default function SalesTaxLiabilityPdfDialogContent() {
+export function SalesTaxLiabilityPdfDialogContent() {
   const { query } = useSalesTaxLiabilitySummaryContext();
   const { isLoading, pdfUrl } = useSalesTaxLiabilitySummaryPdf(query);
 

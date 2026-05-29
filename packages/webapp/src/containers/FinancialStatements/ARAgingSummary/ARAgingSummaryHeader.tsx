@@ -1,17 +1,17 @@
-// @ts-nocheck
 import React from 'react';
 import styled from 'styled-components';
 import moment from 'moment';
 import { FormattedMessage as T } from '@/components';
 import { Formik, Form } from 'formik';
+import type { FormikHelpers } from 'formik';
 import { Tabs, Tab, Button, Intent } from '@blueprintjs/core';
 
-import FinancialStatementHeader from '@/containers/FinancialStatements/FinancialStatementHeader';
-import ARAgingSummaryHeaderGeneral from './ARAgingSummaryHeaderGeneral';
-import ARAgingSummaryHeaderDimensions from './ARAgingSummaryHeaderDimensions';
+import { FinancialStatementHeader } from '@/containers/FinancialStatements/FinancialStatementHeader';
+import { ARAgingSummaryHeaderGeneral } from './ARAgingSummaryHeaderGeneral';
+import { ARAgingSummaryHeaderDimensions } from './ARAgingSummaryHeaderDimensions';
 
 import { withARAgingSummary } from './withARAgingSummary';
-import { withARAgingSummaryActions } from './withARAgingSummaryActions';
+import { withARAgingSummaryActions, WithARAgingSummaryActionsProps } from './withARAgingSummaryActions';
 
 import { compose, transformToForm } from '@/utils';
 import { useFeatureCan } from '@/hooks/state';
@@ -21,27 +21,26 @@ import {
   getDefaultARAgingSummaryQuery,
 } from './common';
 
-/**
- * AR Aging Summary Report - Drawer Header.
- */
-function ARAgingSummaryHeader({
-  // #ownProps
+type ARAgingSummaryFormValues = ReturnType<typeof getDefaultARAgingSummaryQuery>;
+
+interface ARAgingSummaryHeaderOwnProps {
+  pageFilter: ARAgingSummaryFormValues;
+  onSubmitFilter: (values: ARAgingSummaryFormValues) => void;
+}
+
+type ARAgingSummaryHeaderProps = ARAgingSummaryHeaderOwnProps &
+  { isFilterDrawerOpen: boolean } &
+  Pick<WithARAgingSummaryActionsProps, 'toggleARAgingSummaryFilterDrawer'>;
+
+function ARAgingSummaryHeaderInner({
   pageFilter,
   onSubmitFilter,
-
-  // #withReceivableAgingSummaryActions
   toggleARAgingSummaryFilterDrawer: toggleFilterDrawerDisplay,
-
-  // #withARAgingSummary
   isFilterDrawerOpen,
-}) {
-  // Validation schema.
+}: ARAgingSummaryHeaderProps) {
   const validationSchema = getARAgingSummaryQuerySchema();
-
-  // Initial values.
   const defaultValues = getDefaultARAgingSummaryQuery();
 
-  // Initial values.
   const initialValues = transformToForm(
     {
       ...defaultValues,
@@ -50,21 +49,24 @@ function ARAgingSummaryHeader({
     },
     defaultValues,
   );
-  // Handle form submit.
-  const handleSubmit = (values, { setSubmitting }) => {
+
+  const handleSubmit = (
+    values: ARAgingSummaryFormValues,
+    { setSubmitting }: FormikHelpers<ARAgingSummaryFormValues>,
+  ) => {
     onSubmitFilter(values);
     toggleFilterDrawerDisplay(false);
     setSubmitting(false);
   };
-  // Handle cancel button click.
+
   const handleCancelClick = () => {
     toggleFilterDrawerDisplay(false);
   };
-  // Handle the drawer close.
+
   const handleDrawerClose = () => {
     toggleFilterDrawerDisplay(false);
   };
-  // Detarmines the feature whether is enabled.
+
   const { featureCan } = useFeatureCan();
   const isBranchesFeatureCan = featureCan(Features.Branches);
 
@@ -94,7 +96,7 @@ function ARAgingSummaryHeader({
             )}
           </Tabs>
 
-          <div class="financial-header-drawer__footer">
+          <div className="financial-header-drawer__footer">
             <Button className={'mr1'} intent={Intent.PRIMARY} type={'submit'}>
               <T id={'calculate_report'} />
             </Button>
@@ -108,12 +110,12 @@ function ARAgingSummaryHeader({
   );
 }
 
-export default compose(
+export const ARAgingSummaryHeader = compose(
   withARAgingSummaryActions,
   withARAgingSummary(({ ARAgingSummaryFilterDrawer }) => ({
     isFilterDrawerOpen: ARAgingSummaryFilterDrawer,
   })),
-)(ARAgingSummaryHeader);
+)(ARAgingSummaryHeaderInner);
 
 const ARAgingDrawerHeader = styled(FinancialStatementHeader)`
   .bp4-drawer {

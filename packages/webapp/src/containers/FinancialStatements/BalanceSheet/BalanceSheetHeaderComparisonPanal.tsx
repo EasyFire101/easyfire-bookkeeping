@@ -1,4 +1,3 @@
-// @ts-nocheck
 import React from 'react';
 import styled from 'styled-components';
 import { useFormikContext } from 'formik';
@@ -136,7 +135,7 @@ function BalanceSheetHeaderComparisonPanalFields() {
 /**
  * Balance sheet header - Comparison panal.
  */
-export default function BalanceSheetHeaderComparisonPanal() {
+export function BalanceSheetHeaderComparisonPanal() {
   return (
     <BalanceSheetComparisonWrap>
       <BalanceSheetComparisonFieldsWrap>

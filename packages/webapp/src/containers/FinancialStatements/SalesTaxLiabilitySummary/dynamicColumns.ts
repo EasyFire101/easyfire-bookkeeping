@@ -1,12 +1,11 @@
-// @ts-nocheck
-import React from 'react';
 import * as R from 'ramda';
+
 import { getColumnWidth } from '@/utils';
 import { Align } from '@/constants';
 
-const getTableCellValueAccessor = (index) => `cells[${index}].value`;
+const getTableCellValueAccessor = (index: number) => `cells[${index}].value`;
 
-const taxNameAccessor = R.curry((data, column) => ({
+const taxNameAccessor = R.curry((data: any[], column: Record<string, any>) => ({
   key: column.key,
   Header: column.label,
   accessor: getTableCellValueAccessor(column.cell_index),
@@ -16,7 +15,7 @@ const taxNameAccessor = R.curry((data, column) => ({
   disableSortBy: true,
 }));
 
-const taxableAmountAccessor = R.curry((data, column) => {
+const taxableAmountAccessor = R.curry((data: any[], column: Record<string, any>) => {
   const accessor = getTableCellValueAccessor(column.cell_index);
 
   return {
@@ -30,7 +29,7 @@ const taxableAmountAccessor = R.curry((data, column) => {
   };
 });
 
-const dynamicColumnMapper = R.curry((data, column) => {
+const dynamicColumnMapper = R.curry((data: any[], column: Record<string, any>) => {
   const taxNameAccessorColumn = taxNameAccessor(data);
   const taxableAmountColumn = taxableAmountAccessor(data);
 
@@ -43,6 +42,6 @@ const dynamicColumnMapper = R.curry((data, column) => {
   )(column);
 });
 
-export const salesTaxLiabilitySummaryDynamicColumns = (columns, data) => {
+export const salesTaxLiabilitySummaryDynamicColumns = (columns: Record<string, any>[], data: any[]) => {
   return R.map(dynamicColumnMapper(data), columns);
 };

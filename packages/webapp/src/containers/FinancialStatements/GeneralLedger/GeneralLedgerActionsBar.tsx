@@ -1,4 +1,3 @@
-// @ts-nocheck
 import React from 'react';
 import {
   NavbarGroup,
@@ -7,7 +6,6 @@ import {
   NavbarDivider,
   Popover,
   PopoverInteractionKind,
-  Position,
 } from '@blueprintjs/core';
 import classNames from 'classnames';
 
@@ -17,14 +15,22 @@ import { useGeneralLedgerContext } from './GeneralLedgerProvider';
 import { compose } from '@/utils';
 
 import { withGeneralLedger } from './withGeneralLedger';
+import type { WithGeneralLedgerProps } from './withGeneralLedger';
 import { withGeneralLedgerActions } from './withGeneralLedgerActions';
+import type { WithGeneralLedgerActionsProps } from './withGeneralLedgerActions';
 import { withDialogActions } from '@/containers/Dialog/withDialogActions';
+import type { WithDialogActionsProps } from '@/containers/Dialog/withDialogActions';
 import { DialogsName } from '@/constants/dialogs';
+
+type GeneralLedgerActionsBarProps = {
+  isFilterDrawerOpen: boolean;
+} & Pick<WithGeneralLedgerActionsProps, 'toggleGeneralLedgerFilterDrawer'> &
+  WithDialogActionsProps;
 
 /**
  * General ledger - Actions bar.
  */
-function GeneralLedgerActionsBar({
+function GeneralLedgerActionsBarInner({
   // #withGeneralLedger
   isFilterDrawerOpen,
 
@@ -33,7 +39,7 @@ function GeneralLedgerActionsBar({
 
   // #withDialogActions
   openDialog,
-}) {
+}: GeneralLedgerActionsBarProps) {
   const { sheetRefresh } = useGeneralLedgerContext();
 
   // Handle customize button click.
@@ -100,10 +106,10 @@ function GeneralLedgerActionsBar({
   );
 }
 
-export default compose(
+export const GeneralLedgerActionsBar = compose(
   withGeneralLedger(({ generalLedgerFilterDrawer }) => ({
     isFilterDrawerOpen: generalLedgerFilterDrawer,
   })),
   withGeneralLedgerActions,
   withDialogActions,
-)(GeneralLedgerActionsBar);
+)(GeneralLedgerActionsBarInner);

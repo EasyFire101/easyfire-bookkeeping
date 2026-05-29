@@ -1,8 +1,6 @@
-// @ts-nocheck
 import React, { useMemo } from 'react';
-import { Button } from '@blueprintjs/core';
 
-import FinancialLoadingBar from '../FinancialLoadingBar';
+import { FinancialLoadingBar } from '../FinancialLoadingBar';
 
 import { dynamicColumns } from './dynamicColumns';
 import { FinancialComputeAlert } from '../FinancialReportPage';
@@ -45,9 +43,10 @@ export function ProjectProfitabilitySummaryLoadingBar() {
  */
 export function useProjectProfitabilitySummaryColumns() {
   // Balance sheet context.
-  const {
-    projectProfitabilitySummary: { columns, tableRows },
-  } = useProjectProfitabilitySummaryContext();
+  const { projectProfitabilitySummary } = useProjectProfitabilitySummaryContext();
+
+  const columns = (projectProfitabilitySummary as any)?.columns;
+  const tableRows = (projectProfitabilitySummary as any)?.tableRows;
 
   return useMemo(
     () => dynamicColumns(columns, tableRows),

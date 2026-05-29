@@ -1,4 +1,3 @@
-// @ts-nocheck
 import React, { lazy } from 'react';
 import classNames from 'classnames';
 
@@ -9,14 +8,20 @@ import { compose } from '@/utils';
 
 // Lazy loading the content.
 const InventoryValuationPdfDialogContent = lazy(
-  () => import('./InventoryValuationSheetPdfDialogContent'),
+  () => import('./InventoryValuationSheetPdfDialogContent').then(m => ({ default: m.InventoryValuationSheetPdfDialogContent })),
 );
+
+interface InventoryValuationSheetPdfDialogRootProps {
+  dialogName: string;
+  payload?: Record<string, unknown>;
+  isOpen: boolean;
+}
 
 /**
  * Inventory valuation sheet pdf preview dialog.
  * @returns {React.ReactNode}
  */
-function InventoryValuationSheetPdfDialogRoot({ dialogName, payload, isOpen }) {
+function InventoryValuationSheetPdfDialogRoot({ dialogName, isOpen }: InventoryValuationSheetPdfDialogRootProps) {
   return (
     <Dialog
       name={dialogName}

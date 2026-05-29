@@ -1,4 +1,3 @@
-// @ts-nocheck
 import { useRef } from 'react';
 import {
   Button,
@@ -18,7 +17,7 @@ import {
 } from '@/components';
 import { useProfitLossSheetContext } from './ProfitLossProvider';
 import { FinancialComputeAlert } from '../FinancialReportPage';
-import FinancialLoadingBar from '../FinancialLoadingBar';
+import { FinancialLoadingBar } from '../FinancialLoadingBar';
 import {
   useProfitLossSheetCsvExport,
   useProfitLossSheetXlsxExport,

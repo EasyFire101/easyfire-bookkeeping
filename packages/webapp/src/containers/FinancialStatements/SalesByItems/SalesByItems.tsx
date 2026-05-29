@@ -1,4 +1,3 @@
-// @ts-nocheck
 import React, { useEffect, useCallback } from 'react';
 import moment from 'moment';
 
@@ -6,31 +5,35 @@ import { SalesByItemsBody } from './SalesByItemsBody';
 import { SalesByItemProvider } from './SalesByItemProvider';
 import { SalesByItemsLoadingBar } from './components';
 import { FinancialStatement, DashboardPageContent } from '@/components';
-import SalesByItemsActionsBar from './SalesByItemsActionsBar';
-import SalesByItemsHeader from './SalesByItemsHeader';
+import { SalesByItemsActionsBar } from './SalesByItemsActionsBar';
+import { SalesByItemsHeader } from './SalesByItemsHeader';
 
-import { withSalesByItemsActions } from './withSalesByItemsActions';
+import { withSalesByItemsActions, WithSalesByItemsActionsProps } from './withSalesByItemsActions';
 
 import { useSalesByItemsQuery } from './utils';
 import { compose } from '@/utils';
 import { SalesByItemsDialogs } from './SalesByitemsDialogs';
 
+interface SalesByItemsProps {
+  toggleSalesByItemsFilterDrawer: WithSalesByItemsActionsProps['toggleSalesByItemsFilterDrawer'];
+}
+
 /**
  * Sales by items.
  */
-function SalesByItems({
-  // #withSellsByItemsActions
+function SalesByItemsInner({
+  // #withSalesByItemsActions
   toggleSalesByItemsFilterDrawer,
-}) {
+}: SalesByItemsProps) {
   const { query, setLocationQuery } = useSalesByItemsQuery();
 
   // Handle filter form submit.
   const handleFilterSubmit = useCallback(
-    (filter) => {
+    (filter: Record<string, unknown>) => {
       const parsedFilter = {
         ...filter,
-        fromDate: moment(filter.fromDate).format('YYYY-MM-DD'),
-        toDate: moment(filter.toDate).format('YYYY-MM-DD'),
+        fromDate: moment(filter.fromDate as string).format('YYYY-MM-DD'),
+        toDate: moment(filter.toDate as string).format('YYYY-MM-DD'),
       };
       setLocationQuery(parsedFilter);
     },
@@ -38,9 +41,9 @@ function SalesByItems({
   );
 
   // Handle number format form submit.
-  const handleNumberFormatSubmit = (numberFormat) => {
+  const handleNumberFormatSubmit = (numberFormat: Record<string, unknown>) => {
     setLocationQuery({
-      ...filter,
+      ...query,
       numberFormat,
     });
   };
@@ -53,7 +56,7 @@ function SalesByItems({
   return (
     <SalesByItemProvider query={query}>
       <SalesByItemsActionsBar
-        numberFormat={query.numberFormat}
+        numberFormat={query.numberFormat as Record<string, unknown>}
         onNumberFormatSubmit={handleNumberFormatSubmit}
       />
       <SalesByItemsLoadingBar />
@@ -73,4 +76,4 @@ function SalesByItems({
   );
 }
 
-export default compose(withSalesByItemsActions)(SalesByItems);
+export const SalesByItems = compose(withSalesByItemsActions)(SalesByItemsInner);

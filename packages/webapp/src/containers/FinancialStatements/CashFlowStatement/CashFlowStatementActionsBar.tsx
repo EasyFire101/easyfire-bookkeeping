@@ -1,4 +1,3 @@
-// @ts-nocheck
 import React from 'react';
 import {
   NavbarGroup,
@@ -15,48 +14,44 @@ import classNames from 'classnames';
 import NumberFormatDropdown from '@/components/NumberFormatDropdown';
 
 import { useCashFlowStatementContext } from './CashFlowStatementProvider';
-import { withCashFlowStatement } from './withCashFlowStatement';
-import { withCashFlowStatementActions } from './withCashFlowStatementActions';
+import { withCashFlowStatement, WithCashFlowStatementProps } from './withCashFlowStatement';
+import { withCashFlowStatementActions, WithCashFlowStatementActionsProps } from './withCashFlowStatementActions';
 
 import { compose, saveInvoke } from '@/utils';
 import { CashflowSheetExportMenu } from './components';
-import { withDialogActions } from '@/containers/Dialog/withDialogActions';
+import { withDialogActions, WithDialogActionsProps } from '@/containers/Dialog/withDialogActions';
 import { DialogsName } from '@/constants/dialogs';
 
-/**
- * Cash flow statement actions bar.
- */
-function CashFlowStatementActionsBar({
-  //#withCashFlowStatement
+interface CashFlowStatementActionsBarOwnProps {
+  numberFormat: Record<string, unknown>;
+  onNumberFormatSubmit: (values: Record<string, unknown>) => void;
+}
+
+type CashFlowStatementActionsBarProps = { isFilterDrawerOpen: boolean } &
+  Pick<WithCashFlowStatementActionsProps, 'toggleCashFlowStatementFilterDrawer'> &
+  WithDialogActionsProps &
+  CashFlowStatementActionsBarOwnProps;
+
+function CashFlowStatementActionsBarInner({
   isFilterDrawerOpen,
-
-  //#withCashStatementActions
   toggleCashFlowStatementFilterDrawer,
-
-  // #withDialogActions
   openDialog,
-
-  //#ownProps
   numberFormat,
   onNumberFormatSubmit,
-}) {
+}: CashFlowStatementActionsBarProps) {
   const { isCashFlowLoading, refetchCashFlow } = useCashFlowStatementContext();
 
-  // Handle filter toggle click.
   const handleFilterToggleClick = () => {
     toggleCashFlowStatementFilterDrawer();
   };
 
-  // Handle recalculate report button.
   const handleRecalculateReport = () => {
     refetchCashFlow();
   };
 
-  // handle number format form submit.
-  const handleNumberFormatSubmit = (values) =>
+  const handleNumberFormatSubmit = (values: Record<string, unknown>) =>
     saveInvoke(onNumberFormatSubmit, values);
 
-  // Handle print button click.
   const handlePrintBtnClick = () => {
     openDialog(DialogsName.CashflowSheetPdfPreview);
   };
@@ -132,10 +127,10 @@ function CashFlowStatementActionsBar({
   );
 }
 
-export default compose(
+export const CashFlowStatementActionsBar = compose(
   withCashFlowStatement(({ cashFlowStatementDrawerFilter }) => ({
     isFilterDrawerOpen: cashFlowStatementDrawerFilter,
   })),
   withCashFlowStatementActions,
   withDialogActions,
-)(CashFlowStatementActionsBar);
+)(CashFlowStatementActionsBarInner);

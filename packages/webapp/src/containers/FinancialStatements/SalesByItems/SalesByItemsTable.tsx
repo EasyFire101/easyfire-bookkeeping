@@ -1,4 +1,3 @@
-// @ts-nocheck
 import React from 'react';
 import intl from 'react-intl-universal';
 import styled from 'styled-components';
@@ -9,15 +8,19 @@ import { useSalesByItemsTableColumns } from './dynamicColumns';
 import { tableRowTypesToClassnames } from '@/utils';
 import { TableStyle } from '@/constants';
 
+interface SalesByItemsTableProps {
+  companyName: string;
+}
+
 /**
  * Sales by items data table.
  */
-export default function SalesByItemsTable({ companyName }) {
+export function SalesByItemsTable({ companyName }: SalesByItemsTableProps) {
   // Sales by items context.
-  const {
-    salesByItems: { table, query, meta },
-    isLoading,
-  } = useSalesByItemsContext();
+  const { salesByItems, isLoading } = useSalesByItemsContext();
+
+  const table = (salesByItems as any)?.table;
+  const meta = (salesByItems as any)?.meta;
 
   // Sales by items table columns.
   const columns = useSalesByItemsTableColumns();

@@ -1,12 +1,26 @@
-// @ts-nocheck
-import { createContext, useContext, useMemo } from 'react';
-import FinancialReportPage from '../FinancialReportPage';
+import { createContext, useContext, useMemo, ReactNode } from 'react';
+import { FinancialReportPage } from '../FinancialReportPage';
 import { useTrialBalanceSheet } from '@/hooks/query';
 import { transformFilterFormToQuery } from '../common';
 
-const TrialBalanceSheetContext = createContext();
+type UseTrialBalanceSheetResult = ReturnType<typeof useTrialBalanceSheet>;
 
-function TrialBalanceSheetProvider({ query, ...props }) {
+type TrialBalanceSheetContextValue = {
+  trialBalanceSheet: UseTrialBalanceSheetResult['data'];
+  isFetching: boolean;
+  isLoading: boolean;
+  refetchSheet: UseTrialBalanceSheetResult['refetch'];
+  httpQuery: Record<string, unknown>;
+};
+
+interface TrialBalanceSheetProviderProps {
+  query: Record<string, unknown>;
+  children?: ReactNode;
+}
+
+const TrialBalanceSheetContext = createContext<TrialBalanceSheetContextValue | undefined>(undefined);
+
+function TrialBalanceSheetProvider({ query, ...props }: TrialBalanceSheetProviderProps) {
   const httpQuery = useMemo(() => transformFilterFormToQuery(query), [query]);
 
   const {
@@ -14,9 +28,9 @@ function TrialBalanceSheetProvider({ query, ...props }) {
     isFetching,
     isLoading,
     refetch,
-  } = useTrialBalanceSheet({ ...httpQuery }, { keepPreviousData: true });
+  } = useTrialBalanceSheet({ ...httpQuery }, { placeholderData: (prev) => prev });
 
-  const provider = {
+  const provider: TrialBalanceSheetContextValue = {
     trialBalanceSheet,
     isLoading,
     isFetching,
@@ -31,6 +45,10 @@ function TrialBalanceSheetProvider({ query, ...props }) {
   );
 }
 
-const useTrialBalanceSheetContext = () => useContext(TrialBalanceSheetContext);
+const useTrialBalanceSheetContext = (): TrialBalanceSheetContextValue => {
+  const ctx = useContext(TrialBalanceSheetContext);
+  if (!ctx) throw new Error('useTrialBalanceSheetContext must be used within a TrialBalanceSheetProvider');
+  return ctx;
+};
 
 export { TrialBalanceSheetProvider, useTrialBalanceSheetContext };

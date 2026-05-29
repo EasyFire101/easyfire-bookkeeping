@@ -1,4 +1,3 @@
-// @ts-nocheck
 import React from 'react';
 import {
   Row,
@@ -9,10 +8,12 @@ import {
 } from '@/components';
 import { displayColumnsByOptions } from './constants';
 
-/**
- * Financial statement - Display columns by and type select.
- */
-export default function SelectsListColumnsBy(props) {
+interface SelectDisplayColumnsByProps {
+  formGroupProps?: Record<string, unknown>;
+  selectListProps?: Record<string, unknown>;
+}
+
+export function SelectDisplayColumnsBy(props: SelectDisplayColumnsByProps) {
   const { formGroupProps, selectListProps } = props;
 
   return (

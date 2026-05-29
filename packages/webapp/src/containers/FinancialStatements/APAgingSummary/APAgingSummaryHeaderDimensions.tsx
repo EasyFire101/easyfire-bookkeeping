@@ -1,4 +1,3 @@
-// @ts-nocheck
 import React from 'react';
 import intl from 'react-intl-universal';
 import { FormGroup, Classes } from '@blueprintjs/core';
@@ -10,11 +9,7 @@ import {
 import { useFeatureCan } from '@/hooks/state';
 import { Features } from '@/constants';
 
-/**
- * APAging summary header dimensions.
- * @returns
- */
-export default function APAgingSummaryHeaderDimensions() {
+export function APAgingSummaryHeaderDimensions() {
   return (
     <APAgingSummaryHeaderDimensionsProvider>
       <APAgingSummaryHeaderDimensionsContent />
@@ -22,16 +17,10 @@ export default function APAgingSummaryHeaderDimensions() {
   );
 }
 
-/**
- * APAging summary header dimensions content.
- * @returns
- */
 function APAgingSummaryHeaderDimensionsContent() {
   const { branches } = useAPAgingSummaryHeaderDimensonsContext();
 
-  // Detarmines the feature whether is enabled.
   const { featureCan } = useFeatureCan();
-
   const isBranchesFeatureCan = featureCan(Features.Branches);
 
   return (

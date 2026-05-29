@@ -1,4 +1,3 @@
-// @ts-nocheck
 import React, { lazy } from 'react';
 import classNames from 'classnames';
 
@@ -7,16 +6,17 @@ import withDialogRedux from '@/components/DialogReduxConnect';
 import { CLASSES } from '@/constants/classes';
 import { compose } from '@/utils';
 
-// Lazy loading the content.
 const APAgingSummaryPdfDialogContent = lazy(
-  () => import('./APAgingSummaryPdfDialogContent'),
+  () => import('./APAgingSummaryPdfDialogContent').then((m) => ({ default: m.APAgingSummaryPdfDialogContent })),
 );
 
-/**
- * A/P aging summary pdf preview dialog.
- * @returns {React.ReactNode}
- */
-function APAgingSummaryPdfDialogRoot({ dialogName, payload, isOpen }) {
+interface APAgingSummaryPdfDialogRootProps {
+  dialogName: string;
+  payload?: Record<string, unknown>;
+  isOpen: boolean;
+}
+
+function APAgingSummaryPdfDialogRoot({ dialogName, isOpen }: APAgingSummaryPdfDialogRootProps) {
   return (
     <Dialog
       name={dialogName}

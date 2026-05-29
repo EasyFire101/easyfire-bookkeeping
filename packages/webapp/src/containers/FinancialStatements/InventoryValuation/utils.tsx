@@ -1,4 +1,3 @@
-// @ts-nocheck
 import React from 'react';
 import moment from 'moment';
 import { castArray } from 'lodash';
@@ -22,15 +21,15 @@ export const getInventoryValuationQuerySchema = () => {
 export const getInventoryValuationQuery = () => ({
   asDate: moment().format('YYYY-MM-DD'),
   filterByOption: 'with-transactions',
-  itemsIds: [],
-  branchesIds: [],
-  warehousesIds: [],
+  itemsIds: [] as string[],
+  branchesIds: [] as string[],
+  warehousesIds: [] as string[],
 });
 
 /**
  * Parses inventory valuation location query to report query.
  */
-const parseInventoryValuationQuery = (locationQuery) => {
+const parseInventoryValuationQuery = (locationQuery: Record<string, unknown>) => {
   const defaultQuery = getInventoryValuationQuery();
 
   const transformed = {

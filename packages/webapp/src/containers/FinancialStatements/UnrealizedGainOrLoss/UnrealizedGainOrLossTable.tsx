@@ -1,16 +1,15 @@
-// @ts-nocheck
 import React from 'react';
 import intl from 'react-intl-universal';
 
-import { FinancialSheet, DataTable } from '@/components';
+import { FinancialSheet } from '@/components';
 
-/**
- * Unrealized Gain or Loss table.
- */
-export default function UnrealizedGainOrLossTable({
-  // #ownProps
+interface UnrealizedGainOrLossTableProps {
+  companyName: string;
+}
+
+export function UnrealizedGainOrLossTable({
   companyName,
-}) {
+}: UnrealizedGainOrLossTableProps) {
   return (
     <FinancialSheet
       name="unrealized-gain-loss"

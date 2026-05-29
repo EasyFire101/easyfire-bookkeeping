@@ -1,4 +1,3 @@
-// @ts-nocheck
 import React from 'react';
 import {
   NavbarGroup,
@@ -9,41 +8,40 @@ import {
   PopoverInteractionKind,
   Position,
 } from '@blueprintjs/core';
-import { DashboardActionsBar,FormattedMessage as T, Icon } from '@/components';
+import { DashboardActionsBar, FormattedMessage as T, Icon } from '@/components';
 import classNames from 'classnames';
 
 import NumberFormatDropdown from '@/components/NumberFormatDropdown';
 
 import { useUnrealizedGainOrLossContext } from './UnrealizedGainOrLossProvider';
 import { withUnrealizedGainOrLoss } from './withUnrealizedGainOrLoss';
-import { withUnrealizedGainOrLossActions } from './withUnrealizedGainOrLossActions';
+import { withUnrealizedGainOrLossActions, WithUnrealizedGainOrLossActionsProps } from './withUnrealizedGainOrLossActions';
 
 import { compose, saveInvoke } from '@/utils';
 
-/**
- * unrealized Gain or Loss actions bar.
- */
-function UnrealizedGainOrLossActionsBar({
-  //#withRealizedGainOrLoss
+interface UnrealizedGainOrLossActionsBarOwnProps {
+  numberFormat?: Record<string, unknown>;
+  onNumberFormatSubmit?: (values: Record<string, unknown>) => void;
+}
+
+type UnrealizedGainOrLossActionsBarProps = {
+  isFilterDrawerOpen: boolean;
+} & Pick<WithUnrealizedGainOrLossActionsProps, 'toggleUnrealizedGainOrLossFilterDrawer'> &
+  UnrealizedGainOrLossActionsBarOwnProps;
+
+function UnrealizedGainOrLossActionsBarInner({
   isFilterDrawerOpen,
-
-  //#withRealizedGainOrLossActions
   toggleUnrealizedGainOrLossFilterDrawer,
-
-  //#ownProps
   numberFormat,
   onNumberFormatSubmit,
-}) {
-  // Handle filter toggle click.
+}: UnrealizedGainOrLossActionsBarProps) {
   const handleFilterToggleClick = () => {
     toggleUnrealizedGainOrLossFilterDrawer();
   };
 
-  // Handle recalculate report button.
   const handleRecalculateReport = () => {};
 
-  // handle number format form submit.
-  const handleNumberFormatSubmit = (values) =>
+  const handleNumberFormatSubmit = (values: Record<string, unknown>) =>
     saveInvoke(onNumberFormatSubmit, values);
 
   return (
@@ -109,9 +107,9 @@ function UnrealizedGainOrLossActionsBar({
   );
 }
 
-export default compose(
+export const UnrealizedGainOrLossActionsBar = compose(
   withUnrealizedGainOrLoss(({ unrealizedGainOrLossDrawerFilter }) => ({
     isFilterDrawerOpen: unrealizedGainOrLossDrawerFilter,
   })),
   withUnrealizedGainOrLossActions,
-)(UnrealizedGainOrLossActionsBar);
+)(UnrealizedGainOrLossActionsBarInner);

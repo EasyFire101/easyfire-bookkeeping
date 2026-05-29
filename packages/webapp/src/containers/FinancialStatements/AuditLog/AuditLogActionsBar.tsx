@@ -1,17 +1,21 @@
-// @ts-nocheck
 import React from 'react';
 import { Button, Classes, NavbarGroup, NavbarDivider } from '@blueprintjs/core';
 import classNames from 'classnames';
 import { DashboardActionsBar, Icon } from '@/components';
 import { useAuditLogContext } from './AuditLogProvider';
 
+interface AuditLogActionsBarProps {
+  isFilterDrawerOpen: boolean;
+  toggleFilterDrawer: (toggle?: boolean) => void;
+}
+
 /**
  * Audit Log Actions Bar
  */
-function AuditLogActionsBar({
+export function AuditLogActionsBar({
   isFilterDrawerOpen,
   toggleFilterDrawer,
-}) {
+}: AuditLogActionsBarProps) {
   const { sheetRefresh } = useAuditLogContext();
 
   const handleCustomizeClick = () => {
@@ -27,7 +31,7 @@ function AuditLogActionsBar({
       <NavbarGroup>
         <Button
           className={classNames(Classes.MINIMAL)}
-          text={"Reload"}
+          text={'Reload'}
           onClick={handleRecalcReport}
           icon={<Icon icon="refresh-16" iconSize={16} />}
         />
@@ -35,7 +39,7 @@ function AuditLogActionsBar({
         <Button
           className={classNames(Classes.MINIMAL)}
           icon={<Icon icon="cog-16" iconSize={16} />}
-          text={"Filter"}
+          text={'Filter'}
           onClick={handleCustomizeClick}
           active={isFilterDrawerOpen}
         />
@@ -44,4 +48,3 @@ function AuditLogActionsBar({
   );
 }
 
-export default AuditLogActionsBar;

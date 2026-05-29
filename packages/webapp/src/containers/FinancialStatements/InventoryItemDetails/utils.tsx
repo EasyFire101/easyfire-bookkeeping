@@ -1,10 +1,9 @@
-// @ts-nocheck
 import * as R from 'ramda';
 
 import { getColumnWidth } from '@/utils';
 import { Align } from '@/constants';
 
-const itemNameOrDateColumn = R.curry((data, index, column) => ({
+const itemNameOrDateColumn = R.curry((data: unknown[], index: number, column: Record<string, any>) => ({
   id: column.key,
   key: column.key,
   Header: column.label,
@@ -17,7 +16,7 @@ const itemNameOrDateColumn = R.curry((data, index, column) => ({
   disableSortBy: true,
 }));
 
-const numericColumn = R.curry((data, index, column) => ({
+const numericColumn = R.curry((data: unknown[], index: number, column: Record<string, any>) => ({
   id: column.key,
   key: column.key,
   Header: column.label,
@@ -32,7 +31,7 @@ const numericColumn = R.curry((data, index, column) => ({
   money: true,
 }));
 
-const columnsMapper = R.curry((data, index, column) => ({
+const columnsMapper = R.curry((data: unknown[], index: number, column: Record<string, any>) => ({
   id: column.key,
   key: column.key,
   Header: column.label,
@@ -49,8 +48,8 @@ const columnsMapper = R.curry((data, index, column) => ({
 /**
  * Inventory item details columns.
  */
-export const dynamicColumns = (columns, data) => {
-  const mapper = (column, index) => {
+export const dynamicColumns = (columns: Record<string, any>[], data: unknown[]) => {
+  const mapper = (column: Record<string, any>, index: number) => {
     return R.compose(
       R.cond([
         [R.pathEq(['key'], 'date'), itemNameOrDateColumn(data, index)],

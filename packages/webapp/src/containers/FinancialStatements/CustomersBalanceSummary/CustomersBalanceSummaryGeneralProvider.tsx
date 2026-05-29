@@ -1,30 +1,39 @@
-// @ts-nocheck
-import React, { createContext, useContext } from 'react';
+  import React, { createContext, useContext } from 'react';
 import { FinancialHeaderLoadingSkeleton } from '../FinancialHeaderLoadingSkeleton';
 import { useCustomers } from '@/hooks/query';
 
-const CustomersBalanceSummaryGeneralContext = createContext();
+type UseCustomersResult = ReturnType<typeof useCustomers>;
 
-/**
- * Customers balance summary provider.
- */
-function CustomersBalanceSummaryGeneralProvider({ ...props }) {
-  // Fetches the customers list.
+type CustomersBalanceSummaryGeneralContextValue = {
+  isCustomersLoading: boolean;
+  isCustomersFetching: boolean;
+  customers: UseCustomersResult['data'] extends { customers: infer C } ? C : unknown;
+};
+
+type CustomersBalanceSummaryGeneralProviderProps = {
+  children?: React.ReactNode;
+};
+
+const CustomersBalanceSummaryGeneralContext = createContext<
+  CustomersBalanceSummaryGeneralContextValue | undefined
+>(undefined);
+
+function CustomersBalanceSummaryGeneralProvider({
+  ...props
+}: CustomersBalanceSummaryGeneralProviderProps) {
   const {
     data: customersData,
     isFetching: isCustomersFetching,
     isLoading: isCustomersLoading,
   } = useCustomers();
 
-  const provider = {
+  const provider: CustomersBalanceSummaryGeneralContextValue = {
     isCustomersLoading,
     isCustomersFetching,
-    customers: customersData?.customers,
+    customers: (customersData as any)?.customers,
   };
 
-  const loading = isCustomersLoading;
-
-  return loading ? (
+  return isCustomersLoading ? (
     <FinancialHeaderLoadingSkeleton />
   ) : (
     <CustomersBalanceSummaryGeneralContext.Provider
@@ -34,8 +43,16 @@ function CustomersBalanceSummaryGeneralProvider({ ...props }) {
   );
 }
 
-const useCustomersBalanceSummaryGeneralContext = () =>
-  useContext(CustomersBalanceSummaryGeneralContext);
+const useCustomersBalanceSummaryGeneralContext =
+  (): CustomersBalanceSummaryGeneralContextValue => {
+    const ctx = useContext(CustomersBalanceSummaryGeneralContext);
+    if (!ctx) {
+      throw new Error(
+        'useCustomersBalanceSummaryGeneralContext must be used within CustomersBalanceSummaryGeneralProvider',
+      );
+    }
+    return ctx;
+  };
 
 export {
   CustomersBalanceSummaryGeneralProvider,

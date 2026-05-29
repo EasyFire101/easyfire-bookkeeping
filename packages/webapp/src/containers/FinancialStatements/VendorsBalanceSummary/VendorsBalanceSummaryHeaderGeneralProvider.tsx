@@ -1,15 +1,20 @@
-// @ts-nocheck
-import React from 'react';
+import React, { createContext, useContext } from 'react';
 
 import { FinancialHeaderLoadingSkeleton } from '../FinancialHeaderLoadingSkeleton';
 import { useVendors } from '@/hooks/query';
 
-const VendorsBalanceSummaryGeneralPanelContext = React.createContext();
+interface VendorsBalanceSummaryGeneralPanelContextValue {
+  vendors: any;
+  isVendorsFetching: boolean;
+  isVendorsLoading: boolean;
+}
+
+const VendorsBalanceSummaryGeneralPanelContext = createContext<VendorsBalanceSummaryGeneralPanelContextValue | undefined>(undefined);
 
 /**
- * Vendors balance summary provider.
+ * Vendors balance summary general panel provider.
  */
-function VendorsBalanceSummaryGeneralPanelProvider({ filter, ...props }) {
+function VendorsBalanceSummaryGeneralPanelProvider({ ...props }: { children?: React.ReactNode }) {
   // Fetch vendors list with pagination meta.
   const {
     data: vendorsData,
@@ -18,8 +23,8 @@ function VendorsBalanceSummaryGeneralPanelProvider({ filter, ...props }) {
   } = useVendors({ page_size: 1000000 });
 
   // Provider.
-  const provider = {
-    vendors: vendorsData?.vendors,
+  const provider: VendorsBalanceSummaryGeneralPanelContextValue = {
+    vendors: (vendorsData as any)?.vendors,
     isVendorsFetching,
     isVendorsLoading,
   };
@@ -36,8 +41,13 @@ function VendorsBalanceSummaryGeneralPanelProvider({ filter, ...props }) {
   );
 }
 
-const useVendorsBalanceSummaryGeneralPanelContext = () =>
-  React.useContext(VendorsBalanceSummaryGeneralPanelContext);
+const useVendorsBalanceSummaryGeneralPanelContext = (): VendorsBalanceSummaryGeneralPanelContextValue => {
+  const ctx = useContext(VendorsBalanceSummaryGeneralPanelContext);
+  if (!ctx) {
+    throw new Error('useVendorsBalanceSummaryGeneralPanelContext must be used within a VendorsBalanceSummaryGeneralPanelProvider');
+  }
+  return ctx;
+};
 
 export {
   VendorsBalanceSummaryGeneralPanelProvider,

@@ -1,22 +1,21 @@
-// @ts-nocheck
 import React from 'react';
 
-import BalanceSheetTable from './BalanceSheetTable';
-import { withCurrentOrganization } from '@/containers/Organization/withCurrentOrganization';
+import { BalanceSheetTable } from './BalanceSheetTable';
+import {
+  withCurrentOrganization,
+  WithCurrentOrganizationProps,
+} from '@/containers/Organization/withCurrentOrganization';
 
 import { FinancialReportBody } from '../FinancialReportPage';
 import { useBalanceSheetContext } from './BalanceSheetProvider';
 import { FinancialSheetSkeleton } from '@/components';
 import { compose } from '@/utils';
 
-/**
- * Balance sheet body JSX.
- * @returns {React.JSX}
- */
-function BalanceSheetBodyJSX({
-  // #withCurrentOrganization
-  organizationName,
-}) {
+interface BalanceSheetBodyProps {
+  organizationName: WithCurrentOrganizationProps['organization'];
+}
+
+function BalanceSheetBodyJSX({ organizationName }: BalanceSheetBodyProps) {
   const { isLoading } = useBalanceSheetContext();
 
   return (

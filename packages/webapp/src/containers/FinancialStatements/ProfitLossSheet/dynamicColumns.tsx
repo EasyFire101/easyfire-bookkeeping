@@ -1,13 +1,19 @@
-// @ts-nocheck
 import * as R from 'ramda';
 import { isEmpty } from 'lodash';
 
 import { Align } from '@/constants';
 import { getColumnWidth } from '@/utils';
 
-const getTableCellValueAccessor = (index) => `cells[${index}].value`;
+interface ReportTableColumn {
+  key: string;
+  label: string;
+  cell_index?: number;
+  children?: ReportTableColumn[];
+}
 
-const getReportColWidth = (data, accessor, labelText) => {
+const getTableCellValueAccessor = (index: number) => `cells[${index}].value`;
+
+const getReportColWidth = (data: unknown[], accessor: string, labelText?: string) => {
   return getColumnWidth(
     data,
     accessor,
@@ -16,7 +22,7 @@ const getReportColWidth = (data, accessor, labelText) => {
   );
 };
 
-const isNodeHasChildren = (node) => !isEmpty(node.children);
+const isNodeHasChildren = (node: ReportTableColumn) => !isEmpty(node.children);
 
 /**
  * `Percentage of income` column accessor.
@@ -364,7 +370,7 @@ const dateRangeColumn = R.curry((data, column) => {
 /**
  * Detarmines the given string starts with `date-range` string.
  */
-const isMatchesDateRange = (r) => R.match(/^date-range/g, r).length > 0;
+const isMatchesDateRange = (r: string) => R.match(/^date-range/g, r).length > 0;
 
 /**
  *
@@ -383,12 +389,6 @@ const dynamicColumnMapper = R.curry((data, column) => {
   )(column);
 });
 
-/**
- *
- * @param {*} columns
- * @param {*} data
- * @returns
- */
-export const dynamicColumns = (columns, data) => {
+export const dynamicColumns = (columns: ReportTableColumn[], data: unknown[]) => {
   return R.map(dynamicColumnMapper(data), columns);
 };

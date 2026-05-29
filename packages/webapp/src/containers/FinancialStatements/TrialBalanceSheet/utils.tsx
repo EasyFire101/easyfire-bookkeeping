@@ -1,4 +1,3 @@
-// @ts-nocheck
 import React from 'react';
 import moment from 'moment';
 import { castArray } from 'lodash';
@@ -16,15 +15,15 @@ export function getDefaultTrialBalanceQuery() {
     toDate: moment().format('YYYY-MM-DD'),
     basis: 'accrual',
     filterByOption: 'with-transactions',
-    branchesIds: [],
-    numberFormat: {},
+    branchesIds: [] as string[],
+    numberFormat: {} as Record<string, unknown>,
   };
 }
 
 /**
  * Parses the trial balance sheet query of browser location.
  */
-const parseTrialBalanceSheetQuery = (locationQuery) => {
+const parseTrialBalanceSheetQuery = (locationQuery: Record<string, unknown>) => {
   const defaultQuery = getDefaultTrialBalanceQuery();
 
   const transformed = {

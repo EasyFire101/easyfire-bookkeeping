@@ -1,4 +1,3 @@
-// @ts-nocheck
 import React, { lazy } from 'react';
 import classNames from 'classnames';
 
@@ -9,14 +8,20 @@ import { compose } from '@/utils';
 
 // Lazy loading the content.
 const InventoryItemDetailsPdfDialogContent = lazy(
-  () => import('./InventoryItemDetailsPdfDialogContent'),
+  () => import('./InventoryItemDetailsPdfDialogContent').then((m) => ({ default: m.InventoryItemDetailsPdfDialogContent })),
 );
+
+interface InventoryItemDetailsPdfDialogRootProps {
+  dialogName: string;
+  payload?: Record<string, unknown>;
+  isOpen: boolean;
+}
 
 /**
  * Inventory item details sheet pdf preview dialog.
  * @returns {React.ReactNode}
  */
-function InventoryItemDetailsPdfDialogRoot({ dialogName, payload, isOpen }) {
+function InventoryItemDetailsPdfDialogRoot({ dialogName, isOpen }: InventoryItemDetailsPdfDialogRootProps) {
   return (
     <Dialog
       name={dialogName}

@@ -1,4 +1,3 @@
-// @ts-nocheck
 import React, { useMemo } from 'react';
 import intl from 'react-intl-universal';
 import styled from 'styled-components';
@@ -11,26 +10,31 @@ import { useVendorsTransactionsContext } from './VendorsTransactionsProvider';
 import { defaultExpanderReducer, tableRowTypesToClassnames } from '@/utils';
 import { TableStyle } from '@/constants';
 
+interface VendorsTransactionsTableProps {
+  companyName: any;
+}
+
 /**
  * Vendors transactions table.
  */
 
-export default function VendorsTransactionsTable({
+export function VendorsTransactionsTable({
   // #ownProps
   companyName,
-}) {
+}: VendorsTransactionsTableProps) {
   // Vendor transactions context.
   const { vendorsTransactions, isVendorsTransactionsLoading } =
     useVendorsTransactionsContext();
 
-  const { table, query, meta } = vendorsTransactions;
+  const table = (vendorsTransactions as any)?.table;
+  const meta = (vendorsTransactions as any)?.meta;
 
-  // Retireve vendor transactions table columns.
+  // Retrieve vendor transactions table columns.
   const columns = useVendorsTransactionsColumns();
 
   const expandedRows = useMemo(
-    () => defaultExpanderReducer(table.rows, 5),
-    [table.rows],
+    () => defaultExpanderReducer(table?.rows, 5),
+    [table?.rows],
   );
 
   return (
@@ -44,7 +48,7 @@ export default function VendorsTransactionsTable({
     >
       <VendorsTransactionsDataTable
         columns={columns}
-        data={table.rows}
+        data={table?.rows}
         rowClassNames={tableRowTypesToClassnames}
         noInitialFetch={true}
         expandable={true}

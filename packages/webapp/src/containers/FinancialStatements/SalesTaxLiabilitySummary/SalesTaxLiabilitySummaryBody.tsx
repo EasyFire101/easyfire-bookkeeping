@@ -1,4 +1,3 @@
-// @ts-nocheck
 import React from 'react';
 
 import { FinancialReportBody } from '../FinancialReportPage';
@@ -9,7 +8,6 @@ import { useSalesTaxLiabilitySummaryContext } from './SalesTaxLiabilitySummaryBo
 
 /**
  * Sales tax liability summary body.
- * @returns {React.JSX}
  */
 export function SalesTaxLiabilitySummaryBody() {
   const { isLoading } = useSalesTaxLiabilitySummaryContext();

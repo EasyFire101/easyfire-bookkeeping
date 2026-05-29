@@ -1,4 +1,3 @@
-// @ts-nocheck
 import React from 'react';
 import moment from 'moment';
 import { castArray } from 'lodash';
@@ -15,10 +14,10 @@ import { transformFilterFormToQuery } from '../common';
 export const getInventoryItemDetailsDefaultQuery = () => ({
   fromDate: moment().startOf('month').format('YYYY-MM-DD'),
   toDate: moment().format('YYYY-MM-DD'),
-  itemsIds: [],
-  warehousesIds: [],
-  branchesIds: [],
-  numberFormat: {},
+  itemsIds: [] as string[],
+  warehousesIds: [] as string[],
+  branchesIds: [] as string[],
+  numberFormat: {} as Record<string, unknown>,
 });
 
 /**
@@ -38,7 +37,7 @@ export const getInventoryItemDetailsQuerySchema = () => {
 /**
  * Parses inventory item details browser location query.
  */
-const parseInventoryItemDetailsQuery = (locationQuery) => {
+const parseInventoryItemDetailsQuery = (locationQuery: Record<string, unknown>) => {
   const defaultQuery = getInventoryItemDetailsDefaultQuery();
 
   const transformed = {
@@ -83,5 +82,5 @@ export const useInventoryValuationQuery = () => {
 export const useInventoryValuationHttpQuery = () => {
   const { query } = useInventoryValuationQuery();
 
-  return React.useMemo(() => transformFilterFormToQuery(query), [query]);
+  return React.useMemo(() => transformFilterFormToQuery(query) as Record<string, unknown>, [query]);
 };

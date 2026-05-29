@@ -1,4 +1,3 @@
-// @ts-nocheck
 import React, { lazy } from 'react';
 import classNames from 'classnames';
 
@@ -11,14 +10,19 @@ import { compose } from '@/utils';
 
 // Lazy loading the content.
 const SalesTaxLiabilityPdfDialogContent = lazy(
-  () => import('./SalesTaxLiabilityPdfDialogContent'),
+  () => import('./SalesTaxLiabilityPdfDialogContent').then((m) => ({ default: m.SalesTaxLiabilityPdfDialogContent })),
 );
 
+interface SalesTaxLiabilityPdfDialogRootProps {
+  dialogName: string;
+  payload?: Record<string, unknown>;
+  isOpen: boolean;
+}
+
 /**
- * Cashflow sheet pdf preview dialog.
- * @returns {React.ReactNode}
+ * Sales tax liability pdf preview dialog.
  */
-function SalesTaxLiabilityPdfDialogRoot({ dialogName, payload, isOpen }) {
+function SalesTaxLiabilityPdfDialogRoot({ dialogName, payload, isOpen }: SalesTaxLiabilityPdfDialogRootProps) {
   return (
     <Dialog
       name={dialogName}

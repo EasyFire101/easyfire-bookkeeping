@@ -1,4 +1,3 @@
-// @ts-nocheck
 import React, { useRef } from 'react';
 import classNames from 'classnames';
 import {
@@ -11,28 +10,23 @@ import {
 } from '@blueprintjs/core';
 
 import { useARAgingSummaryContext } from './ARAgingSummaryProvider';
-import { AppToaster, If, Stack, FormattedMessage as T } from '@/components';
-import FinancialLoadingBar from '../FinancialLoadingBar';
+import { AppToaster, If, Stack } from '@/components';
+import { FinancialLoadingBar } from '../FinancialLoadingBar';
 import { agingSummaryDynamicColumns } from '../AgingSummary/dynamicColumns';
 import {
   useARAgingSheetCsvExport,
   useARAgingSheetXlsxExport,
 } from '@/hooks/query';
 
-/**
- * Retrieve AR aging summary columns.
- */
 export const useARAgingSummaryColumns = () => {
-  const {
-    ARAgingSummary: { table },
-  } = useARAgingSummaryContext();
+  const { ARAgingSummary } = useARAgingSummaryContext();
 
-  return agingSummaryDynamicColumns(table.columns, table.rows);
+  return agingSummaryDynamicColumns(
+    (ARAgingSummary as any)?.table?.columns ?? [],
+    (ARAgingSummary as any)?.table?.rows ?? [],
+  );
 };
 
-/**
- * A/R aging summary sheet loading bar.
- */
 export function ARAgingSummarySheetLoadingBar() {
   const { isARAgingFetching } = useARAgingSummaryContext();
 
@@ -43,12 +37,8 @@ export function ARAgingSummarySheetLoadingBar() {
   );
 }
 
-/**
- * A/R aging summary export menu.
- * @returns {JSX.Element}
- */
 export function ARAgingSummaryExportMenu() {
-  const toastKey = useRef(null);
+  const toastKey = useRef<string | undefined>(undefined);
   const commonToastConfig = {
     isCloseButtonShown: true,
     timeout: 2000,
@@ -70,7 +60,6 @@ export function ARAgingSummaryExportMenu() {
     );
   };
 
-  // Export the report to xlsx.
   const { mutateAsync: xlsxExport } = useARAgingSheetXlsxExport(httpQuery, {
     onDownloadProgress: (xlsxExportProgress: number) => {
       if (!toastKey.current) {
@@ -89,7 +78,7 @@ export function ARAgingSummaryExportMenu() {
       }
     },
   });
-  // Export the report to csv.
+
   const { mutateAsync: csvExport } = useARAgingSheetCsvExport(httpQuery, {
     onDownloadProgress: (xlsxExportProgress: number) => {
       if (!toastKey.current) {
@@ -108,11 +97,10 @@ export function ARAgingSummaryExportMenu() {
       }
     },
   });
-  // Handle csv export button click.
+
   const handleCsvExportBtnClick = () => {
     csvExport();
   };
-  // Handle xlsx export button click.
   const handleXlsxExportBtnClick = () => {
     xlsxExport();
   };

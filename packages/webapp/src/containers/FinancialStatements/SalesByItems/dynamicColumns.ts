@@ -1,12 +1,11 @@
-// @ts-nocheck
 import { getColumnWidth } from '@/utils';
 import * as R from 'ramda';
 import { Align } from '@/constants';
 import { useSalesByItemsContext } from './SalesByItemProvider';
 
-const getTableCellValueAccessor = (index) => `cells[${index}].value`;
+const getTableCellValueAccessor = (index: number) => `cells[${index}].value`;
 
-const getReportColWidth = (data, accessor, headerText) => {
+const getReportColWidth = (data: any[], accessor: string, headerText: string) => {
   return getColumnWidth(
     data,
     accessor,
@@ -18,7 +17,7 @@ const getReportColWidth = (data, accessor, headerText) => {
 /**
  * Account name column mapper.
  */
-const commonColumnMapper = R.curry((data, column) => {
+const commonColumnMapper = R.curry((data: any[], column: Record<string, any>) => {
   const accessor = getTableCellValueAccessor(column.cell_index);
 
   return {
@@ -33,7 +32,7 @@ const commonColumnMapper = R.curry((data, column) => {
 /**
  * Numeric columns accessor.
  */
-const numericColumnAccessor = R.curry((data, column) => {
+const numericColumnAccessor = R.curry((data: any[], column: Record<string, any>) => {
   const accessor = getTableCellValueAccessor(column.cell_index);
   const width = getReportColWidth(data, accessor, column.label);
 
@@ -41,21 +40,21 @@ const numericColumnAccessor = R.curry((data, column) => {
     ...column,
     align: Align.Right,
     width,
-    money: true
+    money: true,
   };
 });
 
 /**
  * Item name column accessor.
  */
-const itemNameColumnAccessor = R.curry((data, column) => {
+const itemNameColumnAccessor = R.curry((data: any[], column: Record<string, any>) => {
   return {
     ...column,
     width: 180,
-  }
+  };
 });
 
-const dynamiColumnMapper = R.curry((data, column) => {
+const dynamicColumnMapper = R.curry((data: any[], column: Record<string, any>) => {
   const _numericColumnAccessor = numericColumnAccessor(data);
   const _itemNameColumnAccessor = itemNameColumnAccessor(data);
 
@@ -71,12 +70,12 @@ const dynamiColumnMapper = R.curry((data, column) => {
 /**
  * Composes the dynamic columns that fetched from request to columns to table component.
  */
-export const dynamicColumns = R.curry((data, columns) => {
-  return R.map(dynamiColumnMapper(data), columns);
+export const dynamicColumns = R.curry((data: any[], columns: Record<string, any>[]) => {
+  return R.map(dynamicColumnMapper(data), columns);
 });
 
 /**
- * Retrieves the G/L sheet table columns for table component.
+ * Retrieves the sales by items sheet table columns for table component.
  */
 export const useSalesByItemsTableColumns = () => {
   const { salesByItems } = useSalesByItemsContext();
@@ -84,7 +83,7 @@ export const useSalesByItemsTableColumns = () => {
   if (!salesByItems) {
     throw new Error('Sales by items context not found');
   }
-  const { table } = salesByItems;
+  const table = (salesByItems as any).table;
 
   return dynamicColumns(table.rows, table.columns);
 };

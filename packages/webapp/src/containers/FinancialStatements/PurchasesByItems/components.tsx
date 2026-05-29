@@ -1,4 +1,3 @@
-// @ts-nocheck
 import { useRef } from 'react';
 import classNames from 'classnames';
 import {
@@ -12,7 +11,7 @@ import {
 
 import { AppToaster, If, Stack } from '@/components';
 import { usePurchaseByItemsContext } from './PurchasesByItemsProvider';
-import FinancialLoadingBar from '../FinancialLoadingBar';
+import { FinancialLoadingBar } from '../FinancialLoadingBar';
 import {
   usePurchasesByItemsCsvExport,
   usePurchasesByItemsXlsxExport,
@@ -33,10 +32,9 @@ export function PurchasesByItemsLoadingBar() {
 
 /**
  * Retrieves the purchases by items export menu.
- * @returns {JSX.Element}
  */
 export const PurchasesByItemsExportMenu = () => {
-  const toastKey = useRef(null);
+  const toastKey = useRef<string | number | undefined>(undefined);
   const commonToastConfig = { isCloseButtonShown: true, timeout: 2000 };
   const { httpQuery } = usePurchaseByItemsContext();
 
