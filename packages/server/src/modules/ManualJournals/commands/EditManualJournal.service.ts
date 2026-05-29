@@ -66,7 +66,7 @@ export class EditManualJournal {
     oldManualJournal: ManualJournal,
   ) => {
     const amount = sumBy(manualJournalDTO.entries, 'credit') || 0;
-    const date = moment(manualJournalDTO.date).format('YYYY-MM-DD');
+    const date = moment(manualJournalDTO.date).toDate();
 
     return {
       id: oldManualJournal.id,

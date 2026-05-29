@@ -339,8 +339,9 @@ export const valueParser =
  * @param {string} key - Mapped key path. formats: `group.key` or `key`.
  * @returns {string}
  */
-export const parseKey = R.curry(
-  (fields: { [key: string]: IModelMetaField2 }, key: string) => {
+export const parseKey =
+  (fields: { [key: string]: IModelMetaField2 }) =>
+  (key: string): string => {
     const fieldKey = getFieldKey(key);
     const field = fields[fieldKey];
     let _key = key;
@@ -358,8 +359,7 @@ export const parseKey = R.curry(
       }
     }
     return _key;
-  },
-);
+  };
 
 /**
  * Retrieves the field root key, for instance: I -> entries.itemId O -> entries.

@@ -210,13 +210,13 @@ export class MetableDBStore
    */
   mapMetadata(metadata: IMetadata) {
     const metaType = this.config.getMetaType(
-      metadata[this.KEY_COLUMN],
-      metadata['group'],
+      metadata.key,
+      metadata.group,
     );
     return {
-      key: metadata[this.KEY_COLUMN],
+      key: metadata.key,
       value: MetableDBStore.parseMetaValue(
-        metadata[this.VALUE_COLUMN],
+        String(metadata.value),
         metaType,
       ),
       ...this.extraColumns.reduce((obj, extraCol: string) => {

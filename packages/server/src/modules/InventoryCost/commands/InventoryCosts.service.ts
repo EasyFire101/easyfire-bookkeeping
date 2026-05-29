@@ -25,8 +25,8 @@ export class InventoryItemCostService {
    * @param {number} itemId
    */
   private getItemInventoryMeta(
-    INValuationMap: Map<number, IInventoryItemCostMeta>,
-    OUTValuationMap: Map<number, IInventoryItemCostMeta>,
+    INValuationMap: Record<string, any>,
+    OUTValuationMap: Record<string, any>,
     itemId: number,
   ) {
     const INCost = get(INValuationMap, `[${itemId}].cost`, 0);

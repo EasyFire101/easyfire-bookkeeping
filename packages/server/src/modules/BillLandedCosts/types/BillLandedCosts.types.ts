@@ -99,6 +99,11 @@ export interface IBillLandedCostTransaction {
   currencyCode: string;
   exchangeRate: number;
 
+  name?: string;
+  formattedAmount?: string;
+  formattedLocalAmount?: string;
+  allocationMethodFormatted?: string;
+
   allocateEntries?: IBillLandedCostTransactionEntry[];
 }
 

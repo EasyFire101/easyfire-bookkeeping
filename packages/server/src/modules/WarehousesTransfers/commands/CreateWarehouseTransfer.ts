@@ -25,6 +25,16 @@ import {
   WarehouseTransferEntryDto,
 } from '../dtos/WarehouseTransfer.dto';
 
+type WarehouseTransferGraphInsert = {
+  date?: Date;
+  fromWarehouseId?: number;
+  toWarehouseId?: number;
+  transactionNumber?: string;
+  transferDeliveredAt?: Date;
+  transferInitiatedAt?: Date;
+  entries: WarehouseTransferEntryDto[];
+};
+
 @Injectable()
 export class CreateWarehouseTransfer {
   /**
@@ -57,13 +67,13 @@ export class CreateWarehouseTransfer {
    */
   private transformDTOToModel = async (
     warehouseTransferDTO: CreateWarehouseTransferDto,
-  ): Promise<ModelObject<WarehouseTransfer>> => {
+  ): Promise<WarehouseTransferGraphInsert> => {
     const entries = await this.transformEntries(
       warehouseTransferDTO,
       warehouseTransferDTO.entries,
     );
     // Retrieves the auto-increment the warehouse transfer number.
-    const autoNextNumber = this.autoIncrementOrders.getNextTransferNumber();
+    const autoNextNumber = await this.autoIncrementOrders.getNextTransferNumber();
 
     // Warehouse transfer order transaction number.
     const transactionNumber =
@@ -113,7 +123,7 @@ export class CreateWarehouseTransfer {
   public transformEntries = async (
     warehouseTransferDTO: CreateWarehouseTransferDto,
     entries: WarehouseTransferEntryDto[],
-  ): Promise<ModelObject<WarehouseTransferEntry>[]> => {
+  ): Promise<WarehouseTransferEntryDto[]> => {
     const inventoryItemsIds = warehouseTransferDTO.entries.map((e) => e.itemId);
 
     // Retrieves the inventory items valuation map.

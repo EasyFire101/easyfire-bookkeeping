@@ -83,7 +83,7 @@ export class CreateItemService {
   private transformNewItemDTOToModel(itemDTO: CreateItemDto) {
     return {
       ...itemDTO,
-      active: defaultTo(itemDTO.active, 1),
+      active: Boolean(defaultTo(itemDTO.active, true)),
       quantityOnHand: itemDTO.type === 'inventory' ? 0 : null,
     };
   }

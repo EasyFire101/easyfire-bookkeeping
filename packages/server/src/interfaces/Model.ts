@@ -35,6 +35,7 @@ export interface IModelMetaFieldCommon {
   customQuery?: Function;
   required?: boolean;
   importHint?: string;
+  importable?: boolean;
   importableRelationLabel?: string;
   order?: number;
   unique?: number;
@@ -180,6 +181,7 @@ export interface ImodelMetaColumnMeta {
   name: string;
   accessor?: string;
   exportable?: boolean;
+  features?: Array<any>;
 }
 
 interface IModelMetaColumnText {

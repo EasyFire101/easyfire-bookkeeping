@@ -394,5 +394,7 @@ export abstract class DynamicFilterRoleAbstractor implements IDynamicFilter {
   /**
    * Retrieves the response meta.
    */
-  getResponseMeta() {}
+  getResponseMeta(): Record<string, any> {
+    return this.responseMeta;
+  }
 }

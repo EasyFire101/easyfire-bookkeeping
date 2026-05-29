@@ -7,6 +7,7 @@ import {
   ILandedCostTransactionDOJO,
   ILandedCostTransactionEntry,
   ILandedCostTransactionEntryDOJO,
+  LandedCostTransactionModel,
 } from '../types/BillLandedCosts.types';
 import { TransactionLandedCost } from './TransctionLandedCost.service';
 import { formatNumber } from '@/utils/format-number';
@@ -44,10 +45,9 @@ export class LandedCostTranasctions {
       this.transactionLandedCost.transformToLandedCost,
     )(transactionType);
 
-    return pipe(
-      R.map(transformLandedCost),
-      this.transformLandedCostTransactions,
-    )(transactions);
+    return this.transformLandedCostTransactions(
+      (transactions as LandedCostTransactionModel[]).map(transformLandedCost),
+    );
   };
 
   /**

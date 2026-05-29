@@ -1,4 +1,3 @@
-import { pick } from 'lodash';
 import { Inject, Injectable } from '@nestjs/common';
 import {
   ITenantUserActivatedPayload,
@@ -25,13 +24,10 @@ export class SyncTenantUserMutateSubscriber {
       .query()
       .where('id', tenantUser.systemUserId)
       .patch({
-        ...pick(tenantUser, [
-          'firstName',
-          'lastName',
-          'email',
-          'active',
-          'phoneNumber',
-        ]),
+        firstName: tenantUser.firstName,
+        lastName: tenantUser.lastName,
+        email: tenantUser.email,
+        active: tenantUser.active,
       });
   }
 

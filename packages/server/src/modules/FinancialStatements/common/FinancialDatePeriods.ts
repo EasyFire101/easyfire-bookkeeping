@@ -76,7 +76,7 @@ export const FinancialDatePeriods = <T extends GConstructor<FinancialSheet>>(
       (
         fromDate: Date,
         toDate: Date,
-        periodsUnit: string,
+        periodsUnit: moment.unitOfTime.StartOf,
         node: any,
         callback: (
           node: any,

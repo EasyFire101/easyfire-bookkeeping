@@ -1,5 +1,4 @@
 import { Mutex } from 'async-mutex';
-import { chain } from 'lodash';
 import * as moment from 'moment';
 import { Knex } from 'knex';
 import { Injectable } from '@nestjs/common';
@@ -59,13 +58,13 @@ export class SaleInvoicesCost {
   getMaxDateInventoryTransactions(
     inventoryTransactions: ModelObject<InventoryTransaction>[],
   ): ModelObject<InventoryTransaction>[] {
-    return chain(inventoryTransactions)
-      .reduce((acc: any, transaction) => {
-        const compatatorDate = acc[transaction.itemId];
+    const reduced = inventoryTransactions.reduce(
+      (acc: Record<number, ModelObject<InventoryTransaction>>, transaction) => {
+        const existing = acc[transaction.itemId];
 
         if (
-          !compatatorDate ||
-          moment(compatatorDate.date).isBefore(transaction.date)
+          !existing ||
+          moment(existing.date).isBefore(transaction.date)
         ) {
           return {
             ...acc,
@@ -75,9 +74,10 @@ export class SaleInvoicesCost {
           };
         }
         return acc;
-      }, {})
-      .values()
-      .value();
+      },
+      {} as Record<number, ModelObject<InventoryTransaction>>,
+    );
+    return Object.values(reduced);
   }
 
   /**

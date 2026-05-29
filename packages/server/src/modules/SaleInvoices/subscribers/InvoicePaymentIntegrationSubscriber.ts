@@ -32,14 +32,14 @@ export class InvoicePaymentIntegrationSubscriber {
 
     paymentMethods.map(
       async (paymentMethod: TransactionPaymentServiceEntry) => {
-        const payload = {
+        const payload: PaymentIntegrationTransactionLinkEventPayload = {
           ...omit(paymentMethod, ['id']),
           saleInvoiceId: saleInvoice.id,
           trx,
         };
         await this.eventPublisher.emitAsync(
           events.paymentIntegrationLink.onPaymentIntegrationLink,
-          payload as PaymentIntegrationTransactionLinkEventPayload,
+          payload,
         );
       },
     );
@@ -59,11 +59,11 @@ export class InvoicePaymentIntegrationSubscriber {
 
     paymentMethods.map(
       async (paymentMethod: TransactionPaymentServiceEntry) => {
-        const payload = {
+        const payload: PaymentIntegrationTransactionLinkDeleteEventPayload = {
           ...omit(paymentMethod, ['id']),
           oldSaleInvoiceId: oldSaleInvoice.id,
           trx,
-        } as PaymentIntegrationTransactionLinkDeleteEventPayload;
+        };
 
         // Triggers `onPaymentIntegrationDeleteLink` event.
         await this.eventPublisher.emitAsync(

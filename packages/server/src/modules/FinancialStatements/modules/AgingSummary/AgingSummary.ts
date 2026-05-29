@@ -22,11 +22,11 @@ export abstract class AgingSummaryReport extends AgingReport {
   readonly query: IAgingSummaryQuery;
   readonly overdueInvoicesByContactId: Record<
     number,
-    Array<ModelObject<Bill | SaleInvoice>>
+    Array<ModelObject<Bill> | ModelObject<SaleInvoice>>
   >;
   readonly currentInvoicesByContactId: Record<
     number,
-    Array<ModelObject<Bill | SaleInvoice>>
+    Array<ModelObject<Bill> | ModelObject<SaleInvoice>>
   >;
 
   /**

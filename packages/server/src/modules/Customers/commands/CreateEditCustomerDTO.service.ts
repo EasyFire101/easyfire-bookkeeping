@@ -40,7 +40,7 @@ export class CreateEditCustomerDTO {
     return {
       ...commonDTO,
       currencyCode:
-        commonDTO.currencyCode || tenantMeta?.metadata?.baseCurrency,
+        customerDTO.currencyCode || tenantMeta?.metadata?.baseCurrency,
       active: defaultTo(customerDTO.active, true),
       contactService: ContactService.Customer,
       ...(!isEmpty(customerDTO.openingBalanceAt)

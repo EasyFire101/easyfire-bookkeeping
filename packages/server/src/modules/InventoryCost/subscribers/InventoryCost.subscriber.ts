@@ -122,7 +122,7 @@ export class InventoryCostSubscriber {
     }
     const inventoryItemsIds = map(oldInventoryTransactions, 'itemId');
     const startingDates = map(oldInventoryTransactions, 'date');
-    const startingDate: Date = head(startingDates);
+    const startingDate = new Date(head(startingDates));
 
     runAfterTransaction(trx, async () => {
       try {

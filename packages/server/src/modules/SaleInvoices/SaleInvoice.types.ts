@@ -22,8 +22,8 @@ export interface PaymentIntegrationTransactionLink {
 }
 
 export interface PaymentIntegrationTransactionLinkEventPayload {
-  tenantId: number;
-  enable: true;
+  tenantId?: number;
+  enable: boolean;
   paymentIntegrationId: number;
   referenceType: string;
   referenceId: number;
@@ -32,8 +32,8 @@ export interface PaymentIntegrationTransactionLinkEventPayload {
 }
 
 export interface PaymentIntegrationTransactionLinkDeleteEventPayload {
-  tenantId: number;
-  enable: true;
+  tenantId?: number;
+  enable: boolean;
   paymentIntegrationId: number;
   referenceType: string;
   referenceId: number;

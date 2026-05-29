@@ -184,7 +184,7 @@ export class ItemsEntriesService {
       'quantity',
       'itemId',
     );
-    diffEntries.forEach((entry: ItemEntry) => {
+    diffEntries.forEach((entry: { itemId: number; quantity: number }) => {
       const changeQuantityOper = this.itemModel()
         .query()
         .where({ id: entry.itemId, type: 'inventory' })

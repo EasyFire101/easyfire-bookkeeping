@@ -99,7 +99,7 @@ export class BillAllocatedLandedCostTransactions {
         currencyCode: 'USD',
       }),
       allocationMethodFormatted,
-    };
+    } as IBillLandedCostTransaction;
   };
 
   /**
