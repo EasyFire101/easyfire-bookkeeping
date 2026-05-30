@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import intl from 'react-intl-universal';
 import { NonIdealState } from '@blueprintjs/core';
 import {
@@ -8,7 +8,6 @@ import {
   FinancialStatement,
 } from '@/components';
 import { AbilitySubject, AuditLogAction } from '@/constants/abilityOption';
-
 import { AuditLogProvider } from './AuditLogProvider';
 import { AuditLogHeader } from './AuditLogHeader';
 import { AuditLogActionsBar } from './AuditLogActionsBar';
@@ -50,14 +49,14 @@ function AuditLogReportContent() {
 
       <DashboardPageContent>
         <FinancialStatement>
-          <AuditLogHeader
+          {/* <AuditLogHeader
             pageFilter={query}
             onSubmitFilter={handleFilterSubmit}
             isFilterDrawerOpen={isFilterDrawerOpen}
             toggleFilterDrawer={toggleFilterDrawer}
           />
           <AuditLogLoadingBar />
-          <AuditLogBody />
+          <AuditLogBody /> */}
         </FinancialStatement>
       </DashboardPageContent>
     </AuditLogProvider>

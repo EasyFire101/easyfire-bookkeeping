@@ -21,7 +21,6 @@ export function AuditLogActionsBar({
   const handleCustomizeClick = () => {
     toggleFilterDrawer();
   };
-
   const handleRecalcReport = () => {
     sheetRefresh();
   };

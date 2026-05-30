@@ -1,16 +1,12 @@
 import { useCallback, useEffect } from 'react';
 import moment from 'moment';
-
 import { ARAgingSummaryHeader } from './ARAgingSummaryHeader';
 import { ARAgingSummaryActionsBar } from './ARAgingSummaryActionsBar';
-
 import { FinancialStatement, DashboardPageContent } from '@/components';
 import { ARAgingSummaryProvider } from './ARAgingSummaryProvider';
 import { ARAgingSummarySheetLoadingBar } from './components';
 import { ARAgingSummaryBody } from './ARAgingSummaryBody';
-
 import { withARAgingSummaryActions, WithARAgingSummaryActionsProps } from './withARAgingSummaryActions';
-
 import { useARAgingSummaryQuery } from './common';
 import { ARAgingSummaryPdfDialog } from './dialogs/ARAgingSummaryPdfDialog';
 import { DialogsName } from '@/constants/dialogs';

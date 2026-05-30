@@ -1,18 +1,14 @@
 import React from 'react';
 import moment from 'moment';
-import * as R from 'ramda';
-
 import { ProfitLossSheetHeader } from './ProfitLossSheetHeader';
 import { ProfitLossActionsBar } from './ProfitLossActionsBar';
-
 import { DashboardPageContent } from '@/components';
-
+import { compose } from '@/utils';
 import { withDashboardActions } from '@/containers/Dashboard/withDashboardActions';
 import {
   withProfitLossActions,
   WithProfitLossActionsProps,
 } from './withProfitLossActions';
-
 import { useProfitLossSheetQuery } from './utils';
 import { ProfitLossSheetProvider } from './ProfitLossProvider';
 import { ProfitLossSheetAlerts, ProfitLossSheetLoadingBar } from './components';
@@ -74,7 +70,7 @@ function ProfitLossSheetInner({
   );
 }
 
-export const ProfitLossSheet = R.compose(
+export const ProfitLossSheet = compose(
   withDashboardActions,
   withProfitLossActions,
 )(ProfitLossSheetInner);

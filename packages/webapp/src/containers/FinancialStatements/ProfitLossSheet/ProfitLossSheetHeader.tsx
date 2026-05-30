@@ -2,22 +2,19 @@ import React from 'react';
 import moment from 'moment';
 import styled from 'styled-components';
 import { Formik, Form } from 'formik';
-import type { FormikHelpers } from 'formik';
-import * as R from 'ramda';
 import { Tabs, Tab, Button, Intent } from '@blueprintjs/core';
 import { FormattedMessage as T } from '@/components';
-
+import { compose } from '@/utils';
 import { FinancialStatementHeader } from '../FinancialStatementHeader';
 import { ProfitLossSheetHeaderGeneralPane } from './ProfitLossSheetHeaderGeneralPane';
 import { ProfitLossSheetHeaderComparisonPanel } from './ProfitLossSheetHeaderComparisonPanel';
 import { ProfitLossSheetHeaderDimensionsPanel } from './ProfitLossSheetHeaderDimensionsPanel';
-
 import { withProfitLoss, WithProfitLossProps } from './withProfitLoss';
 import { withProfitLossActions, WithProfitLossActionsProps } from './withProfitLossActions';
-
 import { useProfitLossHeaderValidationSchema, getDefaultProfitLossQuery } from './utils';
 import { useFeatureCan } from '@/hooks/state';
 import { Features } from '@/constants';
+import type { FormikHelpers } from 'formik';
 
 type ProfitLossFormValues = ReturnType<typeof getDefaultProfitLossQuery>;
 
@@ -68,7 +65,7 @@ function ProfitLossSheetHeaderInner({
       isOpen={profitLossDrawerFilter}
       drawerProps={{ onClose: handleDrawerClose }}
     >
-      <Formik
+      <Formik<ProfitLossFormValues>
         validationSchema={validationSchema}
         initialValues={initialValues}
         onSubmit={handleSubmit}
@@ -108,7 +105,7 @@ function ProfitLossSheetHeaderInner({
   );
 }
 
-export const ProfitLossSheetHeader = R.compose(
+export const ProfitLossSheetHeader = compose(
   withProfitLoss(({ profitLossDrawerFilter }) => ({
     profitLossDrawerFilter,
   })),

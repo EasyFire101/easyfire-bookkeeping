@@ -13,7 +13,7 @@ import {
 import { compose } from '@/utils';
 
 interface GeneralLedgerBodyProps {
-  organizationName: WithCurrentOrganizationProps['organization'];
+  organizationName: WithCurrentOrganizationProps['organization']['name'];
 }
 
 /**

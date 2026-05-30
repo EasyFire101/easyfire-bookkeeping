@@ -24,10 +24,11 @@ interface ProfitLossSheetPdfDialogRootProps {
 function ProfitLossSheetPdfDialogRoot({
   dialogName,
   isOpen,
+  payload,
 }: ProfitLossSheetPdfDialogRootProps) {
   return (
     <Dialog
-      name={dialogName}
+    name={dialogName}
       title={'Profit/LossSheet Print Preview'}
       className={classNames(CLASSES.DIALOG_PDF_PREVIEW)}
       autoFocus={true}
@@ -36,10 +37,7 @@ function ProfitLossSheetPdfDialogRoot({
       style={{ width: '1000px' }}
     >
       <DialogSuspense>
-        <ProfitLossSheetPdfDialogContent
-          dialogName={dialogName}
-          subscriptionForm={payload}
-        />
+        <ProfitLossSheetPdfDialogContent />
       </DialogSuspense>
     </Dialog>
   );
