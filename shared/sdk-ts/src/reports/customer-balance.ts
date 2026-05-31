@@ -24,7 +24,10 @@ export async function fetchCustomerBalanceTable(
 ): Promise<CustomerBalanceTableResponse> {
   const get = fetcher.path(CUSTOMER_BALANCE_ROUTE).method('get').create();
   const { payload, init } = withNestedQuery(query);
-  const { data } = await get(payload as Arg, init);
+  const { data } = await get(payload as Arg, {
+    ...init,
+    headers: { ...init?.headers, accept: 'application/json+table' },
+  });
   return data as unknown as CustomerBalanceTableResponse;
 }
 

@@ -24,7 +24,10 @@ export async function fetchTrialBalanceTable(
 ): Promise<TrialBalanceTableResponse> {
   const get = fetcher.path(TRIAL_BALANCE_ROUTE).method('get').create();
   const { payload, init } = withNestedQuery(query);
-  const { data } = await get(payload as Arg, init);
+  const { data } = await get(payload as Arg, {
+    ...init,
+    headers: { ...init?.headers, accept: 'application/json+table' },
+  });
   return data as unknown as TrialBalanceTableResponse;
 }
 

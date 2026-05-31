@@ -24,7 +24,10 @@ export async function fetchProfitLossTable(
 ): Promise<ProfitLossTableResponse> {
   const get = fetcher.path(PROFIT_LOSS_ROUTE).method('get').create();
   const { payload, init } = withNestedQuery(query);
-  const { data } = await get(payload as Arg, init);
+  const { data } = await get(payload as Arg, {
+    ...init,
+    headers: { ...init?.headers, accept: 'application/json+table' },
+  });
   return data as unknown as ProfitLossTableResponse;
 }
 

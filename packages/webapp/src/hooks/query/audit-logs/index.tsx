@@ -1,12 +1,9 @@
-import * as qs from 'qs';
-import { useQuery, useInfiniteQuery } from '@tanstack/react-query';
-import useApiRequest from '../../useRequest';
-import { normalizeApiPath } from '@/utils';
+import { useQuery, useInfiniteQuery, keepPreviousData } from '@tanstack/react-query';
+import { useApiFetcher } from '../../useRequest';
+import { fetchAuditLogs, fetchAuditLogFilterOptions } from '@bigcapital/sdk-ts';
 import { AUDIT_LOGS, AUDIT_LOG_FILTER_OPTIONS } from './query-keys';
 
 export { AuditLogsQueryKeys } from './query-keys';
-
-const qsArrayOptions = { skipNulls: true, arrayFormat: 'repeat' as const };
 
 function auditLogStringListParam(value: string | string[] | null | undefined) {
   if (value == null || value === '') return undefined;
@@ -14,45 +11,39 @@ function auditLogStringListParam(value: string | string[] | null | undefined) {
   return [value];
 }
 
-export function useAuditLogsQuery(filters: Record<string, any>, props?: Record<string, any>) {
-  const apiRequest = useApiRequest();
+function buildAuditLogsQuery(page: number, filters: Record<string, any>) {
+  return {
+    page,
+    pageSize: filters.pageSize ?? 20,
+    subject: auditLogStringListParam(filters.subject) as any,
+    action: auditLogStringListParam(filters.action) as any,
+    userId: filters.userId || undefined,
+    from: filters.from || undefined,
+    to: filters.to || undefined,
+  };
+}
 
-  const query = qs.stringify(
-    {
-      page: filters.page ?? 1,
-      pageSize: filters.pageSize ?? 20,
-      subject: auditLogStringListParam(filters.subject),
-      action: auditLogStringListParam(filters.action),
-      userId: filters.userId || undefined,
-      from: filters.from || undefined,
-      to: filters.to || undefined,
-    },
-    qsArrayOptions,
-  );
+export function useAuditLogsQuery(filters: Record<string, any>, props?: Record<string, any>) {
+  const fetcher = useApiFetcher();
 
   return useQuery({
     queryKey: [AUDIT_LOGS, filters],
-    queryFn: () =>
-      apiRequest
-        .http({ method: 'get', url: `/api/${normalizeApiPath(`audit-logs?${query}`)}` })
-        .then((res) => res.data),
-    keepPreviousData: true,
+    queryFn: () => fetchAuditLogs(fetcher, buildAuditLogsQuery(filters.page ?? 1, filters)),
+    placeholderData: keepPreviousData,
     ...props,
   });
 }
 
 export function useAuditLogFilterOptionsQuery(props?: Record<string, any>) {
-  const apiRequest = useApiRequest();
+  const fetcher = useApiFetcher();
 
   return useQuery({
     queryKey: [AUDIT_LOG_FILTER_OPTIONS],
     queryFn: () =>
-      apiRequest
-        .http({ method: 'get', url: `/api/${normalizeApiPath('audit-logs/filter-options')}` })
-        .then((res) => ({
-          subjects: res.data?.subjects ?? [],
-          actions: res.data?.actions ?? [],
-        })),
+      fetchAuditLogFilterOptions(fetcher).then((data) => ({
+        subjects: data?.subjects ?? [],
+        actions: data?.actions ?? [],
+      })),
     placeholderData: { subjects: [], actions: [] },
     staleTime: 5 * 60 * 1000,
     ...props,
@@ -63,38 +54,19 @@ export function useAuditLogsInfinityQuery(
   filters: Record<string, any>,
   infinityProps?: Record<string, any>,
 ) {
-  const apiRequest = useApiRequest();
+  const fetcher = useApiFetcher();
 
-  return useInfiniteQuery(
-    [AUDIT_LOGS, filters],
-    async ({ pageParam = 1 }) => {
-      const query = qs.stringify(
-        {
-          page: pageParam,
-          pageSize: filters.pageSize ?? 20,
-          subject: auditLogStringListParam(filters.subject),
-          action: auditLogStringListParam(filters.action),
-          userId: filters.userId || undefined,
-          from: filters.from || undefined,
-          to: filters.to || undefined,
-        },
-        qsArrayOptions,
-      );
-
-      const response = await apiRequest.http({
-        method: 'get',
-        url: `/api/${normalizeApiPath(`audit-logs?${query}`)}`,
-      });
-      return response.data;
+  return useInfiniteQuery({
+    queryKey: [AUDIT_LOGS, filters],
+    initialPageParam: 1,
+    queryFn: ({ pageParam = 1 }) =>
+      fetchAuditLogs(fetcher, buildAuditLogsQuery(pageParam, filters)),
+    getNextPageParam: (lastPage: any) => {
+      const { pagination } = lastPage;
+      return pagination.total > pagination.page_size * pagination.page
+        ? pagination.page + 1
+        : undefined;
     },
-    {
-      getNextPageParam: (lastPage: any) => {
-        const { pagination } = lastPage;
-        return pagination.total > pagination.page_size * pagination.page
-          ? pagination.page + 1
-          : undefined;
-      },
-      ...infinityProps,
-    },
-  );
+    ...infinityProps,
+  });
 }

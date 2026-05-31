@@ -49,14 +49,14 @@ function AuditLogReportContent() {
 
       <DashboardPageContent>
         <FinancialStatement>
-          {/* <AuditLogHeader
+          <AuditLogHeader
             pageFilter={query}
             onSubmitFilter={handleFilterSubmit}
             isFilterDrawerOpen={isFilterDrawerOpen}
             toggleFilterDrawer={toggleFilterDrawer}
           />
           <AuditLogLoadingBar />
-          <AuditLogBody /> */}
+          <AuditLogBody /> 
         </FinancialStatement>
       </DashboardPageContent>
     </AuditLogProvider>
