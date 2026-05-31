@@ -5,13 +5,13 @@ import {
   DrawerBody,
   FormattedMessage as T,
 } from '@/components';
-import QuickCustomerFormDrawer from './QuickCustomerFormDrawer';
+import { QuickCustomerFormDrawer } from './QuickCustomerFormDrawer';
 import { DRAWERS } from '@/constants/drawers';
 
 /**
  * Quick create/edit customer drawer.
  */
-export default function QuickCreateCustomerDrawerContent({
+export function QuickCreateCustomerDrawerContent({
   displayName,
   autofillRef,
 }) {

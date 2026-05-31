@@ -18,7 +18,7 @@ import intl from 'react-intl-universal';
 /**
  * Transaction type fields.
  */
-function TransactionTypeFields() {
+export function TransactionTypeFields() {
   // Money in dialog context.
   const { cashflowAccounts } = useMoneyOutDialogContext();
 
@@ -71,5 +71,3 @@ function TransactionTypeFields() {
     </div>
   );
 }
-
-export default TransactionTypeFields;

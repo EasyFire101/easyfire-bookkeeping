@@ -3,7 +3,7 @@ import { EnsureOneClickDemoAccountEnabled } from './EnsureOneClickDemoAccountEna
 import { OneClickDemoBoot } from './OneClickDemoBoot';
 import { OneClickDemoPageContent } from './OneClickDemoPageContent';
 
-export default function OneClickDemoPage() {
+export function OneClickDemoPage() {
   return (
     <EnsureAuthNotAuthenticated>
       <OneClickDemoBoot>

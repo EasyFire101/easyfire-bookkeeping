@@ -11,7 +11,7 @@ import { compose } from '@/utils';
  * Task form floating actions.
  * @returns
  */
-function ProjectTaskFormFloatingActions({
+function ProjectTaskFormFloatingActionsInner({
   // #withDialogActions
   closeDialog,
 }) {
@@ -45,4 +45,4 @@ function ProjectTaskFormFloatingActions({
   );
 }
 
-export default compose(withDialogActions)(ProjectTaskFormFloatingActions);
+export const ProjectTaskFormFloatingActions = compose(withDialogActions)(ProjectTaskFormFloatingActionsInner);

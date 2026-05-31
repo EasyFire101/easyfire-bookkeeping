@@ -1,6 +1,6 @@
 // @ts-nocheck
-import AccountDeleteAlert from './AccountDeleteAlert';
+import { AccountDeleteAlert } from './AccountDeleteAlert';
 
-export default {
+export const AccountsIndex = {
   AccountDeleteAlert,
 };

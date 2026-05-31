@@ -22,7 +22,7 @@ import { useBillFormContext } from './BillFormProvider';
 /**
  * Bill floating actions bar.
  */
-export default function BillFloatingActions() {
+export function BillFloatingActions() {
   const history = useHistory();
 
   // Formik context.

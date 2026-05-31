@@ -4,7 +4,7 @@ import intl from 'react-intl-universal';
 import { useSaveSettings } from '@/hooks/query';
 
 import { InvoiceNumberDialogProvider } from './InvoiceNumberDialogProvider';
-import ReferenceNumberForm from '@/containers/JournalNumber/ReferenceNumberForm';
+import { ReferenceNumberForm } from '@/containers/JournalNumber/ReferenceNumberForm';
 
 import { withDialogActions } from '@/containers/Dialog/withDialogActions';
 import { withSettings } from '@/containers/Settings/withSettings';
@@ -19,7 +19,7 @@ import { DialogsName } from '@/constants/dialogs';
 /**
  * invoice number dialog's content.
  */
-function InvoiceNumberDialogContent({
+function InvoiceNumberDialogContentInner({
   // #ownProps
   initialValues,
   onConfirm,
@@ -93,7 +93,7 @@ function InvoiceNumberDialogContent({
   );
 }
 
-export default compose(
+export const InvoiceNumberDialogContent = compose(
   withDialogActions,
   withSettingsActions,
   withSettings(({ invoiceSettings }) => ({
@@ -101,4 +101,4 @@ export default compose(
     numberPrefix: invoiceSettings?.numberPrefix,
     autoIncrement: invoiceSettings?.autoIncrement,
   })),
-)(InvoiceNumberDialogContent);
+)(InvoiceNumberDialogContentInner);

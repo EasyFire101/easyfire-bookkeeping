@@ -5,7 +5,7 @@ import intl from 'react-intl-universal';
 import { Formik } from 'formik';
 import { Intent } from '@blueprintjs/core';
 import { AppToaster } from '@/components';
-import ProjectInvoicingFormContent from './ProjectInvoicingFormContent';
+import { ProjectInvoicingFormContent } from './ProjectInvoicingFormContent';
 import { CreateProjectInvoicingFormSchema } from './ProjectInvoicingForm.schema';
 
 import { withDialogActions } from '@/containers/Dialog/withDialogActions';
@@ -23,7 +23,7 @@ const defaultInitialValues = {
  * project invoicing form.
  * @returns
  */
-function ProjectInvoicingForm({
+function ProjectInvoicingFormInner({
   // #withDialogActions
   closeDialog,
 }) {
@@ -57,4 +57,4 @@ function ProjectInvoicingForm({
   );
 }
 
-export default compose(withDialogActions)(ProjectInvoicingForm);
+export const ProjectInvoicingForm = compose(withDialogActions)(ProjectInvoicingFormInner);

@@ -45,7 +45,7 @@ function ProjectEntriesFormFloatingActions({
   );
 }
 
-export default compose(withDialogActions)(ProjectEntriesFormFloatingActions);
+export const ProjectBillableEntriesFormFloatingActions = compose(withDialogActions)(ProjectEntriesFormFloatingActions);
 
 const SaveButton = styled(Button)`
   &.bp4-button {

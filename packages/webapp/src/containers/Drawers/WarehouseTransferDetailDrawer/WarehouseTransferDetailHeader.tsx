@@ -19,7 +19,7 @@ import { useWarehouseDetailDrawerContext } from './WarehouseTransferDetailDrawer
 /**
  * Warehouse transfer details drawer header.
  */
-export default function WarehouseTransferDetailHeader() {
+export function WarehouseTransferDetailHeader() {
   const { warehouseTransfer } = useWarehouseDetailDrawerContext();
 
   return (

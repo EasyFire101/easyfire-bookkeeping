@@ -11,7 +11,7 @@ let toastKeySessionExpired;
 let toastKeySomethingWrong;
 let toastTooManyRequests;
 
-function GlobalErrors({
+function GlobalErrorsInner({
   // #withGlobalErrors
   globalErrors,
 
@@ -98,4 +98,4 @@ function GlobalErrors({
   return null;
 }
 
-export default compose(withGlobalErrors, withGlobalErrorsActions)(GlobalErrors);
+export const GlobalErrors = compose(withGlobalErrors, withGlobalErrorsActions)(GlobalErrorsInner);

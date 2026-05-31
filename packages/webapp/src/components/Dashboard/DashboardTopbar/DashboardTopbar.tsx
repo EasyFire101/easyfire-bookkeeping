@@ -26,7 +26,7 @@ import { withDashboardActions } from '@/containers/Dashboard/withDashboardAction
 import { withDashboard } from '@/containers/Dashboard/withDashboard';
 import { withDialogActions } from '@/containers/Dialog/withDialogActions';
 
-import QuickNewDropdown from '@/containers/QuickNewDropdown/QuickNewDropdown';
+import { QuickNewDropdown } from '@/containers/QuickNewDropdown/QuickNewDropdown';
 import {
   DashboardHamburgerButton,
   DashboardQuickSearchButton,

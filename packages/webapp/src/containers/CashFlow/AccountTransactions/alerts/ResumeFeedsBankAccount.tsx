@@ -63,7 +63,7 @@ function ResumeFeedsBankAccountAlert({
   );
 }
 
-export default compose(
+export const ResumeFeedsBankAccount = compose(
   withAlertStoreConnect(),
   withAlertActions,
 )(ResumeFeedsBankAccountAlert);

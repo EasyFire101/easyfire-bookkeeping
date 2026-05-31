@@ -20,7 +20,7 @@ import { DRAWERS } from '@/constants/drawers';
 /**
  * Customer delete alert.
  */
-function CustomerDeleteAlert({
+function CustomerDeleteAlertInner({
   name,
 
   // #withAlertStoreConnect
@@ -84,8 +84,8 @@ function CustomerDeleteAlert({
   );
 }
 
-export default compose(
+export const CustomerDeleteAlert = compose(
   withAlertStoreConnect(),
   withAlertActions,
   withDrawerActions,
-)(CustomerDeleteAlert);
+)(CustomerDeleteAlertInner);

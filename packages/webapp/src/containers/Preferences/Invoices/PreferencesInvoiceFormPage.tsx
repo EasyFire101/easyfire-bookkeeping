@@ -23,7 +23,7 @@ const defaultValues = {
 /**
  * Preferences - Invoices.
  */
-function PreferencesInvoiceFormPage({
+function PreferencesInvoiceFormPageInner({
   // #withDashboardActions
   changePreferencesPageTitle,
 
@@ -74,9 +74,9 @@ function PreferencesInvoiceFormPage({
   );
 }
 
-export default compose(
+export const PreferencesInvoiceFormPage = compose(
   withDashboardActions,
   withSettings(({ invoiceSettings }) => ({
     invoiceSettings: invoiceSettings,
   })),
-)(PreferencesInvoiceFormPage);
+)(PreferencesInvoiceFormPageInner);

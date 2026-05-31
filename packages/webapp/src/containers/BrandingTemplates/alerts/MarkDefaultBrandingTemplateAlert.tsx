@@ -13,7 +13,7 @@ import { compose } from '@/utils';
 /**
  * Mark default branding template alert.
  */
-function MarkDefaultBrandingTemplateAlert({
+function MarkDefaultBrandingTemplateAlertInner({
   // #ownProps
   name,
 
@@ -66,7 +66,7 @@ function MarkDefaultBrandingTemplateAlert({
   );
 }
 
-export default compose(
+export const MarkDefaultBrandingTemplateAlert = compose(
   withAlertStoreConnect(),
   withAlertActions,
-)(MarkDefaultBrandingTemplateAlert);
+)(MarkDefaultBrandingTemplateAlertInner);

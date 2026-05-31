@@ -62,7 +62,7 @@ function DeleteStripeAccountAlert({
   );
 }
 
-export default compose(
+export const DeleteStripeConnectionAlert = compose(
   withAlertStoreConnect(),
   withAlertActions,
 )(DeleteStripeAccountAlert);

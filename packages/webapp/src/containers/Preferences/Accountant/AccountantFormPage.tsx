@@ -10,7 +10,7 @@ import { AppToaster } from '@/components';
 import { withDashboardActions } from '@/containers/Dashboard/withDashboardActions';
 import { withSettings } from '@/containers/Settings/withSettings';
 
-import AccountantForm from './AccountantForm';
+import { AccountantForm } from './AccountantForm';
 import { AccountantSchema } from './Accountant.schema';
 import { useAccountantFormContext } from './AccountantFormProvider';
 import { transferObjectOptionsToArray } from './utils';
@@ -36,7 +36,7 @@ const defaultFormValues = flatten({
 });
 
 // Accountant preferences.
-function AccountantFormPage({
+function AccountantFormPageInner({
   //# withDashboardActions
   changePreferencesPageTitle,
 
@@ -84,9 +84,9 @@ function AccountantFormPage({
   );
 }
 
-export default compose(
+export const AccountantFormPage = compose(
   withSettings(({ allSettings }) => ({
     allSettings,
   })),
   withDashboardActions,
-)(AccountantFormPage);
+)(AccountantFormPageInner);

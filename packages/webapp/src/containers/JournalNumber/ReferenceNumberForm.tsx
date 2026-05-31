@@ -7,7 +7,7 @@ import { Intent, Button, Classes } from '@blueprintjs/core';
 import '@/style/pages/ReferenceNumber/ReferenceNumber.scss';
 
 import { FormattedMessage as T, FormObserver } from '@/components';
-import ReferenceNumberFormContent from './ReferenceNumberFormContent';
+import { ReferenceNumberFormContent } from './ReferenceNumberFormContent';
 import { transformValuesToForm } from './utils';
 import { saveInvoke, transformToForm } from '@/utils';
 
@@ -29,7 +29,7 @@ const validationSchema = Yup.object().shape({
 /**
  * Reference number form.
  */
-export default function ReferenceNumberForm({
+export function ReferenceNumberForm({
   initialValues,
   description,
   onSubmit,

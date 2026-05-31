@@ -11,7 +11,7 @@ import { compose } from '@/utils';
  * Project invoicing from floating actions
  * @returns
  */
-function ProjectInvoicingFormFloatingActions({
+function ProjectInvoicingFormFloatingActionsInner({
   // #withDialogActions
   closeDialog,
 }) {
@@ -45,4 +45,4 @@ function ProjectInvoicingFormFloatingActions({
   );
 }
 
-export default compose(withDialogActions)(ProjectInvoicingFormFloatingActions);
+export const ProjectInvoicingFormFloatingActions = compose(withDialogActions)(ProjectInvoicingFormFloatingActionsInner);

@@ -19,7 +19,7 @@ import { compose } from '@/utils';
 /**
  * Branch delete alert.
  */
-function BranchDeleteAlert({
+function BranchDeleteAlertInner({
   name,
 
   // #withAlertStoreConnect
@@ -77,7 +77,7 @@ function BranchDeleteAlert({
   );
 }
 
-export default compose(
+export const BranchDeleteAlert = compose(
   withAlertStoreConnect(),
   withAlertActions,
-)(BranchDeleteAlert);
+)(BranchDeleteAlertInner);

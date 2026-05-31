@@ -29,4 +29,4 @@ function PreferencesBrandingPageRoot({ changePreferencesPageTitle }) {
   );
 }
 
-export default R.compose(withDashboardActions)(PreferencesBrandingPageRoot);
+export const PreferencesBrandingPage = R.compose(withDashboardActions)(PreferencesBrandingPageRoot);

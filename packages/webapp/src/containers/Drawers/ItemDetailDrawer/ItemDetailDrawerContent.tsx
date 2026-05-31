@@ -4,13 +4,13 @@ import React from 'react';
 import '@/style/components/Drawers/ItemDrawer.scss';
 
 import { DrawerBody } from '@/components';
-import ItemContentDetails from './ItemContentDetails';
+import { ItemDetail as ItemContentDetails } from './ItemContentDetails';
 import { ItemDetailDrawerProvider } from './ItemDetailDrawerProvider';
 
 /**
  * Item detail drawer content.
  */
-export default function ItemDetailDrawerContent({
+export function ItemDetailDrawerContent({
   // #ownProp
   itemId,
 }) {

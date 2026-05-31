@@ -7,7 +7,7 @@ import { FeatureCan, FormattedMessage as T, Icon } from '@/components';
 import { withDialogActions } from '@/containers/Dialog/withDialogActions';
 import { compose } from '@/utils';
 
-function BranchesActions({
+function BranchesActionsInner({
   //#ownProps
   openDialog,
 }) {
@@ -30,4 +30,4 @@ function BranchesActions({
   );
 }
 
-export default compose(withDialogActions)(BranchesActions);
+export const BranchesActions = compose(withDialogActions)(BranchesActionsInner);

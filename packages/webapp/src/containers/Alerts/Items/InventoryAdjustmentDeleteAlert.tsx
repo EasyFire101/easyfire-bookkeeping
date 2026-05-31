@@ -19,7 +19,7 @@ import { DRAWERS } from '@/constants/drawers';
 /**
  * Inventory Adjustment delete alerts.
  */
-function InventoryAdjustmentDeleteAlert({
+function InventoryAdjustmentDeleteAlertInner({
   name,
 
   // #withAlertStoreConnect
@@ -80,8 +80,8 @@ function InventoryAdjustmentDeleteAlert({
   );
 }
 
-export default compose(
+export const InventoryAdjustmentDeleteAlert = compose(
   withAlertStoreConnect(),
   withAlertActions,
   withDrawerActions,
-)(InventoryAdjustmentDeleteAlert);
+)(InventoryAdjustmentDeleteAlertInner);

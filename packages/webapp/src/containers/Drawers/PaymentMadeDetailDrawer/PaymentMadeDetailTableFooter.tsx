@@ -14,7 +14,7 @@ import { usePaymentMadeDetailContext } from './PaymentMadeDetailProvider';
 /**
  * Payment made - Details panel - Footer.
  */
-export default function PaymentMadeDetailTableFooter() {
+export function PaymentMadeDetailTableFooter() {
   const { paymentMade } = usePaymentMadeDetailContext();
 
   return (

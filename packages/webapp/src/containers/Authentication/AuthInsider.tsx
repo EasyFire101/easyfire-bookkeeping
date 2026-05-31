@@ -1,13 +1,13 @@
 // @ts-nocheck
 import React from 'react';
 import styled from 'styled-components';
-import AuthCopyright from './AuthCopyright';
+import { AuthCopyright } from './AuthCopyright';
 import { AuthInsiderContent, AuthInsiderCopyright } from './_components';
 
 /**
  * Authentication insider page.
  */
-export default function AuthInsider({
+export function AuthInsider({
   logo = true,
   copyright = true,
   children,

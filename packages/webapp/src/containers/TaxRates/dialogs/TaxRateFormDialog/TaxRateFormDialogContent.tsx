@@ -1,6 +1,6 @@
 // @ts-nocheck
 import React from 'react';
-import TaxRateFormDialogForm from './TaxRateFormDialogForm';
+import { TaxRateFormDialogForm } from './TaxRateFormDialogForm';
 import { TaxRateFormDialogBoot } from './TaxRateFormDialogBoot';
 
 interface TaxRateFormDialogContentProps {
@@ -11,7 +11,7 @@ interface TaxRateFormDialogContentProps {
 /**
  * Tax rate form dialog content.
  */
-export default function TaxRateFormDialogContent({
+export function TaxRateFormDialogContent({
   dialogName,
   taxRateId,
 }: TaxRateFormDialogContentProps) {

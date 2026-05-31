@@ -6,8 +6,8 @@ import { Tab } from '@blueprintjs/core';
 
 import { DrawerMainTabs } from '@/components';
 
-import EstimateDetailActionsBar from './EstimateDetailActionsBar';
-import EstimateDetailPanel from './EstimateDetailPanel';
+import { EstimateDetailActionsBar } from './EstimateDetailActionsBar';
+import { EstimateDetailTab as EstimateDetailPanel } from './EstimateDetailPanel';
 
 /**
  * Estimate details tabs.
@@ -28,7 +28,7 @@ function EstimateDetailsTabs() {
 /**
  * Estimate view detail
  */
-export default function EstimateDetail() {
+export function EstimateDetail() {
   return (
     <EstimateDetailsRoot>
       <EstimateDetailActionsBar />

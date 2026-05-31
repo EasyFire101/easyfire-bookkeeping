@@ -5,9 +5,7 @@ import { withDrawers } from '@/containers/Drawer/withDrawers';
 
 import { compose } from '@/utils';
 
-const PaymentReceiveDetailContent = React.lazy(() =>
-  import('./PaymentReceiveDetailContent'),
-);
+const PaymentReceiveDetailContent = React.lazy(() => import('./PaymentReceiveDetailContent').then(m => ({ default: m.PaymentReceiveDetailContent })));
 
 /**
  * Payment receive detail drawer
@@ -32,4 +30,4 @@ function PaymentReceiveDetailDrawer({
   );
 }
 
-export default compose(withDrawers())(PaymentReceiveDetailDrawer);
+export const index = compose(withDrawers())(PaymentReceiveDetailDrawer);

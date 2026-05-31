@@ -20,7 +20,7 @@ import { DRAWERS } from '@/constants/drawers';
  * Warehouse transfer delete alert
  * @returns
  */
-function WarehouseTransferDeleteAlert({
+function WarehouseTransferDeleteAlertInner({
   name,
 
   // #withAlertStoreConnect
@@ -83,8 +83,8 @@ function WarehouseTransferDeleteAlert({
   );
 }
 
-export default compose(
+export const WarehouseTransferDeleteAlert = compose(
   withAlertStoreConnect(),
   withAlertActions,
   withDrawerActions,
-)(WarehouseTransferDeleteAlert);
+)(WarehouseTransferDeleteAlertInner);

@@ -45,7 +45,7 @@ import { useBulkDeleteCreditNotesDialog } from './hooks/use-bulk-delete-credit-n
 /**
  * Credit note table actions bar.
  */
-function CreditNotesActionsBar({
+function CreditNotesActionsBarInner({
   // #withCreditNotes
   creditNoteFilterRoles,
   creditNotesSelectedRows,
@@ -222,7 +222,7 @@ function CreditNotesActionsBar({
   );
 }
 
-export default compose(
+export const CreditNotesActionsBar = compose(
   withCreditNotesActions,
   withSettingsActions,
   withCreditNotes(({ creditNoteTableState, creditNotesSelectedRows }) => ({
@@ -234,4 +234,4 @@ export default compose(
   })),
   withDialogActions,
   withDrawerActions,
-)(CreditNotesActionsBar);
+)(CreditNotesActionsBarInner);

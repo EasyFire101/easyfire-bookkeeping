@@ -16,7 +16,7 @@ import intl from 'react-intl-universal';
 /**
  * Cashlflow transaction drawer detail Header.
  */
-export default function CashflowTransactionDrawerHeader() {
+export function CashflowTransactionDrawerHeader() {
   const { cashflowTransaction } = useCashflowTransactionDrawerContext();
 
   return (

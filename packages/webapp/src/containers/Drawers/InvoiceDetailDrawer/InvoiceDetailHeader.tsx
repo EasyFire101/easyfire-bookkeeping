@@ -20,7 +20,7 @@ import { InvoiceDetailsStatus } from './utils';
 /**
  * Invoice detail header.
  */
-export default function InvoiceDetailHeader() {
+export function InvoiceDetailHeader() {
   const { invoice } = useInvoiceDetailDrawerContext();
 
   return (

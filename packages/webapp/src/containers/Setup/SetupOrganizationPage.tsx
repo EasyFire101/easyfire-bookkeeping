@@ -4,7 +4,7 @@ import { Formik } from 'formik';
 import { FormattedMessage as T } from '@/components';
 import { x } from '@xstyled/emotion';
 
-import SetupOrganizationForm from './SetupOrganizationForm';
+import { SetupOrganizationForm } from './SetupOrganizationForm';
 
 import { useOrganizationSetup } from '@/hooks/query';
 import { withSettingsActions } from '@/containers/Settings/withSettingsActions';
@@ -25,7 +25,7 @@ const defaultValues = {
 /**
  * Setup organization form.
  */
-function SetupOrganizationPage({ wizard }) {
+function SetupOrganizationPageInner({ wizard }) {
   const { mutateAsync: organizationSetupMutate } = useOrganizationSetup();
 
   // Validation schema.
@@ -70,4 +70,4 @@ function SetupOrganizationPage({ wizard }) {
   );
 }
 
-export default compose(withSettingsActions)(SetupOrganizationPage);
+export const SetupOrganizationPage = compose(withSettingsActions)(SetupOrganizationPageInner);

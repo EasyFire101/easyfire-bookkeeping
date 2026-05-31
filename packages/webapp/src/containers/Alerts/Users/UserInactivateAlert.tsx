@@ -13,7 +13,7 @@ import { compose } from '@/utils';
 /**
  * User inactivate alert.
  */
-function UserInactivateAlert({
+function UserInactivateAlertInner({
   // #ownProps
   name,
 
@@ -77,7 +77,7 @@ function UserInactivateAlert({
   );
 }
 
-export default compose(
+export const UserInactivateAlert = compose(
   withAlertStoreConnect(),
   withAlertActions,
-)(UserInactivateAlert);
+)(UserInactivateAlertInner);

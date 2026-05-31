@@ -14,7 +14,7 @@ import { compose } from '@/utils';
 /**
  * Project delete alert.
  */
-function ProjectDeleteAlert({
+function ProjectDeleteAlertInner({
   name,
 
   // #withAlertStoreConnect
@@ -73,7 +73,7 @@ function ProjectDeleteAlert({
   );
 }
 
-export default compose(
+export const ProjectDeleteAlert = compose(
   withAlertStoreConnect(),
   withAlertActions,
-)(ProjectDeleteAlert);
+)(ProjectDeleteAlertInner);

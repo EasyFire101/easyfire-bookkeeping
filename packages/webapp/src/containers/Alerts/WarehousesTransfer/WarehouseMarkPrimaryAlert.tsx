@@ -14,7 +14,7 @@ import { compose } from '@/utils';
 /**
  * warehouse mark primary alert.
  */
-function WarehouseMarkPrimaryAlert({
+function WarehouseMarkPrimaryAlertInner({
   name,
 
   // #withAlertStoreConnect
@@ -64,7 +64,7 @@ function WarehouseMarkPrimaryAlert({
   );
 }
 
-export default compose(
+export const WarehouseMarkPrimaryAlert = compose(
   withAlertStoreConnect(),
   withAlertActions,
-)(WarehouseMarkPrimaryAlert);
+)(WarehouseMarkPrimaryAlertInner);

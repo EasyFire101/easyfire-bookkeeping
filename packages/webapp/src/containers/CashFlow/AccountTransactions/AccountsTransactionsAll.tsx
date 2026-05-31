@@ -3,7 +3,7 @@ import styled from 'styled-components';
 
 import '@/style/pages/CashFlow/AccountTransactions/List.scss';
 
-import AccountTransactionsDataTable from './AccountTransactionsDataTable';
+import { AccountTransactionsDataTable } from './AccountTransactionsDataTable';
 import { AccountTransactionsAllProvider } from './AccountTransactionsAllBoot';
 
 const Box = styled.div`
@@ -18,7 +18,7 @@ const CashflowTransactionsTableCard = styled.div`
   flex: 0 1;
 `;
 
-export default function AccountTransactionsAll() {
+export function AccountTransactionsAll() {
   return (
     <AccountTransactionsAllProvider>
       <Box>

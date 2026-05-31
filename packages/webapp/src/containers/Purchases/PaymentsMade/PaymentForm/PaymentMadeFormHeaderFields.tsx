@@ -73,7 +73,7 @@ const getFieldsStyle = (theme: Theme) => css`
 /**
  * Payment made form header fields.
  */
-function PaymentMadeFormHeaderFields({ organization: { base_currency } }) {
+function PaymentMadeFormHeaderFieldsInner({ organization: { base_currency } }) {
   // Formik form context.
   const {
     values: { entries, currency_code },
@@ -262,7 +262,7 @@ function PaymentFormVendorSelect() {
   );
 }
 
-export default compose(withCurrentOrganization())(PaymentMadeFormHeaderFields);
+export const PaymentMadeFormHeaderFields = compose(withCurrentOrganization())(PaymentMadeFormHeaderFieldsInner);
 
 const VendorButtonLink = styled(VendorDrawerLink)`
   font-size: 11px;

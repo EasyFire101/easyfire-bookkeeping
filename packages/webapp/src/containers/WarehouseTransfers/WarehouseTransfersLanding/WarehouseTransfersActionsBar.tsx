@@ -29,7 +29,7 @@ import { compose } from '@/utils';
 /**
  * Warehouse Transfers actions bar.
  */
-function WarehouseTransfersActionsBar({
+function WarehouseTransfersActionsBarInner({
   // #withWarehouseTransfers
   warehouseTransferFilterRoles,
 
@@ -135,7 +135,7 @@ function WarehouseTransfersActionsBar({
   );
 }
 
-export default compose(
+export const WarehouseTransfersActionsBar = compose(
   withSettingsActions,
   withWarehouseTransfersActions,
   withWarehouseTransfers(({ warehouseTransferTableState }) => ({
@@ -144,4 +144,4 @@ export default compose(
   withSettings(({ warehouseTransferSettings }) => ({
     warehouseTransferTableSize: warehouseTransferSettings?.tableSize,
   })),
-)(WarehouseTransfersActionsBar);
+)(WarehouseTransfersActionsBarInner);

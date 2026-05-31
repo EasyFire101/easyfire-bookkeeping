@@ -5,15 +5,15 @@ import styled from 'styled-components';
 import { Tab } from '@blueprintjs/core';
 
 import { DrawerMainTabs } from '@/components';
-import InventoryAdjustmentDetailTab from './InventoryAdjustmentDetailTab';
-import InventoryAdjustmentDetailActionsBar from './InventoryAdjustmentDetailActionsBar';
-import InventoryAdjustmentDetailGLEntriesPanel from './InventoryAdjustmentDetailGLEntriesPanel';
+import { InventoryAdjustmentDetailTab } from './InventoryAdjustmentDetailTab';
+import { InventoryAdjustmentDetailActionsBar } from './InventoryAdjustmentDetailActionsBar';
+import { InventoryAdjustmentDetailGLEntriesPanel } from './InventoryAdjustmentDetailGLEntriesPanel';
 
 /**
  * Inventory adjustment detail
  * @returns {React.JSX}
  */
-export default function InventoryAdjustmentDetail() {
+export function InventoryAdjustmentDetail() {
   return (
     <InventoryAdjustmentDetailsRoot>
       <InventoryAdjustmentDetailActionsBar />

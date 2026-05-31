@@ -11,7 +11,7 @@ import { compose } from '@/utils';
 /**
  * Refund credit note floating actions.
  */
-function RefundCreditNoteFloatingActions({
+function RefundCreditNoteFloatingActionsInner({
   // #withDialogActions
   closeDialog,
 }) {
@@ -43,4 +43,4 @@ function RefundCreditNoteFloatingActions({
     </div>
   );
 }
-export default compose(withDialogActions)(RefundCreditNoteFloatingActions);
+export const RefundCreditNoteFloatingActions = compose(withDialogActions)(RefundCreditNoteFloatingActionsInner);

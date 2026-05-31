@@ -3,9 +3,8 @@ import React from 'react';
 import styled from 'styled-components';
 
 import { Card } from '@/components';
-import JournalEntriesTable, {
-  AmountDisplayedBaseCurrencyMessage,
-} from '../../JournalEntriesTable/JournalEntriesTable';
+import {
+  AmountDisplayedBaseCurrencyMessage, JournalEntriesTable } from '../../JournalEntriesTable/JournalEntriesTable';
 
 import { useTransactionsByReference } from '@/hooks/query';
 import { usePaymentMadeDetailContext } from './PaymentMadeDetailProvider';
@@ -14,7 +13,7 @@ import { usePaymentMadeDetailContext } from './PaymentMadeDetailProvider';
  * Payment made GL entries table panel.
  * @returns {React.JSX}
  */
-export default function PaymentMadeGLEntriesPanel() {
+export function PaymentMadeGLEntriesPanel() {
   const { paymentMadeId } = usePaymentMadeDetailContext();
 
   // Handle fetch transaction by reference.

@@ -13,7 +13,7 @@ import { withInvoiceActions } from './withInvoiceActions';
 /**
  * Invoices views tabs.
  */
-function InvoiceViewTabs({
+function InvoiceViewTabsInner({
   // #withInvoiceActions
   setInvoicesTableState,
 
@@ -51,9 +51,9 @@ function InvoiceViewTabs({
   );
 }
 
-export default compose(
+export const InvoiceViewTabs = compose(
   withInvoiceActions,
   withInvoices(({ invoicesTableState }) => ({
     invoicesCurrentView: invoicesTableState.viewSlug,
   })),
-)(InvoiceViewTabs);
+)(InvoiceViewTabsInner);

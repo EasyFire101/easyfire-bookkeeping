@@ -3,10 +3,10 @@ import { Formik } from 'formik';
 import { Link } from 'react-router-dom';
 
 import { AppToaster as Toaster, FormattedMessage as T } from '@/components';
-import AuthInsider from '@/containers/Authentication/AuthInsider';
+import { AuthInsider } from '@/containers/Authentication/AuthInsider';
 import { useAuthLogin } from '@/hooks/query';
 
-import LoginForm from './LoginForm';
+import { LoginForm } from './LoginForm';
 import { LoginSchema, transformLoginErrorsToToasts } from './utils';
 import {
   AuthFooterLinks,
@@ -24,7 +24,7 @@ const initialValues = {
 /**
  * Login page.
  */
-export default function Login() {
+export function Login() {
   const { mutateAsync: loginMutate } = useAuthLogin();
 
   const handleSubmit = (values, { setSubmitting }) => {

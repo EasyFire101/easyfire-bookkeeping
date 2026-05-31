@@ -1,12 +1,12 @@
 // @ts-nocheck
 import React from 'react';
 import { AllocateLandedCostDialogProvider } from './AllocateLandedCostDialogProvider';
-import AllocateLandedCostForm from './AllocateLandedCostForm';
+import { AllocateLandedCostForm } from './AllocateLandedCostForm';
 
 /**
  * Allocate landed cost dialog content.
  */
-export default function AllocateLandedCostDialogContent({
+export function AllocateLandedCostDialogContent({
   // #ownProps
   dialogName,
   billId,

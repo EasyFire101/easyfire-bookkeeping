@@ -9,7 +9,7 @@ import { omit } from 'lodash';
 import { AppToaster } from '@/components';
 import { useRefundVendorCreditContext } from './RefundVendorCreditFormProvider';
 import { CreateVendorRefundCreditFormSchema } from './RefundVendorCreditForm.schema';
-import RefundVendorCreditFormContent from './RefundVendorCreditFormContent';
+import { RefundVendorCreditFormContent } from './RefundVendorCreditFormContent';
 
 import { withDialogActions } from '@/containers/Dialog/withDialogActions';
 import { compose } from '@/utils';
@@ -26,7 +26,7 @@ const defaultInitialValues = {
 /**
  * Refund Vendor credit form.
  */
-function RefundVendorCreditForm({
+function RefundVendorCreditFormInner({
   // #withDialogActions
   closeDialog,
 }) {
@@ -77,4 +77,4 @@ function RefundVendorCreditForm({
   );
 }
 
-export default compose(withDialogActions)(RefundVendorCreditForm);
+export const RefundVendorCreditForm = compose(withDialogActions)(RefundVendorCreditFormInner);

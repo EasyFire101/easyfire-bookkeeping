@@ -13,7 +13,7 @@ import InventoryAdjustmentDrawerCls from '@/style/components/Drawers/InventoryAd
 /**
  * Inventory detail header.
  */
-export default function InventoryAdjustmentDetailHeader() {
+export function InventoryAdjustmentDetailHeader() {
   const { inventoryAdjustment } = useInventoryAdjustmentDrawerContext();
 
   return (

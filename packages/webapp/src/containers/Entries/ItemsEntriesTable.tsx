@@ -31,7 +31,7 @@ interface ItemsEntriesTableProps {
 /**
  * Items entries table.
  */
-function ItemsEntriesTable(props: ItemsEntriesTableProps) {
+export function ItemsEntriesTable(props: ItemsEntriesTableProps) {
   const { value, initialValue, onChange } = props;
 
   const [localValue, handleChange] = useUncontrolled({
@@ -137,5 +137,3 @@ ItemsEntriesTable.defaultProps = {
   minLinesNumber: 1,
   enableTaxRates: true,
 };
-
-export default ItemsEntriesTable;

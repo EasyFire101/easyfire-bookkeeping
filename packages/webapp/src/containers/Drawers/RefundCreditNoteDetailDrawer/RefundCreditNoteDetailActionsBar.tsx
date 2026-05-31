@@ -18,7 +18,7 @@ import { compose } from '@/utils';
 /**
  * Refund credit note actions bar.
  */
-function RefundCreditNoteDetailActionsBar({
+function RefundCreditNoteDetailActionsBarInner({
   // #withAlertActions
   openAlert,
 }) {
@@ -46,4 +46,4 @@ function RefundCreditNoteDetailActionsBar({
   );
 }
 
-export default compose(withAlertActions)(RefundCreditNoteDetailActionsBar);
+export const RefundCreditNoteDetailActionsBar = compose(withAlertActions)(RefundCreditNoteDetailActionsBarInner);

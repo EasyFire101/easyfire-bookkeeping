@@ -4,7 +4,7 @@ import intl from 'react-intl-universal';
 import { useSaveSettings } from '@/hooks/query';
 
 import { VendorCreditNumberDilaogProvider } from './VendorCreditNumberDilaogProvider';
-import ReferenceNumberForm from '@/containers/JournalNumber/ReferenceNumberForm';
+import { ReferenceNumberForm } from '@/containers/JournalNumber/ReferenceNumberForm';
 
 import { withDialogActions } from '@/containers/Dialog/withDialogActions';
 import { withSettings } from '@/containers/Settings/withSettings';
@@ -18,7 +18,7 @@ import {
 /**
  * Vendor credit number dialog
  */
-function VendorCreditNumberDialogContent({
+function VendorCreditNumberDialogContentInner({
   // #ownProps
   initialValues,
   onConfirm,
@@ -92,7 +92,7 @@ function VendorCreditNumberDialogContent({
   );
 }
 
-export default compose(
+export const VendorCreditNumberDialogContent = compose(
   withDialogActions,
   withSettingsActions,
   withSettings(({ vendorsCreditNoteSetting }) => ({
@@ -100,4 +100,4 @@ export default compose(
     nextNumber: vendorsCreditNoteSetting?.nextNumber,
     numberPrefix: vendorsCreditNoteSetting?.numberPrefix,
   })),
-)(VendorCreditNumberDialogContent);
+)(VendorCreditNumberDialogContentInner);

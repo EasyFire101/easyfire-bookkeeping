@@ -16,7 +16,7 @@ import { useInviteUserFormContext } from './InviteUserFormProvider';
 import { withDialogActions } from '@/containers/Dialog/withDialogActions';
 import intl from 'react-intl-universal';
 
-function InviteUserFormContent({
+function InviteUserFormContentInner({
   // #withDialogActions
   closeDialog,
 }) {
@@ -78,4 +78,4 @@ function InviteUserFormContent({
   );
 }
 
-export default compose(withDialogActions)(InviteUserFormContent);
+export const InviteUserFormContent = compose(withDialogActions)(InviteUserFormContentInner);

@@ -11,7 +11,7 @@ import { RoleFormObserver } from './RoleFormObserver';
  * Preferences - Roles Form content.
  * @returns {React.JSX}
  */
-export default function RolesFormContent() {
+export function RolesFormContent() {
   return (
     <Form>
       <RoleFormHeader />

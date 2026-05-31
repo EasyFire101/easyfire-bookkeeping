@@ -7,8 +7,8 @@ import '@/style/pages/Items/List.scss';
 import { DashboardPageContent } from '@/components';
 import { ItemsListProvider } from './ItemsListProvider';
 
-import ItemsActionsBar from './ItemsActionsBar';
-import ItemsDataTable from './ItemsDataTable';
+import { ItemsActionsBar } from './ItemsActionsBar';
+import { ItemsDataTable } from './ItemsDataTable';
 
 import { withItems } from './withItems';
 import { withItemsActions } from './withItemsActions';
@@ -16,7 +16,7 @@ import { withItemsActions } from './withItemsActions';
 /**
  * Items list.
  */
-function ItemsList({
+function ItemsListInner({
   // #withItems
   itemsTableState,
   itemsTableStateChanged,
@@ -46,10 +46,10 @@ function ItemsList({
   );
 }
 
-export default compose(
+export const ItemsList = compose(
   withItemsActions,
   withItems(({ itemsTableState, itemsTableStateChanged }) => ({
     itemsTableState,
     itemsTableStateChanged,
   })),
-)(ItemsList);
+)(ItemsListInner);

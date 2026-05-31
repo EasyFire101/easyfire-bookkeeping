@@ -11,7 +11,7 @@ import { TableStyle } from '@/constants';
 /**
  * Vendor Credit detail table.
  */
-export default function VendorCreditDetailTable() {
+export function VendorCreditDetailTable() {
   const {
     vendorCredit: { entries },
   } = useVendorCreditDetailDrawerContext();

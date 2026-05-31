@@ -23,7 +23,7 @@ const PROJECT_BILLABLE_ENTRIES = {
   PROJECT_BILLABLE_ENTRIES: 'PROJECT_BILLABLE_ENTRIES',
 };
 
-export default {
+export const queryTypes = {
   ...PROJECTS,
   ...CUSTOMERS,
   ...PROJECT_TASKS,

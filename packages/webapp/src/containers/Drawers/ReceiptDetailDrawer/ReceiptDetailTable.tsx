@@ -11,7 +11,7 @@ import { TableStyle } from '@/constants';
 /**
  * Receipt readonly details table columns.
  */
-export default function ReceiptDetailTable() {
+export function ReceiptDetailTable() {
   // Receipt details drawer context.
   const {
     receipt: { entries },

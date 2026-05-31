@@ -208,7 +208,7 @@ function ExpensesActionsBar({
   );
 }
 
-export default compose(
+export const ExpenseActionsBar = compose(
   withDialogActions,
   withExpensesActions,
   withSettingsActions,

@@ -6,7 +6,7 @@ import { EmptyStatus } from '@/components';
 import { Can, FormattedMessage as T } from '@/components';
 import { BillAction, AbilitySubject } from '@/constants/abilityOption';
 
-export default function BillsEmptyStatus() {
+export function BillsEmptyStatus() {
   const history = useHistory();
 
   return (

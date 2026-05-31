@@ -6,9 +6,7 @@ import { Dialog, DialogSuspense } from '@/components';
 import withDialogRedux from '@/components/DialogReduxConnect';
 import { compose } from '@/utils';
 
-const CustomerOpeningBalanceDialogContent = React.lazy(() =>
-  import('./CustomerOpeningBalanceDialogContent'),
-);
+const CustomerOpeningBalanceDialogContent = React.lazy(() => import('./CustomerOpeningBalanceDialogContent').then(m => ({ default: m.CustomerOpeningBalanceDialogContent })));
 
 /**
  * Customer opening balance dialog.
@@ -38,4 +36,4 @@ function CustomerOpeningBalanceDialog({
   );
 }
 
-export default compose(withDialogRedux())(CustomerOpeningBalanceDialog);
+export const index = compose(withDialogRedux())(CustomerOpeningBalanceDialog);

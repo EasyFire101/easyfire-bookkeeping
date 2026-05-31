@@ -13,12 +13,12 @@ import {
 
 import { useReceiptFormContext } from './ReceiptFormProvider';
 
-import ReceiptFromHeader from './ReceiptFormHeader';
-import ReceiptItemsEntriesEditor from './ReceiptItemsEntriesEditor';
-import ReceiptFormFloatingActions from './ReceiptFormFloatingActions';
+import { ReceiptFormHeader as ReceiptFromHeader } from './ReceiptFormHeader';
+import { ReceiptItemsEntriesEditor } from './ReceiptItemsEntriesEditor';
+import { ReceiptFormFloatingActions } from './ReceiptFormFloatingActions';
 import { ReceiptFormFooter } from './ReceiptFormFooter';
-import ReceiptFormDialogs from './ReceiptFormDialogs';
-import ReceiptFormTopBar from './ReceiptFormTopbar';
+import { ReceiptFormDialogs } from './ReceiptFormDialogs';
+import { ReceiptFormTopBar } from './ReceiptFormTopbar';
 
 import { withDashboardActions } from '@/containers/Dashboard/withDashboardActions';
 import { withSettings } from '@/containers/Settings/withSettings';

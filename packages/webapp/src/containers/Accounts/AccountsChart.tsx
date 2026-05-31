@@ -5,8 +5,8 @@ import '@/style/pages/Accounts/List.scss';
 
 import { DashboardPageContent, DashboardContentTable } from '@/components';
 import { AccountsChartProvider } from './AccountsChartProvider';
-import AccountsActionsBar from './AccountsActionsBar';
-import AccountsDataTable from './AccountsDataTable';
+import { AccountsActionsBar } from './AccountsActionsBar';
+import { AccountsDataTable } from './AccountsDataTable';
 
 import { withAccounts } from '@/containers/Accounts/withAccounts';
 import { withAccountsTableActions } from './withAccountsTableActions';
@@ -17,7 +17,7 @@ import { compose } from '@/utils';
 /**
  * Accounts chart list.
  */
-function AccountsChart({
+function AccountsChartInner({
   // #withAccounts
   accountsTableState,
   accountsTableStateChanged,
@@ -49,10 +49,10 @@ function AccountsChart({
   );
 }
 
-export default compose(
+export const AccountsChart = compose(
   withAccounts(({ accountsTableState, accountsTableStateChanged }) => ({
     accountsTableState,
     accountsTableStateChanged,
   })),
   withAccountsTableActions,
-)(AccountsChart);
+)(AccountsChartInner);

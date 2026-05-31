@@ -21,7 +21,7 @@ import { DRAWERS } from '@/constants/drawers';
 /**
  * Account delete alerts.
  */
-function AccountDeleteAlert({
+function AccountDeleteAlertInner({
   name,
 
   // #withAlertStoreConnect
@@ -83,8 +83,8 @@ function AccountDeleteAlert({
   );
 }
 
-export default compose(
+export const AccountDeleteAlert = compose(
   withAlertStoreConnect(),
   withAlertActions,
   withDrawerActions,
-)(AccountDeleteAlert);
+)(AccountDeleteAlertInner);

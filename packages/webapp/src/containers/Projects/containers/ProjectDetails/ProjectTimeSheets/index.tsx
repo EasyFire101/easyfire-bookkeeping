@@ -10,7 +10,7 @@ import { ProjectTimesheetsProvider } from './ProjectTimesheetsProvider';
  * Project Timesheets.
  * @returns
  */
-export default function ProjectTimeSheets() {
+export function ProjectTimeSheets() {
   return (
     <ProjectTimesheetsProvider>
       <ProjectDetailHeader />

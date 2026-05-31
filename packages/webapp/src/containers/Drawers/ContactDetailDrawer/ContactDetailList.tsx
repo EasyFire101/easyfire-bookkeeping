@@ -5,7 +5,7 @@ import { Money } from '@/components';
 import { useContactDetailDrawerContext } from './ContactDetailDrawerProvider';
 import { DetailItem } from '@/components/Details';
 
-export default function ContactDetailList({}) {
+export function ContactDetailList({}) {
   const { contact } = useContactDetailDrawerContext();
 
   return (

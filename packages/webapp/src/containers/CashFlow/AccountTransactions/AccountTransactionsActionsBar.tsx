@@ -52,7 +52,7 @@ import {
 import { DialogsName } from '@/constants/dialogs';
 import { compose } from '@/utils';
 
-function AccountTransactionsActionsBar({
+function AccountTransactionsActionsBarInner({
   // #withDialogActions
   openDialog,
 
@@ -444,7 +444,7 @@ function AccountTransactionsActionsBar({
   );
 }
 
-export default compose(
+export const AccountTransactionsActionsBar = compose(
   withDialogActions,
   withAlertActions,
   withSettingsActions,
@@ -465,4 +465,4 @@ export default compose(
     }),
   ),
   withBankingActions,
-)(AccountTransactionsActionsBar);
+)(AccountTransactionsActionsBarInner);

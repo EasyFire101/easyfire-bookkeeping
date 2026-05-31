@@ -1,9 +1,9 @@
 // @ts-nocheck
 import React from 'react';
 import { AlertLazy } from './components'
-import registered from './registered';
+import { registered } from './registered';
 
-export default function AlertsContainer() {
+export function AlertsContainer() {
   return (
     <React.Fragment>
       {registered.map((alert) => (

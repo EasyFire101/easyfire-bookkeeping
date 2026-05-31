@@ -11,7 +11,7 @@ import { compose, saveInvoke } from '@/utils';
 /**
  * Alert description.
  */
-function ExpenseDeleteEntriesAlert({
+function ExpenseDeleteEntriesAlertInner({
   name,
   onConfirm,
 
@@ -50,7 +50,7 @@ function ExpenseDeleteEntriesAlert({
   );
 }
 
-export default compose(
+export const ExpenseDeleteEntriesAlert = compose(
   withAlertStoreConnect(),
   withAlertActions,
-)(ExpenseDeleteEntriesAlert);
+)(ExpenseDeleteEntriesAlertInner);

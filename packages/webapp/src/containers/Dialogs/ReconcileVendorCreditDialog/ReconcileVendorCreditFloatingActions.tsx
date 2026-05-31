@@ -8,7 +8,7 @@ import { useReconcileVendorCreditContext } from './ReconcileVendorCreditFormProv
 import { withDialogActions } from '@/containers/Dialog/withDialogActions';
 import { compose } from '@/utils';
 
-function ReconcileVendorCreditFloatingActions({
+function ReconcileVendorCreditFloatingActionsInner({
   // #withDialogActions
   closeDialog,
 }) {
@@ -40,4 +40,4 @@ function ReconcileVendorCreditFloatingActions({
     </div>
   );
 }
-export default compose(withDialogActions)(ReconcileVendorCreditFloatingActions);
+export const ReconcileVendorCreditFloatingActions = compose(withDialogActions)(ReconcileVendorCreditFloatingActionsInner);

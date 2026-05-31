@@ -29,7 +29,7 @@ import intl from 'react-intl-universal';
 /**
  * Item form primary section.
  */
-export default function ItemFormPrimarySection() {
+export function ItemFormPrimarySection() {
   // Item form context.
   const { isNewMode, item, itemsCategories } = useItemFormContext();
 

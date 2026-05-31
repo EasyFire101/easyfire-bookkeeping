@@ -2,10 +2,10 @@
 import React from 'react';
 import { Form } from 'formik';
 
-import CurrencyFormFields from './CurrencyFormFields';
-import CurrencyFormFooter from './CurrencyFormFooter';
+import { CurrencyFormFields } from './CurrencyFormFields';
+import { CurrencyFormFooter } from './CurrencyFormFooter';
 
-export default function CurrencyFormContent() {
+export function CurrencyFormContent() {
   return (
     <Form>
       <CurrencyFormFields />

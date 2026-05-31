@@ -5,7 +5,7 @@ import { useHistory } from 'react-router-dom';
 import { Can, FormattedMessage as T, EmptyStatus } from '@/components';
 import { AbilitySubject, CustomerAction } from '@/constants/abilityOption';
 
-export default function CustomersEmptyStatus() {
+export function CustomersEmptyStatus() {
   const history = useHistory();
 
   return (

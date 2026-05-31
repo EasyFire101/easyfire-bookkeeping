@@ -20,4 +20,4 @@ export const mapStateToProps = (state, props) => {
   };
 };
 
-export default connect(mapStateToProps, null);
+export const UsersListDialogConnector = connect(mapStateToProps, null);

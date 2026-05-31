@@ -28,7 +28,7 @@ import { DialogsName } from '@/constants/dialogs';
 /**
  * Items categories actions bar.
  */
-function ItemsCategoryActionsBar({
+function ItemsCategoryActionsBarInner({
   // #withItemCategories
   itemCategoriesSelectedRows = [],
   categoriesFilterConditions,
@@ -117,7 +117,7 @@ function ItemsCategoryActionsBar({
   );
 }
 
-export default compose(
+export const ItemsCategoryActionsBar = compose(
   withDialogActions,
   withItemCategories(
     ({ itemCategoriesSelectedRows, itemsCategoriesTableState }) => ({
@@ -127,4 +127,4 @@ export default compose(
   ),
   withAlertActions,
   withItemCategoriesActions,
-)(ItemsCategoryActionsBar);
+)(ItemsCategoryActionsBarInner);

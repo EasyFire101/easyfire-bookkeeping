@@ -11,7 +11,7 @@ import {
 } from '@/components';
 import { TABLES } from '@/constants/tables';
 
-import ReceiptsEmptyStatus from './ReceiptsEmptyStatus';
+import { ReceiptsEmptyStatus } from './ReceiptsEmptyStatus';
 
 import { withReceipts } from './withReceipts';
 import { withReceiptsActions } from './withReceiptsActions';
@@ -162,7 +162,7 @@ function ReceiptsDataTable({
   );
 }
 
-export default compose(
+export const ReceiptsTable = compose(
   withAlertActions,
   withReceiptsActions,
   withDrawerActions,

@@ -12,7 +12,7 @@ import { useReceiptsListContext } from './ReceiptsListProvider';
 /**
  * Receipts views tabs.
  */
-function ReceiptViewTabs({
+function ReceiptViewTabsInner({
   // #withReceiptActions
   setReceiptsTableState,
 
@@ -45,9 +45,9 @@ function ReceiptViewTabs({
   );
 }
 
-export default compose(
+export const ReceiptViewTabs = compose(
   withReceiptActions,
   withReceipts(({ receiptTableState }) => ({
     receiptsCurrentView: receiptTableState.viewSlug,
   })),
-)(ReceiptViewTabs);
+)(ReceiptViewTabsInner);

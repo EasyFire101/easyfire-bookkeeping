@@ -48,7 +48,7 @@ import { compose } from '@/utils';
 /**
  * Accounts actions bar.
  */
-function AccountsActionsBar({
+function AccountsActionsBarInner({
   // #withDialogActions
   openDialog,
 
@@ -241,7 +241,7 @@ function AccountsActionsBar({
   );
 }
 
-export default compose(
+export const AccountsActionsBar = compose(
   withDialogActions,
   withAlertActions,
   withSettingsActions,
@@ -254,4 +254,4 @@ export default compose(
     accountsTableSize: accountsSettings.tableSize,
   })),
   withAccountsTableActions,
-)(AccountsActionsBar);
+)(AccountsActionsBarInner);

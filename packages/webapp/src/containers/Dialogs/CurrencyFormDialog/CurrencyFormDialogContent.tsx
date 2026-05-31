@@ -2,13 +2,13 @@
 import React from 'react';
 import { CurrencyFormProvider } from './CurrencyFormProvider';
 
-import CurrencyForm from './CurrencyForm';
+import { CurrencyForm } from './CurrencyForm';
 import { withCurrencyDetail } from '@/containers/Currencies/withCurrencyDetail';
 
 import { compose } from '@/utils';
 import '@/style/pages/Currency/CurrencyFormDialog.scss';
 
-function CurrencyFormDialogContent({
+function CurrencyFormDialogContentInner({
   // #ownProp
   action,
   currencyCode,
@@ -25,4 +25,4 @@ function CurrencyFormDialogContent({
   );
 }
 
-export default compose(withCurrencyDetail)(CurrencyFormDialogContent);
+export const CurrencyFormDialogContent = compose(withCurrencyDetail)(CurrencyFormDialogContentInner);

@@ -4,15 +4,15 @@ import clsx from 'classnames';
 
 import { Card } from '@/components';
 
-import VendorDetailsActionsBar from './VendorDetailsActionsBar';
-import VendorDetailsHeader from './VendorDetailsHeader';
+import { VendorDetailsActionsBar } from './VendorDetailsActionsBar';
+import { VendorDetailsHeader } from './VendorDetailsHeader';
 
 import Style from './VendorDetailsDrawer.module.scss';
 
 /**
  * contact detail.
  */
-export default function CustomerDetails() {
+export function CustomerDetails() {
   return (
     <div className={clsx(Style.root)}>
       <VendorDetailsActionsBar />

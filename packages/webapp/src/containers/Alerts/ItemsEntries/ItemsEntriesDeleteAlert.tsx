@@ -11,7 +11,7 @@ import { compose, saveInvoke } from '@/utils';
 /**
  * Items entries table clear all lines alert.
  */
-function ItemsEntriesDeleteAlert({
+function ItemsEntriesDeleteAlertInner({
   name,
   onConfirm,
 
@@ -50,7 +50,7 @@ function ItemsEntriesDeleteAlert({
   );
 }
 
-export default compose(
+export const ItemsEntriesDeleteAlert = compose(
   withAlertStoreConnect(),
   withAlertActions,
-)(ItemsEntriesDeleteAlert);
+)(ItemsEntriesDeleteAlertInner);

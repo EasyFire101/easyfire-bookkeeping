@@ -15,7 +15,7 @@ import { DRAWERS } from '@/constants/drawers';
 /**
  * Item delete alerts.
  */
-function TaxRateDeleteAlert({
+function TaxRateDeleteAlertInner({
   name,
 
   // #withAlertStoreConnect
@@ -85,8 +85,8 @@ function TaxRateDeleteAlert({
   );
 }
 
-export default compose(
+export const TaxRateDeleteAlert = compose(
   withAlertStoreConnect(),
   withAlertActions,
   withDrawerActions,
-)(TaxRateDeleteAlert);
+)(TaxRateDeleteAlertInner);

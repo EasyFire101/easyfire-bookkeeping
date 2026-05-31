@@ -10,7 +10,7 @@ import intl from 'react-intl-universal';
 /**
  * Unlocking transactions form fields.
  */
-export default function UnlockingTransactionsFormFields() {
+export function UnlockingTransactionsFormFields() {
   const reasonFieldRef = useAutofocus();
 
   return (

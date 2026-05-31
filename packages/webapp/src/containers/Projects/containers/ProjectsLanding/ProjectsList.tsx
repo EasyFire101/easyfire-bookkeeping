@@ -2,9 +2,9 @@
 import React from 'react';
 import { DashboardPageContent, DashboardContentTable } from '@/components';
 
-import ProjectsActionsBar from './ProjectsActionsBar';
-import ProjectsViewTabs from './ProjectsViewTabs';
-import ProjectsDataTable from './ProjectsDataTable';
+import { ProjectsActionsBar } from './ProjectsActionsBar';
+import { ProjectsViewTabs } from './ProjectsViewTabs';
+import { ProjectsDataTable } from './ProjectsDataTable';
 
 import { withProjects } from './withProjects';
 import { withProjectsActions } from './withProjectsActions';
@@ -16,7 +16,7 @@ import { compose, transformTableStateToQuery } from '@/utils';
  * Projects list.
  * @returns 
  */
-function ProjectsList({
+function ProjectsListInner({
   // #withProjects
   projectsTableState,
   projectsTableStateChanged,
@@ -49,10 +49,10 @@ function ProjectsList({
   );
 }
 
-export default compose(
+export const ProjectsList = compose(
   withProjects(({ projectsTableState, projectsTableStateChanged }) => ({
     projectsTableState,
     projectsTableStateChanged,
   })),
   withProjectsActions,
-)(ProjectsList);
+)(ProjectsListInner);

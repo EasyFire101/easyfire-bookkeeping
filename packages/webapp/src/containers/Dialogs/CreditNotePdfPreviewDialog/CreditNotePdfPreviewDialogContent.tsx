@@ -8,7 +8,7 @@ import { usePdfCreditNote } from '@/hooks/query';
 import { withDialogActions } from '@/containers/Dialog/withDialogActions';
 import { compose } from '@/utils';
 
-function CreditNotePdfPreviewDialogContent({
+function CreditNotePdfPreviewDialogContentInner({
   subscriptionForm: { creditNoteId },
 }) {
   const { isLoading, pdfUrl, filename } = usePdfCreditNote(creditNoteId);
@@ -45,4 +45,4 @@ function CreditNotePdfPreviewDialogContent({
   );
 }
 
-export default compose(withDialogActions)(CreditNotePdfPreviewDialogContent);
+export const CreditNotePdfPreviewDialogContent = compose(withDialogActions)(CreditNotePdfPreviewDialogContentInner);

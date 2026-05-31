@@ -17,7 +17,7 @@ import { useExpenseFormContext } from './ExpenseFormPageProvider';
  * Expenses form topbar.
  * @returns
  */
-export default function ExpenseFormTopBar() {
+export function ExpenseFormTopBar() {
   // Features guard.
   const { featureCan } = useFeatureCan();
 

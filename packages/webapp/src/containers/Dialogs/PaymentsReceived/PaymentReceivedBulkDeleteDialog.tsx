@@ -4,14 +4,14 @@ import { Button, Classes, Dialog, Intent } from '@blueprintjs/core';
 import { FormattedMessage as T, AppToaster } from '@/components';
 import intl from 'react-intl-universal';
 
-import BulkDeleteDialogContent from '@/containers/Dialogs/components/BulkDeleteDialogContent';
+import { BulkDeleteDialogContent } from '@/containers/Dialogs/components/BulkDeleteDialogContent';
 import { useBulkDeletePaymentReceives } from '@/hooks/query/payment-receives';
 import withDialogRedux from '@/components/DialogReduxConnect';
 import { withDialogActions } from '@/containers/Dialog/withDialogActions';
 import { withPaymentsReceivedActions } from '@/containers/Sales/PaymentsReceived/PaymentsLanding/withPaymentsReceivedActions';
 import { compose } from '@/utils';
 
-function PaymentReceivedBulkDeleteDialog({
+function PaymentReceivedBulkDeleteDialogInner({
   dialogName,
   isOpen,
   payload: {
@@ -100,9 +100,9 @@ function PaymentReceivedBulkDeleteDialog({
   );
 }
 
-export default compose(
+export const PaymentReceivedBulkDeleteDialog = compose(
   withDialogRedux(),
   withDialogActions,
   withPaymentsReceivedActions,
-)(PaymentReceivedBulkDeleteDialog);
+)(PaymentReceivedBulkDeleteDialogInner);
 

@@ -7,7 +7,7 @@ import { Intent } from '@blueprintjs/core';
 
 import { AppToaster } from '@/components';
 
-import SMSMessageFormContent from './SMSMessageFormContent';
+import { SMSMessageFormContent } from './SMSMessageFormContent';
 import { CreateSMSMessageFormSchema } from './SMSMessageForm.schema';
 import { useSMSMessageDialogContext } from './SMSMessageDialogProvider';
 import { transformErrors } from './utils';
@@ -25,7 +25,7 @@ const defaultInitialValues = {
 /**
  * SMS Message form.
  */
-function SMSMessageForm({
+function SMSMessageFormInner({
   // #withDialogActions
   closeDialog,
 }) {
@@ -78,4 +78,4 @@ function SMSMessageForm({
   );
 }
 
-export default compose(withDialogActions)(SMSMessageForm);
+export const SMSMessageForm = compose(withDialogActions)(SMSMessageFormInner);

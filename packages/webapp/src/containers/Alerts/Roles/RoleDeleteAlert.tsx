@@ -19,7 +19,7 @@ import { compose } from '@/utils';
 /**
  * Role delete alert.
  */
-function RoleDeleteAlert({
+function RoleDeleteAlertInner({
   name,
 
   // #withAlertStoreConnect
@@ -81,7 +81,7 @@ function RoleDeleteAlert({
   );
 }
 
-export default compose(
+export const RoleDeleteAlert = compose(
   withAlertStoreConnect(),
   withAlertActions,
-)(RoleDeleteAlert);
+)(RoleDeleteAlertInner);

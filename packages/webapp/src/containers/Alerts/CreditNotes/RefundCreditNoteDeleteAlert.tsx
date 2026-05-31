@@ -16,7 +16,7 @@ import { DRAWERS } from '@/constants/drawers';
 /**
  * Refund credit transactions delete alert
  */
-function RefundCreditNoteDeleteAlert({
+function RefundCreditNoteDeleteAlertInner({
   name,
   // #withAlertStoreConnect
   isOpen,
@@ -71,8 +71,8 @@ function RefundCreditNoteDeleteAlert({
   );
 }
 
-export default compose(
+export const RefundCreditNoteDeleteAlert = compose(
   withAlertStoreConnect(),
   withAlertActions,
   withDrawerActions,
-)(RefundCreditNoteDeleteAlert);
+)(RefundCreditNoteDeleteAlertInner);

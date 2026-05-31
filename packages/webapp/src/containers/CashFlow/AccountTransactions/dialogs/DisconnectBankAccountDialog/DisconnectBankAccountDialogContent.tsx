@@ -24,7 +24,7 @@ interface DisconnectBankAccountDialogContentProps {
   bankAccountId: number;
 }
 
-function DisconnectBankAccountDialogContent({
+function DisconnectBankAccountDialogContentInner({
   bankAccountId,
 
   // #withDialogActions
@@ -100,4 +100,4 @@ function DisconnectBankAccountDialogContent({
   );
 }
 
-export default R.compose(withDialogActions)(DisconnectBankAccountDialogContent);
+export const DisconnectBankAccountDialogContent = R.compose(withDialogActions)(DisconnectBankAccountDialogContentInner);

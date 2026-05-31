@@ -13,7 +13,7 @@ import { compose } from '@/utils';
 /**
  * Expense publish alert.
  */
-function ExpensePublishAlert({
+function ExpensePublishAlertInner({
   closeAlert,
 
   // #withAlertStoreConnect
@@ -59,7 +59,7 @@ function ExpensePublishAlert({
   );
 }
 
-export default compose(
+export const ExpensePublishAlert = compose(
   withAlertStoreConnect(),
   withAlertActions,
-)(ExpensePublishAlert);
+)(ExpensePublishAlertInner);

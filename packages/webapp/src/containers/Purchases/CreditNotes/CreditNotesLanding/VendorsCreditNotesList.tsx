@@ -4,8 +4,8 @@ import React from 'react';
 import '@/style/pages/VendorsCreditNote/List.scss';
 
 import { DashboardPageContent } from '@/components';
-import VendorsCreditNoteActionsBar from './VendorsCreditNoteActionsBar';
-import VendorsCreditNoteDataTable from './VendorsCreditNoteDataTable';
+import { VendorsCreditNoteActionsBar } from './VendorsCreditNoteActionsBar';
+import { VendorsCreditNoteDataTable } from './VendorsCreditNoteDataTable';
 
 import { withVendorsCreditNotes } from './withVendorsCreditNotes';
 import { withVendorsCreditNotesActions } from './withVendorsCreditNotesActions';
@@ -13,7 +13,7 @@ import { withVendorsCreditNotesActions } from './withVendorsCreditNotesActions';
 import { VendorsCreditNoteListProvider } from './VendorsCreditNoteListProvider';
 import { transformTableStateToQuery, compose } from '@/utils';
 
-function VendorsCreditNotesList({
+function VendorsCreditNotesListInner({
   // #withVendorsCreditNotes
   vendorsCreditNoteTableState,
   vendorsCreditNoteTableStateChanged,
@@ -42,7 +42,7 @@ function VendorsCreditNotesList({
   );
 }
 
-export default compose(
+export const VendorsCreditNotesList = compose(
   withVendorsCreditNotesActions,
   withVendorsCreditNotes(
     ({ vendorsCreditNoteTableState, vendorsCreditNoteTableStateChanged }) => ({
@@ -50,4 +50,4 @@ export default compose(
       vendorsCreditNoteTableStateChanged,
     }),
   ),
-)(VendorsCreditNotesList);
+)(VendorsCreditNotesListInner);

@@ -4,10 +4,10 @@ import styled from 'styled-components';
 
 import { CommercialDocBox } from '@/components';
 
-import InventoryAdjustmentDetailHeader from './InventoryAdjustmentDetailHeader';
-import InventoryAdjustmentDetailTable from './InventoryAdjustmentDetailTable';
+import { InventoryAdjustmentDetailHeader } from './InventoryAdjustmentDetailHeader';
+import { InventoryAdjustmentDetailTable } from './InventoryAdjustmentDetailTable';
 
-export default function InventoryAdjustmentDetailTab() {
+export function InventoryAdjustmentDetailTab() {
   return (
     <CommercialDocBox>
       <InventoryAdjustmentDetailHeader />

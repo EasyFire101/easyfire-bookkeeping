@@ -14,7 +14,7 @@ import { useEstimateDetailDrawerContext } from './EstimateDetailDrawerProvider';
 /**
  * Estimate details panel footer content.
  */
-export default function EstimateDetailTableFooter() {
+export function EstimateDetailTableFooter() {
   const { estimate } = useEstimateDetailDrawerContext();
 
   return (

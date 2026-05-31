@@ -16,7 +16,7 @@ import {
   FInputGroupComponent,
   ProjectTaskChargeTypeSelect,
 } from '../../components';
-import ExpenseFormChargeFields from './ProjectExpenseFormChargeFields';
+import { ExpenseFormChargeFields } from './ProjectExpenseFormChargeFields';
 import { momentFormatter } from '@/utils';
 import { useProjectExpenseFormContext } from './ProjectExpenseFormProvider';
 import { expenseChargeOption } from '../common/modalChargeOptions';
@@ -25,7 +25,7 @@ import { expenseChargeOption } from '../common/modalChargeOptions';
  * Project expense form fields.
  * @returns
  */
-export default function ProjectExpenseFormFields() {
+export function ProjectExpenseFormFields() {
   return (
     <div className={Classes.DIALOG_BODY}>
       {/*------------ Expense Name -----------*/}

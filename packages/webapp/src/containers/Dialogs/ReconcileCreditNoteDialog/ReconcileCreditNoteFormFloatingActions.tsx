@@ -11,7 +11,7 @@ import { compose } from '@/utils';
 /**
  * Reconcile credit note floating actions.
  */
-function ReconcileCreditNoteFormFloatingActions({
+function ReconcileCreditNoteFormFloatingActionsInner({
   // #withDialogActions
   closeDialog,
 }) {
@@ -43,6 +43,6 @@ function ReconcileCreditNoteFormFloatingActions({
     </div>
   );
 }
-export default compose(withDialogActions)(
-  ReconcileCreditNoteFormFloatingActions,
+export const ReconcileCreditNoteFormFloatingActions = compose(withDialogActions)(
+  ReconcileCreditNoteFormFloatingActionsInner,
 );

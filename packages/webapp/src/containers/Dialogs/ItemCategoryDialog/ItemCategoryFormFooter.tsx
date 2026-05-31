@@ -12,7 +12,7 @@ import { compose } from '@/utils';
 /**
  * Item category form footer.
  */
-function ItemCategoryFormFooter({
+function ItemCategoryFormFooterInner({
   // #withDialogActions
   closeDialog,
 }) {
@@ -41,4 +41,4 @@ function ItemCategoryFormFooter({
     </div>
   );
 }
-export default compose(withDialogActions)(ItemCategoryFormFooter);
+export const ItemCategoryFormFooter = compose(withDialogActions)(ItemCategoryFormFooterInner);

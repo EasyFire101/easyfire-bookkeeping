@@ -77,7 +77,7 @@ const WarehousesGridItem = compose(
 /**
  * warehouses grid items,
  */
-export default function WarehousesGridItems({ warehouses }) {
+export function WarehousesGridItems({ warehouses }) {
   return warehouses.map((warehouse) => (
     <WarehousesGridItem warehouse={warehouse} />
   ));

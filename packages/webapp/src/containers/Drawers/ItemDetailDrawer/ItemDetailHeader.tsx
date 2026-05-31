@@ -10,7 +10,7 @@ import { useItemDetailDrawerContext } from './ItemDetailDrawerProvider';
 /**
  * Item header drawer of readonly details.
  */
-export default function ItemDetailHeader() {
+export function ItemDetailHeader() {
   const { item } = useItemDetailDrawerContext();
 
   return (

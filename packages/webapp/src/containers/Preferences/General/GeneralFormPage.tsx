@@ -7,7 +7,7 @@ import { Intent } from '@blueprintjs/core';
 import '@/style/pages/Preferences/GeneralForm.scss';
 
 import { AppToaster } from '@/components';
-import GeneralForm from './GeneralForm';
+import { PreferencesGeneralForm as GeneralForm } from './GeneralForm';
 import { PreferencesGeneralSchema } from './General.schema';
 import { useGeneralFormContext } from './GeneralFormProvider';
 import { withDashboardActions } from '@/containers/Dashboard/withDashboardActions';
@@ -30,7 +30,7 @@ const defaultValues = {
 /**
  * Preferences - General form Page.
  */
-function GeneralFormPage({
+function GeneralFormPageInner({
   // #withDashboardActions
   changePreferencesPageTitle,
 }) {
@@ -79,4 +79,4 @@ function GeneralFormPage({
   );
 }
 
-export default compose(withDashboardActions)(GeneralFormPage);
+export const GeneralFormPage = compose(withDashboardActions)(GeneralFormPageInner);

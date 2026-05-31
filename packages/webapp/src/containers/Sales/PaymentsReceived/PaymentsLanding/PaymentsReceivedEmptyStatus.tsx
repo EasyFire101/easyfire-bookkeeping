@@ -6,7 +6,7 @@ import { EmptyStatus } from '@/components';
 import { Can, FormattedMessage as T } from '@/components';
 import { PaymentReceiveAction, AbilitySubject } from '@/constants/abilityOption';
 
-export default function PaymentsReceivedEmptyStatus() {
+export function PaymentsReceivedEmptyStatus() {
   const history = useHistory();
 
   return (

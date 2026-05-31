@@ -8,14 +8,14 @@ import {
   PageFormBigNumber,
 } from '@/components';
 
-import PaymentMadeFormHeaderFields from './PaymentMadeFormHeaderFields';
+import { PaymentMadeFormHeaderFields } from './PaymentMadeFormHeaderFields';
 import { usePaymentmadeTotalAmount } from './utils';
 import intl from 'react-intl-universal';
 
 /**
  * Payment made header form.
  */
-function PaymentMadeFormHeader() {
+export function PaymentMadeFormHeader() {
   // Formik form context.
   const {
     values: { currency_code },
@@ -33,5 +33,3 @@ function PaymentMadeFormHeader() {
     </PageForm.Header>
   );
 }
-
-export default PaymentMadeFormHeader;

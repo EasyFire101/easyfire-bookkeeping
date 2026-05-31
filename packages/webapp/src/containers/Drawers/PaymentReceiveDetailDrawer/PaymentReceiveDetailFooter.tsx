@@ -15,7 +15,7 @@ import intl from 'react-intl-universal';
  * Payment receive detail footer.
  * @returns {React.JSX}
  */
-export default function PaymentReceiveDetailFooter() {
+export function PaymentReceiveDetailFooter() {
   const { paymentReceive } = usePaymentReceiveDetailContext();
 
   return (

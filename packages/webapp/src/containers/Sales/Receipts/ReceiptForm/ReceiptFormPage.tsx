@@ -14,7 +14,7 @@ import { ReceiptForm } from './ReceiptForm';
 /**
  * Receipt form page.
  */
-export default function ReceiptFormPage() {
+export function ReceiptFormPage() {
   const { id } = useParams();
   const receiptId = id ? parseInt(id, 10) : undefined;
 

@@ -2,15 +2,15 @@
 import React from 'react';
 
 import { DashboardPageContent } from '@/components';
-import WarehouseTransfersActionsBar from './WarehouseTransfersActionsBar';
-import WarehouseTransfersDataTable from './WarehouseTransfersDataTable';
+import { WarehouseTransfersActionsBar } from './WarehouseTransfersActionsBar';
+import { WarehouseTransfersDataTable } from './WarehouseTransfersDataTable';
 import { withWarehouseTransfers } from './withWarehouseTransfers';
 import { withWarehouseTransfersActions } from './withWarehouseTransfersActions';
 
 import { WarehouseTransfersListProvider } from './WarehouseTransfersListProvider';
 import { transformTableStateToQuery, compose } from '@/utils';
 
-function WarehouseTransfersList({
+function WarehouseTransfersListInner({
   // #withWarehouseTransfers
   warehouseTransferTableState,
   warehouseTransferTableStateChanged,
@@ -40,7 +40,7 @@ function WarehouseTransfersList({
   );
 }
 
-export default compose(
+export const WarehouseTransfersList = compose(
   withWarehouseTransfersActions,
   withWarehouseTransfers(
     ({ warehouseTransferTableState, warehouseTransferTableStateChanged }) => ({
@@ -48,4 +48,4 @@ export default compose(
       warehouseTransferTableStateChanged,
     }),
   ),
-)(WarehouseTransfersList);
+)(WarehouseTransfersListInner);

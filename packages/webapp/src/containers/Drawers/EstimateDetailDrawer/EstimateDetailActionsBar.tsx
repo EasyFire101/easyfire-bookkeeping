@@ -34,7 +34,7 @@ import { DRAWERS } from '@/constants/drawers';
 /**
  * Estimate read-only details actions bar of the drawer.
  */
-function EstimateDetailActionsBar({
+function EstimateDetailActionsBarInner({
   // #withDialogActions
   openDialog,
 
@@ -144,8 +144,8 @@ function EstimateDetailActionsBar({
   );
 }
 
-export default compose(
+export const EstimateDetailActionsBar = compose(
   withDialogActions,
   withAlertActions,
   withDrawerActions,
-)(EstimateDetailActionsBar);
+)(EstimateDetailActionsBarInner);

@@ -9,7 +9,7 @@ import { isEmpty } from 'lodash';
 import { useInviteAcceptContext } from './InviteAcceptProvider';
 import { AppToaster } from '@/components';
 import { InviteAcceptSchema } from './utils';
-import InviteAcceptFormContent from './InviteAcceptFormContent';
+import { InviteUserFormContent as InviteAcceptFormContent } from './InviteAcceptFormContent';
 import { AuthInsiderCard } from './_components';
 
 const initialValues = {
@@ -20,7 +20,7 @@ const initialValues = {
   password: '',
 };
 
-export default function InviteAcceptForm() {
+export function InviteAcceptForm() {
   const history = useHistory();
 
   // Invite accept context.

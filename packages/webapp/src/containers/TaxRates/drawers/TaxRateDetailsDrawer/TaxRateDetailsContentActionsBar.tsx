@@ -29,7 +29,7 @@ import {
  * Tax rate details content actions bar.
  * @returns {JSX.Element}
  */
-function TaxRateDetailsContentActionsBar({
+function TaxRateDetailsContentActionsBarInner({
   // #withDrawerActions
   openDialog,
 
@@ -141,8 +141,8 @@ function TaxRateDetailsContentActionsBar({
   );
 }
 
-export default R.compose(
+export const TaxRateDetailsContentActionsBar = R.compose(
   withDrawerActions,
   withDialogActions,
   withAlertActions,
-)(TaxRateDetailsContentActionsBar);
+)(TaxRateDetailsContentActionsBarInner);

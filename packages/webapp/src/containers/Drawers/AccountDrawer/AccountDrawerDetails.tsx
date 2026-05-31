@@ -3,14 +3,14 @@ import React from 'react';
 
 import { Card } from '@/components';
 
-import AccountDrawerActionBar from './AccountDrawerActionBar';
-import AccountDrawerHeader from './AccountDrawerHeader';
-import AccountDrawerTable from './AccountDrawerTable';
+import { AccountDrawerActionBar } from './AccountDrawerActionBar';
+import { AccountDrawerHeader } from './AccountDrawerHeader';
+import { AccountDrawerTable } from './AccountDrawerTable';
 
 /**
  * Account view details.
  */
-export default function AccountDrawerDetails() {
+export function AccountDrawerDetails() {
   return (
     <div className={'account-drawer'}>
       <AccountDrawerActionBar />

@@ -12,7 +12,7 @@ import { DashboardInsider } from '@/components';
 /**
  * Payment received form page.
  */
-export default function PaymentReceiveFormPage() {
+export function PaymentReceiveFormPage() {
   const { id } = useParams();
   const paymentReceivedId = id ? parseInt(id, 10) : undefined;
 

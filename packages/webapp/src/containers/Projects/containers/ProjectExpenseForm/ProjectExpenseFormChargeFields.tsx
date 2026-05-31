@@ -39,7 +39,7 @@ function CustomPirceField() {
  * Expense form charge fields.
  * @returns
  */
-export default function ExpenseFormChargeFields() {
+export function ExpenseFormChargeFields() {
   const { values } = useFormikContext();
 
   return (

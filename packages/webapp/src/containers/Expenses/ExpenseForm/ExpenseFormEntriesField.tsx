@@ -1,14 +1,14 @@
 // @ts-nocheck
 import { FastField } from 'formik';
 import React from 'react';
-import ExpenseFormEntriesTable from './ExpenseFormEntriesTable';
+import { ExpenseFormEntriesTable } from './ExpenseFormEntriesTable';
 import { useExpenseFormContext } from './ExpenseFormPageProvider';
 import { defaultExpenseEntry, accountsFieldShouldUpdate } from './utils';
 
 /**
  * Expense form entries field.
  */
-export default function ExpenseFormEntriesField({ linesNumber = 4 }) {
+export function ExpenseFormEntriesField({ linesNumber = 4 }) {
   // Expense form context.
   const { accounts, projects } = useExpenseFormContext();
 

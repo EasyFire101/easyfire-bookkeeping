@@ -6,8 +6,8 @@ import { Form, useFormikContext } from 'formik';
 import { Classes } from '@blueprintjs/core';
 import { castArray } from 'lodash';
 
-import SMSMessageFormFields from './SMSMessageFormFields';
-import SMSMessageFormFloatingActions from './SMSMessageFormFloatingActions';
+import { SMSMessageFormFields } from './SMSMessageFormFields';
+import { SMSMessageFormFloatingActions } from './SMSMessageFormFloatingActions';
 
 import { useSMSMessageDialogContext } from './SMSMessageDialogProvider';
 import { SMSMessagePreview } from '@/components';
@@ -16,7 +16,7 @@ import { getSMSUnits } from '@/containers/NotifyViaSMS/utils';
 /**
  * SMS message form content.
  */
-export default function SMSMessageFormContent() {
+export function SMSMessageFormContent() {
   // SMS message dialog context.
   const { smsNotification } = useSMSMessageDialogContext();
 

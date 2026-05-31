@@ -51,7 +51,7 @@ import { withCurrentOrganization } from '@/containers/Organization/withCurrentOr
 /**
  * Refund credit note form fields.
  */
-function RefundCreditNoteFormFields({
+function RefundCreditNoteFormFieldsInner({
   // #withCurrentOrganization
   organization: { base_currency },
 }) {
@@ -175,7 +175,7 @@ function RefundCreditNoteFormFields({
   );
 }
 
-export default compose(withCurrentOrganization())(RefundCreditNoteFormFields);
+export const RefundCreditNoteFormFields = compose(withCurrentOrganization())(RefundCreditNoteFormFieldsInner);
 
 export const BranchRowDivider = styled.div`
   --x-divider-color: #ebf1f6;

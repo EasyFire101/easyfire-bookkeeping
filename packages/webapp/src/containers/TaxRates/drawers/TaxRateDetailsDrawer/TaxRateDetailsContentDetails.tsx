@@ -5,7 +5,7 @@ import { useTaxRateDetailsContext } from './TaxRateDetailsContentBoot';
 import { Intent, Tag } from '@blueprintjs/core';
 import styled from 'styled-components';
 
-export default function TaxRateDetailsContentDetails() {
+export function TaxRateDetailsContentDetails() {
   const { taxRate } = useTaxRateDetailsContext();
 
   return (

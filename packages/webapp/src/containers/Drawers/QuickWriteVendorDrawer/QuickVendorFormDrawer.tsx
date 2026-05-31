@@ -32,7 +32,7 @@ function DrawerVendorFormLoading({ children }) {
 /**
  * Quick vendor form of the drawer.
  */
-function QuickVendorFormDrawer({
+function QuickVendorFormDrawerInner({
   displayName,
   closeDrawer,
   vendorId,
@@ -72,8 +72,8 @@ function QuickVendorFormDrawer({
   );
 }
 
-export default R.compose(
+export const QuickVendorFormDrawer = R.compose(
   withDrawerActions,
   withDashboardActions,
-)(QuickVendorFormDrawer);
+)(QuickVendorFormDrawerInner);
 

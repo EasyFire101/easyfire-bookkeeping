@@ -6,10 +6,10 @@ import { Tab } from '@blueprintjs/core';
 
 import { useAbilityContext } from '@/hooks/utils';
 import { DrawerMainTabs } from '@/components';
-import VendorCreditDetailActionsBar from './VendorCreditDetailActionsBar';
-import VendorCreditDetailPanel from './VendorCreditDetailPanel';
-import RefundVendorCreditTransactionsTable from './RefundVendorCreditTransactions/RefundVendorCreditTransactionsTable';
-import ReconcileVendorCreditTransactionsTable from './ReconcileVendorCreditTransactions/ReconcileVendorCreditTransactionsTable';
+import { VendorCreditDetailActionsBar } from './VendorCreditDetailActionsBar';
+import { VendorCreditDetailPanel } from './VendorCreditDetailPanel';
+import { RefundVendorCreditTransactionsTable } from './RefundVendorCreditTransactions/RefundVendorCreditTransactionsTable';
+import { ReconcileVendorCreditTransactionsTable } from './ReconcileVendorCreditTransactions/ReconcileVendorCreditTransactionsTable';
 import { VendorCreditGLEntriesTable } from './JournalEntriesTransactions/JournalEntriesTransactionsTable';
 import { VendorCreditAction, AbilitySubject } from '@/constants/abilityOption';
 
@@ -17,7 +17,7 @@ import { VendorCreditAction, AbilitySubject } from '@/constants/abilityOption';
  * Vendor credit view detail.
  *
  */
-export default function VendorCreditDetail() {
+export function VendorCreditDetail() {
   return (
     <VendorCreditRoot>
       <VendorCreditDetailActionsBar />

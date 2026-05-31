@@ -20,7 +20,7 @@ import { compose } from '@/utils';
 /**
  * API Keys Generate form content.
  */
-function ApiKeysGenerateFormContent({
+function ApiKeysGenerateFormContentInner({
   dialogName,
   // #withDialogActions
   closeDialog,
@@ -64,4 +64,4 @@ function ApiKeysGenerateFormContent({
   );
 }
 
-export default compose(withDialogActions)(ApiKeysGenerateFormContent);
+export const ApiKeysGenerateFormContent = compose(withDialogActions)(ApiKeysGenerateFormContentInner);

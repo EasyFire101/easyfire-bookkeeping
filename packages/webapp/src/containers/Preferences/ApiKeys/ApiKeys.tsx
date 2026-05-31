@@ -7,7 +7,7 @@ import styled from 'styled-components';
 import { Card } from '@/components';
 import { CLASSES } from '@/constants/classes';
 import { withDashboardActions } from '@/containers/Dashboard/withDashboardActions';
-import ApiKeysDataTable from './ApiKeysDataTable';
+import { ApiKeysDataTable } from './ApiKeysDataTable';
 import { compose } from '@/utils';
 
 /**
@@ -39,4 +39,4 @@ const ApiKeysPreferencesCard = styled(Card)`
   padding: 0;
 `;
 
-export default compose(withDashboardActions)(ApiKeysPreferences);
+export const ApiKeys = compose(withDashboardActions)(ApiKeysPreferences);

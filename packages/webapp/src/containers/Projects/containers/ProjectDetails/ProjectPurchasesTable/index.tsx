@@ -9,7 +9,7 @@ import { ProjectDetailHeader } from '../ProjectDetailsHeader';
  *
  * @returns
  */
-export default function ProjectPurchasesTableRoot() {
+export function ProjectPurchasesTableRoot() {
   return (
     <Box>
       <ProjectDetailHeader />

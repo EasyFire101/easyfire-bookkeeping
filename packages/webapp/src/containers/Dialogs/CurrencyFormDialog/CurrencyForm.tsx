@@ -4,7 +4,7 @@ import intl from 'react-intl-universal';
 import { Intent } from '@blueprintjs/core';
 import { Formik } from 'formik';
 import { AppToaster } from '@/components';
-import CurrencyFormContent from './CurrencyFormContent';
+import { CurrencyFormContent } from './CurrencyFormContent';
 
 import { useCurrencyFormContext } from './CurrencyFormProvider';
 import {
@@ -24,7 +24,7 @@ const defaultInitialValues = {
 /**
  * Currency form.
  */
-function CurrencyForm({
+function CurrencyFormInner({
   // #withDialogActions
   closeDialog,
 }) {
@@ -102,4 +102,4 @@ function CurrencyForm({
   );
 }
 
-export default compose(withDialogActions)(CurrencyForm);
+export const CurrencyForm = compose(withDialogActions)(CurrencyFormInner);

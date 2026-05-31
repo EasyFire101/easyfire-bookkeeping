@@ -13,7 +13,7 @@ import { compose } from '@/utils';
  * Warehouse form floating actions.
  * @returns
  */
-function WarehouseFormFloatingActions({
+function WarehouseFormFloatingActionsInner({
   // #withDialogActions
   closeDialog,
 }) {
@@ -46,4 +46,4 @@ function WarehouseFormFloatingActions({
   );
 }
 
-export default compose(withDialogActions)(WarehouseFormFloatingActions);
+export const WarehouseFormFloatingActions = compose(withDialogActions)(WarehouseFormFloatingActionsInner);

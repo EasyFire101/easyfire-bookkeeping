@@ -1,7 +1,7 @@
 // @ts-nocheck
 import React from 'react';
 import { FastField } from 'formik';
-import ItemsEntriesTable from '@/containers/Entries/ItemsEntriesTable';
+import { ItemsEntriesTable } from '@/containers/Entries/ItemsEntriesTable';
 import { useCreditNoteFormContext } from './CreditNoteFormProvider';
 import { entriesFieldShouldUpdate } from './utils';
 import { Box } from '@/components';
@@ -9,7 +9,7 @@ import { Box } from '@/components';
 /**
  * Credit note items entries editor field.
  */
-export default function CreditNoteItemsEntriesEditorField() {
+export function CreditNoteItemsEntriesEditorField() {
   const { items } = useCreditNoteFormContext();
 
   return (

@@ -16,7 +16,7 @@ import { useReconcileCreditNoteContext } from './ReconcileCreditNoteFormProvider
 /**
  * Reconcile credit note entries table.
  */
-export default function ReconcileCreditNoteEntriesTable({
+export function ReconcileCreditNoteEntriesTable({
   onUpdateData,
   entries,
   errors,

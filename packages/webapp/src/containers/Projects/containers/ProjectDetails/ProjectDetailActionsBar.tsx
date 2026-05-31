@@ -26,7 +26,7 @@ import { compose } from '@/utils';
  * Project detail actions bar.
  * @returns
  */
-function ProjectDetailActionsBar({
+function ProjectDetailActionsBarInner({
   // #withDialogActions
   openDialog,
 
@@ -129,10 +129,10 @@ function ProjectDetailActionsBar({
     </DashboardActionsBar>
   );
 }
-export default compose(
+export const ProjectDetailActionsBar = compose(
   withDialogActions,
   withSettingsActions,
   withSettings(({ timesheetsSettings }) => ({
     timesheetsTableSize: timesheetsSettings?.tableSize,
   })),
-)(ProjectDetailActionsBar);
+)(ProjectDetailActionsBarInner);

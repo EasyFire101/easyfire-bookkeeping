@@ -13,7 +13,7 @@ import { compose } from '@/utils';
 /**
  * Delete branding template alert.
  */
-function DeleteBrandingTemplateAlert({
+function DeleteBrandingTemplateAlertInner({
   // #ownProps
   name,
 
@@ -79,7 +79,7 @@ function DeleteBrandingTemplateAlert({
   );
 }
 
-export default compose(
+export const DeleteBrandingTemplateAlert = compose(
   withAlertStoreConnect(),
   withAlertActions,
-)(DeleteBrandingTemplateAlert);
+)(DeleteBrandingTemplateAlertInner);

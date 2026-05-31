@@ -8,7 +8,7 @@ import { DashboardContentTable } from '@/components';
  * Project Sales Table.
  * @returns
  */
-export default function ProjectSalesTableRoot() {
+export function ProjectSalesTableRoot() {
   return (
     <ProjectSalesContentTable>
       <ProjectSalesTable />

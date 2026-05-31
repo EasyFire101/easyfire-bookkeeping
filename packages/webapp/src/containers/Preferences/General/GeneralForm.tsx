@@ -8,7 +8,6 @@ import { TimezonePicker, getTimezoneMetadata } from '@blueprintjs/timezone';
 import { ErrorMessage } from 'formik';
 import { useHistory } from 'react-router-dom';
 import { getAllCountries } from '@bigcapital/utils';
-
 import {
   FieldRequiredHint,
   FormattedMessage as T,
@@ -24,7 +23,6 @@ import { getAllCurrenciesOptions } from '@/constants/currencies';
 import { getFiscalYear } from '@/constants/fiscalYearOptions';
 import { getLanguages } from '@/constants/languagesOptions';
 import { useGeneralFormContext } from './GeneralFormProvider';
-
 import { shouldBaseCurrencyUpdate } from './utils';
 import { SelectButton } from '@/components/Forms/Select';
 import intl from 'react-intl-universal';
@@ -33,7 +31,7 @@ const Countries = getAllCountries();
 /**
  * Preferences general form.
  */
-export default function PreferencesGeneralForm({ isSubmitting }) {
+export function PreferencesGeneralForm({ isSubmitting }) {
   const history = useHistory();
 
   const FiscalYear = getFiscalYear();

@@ -1,12 +1,12 @@
 // @ts-nocheck
 import React from 'react';
 import { MoneyOutProvider } from './MoneyOutDialogProvider';
-import MoneyOutForm from './MoneyOutForm';
+import { MoneyOutForm } from './MoneyOutForm';
 
 /**
  * Money out dailog content.
  */
-export default function MoneyOutDialogContent({
+export function MoneyOutDialogContent({
   // #ownProps
   dialogName,
   accountId,

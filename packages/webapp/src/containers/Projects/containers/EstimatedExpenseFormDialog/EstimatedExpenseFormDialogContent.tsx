@@ -1,13 +1,13 @@
 // @ts-nocheck
 import React from 'react';
 import { EstimatedExpenseFormProvider } from './EstimatedExpenseFormProvider';
-import EstimatedExpenseForm from './EstimatedExpenseForm';
+import { EstimatedExpenseForm } from './EstimatedExpenseForm';
 
 /**
  * Estimate expense form dialog.
  * @return
  */
-export default function EstimatedExpenseFormDialogContent({
+export function EstimatedExpenseFormDialogContent({
   //#ownProps
   dialogName,
   estimatedExpense,

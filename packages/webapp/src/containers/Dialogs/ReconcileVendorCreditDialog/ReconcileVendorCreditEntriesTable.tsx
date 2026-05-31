@@ -18,7 +18,7 @@ import { useReconcileVendorCreditContext } from './ReconcileVendorCreditFormProv
 /**
  * Reconcile vendor credit entries table.
  */
-export default function ReconcileVendorCreditEntriesTable({
+export function ReconcileVendorCreditEntriesTable({
   onUpdateData,
   entries,
   errors,

@@ -16,7 +16,7 @@ import { DRAWERS } from '@/constants/drawers';
 /**
  * Bill delete alert.
  */
-function BillDeleteAlert({
+function BillDeleteAlertInner({
   name,
 
   // #withAlertStoreConnect
@@ -78,8 +78,8 @@ function BillDeleteAlert({
   );
 }
 
-export default compose(
+export const BillDeleteAlert = compose(
   withAlertStoreConnect(),
   withAlertActions,
   withDrawerActions,
-)(BillDeleteAlert);
+)(BillDeleteAlertInner);

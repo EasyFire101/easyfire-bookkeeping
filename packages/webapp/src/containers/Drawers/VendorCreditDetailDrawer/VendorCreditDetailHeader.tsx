@@ -21,7 +21,7 @@ import { VendorCreditDetailsStatus } from './utils';
 /**
  * Vendor credit detail drawer header.
  */
-export default function VendorCreditDetailHeader() {
+export function VendorCreditDetailHeader() {
   const { vendorCredit } = useVendorCreditDetailDrawerContext();
   return (
     <CommercialDocHeader>

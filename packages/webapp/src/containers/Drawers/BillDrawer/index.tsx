@@ -5,7 +5,7 @@ import { withDrawers } from '@/containers/Drawer/withDrawers';
 
 import { compose } from '@/utils';
 
-const BillDrawerContent = React.lazy(() => import('./BillDrawerContent'));
+const BillDrawerContent = React.lazy(() => import('./BillDrawerContent').then(m => ({ default: m.BillDrawerContent })));
 
 /**
  * Bill drawer.
@@ -30,4 +30,4 @@ function BillDrawer({
   );
 }
 
-export default compose(withDrawers())(BillDrawer);
+export const index = compose(withDrawers())(BillDrawer);

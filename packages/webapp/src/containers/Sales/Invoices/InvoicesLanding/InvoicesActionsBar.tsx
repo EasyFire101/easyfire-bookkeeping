@@ -229,7 +229,7 @@ function InvoiceActionsBar({
   );
 }
 
-export default compose(
+export const InvoicesActionsBar = compose(
   withInvoiceActions,
   withSettingsActions,
   withInvoices(({ invoicesTableState, invoicesSelectedRows }) => ({

@@ -20,7 +20,7 @@ import { CLASSES } from '@/constants/classes';
 /**
  * Warehouse transfer floating actions bar.
  */
-export default function WarehouseTransferFloatingActions() {
+export function WarehouseTransferFloatingActions() {
   // History context.
   const history = useHistory();
 

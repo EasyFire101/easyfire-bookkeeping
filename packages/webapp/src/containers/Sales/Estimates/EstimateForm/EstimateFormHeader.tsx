@@ -2,13 +2,13 @@
 import React from 'react';
 import intl from 'react-intl-universal';
 
-import EstimateFormHeaderFields from './EstimateFormHeaderFields';
+import { EstimateFormHeader as EstimateFormHeaderFields } from './EstimateFormHeaderFields';
 import { Group, PageFormBigNumber } from '@/components';
 import { useEstimateTotalFormatted } from './utils';
 import { useIsDarkMode } from '@/hooks/useDarkMode';
 
 // Estimate form top header.
-function EstimateFormHeader() {
+export function EstimateFormHeader() {
   const isDarkMode = useIsDarkMode();
 
   return (
@@ -44,5 +44,3 @@ function EstimateFormBigTotal() {
     <PageFormBigNumber label={intl.get('amount')} amount={totalFormatted} />
   );
 }
-
-export default EstimateFormHeader;

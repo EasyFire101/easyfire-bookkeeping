@@ -19,7 +19,7 @@ import intl from 'react-intl-universal';
  * Project task form fields.
  * @returns
  */
-function ProjectTaskFormFields({
+function ProjectTaskFormFieldsInner({
   // #withCurrentOrganization
   organization: { base_currency },
 }) {
@@ -68,4 +68,4 @@ function ProjectTaskFormFields({
   );
 }
 
-export default compose(withCurrentOrganization())(ProjectTaskFormFields);
+export const ProjectTaskFormFields = compose(withCurrentOrganization())(ProjectTaskFormFieldsInner);

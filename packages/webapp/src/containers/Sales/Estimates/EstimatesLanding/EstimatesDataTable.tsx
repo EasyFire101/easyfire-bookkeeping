@@ -2,7 +2,7 @@
 import React, { useCallback } from 'react';
 import { useHistory } from 'react-router-dom';
 
-import EstimatesEmptyStatus from './EstimatesEmptyStatus';
+import { EstimatesEmptyStatus } from './EstimatesEmptyStatus';
 
 import { withEstimatesActions } from './withEstimatesActions';
 import { withAlertActions } from '@/containers/Alert/withAlertActions';
@@ -28,7 +28,7 @@ import { DialogsName } from '@/constants/dialogs';
 /**
  * Estimates datatable.
  */
-function EstimatesDataTable({
+function EstimatesDataTableInner({
   // #withEstimatesActions
   setEstimatesTableState,
   setEstimatesSelectedRows,
@@ -183,7 +183,7 @@ function EstimatesDataTable({
   );
 }
 
-export default compose(
+export const EstimatesDataTable = compose(
   withEstimatesActions,
   withAlertActions,
   withDrawerActions,
@@ -192,4 +192,4 @@ export default compose(
     estimatesTableSize: estimatesSettings?.tableSize,
   })),
   withEstimates(({ estimatesTableState }) => ({ estimatesTableState }))
-)(EstimatesDataTable);
+)(EstimatesDataTableInner);

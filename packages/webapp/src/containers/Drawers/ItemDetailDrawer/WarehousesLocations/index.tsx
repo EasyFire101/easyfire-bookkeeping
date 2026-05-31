@@ -12,7 +12,7 @@ import { useItemWarehouseLocation } from '@/hooks/query';
 /**
  * Warehouses locations table columns.
  */
-export default function WarehouseLocationsTable() {
+export function WarehouseLocationsTable() {
   // Warehouses locations table columns.
   const columns = useWarehouseLocationsColumns();
 

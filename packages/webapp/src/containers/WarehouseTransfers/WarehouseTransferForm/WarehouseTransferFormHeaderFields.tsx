@@ -23,7 +23,7 @@ import intl from 'react-intl-universal';
 /**
  * Warehouse transfer form header fields.
  */
-function WarehouseTransferFormHeaderFields({
+function WarehouseTransferFormHeaderFieldsInner({
   // #withDialogActions
   openDialog,
 
@@ -156,11 +156,11 @@ function WarehouseTransferFormHeaderFields({
   );
 }
 
-export default compose(
+export const WarehouseTransferFormHeaderFields = compose(
   withDialogActions,
   withSettings(({ warehouseTransferSettings }) => ({
     warehouseTransferAutoIncrement: warehouseTransferSettings?.autoIncrement,
     warehouseTransferNextNumber: warehouseTransferSettings?.nextNumber,
     warehouseTransferNumberPrefix: warehouseTransferSettings?.numberPrefix,
   })),
-)(WarehouseTransferFormHeaderFields);
+)(WarehouseTransferFormHeaderFieldsInner);

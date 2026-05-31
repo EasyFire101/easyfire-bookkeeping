@@ -16,7 +16,7 @@ import intl from 'react-intl-universal';
 /**
  * Currency form fields.
  */
-export default function CurrencyFormFields() {
+export function CurrencyFormFields() {
   const currencyNameFieldRef = useAutofocus();
   const { isEditMode } = useCurrencyFormContext();
   const { setFieldValue } = useFormikContext();

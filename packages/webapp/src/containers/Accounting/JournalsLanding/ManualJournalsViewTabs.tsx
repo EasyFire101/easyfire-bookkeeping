@@ -14,7 +14,7 @@ import { compose } from '@/utils';
 /**
  * Manual journal views tabs.
  */
-function ManualJournalsViewTabs({
+function ManualJournalsViewTabsInner({
   // #withManualJournalsActions
   setManualJournalsTableState,
 
@@ -52,10 +52,10 @@ function ManualJournalsViewTabs({
   );
 }
 
-export default compose(
+export const ManualJournalsViewTabs = compose(
   withManualJournalsActions,
   withDashboardActions,
   withManualJournals(({ manualJournalsTableState }) => ({
     journalsTableState: manualJournalsTableState,
   })),
-)(ManualJournalsViewTabs);
+)(ManualJournalsViewTabsInner);

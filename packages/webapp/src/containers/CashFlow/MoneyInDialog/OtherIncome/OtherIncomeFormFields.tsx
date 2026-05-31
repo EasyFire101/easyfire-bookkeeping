@@ -45,7 +45,7 @@ import intl from 'react-intl-universal';
 /**
  * Other income form fields.
  */
-export default function OtherIncomeFormFields() {
+export function OtherIncomeFormFields() {
   // Money in dialog context.
   const { accounts, branches } = useMoneyInDailogContext();
   const { account } = useMoneyInFieldsContext();

@@ -2,14 +2,14 @@
 import React from 'react';
 import intl from 'react-intl-universal';
 import { Group, PageFormBigNumber } from '@/components';
-import ReceiptFormHeaderFields from './ReceiptFormHeaderFields';
+import { ReceiptFormHeader as ReceiptFormHeaderFields } from './ReceiptFormHeaderFields';
 import { useReceiptTotalFormatted } from './utils';
 import { useIsDarkMode } from '@/hooks/useDarkMode';
 
 /**
  * Receipt form header section.
  */
-function ReceiptFormHeader({
+export function ReceiptFormHeader({
   // #ownProps
   onReceiptNumberChanged,
 }) {
@@ -51,5 +51,3 @@ function ReceiptFormHeaderBigTotal() {
     <PageFormBigNumber label={intl.get('due_amount')} amount={totalFormatted} />
   );
 }
-
-export default ReceiptFormHeader;

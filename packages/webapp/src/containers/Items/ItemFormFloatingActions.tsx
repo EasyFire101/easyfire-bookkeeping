@@ -13,7 +13,7 @@ import intl from 'react-intl-universal';
 /**
  * Item form floating actions.
  */
-export default function ItemFormFloatingActions({ onCancel }) {
+export function ItemFormFloatingActions({ onCancel }) {
   // Item form context.
   const { setSubmitPayload, isNewMode } = useItemFormContext();
 

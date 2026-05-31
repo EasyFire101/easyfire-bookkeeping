@@ -111,7 +111,7 @@ function InventoryAdjustmentDataTable({
   );
 }
 
-export default compose(
+export const InventoryAdjustmentTable = compose(
   withAlertActions,
   withInventoryAdjustmentActions,
   withDrawerActions,

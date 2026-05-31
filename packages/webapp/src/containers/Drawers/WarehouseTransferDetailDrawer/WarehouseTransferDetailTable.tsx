@@ -10,7 +10,7 @@ import { useWarehouseDetailDrawerContext } from './WarehouseTransferDetailDrawer
  * Warehouse transfer detail table.
  * @returns {React.JSX}
  */
-export default function WarehouseTransferDetailTable() {
+export function WarehouseTransferDetailTable() {
   // Warehouse transfer entries table columns.
   const columns = useWarehouseTransferReadOnlyEntriesColumns();
 

@@ -14,7 +14,7 @@ import { compose } from '@/utils';
 /**
  * Customer activate alert.
  */
-function CustomerActivateAlert({
+function CustomerActivateAlertInner({
   name,
 
   // #withAlertStoreConnect
@@ -63,7 +63,7 @@ function CustomerActivateAlert({
   );
 }
 
-export default compose(
+export const CustomerActivateAlert = compose(
   withAlertStoreConnect(),
   withAlertActions,
-)(CustomerActivateAlert);
+)(CustomerActivateAlertInner);

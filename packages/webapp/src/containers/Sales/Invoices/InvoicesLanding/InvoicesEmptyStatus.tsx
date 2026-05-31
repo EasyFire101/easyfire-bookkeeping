@@ -5,7 +5,7 @@ import { useHistory } from 'react-router-dom';
 import { EmptyStatus, Can, FormattedMessage as T } from '@/components';
 import { SaleInvoiceAction, AbilitySubject } from '@/constants/abilityOption';
 
-export default function EstimatesEmptyStatus() {
+export function EstimatesEmptyStatus() {
   const history = useHistory();
 
   return (

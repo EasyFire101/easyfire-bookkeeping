@@ -136,7 +136,7 @@ function AccountTransactionsDataTable({
   );
 }
 
-export default compose(
+export const AccountTransactionsUncategorizedTable = compose(
   withSettings(({ cashflowTransactionsSettings }) => ({
     cashflowTansactionsTableSize: cashflowTransactionsSettings?.tableSize,
   })),

@@ -21,7 +21,7 @@ import { useMakeJournalFormContext } from './MakeJournalProvider';
 /**
  * Make Journal floating actions bar.
  */
-export default function MakeJournalFloatingAction() {
+export function MakeJournalFloatingAction() {
   const history = useHistory();
 
   // Formik context.

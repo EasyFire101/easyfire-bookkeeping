@@ -46,7 +46,7 @@ function UsersPreferences({ openDialog }) {
   );
 }
 
-export default withUserPreferences(UsersPreferences);
+export const Users = withUserPreferences(UsersPreferences);
 
 const UsersPereferencesCard = styled(Card)`
   padding: 0;

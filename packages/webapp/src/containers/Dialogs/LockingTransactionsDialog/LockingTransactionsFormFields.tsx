@@ -17,7 +17,7 @@ import intl from 'react-intl-universal';
 /**
  *  locking Transactions form fields.
  */
-export default function LockingTransactionsFormFields() {
+export function LockingTransactionsFormFields() {
   const reasonFieldRef = useAutofocus();
 
   return (

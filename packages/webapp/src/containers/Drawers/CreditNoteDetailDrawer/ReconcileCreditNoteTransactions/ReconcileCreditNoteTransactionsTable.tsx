@@ -47,4 +47,4 @@ function RefundCreditNoteTransactionsTable({
   );
 }
 
-export default compose(withAlertActions)(RefundCreditNoteTransactionsTable);
+export const ReconcileCreditNoteTransactionsTable = compose(withAlertActions)(RefundCreditNoteTransactionsTable);

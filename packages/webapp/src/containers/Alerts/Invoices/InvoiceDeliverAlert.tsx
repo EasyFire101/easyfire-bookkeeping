@@ -14,7 +14,7 @@ import { compose } from '@/utils';
 /**
  * Sale invoice alert.
  */
-function InvoiceDeliverAlert({
+function InvoiceDeliverAlertInner({
   name,
 
   // #withAlertStoreConnect
@@ -63,7 +63,7 @@ function InvoiceDeliverAlert({
   );
 }
 
-export default compose(
+export const InvoiceDeliverAlert = compose(
   withAlertStoreConnect(),
   withAlertActions,
-)(InvoiceDeliverAlert);
+)(InvoiceDeliverAlertInner);

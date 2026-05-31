@@ -6,9 +6,7 @@ import withDialogRedux from '@/components/DialogReduxConnect';
 
 import { compose } from '@/utils';
 
-const SMSMessageDialogContent = React.lazy(() =>
-  import('./SMSMessageDialogContent'),
-);
+const SMSMessageDialogContent = React.lazy(() => import('./SMSMessageDialogContent').then(m => ({ default: m.SMSMessageDialogContent })));
 
 /**
  * SMS Message dialog.
@@ -37,4 +35,4 @@ function SMSMessageDialog({
   );
 }
 
-export default compose(withDialogRedux())(SMSMessageDialog);
+export const index = compose(withDialogRedux())(SMSMessageDialog);

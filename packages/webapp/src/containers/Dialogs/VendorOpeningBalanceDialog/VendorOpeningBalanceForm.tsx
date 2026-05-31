@@ -10,7 +10,7 @@ import { AppToaster } from '@/components';
 import { CreateVendorOpeningBalanceFormSchema } from './VendorOpeningBalanceForm.schema';
 import { useVendorOpeningBalanceContext } from './VendorOpeningBalanceFormProvider';
 
-import VendorOpeningBalanceFormContent from './VendorOpeningBalanceFormContent';
+import { VendorOpeningBalanceFormContent } from './VendorOpeningBalanceFormContent';
 import { withDialogActions } from '@/containers/Dialog/withDialogActions';
 
 import { compose } from '@/utils';
@@ -26,7 +26,7 @@ const defaultInitialValues = {
  * Vendor Opening balance form.
  * @returns
  */
-function VendorOpeningBalanceForm({
+function VendorOpeningBalanceFormInner({
   // #withDialogActions
   closeDialog,
 }) {
@@ -82,4 +82,4 @@ function VendorOpeningBalanceForm({
     />
   );
 }
-export default compose(withDialogActions)(VendorOpeningBalanceForm);
+export const VendorOpeningBalanceForm = compose(withDialogActions)(VendorOpeningBalanceFormInner);

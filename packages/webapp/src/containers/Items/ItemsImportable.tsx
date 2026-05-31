@@ -2,7 +2,7 @@
 import { DashboardInsider } from '@/components';
 import { ImportView } from '../Import/ImportView';
 
-export default function ItemsImport() {
+export function ItemsImport() {
   return (
     <DashboardInsider name={'import-items'}>
       <ImportView resource={'items'} />

@@ -19,7 +19,7 @@ import intl from 'react-intl-universal';
 /**
  * Decrement adjustment fields.
  */
-function DecrementAdjustmentFields() {
+export function DecrementAdjustmentFields() {
   const decrementFieldRef = useAutofocus();
   const { values, setFieldValue } = useFormikContext();
 
@@ -91,5 +91,3 @@ function DecrementAdjustmentFields() {
     </Row>
   );
 }
-
-export default DecrementAdjustmentFields;

@@ -29,7 +29,7 @@ import { DRAWERS } from '@/constants/drawers';
  * Receipt details actions bar.
  * @returns {React.JSX}
  */
-function ReceiptDetailActionBar({
+function ReceiptDetailActionBarInner({
   // #withDialogActions
   openDialog,
 
@@ -114,8 +114,8 @@ function ReceiptDetailActionBar({
   );
 }
 
-export default compose(
+export const ReceiptDetailActionBar = compose(
   withDialogActions,
   withDrawerActions,
   withAlertActions,
-)(ReceiptDetailActionBar);
+)(ReceiptDetailActionBarInner);

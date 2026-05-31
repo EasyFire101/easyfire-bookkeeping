@@ -2,7 +2,7 @@
 import React, { useEffect } from 'react';
 import { DashboardInsider } from '@/components/Dashboard';
 
-import HomepageContent from './HomepageContent';
+import { HomepageContent } from './HomepageContent';
 
 import { withDashboardActions } from '@/containers/Dashboard/withDashboardActions';
 import { withCurrentOrganization } from '@/containers/Organization/withCurrentOrganization';
@@ -30,7 +30,7 @@ function DashboardHomepage({
   );
 }
 
-export default compose(
+export const Homepage = compose(
   withDashboardActions,
   withCurrentOrganization(({ organization }) => ({ organization })),
 )(DashboardHomepage);

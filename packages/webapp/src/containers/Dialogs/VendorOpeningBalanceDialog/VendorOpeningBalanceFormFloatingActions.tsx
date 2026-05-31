@@ -12,7 +12,7 @@ import { compose } from '@/utils';
  * Vendor Opening balance floating actions.
  * @returns
  */
-function VendorOpeningBalanceFormFloatingActions({
+function VendorOpeningBalanceFormFloatingActionsInner({
   // #withDialogActions
   closeDialog,
 }) {
@@ -45,6 +45,6 @@ function VendorOpeningBalanceFormFloatingActions({
     </div>
   );
 }
-export default compose(withDialogActions)(
-  VendorOpeningBalanceFormFloatingActions,
+export const VendorOpeningBalanceFormFloatingActions = compose(withDialogActions)(
+  VendorOpeningBalanceFormFloatingActionsInner,
 );

@@ -6,11 +6,11 @@ import {
   PageFormBigNumber,
 
 } from '@/components';
-import MakeJournalEntriesHeaderFields from './MakeJournalEntriesHeaderFields';
+import { MakeJournalEntriesHeader as MakeJournalEntriesHeaderFields } from './MakeJournalEntriesHeaderFields';
 import { useManualJournalTotalFormatted } from './utils';
 import intl from 'react-intl-universal';
 
-export default function MakeJournalEntriesHeader() {
+export function MakeJournalEntriesHeader() {
   return (
     <PageForm.Header>
       <MakeJournalEntriesHeaderFields />

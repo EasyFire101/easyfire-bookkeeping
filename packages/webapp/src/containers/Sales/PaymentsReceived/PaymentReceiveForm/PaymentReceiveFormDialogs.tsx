@@ -1,13 +1,13 @@
 // @ts-nocheck
 import React from 'react';
 import { useFormikContext } from 'formik';
-import PaymentReceiveNumberDialog from '@/containers/Dialogs/PaymentReceiveNumberDialog';
+import { index as PaymentReceiveNumberDialog } from '@/containers/Dialogs/PaymentReceiveNumberDialog';
 import { ExcessPaymentDialog } from './dialogs/ExcessPaymentDialog';
 
 /**
  * Payment receive form dialogs.
  */
-export default function PaymentReceiveFormDialogs() {
+export function PaymentReceiveFormDialogs() {
   const { setFieldValue } = useFormikContext();
 
   const handleUpdatePaymentNumber = (settings) => {

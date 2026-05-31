@@ -26,7 +26,7 @@ import { DRAWERS } from '@/constants/drawers';
 /**
  * Expense drawer action bar.
  */
-function ExpenseDrawerActionBar({
+function ExpenseDrawerActionBarInner({
   // #withAlertsDialog
   openAlert,
 
@@ -75,7 +75,7 @@ function ExpenseDrawerActionBar({
   );
 }
 
-export default compose(
+export const ExpenseDrawerActionBar = compose(
   withAlertActions,
   withDrawerActions,
-)(ExpenseDrawerActionBar);
+)(ExpenseDrawerActionBarInner);

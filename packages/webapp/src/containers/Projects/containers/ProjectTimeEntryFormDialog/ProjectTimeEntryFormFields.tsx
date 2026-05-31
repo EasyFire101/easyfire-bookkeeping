@@ -28,7 +28,7 @@ import { useSetProjectToForm } from './utils';
  * Project time entry form fields.
  * @returns
  */
-function ProjectTimeEntryFormFields() {
+export function ProjectTimeEntryFormFields() {
   // time entry form dialog context.
   const { projectTasks, projects, projectId } =
     useProjectTimeEntryFormContext();
@@ -109,9 +109,6 @@ function ProjectTimeEntryFormFields() {
     </div>
   );
 }
-
-export default ProjectTimeEntryFormFields;
-
 const DurationInputGroup = styled(FInputGroup)`
   .bp4-input {
     width: 150px;

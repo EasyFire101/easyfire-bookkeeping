@@ -12,7 +12,7 @@ import { useCancelMainSubscription } from '@/hooks/query/subscription';
 /**
  * Cancel Unlocking partial transactions alerts.
  */
-function CancelMainSubscriptionAlert({
+function CancelMainSubscriptionAlertInner({
   name,
 
   // #withAlertStoreConnect
@@ -75,7 +75,7 @@ function CancelMainSubscriptionAlert({
   );
 }
 
-export default R.compose(
+export const CancelMainSubscriptionAlert = R.compose(
   withAlertStoreConnect(),
   withAlertActions,
-)(CancelMainSubscriptionAlert);
+)(CancelMainSubscriptionAlertInner);

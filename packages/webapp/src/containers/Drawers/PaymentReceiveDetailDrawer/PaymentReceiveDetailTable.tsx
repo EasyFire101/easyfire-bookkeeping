@@ -11,7 +11,7 @@ import { TableStyle } from '@/constants';
 /**
  * Payment receive readonly details table.
  */
-export default function PaymentReceiveDetailTable() {
+export function PaymentReceiveDetailTable() {
   const columns = usePaymentReceiveEntriesColumns();
 
   const {

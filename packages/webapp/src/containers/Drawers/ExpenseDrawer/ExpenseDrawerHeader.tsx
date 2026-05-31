@@ -20,7 +20,7 @@ import intl from 'react-intl-universal';
 /**
  * Expense drawer content.
  */
-export default function ExpenseDrawerHeader() {
+export function ExpenseDrawerHeader() {
   const { expense } = useExpenseDrawerContext();
 
   return (

@@ -29,7 +29,7 @@ import { Features } from '@/constants';
  * Vendor Credit note form topbar .
  * @returns {JSX.Element}
  */
-export default function VendorCreditNoteFormTopBar() {
+export function VendorCreditNoteFormTopBar() {
   // Features guard.
   const { featureCan } = useFeatureCan();
 

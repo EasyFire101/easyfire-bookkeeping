@@ -10,14 +10,11 @@ import {
 } from '@blueprintjs/core';
 import { DashboardActionsBar, FormattedMessage as T, Icon } from '@/components';
 import classNames from 'classnames';
-
 import NumberFormatDropdown from '@/components/NumberFormatDropdown';
-
 import { useARAgingSummaryContext } from './ARAgingSummaryProvider';
 import { withARAgingSummaryActions, WithARAgingSummaryActionsProps } from './withARAgingSummaryActions';
 import { withARAgingSummary } from './withARAgingSummary';
 import { withDialogActions, WithDialogActionsProps } from '@/containers/Dialog/withDialogActions';
-
 import { compose, safeInvoke } from '@/utils';
 import { ARAgingSummaryExportMenu } from './components';
 import { DialogsName } from '@/constants/dialogs';
@@ -45,15 +42,12 @@ function ARAgingSummaryActionsBarInner({
   const handleFilterToggleClick = () => {
     toggleDisplayFilterDrawer();
   };
-
   const handleRecalcReport = () => {
     refetch();
   };
-
   const handleNumberFormatSubmit = (numberFormat: Record<string, unknown>) => {
     safeInvoke(onNumberFormatSubmit, numberFormat);
   };
-
   const handlePrintBtnClick = () => {
     openDialog(DialogsName.ARAgingSummaryPdfPreview);
   };

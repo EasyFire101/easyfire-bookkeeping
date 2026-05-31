@@ -14,7 +14,7 @@ import { compose } from '@/utils';
 /**
  * branch mark primary alert.
  */
-function BranchMarkPrimaryAlert({
+function BranchMarkPrimaryAlertInner({
   name,
 
   // #withAlertStoreConnect
@@ -64,7 +64,7 @@ function BranchMarkPrimaryAlert({
   );
 }
 
-export default compose(
+export const BranchMarkPrimaryAlert = compose(
   withAlertStoreConnect(),
   withAlertActions,
-)(BranchMarkPrimaryAlert);
+)(BranchMarkPrimaryAlertInner);

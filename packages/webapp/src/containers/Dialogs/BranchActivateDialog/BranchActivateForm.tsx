@@ -7,7 +7,7 @@ import { Intent } from '@blueprintjs/core';
 
 import { AppToaster } from '@/components';
 import { useBranchActivateContext } from './BranchActivateFormProvider';
-import BranchActivateFormContent from './BranchActivateFormContent';
+import { BranchActivateFormContent } from './BranchActivateFormContent';
 
 import { withDialogActions } from '@/containers/Dialog/withDialogActions';
 
@@ -16,7 +16,7 @@ import { compose } from '@/utils';
 /**
  * Branch activate form.
  */
-function BranchActivateForm({
+function BranchActivateFormInner({
   // #withDialogActions
   closeDialog,
 }) {
@@ -62,4 +62,4 @@ function BranchActivateForm({
   );
 }
 
-export default compose(withDialogActions)(BranchActivateForm);
+export const BranchActivateForm = compose(withDialogActions)(BranchActivateFormInner);

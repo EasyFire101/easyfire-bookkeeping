@@ -14,7 +14,7 @@ import { compose } from '@/utils';
 /**
  * Payment receive view tabs.
  */
-function PaymentsReceivedViewTabs({
+function PaymentsReceivedViewTabsInner({
   // #withPaymentsReceivedActions
   addPaymentReceivesTableQueries,
 
@@ -55,9 +55,9 @@ function PaymentsReceivedViewTabs({
   );
 }
 
-export default compose(
+export const PaymentsReceivedViewTabs = compose(
   withPaymentsReceivedActions,
   withPaymentsReceived(({ paymentReceivesTableState }) => ({
     paymentReceivesTableState,
   })),
-)(PaymentsReceivedViewTabs);
+)(PaymentsReceivedViewTabsInner);

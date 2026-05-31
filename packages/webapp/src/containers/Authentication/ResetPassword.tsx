@@ -7,14 +7,14 @@ import { Link, useParams, useHistory } from 'react-router-dom';
 
 import { AppToaster, FormattedMessage as T } from '@/components';
 import { useAuthResetPassword } from '@/hooks/query';
-import AuthInsider from '@/containers/Authentication/AuthInsider';
+import { AuthInsider } from '@/containers/Authentication/AuthInsider';
 
 import {
   AuthFooterLink,
   AuthFooterLinks,
   AuthInsiderCard,
 } from './_components';
-import ResetPasswordForm from './ResetPasswordForm';
+import { ResetPasswordForm } from './ResetPasswordForm';
 import { ResetPasswordSchema } from './utils';
 import { useAuthMetaBoot } from './AuthMetaBoot';
 
@@ -25,7 +25,7 @@ const initialValues = {
 /**
  * Reset password page.
  */
-export default function ResetPassword() {
+export function ResetPassword() {
   const { token } = useParams();
   const history = useHistory();
 

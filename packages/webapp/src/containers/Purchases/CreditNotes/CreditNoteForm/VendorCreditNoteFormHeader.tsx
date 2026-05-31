@@ -1,7 +1,7 @@
 // @ts-nocheck
 import React from 'react';
 import intl from 'react-intl-universal';
-import VendorCreditNoteFormHeaderFields from './VendorCreditNoteFormHeaderFields';
+import { VendorCreditNoteFormHeaderFields } from './VendorCreditNoteFormHeaderFields';
 import { PageForm } from '@/components/PageForm';
 import { PageFormBigNumber } from '@/components';
 import { useVendorCreditTotalFormatted } from './utils';
@@ -9,7 +9,7 @@ import { useVendorCreditTotalFormatted } from './utils';
 /**
  * Vendor Credit note header.
  */
-function VendorCreditNoteFormHeader() {
+export function VendorCreditNoteFormHeader() {
   const totalFormatted = useVendorCreditTotalFormatted();
 
   return (
@@ -22,5 +22,3 @@ function VendorCreditNoteFormHeader() {
     </PageForm.Header>
   );
 }
-
-export default VendorCreditNoteFormHeader;

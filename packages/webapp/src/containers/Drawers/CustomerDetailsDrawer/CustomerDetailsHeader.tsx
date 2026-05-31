@@ -12,7 +12,7 @@ import Style from './CustomerDetailsDrawer.module.scss';
 /**
  * Customer details header.
  */
-export default function CustomerDetailsHeader() {
+export function CustomerDetailsHeader() {
   const { customer } = useCustomerDetailsDrawerContext();
 
   return (

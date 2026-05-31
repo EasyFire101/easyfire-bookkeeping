@@ -5,7 +5,7 @@ import intl from 'react-intl-universal';
 import { Formik } from 'formik';
 import { Intent } from '@blueprintjs/core';
 import { AppToaster } from '@/components';
-import ProjectFormContent from './ProjectFormContent';
+import { ProjectFormContent } from './ProjectFormContent';
 import { CreateProjectFormSchema } from './ProjectForm.schema';
 import { useProjectFormContext } from './ProjectFormProvider';
 import { withDialogActions } from '@/containers/Dialog/withDialogActions';
@@ -24,7 +24,7 @@ const defaultInitialValues = {
  * Project form
  * @returns
  */
-function ProjectForm({
+function ProjectFormInner({
   // #withDialogActions
   closeDialog,
 }) {
@@ -89,4 +89,4 @@ function ProjectForm({
   );
 }
 
-export default compose(withDialogActions)(ProjectForm);
+export const ProjectForm = compose(withDialogActions)(ProjectFormInner);

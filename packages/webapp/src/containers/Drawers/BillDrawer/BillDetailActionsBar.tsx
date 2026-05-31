@@ -33,7 +33,7 @@ import { BillMenuItem } from './utils';
 import { safeCallback, compose } from '@/utils';
 import { DRAWERS } from '@/constants/drawers';
 
-function BillDetailActionsBar({
+function BillDetailActionsBarInner({
   // #withDialogActions
   openDialog,
 
@@ -122,8 +122,8 @@ function BillDetailActionsBar({
   );
 }
 
-export default compose(
+export const BillDetailActionsBar = compose(
   withDialogActions,
   withDrawerActions,
   withAlertActions,
-)(BillDetailActionsBar);
+)(BillDetailActionsBarInner);

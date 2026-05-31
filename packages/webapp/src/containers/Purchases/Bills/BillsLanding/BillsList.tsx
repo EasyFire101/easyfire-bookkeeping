@@ -6,8 +6,8 @@ import '@/style/pages/Bills/List.scss';
 
 import { BillsListProvider } from './BillsListProvider';
 
-import BillsActionsBar from './BillsActionsBar';
-import BillsTable from './BillsTable';
+import { BillsActionsBar } from './BillsActionsBar';
+import { BillsTable } from './BillsTable';
 
 import { withBills } from './withBills';
 import { withBillsActions } from './withBillsActions';
@@ -17,7 +17,7 @@ import { transformTableStateToQuery, compose } from '@/utils';
 /**
  * Bills list.
  */
-function BillsList({
+function BillsListInner({
   // #withBills
   billsTableState,
   billsTableStateChanged,
@@ -47,10 +47,10 @@ function BillsList({
   );
 }
 
-export default compose(
+export const BillsList = compose(
   withBills(({ billsTableState, billsTableStateChanged }) => ({
     billsTableState,
     billsTableStateChanged,
   })),
   withBillsActions,
-)(BillsList);
+)(BillsListInner);

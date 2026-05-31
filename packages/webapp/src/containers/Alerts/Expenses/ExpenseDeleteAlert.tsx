@@ -16,7 +16,7 @@ import { handleDeleteErrors } from './_utils';
 /**
  * Expense delete alert.
  */
-function ExpenseDeleteAlert({
+function ExpenseDeleteAlertInner({
   // #withAlertActions
   closeAlert,
 
@@ -78,8 +78,8 @@ function ExpenseDeleteAlert({
   );
 }
 
-export default compose(
+export const ExpenseDeleteAlert = compose(
   withAlertStoreConnect(),
   withAlertActions,
   withDrawerActions,
-)(ExpenseDeleteAlert);
+)(ExpenseDeleteAlertInner);

@@ -7,8 +7,8 @@ import '@/style/pages/CashFlow/CashFlowAccounts/List.scss';
 import { DashboardPageContent } from '@/components';
 import { CashFlowAccountsProvider } from './CashFlowAccountsProvider';
 
-import CashflowAccountsGrid from './CashflowAccountsGrid';
-import CashFlowAccountsActionsBar from './CashFlowAccountsActionsBar';
+import { CashflowAccountsGrid } from './CashflowAccountsGrid';
+import { CashFlowAccountsActionsBar } from './CashFlowAccountsActionsBar';
 import { CashflowAccountsPlaidLink } from './CashflowAccountsPlaidLink';
 import { CashflowAccountsLoadingBar } from './CashFlowAccountsLoadingBar';
 
@@ -18,7 +18,7 @@ import { withCashflowAccountsTableActions } from '@/containers/CashFlow/AccountT
 /**
  * Cashflow accounts list.
  */
-function CashFlowAccountsList({
+function CashFlowAccountsListInner({
   // #withCashflowAccounts
   cashflowAccountsTableState,
 
@@ -47,9 +47,9 @@ function CashFlowAccountsList({
   );
 }
 
-export default compose(
+export const CashFlowAccountsList = compose(
   withCashflowAccounts(({ cashflowAccountsTableState }) => ({
     cashflowAccountsTableState,
   })),
   withCashflowAccountsTableActions,
-)(CashFlowAccountsList);
+)(CashFlowAccountsListInner);

@@ -8,7 +8,7 @@ import {
   ManualJournalAction,
 } from '@/constants/abilityOption';
 
-export default function ManualJournalsEmptyStatus() {
+export function ManualJournalsEmptyStatus() {
   const history = useHistory();
 
   return (

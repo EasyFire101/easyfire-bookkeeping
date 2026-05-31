@@ -15,7 +15,7 @@ import { DRAWERS } from '@/constants/drawers';
 /**
  * Refund Vendor transactions delete alert.
  */
-function RefundVendorCreditDeleteAlert({
+function RefundVendorCreditDeleteAlertInner({
   name,
   // #withAlertStoreConnect
   isOpen,
@@ -72,8 +72,8 @@ function RefundVendorCreditDeleteAlert({
   );
 }
 
-export default compose(
+export const RefundVendorCreditDeleteAlert = compose(
   withAlertStoreConnect(),
   withAlertActions,
   withDrawerActions,
-)(RefundVendorCreditDeleteAlert);
+)(RefundVendorCreditDeleteAlertInner);

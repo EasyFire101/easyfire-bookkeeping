@@ -22,7 +22,7 @@ import { DRAWERS } from '@/constants/drawers';
 /**
  * Item delete alerts.
  */
-function ItemDeleteAlert({
+function ItemDeleteAlertInner({
   name,
 
   // #withAlertStoreConnect
@@ -91,9 +91,9 @@ function ItemDeleteAlert({
   );
 }
 
-export default compose(
+export const ItemDeleteAlert = compose(
   withAlertStoreConnect(),
   withAlertActions,
   withItemsActions,
   withDrawerActions,
-)(ItemDeleteAlert);
+)(ItemDeleteAlertInner);

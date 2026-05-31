@@ -1,10 +1,10 @@
 // @ts-nocheck
 import React from 'react';
 
-import UnlockingTransactionsForm from './UnlockingTransactionsForm';
+import { UnlockingTransactionsForm } from './UnlockingTransactionsForm';
 import { UnlockingTransactionsFormProvider } from './UnlockingTransactionsFormProvider';
 
-export default function UnlockingTransactionsDialogContent({
+export function UnlockingTransactionsDialogContent({
   // #ownProps
   moduleName,
   dialogName,

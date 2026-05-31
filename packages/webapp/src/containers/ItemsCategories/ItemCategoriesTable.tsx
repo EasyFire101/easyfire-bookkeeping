@@ -65,4 +65,4 @@ function ItemsCategoryTable({
   );
 }
 
-export default compose(withDialogActions, withAlertActions)(ItemsCategoryTable);
+export const ItemCategoriesTable = compose(withDialogActions, withAlertActions)(ItemsCategoryTable);

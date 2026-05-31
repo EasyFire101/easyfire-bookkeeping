@@ -7,7 +7,7 @@ import { AppToaster } from '@/components';
 import { CreateProjectTaskFormSchema } from './ProjectTaskForm.schema';
 import { useProjectTaskFormContext } from './ProjectTaskFormProvider';
 import { compose, transformToForm } from '@/utils';
-import ProjectTaskFormContent from './ProjectTaskFormContent';
+import { TaskFormContent as ProjectTaskFormContent } from './ProjectTaskFormContent';
 import { withDialogActions } from '@/containers/Dialog/withDialogActions';
 
 const defaultInitialValues = {
@@ -20,7 +20,7 @@ const defaultInitialValues = {
  * Project task form.
  * @returns
  */
-function ProjectTaskForm({
+function ProjectTaskFormInner({
   // #withDialogActions
   closeDialog,
 }) {
@@ -84,4 +84,4 @@ function ProjectTaskForm({
   );
 }
 
-export default compose(withDialogActions)(ProjectTaskForm);
+export const ProjectTaskForm = compose(withDialogActions)(ProjectTaskFormInner);

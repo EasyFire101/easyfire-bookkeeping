@@ -3,7 +3,7 @@ import { useHistory } from 'react-router-dom';
 import { DashboardInsider } from '@/components';
 import { ImportView } from '../Import/ImportView';
 
-export default function VendorsImport() {
+export function VendorsImport() {
   const history = useHistory();
 
   const handleImportSuccess = () => {

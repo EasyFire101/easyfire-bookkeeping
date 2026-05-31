@@ -27,7 +27,7 @@ import { useEstimateFormContext } from './EstimateFormProvider';
  * Estimate form topbar .
  * @returns {JSX.Element}
  */
-export default function EstimtaeFormTopBar() {
+export function EstimtaeFormTopBar() {
   // Features guard.
   const { featureCan } = useFeatureCan();
 

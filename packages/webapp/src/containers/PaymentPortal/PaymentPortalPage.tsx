@@ -9,7 +9,7 @@ import styles from './PaymentPortal.module.scss';
 import { useEffect } from 'react';
 import { hsl, lighten, parseToHsl } from 'polished';
 
-export default function PaymentPortalPage() {
+export function PaymentPortalPage() {
   const { linkId } = useParams<{ linkId: string }>();
 
   return (

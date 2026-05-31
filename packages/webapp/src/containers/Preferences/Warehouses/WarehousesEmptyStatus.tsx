@@ -6,7 +6,7 @@ import { withDialogActions } from '@/containers/Dialog/withDialogActions';
 
 import { compose } from '@/utils';
 
-function WarehousesEmptyStatus({
+function WarehousesEmptyStatusInner({
   // #withDialogActions
   openDialog,
 }) {
@@ -38,4 +38,4 @@ function WarehousesEmptyStatus({
   );
 }
 
-export default compose(withDialogActions)(WarehousesEmptyStatus);
+export const WarehousesEmptyStatus = compose(withDialogActions)(WarehousesEmptyStatusInner);

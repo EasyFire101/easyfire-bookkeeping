@@ -32,7 +32,7 @@ import { compose } from '@/utils';
 /**
  * Cash Flow accounts actions bar.
  */
-function CashFlowAccountsActionsBar({
+function CashFlowAccountsActionsBarInner({
   // #withDialogActions
   openDialog,
 
@@ -120,7 +120,7 @@ function CashFlowAccountsActionsBar({
     </DashboardActionsBar>
   );
 }
-export default compose(
+export const CashFlowAccountsActionsBar = compose(
   withDialogActions,
   withCashflowAccountsTableActions,
-)(CashFlowAccountsActionsBar);
+)(CashFlowAccountsActionsBarInner);

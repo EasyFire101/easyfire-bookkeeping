@@ -14,7 +14,7 @@ import { compose } from '@/utils';
 /**
  * Contact inactivate alert.
  */
-function ContactInactivateAlert({
+function ContactInactivateAlertInner({
   name,
   // #withAlertStoreConnect
   isOpen,
@@ -64,7 +64,7 @@ function ContactInactivateAlert({
   );
 }
 
-export default compose(
+export const ContactInactivateAlert = compose(
   withAlertStoreConnect(),
   withAlertActions,
-)(ContactInactivateAlert);
+)(ContactInactivateAlertInner);

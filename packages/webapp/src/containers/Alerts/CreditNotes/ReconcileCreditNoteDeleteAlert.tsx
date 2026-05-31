@@ -18,7 +18,7 @@ import { compose } from '@/utils';
 /**
  * Reconcile credit note delete alert.
  */
-function ReconcileCreditNoteDeleteAlert({
+function ReconcileCreditNoteDeleteAlertInner({
   name,
 
   // #withAlertStoreConnect
@@ -83,8 +83,8 @@ function ReconcileCreditNoteDeleteAlert({
   );
 }
 
-export default compose(
+export const ReconcileCreditNoteDeleteAlert = compose(
   withAlertStoreConnect(),
   withAlertActions,
   withDrawerActions,
-)(ReconcileCreditNoteDeleteAlert);
+)(ReconcileCreditNoteDeleteAlertInner);

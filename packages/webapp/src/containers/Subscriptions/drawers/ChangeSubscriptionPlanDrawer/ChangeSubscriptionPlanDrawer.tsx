@@ -6,14 +6,12 @@ import { withDrawers } from '@/containers/Drawer/withDrawers';
 import { Position } from '@blueprintjs/core';
 import { DRAWERS } from '@/constants/drawers';
 
-const ChangeSubscriptionPlanContent = lazy(
-  () => import('./ChangeSubscriptionPlanContent'),
-);
+const ChangeSubscriptionPlanContent = lazy(() => import('./ChangeSubscriptionPlanContent').then(m => ({ default: m.ChangeSubscriptionPlanContent })));
 
 /**
  * Account drawer.
  */
-function ChangeSubscriptionPlanDrawer({
+function ChangeSubscriptionPlanDrawerInner({
   name,
   // #withDrawer
   isOpen,
@@ -36,4 +34,4 @@ function ChangeSubscriptionPlanDrawer({
   );
 }
 
-export default R.compose(withDrawers())(ChangeSubscriptionPlanDrawer);
+export const ChangeSubscriptionPlanDrawer = R.compose(withDrawers())(ChangeSubscriptionPlanDrawerInner);

@@ -1,9 +1,9 @@
 // @ts-nocheck
 import React from 'react';
 import { ReconcileVendorCreditFormProvider } from './ReconcileVendorCreditFormProvider';
-import ReconcileVendorCreditForm from './ReconcileVendorCreditForm';
+import { ReconcileVendorCreditForm } from './ReconcileVendorCreditForm';
 
-export default function ReconcileVendorCreditDialogContent({
+export function ReconcileVendorCreditDialogContent({
   // #ownProps
   dialogName,
   vendorCreditId,

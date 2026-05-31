@@ -19,7 +19,7 @@ import { usePaymentMadeDetailContext } from './PaymentMadeDetailProvider';
 /**
  * Payment made - detail panel - header.
  */
-export default function PaymentMadeDetailHeader() {
+export function PaymentMadeDetailHeader() {
   const { paymentMade } = usePaymentMadeDetailContext();
 
   return (

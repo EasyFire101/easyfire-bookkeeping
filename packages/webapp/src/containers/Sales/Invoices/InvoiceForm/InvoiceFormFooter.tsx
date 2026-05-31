@@ -7,7 +7,7 @@ import { InvoiceFormFooterLeft } from './InvoiceFormFooterLeft';
 import { InvoiceFormFooterRight } from './InvoiceFormFooterRight';
 import { UploadAttachmentButton } from '../../../Attachments/UploadAttachmentButton';
 
-export default function InvoiceFormFooter() {
+export function InvoiceFormFooter() {
   return (
     <x.div mt={'20px'} px={'32px'} pb={'20px'} flex={1}>
       <Paper p={'20px'}>

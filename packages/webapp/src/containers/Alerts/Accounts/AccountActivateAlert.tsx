@@ -13,7 +13,7 @@ import { compose } from '@/utils';
 /**
  * Account activate alert.
  */
-function AccountActivateAlert({
+function AccountActivateAlertInner({
   name,
   isOpen,
   payload: { accountId },
@@ -62,7 +62,7 @@ function AccountActivateAlert({
   );
 }
 
-export default compose(
+export const AccountActivateAlert = compose(
   withAlertStoreConnect(),
   withAlertActions,
-)(AccountActivateAlert);
+)(AccountActivateAlertInner);

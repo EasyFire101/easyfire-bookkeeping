@@ -4,8 +4,8 @@ import { DashboardPageContent } from '@/components';
 
 import '@/style/pages/SaleEstimate/List.scss';
 
-import EstimatesActionsBar from './EstimatesActionsBar';
-import EstimatesDataTable from './EstimatesDataTable';
+import { EstimatesActionsBar } from './EstimatesActionsBar';
+import { EstimatesDataTable } from './EstimatesDataTable';
 
 import { withEstimates } from './withEstimates';
 import { withEstimatesActions } from './withEstimatesActions';
@@ -16,7 +16,7 @@ import { compose, transformTableStateToQuery } from '@/utils';
 /**
  * Sale estimates list page.
  */
-function EstimatesList({
+function EstimatesListInner({
   // #withEstimate
   estimatesTableState,
   estimatesTableStateChanged,
@@ -46,10 +46,10 @@ function EstimatesList({
   );
 }
 
-export default compose(
+export const EstimatesList = compose(
   withEstimates(({ estimatesTableState, estimatesTableStateChanged }) => ({
     estimatesTableState,
     estimatesTableStateChanged,
   })),
   withEstimatesActions,
-)(EstimatesList);
+)(EstimatesListInner);

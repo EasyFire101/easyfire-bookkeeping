@@ -3,7 +3,7 @@ import React from 'react';
 import { Formik } from 'formik';
 import { AppToaster } from '@/components';
 import { CreateEstimatedExpenseFormSchema } from './EstimatedExpense.schema';
-import EstimatedExpenseFormConent from './EstimatedExpenseFormConent';
+import { EstimatedExpenseFormConent } from './EstimatedExpenseFormConent';
 import { withDialogActions } from '@/containers/Dialog/withDialogActions';
 import { compose } from '@/utils';
 
@@ -19,7 +19,7 @@ const defaultInitialValues = {
  * Estimated expense form dialog.
  * @returns
  */
-function EstimatedExpenseForm({
+function EstimatedExpenseFormInner({
   //#withDialogActions
   closeDialog,
 }) {
@@ -54,4 +54,4 @@ function EstimatedExpenseForm({
   );
 }
 
-export default compose(withDialogActions)(EstimatedExpenseForm);
+export const EstimatedExpenseForm = compose(withDialogActions)(EstimatedExpenseFormInner);

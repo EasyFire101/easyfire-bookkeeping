@@ -8,7 +8,7 @@ import { defaultTo, omit } from 'lodash';
 import { AppToaster } from '@/components';
 import { useQuickPaymentReceiveContext } from './QuickPaymentReceiveFormProvider';
 import { CreateQuickPaymentReceiveFormSchema } from './QuickPaymentReceive.schema';
-import QuickPaymentReceiveFormContent from './QuickPaymentReceiveFormContent';
+import { QuickPaymentReceiveFormContent } from './QuickPaymentReceiveFormContent';
 
 import { withSettings } from '@/containers/Settings/withSettings';
 import { withDialogActions } from '@/containers/Dialog/withDialogActions';
@@ -22,7 +22,7 @@ import { compose, transactionNumber } from '@/utils';
 /**
  * Quick payment receive form.
  */
-function QuickPaymentReceiveForm({
+function QuickPaymentReceiveFormInner({
   // #withDialogActions
   closeDialog,
 
@@ -99,7 +99,7 @@ function QuickPaymentReceiveForm({
   );
 }
 
-export default compose(
+export const QuickPaymentReceiveForm = compose(
   withDialogActions,
   withSettings(({ paymentReceiveSettings }) => ({
     paymentReceiveNextNumber: paymentReceiveSettings?.nextNumber,
@@ -107,4 +107,4 @@ export default compose(
     paymentReceiveAutoIncrement: paymentReceiveSettings?.autoIncrement,
     preferredDepositAccount: paymentReceiveSettings?.preferredDepositAccount,
   })),
-)(QuickPaymentReceiveForm);
+)(QuickPaymentReceiveFormInner);

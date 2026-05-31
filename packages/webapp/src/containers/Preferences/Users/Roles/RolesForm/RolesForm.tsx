@@ -12,7 +12,7 @@ import { AppToaster, FormattedMessage as T } from '@/components';
 import { CreateRolesFormSchema, EditRolesFormSchema } from './RolesForm.schema';
 import { useRolesFormContext } from './RolesFormProvider';
 import { withDashboardActions } from '@/containers/Dashboard/withDashboardActions';
-import RolesFormContent from './RolesFormContent';
+import { RolesFormContent } from './RolesFormContent';
 import {
   getNewRoleInitialValues,
   transformToArray,
@@ -31,7 +31,7 @@ const defaultValues = {
 /**
  *  Preferences - Roles Form.
  */
-function RolesForm({
+function RolesFormInner({
   // #withDashboardActions
   changePreferencesPageTitle,
 }) {
@@ -106,4 +106,4 @@ function RolesForm({
   );
 }
 
-export default compose(withDashboardActions)(RolesForm);
+export const RolesForm = compose(withDashboardActions)(RolesFormInner);

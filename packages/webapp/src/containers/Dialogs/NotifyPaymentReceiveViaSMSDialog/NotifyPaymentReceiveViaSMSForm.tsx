@@ -5,7 +5,7 @@ import intl from 'react-intl-universal';
 import { Intent } from '@blueprintjs/core';
 import { AppToaster } from '@/components';
 
-import NotifyViaSMSForm from '@/containers/NotifyViaSMS/NotifyViaSMSForm';
+import { NotifyViaSMSForm } from '@/containers/NotifyViaSMS/NotifyViaSMSForm';
 import { useNotifyPaymentReceiveViaSMSContext } from './NotifyPaymentReceiveViaFormProvider';
 import { transformErrors } from '@/containers/NotifyViaSMS/utils';
 
@@ -20,7 +20,7 @@ const notificationType = {
 /**
  * Notify Payment Recive Via SMS Form.
  */
-function NotifyPaymentReceiveViaSMSForm({
+function NotifyPaymentReceiveViaSMSFormInner({
   // #withDialogActions
   closeDialog,
 }) {
@@ -85,4 +85,4 @@ function NotifyPaymentReceiveViaSMSForm({
     />
   );
 }
-export default compose(withDialogActions)(NotifyPaymentReceiveViaSMSForm);
+export const NotifyPaymentReceiveViaSMSForm = compose(withDialogActions)(NotifyPaymentReceiveViaSMSFormInner);

@@ -5,7 +5,7 @@ import intl from 'react-intl-universal';
 import { Intent } from '@blueprintjs/core';
 import { AppToaster } from '@/components';
 
-import NotifyViaSMSForm from '@/containers/NotifyViaSMS/NotifyViaSMSForm';
+import { NotifyViaSMSForm } from '@/containers/NotifyViaSMS/NotifyViaSMSForm';
 import { useEstimateViaSMSContext } from './NotifyEstimateViaSMSFormProvider';
 import { transformErrors } from '@/containers/NotifyViaSMS/utils';
 
@@ -17,7 +17,7 @@ const notificationType = {
   label: intl.get('sms_notification.estimate_details.type'),
 };
 
-function NotifyEstimateViaSMSForm({
+function NotifyEstimateViaSMSFormInner({
   // #withDialogActions
   closeDialog,
 }) {
@@ -79,4 +79,4 @@ function NotifyEstimateViaSMSForm({
   );
 }
 
-export default compose(withDialogActions)(NotifyEstimateViaSMSForm);
+export const NotifyEstimateViaSMSForm = compose(withDialogActions)(NotifyEstimateViaSMSFormInner);

@@ -8,7 +8,7 @@ import { useInventoryAdjustmentDrawerContext } from './InventoryAdjustmentDrawer
 /**
  * Inventory adjustment detail entries table.
  */
-export default function InventoryAdjustmentDetailTable() {
+export function InventoryAdjustmentDetailTable() {
   // Inventory adjustment entries columns.
   const columns = useInventoryAdjustmentEntriesColumns();
 

@@ -17,7 +17,7 @@ import { usePaymentReceiveDetailContext } from './PaymentReceiveDetailProvider';
 /**
  * Payment receive detail header.
  */
-export default function PaymentReceiveDetailHeader() {
+export function PaymentReceiveDetailHeader() {
   const { paymentReceive } = usePaymentReceiveDetailContext();
 
   return (

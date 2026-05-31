@@ -6,7 +6,7 @@ import '@/style/pages/InventoryAdjustments/List.scss';
 import { DashboardContentTable, DashboardPageContent } from '@/components';
 
 import { InventoryAdjustmentsProvider } from './InventoryAdjustmentsProvider';
-import InventoryAdjustmentTable from './InventoryAdjustmentTable';
+import { InventoryAdjustmentTable } from './InventoryAdjustmentTable';
 
 import { withInventoryAdjustments } from './withInventoryAdjustments';
 
@@ -15,7 +15,7 @@ import { compose, transformTableStateToQuery } from '@/utils';
 /**
  * Inventory Adjustment List.
  */
-function InventoryAdjustmentList({
+function InventoryAdjustmentListInner({
   // #withInventoryAdjustments
   inventoryAdjustmentTableState,
 }) {
@@ -32,8 +32,8 @@ function InventoryAdjustmentList({
   );
 }
 
-export default compose(
+export const InventoryAdjustmentList = compose(
   withInventoryAdjustments(({ inventoryAdjustmentTableState }) => ({
     inventoryAdjustmentTableState,
   })),
-)(InventoryAdjustmentList);
+)(InventoryAdjustmentListInner);

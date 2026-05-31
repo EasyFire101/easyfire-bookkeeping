@@ -29,7 +29,7 @@ import { DRAWERS } from '@/constants/drawers';
 /**
  * Item action-bar of readonly details drawer.
  */
-function ItemDetailActionsBar({
+function ItemDetailActionsBarInner({
   // #withAlertActions
   openAlert,
 
@@ -79,7 +79,7 @@ function ItemDetailActionsBar({
   );
 }
 
-export default compose(
+export const ItemDetailActionsBar = compose(
   withDrawerActions,
   withAlertActions,
-)(ItemDetailActionsBar);
+)(ItemDetailActionsBarInner);

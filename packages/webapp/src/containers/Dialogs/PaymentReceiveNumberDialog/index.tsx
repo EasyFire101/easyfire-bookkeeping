@@ -4,9 +4,7 @@ import { Dialog, DialogSuspense, FormattedMessage as T } from '@/components';
 import withDialogRedux from '@/components/DialogReduxConnect';
 import { saveInvoke, compose } from '@/utils';
 
-const PaymentReceiveNumbereDialogContent = lazy(
-  () => import('./PaymentReceiveNumberDialogContent'),
-);
+const PaymentReceiveNumbereDialogContent = lazy(() => import('./PaymentReceiveNumberDialogContent').then(m => ({ default: m.PaymentReceiveNumberDialogContent })));
 
 /**
  * Payment receive number dialog.
@@ -35,4 +33,4 @@ function PaymentReceiveNumberDialog({
   );
 }
 
-export default compose(withDialogRedux())(PaymentReceiveNumberDialog);
+export const index = compose(withDialogRedux())(PaymentReceiveNumberDialog);

@@ -2,9 +2,9 @@
 import React, { useMemo } from 'react';
 import { useFormikContext } from 'formik';
 
-import OwnerContributionFormFields from './OwnerContribution/OwnerContributionFormFields';
-import OtherIncomeFormFields from './OtherIncome/OtherIncomeFormFields';
-import TransferFromAccountFormFields from './TransferFromAccount/TransferFromAccountFormFields';
+import { OwnerContributionFormFields } from './OwnerContribution/OwnerContributionFormFields';
+import { OtherIncomeFormFields } from './OtherIncome/OtherIncomeFormFields';
+import { TransferFromAccountFormFields } from './TransferFromAccount/TransferFromAccountFormFields';
 import { MoneyInFieldsProvider } from './MoneyInFieldsProvider';
 
 /**
@@ -12,7 +12,7 @@ import { MoneyInFieldsProvider } from './MoneyInFieldsProvider';
  * Switches between fields based on the given transaction type.
  * @returns {JSX.Element}
  */
-export default function MoneyInContentFields() {
+export function MoneyInContentFields() {
   const { values } = useFormikContext();
 
   const transactionFields = useMemo(() => {

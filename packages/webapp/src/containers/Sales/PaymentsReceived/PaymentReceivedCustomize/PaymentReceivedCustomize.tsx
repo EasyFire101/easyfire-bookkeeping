@@ -4,7 +4,7 @@ import { useDrawerContext } from '@/components/Drawer/DrawerProvider';
 import { PaymentReceivedCustomizeContent } from './PaymentReceivedCustomizeContent';
 import { BrandingTemplateBoot } from '@/containers/BrandingTemplates/BrandingTemplateBoot';
 
-export default function PaymentReceivedCustomize() {
+export function PaymentReceivedCustomize() {
   const { payload } = useDrawerContext();
   const templateId = payload.templateId;
 

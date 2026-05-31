@@ -4,7 +4,7 @@ import { Dialog, DialogSuspense, FormattedMessage as T } from '@/components';
 import withDialogRedux from '@/components/DialogReduxConnect';
 import { compose } from '@/utils';
 
-const UserFormDialogContent = lazy(() => import('./InviteUserDialogContent'));
+const UserFormDialogContent = lazy(() => import('./InviteUserDialogContent').then(m => ({ default: m.InviteUserDialogContent })));
 
 // User form dialog.
 function UserFormDialog({
@@ -38,7 +38,7 @@ function UserFormDialog({
   );
 }
 
-export default compose(
+export const index = compose(
   // UserFormDialogConnect,
   withDialogRedux(),
 )(UserFormDialog);

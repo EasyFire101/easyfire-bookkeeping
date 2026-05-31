@@ -7,7 +7,7 @@ import { CLASSES } from '@/constants/classes';
 import { Paper, Row, Col } from '@/components';
 import { WarehouseTransferFormFooterLeft } from './WarehouseTransferFormFooterLeft';
 
-export default function WarehouseTransferFormFooter() {
+export function WarehouseTransferFormFooter() {
   return (
     <div className={classNames(CLASSES.PAGE_FORM_FOOTER)}>
       <Paper p={'20px'}>

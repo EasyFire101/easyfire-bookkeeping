@@ -20,7 +20,7 @@ import { useExpenseFormContext } from './ExpenseFormPageProvider';
 /**
  * Expense form floating actions.
  */
-export default function ExpenseFloatingFooter() {
+export function ExpenseFloatingFooter() {
   const history = useHistory();
 
   // Formik context.

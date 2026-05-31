@@ -46,7 +46,7 @@ function BillViewTabs({
   );
 }
 
-export default compose(
+export const BillsViewsTabs = compose(
   withBillsActions,
   withBills(({ billsTableState }) => ({
     billsCurrentView: billsTableState.viewSlug,

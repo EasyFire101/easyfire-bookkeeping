@@ -12,7 +12,7 @@ import { compose } from '@/utils';
 /**
  * Bad bebt form floating actions.
  */
-function BadDebtFormFloatingActions({
+function BadDebtFormFloatingActionsInner({
   // #withDialogActions
   closeDialog,
 }) {
@@ -46,4 +46,4 @@ function BadDebtFormFloatingActions({
   );
 }
 
-export default compose(withDialogActions)(BadDebtFormFloatingActions);
+export const BadDebtFormFloatingActions = compose(withDialogActions)(BadDebtFormFloatingActionsInner);

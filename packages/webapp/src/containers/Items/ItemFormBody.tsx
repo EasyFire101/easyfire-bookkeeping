@@ -34,7 +34,7 @@ import intl from 'react-intl-universal';
 /**
  * Item form body.
  */
-function ItemFormBody({ organization: { base_currency } }) {
+function ItemFormBodyInner({ organization: { base_currency } }) {
   const { accounts, taxRates } = useItemFormContext();
   const { values } = useFormikContext();
 
@@ -244,4 +244,4 @@ function ItemFormBody({ organization: { base_currency } }) {
   );
 }
 
-export default compose(withCurrentOrganization())(ItemFormBody);
+export const ItemFormBody = compose(withCurrentOrganization())(ItemFormBodyInner);

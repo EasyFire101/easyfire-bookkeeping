@@ -1,13 +1,13 @@
 // @ts-nocheck
 import React from 'react';
 import { useParams } from 'react-router-dom';
-import ExpenseForm from './ExpenseForm';
+import { ExpenseForm } from './ExpenseForm';
 import { ExpenseFormPageProvider } from './ExpenseFormPageProvider';
 
 /**
  * Expense page form.
  */
-export default function ExpenseFormPage() {
+export function ExpenseFormPage() {
   const { id } = useParams();
   const expenseId = parseInt(id, 10);
 

@@ -9,12 +9,12 @@ import {
   MIN_LINES_NUMBER,
 } from './utils';
 import { useMakeJournalFormContext } from './MakeJournalProvider';
-import MakeJournalEntriesTable from './MakeJournalEntriesTable';
+import { MakeJournalEntriesTable } from './MakeJournalEntriesTable';
 
 /**
  * Make journal entries field.
  */
-export default function MakeJournalEntriesField() {
+export function MakeJournalEntriesField() {
   const { accounts, contacts, branches, projects } =
     useMakeJournalFormContext();
 

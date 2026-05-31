@@ -16,7 +16,7 @@ import { compose } from '@/utils';
 /**
  * SMS Message Form floating actions.
  */
-function SMSMessageFormFloatingActions({
+function SMSMessageFormFloatingActionsInner({
   // #withDialogActions
   closeDialog,
 }) {
@@ -50,4 +50,4 @@ function SMSMessageFormFloatingActions({
   );
 }
 
-export default compose(withDialogActions)(SMSMessageFormFloatingActions);
+export const SMSMessageFormFloatingActions = compose(withDialogActions)(SMSMessageFormFloatingActionsInner);

@@ -16,4 +16,4 @@ export const mapStateToProps = (state, props) => {
   };
 };
 
-export default connect(mapStateToProps, null);
+export const UserFormDialogConnector = connect(mapStateToProps, null);

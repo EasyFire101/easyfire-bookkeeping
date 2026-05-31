@@ -3,12 +3,12 @@ import React from 'react';
 import intl from 'react-intl-universal';
 import { Tabs, Tab } from '@blueprintjs/core';
 
-import CustomerAddressTabs from './CustomerAddressTabs';
-import CustomerAttachmentTabs from './CustomerAttachmentTabs';
+import { CustomerAddressTabs } from './CustomerAddressTabs';
+import { CustomerAttachmentTabs } from './CustomerAttachmentTabs';
 import CustomerFinancialPanel from './CustomerFormFinancialSection';
-import CustomerNotePanel from './CustomerNotePanel';
+import { CustomerNotePanel } from './CustomerNotePanel';
 
-export default function CustomersTabs() {
+export function CustomersTabs() {
   return (
     <div>
       <Tabs

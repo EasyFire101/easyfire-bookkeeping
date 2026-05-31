@@ -5,8 +5,8 @@ import '@/style/pages/Expense/List.scss';
 
 import { DashboardPageContent } from '@/components';
 
-import ExpenseActionsBar from './ExpenseActionsBar';
-import ExpenseDataTable from './ExpenseDataTable';
+import { ExpenseActionsBar } from './ExpenseActionsBar';
+import { ExpenseDataTable } from './ExpenseDataTable';
 
 import { withExpenses } from './withExpenses';
 import { withExpensesActions } from './withExpensesActions';
@@ -17,7 +17,7 @@ import { ExpensesListProvider } from './ExpensesListProvider';
 /**
  * Expenses list.
  */
-function ExpensesList({
+function ExpensesListInner({
   // #withExpenses
   expensesTableState,
   expensesTableStateChanged,
@@ -47,10 +47,10 @@ function ExpensesList({
   );
 }
 
-export default compose(
+export const ExpensesList = compose(
   withExpenses(({ expensesTableState, expensesTableStateChanged }) => ({
     expensesTableState,
     expensesTableStateChanged,
   })),
   withExpensesActions,
-)(ExpensesList);
+)(ExpensesListInner);

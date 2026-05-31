@@ -14,7 +14,7 @@ import { withDashboardActions } from '@/containers/Dashboard/withDashboardAction
 /**
  * Customers views tabs.
  */
-function CustomersViewsTabs({
+function CustomersViewsTabsInner({
   // #withCustomersActions
   setCustomersTableState,
 
@@ -46,10 +46,10 @@ function CustomersViewsTabs({
   );
 }
 
-export default compose(
+export const CustomersViewsTabs = compose(
   withDashboardActions,
   withCustomersActions,
   withCustomers(({ customersTableState }) => ({
     customersCurrentView: customersTableState.viewSlug,
   })),
-)(CustomersViewsTabs);
+)(CustomersViewsTabsInner);

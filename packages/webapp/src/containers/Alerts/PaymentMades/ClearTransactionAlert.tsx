@@ -49,7 +49,7 @@ function ClearPaymentTransactionAlert({
   );
 }
 
-export default compose(
+export const ClearTransactionAlert = compose(
   withAlertStoreConnect(),
   withAlertActions,
 )(ClearPaymentTransactionAlert);

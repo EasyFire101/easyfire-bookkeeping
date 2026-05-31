@@ -2,14 +2,14 @@
 import React from 'react';
 import { Form } from 'formik';
 
-import WarehouseFormFields from './WarehouseFormFields';
-import WarehouseFormFloatingActions from './WarehouseFormFloatingActions';
+import { WarehouseFormFields } from './WarehouseFormFields';
+import { WarehouseFormFloatingActions } from './WarehouseFormFloatingActions';
 
 /**
  * Warehouse form content.
  * @returns
  */
-export default function WarehouseFormContent() {
+export function WarehouseFormContent() {
   return (
     <Form>
       <WarehouseFormFields />

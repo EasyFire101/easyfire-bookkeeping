@@ -6,13 +6,13 @@ import { Group, Money } from '@/components';
 import { FormattedMessage as T } from '@/components';
 
 import { CLASSES } from '@/constants/classes';
-import PaymentReceiveHeaderFields from './PaymentReceiveHeaderFields';
+import { PaymentReceiveHeaderFields } from './PaymentReceiveHeaderFields';
 import { useIsDarkMode } from '@/hooks/useDarkMode';
 
 /**
  * Payment receive form header.
  */
-function PaymentReceiveFormHeader() {
+export function PaymentReceiveFormHeader() {
   const isDarkMode = useIsDarkMode();
 
   return (
@@ -60,5 +60,3 @@ function PaymentReceiveFormBigTotal() {
     </div>
   );
 }
-
-export default PaymentReceiveFormHeader;

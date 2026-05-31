@@ -18,7 +18,7 @@ import { compose } from '@/utils';
 /**
  * Reconcile vendor credit delete alert.
  */
-function ReconcileVendorCreditDeleteAlert({
+function ReconcileVendorCreditDeleteAlertInner({
   name,
 
   // #withAlertStoreConnect
@@ -82,8 +82,8 @@ function ReconcileVendorCreditDeleteAlert({
   );
 }
 
-export default compose(
+export const ReconcileVendorCreditDeleteAlert = compose(
   withAlertStoreConnect(),
   withAlertActions,
   withDrawerActions,
-)(ReconcileVendorCreditDeleteAlert);
+)(ReconcileVendorCreditDeleteAlertInner);

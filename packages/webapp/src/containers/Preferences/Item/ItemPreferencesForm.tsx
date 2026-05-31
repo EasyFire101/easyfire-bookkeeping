@@ -18,7 +18,7 @@ import { useItemPreferencesFormContext } from './ItemPreferencesFormProvider';
 /**
  * Item preferences form.
  */
-export default function ItemForm() {
+export function ItemForm() {
   const history = useHistory();
   const { accounts } = useItemPreferencesFormContext();
 

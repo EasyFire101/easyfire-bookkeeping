@@ -20,7 +20,7 @@ import intl from 'react-intl-universal';
 /**
  * User form content.
  */
-function UserFormContent({
+function UserFormContentInner({
   calloutCode,
 
   // #withDialogActions
@@ -103,4 +103,4 @@ function UserFormContent({
     </Form>
   );
 }
-export default compose(withDialogActions)(UserFormContent);
+export const UserFormContent = compose(withDialogActions)(UserFormContentInner);

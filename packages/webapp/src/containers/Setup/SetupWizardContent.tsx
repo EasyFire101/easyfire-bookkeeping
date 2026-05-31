@@ -3,10 +3,10 @@ import React from 'react';
 import { x } from '@xstyled/emotion';
 import { css } from '@emotion/css';
 
-import SetupSubscription from './SetupSubscription/SetupSubscription';
-import SetupOrganizationPage from './SetupOrganizationPage';
-import SetupInitializingForm from './SetupInitializingForm';
-import SetupCongratsPage from './SetupCongratsPage';
+import { SetupSubscription } from './SetupSubscription/SetupSubscription';
+import { SetupOrganizationPage } from './SetupOrganizationPage';
+import { SetupInitializingForm } from './SetupInitializingForm';
+import { SetupCongratsPage } from './SetupCongratsPage';
 import { Stepper } from '@/components/Stepper';
 
 interface SetupWizardContentProps {
@@ -21,7 +21,7 @@ const itemsClassName = css`
 /**
  * Setup wizard content.
  */
-export default function SetupWizardContent({
+export function SetupWizardContent({
   stepIndex,
   stepId,
 }: SetupWizardContentProps) {

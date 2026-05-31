@@ -6,7 +6,7 @@ import styled from 'styled-components';
 import { Card } from '@/components';
 import { CLASSES } from '@/constants/classes';
 import { useAccounts, useSaveSettings, useSettings } from '@/hooks/query';
-import PreferencesPageLoader from '../PreferencesPageLoader';
+import { PreferencesPageLoader } from '../PreferencesPageLoader';
 
 const AccountantFormContext = React.createContext();
 

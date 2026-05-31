@@ -5,14 +5,12 @@ import { Dialog, DialogSuspense } from '@/components';
 import withDialogRedux from '@/components/DialogReduxConnect';
 import { compose } from '@/utils';
 
-const TaxRateFormDialogContent = lazy(
-  () => import('./TaxRateFormDialogContent'),
-);
+const TaxRateFormDialogContent = lazy(() => import('./TaxRateFormDialogContent').then(m => ({ default: m.TaxRateFormDialogContent })));
 
 /**
  * Tax rate form dialog.
  */
-function TaxRateFormDialog({
+function TaxRateFormDialogInner({
   dialogName,
   payload = { action: '', id: null },
   isOpen,
@@ -39,4 +37,4 @@ const TaxRateDialog = styled(Dialog)`
   max-width: 450px;
 `;
 
-export default compose(withDialogRedux())(TaxRateFormDialog);
+export const TaxRateFormDialog = compose(withDialogRedux())(TaxRateFormDialogInner);

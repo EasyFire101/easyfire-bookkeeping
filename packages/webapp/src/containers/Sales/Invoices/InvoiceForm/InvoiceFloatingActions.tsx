@@ -28,7 +28,7 @@ import { useIsDarkMode } from '@/hooks/useDarkMode';
 /**
  * Invoice floating actions bar.
  */
-export default function InvoiceFloatingActions() {
+export function InvoiceFloatingActions() {
   const history = useHistory();
   const isDarkMode = useIsDarkMode();
   const { openDrawer } = useDrawerActions();

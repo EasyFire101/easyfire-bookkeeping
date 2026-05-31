@@ -14,7 +14,7 @@ import { compose, transfromViewsToTabs } from '@/utils';
 /**
  * Accounts views tabs.
  */
-function AccountsViewsTabs({
+function AccountsViewsTabsInner({
   // #withAccountsTableActions
   setAccountsTableState,
 
@@ -52,9 +52,9 @@ function AccountsViewsTabs({
   );
 }
 
-export default compose(
+export const AccountsViewsTabs = compose(
   withAccountsTableActions,
   withAccounts(({ accountsTableState }) => ({
     accountsCurrentView: accountsTableState.viewSlug
   }))
-)(AccountsViewsTabs);
+)(AccountsViewsTabsInner);

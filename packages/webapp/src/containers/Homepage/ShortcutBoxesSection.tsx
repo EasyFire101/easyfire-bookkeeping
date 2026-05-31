@@ -28,7 +28,7 @@ function ShortcutBoxes({ sectionTitle, shortcuts }) {
   );
 }
 
-export default function ShortcutBoxesSection({ section }) {
+export function ShortcutBoxesSection({ section }) {
   const BoxSection = useFilterShortcutBoxesSection(section);
   return <For render={ShortcutBoxes} of={BoxSection} />;
 }

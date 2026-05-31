@@ -14,7 +14,7 @@ import intl from 'react-intl-universal';
 /**
  *  Account drawer header.
  */
-export default function AccountDrawerHeader() {
+export function AccountDrawerHeader() {
   const { account } = useAccountDrawerContext();
 
   return (

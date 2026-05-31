@@ -2,9 +2,8 @@
 import styled from 'styled-components';
 
 import { Card } from '@/components';
-import JournalEntriesTable, {
-  AmountDisplayedBaseCurrencyMessage,
-} from '../../JournalEntriesTable/JournalEntriesTable';
+import {
+  AmountDisplayedBaseCurrencyMessage, JournalEntriesTable } from '../../JournalEntriesTable/JournalEntriesTable';
 
 import { useTransactionsByReference } from '@/hooks/query';
 import { usePaymentReceiveDetailContext } from './PaymentReceiveDetailProvider';

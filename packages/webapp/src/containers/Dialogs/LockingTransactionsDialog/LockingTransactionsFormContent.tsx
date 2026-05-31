@@ -2,13 +2,13 @@
 import React from 'react';
 import { Form } from 'formik';
 
-import LockingTransactionsFormFields from './LockingTransactionsFormFields';
-import LockingTransactionsFormFloatingActions from './LockingTransactionsFormFloatingActions';
+import { LockingTransactionsFormFields } from './LockingTransactionsFormFields';
+import { LockingTransactionsFormFloatingActions } from './LockingTransactionsFormFloatingActions';
 
 /**
  * locking Transactions form content.
  */
-export default function LockingTransactionsFormContent() {
+export function LockingTransactionsFormContent() {
   return (
     <Form>
       <LockingTransactionsFormFields />

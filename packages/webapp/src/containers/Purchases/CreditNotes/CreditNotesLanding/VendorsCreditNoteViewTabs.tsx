@@ -13,7 +13,7 @@ import { useVendorsCreditNoteListContext } from './VendorsCreditNoteListProvider
 /**
  * Vendors Credit note views tabs.
  */
-function VendorsCreditNoteViewTabs({
+function VendorsCreditNoteViewTabsInner({
   // #withVendorsCreditNotes
   vendorCreditCurrentView,
 
@@ -43,9 +43,9 @@ function VendorsCreditNoteViewTabs({
   );
 }
 
-export default compose(
+export const VendorsCreditNoteViewTabs = compose(
   withVendorsCreditNotesActions,
   withVendorsCreditNotes(({ vendorsCreditNoteTableState }) => ({
     vendorCreditCurrentView: vendorsCreditNoteTableState.viewSlug,
   })),
-)(VendorsCreditNoteViewTabs);
+)(VendorsCreditNoteViewTabsInner);

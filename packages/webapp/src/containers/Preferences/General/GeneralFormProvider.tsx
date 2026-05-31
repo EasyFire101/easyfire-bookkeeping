@@ -11,7 +11,7 @@ import {
   useDateFormats,
   useOrgBaseCurrencyMutateAbilities,
 } from '@/hooks/query';
-import PreferencesPageLoader from '../PreferencesPageLoader';
+import { PreferencesPageLoader } from '../PreferencesPageLoader';
 
 const GeneralFormContext = createContext();
 

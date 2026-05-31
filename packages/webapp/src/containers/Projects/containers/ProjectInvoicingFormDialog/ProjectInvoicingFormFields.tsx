@@ -17,7 +17,7 @@ import { momentFormatter } from '@/utils';
  * Project invoicing form fields.
  * @returns
  */
-function ProjectInvoicingFormFields() {
+export function ProjectInvoicingFormFields() {
   return (
     <div className={Classes.DIALOG_BODY}>
       {/*------------ Date -----------*/}
@@ -57,5 +57,3 @@ function ProjectInvoicingFormFields() {
     </div>
   );
 }
-
-export default ProjectInvoicingFormFields;

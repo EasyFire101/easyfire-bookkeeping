@@ -14,7 +14,7 @@ import { compose, transfromViewsToTabs } from '@/utils';
  * Projects views tabs.
  * @returns
  */
-function ProjectsViewTabs({
+function ProjectsViewTabsInner({
   // #withProjects
   projectsCurrentView,
 
@@ -46,9 +46,9 @@ function ProjectsViewTabs({
   );
 }
 
-export default compose(
+export const ProjectsViewTabs = compose(
   withProjects(({ projectsTableState }) => ({
     projectsCurrentView: projectsTableState?.viewSlug,
   })),
   withProjectsActions,
-)(ProjectsViewTabs);
+)(ProjectsViewTabsInner);

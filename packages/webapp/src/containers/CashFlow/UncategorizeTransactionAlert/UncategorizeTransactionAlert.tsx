@@ -15,7 +15,7 @@ import { DRAWERS } from '@/constants/drawers';
 /**
  * Project delete alert.
  */
-function UncategorizeTransactionAlert({
+function UncategorizeTransactionAlertInner({
   name,
 
   // #withAlertStoreConnect
@@ -76,8 +76,8 @@ function UncategorizeTransactionAlert({
   );
 }
 
-export default compose(
+export const UncategorizeTransactionAlert = compose(
   withAlertStoreConnect(),
   withAlertActions,
   withDrawerActions,
-)(UncategorizeTransactionAlert);
+)(UncategorizeTransactionAlertInner);

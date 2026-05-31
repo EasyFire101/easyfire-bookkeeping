@@ -6,9 +6,7 @@ import { withDrawers } from '@/containers/Drawer/withDrawers';
 
 import { compose } from '@/utils';
 
-const CashFlowTransactionDrawerContent = React.lazy(() =>
-  import('./CashflowTransactionDrawerContent'),
-);
+const CashFlowTransactionDrawerContent = React.lazy(() => import('./CashflowTransactionDrawerContent').then(m => ({ default: m.CashflowTransactionDrawerContent })));
 
 /**
  * Cash flow transaction drawer
@@ -33,4 +31,4 @@ function CashflowTransactionDetailDrawer({
   );
 }
 
-export default compose(withDrawers())(CashflowTransactionDetailDrawer);
+export const index = compose(withDrawers())(CashflowTransactionDetailDrawer);

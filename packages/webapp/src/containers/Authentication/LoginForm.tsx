@@ -11,7 +11,7 @@ import intl from 'react-intl-universal';
 /**
  * Login form.
  */
-export default function LoginForm({ isSubmitting }) {
+export function LoginForm({ isSubmitting }) {
   const [showPassword, setShowPassword] = useState<boolean>(false);
 
   // Handle password revealer changing.

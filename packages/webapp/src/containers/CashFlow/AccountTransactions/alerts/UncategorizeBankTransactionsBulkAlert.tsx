@@ -12,7 +12,7 @@ import { compose } from '@/utils';
 /**
  * Uncategorize bank account transactions in build alert.
  */
-function UncategorizeBankTransactionsBulkAlert({
+function UncategorizeBankTransactionsBulkAlertInner({
   name,
 
   // #withAlertStoreConnect
@@ -68,7 +68,7 @@ function UncategorizeBankTransactionsBulkAlert({
   );
 }
 
-export default compose(
+export const UncategorizeBankTransactionsBulkAlert = compose(
   withAlertStoreConnect(),
   withAlertActions,
-)(UncategorizeBankTransactionsBulkAlert);
+)(UncategorizeBankTransactionsBulkAlertInner);

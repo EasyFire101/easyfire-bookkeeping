@@ -15,7 +15,7 @@ import intl from 'react-intl-universal';
  * Credit note detail footer
  * @returns {React.JSX}
  */
-export default function CreditNoteDetailFooter() {
+export function CreditNoteDetailFooter() {
   const { creditNote } = useCreditNoteDetailDrawerContext();
 
   return (

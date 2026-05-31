@@ -39,7 +39,7 @@ import { ArrowBottomLeft } from '@/icons/ArrowBottomLeft';
 /**
  * Invoice details action bar.
  */
-function InvoiceDetailActionsBar({
+function InvoiceDetailActionsBarInner({
   // #withDialogActions
   openDialog,
 
@@ -188,8 +188,8 @@ function InvoiceDetailActionsBar({
   );
 }
 
-export default compose(
+export const InvoiceDetailActionsBar = compose(
   withDialogActions,
   withDrawerActions,
   withAlertActions,
-)(InvoiceDetailActionsBar);
+)(InvoiceDetailActionsBarInner);

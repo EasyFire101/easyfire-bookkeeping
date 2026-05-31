@@ -1,10 +1,10 @@
 // @ts-nocheck
 import React from 'react';
 
-import BranchActivateForm from './BranchActivateForm';
+import { BranchActivateForm } from './BranchActivateForm';
 import { BranchActivateFormProvider } from './BranchActivateFormProvider';
 
-export default function BranchActivateDialogContent({
+export function BranchActivateDialogContent({
   // #ownProps
   dialogName,
 }) {

@@ -35,6 +35,6 @@ function ReceiptFormDeliverDialogContentRoot({
   );
 }
 
-export default R.compose(withDialogActions)(
+export const ReceiptFormMailDeliverDialogContent = R.compose(withDialogActions)(
   ReceiptFormDeliverDialogContentRoot,
 );

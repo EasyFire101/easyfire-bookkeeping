@@ -18,7 +18,7 @@ import intl from 'react-intl-universal';
 /**
  * Transaction type fields.
  */
-export default function TransactionTypeFields() {
+export function TransactionTypeFields() {
   // Money in dialog context.
   const { cashflowAccounts, setAccountId, accountId } = useMoneyInDailogContext();
 

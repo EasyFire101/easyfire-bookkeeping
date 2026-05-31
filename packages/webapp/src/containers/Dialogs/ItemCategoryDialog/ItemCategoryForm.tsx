@@ -13,7 +13,7 @@ import {
 } from './itemCategoryForm.schema';
 
 import { withDialogActions } from '@/containers/Dialog/withDialogActions';
-import ItemCategoryFormContent from './ItemCategoryFormContent';
+import { ItemCategoryForm as ItemCategoryFormContent } from './ItemCategoryFormContent';
 
 const defaultInitialValues = {
   name: '',
@@ -26,7 +26,7 @@ const defaultInitialValues = {
 /**
  * Item category form.
  */
-function ItemCategoryForm({
+function ItemCategoryFormInner({
   // #withDialogActions
   closeDialog,
 }) {
@@ -111,4 +111,4 @@ function ItemCategoryForm({
   );
 }
 
-export default compose(withDialogActions)(ItemCategoryForm);
+export const ItemCategoryForm = compose(withDialogActions)(ItemCategoryFormInner);

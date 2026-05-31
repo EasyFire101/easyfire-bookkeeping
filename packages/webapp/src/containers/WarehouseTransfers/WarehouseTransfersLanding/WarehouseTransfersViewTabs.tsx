@@ -10,7 +10,7 @@ import { compose, transfromViewsToTabs } from '@/utils';
 /**
  * Warehouse transfer view tabs.
  */
-function WarehouseTransfersViewTabs({
+function WarehouseTransfersViewTabsInner({
   // #withWarehouseTransfers
   warehouseTransferCurrentView,
 
@@ -44,9 +44,9 @@ function WarehouseTransfersViewTabs({
   );
 }
 
-export default compose(
+export const WarehouseTransfersViewTabs = compose(
   withWarehouseTransfersActions,
   withWarehouseTransfers(({ warehouseTransferTableState }) => ({
     warehouseTransferCurrentView: warehouseTransferTableState?.viewSlug,
   })),
-)(WarehouseTransfersViewTabs);
+)(WarehouseTransfersViewTabsInner);

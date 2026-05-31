@@ -15,7 +15,7 @@ import { compose } from '@/utils';
 /**
  * Item category bulk delete alerts.
  */
-function ItemCategoryBulkDeleteAlert({
+function ItemCategoryBulkDeleteAlertInner({
   name,
 
   // #withAlertStoreConnect
@@ -76,8 +76,8 @@ function ItemCategoryBulkDeleteAlert({
   );
 }
 
-export default compose(
+export const ItemCategoryBulkDeleteAlert = compose(
   withAlertStoreConnect(),
   withAlertActions,
   withItemCategoriesActions,
-)(ItemCategoryBulkDeleteAlert);
+)(ItemCategoryBulkDeleteAlertInner);

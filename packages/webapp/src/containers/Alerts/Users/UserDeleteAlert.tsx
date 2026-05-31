@@ -14,7 +14,7 @@ import { compose } from '@/utils';
 /**
  * User delete alert.
  */
-function UserDeleteAlert({
+function UserDeleteAlertInner({
   // #ownProps
   name,
 
@@ -75,7 +75,7 @@ function UserDeleteAlert({
   );
 }
 
-export default compose(
+export const UserDeleteAlert = compose(
   withAlertStoreConnect(),
   withAlertActions,
-)(UserDeleteAlert);
+)(UserDeleteAlertInner);

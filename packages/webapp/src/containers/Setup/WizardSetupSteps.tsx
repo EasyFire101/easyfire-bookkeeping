@@ -14,7 +14,7 @@ function WizardSetupStep({ label, isActive = false }) {
 /**
  * Setup wizard setups.
  */
-export default function WizardSetupSteps({ currentStep = 1 }) {
+export function WizardSetupSteps({ currentStep = 1 }) {
   const setupWizardSetups = getSetupWizardSteps();
 
   return (

@@ -16,7 +16,7 @@ import { useFormikContext } from 'formik';
 /**
  * Payment made items table.
  */
-export default function PaymentMadeEntriesTable({
+export function PaymentMadeEntriesTable({
   onUpdateData,
   entries,
   currencyCode,

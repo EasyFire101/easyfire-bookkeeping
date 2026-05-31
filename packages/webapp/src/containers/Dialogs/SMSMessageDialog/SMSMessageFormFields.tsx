@@ -14,7 +14,7 @@ import intl from 'react-intl-universal';
 /**
  *
  */
-export default function SMSMessageFormFields() {
+export function SMSMessageFormFields() {
   // SMS message dialog context.
   const { smsNotification } = useSMSMessageDialogContext();
 

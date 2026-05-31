@@ -27,7 +27,7 @@ import { DRAWERS } from '@/constants/drawers';
 /**
  * Manual journal action bar.
  */
-function ManualJournalDrawerActionBar({
+function ManualJournalDrawerActionBarInner({
   // #withAlertsDialog
   openAlert,
 
@@ -74,7 +74,7 @@ function ManualJournalDrawerActionBar({
   );
 }
 
-export default compose(
+export const ManualJournalDrawerActionBar = compose(
   withAlertActions,
   withDrawerActions,
-)(ManualJournalDrawerActionBar);
+)(ManualJournalDrawerActionBarInner);

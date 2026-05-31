@@ -28,7 +28,7 @@ import { useCreditNoteFormContext } from './CreditNoteFormProvider';
  * Credit note form topbar .
  * @returns {JSX.Element}
  */
-export default function CreditNoteFormTopbar() {
+export function CreditNoteFormTopbar() {
   // Features guard.
   const { featureCan } = useFeatureCan();
 

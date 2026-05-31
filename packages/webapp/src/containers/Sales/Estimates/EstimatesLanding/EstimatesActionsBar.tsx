@@ -238,7 +238,7 @@ function EstimateActionsBar({
   );
 }
 
-export default compose(
+export const EstimatesActionsBar = compose(
   withEstimatesActions,
   withSettingsActions,
   withEstimates(({ estimatesTableState, estimatesSelectedRows }) => ({

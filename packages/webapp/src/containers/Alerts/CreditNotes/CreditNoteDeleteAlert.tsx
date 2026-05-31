@@ -20,7 +20,7 @@ import { DRAWERS } from '@/constants/drawers';
 /**
  * Credit note delete alert.
  */
-function CreditNoteDeleteAlert({
+function CreditNoteDeleteAlertInner({
   name,
 
   // #withAlertStoreConnect
@@ -81,8 +81,8 @@ function CreditNoteDeleteAlert({
   );
 }
 
-export default compose(
+export const CreditNoteDeleteAlert = compose(
   withAlertStoreConnect(),
   withAlertActions,
   withDrawerActions,
-)(CreditNoteDeleteAlert);
+)(CreditNoteDeleteAlertInner);

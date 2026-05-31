@@ -5,7 +5,7 @@ import { Intent } from '@blueprintjs/core';
 import { Formik } from 'formik';
 import { AppToaster } from '@/components';
 
-import AccountDialogFormContent from './AccountDialogFormContent';
+import { AccountDialogFormContent } from './AccountDialogFormContent';
 
 import { withDialogActions } from '@/containers/Dialog/withDialogActions';
 import {
@@ -135,4 +135,4 @@ function AccountFormDialogContent({
   );
 }
 
-export default compose(withDialogActions)(AccountFormDialogContent);
+export const AccountDialogForm = compose(withDialogActions)(AccountFormDialogContent);

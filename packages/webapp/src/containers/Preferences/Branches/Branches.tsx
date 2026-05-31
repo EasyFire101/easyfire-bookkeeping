@@ -2,15 +2,15 @@
 import React from 'react';
 import intl from 'react-intl-universal';
 
-import BranchesDataTable from './BranchesDataTable';
-import BranchesEmptyStatus from './BranchesEmptyStatus';
+import { BranchesDataTable } from './BranchesDataTable';
+import { BranchesEmptyStatus } from './BranchesEmptyStatus';
 
 import { withDashboardActions } from '@/containers/Dashboard/withDashboardActions';
 import { useBranchesContext } from './BranchesProvider';
 
 import { compose } from '@/utils';
 
-function Branches({
+function BranchesInner({
   // #withDashboardActions
   changePreferencesPageTitle,
 }) {
@@ -26,4 +26,4 @@ function Branches({
     </React.Fragment>
   );
 }
-export default compose(withDashboardActions)(Branches);
+export const Branches = compose(withDashboardActions)(BranchesInner);

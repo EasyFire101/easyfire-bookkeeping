@@ -10,9 +10,7 @@ import { CLASSES } from '@/constants/classes';
 import { compose } from '@/utils';
 
 // Lazy loading the content.
-const PdfPreviewDialogContent = lazy(() =>
-  import('./InvoicePdfPreviewDialogContent'),
-);
+const PdfPreviewDialogContent = lazy(() => import('./InvoicePdfPreviewDialogContent').then(m => ({ default: m.InvoicePdfPreviewDialogContent })));
 
 /**
  * Invoice PDF preview dialog.
@@ -38,4 +36,4 @@ function InvoicePdfPreviewDialog({ dialogName, payload, isOpen }) {
   );
 }
 
-export default compose(withDialogRedux())(InvoicePdfPreviewDialog);
+export const index = compose(withDialogRedux())(InvoicePdfPreviewDialog);

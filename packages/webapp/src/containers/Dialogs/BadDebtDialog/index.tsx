@@ -5,7 +5,7 @@ import { Dialog, DialogSuspense, FormattedMessage as T } from '@/components';
 import withDialogRedux from '@/components/DialogReduxConnect';
 import { compose } from 'redux';
 
-const BadDebtDialogContent = React.lazy(() => import('./BadDebtDialogContent'));
+const BadDebtDialogContent = React.lazy(() => import('./BadDebtDialogContent').then(m => ({ default: m.BadDebtDialogContent })));
 
 /**
  * Bad debt dialog.
@@ -26,4 +26,4 @@ function BadDebtDialog({ dialogName, payload: { invoiceId = null }, isOpen }) {
     </Dialog>
   );
 }
-export default compose(withDialogRedux())(BadDebtDialog);
+export const index = compose(withDialogRedux())(BadDebtDialog);

@@ -15,7 +15,7 @@ import {
  * Warehouse form fields.
  * @returns
  */
-export default function WarehouseFormFields() {
+export function WarehouseFormFields() {
   return (
     <div className={Classes.DIALOG_BODY}>
       {/*------------ Warehouse Name -----------*/}

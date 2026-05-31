@@ -32,7 +32,7 @@ import intl from 'react-intl-universal';
 /**
  * Transfer from account form fields.
  */
-export default function TransferFromAccountFormFields() {
+export function TransferFromAccountFormFields() {
   // Money in dialog context.
   const { accounts, branches } = useMoneyInDailogContext();
   const { account } = useMoneyInFieldsContext();

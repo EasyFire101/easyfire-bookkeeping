@@ -4,8 +4,8 @@ import { DashboardPageContent } from '@/components';
 
 import '@/style/pages/SaleReceipt/List.scss';
 
-import ReceiptActionsBar from './ReceiptActionsBar';
-import ReceiptsTable from './ReceiptsTable';
+import { ReceiptActionsBar } from './ReceiptActionsBar';
+import { ReceiptsTable } from './ReceiptsTable';
 
 import { withReceipts } from './withReceipts';
 import { withReceiptsActions } from './withReceiptsActions';
@@ -16,7 +16,7 @@ import { transformTableStateToQuery, compose } from '@/utils';
 /**
  * Receipts list page.
  */
-function ReceiptsList({
+function ReceiptsListInner({
   // #withReceipts
   receiptTableState,
   receiptsTableStateChanged,
@@ -48,10 +48,10 @@ function ReceiptsList({
   );
 }
 
-export default compose(
+export const ReceiptsList = compose(
   withReceipts(({ receiptTableState, receiptsTableStateChanged }) => ({
     receiptTableState,
     receiptsTableStateChanged,
   })),
   withReceiptsActions,
-)(ReceiptsList);
+)(ReceiptsListInner);

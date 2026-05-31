@@ -11,7 +11,7 @@ import { useResumeMainSubscription } from '@/hooks/query/subscription';
 /**
  * Resume Unlocking partial transactions alerts.
  */
-function ResumeMainSubscriptionAlert({
+function ResumeMainSubscriptionAlertInner({
   name,
 
   // #withAlertStoreConnect
@@ -73,7 +73,7 @@ function ResumeMainSubscriptionAlert({
   );
 }
 
-export default R.compose(
+export const ResumeMainSubscriptionAlert = R.compose(
   withAlertStoreConnect(),
   withAlertActions,
-)(ResumeMainSubscriptionAlert);
+)(ResumeMainSubscriptionAlertInner);

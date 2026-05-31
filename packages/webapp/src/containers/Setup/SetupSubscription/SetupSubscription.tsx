@@ -10,7 +10,7 @@ import styles from './SetupSubscription.module.scss';
 /**
  * Subscription step of wizard setup.
  */
-function SetupSubscription({
+function SetupSubscriptionInner({
   // #withSubscriptionPlansActions
   initSubscriptionPlans,
 }) {
@@ -35,4 +35,4 @@ function SetupSubscription({
   );
 }
 
-export default R.compose(withSubscriptionPlansActions)(SetupSubscription);
+export const SetupSubscription = R.compose(withSubscriptionPlansActions)(SetupSubscriptionInner);

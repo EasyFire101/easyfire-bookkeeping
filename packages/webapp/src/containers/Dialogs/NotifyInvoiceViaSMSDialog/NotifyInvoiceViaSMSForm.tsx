@@ -5,7 +5,7 @@ import { pick } from 'lodash';
 import { Intent } from '@blueprintjs/core';
 import { AppToaster } from '@/components';
 
-import NotifyViaSMSForm from '@/containers/NotifyViaSMS/NotifyViaSMSForm';
+import { NotifyViaSMSForm } from '@/containers/NotifyViaSMS/NotifyViaSMSForm';
 import { useNotifyInvoiceViaSMSContext } from './NotifyInvoiceViaSMSFormProvider';
 import { transformErrors } from '@/containers/NotifyViaSMS/utils';
 
@@ -31,7 +31,7 @@ const notificationTypes = [
 /**
  * Notify Invoice Via SMS Form.
  */
-function NotifyInvoiceViaSMSForm({
+function NotifyInvoiceViaSMSFormInner({
   // #withDialogActions
   closeDialog,
 }) {
@@ -106,4 +106,4 @@ function NotifyInvoiceViaSMSForm({
   );
 }
 
-export default compose(withDialogActions)(NotifyInvoiceViaSMSForm);
+export const NotifyInvoiceViaSMSForm = compose(withDialogActions)(NotifyInvoiceViaSMSFormInner);

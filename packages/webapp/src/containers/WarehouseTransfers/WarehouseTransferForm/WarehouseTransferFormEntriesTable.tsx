@@ -13,7 +13,7 @@ import { mutateTableCell, mutateTableRow, deleteTableRow } from './utils';
 /**
  * Warehouse transfer form entries table.
  */
-export default function WarehouseTransferFormEntriesTable({
+export function WarehouseTransferFormEntriesTable({
   // #ownProps
   items,
   entries,

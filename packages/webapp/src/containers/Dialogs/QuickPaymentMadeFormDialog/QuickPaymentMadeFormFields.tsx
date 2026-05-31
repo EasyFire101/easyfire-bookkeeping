@@ -38,7 +38,7 @@ import { compose } from '@/utils';
 /**
  * Quick payment made form fields.
  */
-function QuickPaymentMadeFormFields({
+function QuickPaymentMadeFormFieldsInner({
   // #withCurrentOrganization
   organization: { base_currency },
 }) {
@@ -164,7 +164,7 @@ function QuickPaymentMadeFormFields({
   );
 }
 
-export default compose(withCurrentOrganization())(QuickPaymentMadeFormFields);
+export const QuickPaymentMadeFormFields = compose(withCurrentOrganization())(QuickPaymentMadeFormFieldsInner);
 
 export const BranchRowDivider = styled.div`
   height: 1px;

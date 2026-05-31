@@ -8,12 +8,12 @@ import { Sidebar } from '@/containers/Dashboard/Sidebar/Sidebar';
 import DashboardContent from '@/components/Dashboard/DashboardContent';
 import DialogsContainer from '@/components/DialogsContainer';
 import PreferencesPage from '@/components/Preferences/PreferencesPage';
-import DashboardUniversalSearch from '@/containers/UniversalSearch/DashboardUniversalSearch';
+import { DashboardUniversalSearch } from '@/containers/UniversalSearch/DashboardUniversalSearch';
 import DashboardSplitPane from '@/components/Dashboard/DashboardSplitePane';
 import GlobalHotkeys from './GlobalHotkeys';
 import DashboardProvider from './DashboardProvider';
 import DrawersContainer from '@/components/DrawersContainer';
-import AlertsContainer from '@/containers/AlertsContainer';
+import { AlertsContainer } from '@/containers/AlertsContainer';
 import { DashboardSockets } from './DashboardSockets';
 
 /**

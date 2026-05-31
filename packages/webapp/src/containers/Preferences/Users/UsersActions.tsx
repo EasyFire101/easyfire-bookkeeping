@@ -8,7 +8,7 @@ import { Icon, FormattedMessage as T } from '@/components';
 import { withDialogActions } from '@/containers/Dialog/withDialogActions';
 import { compose } from '@/utils';
 
-function UsersActions({ openDialog, closeDialog }) {
+function UsersActionsInner({ openDialog, closeDialog }) {
   const history = useHistory();
   const onClickNewUser = () => {
     openDialog('invite-user');
@@ -38,4 +38,4 @@ function UsersActions({ openDialog, closeDialog }) {
   );
 }
 
-export default compose(withDialogActions)(UsersActions);
+export const UsersActions = compose(withDialogActions)(UsersActionsInner);

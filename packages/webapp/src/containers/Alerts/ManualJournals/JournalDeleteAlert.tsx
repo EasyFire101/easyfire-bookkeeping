@@ -16,7 +16,7 @@ import { handleDeleteErrors } from './_utils';
 /**
  * Journal delete alert.
  */
-function JournalDeleteAlert({
+function JournalDeleteAlertInner({
   name,
 
   // #withAlertStoreConnect
@@ -79,8 +79,8 @@ function JournalDeleteAlert({
   );
 }
 
-export default compose(
+export const JournalDeleteAlert = compose(
   withAlertStoreConnect(),
   withAlertActions,
   withDrawerActions,
-)(JournalDeleteAlert);
+)(JournalDeleteAlertInner);

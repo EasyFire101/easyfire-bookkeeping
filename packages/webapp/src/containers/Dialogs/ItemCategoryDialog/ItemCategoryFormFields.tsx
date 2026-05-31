@@ -15,7 +15,7 @@ import intl from 'react-intl-universal';
 /**
  * Item category form fields.
  */
-export default function ItemCategoryFormFields() {
+export function ItemCategoryFormFields() {
   const categoryNameFieldRef = useAutofocus();
 
   return (

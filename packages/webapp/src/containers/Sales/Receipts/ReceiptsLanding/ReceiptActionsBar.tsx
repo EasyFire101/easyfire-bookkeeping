@@ -53,7 +53,7 @@ import { isEmpty } from 'lodash';
 /**
  * Receipts actions bar.
  */
-function ReceiptActionsBar({
+function ReceiptActionsBarInner({
   // #withReceiptsActions
   setReceiptsTableState,
   setReceiptsSelectedRows,
@@ -247,7 +247,7 @@ function ReceiptActionsBar({
   );
 }
 
-export default compose(
+export const ReceiptActionsBar = compose(
   withReceiptsActions,
   withSettingsActions,
   withReceipts(({ receiptTableState, receiptSelectedRows }) => ({
@@ -259,4 +259,4 @@ export default compose(
   })),
   withDialogActions,
   withDrawerActions,
-)(ReceiptActionsBar);
+)(ReceiptActionsBarInner);

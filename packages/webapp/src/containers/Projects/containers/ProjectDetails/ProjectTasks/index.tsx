@@ -6,7 +6,7 @@ import { ProjectDetailHeader } from '../ProjectDetailsHeader';
 import { ProjectTasksTable } from './ProjectTasksTable';
 import { ProjectTaskProvider } from './ProjectTaskProvider';
 
-export default function ProjectTasks() {
+export function ProjectTasks() {
   return (
     <ProjectTaskProvider>
       <ProjectDetailHeader />

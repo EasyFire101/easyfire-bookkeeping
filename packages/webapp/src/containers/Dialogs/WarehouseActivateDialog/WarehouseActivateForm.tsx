@@ -7,7 +7,7 @@ import { Intent } from '@blueprintjs/core';
 
 import { AppToaster } from '@/components';
 import { useWarehouseActivateContext } from './WarehouseActivateFormProvider';
-import WarehouseActivateFormContent from './WarehouseActivateFormContent';
+import { WarehouseActivateFormContent } from './WarehouseActivateFormContent';
 
 import { withDialogActions } from '@/containers/Dialog/withDialogActions';
 
@@ -16,7 +16,7 @@ import { compose } from '@/utils';
 /**
  * warehouse activate form.
  */
-function WarehouseActivateForm({
+function WarehouseActivateFormInner({
   // #withDialogActions
   closeDialog,
 }) {
@@ -61,4 +61,4 @@ function WarehouseActivateForm({
     />
   );
 }
-export default compose(withDialogActions)(WarehouseActivateForm);
+export const WarehouseActivateForm = compose(withDialogActions)(WarehouseActivateFormInner);

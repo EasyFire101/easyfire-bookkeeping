@@ -88,7 +88,7 @@ function SetupLeftSectionHeader() {
 /**
  * Wizard setup left section.
  */
-export default function SetupLeftSection() {
+export function SetupLeftSection() {
   return (
     <section className={'setup-page__left-section'}>
       <div className={'content'}>

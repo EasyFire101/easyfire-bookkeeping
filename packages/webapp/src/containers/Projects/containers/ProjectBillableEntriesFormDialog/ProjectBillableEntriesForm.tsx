@@ -5,7 +5,7 @@ import intl from 'react-intl-universal';
 import { Formik } from 'formik';
 import { AppToaster } from '@/components';
 import { ProjectBillableEntriesFormSchema } from './ProjectBillableEntriesForm.schema';
-import ProjectBillableEntriesFormContent from './ProjectBillableEntriesFormContent';
+import { ProjectBillableEntriesFormContent } from './ProjectBillableEntriesFormContent';
 import { withDialogActions } from '@/containers/Dialog/withDialogActions';
 
 import { compose } from '@/utils';
@@ -16,7 +16,7 @@ const defaultInitialValues = {};
  * project billable entries form.
  * @returns
  */
-function ProjectBillableEntriesForm({
+function ProjectBillableEntriesFormInner({
   //#withDialogActions
   closeDialog,
 }) {
@@ -53,4 +53,4 @@ function ProjectBillableEntriesForm({
   );
 }
 
-export default compose(withDialogActions)(ProjectBillableEntriesForm);
+export const ProjectBillableEntriesForm = compose(withDialogActions)(ProjectBillableEntriesFormInner);

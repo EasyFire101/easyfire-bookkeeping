@@ -27,7 +27,7 @@ import { DRAWERS } from '@/constants/drawers';
 /**
  * Payment receive floating actions bar.
  */
-export default function PaymentReceiveFormFloatingActions() {
+export function PaymentReceiveFormFloatingActions() {
   // Payment receive form context.
   const { setSubmitPayload, isNewMode } = usePaymentReceiveFormContext();
 

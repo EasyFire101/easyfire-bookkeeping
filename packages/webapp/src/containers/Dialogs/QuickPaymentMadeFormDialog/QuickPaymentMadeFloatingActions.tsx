@@ -8,7 +8,7 @@ import { useQuickPaymentMadeContext } from './QuickPaymentMadeFormProvider';
 import { withDialogActions } from '@/containers/Dialog/withDialogActions';
 import { compose } from '@/utils';
 
-function QuickPaymentMadeFloatingActions({
+function QuickPaymentMadeFloatingActionsInner({
   // #withDialogActions
   closeDialog,
 }) {
@@ -41,4 +41,4 @@ function QuickPaymentMadeFloatingActions({
   );
 }
 
-export default compose(withDialogActions)(QuickPaymentMadeFloatingActions);
+export const QuickPaymentMadeFloatingActions = compose(withDialogActions)(QuickPaymentMadeFloatingActionsInner);

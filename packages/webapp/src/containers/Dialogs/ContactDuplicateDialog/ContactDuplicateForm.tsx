@@ -14,7 +14,7 @@ import { ContactsOptions } from '@/constants/contactsOptions';
 import { withDialogActions } from '@/containers/Dialog/withDialogActions';
 import { compose } from '@/utils';
 
-function ContactDuplicateForm({
+function ContactDuplicateFormInner({
   // #withDialogActions
   closeDialog,
 }) {
@@ -97,4 +97,4 @@ function ContactDuplicateForm({
   );
 }
 
-export default compose(withDialogActions)(ContactDuplicateForm);
+export const ContactDuplicateForm = compose(withDialogActions)(ContactDuplicateFormInner);

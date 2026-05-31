@@ -28,7 +28,7 @@ import {
  * Receipt form topbar .
  * @returns {JSX.Element}
  */
-export default function ReceiptFormTopBar() {
+export function ReceiptFormTopBar() {
   // Features guard.
   const { featureCan } = useFeatureCan();
 

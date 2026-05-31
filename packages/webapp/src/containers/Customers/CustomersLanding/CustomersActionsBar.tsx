@@ -213,7 +213,7 @@ function CustomerActionsBar({
   );
 }
 
-export default compose(
+export const CustomersActionsBar = compose(
   withCustomersActions,
   withSettingsActions,
   withCustomers(({ customersSelectedRows, customersTableState }) => ({

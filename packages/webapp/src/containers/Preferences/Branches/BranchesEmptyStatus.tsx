@@ -6,7 +6,7 @@ import { withDialogActions } from '@/containers/Dialog/withDialogActions';
 
 import { compose } from '@/utils';
 
-function BranchesEmptyStatus({
+function BranchesEmptyStatusInner({
   // #withDialogActions
   openDialog,
 }) {
@@ -37,4 +37,4 @@ function BranchesEmptyStatus({
     />
   );
 }
-export default compose(withDialogActions)(BranchesEmptyStatus);
+export const BranchesEmptyStatus = compose(withDialogActions)(BranchesEmptyStatusInner);

@@ -72,7 +72,7 @@ function EstimatePaymentTransactions({
     />
   );
 }
-export default compose(
+export const index = compose(
   withAlertActions,
   withDrawerActions,
 )(EstimatePaymentTransactions);

@@ -6,7 +6,7 @@ import { EmptyStatus } from '@/components';
 import { Can, FormattedMessage as T } from '@/components';
 import { SaleReceiptAction, AbilitySubject } from '@/constants/abilityOption';
 
-export default function ReceiptsEmptyStatus() {
+export function ReceiptsEmptyStatus() {
   const history = useHistory();
 
   return (

@@ -128,7 +128,7 @@ function PaymentsReceivedActionsBar({
   );
 }
 
-export default compose(
+export const PaymentReceiveActionsBar = compose(
   withDialogActions,
   withDrawerActions,
   withAlertActions,

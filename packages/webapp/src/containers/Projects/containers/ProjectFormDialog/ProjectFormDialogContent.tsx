@@ -2,13 +2,13 @@
 import React from 'react';
 
 import { ProjectFormProvider } from './ProjectFormProvider';
-import ProjectForm from './ProjectForm';
+import { ProjectForm } from './ProjectForm';
 
 /**
  * Project form dialog content.
  * @returns {ReactNode}
  */
-export default function ProjectFormDialogContent({
+export function ProjectFormDialogContent({
   // #ownProps
   dialogName,
   project,

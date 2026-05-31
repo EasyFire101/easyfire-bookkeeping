@@ -9,14 +9,14 @@ import { withDialogActions } from '@/containers/Dialog/withDialogActions';
 import { withInvoiceActions } from '@/containers/Sales/Invoices/InvoicesLanding/withInvoiceActions';
 import { useBulkDeleteInvoices } from '@/hooks/query/invoices';
 import { AppToaster } from '@/components';
-import BulkDeleteDialogContent from '@/containers/Dialogs/components/BulkDeleteDialogContent';
+import { BulkDeleteDialogContent } from '@/containers/Dialogs/components/BulkDeleteDialogContent';
 
 import { compose } from '@/utils';
 
 /**
  * Invoice bulk delete dialog.
  */
-function InvoiceBulkDeleteDialog({
+function InvoiceBulkDeleteDialogInner({
   dialogName,
   isOpen,
   payload: {
@@ -101,8 +101,8 @@ function InvoiceBulkDeleteDialog({
   );
 }
 
-export default compose(
+export const InvoiceBulkDeleteDialog = compose(
   withDialogRedux(),
   withDialogActions,
   withInvoiceActions,
-)(InvoiceBulkDeleteDialog);
+)(InvoiceBulkDeleteDialogInner);

@@ -1,12 +1,12 @@
 // @ts-nocheck
 import React from 'react';
-import VendorCreditNumberDialog from '@/containers/Dialogs/VendorCreditNumberDialog';
+import { index as VendorCreditNumberDialog } from '@/containers/Dialogs/VendorCreditNumberDialog';
 import { useFormikContext } from 'formik';
 
 /**
  * Vendor credit form dialog.
  */
-export default function VendorCreditNoteFormDialogs() {
+export function VendorCreditNoteFormDialogs() {
   // Update the form once the vendor credit number form submit confirm.
   const handleVendorCreditNumberFormConfirm = ({
     incrementNumber,

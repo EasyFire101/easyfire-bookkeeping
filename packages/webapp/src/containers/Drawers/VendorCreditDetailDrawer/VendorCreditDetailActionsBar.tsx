@@ -30,7 +30,7 @@ import { DRAWERS } from '@/constants/drawers';
 /**
  * Vendor credit detail actions bar.
  */
-function VendorCreditDetailActionsBar({
+function VendorCreditDetailActionsBarInner({
   // #withDialogActions
   openDialog,
 
@@ -109,8 +109,8 @@ function VendorCreditDetailActionsBar({
   );
 }
 
-export default compose(
+export const VendorCreditDetailActionsBar = compose(
   withDialogActions,
   withAlertActions,
   withDrawerActions,
-)(VendorCreditDetailActionsBar);
+)(VendorCreditDetailActionsBarInner);

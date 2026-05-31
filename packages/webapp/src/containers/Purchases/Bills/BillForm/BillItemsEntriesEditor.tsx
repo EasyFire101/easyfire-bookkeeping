@@ -1,5 +1,5 @@
 // @ts-nocheck
-import ItemsEntriesTable from '@/containers/Entries/ItemsEntriesTable';
+import { ItemsEntriesTable } from '@/containers/Entries/ItemsEntriesTable';
 import { FastField } from 'formik';
 import { useBillFormContext } from './BillFormProvider';
 import { entriesFieldShouldUpdate } from './utils';
@@ -8,7 +8,7 @@ import { ITEM_TYPE } from '@/containers/Entries/utils';
 /**
  * Bill form body.
  */
-export default function BillFormBody({ defaultBill }) {
+export function BillFormBody({ defaultBill }) {
   const { items, taxRates } = useBillFormContext();
 
   return (

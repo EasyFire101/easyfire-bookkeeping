@@ -15,7 +15,7 @@ import { CLASSES } from '@/constants/classes';
 import { inputIntent } from '@/utils';
 import intl from 'react-intl-universal';
 
-export default function NotifyViaSMSFormFields({ notificationTypes }) {
+export function NotifyViaSMSFormFields({ notificationTypes }) {
   return (
     <NotifyViaSMSFormFieldsRoot>
       <FFormGroup

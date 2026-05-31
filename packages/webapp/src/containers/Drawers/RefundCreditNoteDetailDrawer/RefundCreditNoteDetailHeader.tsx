@@ -12,7 +12,7 @@ import {
 
 import { useRefundCreditNoteDrawerContext } from './RefundCreditNoteDrawerProvider';
 
-export default function RefundCreditNoteDetailHeader() {
+export function RefundCreditNoteDetailHeader() {
   const { refundCreditTransaction } = useRefundCreditNoteDrawerContext();
 
   return (

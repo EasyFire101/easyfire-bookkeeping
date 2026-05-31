@@ -43,7 +43,7 @@ import { useBulkDeleteItemsDialog } from './hooks/use-bulk-delete-items-dialog';
 /**
  * Items actions bar.
  */
-function ItemsActionsBar({
+function ItemsActionsBarInner({
   // #withItems
   itemsSelectedRows,
   itemsFilterRoles,
@@ -214,7 +214,7 @@ function ItemsActionsBar({
   );
 }
 
-export default compose(
+export const ItemsActionsBar = compose(
   withSettingsActions,
   withItems(({ itemsSelectedRows, itemsTableState }) => ({
     itemsSelectedRows,
@@ -226,4 +226,4 @@ export default compose(
   })),
   withItemsActions,
   withDialogActions,
-)(ItemsActionsBar);
+)(ItemsActionsBarInner);

@@ -64,7 +64,7 @@ function BillTransactionDeleteAlert({
   );
 }
 
-export default compose(
+export const BillLocatedLandedCostDeleteAlert = compose(
   withAlertStoreConnect(),
   withAlertActions,
 )(BillTransactionDeleteAlert);

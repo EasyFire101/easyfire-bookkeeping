@@ -2,7 +2,7 @@
 import React from 'react';
 import intl from 'react-intl-universal';
 
-import ReferenceNumberForm from '@/containers/JournalNumber/ReferenceNumberForm';
+import { ReferenceNumberForm } from '@/containers/JournalNumber/ReferenceNumberForm';
 import { useSaveSettings } from '@/hooks/query';
 import { WarehouseTransferNumberDialogProvider } from './WarehouseTransferNumberDialogProvider';
 
@@ -18,7 +18,7 @@ import {
 /**
  * Warehouse transfer no dialog content.
  */
-function WarehouseTransferNumberDialogContent({
+function WarehouseTransferNumberDialogContentInner({
   // #ownProps
   initialValues,
   onConfirm,
@@ -93,7 +93,7 @@ function WarehouseTransferNumberDialogContent({
     </WarehouseTransferNumberDialogProvider>
   );
 }
-export default compose(
+export const WarehouseTransferNumberDialogContent = compose(
   withDialogActions,
   withSettingsActions,
   withSettings(({ warehouseTransferSettings }) => ({
@@ -101,4 +101,4 @@ export default compose(
     nextNumber: warehouseTransferSettings?.nextNumber,
     numberPrefix: warehouseTransferSettings?.numberPrefix,
   })),
-)(WarehouseTransferNumberDialogContent);
+)(WarehouseTransferNumberDialogContentInner);

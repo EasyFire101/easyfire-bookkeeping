@@ -13,7 +13,7 @@ import { compose } from '@/utils';
 /**
  * Journal publish alert.
  */
-function JournalPublishAlert({
+function JournalPublishAlertInner({
   name,
 
   // #withAlertStoreConnect
@@ -65,7 +65,7 @@ function JournalPublishAlert({
   );
 }
 
-export default compose(
+export const JournalPublishAlert = compose(
   withAlertStoreConnect(),
   withAlertActions,
-)(JournalPublishAlert)
+)(JournalPublishAlertInner);

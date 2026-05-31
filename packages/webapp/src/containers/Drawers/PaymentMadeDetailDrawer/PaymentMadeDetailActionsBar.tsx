@@ -29,7 +29,7 @@ import { DRAWERS } from '@/constants/drawers';
 /**
  * Payment made - Details panel - actions bar.
  */
-function PaymentMadeDetailActionsBar({
+function PaymentMadeDetailActionsBarInner({
   // #withAlertActions
   openAlert,
 
@@ -78,8 +78,8 @@ function PaymentMadeDetailActionsBar({
   );
 }
 
-export default compose(
+export const PaymentMadeDetailActionsBar = compose(
   withDialogActions,
   withDrawerActions,
   withAlertActions,
-)(PaymentMadeDetailActionsBar);
+)(PaymentMadeDetailActionsBarInner);

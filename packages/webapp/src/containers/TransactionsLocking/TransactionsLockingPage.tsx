@@ -2,9 +2,9 @@
 import React from 'react';
 
 import { TransactionsLockingProvider } from './TransactionsLockingProvider';
-import TransactionsLockingList from './TransactionsLockingList';
+import { TransactionsLockingListPage as TransactionsLockingList } from './TransactionsLockingList';
 
-export default function TransactionsLockingPage() {
+export function TransactionsLockingPage() {
   return (
     <TransactionsLockingProvider>
       <TransactionsLockingList />

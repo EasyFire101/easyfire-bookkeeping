@@ -10,7 +10,7 @@ import '@/style/pages/CashFlow/CashflowTransactionForm.scss';
 
 import { AppToaster } from '@/components';
 
-import MoneyOutFormContent from './MoneyOutFormContent';
+import { MoneyOutFormContent } from './MoneyOutFormContent';
 import { CreateMoneyOutSchema } from './MoneyOutForm.schema';
 
 import { useMoneyOutDialogContext } from './MoneyOutDialogProvider';
@@ -34,7 +34,7 @@ const defaultInitialValues = {
   exchange_rate: 1,
 };
 
-function MoneyOutForm({
+function MoneyOutFormInner({
   // #withDialogActions
   closeDialog,
 
@@ -101,7 +101,7 @@ function MoneyOutForm({
   );
 }
 
-export default compose(
+export const MoneyOutForm = compose(
   withDialogActions,
   withCurrentOrganization(),
   withSettings(({ cashflowSetting }) => ({
@@ -109,4 +109,4 @@ export default compose(
     transactionNumberPrefix: cashflowSetting?.numberPrefix,
     transactionIncrementMode: cashflowSetting?.autoIncrement,
   })),
-)(MoneyOutForm);
+)(MoneyOutFormInner);

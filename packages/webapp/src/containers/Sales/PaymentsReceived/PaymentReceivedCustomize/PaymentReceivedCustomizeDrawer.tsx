@@ -4,9 +4,7 @@ import * as R from 'ramda';
 import { Drawer, DrawerSuspense } from '@/components';
 import { withDrawers } from '@/containers/Drawer/withDrawers';
 
-const PaymentReceivedCustomize = React.lazy(
-  () => import('./PaymentReceivedCustomize'),
-);
+const PaymentReceivedCustomize = React.lazy(() => import('./PaymentReceivedCustomize').then(m => ({ default: m.PaymentReceivedCustomize })));
 
 /**
  * PaymentReceived customize drawer.

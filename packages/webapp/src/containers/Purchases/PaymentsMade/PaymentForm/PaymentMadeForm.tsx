@@ -10,11 +10,11 @@ import { css } from '@emotion/css';
 
 import { CLASSES } from '@/constants/classes';
 import { AppToaster, Box } from '@/components';
-import PaymentMadeHeader from './PaymentMadeFormHeader';
-import PaymentMadeFloatingActions from './PaymentMadeFloatingActions';
-import PaymentMadeFooter from './PaymentMadeFooter';
-import PaymentMadeFormBody from './PaymentMadeFormBody';
-import PaymentMadeFormTopBar from './PaymentMadeFormTopBar';
+import { PaymentMadeFormHeader as PaymentMadeHeader } from './PaymentMadeFormHeader';
+import { PaymentMadeFloatingActions } from './PaymentMadeFloatingActions';
+import { PaymentMadeFooter } from './PaymentMadeFooter';
+import { PaymentMadeFormBody } from './PaymentMadeFormBody';
+import { PaymentMadeFormTopBar } from './PaymentMadeFormTopBar';
 import { PaymentMadeDialogs } from './PaymentMadeDialogs';
 
 import { PaymentMadeInnerProvider } from './PaymentMadeInnerProvider';
@@ -41,7 +41,7 @@ import {
 /**
  * Payment made form component.
  */
-function PaymentMadeForm({
+function PaymentMadeFormInner({
   // #withSettings
   preferredPaymentAccount,
 
@@ -186,7 +186,7 @@ function PaymentMadeForm({
   );
 }
 
-export default compose(
+export const PaymentMadeForm = compose(
   withSettings(({ billPaymentSettings }) => ({
     paymentNextNumber: billPaymentSettings?.next_number,
     paymentNumberPrefix: billPaymentSettings?.number_prefix,
@@ -194,4 +194,4 @@ export default compose(
   })),
   withCurrentOrganization(),
   withDialogActions,
-)(PaymentMadeForm);
+)(PaymentMadeFormInner);

@@ -8,7 +8,7 @@ import { Intent } from '@blueprintjs/core';
 import { AppToaster } from '@/components';
 import { CreateWarehouseFormSchema } from './WarehouseForm.schema';
 import { useWarehouseFormContext } from './WarehouseFormProvider';
-import WarehouseFormContent from './WarehouseFormContent';
+import { WarehouseFormContent } from './WarehouseFormContent';
 import { transformErrors } from './utils';
 
 import { withDialogActions } from '@/containers/Dialog/withDialogActions';
@@ -29,7 +29,7 @@ const defaultInitialValues = {
  * Warehouse form.
  * @returns
  */
-function WarehouseForm({
+function WarehouseFormInner({
   // #withDialogActions
   closeDialog,
 }) {
@@ -90,4 +90,4 @@ function WarehouseForm({
   );
 }
 
-export default compose(withDialogActions)(WarehouseForm);
+export const WarehouseForm = compose(withDialogActions)(WarehouseFormInner);

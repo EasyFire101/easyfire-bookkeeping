@@ -7,10 +7,10 @@ import { Tab } from '@blueprintjs/core';
 import { useAbilityContext } from '@/hooks/utils';
 import { DrawerMainTabs } from '@/components';
 import { PaymentReceiveAction, AbilitySubject } from '@/constants/abilityOption';
-import InvoiceDetailActionsBar from './InvoiceDetailActionsBar';
-import InvoiceGLEntriesTable from './InvoiceGLEntriesTable';
-import InvoicePaymentTransactionsTable from './InvoicePaymentTransactions/InvoicePaymentTransactionsTable';
-import InvoiceDetailTab from './InvoiceDetailTab';
+import { InvoiceDetailActionsBar } from './InvoiceDetailActionsBar';
+import { InvoiceGLEntriesTable } from './InvoiceGLEntriesTable';
+import { InvoicePaymentTransactionsTable } from './InvoicePaymentTransactions/InvoicePaymentTransactionsTable';
+import { InvoiceDetailTab } from './InvoiceDetailTab';
 
 /**
  * Invoice details tabs.
@@ -52,7 +52,7 @@ function InvoiceDetailsTabs() {
  * Invoice view detail.
  * @returns {React.JSX}
  */
-export default function InvoiceDetail() {
+export function InvoiceDetail() {
   return (
     <InvoiceDetailsRoot>
       <InvoiceDetailActionsBar />

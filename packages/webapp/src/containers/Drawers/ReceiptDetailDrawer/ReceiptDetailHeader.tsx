@@ -21,7 +21,7 @@ import { ReceiptDetailsStatus } from './components';
 /**
  * Receipt details header.
  */
-export default function ReceiptDetailHeader() {
+export function ReceiptDetailHeader() {
   const { receipt } = useReceiptDetailDrawerContext();
 
   return (

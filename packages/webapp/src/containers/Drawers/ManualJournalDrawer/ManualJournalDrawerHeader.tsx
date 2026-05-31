@@ -19,7 +19,7 @@ import intl from 'react-intl-universal';
 /**
  * Manual journal details header.
  */
-export default function ManualJournalDrawerHeader() {
+export function ManualJournalDrawerHeader() {
   const { manualJournal } = useManualJournalDrawerContext();
 
   return (

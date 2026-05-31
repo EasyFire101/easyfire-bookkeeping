@@ -69,7 +69,7 @@ function BillPaymentTransactions({
     />
   );
 }
-export default compose(
+export const index = compose(
   withAlertActions,
   withDrawerActions,
 )(BillPaymentTransactions);

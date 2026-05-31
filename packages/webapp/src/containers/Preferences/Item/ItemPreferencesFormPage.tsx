@@ -6,7 +6,7 @@ import { Intent } from '@blueprintjs/core';
 import { AppToaster } from '@/components';
 import { omit } from 'lodash';
 import { ItemPreferencesSchema } from './ItemPreferences.schema';
-import ItemPreferencesForm from './ItemPreferencesForm';
+import { ItemForm as ItemPreferencesForm } from './ItemPreferencesForm';
 
 import { useItemPreferencesFormContext } from './ItemPreferencesFormProvider';
 import { withDashboardActions } from '@/containers/Dashboard/withDashboardActions';
@@ -27,7 +27,7 @@ const defaultFormValues = {
 };
 
 // item form page preferences.
-function ItemPreferencesFormPage({
+function ItemPreferencesFormPageInner({
   // #withSettings
   itemsSettings,
 
@@ -80,7 +80,7 @@ function ItemPreferencesFormPage({
   );
 }
 
-export default compose(
+export const ItemPreferencesFormPage = compose(
   withSettings(({ itemsSettings }) => ({ itemsSettings })),
   withDashboardActions,
-)(ItemPreferencesFormPage);
+)(ItemPreferencesFormPageInner);

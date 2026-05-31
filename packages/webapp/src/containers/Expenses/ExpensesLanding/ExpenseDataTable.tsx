@@ -13,7 +13,7 @@ import {
 } from '@/components';
 import { TABLES } from '@/constants/tables';
 
-import ExpensesEmptyStatus from './ExpensesEmptyStatus';
+import { InvoicesEmptyStatus as ExpensesEmptyStatus } from './ExpensesEmptyStatus';
 
 import { withDashboardActions } from '@/containers/Dashboard/withDashboardActions';
 import { withExpensesActions } from './withExpensesActions';
@@ -152,7 +152,7 @@ function ExpensesDataTable({
   );
 }
 
-export default compose(
+export const ExpenseDataTable = compose(
   withDashboardActions,
   withAlertActions,
   withDrawerActions,

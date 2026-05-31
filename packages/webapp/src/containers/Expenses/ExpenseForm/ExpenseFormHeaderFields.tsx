@@ -53,7 +53,7 @@ const getFieldsStyle = (theme: Theme) => css`
 /**
  * Expense form header.
  */
-export default function ExpenseFormHeader() {
+export function ExpenseFormHeader() {
   const { currencies, accounts, customers } = useExpenseFormContext();
   const theme = useTheme();
   const fieldsClassName = getFieldsStyle(theme);

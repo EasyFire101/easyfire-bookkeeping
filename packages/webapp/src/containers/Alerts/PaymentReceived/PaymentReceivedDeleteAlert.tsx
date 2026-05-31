@@ -21,7 +21,7 @@ import { DRAWERS } from '@/constants/drawers';
 /**
  * Payment receive delete alert.
  */
-function PaymentReceivedDeleteAlert({
+function PaymentReceivedDeleteAlertInner({
   name,
 
   // #withAlertStoreConnect
@@ -88,8 +88,8 @@ function PaymentReceivedDeleteAlert({
   );
 }
 
-export default compose(
+export const PaymentReceivedDeleteAlert = compose(
   withAlertStoreConnect(),
   withAlertActions,
   withDrawerActions,
-)(PaymentReceivedDeleteAlert);
+)(PaymentReceivedDeleteAlertInner);

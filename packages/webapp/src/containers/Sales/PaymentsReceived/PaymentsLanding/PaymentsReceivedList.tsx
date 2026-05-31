@@ -5,15 +5,15 @@ import '@/style/pages/PaymentReceive/List.scss';
 
 import { DashboardPageContent } from '@/components';
 import { PaymentsReceivedListProvider } from './PaymentsReceivedListProvider';
-import PaymentReceivesTable from './PaymentsReceivedTable';
-import PaymentsReceivedActionsBar from './PaymentsReceivedActionsBar';
+import { PaymentsReceivedTable as PaymentReceivesTable } from './PaymentsReceivedTable';
+import { PaymentsReceivedActionsBar } from './PaymentsReceivedActionsBar';
 
 import { withPaymentsReceived } from './withPaymentsReceived';
 import { withPaymentsReceivedActions } from './withPaymentsReceivedActions';
 
 import { compose, transformTableStateToQuery } from '@/utils';
 
-function PaymentsReceivedList({
+function PaymentsReceivedListInner({
   // #withPaymentsReceived
   paymentReceivesTableState,
   paymentsTableStateChanged,
@@ -43,7 +43,7 @@ function PaymentsReceivedList({
   );
 }
 
-export default compose(
+export const PaymentsReceivedList = compose(
   withPaymentsReceived(
     ({ paymentReceivesTableState, paymentsTableStateChanged }) => ({
       paymentReceivesTableState,
@@ -51,4 +51,4 @@ export default compose(
     }),
   ),
   withPaymentsReceivedActions,
-)(PaymentsReceivedList);
+)(PaymentsReceivedListInner);

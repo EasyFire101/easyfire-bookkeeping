@@ -10,7 +10,7 @@ import { compose } from '@/utils';
 /**
  * Warehouse actions.
  */
-function WarehousesActions({
+function WarehousesActionsInner({
   //#ownProps
   openDialog,
 }) {
@@ -33,4 +33,4 @@ function WarehousesActions({
   );
 }
 
-export default compose(withDialogActions)(WarehousesActions);
+export const WarehousesActions = compose(withDialogActions)(WarehousesActionsInner);

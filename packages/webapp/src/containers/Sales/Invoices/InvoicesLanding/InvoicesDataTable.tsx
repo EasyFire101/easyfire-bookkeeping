@@ -2,7 +2,7 @@
 import React, { useCallback } from 'react';
 import { useHistory } from 'react-router-dom';
 
-import InvoicesEmptyStatus from './InvoicesEmptyStatus';
+import { EstimatesEmptyStatus as InvoicesEmptyStatus } from './InvoicesEmptyStatus';
 
 import { TABLES } from '@/constants/tables';
 import {
@@ -31,7 +31,7 @@ import { DialogsName } from '@/constants/dialogs';
 /**
  * Invoices datatable.
  */
-function InvoicesDataTable({
+function InvoicesDataTableInner({
   // #withInvoicesActions
   setInvoicesTableState,
   setInvoicesSelectedRows,
@@ -183,7 +183,7 @@ function InvoicesDataTable({
   );
 }
 
-export default compose(
+export const InvoicesDataTable = compose(
   withDashboardActions,
   withInvoiceActions,
   withAlertActions,
@@ -193,4 +193,4 @@ export default compose(
   withSettings(({ invoiceSettings }) => ({
     invoicesTableSize: invoiceSettings?.tableSize,
   })),
-)(InvoicesDataTable);
+)(InvoicesDataTableInner);

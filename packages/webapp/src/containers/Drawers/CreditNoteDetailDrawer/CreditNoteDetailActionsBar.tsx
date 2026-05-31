@@ -31,7 +31,7 @@ import { DRAWERS } from '@/constants/drawers';
 /**
  * Credit note detail actions bar.
  */
-function CreditNoteDetailActionsBar({
+function CreditNoteDetailActionsBarInner({
   // #withDialogActions
   openDialog,
 
@@ -124,8 +124,8 @@ function CreditNoteDetailActionsBar({
   );
 }
 
-export default compose(
+export const CreditNoteDetailActionsBar = compose(
   withDialogActions,
   withAlertActions,
   withDrawerActions,
-)(CreditNoteDetailActionsBar);
+)(CreditNoteDetailActionsBarInner);

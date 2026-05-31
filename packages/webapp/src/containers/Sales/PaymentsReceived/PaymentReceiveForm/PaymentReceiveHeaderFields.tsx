@@ -70,7 +70,7 @@ const getHeaderFieldsStyle = (theme: Theme) => css`
 /**
  * Payment receive header fields.
  */
-export default function PaymentReceiveHeaderFields() {
+export function PaymentReceiveHeaderFields() {
   const theme = useTheme();
   const styleClassName = getHeaderFieldsStyle(theme);
 

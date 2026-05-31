@@ -19,7 +19,7 @@ import { DrawerActionsBar, Icon, FormattedMessage as T } from '@/components';
 
 import { safeCallback, compose } from '@/utils';
 
-function ContactDetailActionsBar({
+function ContactDetailActionsBarInner({
   // #withAlertActions
   openAlert,
 
@@ -67,7 +67,7 @@ function ContactDetailActionsBar({
   );
 }
 
-export default compose(
+export const ContactDetailActionsBar = compose(
   withDrawerActions,
   withAlertActions,
-)(ContactDetailActionsBar);
+)(ContactDetailActionsBarInner);

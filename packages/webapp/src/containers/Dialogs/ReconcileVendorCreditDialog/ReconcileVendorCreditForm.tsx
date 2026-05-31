@@ -9,7 +9,7 @@ import '@/style/pages/ReconcileVendorCredit/ReconcileVendorCreditForm.scss';
 import { AppToaster } from '@/components';
 import { CreateReconcileVendorCreditFormSchema } from './ReconcileVendorCreditForm.schema';
 import { useReconcileVendorCreditContext } from './ReconcileVendorCreditFormProvider';
-import ReconcileVendorCreditFormContent from './ReconcileVendorCreditFormContent';
+import { ReconcileVendorCreditFormContent } from './ReconcileVendorCreditFormContent';
 import { withDialogActions } from '@/containers/Dialog/withDialogActions';
 import { compose, transformToForm } from '@/utils';
 
@@ -26,7 +26,7 @@ const defaultInitialValues = {
 /**
  * Reconcile vendor credit form.
  */
-function ReconcileVendorCreditForm({
+function ReconcileVendorCreditFormInner({
   // #withDialogActions
   closeDialog,
 }) {
@@ -95,4 +95,4 @@ function ReconcileVendorCreditForm({
     />
   );
 }
-export default compose(withDialogActions)(ReconcileVendorCreditForm);
+export const ReconcileVendorCreditForm = compose(withDialogActions)(ReconcileVendorCreditFormInner);

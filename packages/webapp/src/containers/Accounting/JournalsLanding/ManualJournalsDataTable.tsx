@@ -10,7 +10,7 @@ import {
 } from '@/components';
 import { TABLES } from '@/constants/tables';
 
-import ManualJournalsEmptyStatus from './ManualJournalsEmptyStatus';
+import { ManualJournalsEmptyStatus } from './ManualJournalsEmptyStatus';
 
 import { ActionsMenu } from './components';
 
@@ -30,7 +30,7 @@ import { DRAWERS } from '@/constants/drawers';
 /**
  * Manual journals data-table.
  */
-function ManualJournalsDataTable({
+function ManualJournalsDataTableInner({
   // #withManualJournalsActions
   setManualJournalsTableState,
   setManualJournalsSelectedRows,
@@ -152,7 +152,7 @@ function ManualJournalsDataTable({
   );
 }
 
-export default compose(
+export const ManualJournalsDataTable = compose(
   withManualJournalsActions,
   withManualJournals(({ manualJournalsTableState }) => ({
     manualJournalsTableState,
@@ -162,4 +162,4 @@ export default compose(
   withSettings(({ manualJournalsSettings }) => ({
     manualJournalsTableSize: manualJournalsSettings?.tableSize,
   })),
-)(ManualJournalsDataTable);
+)(ManualJournalsDataTableInner);

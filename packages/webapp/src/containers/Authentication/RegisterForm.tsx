@@ -19,7 +19,7 @@ import { AuthSubmitButton, AuthenticationLoadingOverlay } from './_components';
 /**
  * Register form.
  */
-export default function RegisterForm({ isSubmitting }) {
+export function RegisterForm({ isSubmitting }) {
   const [showPassword, setShowPassword] = React.useState<boolean>(false);
 
   // Handle password revealer changing.

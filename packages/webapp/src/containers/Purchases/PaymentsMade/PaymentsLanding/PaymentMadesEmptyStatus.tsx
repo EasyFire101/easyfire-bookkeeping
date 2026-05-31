@@ -5,7 +5,7 @@ import { useHistory } from 'react-router-dom';
 import { EmptyStatus, Can, FormattedMessage as T } from '@/components';
 import { PaymentMadeAction, AbilitySubject } from '@/constants/abilityOption';
 
-export default function PaymentMadesEmptyStatus() {
+export function PaymentMadesEmptyStatus() {
   const history = useHistory();
 
   return (

@@ -8,7 +8,7 @@ import { BrandingTemplatesTable } from './BrandingTemplatesTable';
 import { BrandingTemplateActionsBar } from './BrandingTemplatesActionsBar';
 import { withDrawerActions } from '@/containers/Drawer/withDrawerActions';
 
-export default function BrandingTemplateContent() {
+export function BrandingTemplateContent() {
   return (
     <Box>
       <DrawerHeaderContent

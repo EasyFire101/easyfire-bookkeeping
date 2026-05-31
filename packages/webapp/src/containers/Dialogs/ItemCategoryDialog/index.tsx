@@ -5,9 +5,7 @@ import { Dialog, DialogSuspense, FormattedMessage as T } from '@/components';
 import withDialogRedux from '@/components/DialogReduxConnect';
 import { compose } from '@/utils';
 
-const ItemCategoryFormDialogContent = lazy(() =>
-  import('./ItemCategoryFormDialogContent'),
-);
+const ItemCategoryFormDialogContent = lazy(() => import('./ItemCategoryFormDialogContent').then(m => ({ default: m.ItemCategoryFormDialogContent })));
 
 /**
  * Item Category form dialog.
@@ -43,4 +41,4 @@ function ItemCategoryFormDialog({
   );
 }
 
-export default compose(withDialogRedux())(ItemCategoryFormDialog);
+export const index = compose(withDialogRedux())(ItemCategoryFormDialog);

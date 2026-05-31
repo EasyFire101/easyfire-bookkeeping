@@ -9,7 +9,7 @@ function useQuery() {
   return React.useMemo(() => new URLSearchParams(search), [search]);
 }
 
-export default function PreferencesStripeCallback() {
+export function PreferencesStripeCallback() {
   const query = useQuery();
   const code = query.get('code') as string;
   const { mutateAsync: stripeAccountCallback } = useSetStripeAccountCallback();

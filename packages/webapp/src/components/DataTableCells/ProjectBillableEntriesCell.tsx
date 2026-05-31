@@ -5,7 +5,7 @@ import { Popover2 } from '@blueprintjs/popover2';
 import { Button } from '@blueprintjs/core';
 import { CellType } from '@/constants';
 import { Icon, FormattedMessage as T } from '@/components';
-import ProjectBillableEntries from '@/containers/Projects/containers/ProjectBillableEntries';
+import { ProjectBillableEntries } from '@/containers/Projects/containers/ProjectBillableEntries';
 
 /**
  *

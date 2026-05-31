@@ -14,7 +14,7 @@ import { compose } from '@/utils';
 /**
  * Receipt close alert.
  */
-function ReceiptCloseAlert({
+function ReceiptCloseAlertInner({
   name,
 
   // #withAlertStoreConnect
@@ -63,7 +63,7 @@ function ReceiptCloseAlert({
   );
 }
 
-export default compose(
+export const ReceiptCloseAlert = compose(
   withAlertStoreConnect(),
   withAlertActions,
-)(ReceiptCloseAlert);
+)(ReceiptCloseAlertInner);

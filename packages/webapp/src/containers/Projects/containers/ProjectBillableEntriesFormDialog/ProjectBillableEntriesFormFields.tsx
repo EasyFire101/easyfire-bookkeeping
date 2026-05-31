@@ -28,7 +28,7 @@ import intl from 'react-intl-universal';
  * Project billable entries form fields.
  * @returns
  */
-export default function ProjectBillableEntriesFormFields() {
+export function ProjectBillableEntriesFormFields() {
   // Formik context.
   const { values } = useFormikContext();
 

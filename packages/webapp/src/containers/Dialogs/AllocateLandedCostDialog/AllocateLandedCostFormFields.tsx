@@ -18,7 +18,7 @@ import { FieldRequiredHint } from '@/components';
 import { CLASSES } from '@/constants/classes';
 import { AllocateLandedCostType } from '@/constants/allocateLandedCostType';
 
-import AllocateLandedCostFormBody from './AllocateLandedCostFormBody';
+import { AllocateLandedCostFormBody } from './AllocateLandedCostFormBody';
 import {
   allocateCostToEntries,
   resetAllocatedCostEntries,
@@ -28,7 +28,7 @@ import { useAllocateLandedConstDialogContext } from './AllocateLandedCostDialogP
 /**
  * Allocate landed cost form fields.
  */
-export default function AllocateLandedCostFormFields() {
+export function AllocateLandedCostFormFields() {
   // Allocated landed cost dialog.
   const { costTransactionEntries, landedCostTransactions, isLandedCostTransactionsLoading } =
     useAllocateLandedConstDialogContext();

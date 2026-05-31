@@ -5,7 +5,7 @@ import { useHistory } from 'react-router-dom';
 import { EmptyStatus, Can, FormattedMessage as T } from '@/components';
 import { CreditNoteAction, AbilitySubject } from '@/constants/abilityOption';
 
-export default function CreditNotesEmptyStatus() {
+export function CreditNotesEmptyStatus() {
   const history = useHistory();
   return (
     <EmptyStatus

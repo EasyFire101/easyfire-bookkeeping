@@ -7,7 +7,7 @@ import { useKeywordShortcuts } from '@/hooks/dashboard';
 /**
  *  keyboard shortcuts table.
  */
-export default function ShortcutsTable() {
+export function ShortcutsTable() {
   const keywordShortcuts = useKeywordShortcuts();
 
   const columns = useMemo(

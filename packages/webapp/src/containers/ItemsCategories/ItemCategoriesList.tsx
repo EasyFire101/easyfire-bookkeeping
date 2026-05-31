@@ -7,8 +7,8 @@ import '@/style/pages/ItemsCategories/List.scss';
 import { DashboardContentTable, DashboardPageContent } from '@/components';
 import { ItemsCategoriesProvider } from './ItemsCategoriesProvider';
 
-import ItemCategoriesTable from './ItemCategoriesTable';
-import ItemsCategoryActionsBar from './ItemsCategoryActionsBar';
+import { ItemCategoriesTable } from './ItemCategoriesTable';
+import { ItemsCategoryActionsBar } from './ItemsCategoryActionsBar';
 import { withItemCategories } from './withItemCategories';
 
 /**
@@ -31,7 +31,7 @@ function ItemCategoryList({
   );
 }
 
-export default R.compose(
+export const ItemCategoriesList = R.compose(
   withItemCategories(({ itemsCategoriesTableState }) => ({
     itemsCategoriesTableState,
   })),

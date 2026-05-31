@@ -7,7 +7,7 @@ import { BillFormFooterRight } from './BillFormFooterRight';
 import { UploadAttachmentButton } from '@/containers/Attachments/UploadAttachmentButton';
 
 // Bill form floating actions.
-export default function BillFormFooter() {
+export function BillFormFooter() {
   return (
     <x.div mt={'20px'} px={'32px'} pb={'20px'} flex={1}>
       <Paper p={'20px'}>

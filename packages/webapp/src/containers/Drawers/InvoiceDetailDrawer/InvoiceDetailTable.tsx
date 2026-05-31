@@ -12,7 +12,7 @@ import { TableStyle } from '@/constants';
 /**
  * Invoice readonly details entries table columns.
  */
-export default function InvoiceDetailTable() {
+export function InvoiceDetailTable() {
   // Invoice readonly entries table columns.
   const columns = useInvoiceReadonlyEntriesColumns();
 

@@ -11,7 +11,7 @@ import {
 } from '@/components';
 import { useMemorizedColumnsWidths } from '@/hooks';
 
-import CreditNoteEmptyStatus from './CreditNotesEmptyStatus';
+import { CreditNotesEmptyStatus as CreditNoteEmptyStatus } from './CreditNotesEmptyStatus';
 
 import { withDashboardActions } from '@/containers/Dashboard/withDashboardActions';
 import { withCreditNotesActions } from './withCreditNotesActions';
@@ -30,7 +30,7 @@ import { DRAWERS } from '@/constants/drawers';
 /**
  * Credit note data table.
  */
-function CreditNotesDataTable({
+function CreditNotesDataTableInner({
   // #withCreditNotesActions
   setCreditNotesTableState,
   setCreditNotesSelectedRows,
@@ -167,7 +167,7 @@ function CreditNotesDataTable({
   );
 }
 
-export default compose(
+export const CreditNotesDataTable = compose(
   withDashboardActions,
   withCreditNotesActions,
   withDrawerActions,
@@ -177,4 +177,4 @@ export default compose(
     creditNoteTableSize: creditNoteSettings?.tableSize,
   })),
   withCreditNotes(({ creditNoteTableState }) => ({ creditNoteTableState }))
-)(CreditNotesDataTable);
+)(CreditNotesDataTableInner);

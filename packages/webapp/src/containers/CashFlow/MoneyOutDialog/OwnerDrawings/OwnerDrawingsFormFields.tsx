@@ -32,7 +32,7 @@ import intl from 'react-intl-universal';
 /**
  * Owner drawings form fields.
  */
-export default function OwnerDrawingsFormFields() {
+export function OwnerDrawingsFormFields() {
   // Money out dialog context.
   const { accounts, branches } = useMoneyOutDialogContext();
   const { account } = useMoneyOutFieldsContext();

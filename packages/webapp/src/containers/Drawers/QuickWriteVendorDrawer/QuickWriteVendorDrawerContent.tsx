@@ -6,13 +6,13 @@ import {
   FormattedMessage as T,
 } from '@/components';
 
-import QuickVendorFormDrawer from './QuickVendorFormDrawer';
+import { QuickVendorFormDrawer } from './QuickVendorFormDrawer';
 import { DRAWERS } from '@/constants/drawers';
 
 /**
  * Quick create/edit vendor drawer.
  */
-export default function QuickWriteVendorDrawerContent({ displayName, autofillRef }) {
+export function QuickWriteVendorDrawerContent({ displayName, autofillRef }) {
   return (
     <React.Fragment>
       <DrawerHeaderContent

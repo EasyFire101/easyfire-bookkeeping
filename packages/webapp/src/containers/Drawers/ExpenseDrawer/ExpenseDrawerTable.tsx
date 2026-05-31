@@ -11,7 +11,7 @@ import { TableStyle } from '@/constants';
 /**
  * Expense details table.
  */
-export default function ExpenseDrawerTable() {
+export function ExpenseDrawerTable() {
   // Expense readonly entries columns.
   const columns = useExpenseReadEntriesColumns();
 

@@ -28,7 +28,7 @@ import { DRAWERS } from '@/constants/drawers';
 /**
  * Receipt floating actions bar.
  */
-export default function ReceiptFormFloatingActions() {
+export function ReceiptFormFloatingActions() {
   // History context.
   const history = useHistory();
 

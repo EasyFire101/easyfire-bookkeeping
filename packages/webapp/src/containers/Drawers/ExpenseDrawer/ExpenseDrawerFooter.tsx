@@ -14,7 +14,7 @@ import { TotalLine } from '@/components';
 /**
  * Footer details of expense readonly details.
  */
-export default function ExpenseDrawerFooter() {
+export function ExpenseDrawerFooter() {
   const { expense } = useExpenseDrawerContext();
 
   return (

@@ -11,12 +11,12 @@ import {
   getEditInvoiceFormSchema,
 } from './InvoiceForm.schema';
 
-import InvoiceFormHeader from './InvoiceFormHeader';
-import InvoiceItemsEntriesEditorField from './InvoiceItemsEntriesEditorField';
-import InvoiceFloatingActions from './InvoiceFloatingActions';
-import InvoiceFormFooter from './InvoiceFormFooter';
-import InvoiceFormDialogs from './InvoiceFormDialogs';
-import InvoiceFormTopBar from './InvoiceFormTopBar';
+import { InvoiceFormHeader } from './InvoiceFormHeader';
+import { InvoiceItemsEntriesEditorField } from './InvoiceItemsEntriesEditorField';
+import { InvoiceFloatingActions } from './InvoiceFloatingActions';
+import { InvoiceFormFooter } from './InvoiceFormFooter';
+import { InvoiceFormDialogs } from './InvoiceFormDialogs';
+import { InvoiceFormTopBar } from './InvoiceFormTopBar';
 
 import { withDashboardActions } from '@/containers/Dashboard/withDashboardActions';
 import { withSettings } from '@/containers/Settings/withSettings';

@@ -3,16 +3,16 @@ import React from 'react';
 import styled from 'styled-components';
 import intl from 'react-intl-universal';
 import { Tabs, Tab } from '@blueprintjs/core';
-import ProjectTimeSheets from './ProjectTimeSheets';
-import ProjectTasks from './ProjectTasks';
-import ProjectPurchasesTable from './ProjectPurchasesTable';
-import ProjectSalesTable from './ProjectSalesTable';
+import { ProjectTimeSheets } from './ProjectTimeSheets';
+import { ProjectTasks } from './ProjectTasks';
+import { ProjectPurchasesTableRoot as ProjectPurchasesTable } from './ProjectPurchasesTable';
+import { ProjectSalesTableRoot as ProjectSalesTable } from './ProjectSalesTable';
 
 /**
  * Project detail tabs.
  * @returns
  */
-export default function ProjectDetailTabs() {
+export function ProjectDetailTabs() {
   return (
     <ProjectTabsContent>
       <Tabs

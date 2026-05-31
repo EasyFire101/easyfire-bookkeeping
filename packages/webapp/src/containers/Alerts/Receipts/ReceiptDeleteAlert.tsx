@@ -76,7 +76,7 @@ function NameDeleteAlert({
   );
 }
 
-export default compose(
+export const ReceiptDeleteAlert = compose(
   withAlertStoreConnect(),
   withAlertActions,
   withDrawerActions,

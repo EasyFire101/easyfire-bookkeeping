@@ -10,7 +10,7 @@ import { TableStyle } from '@/constants';
 /**
  * Manual journal drawer table.
  */
-export default function ManualJournalDrawerTable() {
+export function ManualJournalDrawerTable() {
   // Retrieves the readonly manual journal entries columns.
   const columns = useManualJournalEntriesColumns();
 

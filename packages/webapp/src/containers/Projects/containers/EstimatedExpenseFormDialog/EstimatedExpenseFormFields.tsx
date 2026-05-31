@@ -15,14 +15,14 @@ import {
   ProjectTaskChargeTypeSelect,
 } from '../../components';
 import { useEstimatedExpenseFormContext } from './EstimatedExpenseFormProvider';
-import EstimatedExpenseFormChargeFields from './EstimatedExpenseFormChargeFields';
+import { EstimatedExpenseFormChargeFields } from './EstimatedExpenseFormChargeFields';
 import { expenseChargeOption } from '../common/modalChargeOptions';
 
 /**
  * Estimated expense form fields.
  * @returns
  */
-export default function EstimatedExpenseFormFields() {
+export function EstimatedExpenseFormFields() {
   return (
     <div className={Classes.DIALOG_BODY}>
       {/*------------ Estimated Expense -----------*/}

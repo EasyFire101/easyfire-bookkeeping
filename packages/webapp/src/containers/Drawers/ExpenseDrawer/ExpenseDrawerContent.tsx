@@ -4,12 +4,12 @@ import React from 'react';
 import { DrawerBody } from '@/components';
 
 import { ExpenseDrawerProvider } from './ExpenseDrawerProvider';
-import ExpenseDrawerDetails from './ExpenseDrawerDetails';
+import { ExpenseDrawerDetails } from './ExpenseDrawerDetails';
 
 /**
  * Expense drawer content.
  */
-export default function ExpenseDrawerContent({
+export function ExpenseDrawerContent({
   // #ownProp
   expenseId,
 }) {

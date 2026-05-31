@@ -15,7 +15,7 @@ import intl from 'react-intl-universal';
  * Bill detail footer.
  * @returns {React.JSX}
  */
-export default function BillDetailFooter() {
+export function BillDetailFooter() {
   const { bill } = useBillDrawerContext();
   return (
     <CommercialDocFooter>

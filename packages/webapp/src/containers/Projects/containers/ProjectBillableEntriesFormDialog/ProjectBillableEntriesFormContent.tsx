@@ -5,14 +5,14 @@ import { Form } from 'formik';
 import { Choose } from '@/components';
 import { EmptyStatuCallout } from './utils';
 import { useProjectBillableEntriesFormContext } from './ProjectBillableEntriesFormProvider';
-import ProjectBillableEntriesFormFields from './ProjectBillableEntriesFormFields';
-import ProjectBillableEntriesFormFloatingActions from './ProjectBillableEntriesFormFloatingActions';
+import { ProjectBillableEntriesFormFields } from './ProjectBillableEntriesFormFields';
+import { ProjectBillableEntriesFormFloatingActions } from './ProjectBillableEntriesFormFloatingActions';
 
 /**
  * Project billable entries form content.
  * @returns
  */
-export default function ProjectBillableEntriesFormContent() {
+export function ProjectBillableEntriesFormContent() {
   const { isEmptyStatus } = useProjectBillableEntriesFormContext();
   return (
     <Choose>

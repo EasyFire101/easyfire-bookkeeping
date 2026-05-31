@@ -40,7 +40,7 @@ import intl from 'react-intl-universal';
 /**
  * Owner contribution form fields.
  */
-export default function OwnerContributionFormFields() {
+export function OwnerContributionFormFields() {
   // Money in dialog context.
   const { accounts, branches } = useMoneyInDailogContext();
   const { account } = useMoneyInFieldsContext();

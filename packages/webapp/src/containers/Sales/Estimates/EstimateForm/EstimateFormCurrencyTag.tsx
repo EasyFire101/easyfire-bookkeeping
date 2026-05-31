@@ -7,7 +7,7 @@ import { useEstimateFormContext } from './EstimateFormProvider';
  * Estimate form currency tag.
  * @returns
  */
-export default function EstimateFromCurrencyTag() {
+export function EstimateFromCurrencyTag() {
   const { isForeignCustomer, selectCustomer } = useEstimateFormContext();
 
   if (!isForeignCustomer) {

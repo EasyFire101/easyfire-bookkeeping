@@ -14,7 +14,7 @@ import { compose } from '@/utils';
 /**
  * Vendor inactivate alert.
  */
-function VendorInactivateAlert({
+function VendorInactivateAlertInner({
   name,
   // #withAlertStoreConnect
   isOpen,
@@ -62,7 +62,7 @@ function VendorInactivateAlert({
   );
 }
 
-export default compose(
+export const VendorInactivateAlert = compose(
   withAlertStoreConnect(),
   withAlertActions,
-)(VendorInactivateAlert);
+)(VendorInactivateAlertInner);

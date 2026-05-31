@@ -22,7 +22,7 @@ import { compose } from '@/utils';
 /**
  * Inventory adjustment detail actions bar.
  */
-function InventoryAdjustmentDetailActionsBar({
+function InventoryAdjustmentDetailActionsBarInner({
   // #withAlertActions
   openAlert,
 }) {
@@ -53,4 +53,4 @@ function InventoryAdjustmentDetailActionsBar({
   );
 }
 
-export default compose(withAlertActions)(InventoryAdjustmentDetailActionsBar);
+export const InventoryAdjustmentDetailActionsBar = compose(withAlertActions)(InventoryAdjustmentDetailActionsBarInner);

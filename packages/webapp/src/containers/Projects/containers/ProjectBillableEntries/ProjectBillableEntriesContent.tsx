@@ -7,7 +7,7 @@ import { useProjectBillableEntriesContext } from './ProjectBillableEntriesProvid
 /**
  * Project billable entries content.
  */
-export default function ProjectBillableEntriesContent() {
+export function ProjectBillableEntriesContent() {
   const { billableEntries } = useProjectBillableEntriesContext();
 
   return (

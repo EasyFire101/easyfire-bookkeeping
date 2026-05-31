@@ -2,13 +2,13 @@
 import React from 'react';
 import { Form } from 'formik';
 
-import ProjectInvoicingFormFields from './ProjectInvoicingFormFields';
-import ProjectInvoicingFormFloatingActions from './ProjectInvoicingFormFloatingActions';
+import { ProjectInvoicingFormFields } from './ProjectInvoicingFormFields';
+import { ProjectInvoicingFormFloatingActions } from './ProjectInvoicingFormFloatingActions';
 
 /**
  * Project Invoicing form content.
  */
-export default function ProjectInvoicingFormContent() {
+export function ProjectInvoicingFormContent() {
   return (
     <Form>
       <ProjectInvoicingFormFields />

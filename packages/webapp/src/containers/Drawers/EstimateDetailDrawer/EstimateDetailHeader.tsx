@@ -22,7 +22,7 @@ import { EstimateDetailsStatus } from './components';
 /**
  * Estimate read-only details drawer header.
  */
-export default function EstimateDetailHeader() {
+export function EstimateDetailHeader() {
   const { estimate } = useEstimateDetailDrawerContext();
 
   return (

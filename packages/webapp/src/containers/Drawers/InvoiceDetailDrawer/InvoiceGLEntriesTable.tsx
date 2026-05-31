@@ -6,15 +6,14 @@ import { Card } from '@/components';
 import { useTransactionsByReference } from '@/hooks/query';
 import { useInvoiceDetailDrawerContext } from './InvoiceDetailDrawerProvider';
 
-import JournalEntriesTable, {
-  AmountDisplayedBaseCurrencyMessage,
-} from '../../JournalEntriesTable/JournalEntriesTable';
+import {
+  AmountDisplayedBaseCurrencyMessage, JournalEntriesTable } from '../../JournalEntriesTable/JournalEntriesTable';
 
 /**
  * Invoice GL entries table.
  * @returns {React.JSX}
  */
-export default function InvoiceGLEntriesTable() {
+export function InvoiceGLEntriesTable() {
   const { invoiceId } = useInvoiceDetailDrawerContext();
 
   // Handle fetch transaction by reference.

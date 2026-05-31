@@ -36,7 +36,7 @@ import { withSettings } from '@/containers/Settings/withSettings';
 /**
  * Quick payment receive form fields.
  */
-function QuickPaymentReceiveFormFields({
+function QuickPaymentReceiveFormFieldsInner({
   paymentReceiveAutoIncrement,
 
   // #withCurrentOrganization
@@ -174,12 +174,12 @@ function QuickPaymentReceiveFormFields({
   );
 }
 
-export default compose(
+export const QuickPaymentReceiveFormFields = compose(
   withSettings(({ paymentReceiveSettings }) => ({
     paymentReceiveAutoIncrement: paymentReceiveSettings?.autoIncrement,
   })),
   withCurrentOrganization(),
-)(QuickPaymentReceiveFormFields);
+)(QuickPaymentReceiveFormFieldsInner);
 
 export const BranchRowDivider = styled.div`
   height: 1px;

@@ -4,9 +4,7 @@ import { Drawer, DrawerSuspense } from '@/components';
 import { withDrawers } from '@/containers/Drawer/withDrawers';
 import { compose } from '@/utils';
 
-const QuickCreateCustomerDrawerContent = React.lazy(
-  () => import('./QuickCreateCustomerDrawerContent'),
-);
+const QuickCreateCustomerDrawerContent = React.lazy(() => import('./QuickCreateCustomerDrawerContent').then(m => ({ default: m.QuickCreateCustomerDrawerContent })));
 
 /**
  * Quick Create customer
@@ -35,4 +33,4 @@ function QuickCreateCustomerDrawer({
   );
 }
 
-export default compose(withDrawers())(QuickCreateCustomerDrawer);
+export const index = compose(withDrawers())(QuickCreateCustomerDrawer);

@@ -5,9 +5,7 @@ import { withDrawers } from '@/containers/Drawer/withDrawers';
 
 import { compose } from '@/utils';
 
-const ManualJournalDrawerContent = lazy(() =>
-  import('./ManualJournalDrawerContent'),
-);
+const ManualJournalDrawerContent = lazy(() => import('./ManualJournalDrawerContent').then(m => ({ default: m.ManualJournalDrawerContent })));
 
 /**
  * Manual journal drawer.
@@ -33,4 +31,4 @@ function ManualJournalDrawer({
   );
 }
 
-export default compose(withDrawers())(ManualJournalDrawer);
+export const index = compose(withDrawers())(ManualJournalDrawer);

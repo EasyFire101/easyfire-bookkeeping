@@ -11,7 +11,7 @@ import 'moment/locale/es-us';
 
 import AppIntlLoader from './AppIntlLoader';
 import { EnsureAuthenticated } from '@/components/Guards/EnsureAuthenticated';
-import GlobalErrors from '@/containers/GlobalErrors/GlobalErrors';
+import { GlobalErrors } from '@/containers/GlobalErrors/GlobalErrors';
 
 import { SplashScreen, DashboardThemeProvider } from '../components';
 import { queryConfig } from '../hooks/query/base';
@@ -20,21 +20,11 @@ import { EnsureUserEmailNotVerified } from './Guards/EnsureUserEmailNotVerified'
 const DashboardPrivatePages = lazy(
   () => import('@/components/Dashboard/PrivatePages'),
 );
-const AuthenticationPage = lazy(
-  () => import('@/containers/Authentication/AuthenticationPage'),
-);
-const EmailConfirmation = lazy(
-  () => import('@/containers/Authentication/EmailConfirmation'),
-);
-const RegisterVerify = lazy(
-  () => import('@/containers/Authentication/RegisterVerify'),
-);
-const OneClickDemoPage = lazy(
-  () => import('@/containers/OneClickDemo/OneClickDemoPage'),
-);
-const PaymentPortalPage = lazy(
-  () => import('@/containers/PaymentPortal/PaymentPortalPage'),
-);
+const AuthenticationPage = lazy(() => import('@/containers/Authentication/AuthenticationPage').then(m => ({ default: m.AuthenticationPage })));
+const EmailConfirmation = lazy(() => import('@/containers/Authentication/EmailConfirmation').then(m => ({ default: m.EmailConfirmation })));
+const RegisterVerify = lazy(() => import('@/containers/Authentication/RegisterVerify').then(m => ({ default: m.RegisterVerify })));
+const OneClickDemoPage = lazy(() => import('@/containers/OneClickDemo/OneClickDemoPage').then(m => ({ default: m.OneClickDemoPage })));
+const PaymentPortalPage = lazy(() => import('@/containers/PaymentPortal/PaymentPortalPage').then(m => ({ default: m.PaymentPortalPage })));
 
 /**
  * App inner.

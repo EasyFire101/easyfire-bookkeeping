@@ -5,7 +5,7 @@ import intl from 'react-intl-universal';
 import { UsersListProvider } from './UsersProvider';
 import { withDashboardActions } from '@/containers/Dashboard/withDashboardActions';
 
-import UsersDataTable from './UsersDataTable';
+import { UsersDataTable } from './UsersDataTable';
 import { compose } from '@/utils';
 
 /**
@@ -26,4 +26,4 @@ function UsersListPreferences({
   );
 }
 
-export default compose(withDashboardActions)(UsersListPreferences);
+export const UsersList = compose(withDashboardActions)(UsersListPreferences);

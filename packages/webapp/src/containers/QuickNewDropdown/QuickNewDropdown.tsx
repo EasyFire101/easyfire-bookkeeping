@@ -12,7 +12,7 @@ import { useGetQuickNewMenu } from '@/constants/quickNewOptions';
 /**
  * Quick New Dropdown.
  */
-export default function QuickNewDropdown() {
+export function QuickNewDropdown() {
   const history = useHistory();
   const quickNewOptions = useGetQuickNewMenu();
 

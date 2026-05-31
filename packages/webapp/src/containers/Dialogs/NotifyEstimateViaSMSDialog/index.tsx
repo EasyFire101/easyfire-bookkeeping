@@ -5,9 +5,7 @@ import { Dialog, DialogSuspense, FormattedMessage as T } from '@/components';
 import withDialogRedux from '@/components/DialogReduxConnect';
 import { compose } from '@/utils';
 
-const NotifyEstimateViaSMSDialogContent = React.lazy(
-  () => import('./NotifyEstimateViaSMSDialogContent'),
-);
+const NotifyEstimateViaSMSDialogContent = React.lazy(() => import('./NotifyEstimateViaSMSDialogContent').then(m => ({ default: m.NotifyEstimateViaSMSDialogContent })));
 
 function NotifyEstimateViaSMSDialog({
   dialogName,
@@ -33,4 +31,4 @@ function NotifyEstimateViaSMSDialog({
   );
 }
 
-export default compose(withDialogRedux())(NotifyEstimateViaSMSDialog);
+export const index = compose(withDialogRedux())(NotifyEstimateViaSMSDialog);

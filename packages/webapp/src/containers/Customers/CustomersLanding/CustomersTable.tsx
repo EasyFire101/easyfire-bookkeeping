@@ -2,7 +2,7 @@
 import React from 'react';
 import { useHistory } from 'react-router-dom';
 
-import CustomersEmptyStatus from './CustomersEmptyStatus';
+import { CustomersEmptyStatus } from './CustomersEmptyStatus';
 
 import { TABLES } from '@/constants/tables';
 import {
@@ -29,7 +29,7 @@ import { DRAWERS } from '@/constants/drawers';
 /**
  * Customers table.
  */
-function CustomersTable({
+function CustomersTableInner({
   // #withCustomersActions
   setCustomersTableState,
   setCustomersSelectedRows,
@@ -173,7 +173,7 @@ function CustomersTable({
   );
 }
 
-export default compose(
+export const CustomersTable = compose(
   withAlertActions,
   withDialogActions,
   withCustomersActions,
@@ -182,4 +182,4 @@ export default compose(
   withSettings(({ customersSettings }) => ({
     customersTableSize: customersSettings?.tableSize,
   })),
-)(CustomersTable);
+)(CustomersTableInner);

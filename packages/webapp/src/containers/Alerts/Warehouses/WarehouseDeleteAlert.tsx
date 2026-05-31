@@ -20,7 +20,7 @@ import { compose } from '@/utils';
  * Warehouse delete alert
  * @returns
  */
-function WarehouseDeleteAlert({
+function WarehouseDeleteAlertInner({
   name,
 
   // #withAlertStoreConnect
@@ -79,7 +79,7 @@ function WarehouseDeleteAlert({
   );
 }
 
-export default compose(
+export const WarehouseDeleteAlert = compose(
   withAlertStoreConnect(),
   withAlertActions,
-)(WarehouseDeleteAlert);
+)(WarehouseDeleteAlertInner);

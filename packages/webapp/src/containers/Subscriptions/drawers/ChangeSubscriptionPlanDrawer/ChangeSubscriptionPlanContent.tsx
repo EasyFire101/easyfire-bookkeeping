@@ -5,7 +5,7 @@ import { Box } from '@/components';
 import { SubscriptionPlansPeriodSwitcher } from '@/containers/Setup/SetupSubscription/SubscriptionPlansPeriodSwitcher';
 import { ChangeSubscriptionPlans } from './ChangeSubscriptionPlans';
 
-export default function ChangeSubscriptionPlanContent() {
+export function ChangeSubscriptionPlanContent() {
   return (
     <Box className={Classes.DRAWER_BODY}>
       <Box

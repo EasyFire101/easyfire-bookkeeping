@@ -9,7 +9,7 @@ import '@/style/pages/AllocateLandedCost/AllocateLandedCostForm.scss';
 import { AppToaster } from '@/components';
 import { AllocateLandedCostFormSchema } from './AllocateLandedCostForm.schema';
 import { useAllocateLandedConstDialogContext } from './AllocateLandedCostDialogProvider';
-import AllocateLandedCostFormContent from './AllocateLandedCostFormContent';
+import { AllocateLandedCostFormContent } from './AllocateLandedCostFormContent';
 import { withDialogActions } from '@/containers/Dialog/withDialogActions';
 import { compose, transformToForm } from '@/utils';
 import { defaultInitialValues } from './utils';
@@ -17,7 +17,7 @@ import { defaultInitialValues } from './utils';
 /**
  * Allocate landed cost form.
  */
-function AllocateLandedCostForm({
+function AllocateLandedCostFormInner({
   // #withDialogActions
   closeDialog,
 }) {
@@ -101,4 +101,4 @@ function AllocateLandedCostForm({
   );
 }
 
-export default compose(withDialogActions)(AllocateLandedCostForm);
+export const AllocateLandedCostForm = compose(withDialogActions)(AllocateLandedCostFormInner);

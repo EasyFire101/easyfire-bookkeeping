@@ -9,7 +9,7 @@ import intl from 'react-intl-universal';
 /**
  * Reset password form.
  */
-export default function ResetPasswordForm({ isSubmitting }) {
+export function ResetPasswordForm({ isSubmitting }) {
   return (
     <Form>
       <FFormGroup name={'password'} label={intl.get('new_password')}>

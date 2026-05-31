@@ -2,11 +2,11 @@
 import React from 'react';
 import { x } from '@xstyled/emotion';
 import { FastField } from 'formik';
-import ItemsEntriesTable from '@/containers/Entries/ItemsEntriesTable';
+import { ItemsEntriesTable } from '@/containers/Entries/ItemsEntriesTable';
 import { useReceiptFormContext } from './ReceiptFormProvider';
 import { entriesFieldShouldUpdate } from './utils';
 
-export default function ReceiptItemsEntriesEditor({ defaultReceipt }) {
+export function ReceiptItemsEntriesEditor({ defaultReceipt }) {
   const { items } = useReceiptFormContext();
 
   return (

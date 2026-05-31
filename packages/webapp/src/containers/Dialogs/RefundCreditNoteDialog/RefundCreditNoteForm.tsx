@@ -9,7 +9,7 @@ import { omit } from 'lodash';
 import { AppToaster } from '@/components';
 import { useRefundCreditNoteContext } from './RefundCreditNoteFormProvider';
 import { CreateRefundCreditNoteFormSchema } from './RefundCreditNoteForm.schema';
-import RefundCreditNoteFormContent from './RefundCreditNoteFormContent';
+import { RefundCreditNoteFormContent } from './RefundCreditNoteFormContent';
 
 import { withDialogActions } from '@/containers/Dialog/withDialogActions';
 import { compose } from '@/utils';
@@ -26,7 +26,7 @@ const defaultInitialValues = {
 /**
  * Refund credit note form.
  */
-function RefundCreditNoteForm({
+function RefundCreditNoteFormInner({
   // #withDialogActions
   closeDialog,
 }) {
@@ -75,4 +75,4 @@ function RefundCreditNoteForm({
     />
   );
 }
-export default compose(withDialogActions)(RefundCreditNoteForm);
+export const RefundCreditNoteForm = compose(withDialogActions)(RefundCreditNoteFormInner);

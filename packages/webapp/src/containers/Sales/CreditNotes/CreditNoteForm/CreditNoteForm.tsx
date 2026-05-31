@@ -12,12 +12,12 @@ import {
   EditCreditNoteFormSchema,
 } from './CreditNoteForm.schema';
 
-import CreditNoteFormHeader from './CreditNoteFormHeader';
-import CreditNoteItemsEntriesEditorField from './CreditNoteItemsEntriesEditorField';
-import CreditNoteFormFooter from './CreditNoteFormFooter';
-import CreditNoteFloatingActions from './CreditNoteFloatingActions';
-import CreditNoteFormDialogs from './CreditNoteFormDialogs';
-import CreditNoteFormTopBar from './CreditNoteFormTopBar';
+import { CreditNoteFormHeader } from './CreditNoteFormHeader';
+import { CreditNoteItemsEntriesEditorField } from './CreditNoteItemsEntriesEditorField';
+import { CreditNoteFormFooter } from './CreditNoteFormFooter';
+import { CreditNoteFloatingActions } from './CreditNoteFloatingActions';
+import { CreditNoteFormDialogs } from './CreditNoteFormDialogs';
+import { CreditNoteFormTopbar as CreditNoteFormTopBar } from './CreditNoteFormTopBar';
 
 import { AppToaster } from '@/components';
 
@@ -47,7 +47,7 @@ import { PageForm } from '@/components/PageForm';
 /**
  * Credit note form.
  */
-function CreditNoteForm({
+function CreditNoteFormInner({
   // #withSettings
   creditAutoIncrement,
   creditNumberPrefix,
@@ -187,7 +187,7 @@ function CreditNoteForm({
     </Formik>
   );
 }
-export default compose(
+export const CreditNoteForm = compose(
   withSettings(({ creditNoteSettings }) => ({
     creditAutoIncrement: creditNoteSettings?.autoIncrement,
     creditNextNumber: creditNoteSettings?.nextNumber,
@@ -196,4 +196,4 @@ export default compose(
     creditTermsConditions: creditNoteSettings?.termsConditions,
   })),
   withCurrentOrganization(),
-)(CreditNoteForm);
+)(CreditNoteFormInner);

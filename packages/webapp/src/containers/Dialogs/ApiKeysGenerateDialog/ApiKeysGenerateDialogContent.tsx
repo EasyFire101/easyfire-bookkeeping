@@ -5,9 +5,9 @@ import intl from 'react-intl-universal';
 import { Intent } from '@blueprintjs/core';
 import { AppToaster } from '@/components';
 import { useGenerateApiKey } from '@/hooks/query';
-import ApiKeysGenerateFormContent from './ApiKeysGenerateFormContent';
-import ApiKeysGenerateFormSchema from './ApiKeysGenerateForm.schema';
-import ApiKeyDisplayView from './ApiKeyDisplayView';
+import { ApiKeysGenerateFormContent } from './ApiKeysGenerateFormContent';
+import { CreateApiKeyFormSchema as ApiKeysGenerateFormSchema } from './ApiKeysGenerateForm.schema';
+import { ApiKeyDisplayView } from './ApiKeyDisplayView';
 import { withDialogActions } from '@/containers/Dialog/withDialogActions';
 import { compose } from '@/utils';
 
@@ -18,7 +18,7 @@ const defaultInitialValues = {
 /**
  * API Keys Generate form dialog content.
  */
-function ApiKeysGenerateDialogContent({
+function ApiKeysGenerateDialogContentInner({
   // #withDialogActions
   closeDialog,
   dialogName,
@@ -83,4 +83,4 @@ function ApiKeysGenerateDialogContent({
   );
 }
 
-export default compose(withDialogActions)(ApiKeysGenerateDialogContent);
+export const ApiKeysGenerateDialogContent = compose(withDialogActions)(ApiKeysGenerateDialogContentInner);

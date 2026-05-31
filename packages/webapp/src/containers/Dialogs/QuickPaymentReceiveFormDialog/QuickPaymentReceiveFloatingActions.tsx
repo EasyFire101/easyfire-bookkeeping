@@ -8,7 +8,7 @@ import { useQuickPaymentReceiveContext } from './QuickPaymentReceiveFormProvider
 import { withDialogActions } from '@/containers/Dialog/withDialogActions';
 import { compose } from '@/utils';
 
-function QuickPaymentReceiveFloatingActions({
+function QuickPaymentReceiveFloatingActionsInner({
   // #withDialogActions
   closeDialog,
 }) {
@@ -40,4 +40,4 @@ function QuickPaymentReceiveFloatingActions({
     </div>
   );
 }
-export default compose(withDialogActions)(QuickPaymentReceiveFloatingActions);
+export const QuickPaymentReceiveFloatingActions = compose(withDialogActions)(QuickPaymentReceiveFloatingActionsInner);

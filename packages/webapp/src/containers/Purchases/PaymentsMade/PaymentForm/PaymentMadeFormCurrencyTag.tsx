@@ -7,7 +7,7 @@ import { usePaymentMadeFormContext } from './PaymentMadeFormProvider';
  * Payment made form currency tag.
  * @returns
  */
-export default function PaymentMadeFormCurrencyTag() {
+export function PaymentMadeFormCurrencyTag() {
   const { isForeignVendor, selectVendor } = usePaymentMadeFormContext();
 
   if (!isForeignVendor) {

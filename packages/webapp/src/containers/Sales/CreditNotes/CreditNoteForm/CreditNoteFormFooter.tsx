@@ -9,7 +9,7 @@ import { UploadAttachmentButton } from '@/containers/Attachments/UploadAttachmen
 /**
  * Credit note form footer.
  */
-export default function CreditNoteFormFooter() {
+export function CreditNoteFormFooter() {
   return (
     <Stack mt={'20px'} px={'32px'} pb={'20px'} flex={1}>
       <Paper p={'20px'}>

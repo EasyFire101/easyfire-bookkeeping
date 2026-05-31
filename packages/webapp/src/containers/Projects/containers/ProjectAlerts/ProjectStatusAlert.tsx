@@ -15,7 +15,7 @@ import { compose } from '@/utils';
  * Project status alert.
  * @returns
  */
-function ProjectStatusAlert({
+function ProjectStatusAlertInner({
   name,
   isOpen,
   payload: { projectId, status },
@@ -70,7 +70,7 @@ function ProjectStatusAlert({
   );
 }
 
-export default compose(
+export const ProjectStatusAlert = compose(
   withAlertStoreConnect(),
   withAlertActions,
-)(ProjectStatusAlert);
+)(ProjectStatusAlertInner);

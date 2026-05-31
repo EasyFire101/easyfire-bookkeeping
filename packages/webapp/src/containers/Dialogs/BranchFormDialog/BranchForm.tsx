@@ -9,7 +9,7 @@ import { AppToaster } from '@/components';
 import { CreateBranchFormSchema } from './BranchForm.schema';
 import { transformErrors } from './utils';
 
-import BranchFormContent from './BranchFormContent';
+import { BranchFormContent } from './BranchFormContent';
 import { useBranchFormContext } from './BranchFormProvider';
 
 import { withDialogActions } from '@/containers/Dialog/withDialogActions';
@@ -26,7 +26,7 @@ const defaultInitialValues = {
   country: '',
 };
 
-function BranchForm({
+function BranchFormInner({
   // #withDialogActions
   closeDialog,
 }) {
@@ -80,4 +80,4 @@ function BranchForm({
     />
   );
 }
-export default compose(withDialogActions)(BranchForm);
+export const BranchForm = compose(withDialogActions)(BranchFormInner);

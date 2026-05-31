@@ -39,7 +39,7 @@ import { useBulkDeleteManualJournalsDialog } from './hooks/use-bulk-delete-manua
 /**
  * Manual journal actions bar.
  */
-function ManualJournalActionsBar({
+function ManualJournalActionsBarInner({
   // #withManualJournalsActions
   setManualJournalsTableState,
 
@@ -206,7 +206,7 @@ function ManualJournalActionsBar({
   );
 }
 
-export default compose(
+export const ManualJournalActionsBar = compose(
   withDialogActions,
   withManualJournalsActions,
   withSettingsActions,
@@ -217,4 +217,4 @@ export default compose(
   withSettings(({ manualJournalsSettings }) => ({
     manualJournalsTableSize: manualJournalsSettings?.tableSize,
   })),
-)(ManualJournalActionsBar);
+)(ManualJournalActionsBarInner);

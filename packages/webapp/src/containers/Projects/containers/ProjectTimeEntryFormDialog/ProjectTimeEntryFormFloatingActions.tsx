@@ -11,7 +11,7 @@ import { compose } from '@/utils';
  * Projcet time entry form floating actions.
  * @returns
  */
-function ProjectTimeEntryFormFloatingActions({
+function ProjectTimeEntryFormFloatingActionsInner({
   // #withDialogActions
   closeDialog,
 }) {
@@ -42,4 +42,4 @@ function ProjectTimeEntryFormFloatingActions({
   );
 }
 
-export default compose(withDialogActions)(ProjectTimeEntryFormFloatingActions);
+export const ProjectTimeEntryFormFloatingActions = compose(withDialogActions)(ProjectTimeEntryFormFloatingActionsInner);

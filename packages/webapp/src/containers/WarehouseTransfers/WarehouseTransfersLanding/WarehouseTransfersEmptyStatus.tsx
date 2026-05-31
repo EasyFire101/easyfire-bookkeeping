@@ -4,7 +4,7 @@ import { useHistory } from 'react-router-dom';
 import { Button, Intent } from '@blueprintjs/core';
 import { EmptyStatus, FormattedMessage as T } from '@/components';
 
-export default function WarehouseTransfersEmptyStatus() {
+export function WarehouseTransfersEmptyStatus() {
   const history = useHistory();
 
   return (

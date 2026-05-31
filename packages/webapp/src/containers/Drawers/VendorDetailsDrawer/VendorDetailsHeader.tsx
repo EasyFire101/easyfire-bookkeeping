@@ -13,7 +13,7 @@ import Style from './VendorDetailsDrawer.module.scss';
 /**
  * Vendor details header.
  */
-export default function VendorDetailsHeader() {
+export function VendorDetailsHeader() {
   const { vendor } = useVendorDetailsDrawerContext();
 
   return (

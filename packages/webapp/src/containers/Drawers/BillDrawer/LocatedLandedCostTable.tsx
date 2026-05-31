@@ -21,7 +21,7 @@ import { DRAWERS } from '@/constants/drawers';
 /**
  * Located landed cost table.
  */
-function LocatedLandedCostTable({
+function LocatedLandedCostTableInner({
   // #withAlertActions
   openAlert,
 
@@ -76,7 +76,7 @@ function LocatedLandedCostTable({
   );
 }
 
-export default compose(
+export const LocatedLandedCostTable = compose(
   withAlertActions,
   withDrawerActions,
-)(LocatedLandedCostTable);
+)(LocatedLandedCostTableInner);

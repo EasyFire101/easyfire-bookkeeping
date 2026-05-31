@@ -2,7 +2,7 @@
 import React from 'react';
 import { FastField } from 'formik';
 import { x } from '@xstyled/emotion';
-import ItemsEntriesTable from '@/containers/Entries/ItemsEntriesTable';
+import { ItemsEntriesTable } from '@/containers/Entries/ItemsEntriesTable';
 import { useInvoiceFormContext } from './InvoiceFormProvider';
 import { entriesFieldShouldUpdate } from './utils';
 import { TaxType } from '@/interfaces/TaxRates';
@@ -11,7 +11,7 @@ import { ITEM_TYPE } from '@/containers/Entries/utils';
 /**
  * Invoice items entries editor field.
  */
-export default function InvoiceItemsEntriesEditorField() {
+export function InvoiceItemsEntriesEditorField() {
   const { items, taxRates } = useInvoiceFormContext();
 
   return (

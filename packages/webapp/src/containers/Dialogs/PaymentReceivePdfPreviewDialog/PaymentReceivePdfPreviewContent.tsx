@@ -45,6 +45,6 @@ function PaymentReceivePdfPreviewDialogContent({
   );
 }
 
-export default compose(withDialogActions)(
+export const PaymentReceivePdfPreviewContent = compose(withDialogActions)(
   PaymentReceivePdfPreviewDialogContent,
 );

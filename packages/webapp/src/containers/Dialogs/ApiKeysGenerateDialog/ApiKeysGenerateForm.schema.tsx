@@ -7,4 +7,3 @@ export const CreateApiKeyFormSchema = Yup.object().shape({
     .max(255, 'Name must be at most 255 characters'),
 });
 
-export default CreateApiKeyFormSchema;

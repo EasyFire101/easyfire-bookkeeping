@@ -11,7 +11,7 @@ import { AppToaster } from '@/components';
 import { CreateLockingTransactionsFormSchema } from './LockingTransactionsForm.schema';
 
 import { useLockingTransactionsContext } from './LockingTransactionsFormProvider';
-import LockingTransactionsFormContent from './LockingTransactionsFormContent';
+import { LockingTransactionsFormContent } from './LockingTransactionsFormContent';
 
 import { withDialogActions } from '@/containers/Dialog/withDialogActions';
 import { compose, transformToForm } from '@/utils';
@@ -25,7 +25,7 @@ const defaultInitialValues = {
 /**
  * Locking Transactions Form.
  */
-function LockingTransactionsForm({
+function LockingTransactionsFormInner({
   // #withDialogActions
   closeDialog,
 }) {
@@ -87,4 +87,4 @@ function LockingTransactionsForm({
     />
   );
 }
-export default compose(withDialogActions)(LockingTransactionsForm);
+export const LockingTransactionsForm = compose(withDialogActions)(LockingTransactionsFormInner);

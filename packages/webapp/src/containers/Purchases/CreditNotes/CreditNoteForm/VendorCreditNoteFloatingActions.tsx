@@ -19,7 +19,7 @@ import { useVendorCreditNoteFormContext } from './VendorCreditNoteFormProvider';
 /**
  * Purchases Credit note floating actions.
  */
-export default function VendorCreditNoteFloatingActions() {
+export function VendorCreditNoteFloatingActions() {
   const history = useHistory();
 
   // Formik context.

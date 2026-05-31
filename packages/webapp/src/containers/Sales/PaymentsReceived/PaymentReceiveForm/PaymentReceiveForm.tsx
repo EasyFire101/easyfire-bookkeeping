@@ -7,13 +7,13 @@ import { useHistory } from 'react-router-dom';
 import { Intent } from '@blueprintjs/core';
 import { css } from '@emotion/css';
 
-import PaymentReceiveHeader from './PaymentReceiveFormHeader';
-import PaymentReceiveFormBody from './PaymentReceiveFormBody';
-import PaymentReceiveFloatingActions from './PaymentReceiveFloatingActions';
-import PaymentReceiveFormFooter from './PaymentReceiveFormFooter';
-import PaymentReceiveFormAlerts from './PaymentReceiveFormAlerts';
-import PaymentReceiveFormDialogs from './PaymentReceiveFormDialogs';
-import PaymentReceiveFormTopBar from './PaymentReceiveFormTopBar';
+import { PaymentReceiveFormHeader as PaymentReceiveHeader } from './PaymentReceiveFormHeader';
+import { PaymentReceiveFormBody } from './PaymentReceiveFormBody';
+import { PaymentReceiveFormFloatingActions as PaymentReceiveFloatingActions } from './PaymentReceiveFloatingActions';
+import { PaymentReceiveFormFooter } from './PaymentReceiveFormFooter';
+import { PaymentReceiveFormAlerts } from './PaymentReceiveFormAlerts';
+import { PaymentReceiveFormDialogs } from './PaymentReceiveFormDialogs';
+import { PaymentReceiveFormTopBar } from './PaymentReceiveFormTopBar';
 import { PaymentReceiveInnerProvider } from './PaymentReceiveInnerProvider';
 
 import { withSettings } from '@/containers/Settings/withSettings';

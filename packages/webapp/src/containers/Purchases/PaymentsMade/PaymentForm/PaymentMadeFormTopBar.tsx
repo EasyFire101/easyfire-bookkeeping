@@ -17,7 +17,7 @@ import { Features } from '@/constants';
  * Payment made from top bar.
  * @returns
  */
-export default function PaymentMadeFormTopBar() {
+export function PaymentMadeFormTopBar() {
   // Features guard.
   const { featureCan } = useFeatureCan();
 

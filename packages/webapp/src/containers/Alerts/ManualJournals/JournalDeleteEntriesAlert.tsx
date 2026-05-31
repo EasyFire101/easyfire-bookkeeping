@@ -11,7 +11,7 @@ import { compose, saveInvoke } from '@/utils';
 /**
  * Make journal delete entries alert.
  */
-function JournalDeleteEntriesAlert({
+function JournalDeleteEntriesAlertInner({
   // #ownProps
   name,
   onConfirm,
@@ -51,7 +51,7 @@ function JournalDeleteEntriesAlert({
   );
 }
 
-export default compose(
+export const JournalDeleteEntriesAlert = compose(
   withAlertStoreConnect(),
   withAlertActions,
-)(JournalDeleteEntriesAlert);
+)(JournalDeleteEntriesAlertInner);

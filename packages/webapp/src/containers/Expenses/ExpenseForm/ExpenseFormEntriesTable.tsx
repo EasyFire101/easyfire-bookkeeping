@@ -16,7 +16,7 @@ import {
 /**
  * Expenses form entries.
  */
-export default function ExpenseFormEntriesTable({
+export function ExpenseFormEntriesTable({
   // #ownPorps
   entries,
   defaultEntry,

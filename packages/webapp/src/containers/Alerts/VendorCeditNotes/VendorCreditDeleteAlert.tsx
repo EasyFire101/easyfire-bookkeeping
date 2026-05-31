@@ -19,7 +19,7 @@ import { DRAWERS } from '@/constants/drawers';
 /**
  * Vendor Credit delete alert.
  */
-function VendorCreditDeleteAlert({
+function VendorCreditDeleteAlertInner({
   name,
 
   // #withAlertStoreConnect
@@ -82,8 +82,8 @@ function VendorCreditDeleteAlert({
   );
 }
 
-export default compose(
+export const VendorCreditDeleteAlert = compose(
   withAlertStoreConnect(),
   withAlertActions,
   withDrawerActions,
-)(VendorCreditDeleteAlert);
+)(VendorCreditDeleteAlertInner);

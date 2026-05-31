@@ -16,7 +16,7 @@ const mapStateToProps = (state, ownProps) => {
 
 const viewFormConnect = connect(mapStateToProps);
 
-export default compose(
+export const ViewFormContainer = compose(
   withDashboardActions,
   withViewsActions,
   withViewsDetails,

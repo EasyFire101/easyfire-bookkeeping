@@ -21,7 +21,7 @@ import { CLASSES } from '@/constants/classes';
 /**
  * Payment made floating actions bar.
  */
-export default function PaymentMadeFloatingActions() {
+export function PaymentMadeFloatingActions() {
   // History context.
   const history = useHistory();
 

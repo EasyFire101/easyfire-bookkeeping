@@ -65,7 +65,7 @@ const getFieldsStyle = (theme: Theme) => css`
 /**
  * Vendor Credit note form header fields.
  */
-function VendorCreditNoteFormHeaderFields({
+function VendorCreditNoteFormHeaderFieldsInner({
   // #withDialogActions
   openDialog,
 
@@ -215,14 +215,14 @@ function VendorCreditFormVendorSelect() {
   );
 }
 
-export default compose(
+export const VendorCreditNoteFormHeaderFields = compose(
   withDialogActions,
   withSettings(({ vendorsCreditNoteSetting }) => ({
     vendorcreditAutoIncrement: vendorsCreditNoteSetting?.autoIncrement,
     vendorcreditNextNumber: vendorsCreditNoteSetting?.nextNumber,
     vendorcreditNumberPrefix: vendorsCreditNoteSetting?.numberPrefix,
   })),
-)(VendorCreditNoteFormHeaderFields);
+)(VendorCreditNoteFormHeaderFieldsInner);
 
 const VendorButtonLink = styled(VendorDrawerLink)`
   font-size: 11px;

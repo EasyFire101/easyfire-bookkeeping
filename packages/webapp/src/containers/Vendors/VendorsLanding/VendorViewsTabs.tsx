@@ -12,7 +12,7 @@ import { transfromViewsToTabs, compose } from '@/utils';
 /**
  * Vendors views tabs.
  */
-function VendorViewsTabs({
+function VendorViewsTabsInner({
   // #withVendorsActions
   setVendorsTableState,
 
@@ -43,9 +43,9 @@ function VendorViewsTabs({
   );
 }
 
-export default compose(
+export const VendorViewsTabs = compose(
   withVendorsActions,
   withVendors(({ vendorsTableState }) => ({
     vendorsCurrentView: vendorsTableState.viewSlug,
   })),
-)(VendorViewsTabs);
+)(VendorViewsTabsInner);

@@ -8,7 +8,7 @@ import { useBillReadonlyEntriesTableColumns } from './utils';
 
 import { TableStyle } from '@/constants';
 
-export default function BillDetailTable() {
+export function BillDetailTable() {
   const {
     bill: { entries },
   } = useBillDrawerContext();

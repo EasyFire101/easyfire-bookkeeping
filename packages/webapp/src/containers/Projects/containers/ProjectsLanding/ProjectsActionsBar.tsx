@@ -30,7 +30,7 @@ import { DialogsName } from '@/constants/dialogs';
  * Projects actions bar.
  * @returns
  */
-function ProjectsActionsBar({
+function ProjectsActionsBarInner({
   // #withDialogActions
   openDialog,
 
@@ -118,7 +118,7 @@ function ProjectsActionsBar({
   );
 }
 
-export default compose(
+export const ProjectsActionsBar = compose(
   withDialogActions,
   withProjectsActions,
   withSettingsActions,
@@ -128,4 +128,4 @@ export default compose(
   withSettings(({ projectSettings }) => ({
     projectsTableSize: projectSettings?.tableSize,
   })),
-)(ProjectsActionsBar);
+)(ProjectsActionsBarInner);

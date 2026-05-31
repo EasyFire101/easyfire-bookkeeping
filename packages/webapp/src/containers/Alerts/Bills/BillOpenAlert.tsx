@@ -13,7 +13,7 @@ import { compose } from '@/utils';
 /**
  * Bill open alert.
  */
-function BillOpenAlert({
+function BillOpenAlertInner({
   name,
 
   // #withAlertStoreConnect
@@ -62,7 +62,7 @@ function BillOpenAlert({
   );
 }
 
-export default compose(
+export const BillOpenAlert = compose(
   withAlertStoreConnect(),
   withAlertActions,
-)(BillOpenAlert);
+)(BillOpenAlertInner);

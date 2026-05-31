@@ -75,7 +75,7 @@ function CancelUnlockingPartialTarnsactions({
   );
 }
 
-export default compose(
+export const cancelUnlockingPartialAlert = compose(
   withAlertStoreConnect(),
   withAlertActions,
 )(CancelUnlockingPartialTarnsactions);

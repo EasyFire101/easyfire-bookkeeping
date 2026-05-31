@@ -17,7 +17,7 @@ import { DRAWERS } from '@/constants/drawers';
 /**
  * Bill payment transactions datatable.
  */
-function BillPaymentTransactionTable({
+function BillPaymentTransactionTableInner({
   // #withAlertActions
   openAlert,
 
@@ -72,7 +72,7 @@ function BillPaymentTransactionTable({
   );
 }
 
-export default compose(
+export const BillPaymentTransactionTable = compose(
   withAlertActions,
   withDrawerActions,
-)(BillPaymentTransactionTable);
+)(BillPaymentTransactionTableInner);

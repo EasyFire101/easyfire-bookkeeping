@@ -2,7 +2,7 @@
 import { useIsDarkMode } from '@/hooks/useDarkMode';
 import ContentLoader from 'react-content-loader';
 
-export default function PreferencesPageLoader(props) {
+export function PreferencesPageLoader(props) {
   const isDarkmode = useIsDarkMode();
 
   return (

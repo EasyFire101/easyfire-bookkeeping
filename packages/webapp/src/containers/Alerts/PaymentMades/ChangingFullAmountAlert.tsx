@@ -10,7 +10,7 @@ import { compose, saveInvoke } from '@/utils';
 /**
  * Changing full-amount alert in payment made form.
  */
-function ChangingFullAmountAlert({
+function ChangingFullAmountAlertInner({
   name,
   onConfirm,
 
@@ -49,7 +49,7 @@ function ChangingFullAmountAlert({
   );
 }
 
-export default compose(
+export const ChangingFullAmountAlert = compose(
   withAlertStoreConnect(),
   withAlertActions,
-)(ChangingFullAmountAlert);
+)(ChangingFullAmountAlertInner);

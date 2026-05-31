@@ -35,7 +35,7 @@ import intl from 'react-intl-universal';
 /**
  * Transfer to account form fields.
  */
-export default function TransferToAccountFormFields() {
+export function TransferToAccountFormFields() {
   // Money in dialog context.
   const { accounts, branches } = useMoneyOutDialogContext();
   const { account } = useMoneyOutFieldsContext();

@@ -14,7 +14,7 @@ import { toSafeNumber } from '@/utils';
 import { decrementQuantity, incrementQuantity } from './utils';
 import intl from 'react-intl-universal';
 
-export default function IncrementAdjustmentFields() {
+export function IncrementAdjustmentFields() {
   const incrementFieldRef = useAutofocus();
   const { values, setFieldValue } = useFormikContext();
 

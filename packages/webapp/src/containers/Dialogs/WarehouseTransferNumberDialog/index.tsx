@@ -4,9 +4,7 @@ import { Dialog, DialogSuspense, FormattedMessage as T } from '@/components';
 import withDialogRedux from '@/components/DialogReduxConnect';
 import { compose, saveInvoke } from '@/utils';
 
-const WarehouseTransferNumberDialogContent = React.lazy(
-  () => import('./WarehouseTransferNumberDialogContent'),
-);
+const WarehouseTransferNumberDialogContent = React.lazy(() => import('./WarehouseTransferNumberDialogContent').then(m => ({ default: m.WarehouseTransferNumberDialogContent })));
 
 /**
  * Warehouse transfer number dialog.
@@ -37,4 +35,4 @@ function WarehouseTransferNumberDilaog({
     </Dialog>
   );
 }
-export default compose(withDialogRedux())(WarehouseTransferNumberDilaog);
+export const index = compose(withDialogRedux())(WarehouseTransferNumberDilaog);

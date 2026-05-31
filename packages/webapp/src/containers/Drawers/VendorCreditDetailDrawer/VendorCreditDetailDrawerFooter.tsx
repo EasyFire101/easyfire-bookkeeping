@@ -14,7 +14,7 @@ import { useVendorCreditDetailDrawerContext } from './VendorCreditDetailDrawerPr
 /**
  * Vendor Credit detail panel footer.
  */
-export default function VendorCreditDetailDrawerFooter() {
+export function VendorCreditDetailDrawerFooter() {
   const { vendorCredit } = useVendorCreditDetailDrawerContext();
 
   return (

@@ -14,7 +14,7 @@ import { useReceiptDetailDrawerContext } from './ReceiptDetailDrawerProvider';
 /**
  * Receipts read-only details table footer.
  */
-export default function ReceiptDetailTableFooter() {
+export function ReceiptDetailTableFooter() {
   const { receipt } = useReceiptDetailDrawerContext();
 
   return (

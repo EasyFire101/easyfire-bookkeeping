@@ -1,7 +1,7 @@
 // @ts-nocheck
 import React from 'react';
 import intl from 'react-intl-universal';
-import CreditNoteFormHeaderFields from './CreditNoteFormHeaderFields';
+import { CreditNoteFormHeaderFields } from './CreditNoteFormHeaderFields';
 import { Group, PageFormBigNumber } from '@/components';
 import { useCreditNoteTotalFormatted } from './utils';
 import { useIsDarkMode } from '@/hooks/useDarkMode';
@@ -9,7 +9,7 @@ import { useIsDarkMode } from '@/hooks/useDarkMode';
 /**
  * Credit note header.
  */
-function CreditNoteFormHeader() {
+export function CreditNoteFormHeader() {
   const isDarkMode = useIsDarkMode();
 
   return (
@@ -49,5 +49,3 @@ function CreditNoteFormBigNumber() {
     />
   );
 }
-
-export default CreditNoteFormHeader;

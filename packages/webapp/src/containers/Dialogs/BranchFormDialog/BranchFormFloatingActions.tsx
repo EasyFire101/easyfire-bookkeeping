@@ -12,7 +12,7 @@ import { compose } from '@/utils';
 /**
  * Branch form floating actions.
  */
-function BranchFormFloatingActions({
+function BranchFormFloatingActionsInner({
   // #withDialogActions
   closeDialog,
 }) {
@@ -44,4 +44,4 @@ function BranchFormFloatingActions({
     </div>
   );
 }
-export default compose(withDialogActions)(BranchFormFloatingActions);
+export const BranchFormFloatingActions = compose(withDialogActions)(BranchFormFloatingActionsInner);

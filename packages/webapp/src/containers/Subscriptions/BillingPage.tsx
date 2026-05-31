@@ -34,7 +34,7 @@ function BillingPageRoot({
   );
 }
 
-export default R.compose(
+export const BillingPage = R.compose(
   withAlertActions,
   withDashboardActions,
 )(BillingPageRoot);

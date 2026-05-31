@@ -4,7 +4,7 @@ import styled from 'styled-components';
 
 import { Card } from '@/components';
 import { ItemManuTransaction } from './utils';
-import ItemPaymentTransactionContent from './ItemPaymentTransactionContent';
+import { ItemPaymentTransactionsContent as ItemPaymentTransactionContent } from './ItemPaymentTransactionContent';
 
 import { useItemDetailDrawerContext } from '../ItemDetailDrawerProvider';
 

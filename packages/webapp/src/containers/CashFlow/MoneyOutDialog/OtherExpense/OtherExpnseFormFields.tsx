@@ -30,7 +30,7 @@ import intl from 'react-intl-universal';
 /**
  * Other expense form fields.
  */
-export default function OtherExpnseFormFields() {
+export function OtherExpnseFormFields() {
   // Money in dialog context.
   const { accounts, branches } = useMoneyOutDialogContext();
   const { account } = useMoneyOutFieldsContext();

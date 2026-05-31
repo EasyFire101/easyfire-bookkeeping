@@ -39,7 +39,7 @@ import { compose } from '@/utils';
 /**
  * Payment made actions bar.
  */
-function PaymentMadeActionsBar({
+function PaymentMadeActionsBarInner({
   // #withPaymentMadeActions
   setPaymentMadesTableState,
 
@@ -173,7 +173,7 @@ function PaymentMadeActionsBar({
   );
 }
 
-export default compose(
+export const PaymentMadeActionsBar = compose(
   withPaymentMadeActions,
   withSettingsActions,
   withPaymentMade(({ paymentMadesTableState }) => ({
@@ -183,4 +183,4 @@ export default compose(
     paymentMadesTableSize: billPaymentSettings?.tableSize,
   })),
   withDialogActions,
-)(PaymentMadeActionsBar);
+)(PaymentMadeActionsBarInner);

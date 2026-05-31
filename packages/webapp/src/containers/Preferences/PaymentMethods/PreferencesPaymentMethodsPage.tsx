@@ -15,7 +15,7 @@ import { DRAWERS } from '@/constants/drawers';
  * Payment methods page.
  * @returns {JSX.Element}
  */
-export default function PreferencesPaymentMethodsPage() {
+export function PreferencesPaymentMethodsPage() {
   const changePageTitle = useChangePreferencesPageTitle();
 
   useEffect(() => {

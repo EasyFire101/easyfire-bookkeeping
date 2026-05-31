@@ -13,7 +13,7 @@ import { compose } from '@/utils';
 /**
  * Money out floating actions.
  */
-function MoneyOutFloatingActions({
+function MoneyOutFloatingActionsInner({
   // #withDialogActions
   closeDialog,
 }) {
@@ -63,4 +63,4 @@ function MoneyOutFloatingActions({
   );
 }
 
-export default compose(withDialogActions)(MoneyOutFloatingActions);
+export const MoneyOutFloatingActions = compose(withDialogActions)(MoneyOutFloatingActionsInner);

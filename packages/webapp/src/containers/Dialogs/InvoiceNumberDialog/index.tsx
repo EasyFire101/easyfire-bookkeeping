@@ -4,9 +4,7 @@ import { Dialog, DialogSuspense, FormattedMessage as T } from '@/components';
 import withDialogRedux from '@/components/DialogReduxConnect';
 import { compose, saveInvoke } from '@/utils';
 
-const InvoiceNumberDialogContent = lazy(
-  () => import('./InvoiceNumberDialogContent'),
-);
+const InvoiceNumberDialogContent = lazy(() => import('./InvoiceNumberDialogContent').then(m => ({ default: m.InvoiceNumberDialogContent })));
 
 /**
  * Invoice number dialog.
@@ -39,4 +37,4 @@ function InvoiceNumberDialog({
   );
 }
 
-export default compose(withDialogRedux())(InvoiceNumberDialog);
+export const index = compose(withDialogRedux())(InvoiceNumberDialog);

@@ -27,7 +27,7 @@ import { DRAWERS } from '@/constants/drawers';
 /**
  * Estimate floating actions bar.
  */
-export default function EstimateFloatingActions() {
+export function EstimateFloatingActions() {
   const history = useHistory();
   const { openDrawer } = useDrawerActions();
   const { resetForm, submitForm, isSubmitting } = useFormikContext();

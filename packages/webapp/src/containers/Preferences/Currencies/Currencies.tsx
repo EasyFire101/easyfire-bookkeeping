@@ -5,9 +5,9 @@ import styled from 'styled-components';
 
 import { Card } from '@/components';
 import { CLASSES } from '@/constants/classes';
-import CurrenciesList from './CurrenciesList';
+import { CurrenciesList } from './CurrenciesList';
 
-export default function PreferencesCurrenciesPage() {
+export function PreferencesCurrenciesPage() {
   return (
     <div
       className={classNames(

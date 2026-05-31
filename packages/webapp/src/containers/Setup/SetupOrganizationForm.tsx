@@ -28,7 +28,7 @@ const countries = getAllCountries();
 /**
  * Setup organization form.
  */
-export default function SetupOrganizationForm({ isSubmitting, values }) {
+export function SetupOrganizationForm({ isSubmitting, values }) {
   const FiscalYear = getFiscalYear();
   const Languages = getLanguages();
   const currencies = getAllCurrenciesOptions();

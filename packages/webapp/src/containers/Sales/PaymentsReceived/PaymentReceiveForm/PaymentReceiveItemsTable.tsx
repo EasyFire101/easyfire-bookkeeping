@@ -14,7 +14,7 @@ import { compose, updateTableCell } from '@/utils';
 /**
  * Payment receive items table.
  */
-export default function PaymentReceiveItemsTable({
+export function PaymentReceiveItemsTable({
   entries,
   onUpdateData,
   currencyCode,

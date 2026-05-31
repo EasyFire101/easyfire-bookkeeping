@@ -8,7 +8,7 @@ import { Button, Classes, Intent } from '@blueprintjs/core';
 /**
  * Invoice number dialog.
  */
-function InvoiceExchangeRateChangeDialog({
+function InvoiceExchangeRateChangeDialogInner({
   dialogName,
   isOpen,
   // #withDialogActions
@@ -50,7 +50,7 @@ function InvoiceExchangeRateChangeDialog({
   );
 }
 
-export default compose(
+export const InvoiceExchangeRateChangeDialog = compose(
   withDialogRedux(),
   withDialogActions,
-)(InvoiceExchangeRateChangeDialog);
+)(InvoiceExchangeRateChangeDialogInner);

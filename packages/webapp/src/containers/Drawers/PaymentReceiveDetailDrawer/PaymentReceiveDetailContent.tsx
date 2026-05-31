@@ -2,13 +2,13 @@
 import React from 'react';
 
 import { DrawerBody } from '@/components';
-import PaymentReceiveDetail from './PaymentReceiveDetail';
+import { PaymentReceiveDetail } from './PaymentReceiveDetail';
 import { PaymentReceiveDetailProvider } from './PaymentReceiveDetailProvider';
 
 /**
  * Payment receive detail content.
  */
-export default function PaymentReceiveDetailContent({
+export function PaymentReceiveDetailContent({
   // #ownProp
   paymentReceiveId,
 }) {

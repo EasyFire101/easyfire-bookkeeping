@@ -3,15 +3,15 @@ import React from 'react';
 import { Form } from 'formik';
 import { Choose } from '@/components';
 
-import ReconcileCreditNoteFormFields from './ReconcileCreditNoteFormFields';
-import ReconcileCreditNoteFormFloatingActions from './ReconcileCreditNoteFormFloatingActions';
+import { ReconcileCreditNoteFormFields } from './ReconcileCreditNoteFormFields';
+import { ReconcileCreditNoteFormFloatingActions } from './ReconcileCreditNoteFormFloatingActions';
 import { EmptyStatuCallout } from './utils';
 import { useReconcileCreditNoteContext } from './ReconcileCreditNoteFormProvider';
 
 /**
  * Reconcile credit note form content.
  */
-export default function ReconcileCreditNoteFormContent() {
+export function ReconcileCreditNoteFormContent() {
   const { isEmptyStatus } = useReconcileCreditNoteContext();
   return (
     <Choose>

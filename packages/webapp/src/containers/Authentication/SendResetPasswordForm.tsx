@@ -11,7 +11,7 @@ import intl from 'react-intl-universal';
 /**
  * Send reset password form.
  */
-export default function SendResetPasswordForm({ isSubmitting }) {
+export function SendResetPasswordForm({ isSubmitting }) {
   return (
     <Form>
       <TopParagraph>

@@ -18,7 +18,7 @@ import intl from 'react-intl-universal';
 /**
  * Item form inventory sections.
  */
-function ItemFormInventorySection({ organization: { base_currency } }) {
+function ItemFormInventorySectionInner({ organization: { base_currency } }) {
   const { accounts } = useItemFormContext();
 
   return (
@@ -53,4 +53,4 @@ function ItemFormInventorySection({ organization: { base_currency } }) {
   );
 }
 
-export default compose(withCurrentOrganization())(ItemFormInventorySection);
+export const ItemFormInventorySection = compose(withCurrentOrganization())(ItemFormInventorySectionInner);

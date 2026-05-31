@@ -1,7 +1,6 @@
 // @ts-nocheck
 import * as R from 'ramda';
 import { useHotkeys } from 'react-hotkeys-hook';
-
 import { withUniversalSearchActions } from './withUniversalSearchActions';
 
 /**
@@ -17,6 +16,6 @@ function DashboardUniversalSearchHotkey({
   return null;
 }
 
-export default R.compose(
+export const DashboardUniversalSearchHotkeys = R.compose(
   withUniversalSearchActions
 )(DashboardUniversalSearchHotkey);

@@ -21,7 +21,7 @@ import { DRAWERS } from '@/constants/drawers';
 /**
  * Invoice delete alert.
  */
-function InvoiceDeleteAlert({
+function InvoiceDeleteAlertInner({
   name,
 
   // #withAlertStoreConnect
@@ -85,8 +85,8 @@ function InvoiceDeleteAlert({
   );
 }
 
-export default compose(
+export const InvoiceDeleteAlert = compose(
   withAlertStoreConnect(),
   withAlertActions,
   withDrawerActions,
-)(InvoiceDeleteAlert);
+)(InvoiceDeleteAlertInner);

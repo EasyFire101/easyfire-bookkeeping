@@ -1,9 +1,9 @@
 // @ts-nocheck
 import React from 'react';
 import { NotifyEstimateViaSMSFormProvider } from './NotifyEstimateViaSMSFormProvider';
-import NotifyEstimateViaSMSForm from './NotifyEstimateViaSMSForm';
+import { NotifyEstimateViaSMSForm } from './NotifyEstimateViaSMSForm';
 
-export default function NotifyEstimateViaSMSDialogContent({
+export function NotifyEstimateViaSMSDialogContent({
   // #ownProps
   dialogName,
   estimate,

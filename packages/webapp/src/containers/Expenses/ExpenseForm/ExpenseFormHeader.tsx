@@ -1,13 +1,13 @@
 // @ts-nocheck
 import React from 'react';
 
-import ExpenseFormHeaderFields from './ExpenseFormHeaderFields';
+import { ExpenseFormHeader as ExpenseFormHeaderFields } from './ExpenseFormHeaderFields';
 import { PageForm, PageFormBigNumber } from '@/components';
 import { useExpenseTotalFormatted } from './utils';
 import intl from 'react-intl-universal';
 
 // Expense form header.
-export default function ExpenseFormHeader() {
+export function ExpenseFormHeader() {
   const totalFormatted = useExpenseTotalFormatted();
 
   return (

@@ -22,7 +22,7 @@ import { compose } from '@/utils';
 /**
  * Cashflow transaction drawer action bar.
  */
-function CashflowTransactionDrawerActionBar({
+function CashflowTransactionDrawerActionBarInner({
   // #withAlertsDialog
   openAlert,
 }) {
@@ -67,4 +67,4 @@ function CashflowTransactionDrawerActionBar({
   );
 }
 
-export default compose(withAlertActions)(CashflowTransactionDrawerActionBar);
+export const CashflowTransactionDrawerActionBar = compose(withAlertActions)(CashflowTransactionDrawerActionBarInner);

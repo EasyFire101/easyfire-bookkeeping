@@ -12,7 +12,7 @@ interface BulkDeleteDialogContentProps {
   resourcePluralLabel: string;
 }
 
-function BulkDeleteDialogContent({
+export function BulkDeleteDialogContent({
   totalSelected,
   deletableCount,
   undeletableCount,
@@ -78,6 +78,3 @@ function BulkDeleteDialogContent({
     </div>
   );
 }
-
-export default BulkDeleteDialogContent;
-

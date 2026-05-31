@@ -22,7 +22,7 @@ import { BillDetailsStatus } from './utils';
 /**
  * Bill detail header.
  */
-export default function BillDetailHeader() {
+export function BillDetailHeader() {
   const { bill } = useBillDrawerContext();
 
   return (

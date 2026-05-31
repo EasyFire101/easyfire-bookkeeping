@@ -17,7 +17,7 @@ import { handleDeleteErrors } from './_utils';
 /**
  * Payment made delete alert.
  */
-function PaymentMadeDeleteAlert({
+function PaymentMadeDeleteAlertInner({
   name,
 
   // #withAlertStoreConnect
@@ -80,8 +80,8 @@ function PaymentMadeDeleteAlert({
   );
 }
 
-export default compose(
+export const PaymentMadeDeleteAlert = compose(
   withAlertStoreConnect(),
   withAlertActions,
   withDrawerActions,
-)(PaymentMadeDeleteAlert);
+)(PaymentMadeDeleteAlertInner);

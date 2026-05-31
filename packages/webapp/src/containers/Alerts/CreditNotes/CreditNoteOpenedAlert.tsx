@@ -14,7 +14,7 @@ import { compose } from '@/utils';
 /**
  * Credit note opened alert.
  */
-function CreditNoteOpenedAlert({
+function CreditNoteOpenedAlertInner({
   name,
 
   // #withAlertStoreConnect
@@ -62,7 +62,7 @@ function CreditNoteOpenedAlert({
     </Alert>
   );
 }
-export default compose(
+export const CreditNoteOpenedAlert = compose(
   withAlertStoreConnect(),
   withAlertActions,
-)(CreditNoteOpenedAlert);
+)(CreditNoteOpenedAlertInner);

@@ -5,8 +5,8 @@ import '@/style/pages/Customers/List.scss';
 
 import { DashboardPageContent } from '@/components';
 
-import CustomersActionsBar from './CustomersActionsBar';
-import CustomersTable from './CustomersTable';
+import { CustomersActionsBar } from './CustomersActionsBar';
+import { CustomersTable } from './CustomersTable';
 import { CustomersListProvider } from './CustomersListProvider';
 
 import { withCustomers } from './withCustomers';
@@ -17,7 +17,7 @@ import { compose } from '@/utils';
 /**
  * Customers list.
  */
-function CustomersList({
+function CustomersListInner({
   // #withCustomers
   customersTableState,
   customersTableStateChanged,
@@ -49,10 +49,10 @@ function CustomersList({
   );
 }
 
-export default compose(
+export const CustomersList = compose(
   withCustomers(({ customersTableState, customersTableStateChanged }) => ({
     customersTableState,
     customersTableStateChanged,
   })),
   withCustomersActions,
-)(CustomersList);
+)(CustomersListInner);

@@ -4,7 +4,7 @@ import { ReceiptCustomizeContent } from './ReceiptCustomizeContent';
 import { BrandingTemplateBoot } from '@/containers/BrandingTemplates/BrandingTemplateBoot';
 import { useDrawerContext } from '@/components/Drawer/DrawerProvider';
 
-export default function ReceiptCustomizeDrawerBody() {
+export function ReceiptCustomizeDrawerBody() {
   const { payload } = useDrawerContext();
   const templateId = payload.templateId;
 

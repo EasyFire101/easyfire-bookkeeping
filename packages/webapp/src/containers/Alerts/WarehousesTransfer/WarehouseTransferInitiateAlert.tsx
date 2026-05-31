@@ -15,7 +15,7 @@ import { compose } from '@/utils';
  * warehouse transfer initiate alert.
  * @returns
  */
-function WarehouseTransferInitiateAlert({
+function WarehouseTransferInitiateAlertInner({
   name,
 
   // #withAlertStoreConnect
@@ -65,7 +65,7 @@ function WarehouseTransferInitiateAlert({
   );
 }
 
-export default compose(
+export const WarehouseTransferInitiateAlert = compose(
   withAlertStoreConnect(),
   withAlertActions,
-)(WarehouseTransferInitiateAlert);
+)(WarehouseTransferInitiateAlertInner);

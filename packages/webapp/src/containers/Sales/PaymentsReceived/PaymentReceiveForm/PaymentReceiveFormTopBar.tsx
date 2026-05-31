@@ -17,7 +17,7 @@ import { Features } from '@/constants';
  * Payment receive from top bar.
  * @returns {JSX.Element}
  */
-export default function PaymentReceiveFormTopBar() {
+export function PaymentReceiveFormTopBar() {
   // Features guard.
   const { featureCan } = useFeatureCan();
 

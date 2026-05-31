@@ -8,7 +8,7 @@ import '@/style/pages/ReconcileCreditNote/ReconcileCreditNoteForm.scss';
 import { AppToaster } from '@/components';
 import { CreateReconcileCreditNoteFormSchema } from './ReconcileCreditNoteForm.schema';
 import { useReconcileCreditNoteContext } from './ReconcileCreditNoteFormProvider';
-import ReconcileCreditNoteFormContent from './ReconcileCreditNoteFormContent';
+import { ReconcileCreditNoteFormContent } from './ReconcileCreditNoteFormContent';
 import { withDialogActions } from '@/containers/Dialog/withDialogActions';
 import { compose, transformToForm } from '@/utils';
 import { transformErrors } from './utils';
@@ -26,7 +26,7 @@ const defaultInitialValues = {
 /**
  * Reconcile credit note form.
  */
-function ReconcileCreditNoteForm({
+function ReconcileCreditNoteFormInner({
   // #withDialogActions
   closeDialog,
 }) {
@@ -95,4 +95,4 @@ function ReconcileCreditNoteForm({
   );
 }
 
-export default compose(withDialogActions)(ReconcileCreditNoteForm);
+export const ReconcileCreditNoteForm = compose(withDialogActions)(ReconcileCreditNoteFormInner);

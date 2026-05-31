@@ -137,7 +137,7 @@ function TaxRatesDataTable({
   );
 }
 
-export default compose(
+export const TaxRatesLandingTable = compose(
   withDashboardActions,
   withAlertActions,
   withDrawerActions,

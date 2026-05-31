@@ -3,9 +3,9 @@ import React from 'react';
 import classNames from 'classnames';
 import { FastField } from 'formik';
 import { CLASSES } from '@/constants/classes';
-import PaymentMadeEntriesTable from './PaymentMadeEntriesTable';
+import { PaymentMadeEntriesTable } from './PaymentMadeEntriesTable';
 
-export default function PaymentMadeFormBody() {
+export function PaymentMadeFormBody() {
   return (
     <div className={classNames(CLASSES.PAGE_FORM_BODY)}>
       <FastField name={'entries'}>

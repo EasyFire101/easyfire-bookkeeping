@@ -8,7 +8,7 @@ import { useInvoiceFormContext } from './InvoiceFormProvider';
 /**
  * Invoice form currency tag.
  */
-export default function InvoiceFormCurrencyTag() {
+export function InvoiceFormCurrencyTag() {
   const { isForeignCustomer } = useInvoiceFormContext();
   const {
     values: { currency_code },

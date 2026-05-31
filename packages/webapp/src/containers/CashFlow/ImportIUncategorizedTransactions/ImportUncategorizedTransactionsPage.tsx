@@ -3,7 +3,7 @@ import { DashboardInsider } from '@/components';
 import { ImportView } from '@/containers/Import/ImportView';
 import { useHistory, useParams } from 'react-router-dom';
 
-export default function ImportUncategorizedTransactions() {
+export function ImportUncategorizedTransactions() {
   const history = useHistory();
   const params = useParams();
 

@@ -4,7 +4,7 @@ import intl from 'react-intl-universal';
 import { DialogContent } from '@/components';
 import { useSaveSettings, useSettingsManualJournals } from '@/hooks/query';
 
-import ReferenceNumberForm from '@/containers/JournalNumber/ReferenceNumberForm';
+import { ReferenceNumberForm } from '@/containers/JournalNumber/ReferenceNumberForm';
 
 import { withDialogActions } from '@/containers/Dialog/withDialogActions';
 import { withSettings } from '@/containers/Settings/withSettings';
@@ -19,7 +19,7 @@ import '@/style/pages/ManualJournal/JournalNumberDialog.scss';
 /**
  * Journal number dialog's content.
  */
-function JournalNumberDialogContent({
+function JournalNumberDialogContentInner({
   // #withSettings
   nextNumber,
   numberPrefix,
@@ -93,11 +93,11 @@ function JournalNumberDialogContent({
   );
 }
 
-export default compose(
+export const JournalNumberDialogContent = compose(
   withDialogActions,
   withSettings(({ manualJournalsSettings }) => ({
     nextNumber: manualJournalsSettings?.nextNumber,
     numberPrefix: manualJournalsSettings?.numberPrefix,
     autoIncrement: manualJournalsSettings?.autoIncrement,
   })),
-)(JournalNumberDialogContent);
+)(JournalNumberDialogContentInner);

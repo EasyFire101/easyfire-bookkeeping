@@ -34,7 +34,7 @@ import intl from 'react-intl-universal';
 /**
  * Bad debt form fields.
  */
-function BadDebtFormFields() {
+export function BadDebtFormFields() {
   const amountfieldRef = useAutofocus();
 
   const { accounts, invoice } = useBadDebtContext();
@@ -91,5 +91,3 @@ function BadDebtFormFields() {
     </div>
   );
 }
-
-export default BadDebtFormFields;

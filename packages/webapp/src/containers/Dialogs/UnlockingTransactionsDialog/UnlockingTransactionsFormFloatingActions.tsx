@@ -11,7 +11,7 @@ import { compose } from '@/utils';
 /**
  * Unlocking transactions form floating actions.
  */
-function UnlockingTransactionsFormFloatingActions({
+function UnlockingTransactionsFormFloatingActionsInner({
   // #withDialogActions
   closeDialog,
 }) {
@@ -44,6 +44,6 @@ function UnlockingTransactionsFormFloatingActions({
   );
 }
 
-export default compose(withDialogActions)(
-  UnlockingTransactionsFormFloatingActions,
+export const UnlockingTransactionsFormFloatingActions = compose(withDialogActions)(
+  UnlockingTransactionsFormFloatingActionsInner,
 );

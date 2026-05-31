@@ -10,7 +10,7 @@ import { useAllocateLandedCostEntriesTableColumns } from './utils';
 /**
  * Allocate landed cost entries table.
  */
-export default function AllocateLandedCostEntriesTable({
+export function AllocateLandedCostEntriesTable({
   onUpdateData,
   entries,
 }) {

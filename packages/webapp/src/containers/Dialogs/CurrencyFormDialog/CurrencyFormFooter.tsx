@@ -12,7 +12,7 @@ import { compose } from '@/utils';
 /**
  * Currency dialog form footer action.
  */
-function CurrencyFormFooter({
+function CurrencyFormFooterInner({
   // #withDialogActions
   closeDialog,
 }) {
@@ -38,4 +38,4 @@ function CurrencyFormFooter({
   );
 }
 
-export default compose(withDialogActions)(CurrencyFormFooter);
+export const CurrencyFormFooter = compose(withDialogActions)(CurrencyFormFooterInner);

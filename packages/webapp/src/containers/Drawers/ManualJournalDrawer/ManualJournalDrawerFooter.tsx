@@ -15,7 +15,7 @@ import {
 /**
  * Manual journal readonly details footer.
  */
-export default function ManualJournalDrawerFooter() {
+export function ManualJournalDrawerFooter() {
   const {
     manualJournal: { amount, formatted_amount },
   } = useManualJournalDrawerContext();

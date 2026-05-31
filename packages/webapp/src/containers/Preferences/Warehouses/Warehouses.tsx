@@ -4,7 +4,7 @@ import intl from 'react-intl-universal';
 
 import '@/style/pages/Preferences/warehousesList.scss';
 
-import WarehousesGrid from './WarehousesGrid';
+import { WarehousesGrid } from './WarehousesGrid';
 import { withDashboardActions } from '@/containers/Dashboard/withDashboardActions';
 import { compose } from '@/utils';
 
@@ -12,7 +12,7 @@ import { compose } from '@/utils';
  * Warehouses.
  * @returns
  */
-function Warehouses({
+function WarehousesInner({
   // #withDashboardActions
   changePreferencesPageTitle,
 }) {
@@ -26,4 +26,4 @@ function Warehouses({
     </React.Fragment>
   );
 }
-export default compose(withDashboardActions)(Warehouses);
+export const Warehouses = compose(withDashboardActions)(WarehousesInner);

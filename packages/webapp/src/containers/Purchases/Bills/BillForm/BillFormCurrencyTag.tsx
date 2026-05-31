@@ -7,7 +7,7 @@ import { useBillFormContext } from './BillFormProvider';
  * Bill form currnecy tag.
  * @returns
  */
-export default function BillFormCurrencyTag() {
+export function BillFormCurrencyTag() {
   const { isForeignVendor, selectVendor } = useBillFormContext();
 
   if (!isForeignVendor) {

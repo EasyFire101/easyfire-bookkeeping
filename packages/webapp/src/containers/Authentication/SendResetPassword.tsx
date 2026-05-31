@@ -8,7 +8,7 @@ import { Intent } from '@blueprintjs/core';
 import { AppToaster, FormattedMessage as T } from '@/components';
 import { useAuthSendResetPassword } from '@/hooks/query';
 
-import SendResetPasswordForm from './SendResetPasswordForm';
+import { SendResetPasswordForm } from './SendResetPasswordForm';
 import {
   AuthFooterLink,
   AuthFooterLinks,
@@ -18,7 +18,7 @@ import {
   SendResetPasswordSchema,
   transformSendResetPassErrorsToToasts,
 } from './utils';
-import AuthInsider from '@/containers/Authentication/AuthInsider';
+import { AuthInsider } from '@/containers/Authentication/AuthInsider';
 import { useAuthMetaBoot } from './AuthMetaBoot';
 
 const initialValues = {
@@ -28,7 +28,7 @@ const initialValues = {
 /**
  * Send reset password page.
  */
-export default function SendResetPassword() {
+export function SendResetPassword() {
   const history = useHistory();
   const { mutateAsync: sendResetPasswordMutate } = useAuthSendResetPassword();
 

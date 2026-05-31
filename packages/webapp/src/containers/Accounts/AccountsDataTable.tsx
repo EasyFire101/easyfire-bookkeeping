@@ -29,7 +29,7 @@ import { DRAWERS } from '@/constants/drawers';
 /**
  * Accounts data-table.
  */
-function AccountsDataTable({
+function AccountsDataTableInner({
   // #withAlertsDialog
   openAlert,
 
@@ -144,7 +144,7 @@ function AccountsDataTable({
   );
 }
 
-export default compose(
+export const AccountsDataTable = compose(
   withAlertActions,
   withDrawerActions,
   withDialogActions,
@@ -152,4 +152,4 @@ export default compose(
   withSettings(({ accountsSettings }) => ({
     accountsTableSize: accountsSettings.tableSize,
   })),
-)(AccountsDataTable);
+)(AccountsDataTableInner);

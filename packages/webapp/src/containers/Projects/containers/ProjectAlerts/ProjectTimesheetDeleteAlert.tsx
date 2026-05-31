@@ -15,7 +15,7 @@ import { compose } from '@/utils';
  * Project timesheet delete alert.
  * @returns
  */
-function ProjectTimesheetDeleteAlert({
+function ProjectTimesheetDeleteAlertInner({
   name,
 
   // #withAlertStoreConnect
@@ -73,7 +73,7 @@ function ProjectTimesheetDeleteAlert({
     </Alert>
   );
 }
-export default compose(
+export const ProjectTimesheetDeleteAlert = compose(
   withAlertStoreConnect(),
   withAlertActions,
-)(ProjectTimesheetDeleteAlert);
+)(ProjectTimesheetDeleteAlertInner);

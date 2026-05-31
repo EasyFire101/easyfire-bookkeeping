@@ -208,7 +208,7 @@ function BillActionsBar({
   );
 }
 
-export default compose(
+export const BillsActionsBar = compose(
   withBillsActions,
   withSettingsActions,
   withBills(({ billsTableState, billsSelectedRows }) => ({

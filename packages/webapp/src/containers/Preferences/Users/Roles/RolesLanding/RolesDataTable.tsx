@@ -16,7 +16,7 @@ import { compose } from '@/utils';
 /**
  * Roles data table.
  */
-function RolesDataTable({
+function RolesDataTableInner({
   // #withAlertActions
   openAlert,
 }) {
@@ -75,4 +75,4 @@ const RolesTable = styled(DataTable)`
   }
 `;
 
-export default compose(withAlertActions)(RolesDataTable);
+export const RolesDataTable = compose(withAlertActions)(RolesDataTableInner);

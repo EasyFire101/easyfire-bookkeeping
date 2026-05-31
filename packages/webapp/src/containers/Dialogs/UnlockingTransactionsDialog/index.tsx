@@ -4,9 +4,7 @@ import { Dialog, DialogSuspense, FormattedMessage as T } from '@/components';
 import withDialogRedux from '@/components/DialogReduxConnect';
 import { compose } from '@/utils';
 
-const UnlockingTransactionsDialogContent = React.lazy(() =>
-  import('./UnlockingTransactionsDialogContent'),
-);
+const UnlockingTransactionsDialogContent = React.lazy(() => import('./UnlockingTransactionsDialogContent').then(m => ({ default: m.UnlockingTransactionsDialogContent })));
 
 /**
  * Unlocking transactions dialog.
@@ -35,4 +33,4 @@ function UnlockingTransactionsDialog({
   );
 }
 
-export default compose(withDialogRedux())(UnlockingTransactionsDialog);
+export const index = compose(withDialogRedux())(UnlockingTransactionsDialog);

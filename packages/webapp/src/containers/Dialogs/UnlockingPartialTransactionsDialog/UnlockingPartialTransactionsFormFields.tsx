@@ -19,7 +19,7 @@ import intl from 'react-intl-universal';
 /**
  * Parial Unlocking transactions form fields.
  */
-export default function UnlockingPartialTransactionsFormFields() {
+export function UnlockingPartialTransactionsFormFields() {
   const reasonFieldRef = useAutofocus();
 
   return (

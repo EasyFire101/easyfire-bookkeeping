@@ -13,7 +13,7 @@ import { useGLEntriesTableColumns } from './utils';
 /**
  * Journal entries table.
  */
-export default function JournalEntriesTable({ transactions, ...restProps }) {
+export function JournalEntriesTable({ transactions, ...restProps }) {
   const columns = useGLEntriesTableColumns();
 
   return (

@@ -8,7 +8,7 @@ import { MakeJournalFormFooterLeft } from './MakeJournalFormFooterLeft';
 import { MakeJournalFormFooterRight } from './MakeJournalFormFooterRight';
 import { UploadAttachmentButton } from '@/containers/Attachments/UploadAttachmentButton';
 
-export default function MakeJournalFormFooter() {
+export function MakeJournalFormFooter() {
   return (
     <div className={classNames(CLASSES.PAGE_FORM_FOOTER)}>
       <Paper p={'20px'}>

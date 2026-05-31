@@ -33,7 +33,7 @@ import { CLASSES } from '@/constants';
 /**
  * Account drawer action bar.
  */
-function AccountDrawerActionBar({
+function AccountDrawerActionBarInner({
   // #withDialog
   openDialog,
 
@@ -140,7 +140,7 @@ function AccountDrawerActionBar({
     </DrawerActionsBar>
   );
 }
-export default compose(
+export const AccountDrawerActionBar = compose(
   withDialogActions,
   withAlertActions,
-)(AccountDrawerActionBar);
+)(AccountDrawerActionBarInner);

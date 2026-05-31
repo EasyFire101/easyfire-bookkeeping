@@ -14,7 +14,7 @@ import { compose } from '@/utils';
 /**
  *  Estimate reject delete alerts.
  */
-function EstimateRejectAlert({
+function EstimateRejectAlertInner({
   name,
 
   // #withAlertStoreConnect
@@ -63,7 +63,7 @@ function EstimateRejectAlert({
   );
 }
 
-export default compose(
+export const EstimateRejectAlert = compose(
   withAlertStoreConnect(),
   withAlertActions,
-)(EstimateRejectAlert);
+)(EstimateRejectAlertInner);

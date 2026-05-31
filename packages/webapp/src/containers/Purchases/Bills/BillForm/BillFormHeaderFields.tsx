@@ -193,7 +193,7 @@ function BillFormVendorField() {
   );
 }
 
-export default compose(withDialogActions)(BillFormHeader);
+export const BillFormHeaderFields = compose(withDialogActions)(BillFormHeader);
 
 const VendorButtonLink = styled(VendorDrawerLink)`
   font-size: 11px;

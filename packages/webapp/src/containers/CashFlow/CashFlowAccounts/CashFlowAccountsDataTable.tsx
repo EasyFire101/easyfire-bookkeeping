@@ -19,7 +19,7 @@ import { compose } from '@/utils';
 /**
  * Cash flow accounts data table.
  */
-function CashFlowAccountsDataTable({
+function CashFlowAccountsDataTableInner({
   // #withSettings
   cashflowTableSize,
 }) {
@@ -60,8 +60,8 @@ function CashFlowAccountsDataTable({
   );
 }
 
-export default compose(
+export const CashFlowAccountsDataTable = compose(
   withSettings(({ cashflowSettings }) => ({
     cashflowTableSize: cashflowSettings?.tableSize,
   })),
-)(CashFlowAccountsDataTable);
+)(CashFlowAccountsDataTableInner);

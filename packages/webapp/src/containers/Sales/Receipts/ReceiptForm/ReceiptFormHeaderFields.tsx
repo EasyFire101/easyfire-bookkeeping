@@ -53,7 +53,7 @@ const getEstimateFieldsStyle = (theme: Theme) => css`
 /**
  * Receipt form header fields.
  */
-export default function ReceiptFormHeader() {
+export function ReceiptFormHeader() {
   const theme = useTheme();
   const receiptFieldsClassName = getEstimateFieldsStyle(theme);
   const { accounts, projects } = useReceiptFormContext();

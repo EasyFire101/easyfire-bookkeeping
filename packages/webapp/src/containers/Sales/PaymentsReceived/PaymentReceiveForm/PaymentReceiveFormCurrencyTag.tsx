@@ -7,7 +7,7 @@ import { usePaymentReceiveFormContext } from './PaymentReceiveFormProvider';
  * Payment reecevie form currnecy tag.
  * @returns
  */
-export default function PaymentReceiveFormCurrencyTag() {
+export function PaymentReceiveFormCurrencyTag() {
   const { isForeignCustomer, selectCustomer } = usePaymentReceiveFormContext();
 
   if (!isForeignCustomer) {

@@ -2,7 +2,7 @@
 import React from 'react';
 import { x } from '@xstyled/emotion';
 
-import SetupWizardContent from './SetupWizardContent';
+import { SetupWizardContent } from './SetupWizardContent';
 
 import { withOrganization } from '@/containers/Organization/withOrganization';
 import { withCurrentOrganization } from '@/containers/Organization/withCurrentOrganization';
@@ -14,7 +14,7 @@ import { compose } from '@/utils';
 /**
  * Wizard setup right section.
  */
-function SetupRightSection({
+function SetupRightSectionInner({
   // #withOrganization
   isOrganizationInitialized,
   isOrganizationSeeded,
@@ -34,7 +34,7 @@ function SetupRightSection({
   );
 }
 
-export default compose(
+export const SetupRightSection = compose(
   withCurrentOrganization(({ organizationTenantId }) => ({
     organizationId: organizationTenantId,
   })),
@@ -63,4 +63,4 @@ export default compose(
     setupStepId,
     setupStepIndex,
   })),
-)(SetupRightSection);
+)(SetupRightSectionInner);

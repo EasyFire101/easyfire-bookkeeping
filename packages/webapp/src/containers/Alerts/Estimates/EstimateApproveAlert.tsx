@@ -15,7 +15,7 @@ import { compose } from '@/utils';
 /**
  * Estimate approve alert.
  */
-function EstimateApproveAlert({
+function EstimateApproveAlertInner({
   name,
 
   // #withAlertStoreConnect
@@ -66,7 +66,7 @@ function EstimateApproveAlert({
   );
 }
 
-export default compose(
+export const EstimateApproveAlert = compose(
   withAlertStoreConnect(),
   withAlertActions,
-)(EstimateApproveAlert);
+)(EstimateApproveAlertInner);

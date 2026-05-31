@@ -10,11 +10,11 @@ import { CLASSES } from '@/constants/classes';
 import { css } from '@emotion/css';
 
 import { EditBillFormSchema, CreateBillFormSchema } from './BillForm.schema';
-import BillFormHeader from './BillFormHeader';
-import BillFloatingActions from './BillFloatingActions';
-import BillFormFooter from './BillFormFooter';
-import BillItemsEntriesEditor from './BillItemsEntriesEditor';
-import BillFormTopBar from './BillFormTopBar';
+import { BillFormHeader } from './BillFormHeader';
+import { BillFloatingActions } from './BillFloatingActions';
+import { BillFormFooter } from './BillFormFooter';
+import { BillFormBody as BillItemsEntriesEditor } from './BillItemsEntriesEditor';
+import { BillFormTopBar } from './BillFormTopBar';
 
 import { AppToaster, Box } from '@/components';
 import { PageForm } from '@/components/PageForm';
@@ -33,7 +33,7 @@ import { BillFormEntriesActions } from './BillFormEntriesActions';
 /**
  * Bill form.
  */
-function BillForm({
+function BillFormInner({
   // #withCurrentOrganization
   organization: { base_currency },
 }) {
@@ -147,4 +147,4 @@ function BillForm({
     </Formik>
   );
 }
-export default compose(withCurrentOrganization())(BillForm);
+export const BillForm = compose(withCurrentOrganization())(BillFormInner);

@@ -30,7 +30,7 @@ import intl from 'react-intl-universal';
  * Customer Opening balance fields.
  * @returns
  */
-function CustomerOpeningBalanceFields({
+function CustomerOpeningBalanceFieldsInner({
   // #withCurrentOrganization
   organization: { base_currency },
 }) {
@@ -111,4 +111,4 @@ function CustomerOpeningBalanceFields({
     </div>
   );
 }
-export default compose(withCurrentOrganization())(CustomerOpeningBalanceFields);
+export const CustomerOpeningBalanceFields = compose(withCurrentOrganization())(CustomerOpeningBalanceFieldsInner);

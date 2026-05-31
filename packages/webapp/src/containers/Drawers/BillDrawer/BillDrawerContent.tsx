@@ -3,12 +3,12 @@ import React from 'react';
 import { DrawerBody } from '@/components';
 
 import { BillDrawerProvider } from './BillDrawerProvider';
-import BillDrawerDetails from './BillDrawerDetails';
+import { BillDetails as BillDrawerDetails } from './BillDrawerDetails';
 
 /**
  * Bill drawer content.
  */
-export default function BillDrawerContent({
+export function BillDrawerContent({
   // #ownProp
   billId,
 }) {

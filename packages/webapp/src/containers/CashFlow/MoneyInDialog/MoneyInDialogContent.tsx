@@ -1,11 +1,11 @@
 // @ts-nocheck
 import { MoneyInDialogProvider } from './MoneyInDialogProvider';
-import MoneyInForm from './MoneyInForm';
+import { MoneyInForm } from './MoneyInForm';
 
 /**
  * Money in dialog content.
  */
-export default function MoneyInDialogContent({
+export function MoneyInDialogContent({
   // #ownProps
   dialogName,
   accountId,

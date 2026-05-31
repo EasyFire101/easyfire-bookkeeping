@@ -46,7 +46,7 @@ const getCreditNoteFieldsStyle = (theme: Theme) => css`
 /**
  * Credit note form header fields.
  */
-export default function CreditNoteFormHeaderFields() {
+export function CreditNoteFormHeaderFields() {
   const theme = useTheme();
   const styleClassName = getCreditNoteFieldsStyle(theme);
 

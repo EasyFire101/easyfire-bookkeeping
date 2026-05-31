@@ -3,7 +3,7 @@ import React from 'react';
 import { useCashflowTransactionDrawerContext } from './CashflowTransactionDrawerProvider';
 import { T, FormatNumber } from '@/components';
 
-export default function CashflowTransactionDrawerTableFooter() {
+export function CashflowTransactionDrawerTableFooter() {
   const {
     cashflowTransaction: { formatted_amount },
   } = useCashflowTransactionDrawerContext();

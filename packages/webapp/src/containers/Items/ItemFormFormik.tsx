@@ -9,10 +9,10 @@ import '@/style/pages/Items/Form.scss';
 
 import { CLASSES } from '@/constants/classes';
 import { AppToaster } from '@/components';
-import ItemFormBody from './ItemFormBody';
-import ItemFormPrimarySection from './ItemFormPrimarySection';
-import ItemFormFloatingActions from './ItemFormFloatingActions';
-import ItemFormInventorySection from './ItemFormInventorySection';
+import { ItemFormBody } from './ItemFormBody';
+import { ItemFormPrimarySection } from './ItemFormPrimarySection';
+import { ItemFormFloatingActions } from './ItemFormFloatingActions';
+import { ItemFormInventorySection } from './ItemFormInventorySection';
 
 import {
   transformSubmitRequestErrors,
@@ -25,7 +25,7 @@ import { safeInvoke } from '@/utils';
 /**
  * Item form.
  */
-export default function ItemFormFormik({
+export function ItemFormFormik({
   // #ownProps
   initialValues: initialValuesComponent,
   onSubmitSuccess,

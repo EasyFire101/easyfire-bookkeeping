@@ -28,7 +28,7 @@ import {
  * Invoice form topbar .
  * @returns {JSX.Element}
  */
-export default function InvoiceFormTopBar() {
+export function InvoiceFormTopBar() {
   // Features guard.
   const { featureCan } = useFeatureCan();
 

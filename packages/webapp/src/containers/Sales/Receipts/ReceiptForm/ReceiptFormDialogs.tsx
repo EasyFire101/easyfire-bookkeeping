@@ -1,12 +1,12 @@
 // @ts-nocheck
 import React from 'react';
 import { useFormikContext } from 'formik';
-import ReceiptNumberDialog from '@/containers/Dialogs/ReceiptNumberDialog';
+import { index as ReceiptNumberDialog } from '@/containers/Dialogs/ReceiptNumberDialog';
 
 /**
  * Receipt form dialogs.
  */
-export default function ReceiptFormDialogs() {
+export function ReceiptFormDialogs() {
   const { setFieldValue } = useFormikContext();
 
   // Update the form once the receipt number form submit confirm.

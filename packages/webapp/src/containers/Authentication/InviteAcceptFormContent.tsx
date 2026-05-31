@@ -20,7 +20,7 @@ import { AuthSubmitButton } from './_components';
 /**
  * Invite user form.
  */
-export default function InviteUserFormContent() {
+export function InviteUserFormContent() {
   const [showPassword, setShowPassword] = useState<boolean>(false);
 
   const { inviteMeta } = useInviteAcceptContext();

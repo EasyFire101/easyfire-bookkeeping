@@ -49,7 +49,7 @@ function ClearAllLinesAlert({
   );
 }
 
-export default compose(
+export const ClearningAllLinesAlert = compose(
   withAlertStoreConnect(),
   withAlertActions,
 )(ClearAllLinesAlert);

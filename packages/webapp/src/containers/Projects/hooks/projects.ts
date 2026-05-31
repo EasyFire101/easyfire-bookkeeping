@@ -2,7 +2,7 @@
 import { useQueryClient, useMutation } from '@tanstack/react-query';
 import { useRequestQuery } from '@/hooks/useQueryRequest';
 import useApiRequest from '@/hooks/useRequest';
-import t from './type';
+import { queryTypes as t } from './type';
 
 // Common invalidate queries.
 const commonInvalidateQueries = (queryClient) => {

@@ -5,12 +5,12 @@ import '@/style/components/Drawers/ManualJournalDrawer.scss';
 
 import { DrawerBody } from '@/components';
 import { ManualJournalDrawerProvider } from './ManualJournalDrawerProvider';
-import ManualJournalDrawerDetails from './ManualJournalDrawerDetails';
+import { ManualJournalDrawerDetails } from './ManualJournalDrawerDetails';
 
 /**
  * Manual Journal drawer content.
  */
-export default function ManualJournalDrawerContent({
+export function ManualJournalDrawerContent({
   // #ownProp
   manualJournalId,
 }) {

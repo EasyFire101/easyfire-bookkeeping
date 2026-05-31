@@ -55,7 +55,7 @@ const getInvoiceFieldsStyle = (theme: Theme) => css`
 /**
  * Invoice form header fields.
  */
-export default function InvoiceFormHeaderFields() {
+export function InvoiceFormHeaderFields() {
   const theme = useTheme();
   const { projects } = useInvoiceFormContext();
   const { values } = useFormikContext();

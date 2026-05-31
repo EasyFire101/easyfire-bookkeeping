@@ -4,9 +4,7 @@ import * as R from 'ramda';
 import { Drawer, DrawerSuspense } from '@/components';
 import { withDrawers } from '@/containers/Drawer/withDrawers';
 
-const CreditNoteCustomizeDrawerBody = React.lazy(
-  () => import('./CreditNoteCustomizeDrawerBody'),
-);
+const CreditNoteCustomizeDrawerBody = React.lazy(() => import('./CreditNoteCustomizeDrawerBody').then(m => ({ default: m.CreditNoteCustomizeDrawerBody })));
 
 /**
  * Invoice customize drawer.

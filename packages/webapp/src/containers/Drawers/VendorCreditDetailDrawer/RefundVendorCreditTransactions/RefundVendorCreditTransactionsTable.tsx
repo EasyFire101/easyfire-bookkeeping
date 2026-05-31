@@ -16,7 +16,7 @@ import { compose } from '@/utils';
 /**
  * Refund vendor transactions table.
  */
-function RefundVendorCreditTransactionsTable({
+function RefundVendorCreditTransactionsTableInner({
   // #withAlertActions
   openAlert,
 }) {
@@ -44,4 +44,4 @@ function RefundVendorCreditTransactionsTable({
   );
 }
 
-export default compose(withAlertActions)(RefundVendorCreditTransactionsTable);
+export const RefundVendorCreditTransactionsTable = compose(withAlertActions)(RefundVendorCreditTransactionsTableInner);

@@ -4,14 +4,14 @@ import { Button, Classes, Dialog, Intent } from '@blueprintjs/core';
 import { FormattedMessage as T, AppToaster } from '@/components';
 import intl from 'react-intl-universal';
 
-import BulkDeleteDialogContent from '@/containers/Dialogs/components/BulkDeleteDialogContent';
+import { BulkDeleteDialogContent } from '@/containers/Dialogs/components/BulkDeleteDialogContent';
 import { useBulkDeleteBills } from '@/hooks/query/bills';
 import withDialogRedux from '@/components/DialogReduxConnect';
 import { withDialogActions } from '@/containers/Dialog/withDialogActions';
 import { withBillsActions } from '@/containers/Purchases/Bills/BillsLanding/withBillsActions';
 import { compose } from '@/utils';
 
-function BillBulkDeleteDialog({
+function BillBulkDeleteDialogInner({
   dialogName,
   isOpen,
   payload: {
@@ -92,9 +92,9 @@ function BillBulkDeleteDialog({
   );
 }
 
-export default compose(
+export const BillBulkDeleteDialog = compose(
   withDialogRedux(),
   withDialogActions,
   withBillsActions,
-)(BillBulkDeleteDialog);
+)(BillBulkDeleteDialogInner);
 

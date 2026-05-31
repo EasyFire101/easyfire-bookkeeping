@@ -20,7 +20,7 @@ import { DRAWERS } from '@/constants/drawers';
 /**
  * Estimate delete alert.
  */
-function EstimateDeleteAlert({
+function EstimateDeleteAlertInner({
   name,
 
   // #withAlertStoreConnect
@@ -93,8 +93,8 @@ function EstimateDeleteAlert({
   );
 }
 
-export default compose(
+export const EstimateDeleteAlert = compose(
   withAlertStoreConnect(),
   withAlertActions,
   withDrawerActions,
-)(EstimateDeleteAlert);
+)(EstimateDeleteAlertInner);

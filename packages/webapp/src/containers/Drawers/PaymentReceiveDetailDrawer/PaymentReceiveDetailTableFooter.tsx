@@ -15,7 +15,7 @@ import { usePaymentReceiveDetailContext } from './PaymentReceiveDetailProvider';
  * Payment receive detail table footer.
  * @returns {React.JSX}
  */
-export default function PaymentReceiveDetailTableFooter() {
+export function PaymentReceiveDetailTableFooter() {
   const { paymentReceive } = usePaymentReceiveDetailContext();
 
   return (

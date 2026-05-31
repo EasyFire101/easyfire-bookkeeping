@@ -22,7 +22,7 @@ import { compose } from '@/utils';
 /**
  * Warehouse transfer detail actions bar.
  */
-function WarehouseTransferDetailActionsBar({
+function WarehouseTransferDetailActionsBarInner({
   // #withAlertActions
   openAlert,
 
@@ -66,8 +66,8 @@ function WarehouseTransferDetailActionsBar({
   );
 }
 
-export default compose(
+export const WarehouseTransferDetailActionsBar = compose(
   withDialogActions,
   withAlertActions,
   withDrawerActions,
-)(WarehouseTransferDetailActionsBar);
+)(WarehouseTransferDetailActionsBarInner);

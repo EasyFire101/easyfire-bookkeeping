@@ -49,29 +49,17 @@ export function CategorizeTransactionFormContent() {
   );
 }
 
-const CategorizeTransactionOtherIncome = React.lazy(
-  () => import('./MoneyIn/CategorizeTransactionOtherIncome'),
-);
+const CategorizeTransactionOtherIncome = React.lazy(() => import('./MoneyIn/CategorizeTransactionOtherIncome').then(m => ({ default: m.CategorizeTransactionOtherIncome })));
 
-const CategorizeTransactionOwnerContribution = React.lazy(
-  () => import('./MoneyIn/CategorizeTransactionOwnerContribution'),
-);
+const CategorizeTransactionOwnerContribution = React.lazy(() => import('./MoneyIn/CategorizeTransactionOwnerContribution').then(m => ({ default: m.CategorizeTransactionOwnerContribution })));
 
-const CategorizeTransactionTransferFrom = React.lazy(
-  () => import('./MoneyIn/CategorizeTransactionTransferFrom'),
-);
+const CategorizeTransactionTransferFrom = React.lazy(() => import('./MoneyIn/CategorizeTransactionTransferFrom').then(m => ({ default: m.CategorizeTransactionTransferFrom })));
 
-const CategorizeTransactionOtherExpense = React.lazy(
-  () => import('./MoneyOut/CategorizeTransactionOtherExpense'),
-);
+const CategorizeTransactionOtherExpense = React.lazy(() => import('./MoneyOut/CategorizeTransactionOtherExpense').then(m => ({ default: m.CategorizeTransactionOtherExpense })));
 
-const CategorizeTransactionToAccount = React.lazy(
-  () => import('./MoneyOut/CategorizeTransactionToAccount'),
-);
+const CategorizeTransactionToAccount = React.lazy(() => import('./MoneyOut/CategorizeTransactionToAccount').then(m => ({ default: m.CategorizeTransactionToAccount })));
 
-const CategorizeTransactionOwnerDrawings = React.lazy(
-  () => import('./MoneyOut/CategorizeTransactionOwnerDrawings'),
-);
+const CategorizeTransactionOwnerDrawings = React.lazy(() => import('./MoneyOut/CategorizeTransactionOwnerDrawings').then(m => ({ default: m.CategorizeTransactionOwnerDrawings })));
 
 function CategorizeTransactionFormSubContent() {
   const { values } = useFormikContext();

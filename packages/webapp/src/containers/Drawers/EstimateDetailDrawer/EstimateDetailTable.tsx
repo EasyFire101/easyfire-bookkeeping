@@ -11,7 +11,7 @@ import { TableStyle } from '@/constants';
 /**
  * Estimate detail table.
  */
-export default function EstimateDetailTable() {
+export function EstimateDetailTable() {
   const {
     estimate: { entries },
   } = useEstimateDetailDrawerContext();

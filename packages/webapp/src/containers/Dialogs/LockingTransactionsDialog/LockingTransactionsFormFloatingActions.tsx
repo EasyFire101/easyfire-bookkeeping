@@ -11,7 +11,7 @@ import { compose } from '@/utils';
 /**
  * locking Transactions floating actions.
  */
-function LockingTransactionsFormFloatingActions({
+function LockingTransactionsFormFloatingActionsInner({
   // #withDialogActions
   closeDialog,
 }) {
@@ -44,6 +44,6 @@ function LockingTransactionsFormFloatingActions({
   );
 }
 
-export default compose(withDialogActions)(
-  LockingTransactionsFormFloatingActions,
+export const LockingTransactionsFormFloatingActions = compose(withDialogActions)(
+  LockingTransactionsFormFloatingActionsInner,
 );

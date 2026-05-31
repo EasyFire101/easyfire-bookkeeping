@@ -11,7 +11,7 @@ import { compose } from '@/utils';
 /**
  * Refund vendor flaoting actions.
  */
-function RefundVendorCreditFloatingActions({
+function RefundVendorCreditFloatingActionsInner({
   // #withDialogActions
   closeDialog,
 }) {
@@ -44,4 +44,4 @@ function RefundVendorCreditFloatingActions({
   );
 }
 
-export default compose(withDialogActions)(RefundVendorCreditFloatingActions);
+export const RefundVendorCreditFloatingActions = compose(withDialogActions)(RefundVendorCreditFloatingActionsInner);

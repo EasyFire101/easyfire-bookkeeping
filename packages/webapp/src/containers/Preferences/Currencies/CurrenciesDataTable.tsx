@@ -15,7 +15,7 @@ import styled from 'styled-components';
 /**
  * Currencies table.
  */
-function CurrenciesDataTable({
+function CurrenciesDataTableInner({
   // #ownProps
   tableProps,
 
@@ -65,10 +65,10 @@ function CurrenciesDataTable({
   );
 }
 
-export default compose(
+export const CurrenciesDataTable = compose(
   withDialogActions,
   withAlertActions,
-)(CurrenciesDataTable);
+)(CurrenciesDataTableInner);
 
 const CurrencieDataTable = styled(DataTable)`
   .table .th,

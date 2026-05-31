@@ -11,12 +11,12 @@ import {
   EditEstimateFormSchema,
 } from './EstimateForm.schema';
 
-import EstimateFormHeader from './EstimateFormHeader';
-import EstimateItemsEntriesField from './EstimateItemsEntriesField';
-import EstimateFloatingActions from './EstimateFloatingActions';
-import EstimateFormFooter from './EstimateFormFooter';
-import EstimateFormDialogs from './EstimateFormDialogs';
-import EstimtaeFormTopBar from './EstimtaeFormTopBar';
+import { EstimateFormHeader } from './EstimateFormHeader';
+import { EstimateFormItemsEntriesField as EstimateItemsEntriesField } from './EstimateItemsEntriesField';
+import { EstimateFloatingActions } from './EstimateFloatingActions';
+import { EstiamteFormFooter as EstimateFormFooter } from './EstimateFormFooter';
+import { EstimateFormDialogs } from './EstimateFormDialogs';
+import { EstimtaeFormTopBar } from './EstimtaeFormTopBar';
 import {
   EstimateIncrementSyncSettingsToForm,
   EstimateSyncAutoExRateToForm,
@@ -40,7 +40,7 @@ import { PageForm } from '@/components/PageForm';
 /**
  * Estimate form.
  */
-function EstimateForm({
+function EstimateFormInner({
   // #withSettings
   estimateNextNumber,
   estimateNumberPrefix,
@@ -187,7 +187,7 @@ function EstimateForm({
   );
 }
 
-export default compose(
+export const EstimateForm = compose(
   withSettings(({ estimatesSettings }) => ({
     estimateNextNumber: estimatesSettings?.nextNumber,
     estimateNumberPrefix: estimatesSettings?.numberPrefix,
@@ -196,4 +196,4 @@ export default compose(
     estimateTermsConditions: estimatesSettings?.termsConditions,
   })),
   withCurrentOrganization(),
-)(EstimateForm);
+)(EstimateFormInner);

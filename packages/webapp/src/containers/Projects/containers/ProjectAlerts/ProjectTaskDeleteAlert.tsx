@@ -15,7 +15,7 @@ import { compose } from '@/utils';
  * Project tasks delete alert.
  * @returns
  */
-function ProjectTaskDeleteAlert({
+function ProjectTaskDeleteAlertInner({
   name,
 
   // #withAlertStoreConnect
@@ -72,7 +72,7 @@ function ProjectTaskDeleteAlert({
   );
 }
 
-export default compose(
+export const ProjectTaskDeleteAlert = compose(
   withAlertStoreConnect(),
   withAlertActions,
-)(ProjectTaskDeleteAlert);
+)(ProjectTaskDeleteAlertInner);

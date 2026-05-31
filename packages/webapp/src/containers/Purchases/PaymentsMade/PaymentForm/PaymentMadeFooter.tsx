@@ -13,7 +13,7 @@ import { UploadAttachmentButton } from '@/containers/Attachments/UploadAttachmen
 /**
  * Payment made form footer.
  */
-export default function PaymentMadeFooter() {
+export function PaymentMadeFooter() {
   return (
     <x.div mt={'20px'} px={'32px'} pb={'20px'} flex={1}>
       <Paper p={'20px'}>

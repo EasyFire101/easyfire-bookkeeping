@@ -4,14 +4,14 @@ import { useFormikContext } from 'formik';
 import { Classes } from '@blueprintjs/core';
 
 import { If } from '@/components';
-import MoneyInContentFields from './MoneyInContentFields';
-import TransactionTypeFields from './TransactionTypeFields';
+import { MoneyInContentFields } from './MoneyInContentFields';
+import { TransactionTypeFields } from './TransactionTypeFields';
 import { useMoneyInDailogContext } from './MoneyInDialogProvider';
 
 /**
  * Money in form fields.
  */
-function MoneyInFormFields() {
+export function MoneyInFormFields() {
   // Money in dialog context.
   const { defaultAccountId } = useMoneyInDailogContext();
 
@@ -22,5 +22,3 @@ function MoneyInFormFields() {
     </div>
   );
 }
-
-export default MoneyInFormFields;

@@ -4,8 +4,8 @@ import React from 'react';
 import '@/style/pages/CreditNote/List.scss';
 
 import { DashboardPageContent } from '@/components';
-import CreditNotesActionsBar from './CreditNotesActionsBar';
-import CreditNotesDataTable from './CreditNotesDataTable';
+import { CreditNotesActionsBar } from './CreditNotesActionsBar';
+import { CreditNotesDataTable } from './CreditNotesDataTable';
 
 import { withCreditNotes } from './withCreditNotes';
 import { withCreditNotesActions } from './withCreditNotesActions';
@@ -13,7 +13,7 @@ import { withCreditNotesActions } from './withCreditNotesActions';
 import { CreditNotesListProvider } from './CreditNotesListProvider';
 import { transformTableStateToQuery, compose } from '@/utils';
 
-function CreditNotesList({
+function CreditNotesListInner({
   // #withCreditNotes
   creditNoteTableState,
   creditNoteTableStateChanged,
@@ -43,10 +43,10 @@ function CreditNotesList({
   );
 }
 
-export default compose(
+export const CreditNotesList = compose(
   withCreditNotesActions,
   withCreditNotes(({ creditNoteTableState, creditNoteTableStateChanged }) => ({
     creditNoteTableState,
     creditNoteTableStateChanged,
   })),
-)(CreditNotesList);
+)(CreditNotesListInner);

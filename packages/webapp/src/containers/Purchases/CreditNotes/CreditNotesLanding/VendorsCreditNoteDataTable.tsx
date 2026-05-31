@@ -2,7 +2,7 @@
 import React from 'react';
 import { useHistory } from 'react-router-dom';
 
-import VendorsCreditNoteEmptyStatus from './VendorsCreditNoteEmptyStatus';
+import { VendorsCreditNoteEmptyStatus } from './VendorsCreditNoteEmptyStatus';
 import {
   DataTable,
   DashboardContentTable,
@@ -29,7 +29,7 @@ import { DRAWERS } from '@/constants/drawers';
 /**
  * Vendors Credit note data table.
  */
-function VendorsCreditNoteDataTable({
+function VendorsCreditNoteDataTableInner({
   // #withVendorsCreditNotesActions
   setVendorsCreditNoteTableState,
   setVendorsCreditNoteSelectedRows,
@@ -162,7 +162,7 @@ function VendorsCreditNoteDataTable({
   );
 }
 
-export default compose(
+export const VendorsCreditNoteDataTable = compose(
   withDashboardActions,
   withVendorsCreditNotesActions,
   withAlertActions,
@@ -174,4 +174,4 @@ export default compose(
   withVendorsCreditNotes(({ vendorsCreditNoteTableState }) => ({
     vendorsCreditNoteTableState,
   })),
-)(VendorsCreditNoteDataTable);
+)(VendorsCreditNoteDataTableInner);

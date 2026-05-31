@@ -2,12 +2,12 @@
 import React from 'react';
 
 import { UnlockingPartialTransactionsFormProvider } from './UnlockingPartialTransactionsFormProvider';
-import UnlockingPartialTransactionsForm from './UnlockingPartialTransactionsForm';
+import { UnlockingPartialTransactionsForm } from './UnlockingPartialTransactionsForm';
 
 /**
  * Unlocking partail transactions dialog content.
  */
-export default function UnlockingPartialTransactionsDialogContent({
+export function UnlockingPartialTransactionsDialogContent({
   // #ownProps
   moduleName,
   dialogName,

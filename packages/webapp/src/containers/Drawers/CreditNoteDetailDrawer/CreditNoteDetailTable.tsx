@@ -10,7 +10,7 @@ import { useCreditNoteReadOnlyEntriesColumns } from './utils';
  * Credit note detail table.
  * @returns {React.JSX}
  */
-export default function CreditNoteDetailTable() {
+export function CreditNoteDetailTable() {
   const {
     creditNote: { entries },
   } = useCreditNoteDetailDrawerContext();

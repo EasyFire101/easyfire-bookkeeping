@@ -5,9 +5,7 @@ import { Dialog, DialogSuspense, FormattedMessage as T } from '@/components';
 import withDialogRedux from '@/components/DialogReduxConnect';
 import { compose } from '@/utils';
 
-const QuickPaymentReceiveFormDialogContent = lazy(
-  () => import('./QuickPaymentReceiveFormDialogContent'),
-);
+const QuickPaymentReceiveFormDialogContent = lazy(() => import('./QuickPaymentReceiveFormDialogContent').then(m => ({ default: m.QuickPaymentReceiveFormDialogContent })));
 
 /**
  * Quick payment receive form dialog.
@@ -36,4 +34,4 @@ function QuickPaymentReceiveFormDialog({
   );
 }
 
-export default compose(withDialogRedux())(QuickPaymentReceiveFormDialog);
+export const index = compose(withDialogRedux())(QuickPaymentReceiveFormDialog);

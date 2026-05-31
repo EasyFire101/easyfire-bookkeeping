@@ -184,7 +184,7 @@ function AccountFormDialogFields({
   );
 }
 
-export default compose(
+export const AccountDialogFormContent = compose(
   withAccounts(({ accountsTypes, accountsList }) => ({
     accountsTypes,
     accounts: accountsList,

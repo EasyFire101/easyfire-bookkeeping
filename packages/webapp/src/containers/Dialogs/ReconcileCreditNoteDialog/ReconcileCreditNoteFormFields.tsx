@@ -13,14 +13,14 @@ import {
 } from '@/components';
 import { subtract } from 'lodash';
 import { getEntriesTotal } from '@/containers/Entries/utils';
-import ReconcileCreditNoteEntriesTable from './ReconcileCreditNoteEntriesTable';
+import { ReconcileCreditNoteEntriesTable } from './ReconcileCreditNoteEntriesTable';
 import { useReconcileCreditNoteContext } from './ReconcileCreditNoteFormProvider';
 import { formattedAmount } from '@/utils';
 
 /**
  * Reconcile credit note form fields.
  */
-export default function ReconcileCreditNoteFormFields() {
+export function ReconcileCreditNoteFormFields() {
   const {
     creditNote: { formatted_credits_remaining },
   } = useReconcileCreditNoteContext();

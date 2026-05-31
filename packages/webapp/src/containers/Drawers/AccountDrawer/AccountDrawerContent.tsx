@@ -5,12 +5,12 @@ import { DrawerBody } from '@/components';
 import '@/style/components/Drawers/AccountDrawer.scss';
 
 import { AccountDrawerProvider } from './AccountDrawerProvider';
-import AccountDrawerDetails from './AccountDrawerDetails';
+import { AccountDrawerDetails } from './AccountDrawerDetails';
 
 /**
  * Account drawer content.
  */
-export default function AccountDrawerContent({
+export function AccountDrawerContent({
   // #ownProp
   accountId,
   name,

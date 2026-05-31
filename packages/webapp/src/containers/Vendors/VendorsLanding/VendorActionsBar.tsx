@@ -42,7 +42,7 @@ import { DialogsName } from '@/constants/dialogs';
 /**
  * Vendors actions bar.
  */
-function VendorActionsBar({
+function VendorActionsBarInner({
   // #withVendors
   vendorsSelectedRows = [],
   vendorsFilterConditions,
@@ -205,7 +205,7 @@ function VendorActionsBar({
   );
 }
 
-export default compose(
+export const VendorActionsBar = compose(
   withVendorsActions,
   withSettingsActions,
   withVendors(({ vendorsTableState, vendorsSelectedRows }) => ({
@@ -217,4 +217,4 @@ export default compose(
     vendorsTableSize: vendorsSettings?.tableSize,
   })),
   withDialogActions,
-)(VendorActionsBar);
+)(VendorActionsBarInner);

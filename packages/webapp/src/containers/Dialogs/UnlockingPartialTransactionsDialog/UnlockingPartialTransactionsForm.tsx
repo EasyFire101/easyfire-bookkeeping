@@ -11,7 +11,7 @@ import { AppToaster } from '@/components';
 import { CreateUnLockingPartialTransactionsFormSchema } from './UnlockingPartialTransactionsForm.schema';
 
 import { useUnlockingPartialTransactionsContext } from './UnlockingPartialTransactionsFormProvider';
-import UnlockingPartialTransactionsFormContent from './UnlockingPartialTransactionsFormContent';
+import { PartialUnlockingTransactionsFormContent as UnlockingPartialTransactionsFormContent } from './UnlockingPartialTransactionsFormContent';
 
 import { withDialogActions } from '@/containers/Dialog/withDialogActions';
 import { compose } from '@/utils';
@@ -26,7 +26,7 @@ const defaultInitialValues = {
 /**
  * Partial Unlocking transactions form.
  */
-function UnlockingPartialTransactionsForm({
+function UnlockingPartialTransactionsFormInner({
   // #withDialogActions
   closeDialog,
 }) {
@@ -77,4 +77,4 @@ function UnlockingPartialTransactionsForm({
   );
 }
 
-export default compose(withDialogActions)(UnlockingPartialTransactionsForm);
+export const UnlockingPartialTransactionsForm = compose(withDialogActions)(UnlockingPartialTransactionsFormInner);

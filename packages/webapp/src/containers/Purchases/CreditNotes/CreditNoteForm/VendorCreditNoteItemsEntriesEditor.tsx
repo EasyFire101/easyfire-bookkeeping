@@ -5,9 +5,9 @@ import { FastField } from 'formik';
 import { CLASSES } from '@/constants/classes';
 import { entriesFieldShouldUpdate } from './utils';
 import { useVendorCreditNoteFormContext } from './VendorCreditNoteFormProvider';
-import ItemsEntriesTable from '@/containers/Entries/ItemsEntriesTable';
+import { ItemsEntriesTable } from '@/containers/Entries/ItemsEntriesTable';
 
-export default function VendorCreditNoteItemsEntriesEditor() {
+export function VendorCreditNoteItemsEntriesEditor() {
   const { items } = useVendorCreditNoteFormContext();
   return (
     <div className={classNames(CLASSES.PAGE_FORM_BODY)}>

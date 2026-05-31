@@ -3,12 +3,12 @@ import React from 'react';
 import intl from 'react-intl-universal';
 import { Form } from 'formik';
 import { Classes } from '@blueprintjs/core';
-import BranchActivateFormFloatingActions from './BranchActivateFormFloatingActions';
+import { BranchActivateFormFloatingActions } from './BranchActivateFormFloatingActions';
 
 /**
  * Branch activate form content.
  */
-export default function BranchActivateFormContent() {
+export function BranchActivateFormContent() {
   return (
     <Form>
       <div className={Classes.DIALOG_BODY}>

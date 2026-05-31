@@ -3,14 +3,14 @@ import React from 'react';
 
 import '@/style/pages/CustomerOpeningBalance/CustomerOpeningBalance.scss';
 
-import CustomerOpeningBalanceForm from './CustomerOpeningBalanceForm';
+import { CustomerOpeningBalanceForm } from './CustomerOpeningBalanceForm';
 import { CustomerOpeningBalanceFormProvider } from './CustomerOpeningBalanceFormProvider';
 
 /**
  * Customer opening balance dialog content.
  * @returns
  */
-export default function CustomerOpeningBalanceDialogContent({
+export function CustomerOpeningBalanceDialogContent({
   // #ownProps
   dialogName,
   customerId,

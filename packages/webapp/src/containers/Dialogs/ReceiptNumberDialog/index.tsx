@@ -4,9 +4,7 @@ import { Dialog, DialogSuspense, FormattedMessage as T } from '@/components';
 import withDialogRedux from '@/components/DialogReduxConnect';
 import { compose, saveInvoke } from '@/utils';
 
-const ReceiptNumberDialogContent = lazy(
-  () => import('./ReceiptNumberDialogContent'),
-);
+const ReceiptNumberDialogContent = lazy(() => import('./ReceiptNumberDialogContent').then(m => ({ default: m.ReceiptNumberDialogContent })));
 
 /**
  * Sale receipt number dialog.
@@ -39,4 +37,4 @@ function ReceiptNumberDialog({
   );
 }
 
-export default compose(withDialogRedux())(ReceiptNumberDialog);
+export const index = compose(withDialogRedux())(ReceiptNumberDialog);

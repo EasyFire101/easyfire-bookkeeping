@@ -4,7 +4,7 @@ import intl from 'react-intl-universal';
 import { ControlGroup } from '@blueprintjs/core';
 import { FFormGroup, FInputGroup } from '@/components';
 
-export default function CustomerFormAfterPrimarySection({}) {
+export function CustomerFormAfterPrimarySection({}) {
   return (
     <div>
       {/*------------ Customer email -----------*/}

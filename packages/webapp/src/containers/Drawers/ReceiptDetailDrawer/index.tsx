@@ -5,9 +5,7 @@ import { withDrawers } from '@/containers/Drawer/withDrawers';
 
 import { compose } from '@/utils';
 
-const ReceiptDetailDrawerContent = React.lazy(() =>
-  import('./ReceiptDetailDrawerContent'),
-);
+const ReceiptDetailDrawerContent = React.lazy(() => import('./ReceiptDetailDrawerContent').then(m => ({ default: m.ReceiptDetailDrawerContent })));
 
 /**
  * Receipt Detail drawer.
@@ -32,4 +30,4 @@ function ReceiptDetailDrawer({
   );
 }
 
-export default compose(withDrawers())(ReceiptDetailDrawer);
+export const index = compose(withDrawers())(ReceiptDetailDrawer);

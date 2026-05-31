@@ -10,7 +10,7 @@ import { AppToaster } from '@/components';
 import { CreateBadDebtFormSchema } from './BadDebtForm.schema';
 import { transformErrors } from './utils';
 
-import BadDebtFormContent from './BadDebtFormContent';
+import { BadDebtFormContent } from './BadDebtFormContent';
 
 import { withDialogActions } from '@/containers/Dialog/withDialogActions';
 import { withCurrentOrganization } from '@/containers/Organization/withCurrentOrganization';
@@ -25,7 +25,7 @@ const defaultInitialValues = {
   amount: '',
 };
 
-function BadDebtForm({
+function BadDebtFormInner({
   // #withDialogActions
   closeDialog,
 
@@ -79,7 +79,7 @@ function BadDebtForm({
   );
 }
 
-export default compose(
+export const BadDebtForm = compose(
   withDialogActions,
   withCurrentOrganization(),
-)(BadDebtForm);
+)(BadDebtFormInner);

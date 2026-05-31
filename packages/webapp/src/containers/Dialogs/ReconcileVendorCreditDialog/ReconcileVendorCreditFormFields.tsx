@@ -13,11 +13,11 @@ import {
   TotalLineBorderStyle,
   TotalLineTextStyle,
 } from '@/components';
-import ReconcileVendorCreditEntriesTable from './ReconcileVendorCreditEntriesTable';
+import { ReconcileVendorCreditEntriesTable } from './ReconcileVendorCreditEntriesTable';
 import { useReconcileVendorCreditContext } from './ReconcileVendorCreditFormProvider';
 import { formattedAmount } from '@/utils';
 
-export default function ReconcileVendorCreditFormFields() {
+export function ReconcileVendorCreditFormFields() {
   const {
     vendorCredit: { formatted_credits_remaining },
   } = useReconcileVendorCreditContext();

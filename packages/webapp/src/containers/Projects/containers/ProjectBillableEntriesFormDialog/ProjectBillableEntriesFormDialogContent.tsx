@@ -1,13 +1,13 @@
 // @ts-nocheck
 import React from 'react';
 import { ProjectBillableEntriesFormProvider } from './ProjectBillableEntriesFormProvider';
-import ProjectBillableEntriesForm from './ProjectBillableEntriesForm';
+import { ProjectBillableEntriesForm } from './ProjectBillableEntriesForm';
 
 /**
  * Project billable entries form dialog content.
  * @returns
  */
-export default function ProjectEntriesFormDialogContent({
+export function ProjectEntriesFormDialogContent({
   // #ownProps
   dialogName,
   projectId,

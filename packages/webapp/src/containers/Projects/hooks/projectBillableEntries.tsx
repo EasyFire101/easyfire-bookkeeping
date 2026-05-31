@@ -1,7 +1,7 @@
 // @ts-nocheck
 
 import { useRequestQuery } from '@/hooks/useQueryRequest';
-import t from './type';
+import { queryTypes as t } from './type';
 
 /**
  *

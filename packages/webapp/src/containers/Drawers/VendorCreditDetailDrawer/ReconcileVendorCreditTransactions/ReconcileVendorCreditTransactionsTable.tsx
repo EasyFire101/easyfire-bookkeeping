@@ -15,7 +15,7 @@ import { compose } from '@/utils';
 /**
  * Reconcile vendor credit transactions table.
  */
-function ReconcileVendorCreditTransactionsTable({
+function ReconcileVendorCreditTransactionsTableInner({
   // #withAlertActions
   openAlert,
 }) {
@@ -43,6 +43,6 @@ function ReconcileVendorCreditTransactionsTable({
   );
 }
 
-export default compose(withAlertActions)(
-  ReconcileVendorCreditTransactionsTable,
+export const ReconcileVendorCreditTransactionsTable = compose(withAlertActions)(
+  ReconcileVendorCreditTransactionsTableInner,
 );

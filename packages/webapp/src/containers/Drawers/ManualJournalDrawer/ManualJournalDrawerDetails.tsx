@@ -4,15 +4,15 @@ import styled from 'styled-components';
 
 import { CommercialDocBox } from '@/components';
 
-import ManualJournalDrawerActionBar from './ManualJournalDrawerActionBar';
-import ManualJournalDrawerHeader from './ManualJournalDrawerHeader';
-import ManualJournalDrawerTable from './ManualJournalDrawerTable';
-import ManualJournalDrawerFooter from './ManualJournalDrawerFooter';
+import { ManualJournalDrawerActionBar } from './ManualJournalDrawerActionBar';
+import { ManualJournalDrawerHeader } from './ManualJournalDrawerHeader';
+import { ManualJournalDrawerTable } from './ManualJournalDrawerTable';
+import { ManualJournalDrawerFooter } from './ManualJournalDrawerFooter';
 
 /**
  * Manual journal view details.
  */
-export default function ManualJournalDrawerDetails() {
+export function ManualJournalDrawerDetails() {
   return (
     <ManualJournalDetailsRoot>
       <ManualJournalDrawerActionBar />

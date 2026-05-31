@@ -2,9 +2,9 @@
 import React from 'react';
 
 import { NotifyPaymentReceiveViaFormProvider } from './NotifyPaymentReceiveViaFormProvider';
-import NotifyPaymentReceiveViaSMSForm from './NotifyPaymentReceiveViaSMSForm';
+import { NotifyPaymentReceiveViaSMSForm } from './NotifyPaymentReceiveViaSMSForm';
 
-export default function NotifyPaymentReceiveViaSMSContent({
+export function NotifyPaymentReceiveViaSMSContent({
   // #ownProps
   dialogName,
   paymentReceive,

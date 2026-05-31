@@ -12,7 +12,7 @@ import { withCreditNotesActions } from './withCreditNotesActions';
 /**
  * Credit Note views tabs.
  */
-function CreditNotesViewTabs({
+function CreditNotesViewTabsInner({
   // #withCreditNotes
   creditNoteCurrentView,
 
@@ -43,9 +43,9 @@ function CreditNotesViewTabs({
   );
 }
 
-export default compose(
+export const CreditNotesViewTabs = compose(
   withCreditNotesActions,
   withCreditNotes(({ creditNoteTableState }) => ({
     creditNoteCurrentView: creditNoteTableState.viewSlug,
   })),
-)(CreditNotesViewTabs);
+)(CreditNotesViewTabsInner);

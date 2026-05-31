@@ -4,9 +4,7 @@ import { FormattedMessage as T, Dialog, DialogSuspense } from '@/components';
 import withDialogRedux from '@/components/DialogReduxConnect';
 import { compose } from '@/utils';
 
-const AllocateLandedCostDialogContent = lazy(() =>
-  import('./AllocateLandedCostDialogContent'),
-);
+const AllocateLandedCostDialogContent = lazy(() => import('./AllocateLandedCostDialogContent').then(m => ({ default: m.AllocateLandedCostDialogContent })));
 
 /**
  * Allocate landed cost dialog.
@@ -34,4 +32,4 @@ function AllocateLandedCostDialog({
   );
 }
 
-export default compose(withDialogRedux())(AllocateLandedCostDialog);
+export const index = compose(withDialogRedux())(AllocateLandedCostDialog);

@@ -13,11 +13,11 @@ import {
   EditWarehouseFormSchema,
 } from './WarehouseTransferForm.schema';
 
-import WarehouseTransferFormHeader from './WarehouseTransferFormHeader';
-import WarehouseTransferEditorField from './WarehouseTransferEditorField';
-import WarehouseTransferFormFooter from './WarehouseTransferFormFooter';
-import WarehouseTransferFloatingActions from './WarehouseTransferFloatingActions';
-import WarehouseTransferFormDialog from './WarehouseTransferFormDialog';
+import { WarehouseTransferFormHeader } from './WarehouseTransferFormHeader';
+import { WarehouseTransferEditorField } from './WarehouseTransferEditorField';
+import { WarehouseTransferFormFooter } from './WarehouseTransferFormFooter';
+import { WarehouseTransferFloatingActions } from './WarehouseTransferFloatingActions';
+import { WarehouseTransferFormDialog } from './WarehouseTransferFormDialog';
 import { withDashboardActions } from '@/containers/Dashboard/withDashboardActions';
 import { withSettings } from '@/containers/Settings/withSettings';
 
@@ -32,7 +32,7 @@ import {
   transformToEditForm,
 } from './utils';
 
-function WarehouseTransferForm({
+function WarehouseTransferFormInner({
   // #withSettings
   warehouseTransferNextNumber,
   warehouseTransferNumberPrefix,
@@ -149,11 +149,11 @@ function WarehouseTransferForm({
   );
 }
 
-export default compose(
+export const WarehouseTransferForm = compose(
   withDashboardActions,
   withSettings(({ warehouseTransferSettings }) => ({
     warehouseTransferNextNumber: warehouseTransferSettings?.nextNumber,
     warehouseTransferNumberPrefix: warehouseTransferSettings?.numberPrefix,
     warehouseTransferIncrementMode: warehouseTransferSettings?.autoIncrement,
   })),
-)(WarehouseTransferForm);
+)(WarehouseTransferFormInner);

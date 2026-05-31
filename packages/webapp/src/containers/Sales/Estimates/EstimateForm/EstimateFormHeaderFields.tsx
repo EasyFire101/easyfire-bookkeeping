@@ -50,7 +50,7 @@ const getEstimateFieldsStyle = (theme: Theme) => css`
 /**
  * Estimate form header.
  */
-export default function EstimateFormHeader() {
+export function EstimateFormHeader() {
   const theme = useTheme();
   const { projects } = useEstimateFormContext();
   const styleClassName = getEstimateFieldsStyle(theme);

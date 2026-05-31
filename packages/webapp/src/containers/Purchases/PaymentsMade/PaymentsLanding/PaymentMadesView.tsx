@@ -2,7 +2,7 @@
 import React, { useEffect } from 'react';
 import { Switch, Route } from 'react-router-dom';
 
-import PaymentMadeViewTabs from './PaymentMadeViewTabs';
+import { PaymentMadeViewTabs } from './PaymentMadeViewTabs';
 
 import { withAlertActions } from '@/containers/Alert/withAlertActions';
 import { withDialogActions } from '@/containers/Dialog/withDialogActions';
@@ -33,7 +33,7 @@ function PaymentMadesViewPage({
   );
 }
 
-export default compose(
+export const PaymentMadesView = compose(
   withAlertActions,
   withDialogActions,
 )(PaymentMadesViewPage);

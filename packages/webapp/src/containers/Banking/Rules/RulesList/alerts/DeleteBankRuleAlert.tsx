@@ -73,7 +73,7 @@ function BankRuleDeleteAlert({
   );
 }
 
-export default compose(
+export const DeleteBankRuleAlert = compose(
   withAlertStoreConnect(),
   withAlertActions,
   withDrawerActions,

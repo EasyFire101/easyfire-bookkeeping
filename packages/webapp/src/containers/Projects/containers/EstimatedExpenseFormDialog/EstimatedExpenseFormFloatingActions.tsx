@@ -11,7 +11,7 @@ import { compose } from '@/utils';
  * Estimated expense form floating actions.
  * @returns
  */
-function EstimatedExpenseFormFloatingActions({
+function EstimatedExpenseFormFloatingActionsInner({
   // #withDialogActions
   closeDialog,
 }) {
@@ -45,4 +45,4 @@ function EstimatedExpenseFormFloatingActions({
   );
 }
 
-export default compose(withDialogActions)(EstimatedExpenseFormFloatingActions);
+export const EstimatedExpenseFormFloatingActions = compose(withDialogActions)(EstimatedExpenseFormFloatingActionsInner);

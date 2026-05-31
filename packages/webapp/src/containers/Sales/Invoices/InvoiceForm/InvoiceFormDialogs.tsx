@@ -1,12 +1,12 @@
 // @ts-nocheck
 import { useFormikContext } from 'formik';
-import InvoiceNumberDialog from '@/containers/Dialogs/InvoiceNumberDialog';
+import { index as InvoiceNumberDialog } from '@/containers/Dialogs/InvoiceNumberDialog';
 import { DialogsName } from '@/constants/dialogs';
 
 /**
  * Invoice form dialogs.
  */
-export default function InvoiceFormDialogs() {
+export function InvoiceFormDialogs() {
   const { setFieldValue } = useFormikContext();
 
   // Update the form once the invoice number form submit confirm.

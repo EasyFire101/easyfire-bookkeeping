@@ -6,15 +6,14 @@ import { Card } from '@/components';
 import { useTransactionsByReference } from '@/hooks/query';
 import { useInventoryAdjustmentDrawerContext } from './InventoryAdjustmentDrawerProvider';
 
-import JournalEntriesTable, {
-  AmountDisplayedBaseCurrencyMessage,
-} from '../../JournalEntriesTable/JournalEntriesTable';
+import {
+  AmountDisplayedBaseCurrencyMessage, JournalEntriesTable } from '../../JournalEntriesTable/JournalEntriesTable';
 
 /**
  * Inentory adjustment detail GL entries panel.
  * @returns {React.JSX}
  */
-export default function InventoryAdjustmentDetailGLEntriesPanel() {
+export function InventoryAdjustmentDetailGLEntriesPanel() {
   const { inventoryId } = useInventoryAdjustmentDrawerContext();
 
   // Handle fetch transaction by reference.

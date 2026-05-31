@@ -4,11 +4,11 @@ import { Form } from 'formik';
 import { Choose } from '@/components';
 
 import { EmptyStatuCallout } from './utils';
-import ReconcileVendorCreditFormFields from './ReconcileVendorCreditFormFields';
-import ReconcileVendorCreditFloatingActions from './ReconcileVendorCreditFloatingActions';
+import { ReconcileVendorCreditFormFields } from './ReconcileVendorCreditFormFields';
+import { ReconcileVendorCreditFloatingActions } from './ReconcileVendorCreditFloatingActions';
 import { useReconcileVendorCreditContext } from './ReconcileVendorCreditFormProvider';
 
-export default function ReconcileVendorCreditFormContent() {
+export function ReconcileVendorCreditFormContent() {
   const { isEmptyStatus } = useReconcileVendorCreditContext();
 
   return (

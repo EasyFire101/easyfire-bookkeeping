@@ -10,7 +10,7 @@ import { AppToaster } from '@/components';
 import { CreateUnlockingTransactionsFormSchema } from './UnlockingTransactionsForm.schema';
 
 import { useUnlockingTransactionsContext } from './UnlockingTransactionsFormProvider';
-import UnlockingTransactionsFormContent from './UnlockingTransactionsFormContent';
+import { UnlockingTransactionsFormContent } from './UnlockingTransactionsFormContent';
 
 import { withDialogActions } from '@/containers/Dialog/withDialogActions';
 import { compose } from '@/utils';
@@ -23,7 +23,7 @@ const defaultInitialValues = {
 /**
  * Unlocking transactions form.
  */
-function UnlockingTransactionsForm({
+function UnlockingTransactionsFormInner({
   // #withDialogActions
   closeDialog,
 }) {
@@ -74,4 +74,4 @@ function UnlockingTransactionsForm({
     />
   );
 }
-export default compose(withDialogActions)(UnlockingTransactionsForm);
+export const UnlockingTransactionsForm = compose(withDialogActions)(UnlockingTransactionsFormInner);

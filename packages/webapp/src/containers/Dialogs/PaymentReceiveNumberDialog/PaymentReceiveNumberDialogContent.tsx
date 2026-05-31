@@ -5,7 +5,7 @@ import intl from 'react-intl-universal';
 import { DialogContent } from '@/components';
 import { useSaveSettings, useSettingsPaymentReceives } from '@/hooks/query';
 
-import ReferenceNumberForm from '@/containers/JournalNumber/ReferenceNumberForm';
+import { ReferenceNumberForm } from '@/containers/JournalNumber/ReferenceNumberForm';
 
 import { withDialogActions } from '@/containers/Dialog/withDialogActions';
 import { withSettingsActions } from '@/containers/Settings/withSettingsActions';
@@ -96,7 +96,7 @@ function PaymentNumberDialogContent({
   );
 }
 
-export default compose(
+export const PaymentReceiveNumberDialogContent = compose(
   withDialogActions,
   withSettingsActions,
   withSettings(({ paymentReceiveSettings }) => ({

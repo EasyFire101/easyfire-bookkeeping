@@ -4,7 +4,7 @@ import { Dialog, DialogSuspense, FormattedMessage as T } from '@/components';
 import withDialogRedux from '@/components/DialogReduxConnect';
 import { compose } from '@/utils';
 
-const ExportDialogContent = lazy(() => import('./ExportDialogContent'));
+const ExportDialogContent = lazy(() => import('./ExportDialogContent').then(m => ({ default: m.ExportDialogContent })));
 
 // User form dialog.
 function ExportDialogRoot({ dialogName, payload, isOpen }) {

@@ -15,7 +15,7 @@ import intl from 'react-intl-universal';
  * Receipt details footer
  * @returns {React.JSX}
  */
-export default function ReceiptDetailFooter() {
+export function ReceiptDetailFooter() {
   const { receipt } = useReceiptDetailDrawerContext();
 
   return (

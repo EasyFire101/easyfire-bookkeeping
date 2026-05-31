@@ -27,7 +27,7 @@ function DrawerCustomerFormLoading({ children }) {
 /**
  * Quick customer form of the drawer.
  */
-function QuickCustomerFormDrawer({
+function QuickCustomerFormDrawerInner({
   displayName,
   autofillRef,
   closeDrawer,
@@ -63,4 +63,4 @@ function QuickCustomerFormDrawer({
   );
 }
 
-export default R.compose(withDrawerActions)(QuickCustomerFormDrawer);
+export const QuickCustomerFormDrawer = R.compose(withDrawerActions)(QuickCustomerFormDrawerInner);

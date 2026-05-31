@@ -1,12 +1,12 @@
 // @ts-nocheck
 import React from 'react';
 import { useFormikContext } from 'formik';
-import CreditNoteNumberDialog from '@/containers/Dialogs/CreditNoteNumberDialog';
+import { index as CreditNoteNumberDialog } from '@/containers/Dialogs/CreditNoteNumberDialog';
 
 /**
  * Credit note form dialogs.
  */
-export default function CreditNoteFormDialogs() {
+export function CreditNoteFormDialogs() {
   const { setFieldValue } = useFormikContext();
 
   // Update the form once the credit number form submit confirm.

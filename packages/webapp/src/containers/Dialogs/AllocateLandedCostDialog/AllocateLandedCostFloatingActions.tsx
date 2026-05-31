@@ -17,7 +17,7 @@ import { compose } from '@/utils';
  * Allocate landed cost floating actions.
  * @returns {React.JSX}
  */
-function AllocateLandedCostFloatingActions({
+function AllocateLandedCostFloatingActionsInner({
   // #withDialogActions
   closeDialog,
 }) {
@@ -61,7 +61,7 @@ function AllocateLandedCostFloatingActions({
   );
 }
 
-export default compose(withDialogActions)(AllocateLandedCostFloatingActions);
+export const AllocateLandedCostFloatingActions = compose(withDialogActions)(AllocateLandedCostFloatingActionsInner);
 
 const AllocateDialogFooter = styled(DialogFooter)`
   display: flex;

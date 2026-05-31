@@ -17,7 +17,7 @@ import { compose } from '@/utils';
 /**
  * Refund vendor credit actions bar.
  */
-function RefundVendorCreditDetailActionsBar({
+function RefundVendorCreditDetailActionsBarInner({
   // #withAlertActions
   openAlert,
 }) {
@@ -45,4 +45,4 @@ function RefundVendorCreditDetailActionsBar({
   );
 }
 
-export default compose(withAlertActions)(RefundVendorCreditDetailActionsBar);
+export const RefundVendorCreditDetailActionsBar = compose(withAlertActions)(RefundVendorCreditDetailActionsBarInner);

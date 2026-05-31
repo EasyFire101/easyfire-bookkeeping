@@ -1,12 +1,12 @@
 // @ts-nocheck
 import React from 'react';
 import { ProjectTaskFormProvider } from './ProjectTaskFormProvider';
-import ProjectTaskForm from './ProjectTaskForm';
+import { ProjectTaskForm } from './ProjectTaskForm';
 
 /**
  * Project task form dialog content.
  */
-export default function ProjectTaskFormDialogContent({
+export function ProjectTaskFormDialogContent({
   // #ownProps
   dialogName,
   task,

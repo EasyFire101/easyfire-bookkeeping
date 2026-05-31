@@ -16,7 +16,7 @@ import { compose } from '@/utils';
 /**
  * SMS Message data table.
  */
-function SMSMessagesDataTable({
+function SMSMessagesDataTableInner({
   // #withDialogAction
   openDialog,
 }) {
@@ -87,7 +87,7 @@ function SMSMessagesDataTable({
   );
 }
 
-export default compose(withDialogActions)(SMSMessagesDataTable);
+export const SMSMessagesDataTable = compose(withDialogActions)(SMSMessagesDataTableInner);
 
 const SMSNotificationsTable = styled(DataTable)`
   .table .tbody .tr .td {

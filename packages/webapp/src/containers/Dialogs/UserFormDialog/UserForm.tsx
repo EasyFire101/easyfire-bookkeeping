@@ -9,7 +9,7 @@ import { AppToaster } from '@/components';
 import { withDialogActions } from '@/containers/Dialog/withDialogActions';
 
 import { UserFormSchema } from './UserForm.schema';
-import UserFormContent from './UserFormContent';
+import { UserFormContent } from './UserFormContent';
 import { useUserFormContext } from './UserFormProvider';
 import { transformErrors } from './utils';
 
@@ -25,7 +25,7 @@ const initialValues = {
 /**
  * User form.
  */
-function UserForm({
+function UserFormInner({
   // #withDialogActions
   closeDialog,
 }) {
@@ -79,4 +79,4 @@ function UserForm({
     </Formik>
   );
 }
-export default compose(withDialogActions)(UserForm);
+export const UserForm = compose(withDialogActions)(UserFormInner);

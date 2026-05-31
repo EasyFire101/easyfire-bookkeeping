@@ -2,9 +2,9 @@
 import React, { useMemo } from 'react';
 import { useFormikContext } from 'formik';
 
-import OtherExpnseFormFields from './OtherExpense/OtherExpnseFormFields';
-import OwnerDrawingsFormFields from './OwnerDrawings/OwnerDrawingsFormFields';
-import TransferToAccountFormFields from './TransferToAccount/TransferToAccountFormFields';
+import { OtherExpnseFormFields } from './OtherExpense/OtherExpnseFormFields';
+import { OwnerDrawingsFormFields } from './OwnerDrawings/OwnerDrawingsFormFields';
+import { TransferToAccountFormFields } from './TransferToAccount/TransferToAccountFormFields';
 import { MoneyOutFieldsProvider } from './MoneyOutFieldsProvider';
 
 /**
@@ -12,7 +12,7 @@ import { MoneyOutFieldsProvider } from './MoneyOutFieldsProvider';
  * Switches between form fields based on the given transaction type.
  * @returns {JSX.Element}
  */
-function MoneyOutContentFields() {
+export function MoneyOutContentFields() {
   const { values } = useFormikContext();
 
   const transactionType = useMemo(() => {
@@ -35,5 +35,3 @@ function MoneyOutContentFields() {
 
   return <MoneyOutFieldsProvider>{transactionType}</MoneyOutFieldsProvider>;
 }
-
-export default MoneyOutContentFields;

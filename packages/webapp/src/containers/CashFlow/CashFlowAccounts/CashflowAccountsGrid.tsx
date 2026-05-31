@@ -170,7 +170,7 @@ function CashflowAccountsEmptyState() {
 /**
  * Cashflow accounts grid.
  */
-export default function CashflowAccountsGrid() {
+export function CashflowAccountsGrid() {
   // Retrieve list context.
   const { cashflowAccounts, isCashFlowAccountsLoading } =
     useCashFlowAccountsContext();

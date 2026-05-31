@@ -12,7 +12,7 @@ import { compose } from '@/utils';
 /**
  * Money in floating actions.
  */
-function MoneyInFloatingActions({
+function MoneyInFloatingActionsInner({
   // #withDialogActions
   closeDialog,
 }) {
@@ -71,4 +71,4 @@ function MoneyInFloatingActions({
   );
 }
 
-export default compose(withDialogActions)(MoneyInFloatingActions);
+export const MoneyInFloatingActions = compose(withDialogActions)(MoneyInFloatingActionsInner);

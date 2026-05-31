@@ -8,7 +8,7 @@ import { usePdfInvoice } from '@/hooks/query';
 import { withDialogActions } from '@/containers/Dialog/withDialogActions';
 import { compose } from '@/utils';
 
-function InvoicePdfPreviewDialogContent({
+function InvoicePdfPreviewDialogContentInner({
   subscriptionForm: { invoiceId },
   // #withDialog
   closeDialog,
@@ -47,4 +47,4 @@ function InvoicePdfPreviewDialogContent({
   );
 }
 
-export default compose(withDialogActions)(InvoicePdfPreviewDialogContent);
+export const InvoicePdfPreviewDialogContent = compose(withDialogActions)(InvoicePdfPreviewDialogContentInner);

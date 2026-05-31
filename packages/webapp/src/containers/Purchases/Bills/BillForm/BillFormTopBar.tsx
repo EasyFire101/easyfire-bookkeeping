@@ -27,7 +27,7 @@ import { Features } from '@/constants';
  * Bill form topbar .
  * @returns {JSX.Element}
  */
-export default function BillFormTopBar() {
+export function BillFormTopBar() {
   // Features guard.
   const { featureCan } = useFeatureCan();
 

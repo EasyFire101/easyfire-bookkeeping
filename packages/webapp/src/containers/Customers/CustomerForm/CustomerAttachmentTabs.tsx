@@ -8,7 +8,7 @@ import React, {
 } from 'react';
 import { Dragzone, FormattedMessage as T } from '@/components';
 
-function CustomerAttachmentTabs() {
+export function CustomerAttachmentTabs() {
   return (
     <div>
       <Dragzone
@@ -20,5 +20,3 @@ function CustomerAttachmentTabs() {
     </div>
   );
 }
-
-export default CustomerAttachmentTabs;

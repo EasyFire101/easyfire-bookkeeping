@@ -5,7 +5,7 @@ import { Dialog, DialogSuspense } from '@/components';
 import withDialogRedux from '@/components/DialogReduxConnect';
 import { compose } from '@/utils';
 
-const BillNumberDialogContent = lazy(() => import('./BillNumberDialogContent'));
+const BillNumberDialogContent = lazy(() => import('./BillNumberDialogContent').then(m => ({ default: m.BillNumberDialogContent })));
 
 function BillNumberDialog({ dialogName, payload = { id: null }, isOpen }) {
   return (
@@ -24,4 +24,4 @@ function BillNumberDialog({ dialogName, payload = { id: null }, isOpen }) {
   );
 }
 
-export default compose(withDialogRedux())(BillNumberDialog);
+export const index = compose(withDialogRedux())(BillNumberDialog);

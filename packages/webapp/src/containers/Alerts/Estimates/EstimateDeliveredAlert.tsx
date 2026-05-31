@@ -14,7 +14,7 @@ import { compose } from '@/utils';
 /**
  * Estimate delivered alert.
  */
-function EstimateDeliveredAlert({
+function EstimateDeliveredAlertInner({
   name,
 
   // #withAlertStoreConnect
@@ -64,7 +64,7 @@ function EstimateDeliveredAlert({
   );
 }
 
-export default compose(
+export const EstimateDeliveredAlert = compose(
   withAlertStoreConnect(),
   withAlertActions,
-)(EstimateDeliveredAlert);
+)(EstimateDeliveredAlertInner);

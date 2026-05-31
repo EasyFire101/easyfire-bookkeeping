@@ -16,7 +16,7 @@ import { withOrganization } from '../Organization/withOrganization';
 /**
  * Setup initializing step form.
  */
-function SetupInitializingForm({
+function SetupInitializingFormInner({
   setOrganizationSetupCompleted,
   organization,
 }) {
@@ -62,13 +62,13 @@ function SetupInitializingForm({
   );
 }
 
-export default R.compose(
+export const SetupInitializingForm = R.compose(
   withOrganizationActions,
   withCurrentOrganization(({ organizationTenantId }) => ({
     organizationId: organizationTenantId,
   })),
   withOrganization(({ organization }) => ({ organization })),
-)(SetupInitializingForm);
+)(SetupInitializingFormInner);
 
 /**
  * State initializing failed state.

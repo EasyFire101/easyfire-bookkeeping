@@ -4,7 +4,7 @@ import classNames from 'classnames';
 import styled from 'styled-components';
 import { CLASSES } from '@/constants/classes';
 import { useSettings } from '@/hooks/query';
-import PreferencesPageLoader from '../PreferencesPageLoader';
+import { PreferencesPageLoader } from '../PreferencesPageLoader';
 import { Card } from '@/components';
 
 const PreferencesReceiptsFormContext = React.createContext();

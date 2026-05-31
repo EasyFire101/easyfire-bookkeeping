@@ -1,12 +1,12 @@
 // @ts-nocheck
 import React from 'react';
 import { useFormikContext } from 'formik';
-import JournalNumberDialog from '@/containers/Dialogs/JournalNumberDialog';
+import { index as JournalNumberDialog } from '@/containers/Dialogs/JournalNumberDialog';
 
 /**
  * Make journal form dialogs.
  */
-export default function MakeJournalFormDialogs() {
+export function MakeJournalFormDialogs() {
   const { setFieldValue } = useFormikContext();
 
   // Update the form once the journal number form submit confirm.

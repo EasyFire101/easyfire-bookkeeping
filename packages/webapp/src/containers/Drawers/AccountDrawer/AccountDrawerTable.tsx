@@ -20,7 +20,7 @@ import { compose } from '@/utils';
 /**
  * account drawer table.
  */
-function AccountDrawerTable({ closeDrawer }) {
+function AccountDrawerTableInner({ closeDrawer }) {
   const { accounts, drawerName } = useAccountDrawerContext();
 
   // Handle view more link click.
@@ -67,7 +67,7 @@ function AccountDrawerDataTable() {
   );
 }
 
-export default compose(withDrawerActions)(AccountDrawerTable);
+export const AccountDrawerTable = compose(withDrawerActions)(AccountDrawerTableInner);
 
 const TableFooter = styled.div`
   --x-border-color: #d2dde2;

@@ -2,14 +2,14 @@
 import React from 'react';
 import { x } from '@xstyled/emotion';
 import { FastField } from 'formik';
-import ItemsEntriesTable from '@/containers/Entries/ItemsEntriesTable';
+import { ItemsEntriesTable } from '@/containers/Entries/ItemsEntriesTable';
 import { useEstimateFormContext } from './EstimateFormProvider';
 import { entriesFieldShouldUpdate } from './utils';
 
 /**
  * Estimate form items entries editor.
  */
-export default function EstimateFormItemsEntriesField() {
+export function EstimateFormItemsEntriesField() {
   const { items } = useEstimateFormContext();
 
   return (

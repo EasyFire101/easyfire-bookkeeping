@@ -45,7 +45,7 @@ function EstimateViewTabs({
   );
 }
 
-export default compose(
+export const EstimatesViewTabs = compose(
   withEstimatesActions,
   withEstimates(({ estimatesTableState }) => ({
     estimatesCurrentView: estimatesTableState.viewSlug

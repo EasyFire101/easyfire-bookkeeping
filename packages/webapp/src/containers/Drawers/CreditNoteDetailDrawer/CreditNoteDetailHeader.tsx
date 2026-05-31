@@ -22,7 +22,7 @@ import { CreditNoteDetailsStatus } from './utils';
 /**
  * Credit note details drawer header.
  */
-export default function CreditNoteDetailHeader() {
+export function CreditNoteDetailHeader() {
   const { creditNote } = useCreditNoteDetailDrawerContext();
 
   return (

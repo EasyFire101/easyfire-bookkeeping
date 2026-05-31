@@ -8,7 +8,7 @@ import {
   TableSkeletonHeader,
 } from '@/components';
 import { TABLES } from '@/constants/tables';
-import ProjectsEmptyStatus from './ProjectsEmptyStatus';
+import { ProjectsEmptyStatus } from './ProjectsEmptyStatus';
 import { useProjectsListContext } from './ProjectsListProvider';
 import { useMemorizedColumnsWidths } from '@/hooks';
 import { useProjectsListColumns, ActionsMenu } from './components';
@@ -23,7 +23,7 @@ import { compose } from '@/utils';
  * Projects list datatable.
  * @returns
  */
-function ProjectsDataTable({
+function ProjectsDataTableInner({
   // #withDial
   openDialog,
 
@@ -119,14 +119,14 @@ function ProjectsDataTable({
   );
 }
 
-export default compose(
+export const ProjectsDataTable = compose(
   withDialogActions,
   withAlertActions,
   withProjectsActions,
   withSettings(({ projectSettings }) => ({
     projectsTableSize: projectSettings?.tableSize,
   })),
-)(ProjectsDataTable);
+)(ProjectsDataTableInner);
 
 const ProjectsTable = styled(DataTable)`
   .tbody {

@@ -8,7 +8,7 @@ import { usePdfReceipt } from '@/hooks/query';
 import { withDialogActions } from '@/containers/Dialog/withDialogActions';
 import { compose } from '@/utils';
 
-function ReceiptPdfPreviewDialogContent({
+function ReceiptPdfPreviewDialogContentInner({
   subscriptionForm: { receiptId },
   // #withDialogActions
   closeDialog,
@@ -47,4 +47,4 @@ function ReceiptPdfPreviewDialogContent({
   );
 }
 
-export default compose(withDialogActions)(ReceiptPdfPreviewDialogContent);
+export const ReceiptPdfPreviewDialogContent = compose(withDialogActions)(ReceiptPdfPreviewDialogContentInner);

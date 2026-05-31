@@ -3,7 +3,7 @@ import React from 'react';
 import { Intent, Button } from '@blueprintjs/core';
 import { FormattedMessage as T } from '@/components';
 
-export default function ItemFloatingFooter({
+export function ItemFloatingFooter({
   formik: { isSubmitting },
   onSubmitClick,
   onCancelClick,

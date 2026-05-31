@@ -5,7 +5,7 @@ import intl from 'react-intl-universal';
 import { DialogContent } from '@/components';
 import { useSaveSettings, useSettingsEstimates } from '@/hooks/query';
 
-import ReferenceNumberForm from '@/containers/JournalNumber/ReferenceNumberForm';
+import { ReferenceNumberForm } from '@/containers/JournalNumber/ReferenceNumberForm';
 import { withDialogActions } from '@/containers/Dialog/withDialogActions';
 import { withSettings } from '@/containers/Settings/withSettings';
 
@@ -18,7 +18,7 @@ import {
 /**
  * Estimate number dialog's content.
  */
-function EstimateNumberDialogContent({
+function EstimateNumberDialogContentInner({
   // #withSettings
   nextNumber,
   numberPrefix,
@@ -94,11 +94,11 @@ function EstimateNumberDialogContent({
   );
 }
 
-export default compose(
+export const EstimateNumberDialogContent = compose(
   withDialogActions,
   withSettings(({ estimatesSettings }) => ({
     nextNumber: estimatesSettings?.nextNumber,
     numberPrefix: estimatesSettings?.numberPrefix,
     autoIncrement: estimatesSettings?.autoIncrement,
   })),
-)(EstimateNumberDialogContent);
+)(EstimateNumberDialogContentInner);

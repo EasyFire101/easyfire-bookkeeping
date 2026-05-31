@@ -13,7 +13,7 @@ import { compose, transfromViewsToTabs } from '@/utils';
 /**
  * Items views tabs.
  */
-function ItemsViewsTabs({
+function ItemsViewsTabsInner({
   // #withItemsActions
   setItemsTableState,
 
@@ -44,10 +44,10 @@ function ItemsViewsTabs({
   );
 }
 
-export default compose(
+export const ItemsViewsTabs = compose(
   withRouter,
   withItems(({ itemsTableState }) => ({
     itemsCurrentView: itemsTableState?.viewSlug,
   })),
   withItemsActions,
-)(ItemsViewsTabs);
+)(ItemsViewsTabsInner);

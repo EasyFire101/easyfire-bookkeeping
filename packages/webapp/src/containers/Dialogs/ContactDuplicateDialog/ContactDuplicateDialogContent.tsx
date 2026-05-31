@@ -1,12 +1,12 @@
 // @ts-nocheck
 import React from 'react';
 
-import ContactDuplicateForm from './ContactDuplicateForm';
+import { ContactDuplicateForm } from './ContactDuplicateForm';
 import { ContactDuplicateProvider } from './ContactDuplicateProvider';
 
 import '@/style/pages/ContactDuplicate/ContactDuplicateDialog.scss';
 
-export default function ContactDuplicateDialogContent({
+export function ContactDuplicateDialogContent({
   // #ownProp
   contact,
   dialogName,

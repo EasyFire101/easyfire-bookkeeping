@@ -13,7 +13,7 @@ import { useInactivateAccount } from '@/hooks/query';
 /**
  * Account inactivate alert.
  */
-function AccountInactivateAlert({
+function AccountInactivateAlertInner({
   name,
 
   // #withAlertStoreConnect
@@ -60,7 +60,7 @@ function AccountInactivateAlert({
   );
 }
 
-export default compose(
+export const AccountInactivateAlert = compose(
   withAlertStoreConnect(),
   withAlertActions,
-)(AccountInactivateAlert);
+)(AccountInactivateAlertInner);

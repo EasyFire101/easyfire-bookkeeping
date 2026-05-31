@@ -7,7 +7,7 @@ import { useReceiptFormContext } from './ReceiptFormProvider';
  * Receipt form currency tag.
  * @returns
  */
-export default function ReceiptFormCurrencyTag() {
+export function ReceiptFormCurrencyTag() {
   const { isForeignCustomer, selectCustomer } = useReceiptFormContext();
 
   if (!isForeignCustomer) {

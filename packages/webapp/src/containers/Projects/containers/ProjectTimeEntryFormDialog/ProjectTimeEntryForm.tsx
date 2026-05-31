@@ -6,7 +6,7 @@ import { Intent } from '@blueprintjs/core';
 import { Formik } from 'formik';
 import { AppToaster } from '@/components';
 
-import ProjectTimeEntryFormContent from './ProjectTimeEntryFormContent';
+import { TimeEntryFormContent as ProjectTimeEntryFormContent } from './ProjectTimeEntryFormContent';
 import { CreateProjectTimeEntryFormSchema } from './ProjectTimeEntryForm.schema';
 import { useProjectTimeEntryFormContext } from './ProjectTimeEntryFormProvider';
 import { withDialogActions } from '@/containers/Dialog/withDialogActions';
@@ -25,7 +25,7 @@ const defaultInitialValues = {
  * Project Time entry form.
  * @returns
  */
-function ProjectTimeEntryForm({
+function ProjectTimeEntryFormInner({
   // #withDialogActions
   closeDialog,
 }) {
@@ -94,4 +94,4 @@ function ProjectTimeEntryForm({
   );
 }
 
-export default compose(withDialogActions)(ProjectTimeEntryForm);
+export const ProjectTimeEntryForm = compose(withDialogActions)(ProjectTimeEntryFormInner);

@@ -11,7 +11,7 @@ import '@/style/pages/Items/ItemAdjustmentDialog.scss';
 import { AppToaster } from '@/components';
 import { CreateInventoryAdjustmentFormSchema } from './InventoryAdjustmentForm.schema';
 
-import InventoryAdjustmentFormContent from './InventoryAdjustmentFormContent';
+import { InventoryAdjustmentFormContent } from './InventoryAdjustmentFormContent';
 import { useInventoryAdjContext } from './InventoryAdjustmentFormProvider';
 
 import { withDialogActions } from '@/containers/Dialog/withDialogActions';
@@ -35,7 +35,7 @@ const defaultInitialValues = {
 /**
  * Inventory adjustment form.
  */
-function InventoryAdjustmentForm({
+function InventoryAdjustmentFormInner({
   // #withDialogActions
   closeDialog,
 }) {
@@ -83,4 +83,4 @@ function InventoryAdjustmentForm({
   );
 }
 
-export default compose(withDialogActions)(InventoryAdjustmentForm);
+export const InventoryAdjustmentForm = compose(withDialogActions)(InventoryAdjustmentFormInner);

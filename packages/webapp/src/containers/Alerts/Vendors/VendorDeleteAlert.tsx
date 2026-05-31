@@ -21,7 +21,7 @@ import { DRAWERS } from '@/constants/drawers';
 /**
  * Vendor delete alert.
  */
-function VendorDeleteAlert({
+function VendorDeleteAlertInner({
   name,
 
   // #withAlertStoreConnect
@@ -85,8 +85,8 @@ function VendorDeleteAlert({
   );
 }
 
-export default compose(
+export const VendorDeleteAlert = compose(
   withAlertStoreConnect(),
   withAlertActions,
   withDrawerActions,
-)(VendorDeleteAlert);
+)(VendorDeleteAlertInner);

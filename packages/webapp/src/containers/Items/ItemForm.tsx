@@ -4,7 +4,7 @@ import intl from 'react-intl-universal';
 import styled from 'styled-components';
 import { useHistory } from 'react-router-dom';
 
-import ItemFormFormik from './ItemFormFormik';
+import { ItemFormFormik } from './ItemFormFormik';
 
 import { useDashboardPageTitle } from '@/hooks/state';
 import { useItemFormContext, ItemFormProvider } from './ItemFormProvider';
@@ -49,7 +49,7 @@ function ItemFormPageLoading({ children }) {
  * Item form of the page.
  * @returns {JSX}
  */
-export default function ItemForm({ itemId }) {
+export function ItemForm({ itemId }) {
   // History context.
   const history = useHistory();
 

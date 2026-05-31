@@ -62,7 +62,7 @@ function PauseFeedsBankAccountAlert({
   );
 }
 
-export default compose(
+export const PauseFeedsBankAccount = compose(
   withAlertStoreConnect(),
   withAlertActions,
 )(PauseFeedsBankAccountAlert);

@@ -18,7 +18,7 @@ import { compose } from '@/utils';
 /**
  * Currency delete alerts.
  */
-function CurrencyDeleteAlert({
+function CurrencyDeleteAlertInner({
   name,
 
   // #withAlertStoreConnect
@@ -79,7 +79,7 @@ function CurrencyDeleteAlert({
   );
 }
 
-export default compose(
+export const CurrencyDeleteAlert = compose(
   withAlertStoreConnect(),
   withAlertActions,
-)(CurrencyDeleteAlert);
+)(CurrencyDeleteAlertInner);

@@ -33,7 +33,7 @@ import { DRAWERS } from '@/constants/drawers';
 /**
  * Credit note floating actions.
  */
-export default function CreditNoteFloatingActions() {
+export function CreditNoteFloatingActions() {
   const history = useHistory();
   const { openDrawer } = useDrawerActions();
 

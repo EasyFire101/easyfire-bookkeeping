@@ -13,7 +13,7 @@ import {
 /**
  * Branch form dialog fields.
  */
-function BranchFormFields() {
+export function BranchFormFields() {
   return (
     <div className={Classes.DIALOG_BODY}>
       {/*------------ Branch Name -----------*/}
@@ -100,9 +100,6 @@ function BranchFormFields() {
     </div>
   );
 }
-
-export default BranchFormFields;
-
 const BranchAddressWrap = styled.div`
   margin-left: 160px;
 `;

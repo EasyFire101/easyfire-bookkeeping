@@ -6,7 +6,7 @@ import { EmptyStatus } from '@/components';
 import { Can, FormattedMessage as T } from '@/components';
 import { SaleEstimateAction, AbilitySubject } from '@/constants/abilityOption';
 
-export default function EstimatesEmptyStatus() {
+export function EstimatesEmptyStatus() {
   const history = useHistory();
   return (
     <EmptyStatus

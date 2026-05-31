@@ -19,7 +19,7 @@ import { useMakeJournalFormContext } from './MakeJournalProvider';
  * Make journal form topbar.
  * @returns
  */
-export default function MakeJournalFormTopBar() {
+export function MakeJournalFormTopBar() {
   // Features guard.
   const { featureCan } = useFeatureCan();
 

@@ -2,13 +2,13 @@
 import React from 'react';
 import { Form } from 'formik';
 
-import UnlockingTransactionsFormFields from './UnlockingTransactionsFormFields';
-import UnlockingTransactionsFormFloatingActions from './UnlockingTransactionsFormFloatingActions';
+import { UnlockingTransactionsFormFields } from './UnlockingTransactionsFormFields';
+import { UnlockingTransactionsFormFloatingActions } from './UnlockingTransactionsFormFloatingActions';
 
 /**
  * Unlocking transactions form content.
  */
-export default function UnlockingTransactionsFormContent() {
+export function UnlockingTransactionsFormContent() {
   return (
     <Form>
       <UnlockingTransactionsFormFields />

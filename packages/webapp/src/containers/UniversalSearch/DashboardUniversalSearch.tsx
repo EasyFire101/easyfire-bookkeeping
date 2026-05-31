@@ -12,14 +12,14 @@ import { withUniversalSearchActions } from './withUniversalSearchActions';
 import { withUniversalSearch } from './withUniversalSearch';
 
 import { useGetUniversalSearchTypeOptions } from './utils';
-import DashboardUniversalSearchItemActions from './DashboardUniversalSearchItemActions';
+import { DashboardUniversalSearchItemActions } from './DashboardUniversalSearchItemActions';
 import { DashboardUniversalSearchItem } from './components';
-import DashboardUniversalSearchHotkeys from './DashboardUniversalSearchHotkeys';
+import { DashboardUniversalSearchHotkeys } from './DashboardUniversalSearchHotkeys';
 
 /**
  * Dashboard universal search.
  */
-function DashboardUniversalSearch({
+function DashboardUniversalSearchInner({
   // #withUniversalSearchActions
   setSelectedItemUniversalSearch,
 
@@ -127,10 +127,10 @@ function DashboardUniversalSearch({
   );
 }
 
-export default compose(
+export const DashboardUniversalSearch = compose(
   withUniversalSearchActions,
   withUniversalSearch(({ globalSearchShow, defaultUniversalResourceType }) => ({
     globalSearchShow,
     defaultUniversalResourceType,
   })),
-)(DashboardUniversalSearch);
+)(DashboardUniversalSearchInner);

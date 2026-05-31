@@ -11,7 +11,7 @@ import { useTaxRateFormDialogContext } from './TaxRateFormDialogBoot';
  * Tax rate form content.
  * @returns {JSX.Element}
  */
-export default function TaxRateFormDialogContent() {
+export function TaxRateFormDialogContent() {
   return (
     <div>
       <FFormGroup

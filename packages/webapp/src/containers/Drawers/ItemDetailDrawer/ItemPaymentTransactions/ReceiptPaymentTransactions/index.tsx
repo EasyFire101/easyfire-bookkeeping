@@ -71,7 +71,7 @@ function ReceiptPaymentTransactions({
   );
 }
 
-export default compose(
+export const index = compose(
   withAlertActions,
   withDrawerActions,
 )(ReceiptPaymentTransactions);

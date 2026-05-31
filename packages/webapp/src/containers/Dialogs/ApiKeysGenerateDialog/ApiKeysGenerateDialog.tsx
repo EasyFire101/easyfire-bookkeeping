@@ -4,14 +4,12 @@ import { Dialog, DialogSuspense, FormattedMessage as T } from '@/components';
 import withDialogRedux from '@/components/DialogReduxConnect';
 import { compose } from '@/utils';
 
-const ApiKeysGenerateDialogContent = React.lazy(
-  () => import('./ApiKeysGenerateDialogContent'),
-);
+const ApiKeysGenerateDialogContent = React.lazy(() => import('./ApiKeysGenerateDialogContent').then(m => ({ default: m.ApiKeysGenerateDialogContent })));
 
 /**
  * API Keys Generate dialog.
  */
-function ApiKeysGenerateDialog({ dialogName, payload, isOpen }) {
+function ApiKeysGenerateDialogInner({ dialogName, payload, isOpen }) {
   return (
     <Dialog
       name={dialogName}
@@ -32,4 +30,4 @@ function ApiKeysGenerateDialog({ dialogName, payload, isOpen }) {
     </Dialog>
   );
 }
-export default compose(withDialogRedux())(ApiKeysGenerateDialog);
+export const ApiKeysGenerateDialog = compose(withDialogRedux())(ApiKeysGenerateDialogInner);

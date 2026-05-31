@@ -50,7 +50,7 @@ import { useBulkDeletePaymentReceivesDialog } from './hooks/use-bulk-delete-paym
 /**
  * Payment receives actions bar.
  */
-function PaymentsReceivedActionsBar({
+function PaymentsReceivedActionsBarInner({
   // #withPaymentsReceivedActions
   setPaymentReceivesTableState,
 
@@ -226,7 +226,7 @@ function PaymentsReceivedActionsBar({
   );
 }
 
-export default compose(
+export const PaymentsReceivedActionsBar = compose(
   withPaymentsReceivedActions,
   withSettingsActions,
   withPaymentsReceived(({ paymentReceivesTableState, paymentReceivesSelectedRows }) => ({
@@ -239,4 +239,4 @@ export default compose(
   })),
   withDialogActions,
   withDrawerActions,
-)(PaymentsReceivedActionsBar);
+)(PaymentsReceivedActionsBarInner);

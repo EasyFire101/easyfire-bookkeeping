@@ -14,7 +14,7 @@ import { compose } from '@/utils';
  * Inventory Adjustment publish alert.
  */
 
-function InventoryAdjustmentPublishAlert({
+function InventoryAdjustmentPublishAlertInner({
   name,
 
   // #withAlertStoreConnect
@@ -64,7 +64,7 @@ function InventoryAdjustmentPublishAlert({
   );
 }
 
-export default compose(
+export const InventoryAdjustmentPublishAlert = compose(
   withAlertStoreConnect(),
   withAlertActions,
-)(InventoryAdjustmentPublishAlert);
+)(InventoryAdjustmentPublishAlertInner);

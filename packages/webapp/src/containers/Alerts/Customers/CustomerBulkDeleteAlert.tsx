@@ -14,7 +14,7 @@ import { compose } from '@/utils';
 /**
  * Customer bulk delete alert.
  */
-function CustomerBulkDeleteAlert({
+function CustomerBulkDeleteAlertInner({
   name,
 
   // #withAlertStoreConnect
@@ -71,7 +71,7 @@ function CustomerBulkDeleteAlert({
   );
 }
 
-export default compose(
+export const CustomerBulkDeleteAlert = compose(
   withAlertStoreConnect(),
   withAlertActions,
-)(CustomerBulkDeleteAlert);
+)(CustomerBulkDeleteAlertInner);

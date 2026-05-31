@@ -13,7 +13,7 @@ import {
  * Customer form page.
  * @returns {JSX}
  */
-export default function CustomerFormPage() {
+export function CustomerFormPage() {
   const { id } = useParams();
   const customerId = parseInt(id, 10);
   

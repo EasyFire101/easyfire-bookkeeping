@@ -1,29 +1,14 @@
 // @ts-nocheck
 import React from 'react';
 
-const WarehouseTransferDeleteAlert = React.lazy(
-  () =>
-    import(
-      '@/containers/Alerts/WarehousesTransfer/WarehouseTransferDeleteAlert'
-    ),
-);
-const WarehouseTransferInitiateAlert = React.lazy(
-  () =>
-    import(
-      '@/containers/Alerts/WarehousesTransfer/WarehouseTransferInitiateAlert'
-    ),
-);
-const TransferredWarehouseTransferAlert = React.lazy(
-  () =>
-    import(
-      '@/containers/Alerts/WarehousesTransfer/TransferredWarehouseTransferAlert'
-    ),
-);
+const WarehouseTransferDeleteAlert = React.lazy(() => import('@/containers/Alerts/WarehousesTransfer/WarehouseTransferDeleteAlert').then(m => ({ default: m.WarehouseTransferDeleteAlert })));
+const WarehouseTransferInitiateAlert = React.lazy(() => import('@/containers/Alerts/WarehousesTransfer/WarehouseTransferInitiateAlert').then(m => ({ default: m.WarehouseTransferInitiateAlert })));
+const TransferredWarehouseTransferAlert = React.lazy(() => import('@/containers/Alerts/WarehousesTransfer/TransferredWarehouseTransferAlert').then(m => ({ default: m.TransferredWarehouseTransferAlert })));
 
 /**
  * Warehouses alerts.
  */
-export default [
+export const WarehousesTransfersAlerts = [
   {
     name: 'warehouse-transfer-delete',
     component: WarehouseTransferDeleteAlert,

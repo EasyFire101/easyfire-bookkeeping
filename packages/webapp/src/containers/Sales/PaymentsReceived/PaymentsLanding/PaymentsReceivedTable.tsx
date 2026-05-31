@@ -11,7 +11,7 @@ import {
   TableSkeletonHeader,
 } from '@/components';
 
-import PaymentReceivesEmptyStatus from './PaymentsReceivedEmptyStatus';
+import { PaymentsReceivedEmptyStatus as PaymentReceivesEmptyStatus } from './PaymentsReceivedEmptyStatus';
 
 import { withPaymentsReceived } from './withPaymentsReceived';
 import { withPaymentsReceivedActions } from './withPaymentsReceivedActions';
@@ -155,7 +155,7 @@ function PaymentsReceivedDataTable({
   );
 }
 
-export default compose(
+export const PaymentsReceivedTable = compose(
   withPaymentsReceivedActions,
   withAlertActions,
   withDrawerActions,

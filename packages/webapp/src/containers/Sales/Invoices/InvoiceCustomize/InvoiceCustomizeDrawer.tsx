@@ -4,7 +4,7 @@ import * as R from 'ramda';
 import { Drawer, DrawerSuspense } from '@/components';
 import { withDrawers } from '@/containers/Drawer/withDrawers';
 
-const InvoiceCustomize = React.lazy(() => import('./InvoiceCustomize'));
+const InvoiceCustomize = React.lazy(() => import('./InvoiceCustomize').then(m => ({ default: m.InvoiceCustomize })));
 
 /**
  * Invoice customize drawer.

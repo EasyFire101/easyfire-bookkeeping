@@ -15,12 +15,12 @@ import {
   EditJournalSchema,
 } from './MakeJournalEntries.schema';
 import { useMakeJournalFormContext } from './MakeJournalProvider';
-import MakeJournalEntriesHeader from './MakeJournalEntriesHeader';
-import MakeJournalFormFloatingActions from './MakeJournalFormFloatingActions';
-import MakeJournalEntriesField from './MakeJournalEntriesField';
-import MakeJournalFormFooter from './MakeJournalFormFooter';
-import MakeJournalFormDialogs from './MakeJournalFormDialogs';
-import MakeJournalFormTopBar from './MakeJournalFormTopBar';
+import { MakeJournalEntriesHeader } from './MakeJournalEntriesHeader';
+import { MakeJournalFloatingAction as MakeJournalFormFloatingActions } from './MakeJournalFormFloatingActions';
+import { MakeJournalEntriesField } from './MakeJournalEntriesField';
+import { MakeJournalFormFooter } from './MakeJournalFormFooter';
+import { MakeJournalFormDialogs } from './MakeJournalFormDialogs';
+import { MakeJournalFormTopBar } from './MakeJournalFormTopBar';
 
 import { withSettings } from '@/containers/Settings/withSettings';
 import { withCurrentOrganization } from '@/containers/Organization/withCurrentOrganization';
@@ -39,7 +39,7 @@ import { transformAttachmentsToRequest } from '@/containers/Attachments/utils';
 /**
  * Journal entries form.
  */
-function MakeJournalEntriesForm({
+function MakeJournalEntriesFormInner({
   // #withSettings
   journalNextNumber,
   journalNumberPrefix,
@@ -209,11 +209,11 @@ function MakeJournalEntriesForm({
   );
 }
 
-export default compose(
+export const MakeJournalEntriesForm = compose(
   withSettings(({ manualJournalsSettings }) => ({
     journalNextNumber: manualJournalsSettings?.nextNumber,
     journalNumberPrefix: manualJournalsSettings?.numberPrefix,
     journalAutoIncrement: manualJournalsSettings?.autoIncrement,
   })),
   withCurrentOrganization(),
-)(MakeJournalEntriesForm);
+)(MakeJournalEntriesFormInner);

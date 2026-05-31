@@ -30,7 +30,7 @@ import intl from 'react-intl-universal';
  * Vendor Opening balance form fields.
  * @returns
  */
-function VendorOpeningBalanceFormFields({
+function VendorOpeningBalanceFormFieldsInner({
   // #withCurrentOrganization
   organization: { base_currency },
 }) {
@@ -110,6 +110,6 @@ function VendorOpeningBalanceFormFields({
   );
 }
 
-export default compose(withCurrentOrganization())(
-  VendorOpeningBalanceFormFields,
+export const VendorOpeningBalanceFormFields = compose(withCurrentOrganization())(
+  VendorOpeningBalanceFormFieldsInner,
 );

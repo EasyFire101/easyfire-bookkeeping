@@ -4,13 +4,13 @@ import { Tab } from '@blueprintjs/core';
 
 import { DrawerMainTabs, FormattedMessage as T } from '@/components';
 import { ItemPaymentTransactions } from './ItemPaymentTransactions';
-import ItemDetailHeader from './ItemDetailHeader';
-import WarehousesLocationsTable from './WarehousesLocations';
+import { ItemDetailHeader } from './ItemDetailHeader';
+import { WarehouseLocationsTable as WarehousesLocationsTable } from './WarehousesLocations';
 
 import { Features } from '@/constants';
 import { useFeatureCan } from '@/hooks/state';
 
-export default function ItemDetailTab() {
+export function ItemDetailTab() {
   const { featureCan } = useFeatureCan();
 
   return (

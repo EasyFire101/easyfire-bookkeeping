@@ -15,7 +15,7 @@ import intl from 'react-intl-universal';
 /**
  * Reference number form content.
  */
-export default function ReferenceNumberFormContent() {
+export function ReferenceNumberFormContent() {
   return (
     <>
       {/* ------------- Auto increment mode ------------- */}

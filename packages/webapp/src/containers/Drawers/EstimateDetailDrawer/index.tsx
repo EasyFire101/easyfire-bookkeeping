@@ -5,9 +5,7 @@ import { withDrawers } from '@/containers/Drawer/withDrawers';
 
 import { compose } from '@/utils';
 
-const EstimateDetailDrawerContent = React.lazy(() =>
-  import('./EstimateDetailDrawerContent'),
-);
+const EstimateDetailDrawerContent = React.lazy(() => import('./EstimateDetailDrawerContent').then(m => ({ default: m.EstimateDetailDrawerContent })));
 
 function EstimateDetailDrawer({
   name,
@@ -30,4 +28,4 @@ function EstimateDetailDrawer({
   );
 }
 
-export default compose(withDrawers())(EstimateDetailDrawer);
+export const index = compose(withDrawers())(EstimateDetailDrawer);

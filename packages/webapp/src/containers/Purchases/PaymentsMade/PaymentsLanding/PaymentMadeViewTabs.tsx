@@ -14,7 +14,7 @@ import { withPaymentMadeActions } from './withPaymentMadeActions';
 /**
  * Payment made views tabs.
  */
-function PaymentMadeViewTabs({
+function PaymentMadeViewTabsInner({
   // #withPaymentMadeActions
   setPaymentMadesTableState,
 
@@ -55,7 +55,7 @@ function PaymentMadeViewTabs({
   );
 }
 
-export default compose(
+export const PaymentMadeViewTabs = compose(
   withPaymentMadeActions,
   withPaymentMade(({ paymentMadesTableState }) => ({ paymentMadesTableState })),
-)(PaymentMadeViewTabs);
+)(PaymentMadeViewTabsInner);

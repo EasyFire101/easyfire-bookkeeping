@@ -3,7 +3,7 @@ import { DashboardInsider } from '@/components';
 import { ImportView } from '../Import/ImportView';
 import { useHistory } from 'react-router-dom';
 
-export default function AccountsImport() {
+export function AccountsImport() {
   const history = useHistory();
 
   const handleCancelBtnClick = () => {

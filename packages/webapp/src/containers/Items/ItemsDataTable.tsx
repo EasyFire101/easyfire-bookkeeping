@@ -10,7 +10,7 @@ import {
   TableSkeletonHeader,
 } from '@/components';
 
-import ItemsEmptyStatus from './ItemsEmptyStatus';
+import { ItemsEmptyStatus } from './ItemsEmptyStatus';
 
 import { withItemsActions } from './withItemsActions';
 import { withAlertActions } from '@/containers/Alert/withAlertActions';
@@ -28,7 +28,7 @@ import { DRAWERS } from '@/constants/drawers';
 /**
  * Items datatable.
  */
-function ItemsDataTable({
+function ItemsDataTableInner({
   // #withItemsActions
   setItemsTableState,
   setItemsSelectedRows,
@@ -183,7 +183,7 @@ function ItemsDataTable({
   );
 }
 
-export default compose(
+export const ItemsDataTable = compose(
   withItemsActions,
   withAlertActions,
   withDrawerActions,
@@ -192,4 +192,4 @@ export default compose(
     itemsTableSize: itemsSettings.tableSize,
   })),
   withItems(({ itemsTableState }) => ({ itemsTableState }))
-)(ItemsDataTable);
+)(ItemsDataTableInner);

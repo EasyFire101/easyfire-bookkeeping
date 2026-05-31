@@ -6,8 +6,8 @@ import '@/style/pages/SaleInvoice/List.scss';
 import { DashboardPageContent } from '@/components';
 import { InvoicesListProvider } from './InvoicesListProvider';
 
-import InvoicesDataTable from './InvoicesDataTable';
-import InvoicesActionsBar from './InvoicesActionsBar';
+import { InvoicesDataTable } from './InvoicesDataTable';
+import { InvoicesActionsBar } from './InvoicesActionsBar';
 
 import { withInvoices } from './withInvoices';
 import { withInvoiceActions } from './withInvoiceActions';
@@ -18,7 +18,7 @@ import { transformTableStateToQuery, compose } from '@/utils';
 /**
  * Sale invoices list.
  */
-function InvoicesList({
+function InvoicesListInner({
   // #withInvoice
   invoicesTableState,
   invoicesTableStateChanged,
@@ -48,11 +48,11 @@ function InvoicesList({
   );
 }
 
-export default compose(
+export const InvoicesList = compose(
   withInvoices(({ invoicesTableState, invoicesTableStateChanged }) => ({
     invoicesTableState,
     invoicesTableStateChanged,
   })),
   withInvoiceActions,
   withAlertActions,
-)(InvoicesList);
+)(InvoicesListInner);

@@ -13,7 +13,7 @@ import { compose, transfromViewsToTabs } from '@/utils';
 /**
  * Expesne views tabs.
  */
-function ExpenseViewTabs({
+function ExpenseViewTabsInner({
   // #withExpensesActions
   setExpensesTableState,
 
@@ -50,9 +50,9 @@ function ExpenseViewTabs({
   );
 }
 
-export default compose(
+export const ExpenseViewTabs = compose(
   withExpensesActions,
   withExpenses(({ expensesTableState }) => ({
     expensesCurrentView: expensesTableState.viewSlug,
   })),
-)(ExpenseViewTabs);
+)(ExpenseViewTabsInner);

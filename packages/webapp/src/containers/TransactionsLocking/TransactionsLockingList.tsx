@@ -10,7 +10,7 @@ import { TransactionsLockingBody } from './TransactionsLockingBody';
 /**
  * Transactions locking list.
  */
-export default function TransactionsLockingListPage() {
+export function TransactionsLockingListPage() {
   return (
     <TransactionsLockingProvider>
       <TransactionsLocking>

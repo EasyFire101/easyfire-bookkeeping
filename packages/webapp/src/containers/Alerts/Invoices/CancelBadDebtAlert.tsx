@@ -13,7 +13,7 @@ import { compose } from '@/utils';
 /**
  * Cancel bad debt alert.
  */
-function CancelBadDebtAlert({
+function CancelBadDebtAlertInner({
   name,
 
   // #withAlertStoreConnect
@@ -62,7 +62,7 @@ function CancelBadDebtAlert({
   );
 }
 
-export default compose(
+export const CancelBadDebtAlert = compose(
   withAlertStoreConnect(),
   withAlertActions,
-)(CancelBadDebtAlert);
+)(CancelBadDebtAlertInner);

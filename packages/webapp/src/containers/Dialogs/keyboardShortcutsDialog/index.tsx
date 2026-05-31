@@ -4,9 +4,7 @@ import { Dialog, DialogSuspense, FormattedMessage as T } from '@/components';
 import withDialogRedux from '@/components/DialogReduxConnect';
 import { compose } from '@/utils';
 
-const KeyboardShortcutsContent = lazy(
-  () => import('./KeyboardShortcutsDialogContent'),
-);
+const KeyboardShortcutsContent = lazy(() => import('./KeyboardShortcutsDialogContent').then(m => ({ default: m.KeyboardShortcutsDialogContent })));
 
 /**
  * Keyboard shortcuts dialog.
@@ -26,4 +24,4 @@ function KeyboardShortcutsDialog({ dialogName, isOpen }) {
   );
 }
 
-export default compose(withDialogRedux())(KeyboardShortcutsDialog);
+export const index = compose(withDialogRedux())(KeyboardShortcutsDialog);

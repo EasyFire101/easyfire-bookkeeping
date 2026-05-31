@@ -35,7 +35,7 @@ import { withCurrentOrganization } from '@/containers/Organization/withCurrentOr
 /**
  * Refund Vendor credit form fields.
  */
-function RefundVendorCreditFormFields({
+function RefundVendorCreditFormFieldsInner({
   // #withCurrentOrganization
   organization: { base_currency },
 }) {
@@ -159,7 +159,7 @@ function RefundVendorCreditFormFields({
   );
 }
 
-export default compose(withCurrentOrganization())(RefundVendorCreditFormFields);
+export const RefundVendorCreditFormFields = compose(withCurrentOrganization())(RefundVendorCreditFormFieldsInner);
 
 export const BranchRowDivider = styled.div`
   --x-divider-color: #ebf1f6;

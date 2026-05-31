@@ -10,7 +10,7 @@ import { TableStyle } from '@/constants';
 /**
  * Cashflow transaction drawer table.
  */
-export default function CashflowTransactionDrawerTable() {
+export function CashflowTransactionDrawerTable() {
   const columns = useCashflowTransactionColumns();
   const {
     cashflowTransaction: { transactions },

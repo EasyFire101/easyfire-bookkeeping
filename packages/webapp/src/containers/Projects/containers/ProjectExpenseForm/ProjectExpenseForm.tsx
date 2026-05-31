@@ -5,7 +5,7 @@ import intl from 'react-intl-universal';
 import { Formik } from 'formik';
 import { AppToaster } from '@/components';
 import { CreateProjectExpenseFormSchema } from './ProjectExpenseForm.schema';
-import ProjectExpenseFormContent from './ProjectExpenseFormContent';
+import { ProjectExpenseFormContent } from './ProjectExpenseFormContent';
 import { useProjectExpenseFormContext } from './ProjectExpenseFormProvider';
 import { withDialogActions } from '@/containers/Dialog/withDialogActions';
 
@@ -26,7 +26,7 @@ const defaultInitialValues = {
  * Project expense form.
  * @returns
  */
-function ProjectExpenseForm({
+function ProjectExpenseFormInner({
   //#withDialogActions
   closeDialog,
 }) {
@@ -62,4 +62,4 @@ function ProjectExpenseForm({
   );
 }
 
-export default compose(withDialogActions)(ProjectExpenseForm);
+export const ProjectExpenseForm = compose(withDialogActions)(ProjectExpenseFormInner);

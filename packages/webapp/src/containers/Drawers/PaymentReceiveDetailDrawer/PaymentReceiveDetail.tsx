@@ -6,8 +6,8 @@ import { Tab } from '@blueprintjs/core';
 
 import { DrawerMainTabs } from '@/components';
 
-import PaymentReceiveDetailTab from './PaymentReceiveDetailTab';
-import PaymentReceiveActionsBar from './PaymentReceiveActionsBar';
+import { PaymentReceiveDetailTab } from './PaymentReceiveDetailTab';
+import { PaymentReceiveActionsBar } from './PaymentReceiveActionsBar';
 import { PaymentReceiveGLEntriesPanel } from './PaymentReceiveGLEntriesPanel';
 
 /**
@@ -35,7 +35,7 @@ function PaymentReceiveDetailsTabs() {
  * Payment receive view detail.
  * @returns {React.JSX}
  */
-export default function PaymentReceiveDetail() {
+export function PaymentReceiveDetail() {
   return (
     <PaymentReceiveDetailsRoot>
       <PaymentReceiveActionsBar />

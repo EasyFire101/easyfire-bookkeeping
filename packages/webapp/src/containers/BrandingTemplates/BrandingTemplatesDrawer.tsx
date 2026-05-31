@@ -4,9 +4,7 @@ import * as R from 'ramda';
 import { Drawer, DrawerSuspense } from '@/components';
 import { withDrawers } from '@/containers/Drawer/withDrawers';
 
-const BrandingTemplatesContent = React.lazy(
-  () => import('./BrandingTemplatesContent'),
-);
+const BrandingTemplatesContent = React.lazy(() => import('./BrandingTemplatesContent').then(m => ({ default: m.BrandingTemplateContent })));
 
 /**
  * Invoice customize drawer.

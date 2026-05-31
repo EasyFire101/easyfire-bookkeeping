@@ -15,7 +15,7 @@ import intl from 'react-intl-universal';
  * Estimate details footer.
  * @returns {React.JSX}
  */
-export default function EstimateDetailFooter() {
+export function EstimateDetailFooter() {
   const { estimate } = useEstimateDetailDrawerContext();
 
   return (

@@ -17,7 +17,7 @@ import { AppToaster } from '@/components';
 /**
  * API Key Display view component (used within the generate dialog).
  */
-function ApiKeyDisplayView({
+export function ApiKeyDisplayView({
   dialogName,
   apiKey,
   onClose,
@@ -67,6 +67,3 @@ function ApiKeyDisplayView({
     </>
   );
 }
-
-export default ApiKeyDisplayView;
-

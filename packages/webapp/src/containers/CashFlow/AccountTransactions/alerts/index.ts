@@ -1,17 +1,11 @@
 // @ts-nocheck
 import React from 'react';
 
-const ResumeFeedsBankAccountAlert = React.lazy(
-  () => import('./ResumeFeedsBankAccount'),
-);
+const ResumeFeedsBankAccountAlert = React.lazy(() => import('./ResumeFeedsBankAccount').then(m => ({ default: m.ResumeFeedsBankAccount })));
 
-const PauseFeedsBankAccountAlert = React.lazy(
-  () => import('./PauseFeedsBankAccount'),
-);
+const PauseFeedsBankAccountAlert = React.lazy(() => import('./PauseFeedsBankAccount').then(m => ({ default: m.PauseFeedsBankAccount })));
 
-const UncategorizeTransactionsBulkAlert = React.lazy(
-  () => import('./UncategorizeBankTransactionsBulkAlert'),
-);
+const UncategorizeTransactionsBulkAlert = React.lazy(() => import('./UncategorizeBankTransactionsBulkAlert').then(m => ({ default: m.UncategorizeBankTransactionsBulkAlert })));
 
 /**
  * Bank account alerts.

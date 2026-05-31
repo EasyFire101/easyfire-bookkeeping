@@ -12,7 +12,7 @@ import { withAlertActions } from '@/containers/Alert/withAlertActions';
 
 import { compose } from '@/utils';
 
-function AccountBulkInactivateAlert({
+function AccountBulkInactivateAlertInner({
   name,
   isOpen,
   payload: { accountsIds },
@@ -65,8 +65,8 @@ function AccountBulkInactivateAlert({
   );
 }
 
-export default compose(
+export const AccountBulkInactivateAlert = compose(
   withAlertStoreConnect(),
   withAlertActions,
   // withAccountsActions,
-)(AccountBulkInactivateAlert);
+)(AccountBulkInactivateAlertInner);

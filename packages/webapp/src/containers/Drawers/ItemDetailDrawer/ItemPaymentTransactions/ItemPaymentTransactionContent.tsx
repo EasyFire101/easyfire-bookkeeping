@@ -1,11 +1,11 @@
 // @ts-nocheck
 import React from 'react';
-import InvoicePaymentTransactions from './InvoicePaymentTransactions';
-import EstimatePaymentTransactions from './EstimatePaymentTransactions';
-import ReceiptPaymentTransactions from './ReceiptPaymentTransactions';
-import BillPaymentTransactions from './BillPaymentTransactions';
+import { index as InvoicePaymentTransactions } from './InvoicePaymentTransactions';
+import { index as EstimatePaymentTransactions } from './EstimatePaymentTransactions';
+import { index as ReceiptPaymentTransactions } from './ReceiptPaymentTransactions';
+import { index as BillPaymentTransactions } from './BillPaymentTransactions';
 
-export default function ItemPaymentTransactionsContent({ tansactionType }) {
+export function ItemPaymentTransactionsContent({ tansactionType }) {
   const handleType = () => {
     switch (tansactionType) {
       case 'invoices':

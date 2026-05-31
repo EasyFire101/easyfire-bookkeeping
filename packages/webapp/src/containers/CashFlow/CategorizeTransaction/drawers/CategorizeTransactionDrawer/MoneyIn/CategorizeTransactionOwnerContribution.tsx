@@ -11,7 +11,7 @@ import {
 import { useCategorizeTransactionBoot } from '../CategorizeTransactionBoot';
 import { CategorizeTransactionBranchField } from '../CategorizeTransactionBranchField';
 
-export default function CategorizeTransactionOwnerContribution() {
+export function CategorizeTransactionOwnerContribution() {
   const { accounts } = useCategorizeTransactionBoot();
 
   return (

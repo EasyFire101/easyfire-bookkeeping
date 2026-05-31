@@ -10,7 +10,7 @@ import {
   TableSkeletonHeader,
 } from '@/components';
 
-import BillsEmptyStatus from './BillsEmptyStatus';
+import { BillsEmptyStatus } from './BillsEmptyStatus';
 
 import { withBills } from './withBills';
 import { withBillsActions } from './withBillsActions';
@@ -161,7 +161,7 @@ function BillsDataTable({
   );
 }
 
-export default compose(
+export const BillsTable = compose(
   withBills(({ billsTableState }) => ({ billsTableState })),
   withBillsActions,
   withAlertActions,

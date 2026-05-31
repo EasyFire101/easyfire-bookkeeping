@@ -12,7 +12,7 @@ import intl from 'react-intl-universal';
 /**
  * API Keys datatable.
  */
-function ApiKeysDataTable({
+function ApiKeysDataTableInner({
   // #withDialogActions
   openDialog,
 
@@ -62,4 +62,4 @@ function ApiKeysDataTable({
   );
 }
 
-export default compose(withDialogActions, withAlertActions)(ApiKeysDataTable);
+export const ApiKeysDataTable = compose(withDialogActions, withAlertActions)(ApiKeysDataTableInner);

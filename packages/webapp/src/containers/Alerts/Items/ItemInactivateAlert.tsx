@@ -14,7 +14,7 @@ import { compose } from '@/utils';
 /**
  * Item inactivate alert.
  */
-function ItemInactivateAlert({
+function ItemInactivateAlertInner({
   name,
 
   // #withAlertStoreConnect
@@ -63,7 +63,7 @@ function ItemInactivateAlert({
   );
 }
 
-export default compose(
+export const ItemInactivateAlert = compose(
   withAlertStoreConnect(),
   withAlertActions,
-)(ItemInactivateAlert);
+)(ItemInactivateAlertInner);

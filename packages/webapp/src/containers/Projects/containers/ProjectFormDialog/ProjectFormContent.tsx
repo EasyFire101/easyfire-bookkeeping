@@ -2,13 +2,13 @@
 import React from 'react';
 import { Form } from 'formik';
 
-import ProjectFormFields from './ProjectFormFields';
-import ProjectFormFloatingActions from './ProjectFormFloatingActions';
+import { ProjectFormFields } from './ProjectFormFields';
+import { ProjectFormFloatingActions } from './ProjectFormFloatingActions';
 
 /**
  * Project form content.
  */
-export default function ProjectFormContent() {
+export function ProjectFormContent() {
   return (
     <Form>
       <ProjectFormFields />

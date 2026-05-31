@@ -32,7 +32,7 @@ import { compose } from '@/utils';
 /**
  * Account transactions data table.
  */
-function AccountTransactionsDataTable({
+function AccountTransactionsDataTableInner({
   // #withSettings
   cashflowTansactionsTableSize,
 
@@ -153,14 +153,14 @@ function AccountTransactionsDataTable({
   );
 }
 
-export default compose(
+export const AccountTransactionsDataTable = compose(
   withSettings(({ cashflowTransactionsSettings }) => ({
     cashflowTansactionsTableSize: cashflowTransactionsSettings?.tableSize,
   })),
   withAlertActions,
   withDrawerActions,
   withBankingActions,
-)(AccountTransactionsDataTable);
+)(AccountTransactionsDataTableInner);
 
 const DashboardConstrantTable = styled(DataTable)`
   .table {

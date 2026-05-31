@@ -43,7 +43,7 @@ import { DRAWERS } from '@/constants/drawers';
 /**
  * Customer details actions bar.
  */
-function CustomerDetailsActionsBar({
+function CustomerDetailsActionsBarInner({
   // #withDialogActions
   openDialog,
 
@@ -167,8 +167,8 @@ function CustomerDetailsActionsBar({
   );
 }
 
-export default compose(
+export const CustomerDetailsActionsBar = compose(
   withDrawerActions,
   withAlertActions,
   withDialogActions,
-)(CustomerDetailsActionsBar);
+)(CustomerDetailsActionsBarInner);

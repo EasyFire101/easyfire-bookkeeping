@@ -11,7 +11,7 @@ import { TableStyle } from '@/constants';
 /**
  * Payment made read-only details table.
  */
-export default function PaymentMadeDetailTable() {
+export function PaymentMadeDetailTable() {
   // Retrieve payment made entries columns.
   const columns = usePaymentMadeEntriesColumns();
 

@@ -12,7 +12,7 @@ const CategorizeTransactionContent = lazy(
 /**
  * Categorize the uncategorized transaction drawer.
  */
-function CategorizeTransactionDrawer({
+function CategorizeTransactionDrawerInner({
   name,
   // #withDrawer
   isOpen,
@@ -34,4 +34,4 @@ function CategorizeTransactionDrawer({
   );
 }
 
-export default compose(withDrawers())(CategorizeTransactionDrawer);
+export const CategorizeTransactionDrawer = compose(withDrawers())(CategorizeTransactionDrawerInner);

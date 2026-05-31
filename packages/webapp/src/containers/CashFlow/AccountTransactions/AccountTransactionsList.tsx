@@ -7,7 +7,7 @@ import '@/style/pages/CashFlow/AccountTransactions/List.scss';
 
 import { DashboardPageContent } from '@/components';
 
-import AccountTransactionsActionsBar from './AccountTransactionsActionsBar';
+import { AccountTransactionsActionsBar } from './AccountTransactionsActionsBar';
 import {
   AccountTransactionsProvider,
   useAccountTransactionsContext,
@@ -56,7 +56,7 @@ function AccountTransactionsMain() {
   );
 }
 
-export default R.compose(
+export const AccountTransactionsList = R.compose(
   withBanking(
     ({ selectedUncategorizedTransactionId, openMatchingTransactionAside }) => ({
       selectedUncategorizedTransactionId,
@@ -65,10 +65,8 @@ export default R.compose(
   ),
 )(AccountTransactionsListRoot);
 
-const AccountsTransactionsAll = lazy(() => import('./AccountsTransactionsAll'));
-const AccountsTransactionsUncategorized = lazy(
-  () => import('./AllTransactionsUncategorized'),
-);
+const AccountsTransactionsAll = lazy(() => import('./AccountsTransactionsAll').then(m => ({ default: m.AccountTransactionsAll })));
+const AccountsTransactionsUncategorized = lazy(() => import('./AllTransactionsUncategorized').then(m => ({ default: m.AllTransactionsUncategorized })));
 
 function AccountTransactionsContent() {
   const { filterTab } = useAccountTransactionsContext();

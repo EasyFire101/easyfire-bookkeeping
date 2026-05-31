@@ -1,14 +1,14 @@
 import React from 'react';
 import intl from 'react-intl-universal';
 import { Group, PageFormBigNumber } from '@/components';
-import InvoiceFormHeaderFields from './InvoiceFormHeaderFields';
+import { InvoiceFormHeaderFields } from './InvoiceFormHeaderFields';
 import { useInvoiceTotalFormatted } from './utils';
 import styles from './InvoiceFormHeader.module.scss';
 
 /**
  * Invoice form header section.
  */
-function InvoiceFormHeader() {
+export function InvoiceFormHeader() {
   return (
     <Group
       position="apart"
@@ -34,4 +34,3 @@ function InvoiceFormBigTotal() {
     <PageFormBigNumber label={intl.get('due_amount')} amount={totalFormatted} />
   );
 }
-export default InvoiceFormHeader;

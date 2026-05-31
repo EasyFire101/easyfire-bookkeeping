@@ -8,7 +8,7 @@ import { usePdfEstimate } from '@/hooks/query';
 import { withDialogActions } from '@/containers/Dialog/withDialogActions';
 import { compose } from '@/utils';
 
-function EstimatePdfPreviewDialogContent({
+function EstimatePdfPreviewDialogContentInner({
   subscriptionForm: { estimateId },
   dialogName,
   // #withDialogActions
@@ -48,4 +48,4 @@ function EstimatePdfPreviewDialogContent({
   );
 }
 
-export default compose(withDialogActions)(EstimatePdfPreviewDialogContent);
+export const EstimatePdfPreviewDialogContent = compose(withDialogActions)(EstimatePdfPreviewDialogContentInner);

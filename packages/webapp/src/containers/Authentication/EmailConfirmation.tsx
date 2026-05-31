@@ -10,7 +10,7 @@ function useQuery() {
   return useMemo(() => new URLSearchParams(search), [search]);
 }
 
-export default function EmailConfirmation() {
+export function EmailConfirmation() {
   const { mutateAsync: authSignupVerify } = useAuthSignUpVerify();
   const history = useHistory();
   const query = useQuery();

@@ -29,7 +29,7 @@ import { Features, CLASSES } from '@/constants';
 import { useInventoryAdjContext } from './InventoryAdjustmentFormProvider';
 import { useFeatureCan } from '@/hooks/state';
 
-import InventoryAdjustmentQuantityFields from './InventoryAdjustmentQuantityFields';
+import { InventoryAdjustmentQuantityFields } from './InventoryAdjustmentQuantityFields';
 import {
   diffQuantity,
   useSetPrimaryBranchToForm,
@@ -40,7 +40,7 @@ import {
 /**
  * Inventory adjustment form dialogs fields.
  */
-export default function InventoryAdjustmentFormDialogFields() {
+export function InventoryAdjustmentFormDialogFields() {
   // Features guard.
   const { featureCan } = useFeatureCan();
 

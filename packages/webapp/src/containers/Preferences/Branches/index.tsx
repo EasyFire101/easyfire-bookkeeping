@@ -2,12 +2,12 @@
 import React from 'react';
 
 import { BranchesProvider } from './BranchesProvider';
-import Branches from './Branches';
+import { Branches } from './Branches';
 
 /**
  * Branches .
  */
-export default function BranchesPreferences() {
+export function BranchesPreferences() {
   return (
     <BranchesProvider>
       <Branches />
