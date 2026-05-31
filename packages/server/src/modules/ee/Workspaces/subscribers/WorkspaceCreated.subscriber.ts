@@ -5,9 +5,7 @@ import { IWorkspaceCreatedEventPayload } from '../Workspaces.types';
 
 @Injectable()
 export class WorkspaceCreatedSubscriber {
-  constructor() // Inject services needed for workspace setup
-  // e.g., private readonly someSetupService: SomeSetupService,
-  {}
+  constructor() {}
 
   @OnEvent(events.workspace.created)
   async handleWorkspaceCreated({
