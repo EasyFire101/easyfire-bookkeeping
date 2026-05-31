@@ -1,24 +1,29 @@
-// @ts-nocheck
-import React from 'react';
+import React, { ReactNode } from 'react';
 import classNames from 'classnames';
 import { CLASSES } from '@/constants/classes';
 import { useRoles } from '@/hooks/query';
+import type { RolesListResponse } from '@bigcapital/sdk-ts';
 
-const RolesListContext = React.createContext();
+interface RolesListContextValue {
+  roles: RolesListResponse | undefined;
+  isRolesFetching: boolean;
+  isRolesLoading: boolean;
+}
 
-/**
- * Roles list provider.
- */
-function RolesListProvider({ ...props }) {
-  // Fetch roles list.
+const RolesListContext = React.createContext<RolesListContextValue>({} as RolesListContextValue);
+
+interface RolesListProviderProps {
+  children: ReactNode;
+}
+
+function RolesListProvider({ children, ...props }: RolesListProviderProps) {
   const {
     data: roles,
     isFetching: isRolesFetching,
     isLoading: isRolesLoading,
   } = useRoles();
 
-  // Provider state.
-  const provider = {
+  const provider: RolesListContextValue = {
     roles,
     isRolesFetching,
     isRolesLoading,
@@ -30,7 +35,9 @@ function RolesListProvider({ ...props }) {
         CLASSES.PREFERENCES_PAGE_INSIDE_CONTENT_USERS,
       )}
     >
-      <RolesListContext.Provider value={provider} {...props} />
+      <RolesListContext.Provider value={provider} {...props}>
+        {children}
+      </RolesListContext.Provider>
     </div>
   );
 }

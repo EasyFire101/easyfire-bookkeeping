@@ -26,10 +26,7 @@ function BranchesDataTable({
   // #withAlertActions
   openAlert,
 }) {
-  // Table columns.
   const columns = useBranchesTableColumns();
-
-  // MarkBranchAsPrimary
   const { mutateAsync: markBranchAsPrimaryMutate } = useMarkBranchAsPrimary();
 
   const { branches, isBranchesLoading, isBranchesFetching } =
@@ -59,7 +56,7 @@ function BranchesDataTable({
     <BranchesTableCard>
       <BranchesTable
         columns={columns}
-        data={branches}
+        data={branches ?? []}
         loading={isBranchesLoading}
         headerLoading={isBranchesLoading}
         progressBarLoading={isBranchesFetching}

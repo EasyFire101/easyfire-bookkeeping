@@ -49,7 +49,7 @@ function CurrenciesDataTable({
   return (
     <CurrencieDataTable
       columns={columns}
-      data={currencies}
+      data={currencies ?? []}
       loading={isCurrenciesLoading}
       progressBarLoading={isCurrenciesLoading}
       TableLoadingRenderer={TableSkeletonRows}

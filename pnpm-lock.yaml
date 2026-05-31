@@ -785,6 +785,9 @@ importers:
         specifier: ^0.28.1
         version: 0.28.5
     devDependencies:
+      '@types/flat':
+        specifier: ^5.0.5
+        version: 5.0.5
       '@vitejs/plugin-legacy':
         specifier: ^5.4.2
         version: 5.4.3(terser@5.31.0)(vite@5.4.10(@types/node@20.19.25)(less@4.2.0)(sass@1.77.2)(terser@5.31.0))
@@ -5447,6 +5450,9 @@ packages:
 
   '@types/find-cache-dir@3.2.1':
     resolution: {integrity: sha512-frsJrz2t/CeGifcu/6uRo4b+SzAwT4NYCVPu1GN8IB9XTzrpPkGuV0tmh9mN+/L0PklAlsC3u5Fxt0ju00LXIw==}
+
+  '@types/flat@5.0.5':
+    resolution: {integrity: sha512-nPLljZQKSnac53KDUDzuzdRfGI0TDb5qPrb+SrQyN3MtdQrOnGsKniHN1iYZsJEBIVQve94Y6gNz22sgISZq+Q==}
 
   '@types/glob@7.2.0':
     resolution: {integrity: sha512-ZUxbzKl0IfJILTS6t7ip5fQQM/J3TJYubDm3nMbgubNNYS62eXeUpoLUC8/7fJNiFYHTrGPQn7hspDUzIHX3UA==}
@@ -20108,6 +20114,8 @@ snapshots:
       '@types/serve-static': 1.15.7
 
   '@types/find-cache-dir@3.2.1': {}
+
+  '@types/flat@5.0.5': {}
 
   '@types/glob@7.2.0':
     dependencies:

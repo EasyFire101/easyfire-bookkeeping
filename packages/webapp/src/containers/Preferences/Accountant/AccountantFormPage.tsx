@@ -1,16 +1,13 @@
-// @ts-nocheck
-import React, { useEffect } from 'react';
+import { useEffect } from 'react';
 import * as R from 'ramda';
 import intl from 'react-intl-universal';
-import { Formik } from 'formik';
+import { Formik, FormikHelpers } from 'formik';
 import { Intent } from '@blueprintjs/core';
 import { flatten, unflatten } from 'flat';
-
 import { AppToaster } from '@/components';
-import { withDashboardActions } from '@/containers/Dashboard/withDashboardActions';
-import { withSettings } from '@/containers/Settings/withSettings';
-
-import AccountantForm from './AccountantForm';
+import { withDashboardActions, type WithDashboardActionsProps } from '@/containers/Dashboard/withDashboardActions';
+import { withSettings, type WithSettingsProps } from '@/containers/Settings/withSettings';
+import { AccountantForm } from './AccountantForm';
 import { AccountantSchema } from './Accountant.schema';
 import { useAccountantFormContext } from './AccountantFormProvider';
 import { transferObjectOptionsToArray } from './utils';
@@ -35,14 +32,12 @@ const defaultFormValues = flatten({
   },
 });
 
-// Accountant preferences.
-function AccountantFormPage({
-  //# withDashboardActions
-  changePreferencesPageTitle,
+interface AccountantFormPageInnerProps extends WithDashboardActionsProps, WithSettingsProps {}
 
-  // #withSettings
+function AccountantFormPageInner({
+  changePreferencesPageTitle,
   allSettings,
-}) {
+}: AccountantFormPageInnerProps) {
   const { saveSettingMutate } = useAccountantFormContext();
 
   useEffect(() => {
@@ -53,8 +48,7 @@ function AccountantFormPage({
     ...defaultFormValues,
     ...transformToForm(flatten(allSettings), defaultFormValues),
   });
-  // Handle the form submitting.
-  const handleFormSubmit = (values, { setSubmitting }) => {
+  const handleFormSubmit = (values: Record<string, any>, { setSubmitting }: FormikHelpers<Record<string, any>>) => {
     const options = R.compose(
       transferObjectOptionsToArray,
       transfromToSnakeCase,
@@ -84,9 +78,9 @@ function AccountantFormPage({
   );
 }
 
-export default compose(
+export const AccountantFormPage = compose(
   withSettings(({ allSettings }) => ({
     allSettings,
   })),
   withDashboardActions,
-)(AccountantFormPage);
+)(AccountantFormPageInner);

@@ -1,27 +1,35 @@
-// @ts-nocheck
-import React from 'react';
+import React, { ReactNode } from 'react';
 import classNames from 'classnames';
+import { BranchesListResponse } from '@bigcapital/sdk-ts';
 import { CLASSES } from '@/constants/classes';
 import { useBranches } from '@/hooks/query';
 import { useFeatureCan } from '@/hooks/state';
 import { Features } from '@/constants';
 import { isEmpty } from 'lodash';
 
-const BranchesContext = React.createContext();
+interface BranchesContextValue {
+  branches: BranchesListResponse | undefined;
+  isBranchesLoading: boolean;
+  isEmptyStatus: boolean;
+}
 
-/**
- * Branches data provider.
- */
-function BranchesProvider({ query, ...props }) {
+const BranchesContext = React.createContext<BranchesContextValue>(
+  {} as BranchesContextValue,
+);
+
+interface BranchesProviderProps {
+  query?: Record<string, unknown>;
+  children: ReactNode;
+}
+
+function BranchesProvider({ query, ...props }: BranchesProviderProps) {
   // Features guard.
   const { featureCan } = useFeatureCan();
-
   const isBranchFeatureCan = featureCan(Features.Branches);
 
   // Fetches the branches list.
   const {
     isLoading: isBranchesLoading,
-    isFetching: isBranchesFetching,
     data: branches,
   } = useBranches(query, { enabled: isBranchFeatureCan });
 
@@ -30,10 +38,9 @@ function BranchesProvider({ query, ...props }) {
     (isEmpty(branches) && !isBranchesLoading) || !isBranchFeatureCan;
 
   // Provider state.
-  const provider = {
+  const provider: BranchesContextValue = {
     branches,
     isBranchesLoading,
-    isBranchesFetching,
     isEmptyStatus,
   };
 
@@ -49,5 +56,7 @@ function BranchesProvider({ query, ...props }) {
   );
 }
 
-const useBranchesContext = () => React.useContext(BranchesContext);
+const useBranchesContext = () =>
+  React.useContext<BranchesContextValue>(BranchesContext);
+
 export { BranchesProvider, useBranchesContext };

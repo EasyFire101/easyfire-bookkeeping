@@ -5,7 +5,6 @@ import { Form, useFormikContext } from 'formik';
 import styled from 'styled-components';
 import { FormGroup, Radio, Button, Intent } from '@blueprintjs/core';
 import { useHistory } from 'react-router-dom';
-
 import {
   FormattedMessage as T,
   AccountsSelect,

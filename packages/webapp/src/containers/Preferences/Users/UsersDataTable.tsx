@@ -86,7 +86,7 @@ function UsersDataTable({
   return (
     <DataTable
       columns={columns}
-      data={users}
+      data={users ?? []}
       loading={isUsersLoading}
       headerLoading={isUsersLoading}
       progressBarLoading={isUsersFetching}

@@ -1,18 +1,23 @@
-// @ts-nocheck
 import React from 'react';
 import intl from 'react-intl-universal';
-
 import { Intent, Menu, MenuItem, MenuDivider } from '@blueprintjs/core';
 import { safeCallback } from '@/utils';
 import { Icon } from '@/components';
 
-/**
- * Context menu of roles.
- */
+interface ActionsMenuPayload {
+  onDeleteRole: (role: { id: number; predefined: boolean }) => void;
+  onEditRole: (role: { id: number; predefined: boolean }) => void;
+}
+
+interface ActionsMenuProps {
+  payload: ActionsMenuPayload;
+  row: { original: Record<string, any> };
+}
+
 export function ActionsMenu({
   payload: { onDeleteRole, onEditRole },
   row: { original },
-}) {
+}: ActionsMenuProps) {
   return (
     <Menu>
       <MenuItem

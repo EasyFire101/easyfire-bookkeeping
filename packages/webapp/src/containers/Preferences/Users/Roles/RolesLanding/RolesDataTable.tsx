@@ -1,36 +1,24 @@
-// @ts-nocheck
 import React from 'react';
 import intl from 'react-intl-universal';
 import styled from 'styled-components';
 import { Intent } from '@blueprintjs/core';
 import { useHistory } from 'react-router-dom';
-
 import { DataTable, AppToaster, TableSkeletonRows } from '@/components';
-
 import { useRolesTableColumns, ActionsMenu } from './components';
-import { withAlertActions } from '@/containers/Alert/withAlertActions';
+import { withAlertActions, type WithAlertActionsProps } from '@/containers/Alert/withAlertActions';
 import { useRolesContext } from './RolesListProvider';
-
 import { compose } from '@/utils';
 
-/**
- * Roles data table.
- */
-function RolesDataTable({
-  // #withAlertActions
+function RolesDataTableInner({
   openAlert,
-}) {
-  // History context.
+}: WithAlertActionsProps) {
   const history = useHistory();
 
-  // Retrieve roles table columns
   const columns = useRolesTableColumns();
 
-  // Roles table context.
   const { roles, isRolesFetching, isRolesLoading } = useRolesContext();
 
-  // handles delete the given role.
-  const handleDeleteRole = ({ id, predefined }) => {
+  const handleDeleteRole = ({ id, predefined }: { id: number; predefined: boolean }) => {
     if (predefined) {
       AppToaster.show({
         message: intl.get('roles.error.you_cannot_delete_predefined_roles'),
@@ -40,8 +28,7 @@ function RolesDataTable({
       openAlert('role-delete', { roleId: id });
     }
   };
-  // Handles the edit of the given role.
-  const handleEditRole = ({ id, predefined }) => {
+  const handleEditRole = ({ id, predefined }: { id: number; predefined: boolean }) => {
     if (predefined) {
       AppToaster.show({
         message: intl.get('roles.error.you_cannot_edit_predefined_roles'),
@@ -55,7 +42,7 @@ function RolesDataTable({
   return (
     <RolesTable
       columns={columns}
-      data={roles}
+      data={roles ?? []}
       loading={isRolesLoading}
       headerLoading={isRolesFetching}
       progressBarLoading={isRolesFetching}
@@ -75,4 +62,4 @@ const RolesTable = styled(DataTable)`
   }
 `;
 
-export default compose(withAlertActions)(RolesDataTable);
+export const RolesDataTable = compose(withAlertActions)(RolesDataTableInner);
