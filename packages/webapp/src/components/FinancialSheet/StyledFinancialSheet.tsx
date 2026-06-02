@@ -1,7 +1,11 @@
-// @ts-nocheck
 import styled from 'styled-components';
 
-export const FinancialSheetRoot = styled.div`
+interface FinancialSheetRootProps {
+  $minimal?: boolean;
+  $fullWidth?: boolean;
+}
+
+export const FinancialSheetRoot = styled.div<FinancialSheetRootProps>`
   border: 2px solid var(--color-financial-sheet-card-border);
   border-radius: 10px;
   min-width: 640px;
@@ -15,13 +19,13 @@ export const FinancialSheetRoot = styled.div`
   gap: 24px;
 
   ${(props) =>
-    props.fullWidth &&
+    props.$fullWidth &&
     `
     width: 100%;
     margin-top: 25px;`}
 
   ${(props) =>
-    props.minimal &&
+    props.$minimal &&
     `
     border: 0;
     padding: 0;
@@ -36,7 +40,7 @@ export const FinancialSheetRoot = styled.div`
   }
   ${FinancialSheetDate} {
     margin-top: 20px;
-  }  
+  }
 `}
 `;
 

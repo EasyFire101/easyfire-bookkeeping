@@ -4,9 +4,7 @@ import intl from 'react-intl-universal';
 import { Intent } from '@blueprintjs/core';
 import { Formik } from 'formik';
 import { AppToaster } from '@/components';
-
 import { AccountDialogFormContent } from './AccountDialogFormContent';
-
 import { withDialogActions } from '@/containers/Dialog/withDialogActions';
 import {
   EditAccountFormSchema,
@@ -18,7 +16,6 @@ import {
   transformAccountToForm,
   transformFormToReq,
 } from './utils';
-
 import '@/style/pages/Accounts/AccountFormDialog.scss';
 import { useAccountDialogContext } from './AccountDialogProvider';
 

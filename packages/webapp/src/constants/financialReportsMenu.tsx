@@ -7,7 +7,7 @@ import {
   AuditLogAction,
 } from '@/constants/abilityOption';
 
-export const financialReportMenus = [
+export const financialReportMenus: Array<FinancialSection> = [
   {
     sectionTitle: <T id={'financial_accounting'} />,
     reports: [

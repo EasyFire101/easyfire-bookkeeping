@@ -1,12 +1,9 @@
 import React, { useMemo } from 'react';
 import intl from 'react-intl-universal';
 import styled from 'styled-components';
-
 import { DataTable, FinancialSheet } from '@/components';
-
 import { useVendorsTransactionsColumns } from './components';
 import { useVendorsTransactionsContext } from './VendorsTransactionsProvider';
-
 import { defaultExpanderReducer, tableRowTypesToClassnames } from '@/utils';
 import { TableStyle } from '@/constants';
 
@@ -23,8 +20,7 @@ export function VendorsTransactionsTable({
   companyName,
 }: VendorsTransactionsTableProps) {
   // Vendor transactions context.
-  const { vendorsTransactions, isVendorsTransactionsLoading } =
-    useVendorsTransactionsContext();
+  const { vendorsTransactions } = useVendorsTransactionsContext();
 
   const table = (vendorsTransactions as any)?.table;
   const meta = (vendorsTransactions as any)?.meta;
@@ -39,10 +35,8 @@ export function VendorsTransactionsTable({
 
   return (
     <FinancialSheet
-      name="vendor-transactions"
       companyName={companyName}
       sheetType={intl.get('vendors_transactions')}
-      loading={isVendorsTransactionsLoading}
       dateText={meta?.formatted_date_range ?? meta?.formatted_as_date}
       fullWidth={true}
     >

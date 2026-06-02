@@ -3,13 +3,13 @@ import { Dispatch } from 'redux';
 import { toggleRealizedGainOrLossFilterDrawer } from '@/store/financial-statement/financial-statements.actions';
 
 export interface WithRealizedGainOrLossActionsProps {
-  toggleRealizedGainOrLossFilterDrawer: (toggle: boolean) => void;
+  toggleRealizedGainOrLossFilterDrawer: (toggle?: boolean) => void;
 }
 
 export const mapDispatchToProps = (
   dispatch: Dispatch,
 ): WithRealizedGainOrLossActionsProps => ({
-  toggleRealizedGainOrLossFilterDrawer: (toggle: boolean) =>
+  toggleRealizedGainOrLossFilterDrawer: (toggle?: boolean) =>
     dispatch(toggleRealizedGainOrLossFilterDrawer(toggle)),
 });
 

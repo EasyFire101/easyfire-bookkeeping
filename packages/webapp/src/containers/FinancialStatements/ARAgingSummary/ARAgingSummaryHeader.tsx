@@ -3,19 +3,15 @@ import styled from 'styled-components';
 import moment from 'moment';
 import { FormattedMessage as T } from '@/components';
 import { Formik, Form } from 'formik';
-import type { FormikHelpers } from 'formik';
 import { Tabs, Tab, Button, Intent } from '@blueprintjs/core';
-
 import { FinancialStatementHeader } from '@/containers/FinancialStatements/FinancialStatementHeader';
 import { ARAgingSummaryHeaderGeneral } from './ARAgingSummaryHeaderGeneral';
 import { ARAgingSummaryHeaderDimensions } from './ARAgingSummaryHeaderDimensions';
-
 import { withARAgingSummary } from './withARAgingSummary';
 import {
   withARAgingSummaryActions,
   WithARAgingSummaryActionsProps,
 } from './withARAgingSummaryActions';
-
 import { compose, transformToForm } from '@/utils';
 import { useFeatureCan } from '@/hooks/state';
 import { Features } from '@/constants';
@@ -23,6 +19,7 @@ import {
   getARAgingSummaryQuerySchema,
   getDefaultARAgingSummaryQuery,
 } from './common';
+import type { FormikHelpers } from 'formik';
 
 type ARAgingSummaryFormValues = ReturnType<
   typeof getDefaultARAgingSummaryQuery
@@ -53,7 +50,7 @@ function ARAgingSummaryHeaderInner({
       asDate: moment(pageFilter.asDate).toDate(),
     },
     defaultValues,
-  );
+  ) as ARAgingSummaryFormValues;
 
   const handleSubmit = (
     values: ARAgingSummaryFormValues,

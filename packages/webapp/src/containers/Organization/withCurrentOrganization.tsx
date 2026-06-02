@@ -1,7 +1,6 @@
 import { connect, MapStateToProps } from 'react-redux';
 import { getCurrentOrganizationFactory } from '@/store/authentication/authentication.selectors';
 import { ApplicationState } from '@/store/reducers';
-import type { MapState } from '@/containers/hoc.types';
 
 export interface OrganizationStore {
   id: number;
@@ -38,24 +37,28 @@ export interface WithCurrentOrganizationProps {
   organization: OrganizationStore;
 }
 
-export function withCurrentOrganization<Props>(
-  mapState?: MapState<WithCurrentOrganizationProps, Props>,
+export function withCurrentOrganization<
+  TInjected extends object = WithCurrentOrganizationProps,
+  TOwnProps = {},
+>(
+  mapState?: (
+    storeProps: WithCurrentOrganizationProps,
+    state: ApplicationState,
+    ownProps: TOwnProps,
+  ) => TInjected,
 ) {
   const getCurrentOrganization = getCurrentOrganizationFactory();
 
-  const mapStateToProps: MapStateToProps<
-    WithCurrentOrganizationProps,
-    Props,
-    ApplicationState
-  > = (state, props) => {
+  const mapStateToProps: MapStateToProps<TInjected, TOwnProps, ApplicationState> = (
+    state,
+    props,
+  ) => {
     const mapped: WithCurrentOrganizationProps = {
       organizationTenantId: state.authentication.organizationId,
       organizationId: state.authentication.organizationId,
       organization: getCurrentOrganization(state) as OrganizationStore,
     };
-    return mapState
-      ? (mapState(mapped, state, props) as WithCurrentOrganizationProps)
-      : mapped;
+    return (mapState ? mapState(mapped, state, props) : mapped) as TInjected;
   };
   return connect(mapStateToProps);
 }

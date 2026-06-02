@@ -1,27 +1,22 @@
 import React from 'react';
-
 import moment from 'moment';
 import { Formik, Form, FormikHelpers } from 'formik';
 import { Tabs, Tab, Button, Intent } from '@blueprintjs/core';
 import { FormattedMessage as T } from '@/components';
-
 import { FinancialStatementHeader } from '../FinancialStatementHeader';
 import { VendorsTransactionsHeaderGeneralPanel } from './VendorsTransactionsHeaderGeneralPanel';
-
 import {
   withVendorsTransaction,
-  WithVendorsTransactionProps,
 } from './withVendorsTransaction';
 import {
   withVendorsTransactionsActions,
   WithVendorsTransactionsActionsProps,
 } from './withVendorsTransactionsActions';
-
-import { compose, transformToForm } from '@/utils';
 import {
   getVendorTransactionsQuerySchema,
   getVendorsTransactionsDefaultQuery,
 } from './_utils';
+import { compose, transformToForm } from '@/utils';
 
 interface VendorsTransactionsHeaderOwnProps {
   onSubmitFilter: (values: Record<string, unknown>) => void;
@@ -65,7 +60,7 @@ function VendorsTransactionsHeaderInner({
       toDate: moment(pageFilter.toDate as string).toDate(),
     },
     defaultValues,
-  );
+  ) as FormValues;
   // Validation schema.
   const validationSchema = getVendorTransactionsQuerySchema();
 

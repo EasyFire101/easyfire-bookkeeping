@@ -1,21 +1,16 @@
-import React, { useCallback, useEffect } from 'react';
+import { useCallback, useEffect } from 'react';
 import moment from 'moment';
-
 import { useAPAgingSummaryQuery } from './common';
 import { FinancialStatement, DashboardPageContent } from '@/components';
-
 import { APAgingSummaryHeader } from './APAgingSummaryHeader';
 import { APAgingSummaryActionsBar } from './APAgingSummaryActionsBar';
-
 import { APAgingSummaryBody } from './APAgingSummaryBody';
 import { APAgingSummaryProvider } from './APAgingSummaryProvider';
 import { APAgingSummarySheetLoadingBar } from './components';
-
 import {
   withAPAgingSummaryActions,
   WithAPAgingSummaryActionsProps,
 } from './withAPAgingSummaryActions';
-
 import { compose } from '@/utils';
 import { APAgingSummaryPdfDialog } from './dialogs/APAgingSummaryPdfDialog';
 import { DialogsName } from '@/constants/dialogs';
@@ -40,7 +35,6 @@ function APAgingSummaryInner({
     },
     [setLocationQuery],
   );
-
   const handleNumberFormatSubmit = (numberFormat: Record<string, unknown>) => {
     setLocationQuery({ ...query, numberFormat });
   };
@@ -61,7 +55,7 @@ function APAgingSummaryInner({
       <APAgingSummarySheetLoadingBar />
 
       <DashboardPageContent>
-        <FinancialStatement name={'AP-aging-summary'}>
+        <FinancialStatement>
           <APAgingSummaryHeader
             pageFilter={query}
             onSubmitFilter={handleFilterSubmit}

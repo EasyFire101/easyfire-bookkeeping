@@ -15,6 +15,7 @@ import { sanitizeSortDirection } from '@/modules/DynamicListing/DynamicFilter/sa
 import { InjectModelDefaultViews } from '@/modules/Views/decorators/InjectModelDefaultViews.decorator';
 import { BillDefaultViews } from '../Bills.constants';
 import { InjectAttachable } from '@/modules/Attachments/decorators/InjectAttachable.decorator';
+import { TaxRateTransaction } from '@/modules/TaxRates/models/TaxRateTransaction.model';
 
 @InjectAttachable()
 @ExportableModel()
@@ -56,6 +57,8 @@ export class Bill extends TenantBaseModel {
   public entries?: ItemEntry[];
   public attachments!: Document[];
   public locatedLandedCosts?: BillLandedCost[];
+  public taxes!: Array<TaxRateTransaction>;
+
   /**
    * Timestamps columns.
    */

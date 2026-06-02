@@ -12,7 +12,6 @@ export function UnrealizedGainOrLossTable({
 }: UnrealizedGainOrLossTableProps) {
   return (
     <FinancialSheet
-      name="unrealized-gain-loss"
       companyName={companyName}
       sheetType={intl.get('unrealized_gain_or_loss.label')}
     ></FinancialSheet>

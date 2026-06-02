@@ -1,5 +1,4 @@
-import React, { useMemo } from 'react';
-import * as Yup from 'yup';
+import { useMemo } from 'react';
 import moment from 'moment';
 import { Button, Tabs, Tab, Position } from '@blueprintjs/core';
 import styled from 'styled-components';
@@ -10,6 +9,7 @@ import { useAuditLogFilterOptionsQuery } from '@/hooks/query';
 import { saveInvoke, transformToForm } from '@/utils';
 import { FinancialStatementHeader } from '../FinancialStatementHeader';
 import { getDefaultAuditLogQuery, getAuditLogQuerySchema } from './common';
+import { SelectOptionProps } from '@blueprintjs-formik/select';
 
 interface AuditLogHeaderFormValues {
   subject: string[];
@@ -30,7 +30,7 @@ function normalizeStringListField(value: unknown): string[] {
   return value ? [value as string] : [];
 }
 
-interface SelectItem {
+interface SelectItem extends SelectOptionProps{
   value: string;
   name: string;
 }
@@ -208,7 +208,7 @@ export function AuditLogHeader({
                     />
                   </FFormGroup>
 
-                  <FFormGroup name="toDate" label={'To'} fill fastField>
+                  <FFormGroup name="toDate" label={'To'} fastField>
                     <FDateInput
                       name="toDate"
                       type="date"

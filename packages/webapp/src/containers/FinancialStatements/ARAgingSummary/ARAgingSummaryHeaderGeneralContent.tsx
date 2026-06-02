@@ -1,4 +1,4 @@
-import React from 'react';
+import intl from 'react-intl-universal';
 import { Position } from '@blueprintjs/core';
 import { FinancialStatementsFilter } from '../FinancialStatementsFilter';
 import {
@@ -13,7 +13,6 @@ import {
 import { momentFormatter } from '@/utils';
 import { useARAgingSummaryGeneralContext } from './ARAgingSummaryGeneralProvider';
 import { filterCustomersOptions } from './constants';
-import intl from 'react-intl-universal';
 
 export function ARAgingSummaryHeaderGeneralContent() {
   const { customers } = useARAgingSummaryGeneralContext();
@@ -26,14 +25,12 @@ export function ARAgingSummaryHeaderGeneralContent() {
             name={'asDate'}
             label={intl.get('as_date')}
             labelInfo={<FieldHint />}
-            fill
             fastField
           >
             <FDateInput
               name={'asDate'}
               {...momentFormatter('YYYY/MM/DD')}
               popoverProps={{ position: Position.BOTTOM_LEFT, minimal: true }}
-              minimal
               fill
               fastField
             />
@@ -49,7 +46,7 @@ export function ARAgingSummaryHeaderGeneralContent() {
             labelInfo={<FieldHint />}
             fastField
           >
-            <FInputGroup name={'agingDaysBefore'} medium={true} fastField />
+            <FInputGroup name={'agingDaysBefore'} fastField />
           </FFormGroup>
         </Col>
       </Row>
@@ -61,7 +58,7 @@ export function ARAgingSummaryHeaderGeneralContent() {
             label={intl.get('aging_periods')}
             labelInfo={<FieldHint />}
           >
-            <FInputGroup name={'agingPeriods'} medium={true} />
+            <FInputGroup name={'agingPeriods'} />
           </FFormGroup>
         </Col>
       </Row>

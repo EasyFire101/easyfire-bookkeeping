@@ -2,6 +2,7 @@ import React, { createContext, useContext, useMemo } from 'react';
 import { FinancialReportPage } from '../FinancialReportPage';
 import { useVendorsBalanceSummaryReport } from '@/hooks/query';
 import { transformFilterFormToQuery } from '../common';
+import { VendorBalanceTableQuery } from '@bigcapital/sdk-ts';
 
 type UseVendorsBalanceSummaryResult = ReturnType<
   typeof useVendorsBalanceSummaryReport
@@ -30,7 +31,8 @@ function VendorsBalanceSummaryProvider({
   filter,
   ...props
 }: VendorsBalanceSummaryProviderProps & { children?: React.ReactNode }) {
-  const httpQuery = useMemo(() => transformFilterFormToQuery(filter), [filter]);
+  const httpQuery = useMemo(() => transformFilterFormToQuery(filter) as VendorBalanceTableQuery, [filter]);
+
   // Fetching vendors balance summary report based on the given query.
   const {
     data: VendorBalanceSummary,

@@ -4,8 +4,6 @@ import type {
   CreateBillBody,
   EditBillBody,
   AccountsList,
-  VendorsListResponse,
-  ItemsListResponse,
   WarehousesListResponse,
   BranchesListResponse,
   TaxRatesListResponse,
@@ -157,14 +155,14 @@ function BillFormProvider({ billId, ...props }: BillFormProviderProps) {
     isTaxRatesLoading;
 
   const provider: BillFormContextValue = {
-    accounts,
+    accounts: accounts ?? [],
     vendors: (vendorsData as any)?.vendors,
     items: (itemsData as any)?.items,
     bill,
-    warehouses,
-    branches,
+    warehouses: warehouses ?? [],
+    branches: branches ?? [],
     projects: projectsData?.projects,
-    taxRates,
+    taxRates: taxRates ?? [],
     submitPayload,
     isNewMode,
 

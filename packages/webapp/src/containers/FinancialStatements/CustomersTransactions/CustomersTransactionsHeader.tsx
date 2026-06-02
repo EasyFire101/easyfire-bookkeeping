@@ -4,19 +4,15 @@ import styled from 'styled-components';
 import { Tabs, Tab, Button, Intent } from '@blueprintjs/core';
 import { FormattedMessage as T } from '@/components';
 import { Formik, Form, FormikHelpers } from 'formik';
-
 import { FinancialStatementHeader } from '../FinancialStatementHeader';
 import { CustomersTransactionsHeaderGeneralPanel } from './CustomersTransactionsHeaderGeneralPanel';
-
 import {
   withCustomersTransactions,
-  WithCustomersTransactionsProps,
 } from './withCustomersTransactions';
 import {
   withCustomersTransactionsActions,
   WithCustomersTransactionsActionsProps,
 } from './withCustomersTransactionsActions';
-
 import { compose, transformToForm } from '@/utils';
 import {
   getCustomersTransactionsDefaultQuery,
@@ -70,7 +66,7 @@ function CustomersTransactionsHeaderInner({
       toDate: moment(pageFilter.toDate).toDate(),
     },
     defaultValues,
-  );
+  ) as CustomersTransactionsHeaderFormValues;
 
   // Validation schema.
   const validationSchema = getCustomersTransactionsQuerySchema();

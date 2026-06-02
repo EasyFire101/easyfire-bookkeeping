@@ -1,4 +1,3 @@
-// @ts-nocheck
 import React from 'react';
 import intl from 'react-intl-universal';
 import { Link } from 'react-router-dom';
@@ -13,14 +12,17 @@ import { useAccountReadEntriesColumns } from './utils';
 import { useAppIntlContext } from '@/components/AppIntlProvider';
 import { useAccountDrawerContext } from './AccountDrawerProvider';
 
-import { withDrawerActions } from '@/containers/Drawer/withDrawerActions';
+import {
+  withDrawerActions,
+  WithDrawerActionsProps,
+} from '@/containers/Drawer/withDrawerActions';
 
 import { compose } from '@/utils';
 
 /**
  * account drawer table.
  */
-function AccountDrawerTableInner({ closeDrawer }) {
+function AccountDrawerTableInner({ closeDrawer }: WithDrawerActionsProps) {
   const { accounts, drawerName } = useAccountDrawerContext();
 
   // Handle view more link click.
@@ -36,7 +38,7 @@ function AccountDrawerTableInner({ closeDrawer }) {
         <AccountDrawerTableHeader />
         <AccountDrawerDataTable />
 
-        <If condition={accounts.length > 0}>
+        <If condition={(accounts?.length ?? 0) > 0}>
           <TableFooter>
             <Link
               to={`/financial-reports/general-ledger`}
@@ -60,7 +62,7 @@ function AccountDrawerDataTable() {
   return (
     <DataTable
       columns={columns}
-      data={accounts}
+      data={accounts ?? []}
       payload={{ account }}
       styleName={TableStyle.Constrant}
     />

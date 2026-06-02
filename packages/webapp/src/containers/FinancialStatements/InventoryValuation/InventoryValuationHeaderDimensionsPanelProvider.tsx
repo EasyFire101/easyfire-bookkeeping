@@ -1,13 +1,13 @@
 import React, { createContext, useContext } from 'react';
-
+import { BranchesListResponse, WarehousesListResponse } from '@bigcapital/sdk-ts';
 import { Features } from '@/constants';
 import { useFeatureCan } from '@/hooks/state';
 import { useWarehouses, useBranches } from '@/hooks/query';
 import { FinancialHeaderLoadingSkeleton } from '../FinancialHeaderLoadingSkeleton';
 
 interface InventoryValuationHeaderDimensionsPanelContextValue {
-  warehouses: Record<string, unknown> | undefined;
-  branches: Record<string, unknown> | undefined;
+  warehouses: WarehousesListResponse | undefined;
+  branches: BranchesListResponse | undefined;
   isWarehouesLoading: boolean;
   isBranchLoading: boolean;
 }
@@ -23,7 +23,6 @@ const InventoryValuationHeaderDimensionsPanelContext = createContext<
 
 /**
  * Inventory valuation header provider.
- * @returns
  */
 function InventoryValuationHeaderDimensionsProvider({
   ...props
@@ -39,12 +38,11 @@ function InventoryValuationHeaderDimensionsProvider({
 
   // Fetches the warehouses list.
   const { data: warehouses, isLoading: isWarehouesLoading } = useWarehouses(
-    null,
+    {},
     { enabled: isWarehouseFeatureCan },
   );
-
   // Fetches the branches list.
-  const { data: branches, isLoading: isBranchLoading } = useBranches(null, {
+  const { data: branches, isLoading: isBranchLoading } = useBranches({}, {
     enabled: isBranchFeatureCan,
   });
 

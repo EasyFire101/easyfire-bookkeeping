@@ -8,18 +8,15 @@ import {
   TableSkeletonRows,
   AppToaster,
 } from '@/components';
-
 import { withAlertActions } from '@/containers/Alert/withAlertActions';
 import { withDrawerActions } from '@/containers/Drawer/withDrawerActions';
 import { withDialogActions } from '@/containers/Dialog/withDialogActions';
 import { withDashboardActions } from '@/containers/Dashboard/withDashboardActions';
 import { withSettings } from '@/containers/Settings/withSettings';
-
 import { useTaxRatesTableColumns } from './_utils';
 import { useTaxRatesLandingContext } from './TaxRatesLandingProvider';
 import { TaxRatesLandingEmptyState } from './TaxRatesLandingEmptyState';
 import { TaxRatesTableActionsMenu } from './_components';
-
 import { compose } from '@/utils';
 import { DRAWERS } from '@/constants/drawers';
 import { DialogsName } from '@/constants/dialogs';
@@ -108,7 +105,7 @@ function TaxRatesDataTable({
     <DashboardContentTable>
       <DataTable
         columns={columns}
-        data={taxRates}
+        data={taxRates ?? []}
         loading={isTaxRatesLoading}
         headerLoading={isTaxRatesLoading}
         progressBarLoading={isTaxRatesLoading}

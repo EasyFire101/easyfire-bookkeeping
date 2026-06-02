@@ -1,7 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
 import intl from 'react-intl-universal';
-
 import { TableStyle } from '@/constants';
 import { ReportDataTable, FinancialSheet } from '@/components';
 import { useBalanceSheetContext } from './BalanceSheetProvider';

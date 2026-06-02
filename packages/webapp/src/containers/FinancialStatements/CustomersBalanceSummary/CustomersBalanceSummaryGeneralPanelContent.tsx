@@ -1,4 +1,5 @@
 import { Position } from '@blueprintjs/core';
+import intl from 'react-intl-universal';
 import {
   Row,
   Col,
@@ -12,7 +13,6 @@ import { momentFormatter } from '@/utils';
 import { filterCustomersOptions } from '../constants';
 import { useCustomersBalanceSummaryGeneralContext } from './CustomersBalanceSummaryGeneralProvider';
 import { FinancialStatementsFilter } from '../FinancialStatementsFilter';
-import intl from 'react-intl-universal';
 
 /**
  * Customers balance header - General panel - Content
@@ -28,14 +28,12 @@ export function CustomersBalanceSummaryGeneralPanelContent() {
             name={'asDate'}
             label={intl.get('as_date')}
             labelInfo={<FieldHint />}
-            fill
             fastField
           >
             <FDateInput
               name={'asDate'}
               {...momentFormatter('YYYY/MM/DD')}
               popoverProps={{ position: Position.BOTTOM, minimal: true }}
-              minimal={true}
               fill={true}
               fastField
             />
@@ -53,7 +51,6 @@ export function CustomersBalanceSummaryGeneralPanelContent() {
             <FCheckbox
               name={'percentage_column'}
               inline={true}
-              small={true}
               label={intl.get('percentage_of_column')}
               fastField
             />

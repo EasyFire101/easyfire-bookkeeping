@@ -23,7 +23,7 @@ interface GeneralLedgerTableProps {
  */
 export function GeneralLedgerTable({ companyName }: GeneralLedgerTableProps) {
   // General ledger context.
-  const { generalLedger, isLoading } = useGeneralLedgerContext();
+  const { generalLedger } = useGeneralLedgerContext();
 
   const table = (generalLedger as any)?.table;
   const meta = (generalLedger as any)?.meta;
@@ -42,7 +42,6 @@ export function GeneralLedgerTable({ companyName }: GeneralLedgerTableProps) {
       companyName={companyName}
       sheetType={intl.get('general_ledger_sheet')}
       dateText={meta?.formatted_date_range ?? meta?.formatted_as_date}
-      loading={isLoading}
       fullWidth={true}
     >
       <GeneralLedgerDataTable

@@ -3,13 +3,13 @@ import { Dispatch } from 'redux';
 import { toggleJournalSheeetFilterDrawer } from '@/store/financial-statement/financial-statements.actions';
 
 export interface WithJournalActionsProps {
-  toggleJournalSheetFilter: (toggle: boolean) => void;
+  toggleJournalSheetFilter: (toggle?: boolean) => void;
 }
 
 export const mapDispatchToProps = (
   dispatch: Dispatch,
 ): WithJournalActionsProps => ({
-  toggleJournalSheetFilter: (toggle: boolean) =>
+  toggleJournalSheetFilter: (toggle?: boolean) =>
     dispatch(toggleJournalSheeetFilterDrawer(toggle)),
 });
 

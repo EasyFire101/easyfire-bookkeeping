@@ -16,10 +16,10 @@ import {
   FinancialSheetTable,
 } from './StyledFinancialSheet';
 
-const defaultSkeletonColumns: Column<object>[] = [
+const defaultSkeletonColumns = [
   { id: 'skeleton-1', className: 'skeleton-1' },
   { id: 'skeleton-2', className: 'skeleton-2', align: Align.Right },
-];
+] as unknown as Column<object>[];
 
 interface FinancialSheetSkeletonProps {
   minimal?: boolean;
@@ -39,8 +39,7 @@ export function FinancialSheetSkeleton({
   skeletonTableColumns = defaultSkeletonColumns,
 }: FinancialSheetSkeletonProps) {
   return (
-    // @ts-ignore – minimal/fullWidth are valid transient props on this styled component
-    <FinancialSheetRoot minimal={minimal} fullWidth={fullWidth}>
+    <FinancialSheetRoot $minimal={minimal} $fullWidth={fullWidth}>
       <FinancialSheetTitle>
         <SkeletonText charsLength={titleCharsLength} />
       </FinancialSheetTitle>

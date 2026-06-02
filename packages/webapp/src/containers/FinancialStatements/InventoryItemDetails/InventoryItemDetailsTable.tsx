@@ -20,8 +20,7 @@ export function InventoryItemDetailsTable({
   // #ownProps
   companyName,
 }: InventoryItemDetailsTableProps) {
-  const { inventoryItemDetails, isInventoryItemDetailsLoading } =
-    useInventoryItemDetailsContext();
+  const { inventoryItemDetails } = useInventoryItemDetailsContext();
 
   // Null-safe access for SDK opaque type.
   const tableRows = (inventoryItemDetails as any)?.tableRows ?? [];
@@ -38,7 +37,6 @@ export function InventoryItemDetailsTable({
     <FinancialSheet
       companyName={companyName}
       sheetType={intl.get('inventory_item_details')}
-      loading={isInventoryItemDetailsLoading}
       dateText={meta?.formatted_date_range ?? meta?.formatted_as_date}
       fullWidth={true}
     >

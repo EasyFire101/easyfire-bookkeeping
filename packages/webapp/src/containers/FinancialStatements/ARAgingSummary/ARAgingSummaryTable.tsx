@@ -17,7 +17,7 @@ interface ARAgingSummaryTableProps {
 export function ARAgingSummaryTable({
   organizationName,
 }: ARAgingSummaryTableProps) {
-  const { ARAgingSummary, isARAgingLoading } = useARAgingSummaryContext();
+  const { ARAgingSummary } = useARAgingSummaryContext();
 
   const columns = useARAgingSummaryColumns();
   const table = (ARAgingSummary as any)?.table;
@@ -28,7 +28,6 @@ export function ARAgingSummaryTable({
       companyName={organizationName}
       sheetType={intl.get('receivable_aging_summary')}
       dateText={meta?.formatted_date_range ?? meta?.formatted_as_date}
-      loading={isARAgingLoading}
     >
       <ARAgingSummaryDataTable
         columns={columns}

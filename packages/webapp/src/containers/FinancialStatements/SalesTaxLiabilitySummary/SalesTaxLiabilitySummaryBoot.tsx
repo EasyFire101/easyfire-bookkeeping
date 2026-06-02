@@ -2,6 +2,7 @@ import React, { createContext, useContext, useMemo, ReactNode } from 'react';
 import { FinancialReportPage } from '../FinancialReportPage';
 import { transformFilterFormToQuery } from '../common';
 import { useSalesTaxLiabilitySummary } from '@/hooks/query';
+import { SalesTaxLiabilityTableQuery } from '@bigcapital/sdk-ts';
 
 type UseSalesTaxLiabilitySummaryResult = ReturnType<
   typeof useSalesTaxLiabilitySummary
@@ -33,7 +34,8 @@ function SalesTaxLiabilitySummaryBoot({
   ...props
 }: SalesTaxLiabilitySummaryBootProps) {
   // Transformes the given filter to query.
-  const query = useMemo(() => transformFilterFormToQuery(filter), [filter]);
+  const query = useMemo(() => transformFilterFormToQuery(filter) as SalesTaxLiabilityTableQuery, [filter]);
+
   // Fetches the sales tax liability summary report.
   const {
     data: salesTaxLiabilitySummary,

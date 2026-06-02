@@ -96,11 +96,11 @@ const AuditLogDataTable = styled(ReportDataTable)`
  * Audit Log Table
  */
 export function AuditLogTable() {
-  const { auditLogs, isLoading } = useAuditLogContext();
+  const { auditLogs } = useAuditLogContext();
   const columns = useAuditLogTableColumns();
 
   return (
-    <FinancialSheet loading={isLoading} fullWidth={true} currentDate={false}>
+    <FinancialSheet fullWidth={true} currentDate={false}>
       <AuditLogDataTable
         noResults={'No audit log entries found'}
         columns={columns}

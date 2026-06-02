@@ -25,7 +25,7 @@ interface JournalTableProps {
  */
 export function JournalTable({ companyName }: JournalTableProps) {
   // Journal sheet context.
-  const { journalSheet, isLoading } = useJournalSheetContext();
+  const { journalSheet } = useJournalSheetContext();
 
   const table = (journalSheet as any)?.table;
   const meta = (journalSheet as any)?.meta;
@@ -41,9 +41,7 @@ export function JournalTable({ companyName }: JournalTableProps) {
       companyName={companyName}
       sheetType={intl.get('journal_sheet')}
       dateText={meta?.formatted_date_range ?? meta?.formatted_as_date}
-      loading={isLoading}
       fullWidth={true}
-      name="journal"
     >
       <JournalDataTable
         columns={columns}

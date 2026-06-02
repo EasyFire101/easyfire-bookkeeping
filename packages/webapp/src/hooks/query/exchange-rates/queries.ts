@@ -16,7 +16,7 @@ interface LatestExchangeRateQuery {
  */
 export function useLatestExchangeRate(
   { toCurrency, fromCurrency }: LatestExchangeRateQuery,
-  props?: UseQueryOptions<ExchangeRateLatestResponse>,
+  props?: Omit<UseQueryOptions<ExchangeRateLatestResponse>, 'queryKey' | 'queryFn'>,
 ) {
   const fetcher = useApiFetcher();
 

@@ -89,7 +89,7 @@ export function useBankRules(
 
 export function useBankRule(
   bankRuleId: number,
-  options?: UseQueryOptions<unknown, Error>,
+  options?: Omit<UseQueryOptions<unknown, Error>, 'queryKey'>,
 ): UseQueryResult<unknown, Error> {
   const fetcher = useApiFetcher();
 

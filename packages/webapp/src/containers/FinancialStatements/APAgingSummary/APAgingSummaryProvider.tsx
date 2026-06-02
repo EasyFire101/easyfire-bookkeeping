@@ -1,8 +1,8 @@
 import { useMemo, createContext, useContext } from 'react';
-
 import { FinancialReportPage } from '../FinancialReportPage';
 import { useAPAgingSummaryReport } from '@/hooks/query';
 import { transformFilterFormToQuery } from '../common';
+import { PayableAgingTableQuery } from '@bigcapital/sdk-ts';
 
 type UseAPAgingSummaryResult = ReturnType<typeof useAPAgingSummaryReport>;
 
@@ -11,8 +11,8 @@ type APAgingSummaryContextValue = {
   isAPAgingLoading: boolean;
   isAPAgingFetching: boolean;
   refetch: UseAPAgingSummaryResult['refetch'];
-  query: Record<string, unknown>;
-  httpQuery: Record<string, unknown>;
+  query: PayableAgingTableQuery;
+  httpQuery: PayableAgingTableQuery;
 };
 
 type APAgingSummaryProviderProps = {
@@ -29,7 +29,7 @@ function APAgingSummaryProvider({
   ...props
 }: APAgingSummaryProviderProps) {
   // Transformers the filter from to the Url query.
-  const httpQuery = useMemo(() => transformFilterFormToQuery(filter), [filter]);
+  const httpQuery = useMemo(() => transformFilterFormToQuery(filter) as PayableAgingTableQuery, [filter]);
 
   const {
     data: APAgingSummary,

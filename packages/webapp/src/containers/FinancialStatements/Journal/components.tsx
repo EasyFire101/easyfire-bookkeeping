@@ -9,7 +9,6 @@ import {
   Text,
   Intent,
 } from '@blueprintjs/core';
-
 import {
   AppToaster,
   Icon,
@@ -20,7 +19,6 @@ import {
 import { useJournalSheetContext } from './JournalProvider';
 import { FinancialLoadingBar } from '../FinancialLoadingBar';
 import { FinancialComputeAlert } from '../FinancialReportPage';
-
 import {
   useJournalSheetCsvExport,
   useJournalSheetXlsxExport,
