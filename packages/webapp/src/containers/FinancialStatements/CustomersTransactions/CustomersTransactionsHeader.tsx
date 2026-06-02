@@ -6,9 +6,7 @@ import { FormattedMessage as T } from '@/components';
 import { Formik, Form, FormikHelpers } from 'formik';
 import { FinancialStatementHeader } from '../FinancialStatementHeader';
 import { CustomersTransactionsHeaderGeneralPanel } from './CustomersTransactionsHeaderGeneralPanel';
-import {
-  withCustomersTransactions,
-} from './withCustomersTransactions';
+import { withCustomersTransactions } from './withCustomersTransactions';
 import {
   withCustomersTransactionsActions,
   WithCustomersTransactionsActionsProps,

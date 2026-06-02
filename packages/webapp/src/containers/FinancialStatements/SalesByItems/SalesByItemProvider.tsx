@@ -25,7 +25,10 @@ const SalesByItemsContext = createContext<SalesByItemsContextValue | undefined>(
 
 function SalesByItemProvider({ query, ...props }: SalesByItemProviderProps) {
   // Transforms the sheet query to http query.
-  const httpQuery = useMemo(() => transformFilterFormToQuery(query) as SalesByItemsTableQuery, [query]);
+  const httpQuery = useMemo(
+    () => transformFilterFormToQuery(query) as SalesByItemsTableQuery,
+    [query],
+  );
 
   const {
     data: salesByItems,

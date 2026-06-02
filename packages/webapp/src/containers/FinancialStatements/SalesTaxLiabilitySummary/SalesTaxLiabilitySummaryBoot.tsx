@@ -34,7 +34,10 @@ function SalesTaxLiabilitySummaryBoot({
   ...props
 }: SalesTaxLiabilitySummaryBootProps) {
   // Transformes the given filter to query.
-  const query = useMemo(() => transformFilterFormToQuery(filter) as SalesTaxLiabilityTableQuery, [filter]);
+  const query = useMemo(
+    () => transformFilterFormToQuery(filter) as SalesTaxLiabilityTableQuery,
+    [filter],
+  );
 
   // Fetches the sales tax liability summary report.
   const {

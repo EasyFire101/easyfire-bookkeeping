@@ -27,7 +27,10 @@ function TrialBalanceSheetProvider({
   query,
   ...props
 }: TrialBalanceSheetProviderProps) {
-  const httpQuery = useMemo(() => transformFilterFormToQuery(query) as TrialBalanceTableQuery, [query]);
+  const httpQuery = useMemo(
+    () => transformFilterFormToQuery(query) as TrialBalanceTableQuery,
+    [query],
+  );
 
   const {
     data: trialBalanceSheet,

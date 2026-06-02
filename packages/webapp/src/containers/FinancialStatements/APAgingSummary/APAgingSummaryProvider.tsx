@@ -29,7 +29,10 @@ function APAgingSummaryProvider({
   ...props
 }: APAgingSummaryProviderProps) {
   // Transformers the filter from to the Url query.
-  const httpQuery = useMemo(() => transformFilterFormToQuery(filter) as PayableAgingTableQuery, [filter]);
+  const httpQuery = useMemo(
+    () => transformFilterFormToQuery(filter) as PayableAgingTableQuery,
+    [filter],
+  );
 
   const {
     data: APAgingSummary,

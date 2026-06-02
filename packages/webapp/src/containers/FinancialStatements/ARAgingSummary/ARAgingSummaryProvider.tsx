@@ -27,7 +27,10 @@ function ARAgingSummaryProvider({
   filter,
   ...props
 }: ARAgingSummaryProviderProps) {
-  const httpQuery = useMemo(() => transformFilterFormToQuery(filter) as ReceivableAgingTableQuery, [filter]);
+  const httpQuery = useMemo(
+    () => transformFilterFormToQuery(filter) as ReceivableAgingTableQuery,
+    [filter],
+  );
 
   const {
     data: ARAgingSummary,

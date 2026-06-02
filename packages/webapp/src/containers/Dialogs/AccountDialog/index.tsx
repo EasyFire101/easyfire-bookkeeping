@@ -1,7 +1,9 @@
 import React, { lazy } from 'react';
 import { FormattedMessage as T } from '@/components';
 import { Dialog, DialogSuspense } from '@/components';
-import withDialogRedux, { DialogBaseProps } from '@/components/DialogReduxConnect';
+import withDialogRedux, {
+  DialogBaseProps,
+} from '@/components/DialogReduxConnect';
 import { compose } from '@/utils';
 
 const AccountDialogContent = lazy(() =>

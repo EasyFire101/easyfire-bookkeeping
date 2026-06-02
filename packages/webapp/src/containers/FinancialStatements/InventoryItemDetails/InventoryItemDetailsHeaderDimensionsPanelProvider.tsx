@@ -4,7 +4,10 @@ import { useWarehouses, useBranches } from '@/hooks/query';
 import { useFeatureCan } from '@/hooks/state';
 import { FinancialHeaderLoadingSkeleton } from '../FinancialHeaderLoadingSkeleton';
 import { Features } from '@/constants';
-import { BranchesListResponse, WarehousesListResponse } from '@bigcapital/sdk-ts';
+import {
+  BranchesListResponse,
+  WarehousesListResponse,
+} from '@bigcapital/sdk-ts';
 
 interface InventoryItemDetailsHeaderDimensionsPanelContextValue {
   warehouses: WarehousesListResponse | undefined;
@@ -45,9 +48,12 @@ function InventoryItemDetailsHeaderDimensionsProvider({
   );
 
   // Fetches the branches list.
-  const { data: branches, isLoading: isBranchesLoading } = useBranches({}, {
-    enabled: isBranchesFeatureCan,
-  });
+  const { data: branches, isLoading: isBranchesLoading } = useBranches(
+    {},
+    {
+      enabled: isBranchesFeatureCan,
+    },
+  );
 
   // Provider
   const provider: InventoryItemDetailsHeaderDimensionsPanelContextValue = {

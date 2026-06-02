@@ -1,7 +1,9 @@
 import React, { lazy } from 'react';
 import styled from 'styled-components';
 import { Dialog, DialogSuspense } from '@/components';
-import withDialogRedux, { DialogBaseProps } from '@/components/DialogReduxConnect';
+import withDialogRedux, {
+  DialogBaseProps,
+} from '@/components/DialogReduxConnect';
 import { compose } from '@/utils';
 
 const TaxRateFormDialogContent = lazy(() =>

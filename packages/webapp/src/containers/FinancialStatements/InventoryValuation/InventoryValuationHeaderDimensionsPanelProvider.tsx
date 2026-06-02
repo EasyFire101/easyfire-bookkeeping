@@ -1,5 +1,8 @@
 import React, { createContext, useContext } from 'react';
-import { BranchesListResponse, WarehousesListResponse } from '@bigcapital/sdk-ts';
+import {
+  BranchesListResponse,
+  WarehousesListResponse,
+} from '@bigcapital/sdk-ts';
 import { Features } from '@/constants';
 import { useFeatureCan } from '@/hooks/state';
 import { useWarehouses, useBranches } from '@/hooks/query';
@@ -42,9 +45,12 @@ function InventoryValuationHeaderDimensionsProvider({
     { enabled: isWarehouseFeatureCan },
   );
   // Fetches the branches list.
-  const { data: branches, isLoading: isBranchLoading } = useBranches({}, {
-    enabled: isBranchFeatureCan,
-  });
+  const { data: branches, isLoading: isBranchLoading } = useBranches(
+    {},
+    {
+      enabled: isBranchFeatureCan,
+    },
+  );
 
   // Provider
   const provider: InventoryValuationHeaderDimensionsPanelContextValue = {

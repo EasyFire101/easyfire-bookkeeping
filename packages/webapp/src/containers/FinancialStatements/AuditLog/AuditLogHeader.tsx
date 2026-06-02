@@ -30,7 +30,7 @@ function normalizeStringListField(value: unknown): string[] {
   return value ? [value as string] : [];
 }
 
-interface SelectItem extends SelectOptionProps{
+interface SelectItem extends SelectOptionProps {
   value: string;
   name: string;
 }

@@ -51,7 +51,10 @@ function AccountDrawerProvider({
   };
 
   return (
-    <DrawerLoading loading={isAccountLoading || isAccountsLoading} mount={false}>
+    <DrawerLoading
+      loading={isAccountLoading || isAccountsLoading}
+      mount={false}
+    >
       <DrawerHeaderContent name={DRAWERS.ACCOUNT_DETAILS} title={drawerTitle} />
       <AccountDrawerContext.Provider value={provider}>
         {children}

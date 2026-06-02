@@ -31,7 +31,10 @@ function VendorsBalanceSummaryProvider({
   filter,
   ...props
 }: VendorsBalanceSummaryProviderProps & { children?: React.ReactNode }) {
-  const httpQuery = useMemo(() => transformFilterFormToQuery(filter) as VendorBalanceTableQuery, [filter]);
+  const httpQuery = useMemo(
+    () => transformFilterFormToQuery(filter) as VendorBalanceTableQuery,
+    [filter],
+  );
 
   // Fetching vendors balance summary report based on the given query.
   const {

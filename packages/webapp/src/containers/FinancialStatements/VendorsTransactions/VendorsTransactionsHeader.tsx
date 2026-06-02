@@ -5,9 +5,7 @@ import { Tabs, Tab, Button, Intent } from '@blueprintjs/core';
 import { FormattedMessage as T } from '@/components';
 import { FinancialStatementHeader } from '../FinancialStatementHeader';
 import { VendorsTransactionsHeaderGeneralPanel } from './VendorsTransactionsHeaderGeneralPanel';
-import {
-  withVendorsTransaction,
-} from './withVendorsTransaction';
+import { withVendorsTransaction } from './withVendorsTransaction';
 import {
   withVendorsTransactionsActions,
   WithVendorsTransactionsActionsProps,

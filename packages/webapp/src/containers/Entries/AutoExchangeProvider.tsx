@@ -12,9 +12,10 @@ interface AutoExchangeRateProviderValue {
   autoExchangeRate?: { exchange_rate?: number } | null;
 }
 
-const AutoExchangeRateContext = React.createContext<AutoExchangeRateProviderValue>(
-  {} as AutoExchangeRateProviderValue,
-);
+const AutoExchangeRateContext =
+  React.createContext<AutoExchangeRateProviderValue>(
+    {} as AutoExchangeRateProviderValue,
+  );
 
 function AutoExchangeRateProvider({ children }: AutoExchangeRateProviderProps) {
   const [autoExRateCurrency, setAutoExRateCurrency] = React.useState<

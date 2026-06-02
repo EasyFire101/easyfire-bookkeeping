@@ -49,10 +49,11 @@ export function withCurrentOrganization<
 ) {
   const getCurrentOrganization = getCurrentOrganizationFactory();
 
-  const mapStateToProps: MapStateToProps<TInjected, TOwnProps, ApplicationState> = (
-    state,
-    props,
-  ) => {
+  const mapStateToProps: MapStateToProps<
+    TInjected,
+    TOwnProps,
+    ApplicationState
+  > = (state, props) => {
     const mapped: WithCurrentOrganizationProps = {
       organizationTenantId: state.authentication.organizationId,
       organizationId: state.authentication.organizationId,
