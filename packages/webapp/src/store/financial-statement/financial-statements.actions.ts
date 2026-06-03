@@ -11,7 +11,6 @@ import {
   INVENTORY_VALUATION,
   JOURNAL,
   PROFIT_LOSS,
-  PROJECT_PROFITABILITY_SUMMARY,
   PURCHASES_BY_ITEMS,
   REALIZED_GAIN_OR_LOSS,
   SALES_BY_ITEMS,
@@ -127,14 +126,6 @@ export function toggleRealizedGainOrLossFilterDrawer(toggle?: boolean) {
 export function toggleUnrealizedGainOrLossFilterDrawer(toggle?: boolean) {
   return {
     type: `${UNREALIZED_GAIN_OR_LOSS}/${DISPLAY_FILTER_DRAWER_TOGGLE}`,
-    payload: { toggle },
-  };
-}
-export function toggleProjectProfitabilitySummaryFilterDrawer(
-  toggle?: boolean,
-) {
-  return {
-    type: `${PROJECT_PROFITABILITY_SUMMARY}/${DISPLAY_FILTER_DRAWER_TOGGLE}`,
     payload: { toggle },
   };
 }

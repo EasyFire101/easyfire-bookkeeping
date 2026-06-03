@@ -12,7 +12,6 @@ import {
   INVENTORY_VALUATION,
   JOURNAL,
   PROFIT_LOSS,
-  PROJECT_PROFITABILITY_SUMMARY,
   PURCHASES_BY_ITEMS,
   REALIZED_GAIN_OR_LOSS,
   SALES_BY_ITEMS,
@@ -50,7 +49,6 @@ const initialState: FinancialStatementsState = {
   inventoryItemDetails: { displayFilterDrawer: false },
   realizedGainOrLoss: { displayFilterDrawer: false },
   unrealizedGainOrLoss: { displayFilterDrawer: false },
-  projectProfitabilitySummary: { displayFilterDrawer: false },
   salesTaxLiabilitySummary: { displayFilterDrawer: false },
 };
 
@@ -110,10 +108,6 @@ export const financialStatementsReducer = createReducer(initialState, {
   ...financialStatementFilterToggle(
     UNREALIZED_GAIN_OR_LOSS,
     'unrealizedGainOrLoss',
-  ),
-  ...financialStatementFilterToggle(
-    PROJECT_PROFITABILITY_SUMMARY,
-    'projectProfitabilitySummary',
   ),
   ...financialStatementFilterToggle(
     SALES_TAX_LIABILITY_SUMMARY,

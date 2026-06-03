@@ -554,62 +554,6 @@ export const SidebarMenu = [
       },
     ],
   },
-  // ---------------------
-  // # Projects Management
-  // ---------------------
-  // {
-  //   text: <T id={'sidebar.projects'} />,
-  //   type: ISidebarMenuItemType.Overlay,
-  //   overlayId: ISidebarMenuOverlayIds.Projects,
-  //   children: [
-  //     {
-  //       text: <T id={'sidebar.projects'} />,
-  //       type: ISidebarMenuItemType.Group,
-  //       children: [
-  //         {
-  //           text: <T id={'sidebar.projects'} />,
-  //           href: '/projects',
-  //           type: ISidebarMenuItemType.Link,
-  //           permission: {
-  //             subject: AbilitySubject.Project,
-  //             ability: ProjectAction.View,
-  //           },
-  //         },
-  //       ],
-  //     },
-  //     {
-  //       text: <T id={'sidebar.new_tasks'} />,
-  //       type: ISidebarMenuItemType.Group,
-  //       children: [
-  //         {
-  //           text: <T id={'sidebar.new_project'} />,
-  //           type: ISidebarMenuItemType.Dialog,
-  //           dialogName: 'project-form',
-  //           permission: {
-  //             subject: AbilitySubject.Project,
-  //             ability: ProjectAction.Create,
-  //           },
-  //         },
-  //         {
-  //           text: <T id={'sidebar.new_time_entry'} />,
-  //           type: ISidebarMenuItemType.Dialog,
-  //           dialogName: 'project-time-entry-form',
-  //         },
-  //       ],
-  //     },
-  //     {
-  //       text: <T id={'sidebar.reports'} />,
-  //       type: ISidebarMenuItemType.Group,
-  //       children: [
-  //         {
-  //           text: <T id={'sidebar.project_profitability_summary'} />,
-  //           href: '/financial-reports/project-profitability-summary',
-  //           type: ISidebarMenuItemType.Link,
-  //         },
-  //       ],
-  //     },
-  //   ],
-  // },
   // ---------------
   // # Reports
   // ---------------

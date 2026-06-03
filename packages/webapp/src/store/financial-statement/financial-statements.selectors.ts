@@ -65,10 +65,6 @@ export const realizedGainOrLossFilterDrawerSelector = (state: RootState) =>
 export const unrealizedGainOrLossFilterDrawerSelector = (state: RootState) =>
   filterDrawerByTypeSelector('unrealizedGainOrLoss')(state);
 
-export const projectProfitabilitySummaryFilterDrawerSelector = (
-  state: RootState,
-) => filterDrawerByTypeSelector('projectProfitabilitySummary')(state);
-
 export const salesTaxLiabilitySummaryFilterDrawerSelector = (
   state: RootState,
 ) => filterDrawerByTypeSelector('salesTaxLiabilitySummary')(state);
@@ -147,10 +143,6 @@ export const getRealizedGainOrLossFilterDrawer = createSelector(
 );
 export const getUnrealizedGainOrLossFilterDrawer = createSelector(
   unrealizedGainOrLossFilterDrawerSelector,
-  (isOpen) => isOpen,
-);
-export const getProjectProfitabilitySummaryFilterDrawer = createSelector(
-  projectProfitabilitySummaryFilterDrawerSelector,
   (isOpen) => isOpen,
 );
 export const getSalesTaxLiabilitySummaryFilterDrawer = createSelector(

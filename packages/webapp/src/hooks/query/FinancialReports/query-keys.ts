@@ -18,7 +18,6 @@ export const INVENTORY_ITEM_DETAILS = 'INVENTORY_ITEM_DETAILS';
 export const TRANSACTIONS_BY_REFERENCE = 'TRANSACTIONS_BY_REFERENCE';
 export const REALIZED_GAIN_OR_LOSS = 'REALIZED_GAIN_OR_LOSS';
 export const UNREALIZED_GAIN_OR_LOSS = 'UNREALIZED_GAIN_OR_LOSS';
-export const PROJECT_PROFITABILITY_SUMMARY = 'PROJECT_PROFITABILITY_SUMMARY';
 export const SALES_TAX_LIABILITY_SUMMARY = 'SALES_TAX_LIABILITY_SUMMARY';
 
 // Query key factory
@@ -62,8 +61,6 @@ export const financialReportsKeys = {
     [FINANCIAL_REPORT, REALIZED_GAIN_OR_LOSS, query] as const,
   unrealizedGainOrLoss: (query?: Record<string, unknown>) =>
     [FINANCIAL_REPORT, UNREALIZED_GAIN_OR_LOSS, query] as const,
-  projectProfitability: (query?: Record<string, unknown>) =>
-    [FINANCIAL_REPORT, PROJECT_PROFITABILITY_SUMMARY, query] as const,
   salesTaxLiability: (query?: Record<string, unknown>) =>
     [FINANCIAL_REPORT, SALES_TAX_LIABILITY_SUMMARY, query] as const,
 };
@@ -90,6 +87,5 @@ export const FinancialReportsQueryKeys = {
   TRANSACTIONS_BY_REFERENCE,
   REALIZED_GAIN_OR_LOSS,
   UNREALIZED_GAIN_OR_LOSS,
-  PROJECT_PROFITABILITY_SUMMARY,
   SALES_TAX_LIABILITY_SUMMARY,
 } as const;
