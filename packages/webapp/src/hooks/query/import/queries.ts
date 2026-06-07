@@ -97,7 +97,6 @@ export function useImportFileMeta(
     ...props,
     queryKey: importKeys.fileMeta(importId),
     queryFn: () => fetchImportFileMeta(fetcher, importId),
-    enabled: !!importId,
   });
 }
 

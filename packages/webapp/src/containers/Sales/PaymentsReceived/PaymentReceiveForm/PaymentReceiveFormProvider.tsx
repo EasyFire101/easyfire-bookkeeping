@@ -94,8 +94,8 @@ function PaymentReceiveFormProvider({
   } = usePaymentReceiveEditPage(paymentReceiveId, {
     enabled: !!paymentReceiveId,
   });
-  const paymentReceiveEditPage = (paymentReceivedEditData as any)?.data;
-  const paymentEntriesEditPage = (paymentReceivedEditData as any)?.entries;
+  const paymentReceiveEditPage = paymentReceivedEditData?.data;
+  const paymentEntriesEditPage = paymentReceivedEditData?.entries;
 
   // Handle fetch accounts data.
   const { data: accounts, isLoading: isAccountsLoading } = useAccounts();
@@ -151,11 +151,11 @@ function PaymentReceiveFormProvider({
   const provider: PaymentReceiveFormContextValue = {
     paymentReceiveId,
     paymentReceiveEditPage,
-    paymentEntriesEditPage,
-    accounts,
-    customers: (customersData as any)?.customers,
-    branches,
-    projects: (projectsData as any)?.projects,
+    paymentEntriesEditPage: paymentEntriesEditPage ?? [],
+    accounts: accounts ?? [],
+    customers: customersData?.data ?? [],
+    branches: branches ?? [],
+    projects: projectsData?.projects ?? [],
 
     isPaymentLoading,
     isAccountsLoading,

@@ -1,20 +1,15 @@
-import React from 'react';
 import styled from 'styled-components';
 import { FormattedMessage as T } from '@/components';
 import { Formik, Form } from 'formik';
-import type { FormikHelpers } from 'formik';
 import { Tabs, Tab, Button, Intent } from '@blueprintjs/core';
-
 import { FinancialStatementHeader } from '@/containers/FinancialStatements/FinancialStatementHeader';
 import { APAgingSummaryHeaderGeneral } from './APAgingSummaryHeaderGeneral';
 import { APAgingSummaryHeaderDimensions } from './APAgingSummaryHeaderDimensions';
-
 import { withAPAgingSummary } from './withAPAgingSummary';
 import {
   withAPAgingSummaryActions,
   WithAPAgingSummaryActionsProps,
 } from './withAPAgingSummaryActions';
-
 import { transformToForm, compose } from '@/utils';
 import { useFeatureCan } from '@/hooks/state';
 import { Features } from '@/constants';
@@ -22,6 +17,7 @@ import {
   getAPAgingSummaryQuerySchema,
   getDefaultAPAgingSummaryQuery,
 } from './common';
+import type { FormikHelpers } from 'formik';
 
 type APAgingSummaryFormValues = ReturnType<
   typeof getDefaultAPAgingSummaryQuery
@@ -47,7 +43,7 @@ function APAgingSummaryHeaderInner({
   const initialValues = transformToForm(
     { ...defaultValues, ...pageFilter },
     defaultValues,
-  );
+  ) as APAgingSummaryFormValues;
 
   const handleSubmit = (
     values: APAgingSummaryFormValues,
@@ -57,11 +53,9 @@ function APAgingSummaryHeaderInner({
     toggleFilterDrawerDisplay(false);
     setSubmitting(false);
   };
-
   const handleCancelClick = () => {
     toggleFilterDrawerDisplay(false);
   };
-
   const handleDrawerClose = () => {
     toggleFilterDrawerDisplay(false);
   };

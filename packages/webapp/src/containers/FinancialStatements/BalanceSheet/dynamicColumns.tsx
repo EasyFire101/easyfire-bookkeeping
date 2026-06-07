@@ -6,7 +6,7 @@ import { getColumnWidth } from '@/utils';
 interface ReportTableColumn {
   key: string;
   label: string;
-  cell_index?: number;
+  cellIndex?: number;
   children?: ReportTableColumn[];
 }
 
@@ -29,7 +29,7 @@ const getReportColWidth = (
  * Account name column mapper.
  */
 const accountNameMapper = R.curry((data, column) => {
-  const accessor = getTableCellValueAccessor(column.cell_index);
+  const accessor = getTableCellValueAccessor(column.cellIndex);
   const width = getReportColWidth(data, accessor, column.label);
 
   return {
@@ -64,7 +64,7 @@ const isColumnHasColumns = (column) => !isEmpty(column.children);
  * @returns
  */
 const dateRangeSoloColumnAttrs = (data, column) => {
-  const accessor = getTableCellValueAccessor(column.cell_index);
+  const accessor = getTableCellValueAccessor(column.cellIndex);
 
   return {
     accessor,
@@ -103,7 +103,7 @@ const dateRangeMapper = R.curry((data, column) => {
  */
 const totalMapper = R.curry((data, column) => {
   const hasChildren = !isEmpty(column.children);
-  const accessor = getTableCellValueAccessor(column.cell_index);
+  const accessor = getTableCellValueAccessor(column.cellIndex);
   const width = getReportColWidth(data, accessor, column.label);
 
   const columnAccessor = {
@@ -125,7 +125,7 @@ const totalMapper = R.curry((data, column) => {
  * `Percentage of column` column accessor.
  */
 const percentageOfColumnAccessor = R.curry((data, column) => {
-  const accessor = getTableCellValueAccessor(column.cell_index);
+  const accessor = getTableCellValueAccessor(column.cellIndex);
   const width = getReportColWidth(data, accessor, column.label);
 
   return {
@@ -144,7 +144,7 @@ const percentageOfColumnAccessor = R.curry((data, column) => {
  * `Percentage of row` column accessor.
  */
 const percentageOfRowAccessor = R.curry((data, column) => {
-  const accessor = getTableCellValueAccessor(column.cell_index);
+  const accessor = getTableCellValueAccessor(column.cellIndex);
   const width = getReportColWidth(data, accessor, column.label);
 
   return {
@@ -163,7 +163,7 @@ const percentageOfRowAccessor = R.curry((data, column) => {
  * Previous year column accessor.
  */
 const previousYearAccessor = R.curry((data, column) => {
-  const accessor = getTableCellValueAccessor(column.cell_index);
+  const accessor = getTableCellValueAccessor(column.cellIndex);
   const width = getReportColWidth(data, accessor, column.label);
 
   return {
@@ -182,7 +182,7 @@ const previousYearAccessor = R.curry((data, column) => {
  * Pervious year change column accessor.
  */
 const previousYearChangeAccessor = R.curry((data, column) => {
-  const accessor = getTableCellValueAccessor(column.cell_index);
+  const accessor = getTableCellValueAccessor(column.cellIndex);
   const width = getReportColWidth(data, accessor, column.label);
 
   return {
@@ -201,7 +201,7 @@ const previousYearChangeAccessor = R.curry((data, column) => {
  * Previous year percentage column accessor.
  */
 const previousYearPercentageAccessor = R.curry((data, column) => {
-  const accessor = getTableCellValueAccessor(column.cell_index);
+  const accessor = getTableCellValueAccessor(column.cellIndex);
   const width = getReportColWidth(data, accessor, column.label);
 
   return {
@@ -220,7 +220,7 @@ const previousYearPercentageAccessor = R.curry((data, column) => {
  * Previous period column accessor.
  */
 const previousPeriodAccessor = R.curry((data, column) => {
-  const accessor = getTableCellValueAccessor(column.cell_index);
+  const accessor = getTableCellValueAccessor(column.cellIndex);
   const width = getReportColWidth(data, accessor, column.label);
 
   return {
@@ -239,7 +239,7 @@ const previousPeriodAccessor = R.curry((data, column) => {
  * Previous period change column accessor.
  */
 const previousPeriodChangeAccessor = R.curry((data, column) => {
-  const accessor = getTableCellValueAccessor(column.cell_index);
+  const accessor = getTableCellValueAccessor(column.cellIndex);
   const width = getReportColWidth(data, accessor, column.label);
 
   return {
@@ -258,7 +258,7 @@ const previousPeriodChangeAccessor = R.curry((data, column) => {
  * Previous period percentage column accessor.
  */
 const previousPeriodPercentageAccessor = R.curry((data, column) => {
-  const accessor = getTableCellValueAccessor(column.cell_index);
+  const accessor = getTableCellValueAccessor(column.cellIndex);
   const width = getReportColWidth(data, accessor, column.label);
 
   return {
@@ -284,31 +284,31 @@ const totalColumnsMapper = R.curry((data, column) => {
     R.when(R.pathEq(['key'], 'total'), totalMapper(data)),
     // Percetage of column/row.
     R.when(
-      R.pathEq(['key'], 'percentage_of_column'),
+      R.pathEq(['key'], 'percentageOfColumn'),
       percentageOfColumnAccessor(data),
     ),
     R.when(
-      R.pathEq(['key'], 'percentage_of_row'),
+      R.pathEq(['key'], 'percentageOfRow'),
       percentageOfRowAccessor(data),
     ),
     // Previous year.
-    R.when(R.pathEq(['key'], 'previous_year'), previousYearAccessor(data)),
+    R.when(R.pathEq(['key'], 'previousYear'), previousYearAccessor(data)),
     R.when(
-      R.pathEq(['key'], 'previous_year_change'),
+      R.pathEq(['key'], 'previousYearChange'),
       previousYearChangeAccessor(data),
     ),
     R.when(
-      R.pathEq(['key'], 'previous_year_percentage'),
+      R.pathEq(['key'], 'previousYearPercentage'),
       previousYearPercentageAccessor(data),
     ),
     // Pervious period.
-    R.when(R.pathEq(['key'], 'previous_period'), previousPeriodAccessor(data)),
+    R.when(R.pathEq(['key'], 'previousPeriod'), previousPeriodAccessor(data)),
     R.when(
-      R.pathEq(['key'], 'previous_period_change'),
+      R.pathEq(['key'], 'previousPeriodChange'),
       previousPeriodChangeAccessor(data),
     ),
     R.when(
-      R.pathEq(['key'], 'previous_period_percentage'),
+      R.pathEq(['key'], 'previousPeriodPercentage'),
       previousPeriodPercentageAccessor(data),
     ),
   )(column);

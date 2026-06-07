@@ -4,6 +4,7 @@ import {
   Tooltip,
   MenuItem,
   Position,
+  PopperModifiers,
 } from '@blueprintjs/core';
 import classNames from 'classnames';
 import {
@@ -27,10 +28,10 @@ interface FinancialStatementsFilterProps {
   [key: string]: unknown;
 }
 
-const SUBMENU_POPOVER_MODIFIERS = {
+const SUBMENU_POPOVER_MODIFIERS: PopperModifiers = {
   flip: { boundariesElement: 'viewport', padding: 20 },
   offset: { offset: '0, 10' },
-  preventOverflow: { boundariesElement: 'viewport', padding: 40 },
+  preventOverflow: { boundariesElement: 'viewport' },
 };
 
 export function FinancialStatementsFilter({
@@ -48,7 +49,6 @@ export function FinancialStatementsFilter({
         position={Position.RIGHT_TOP}
         content={item.hint}
         modifiers={SUBMENU_POPOVER_MODIFIERS}
-        inline={true}
         minimal={true}
         className={MODIFIER.SELECT_LIST_TOOLTIP_ITEMS}
       >

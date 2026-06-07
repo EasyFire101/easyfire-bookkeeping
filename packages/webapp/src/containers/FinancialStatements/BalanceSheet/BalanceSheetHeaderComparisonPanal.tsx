@@ -30,7 +30,7 @@ function BalanceSheetHeaderComparisonPanalFields() {
         />
       </FFormGroup>
 
-      <FlexSubFields align={'left'}>
+      <FlexSubFields align={'flex-start'}>
         <FlexItem col={6}>
           <FFormGroup
             name={'previousYearAmountChange'}

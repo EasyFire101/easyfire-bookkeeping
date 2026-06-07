@@ -32,7 +32,7 @@ export function useSalesByItems(
     'queryKey' | 'queryFn'
   >,
 ) {
-  const fetcher = useApiFetcher();
+  const fetcher = useApiFetcher({ enableCamelCaseTransform: true });
   return useQuery({
     ...props,
     queryKey: financialReportsKeys.salesByItems(query),
@@ -47,7 +47,7 @@ export function useSalesByItemsTable(
     'queryKey' | 'queryFn'
   >,
 ) {
-  const fetcher = useApiFetcher();
+  const fetcher = useApiFetcher({ enableCamelCaseTransform: true });
   return useQuery({
     ...props,
     queryKey: financialReportsKeys.salesByItems(query),

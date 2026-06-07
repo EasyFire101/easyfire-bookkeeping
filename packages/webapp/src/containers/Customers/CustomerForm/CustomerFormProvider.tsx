@@ -1,5 +1,6 @@
 import React, { createContext, useState } from 'react';
 import { useLocation } from 'react-router-dom';
+import { CurrenciesListResponse, BranchesListResponse, Customer } from '@bigcapital/sdk-ts'
 import {
   useCustomer,
   useCurrencies,
@@ -15,28 +16,12 @@ type CustomerFormSubmitPayload = {
   noRedirect?: boolean;
 };
 
-type Customer = {
-  id: number;
-  [key: string]: any;
-};
-
-type Currency = {
-  currency_code: string;
-  [key: string]: any;
-};
-
-type Branch = {
-  id: number;
-  primary?: boolean;
-  [key: string]: any;
-};
-
 type CustomerFormContextValue = {
   customerId?: number;
-  customer?: Customer;
-  currencies: Currency[];
-  branches: Branch[];
-  contactDuplicate?: Customer;
+  customer?: Customer | undefined;
+  currencies: CurrenciesListResponse;
+  branches: BranchesListResponse;
+  contactDuplicate?: unknown | undefined;
   submitPayload: CustomerFormSubmitPayload;
   isNewMode: boolean;
 
@@ -54,7 +39,7 @@ type CustomerFormContextValue = {
 };
 
 type CustomerFormProviderProps = {
-  query?: unknown;
+  query?: Record<string, unknown>;
   customerId?: number;
   children?: React.ReactNode;
 };
@@ -116,10 +101,10 @@ export function CustomerFormProvider({
 
   const provider: CustomerFormContextValue = {
     customerId,
-    customer: customer as Customer | undefined,
-    currencies: (currencies as Currency[]) ?? [],
-    branches: (branches as Branch[]) ?? [],
-    contactDuplicate: contactDuplicate as Customer | undefined,
+    customer,
+    currencies: currencies ?? [],
+    branches: branches ?? [],
+    contactDuplicate: contactDuplicate || undefined,
     submitPayload,
     isNewMode,
 

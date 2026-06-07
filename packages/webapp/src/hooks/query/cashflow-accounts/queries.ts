@@ -69,7 +69,6 @@ export function useCashflowAccounts(
   props?: Omit<UseQueryOptions<unknown>, 'queryKey' | 'queryFn'>,
 ) {
   const fetcher = useApiFetcher();
-
   return useQuery({
     ...props,
     queryKey: cashflowAccountsKeys.list(query),

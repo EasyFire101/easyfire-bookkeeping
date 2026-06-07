@@ -37,7 +37,7 @@ function BalanceSheetPdfDialogRoot({
       style={{ width: '1000px' }}
     >
       <DialogSuspense>
-        <BalanceSheetPdfDialogContent dialogName={dialogName} />
+        <BalanceSheetPdfDialogContent />
       </DialogSuspense>
     </Dialog>
   );

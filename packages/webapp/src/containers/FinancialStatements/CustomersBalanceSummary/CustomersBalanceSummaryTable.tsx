@@ -24,7 +24,7 @@ export function CustomersBalanceSummaryTable({
     <FinancialSheet
       companyName={companyName}
       sheetType={intl.get('customers_balance_summary')}
-      dateText={meta?.formatted_date_range ?? meta?.formatted_as_date}
+      dateText={meta?.formattedDateRange ?? meta?.formattedAsDate}
     >
       <CustomerBalanceDataTable
         columns={columns}

@@ -8,7 +8,7 @@ const getTableCellValueAccessor = (index: number) => `cells[${index}].value`;
 const taxNameAccessor = R.curry((data: any[], column: Record<string, any>) => ({
   key: column.key,
   Header: column.label,
-  accessor: getTableCellValueAccessor(column.cell_index),
+  accessor: getTableCellValueAccessor(column.cellIndex),
   sticky: 'left',
   width: 300,
   textOverview: true,
@@ -17,12 +17,12 @@ const taxNameAccessor = R.curry((data: any[], column: Record<string, any>) => ({
 
 const taxableAmountAccessor = R.curry(
   (data: any[], column: Record<string, any>) => {
-    const accessor = getTableCellValueAccessor(column.cell_index);
+    const accessor = getTableCellValueAccessor(column.cellIndex);
 
     return {
       Header: column.label,
       id: column.key,
-      accessor: getTableCellValueAccessor(column.cell_index),
+      accessor: getTableCellValueAccessor(column.cellIndex),
       className: column.key,
       width: getColumnWidth(data, accessor, { minWidth: 120 }),
       align: Align.Right,

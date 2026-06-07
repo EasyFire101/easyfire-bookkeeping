@@ -209,7 +209,7 @@ function InvoiceFormProvider({
     projects:
       (projectsData as { data?: { projects?: unknown[] } })?.data?.projects ??
       [],
-    taxRates: taxRates?.data ?? [],
+    taxRates: taxRates ?? [],
     brandingTemplates: brandingTemplates?.templates ?? [],
 
     isInvoiceLoading,

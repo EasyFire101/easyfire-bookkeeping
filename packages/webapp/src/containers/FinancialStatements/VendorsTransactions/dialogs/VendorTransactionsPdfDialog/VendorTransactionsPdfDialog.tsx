@@ -1,6 +1,5 @@
 import React, { lazy } from 'react';
 import classNames from 'classnames';
-
 import { Dialog, DialogSuspense } from '@/components';
 import withDialogRedux from '@/components/DialogReduxConnect';
 import { CLASSES } from '@/constants/classes';
@@ -39,7 +38,7 @@ function VendorTransactionsPdfDialogRoot({
       style={{ width: '1000px' }}
     >
       <DialogSuspense>
-        <VendorTransactionsPdfDialogContent dialogName={dialogName} />
+        <VendorTransactionsPdfDialogContent />
       </DialogSuspense>
     </Dialog>
   );

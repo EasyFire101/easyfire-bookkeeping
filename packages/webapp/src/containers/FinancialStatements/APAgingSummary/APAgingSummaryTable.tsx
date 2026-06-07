@@ -17,7 +17,7 @@ interface APAgingSummaryTableProps {
 export function APAgingSummaryTable({
   organizationName,
 }: APAgingSummaryTableProps) {
-  const { APAgingSummary, isAPAgingLoading } = useAPAgingSummaryContext();
+  const { APAgingSummary } = useAPAgingSummaryContext();
 
   const columns = useAPAgingSummaryColumns();
   const table = (APAgingSummary as any)?.table;
@@ -27,8 +27,7 @@ export function APAgingSummaryTable({
     <FinancialSheet
       companyName={organizationName}
       sheetType={intl.get('payable_aging_summary')}
-      dateText={meta?.formatted_date_range ?? meta?.formatted_as_date}
-      loading={isAPAgingLoading}
+      dateText={meta?.formattedDateRange ?? meta?.formattedAsDate}
     >
       <APAgingSummaryDataTable
         columns={columns}

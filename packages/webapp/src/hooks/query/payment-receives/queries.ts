@@ -16,6 +16,7 @@ import type {
   ValidateBulkDeletePaymentsReceivedResponse,
   PaymentReceivedStateResponse,
   PaymentReceivedHtmlContentResponse,
+  PaymentReceiveEditPageResponse,
 } from '@bigcapital/sdk-ts';
 import {
   fetchPaymentsReceived,
@@ -185,7 +186,10 @@ export function usePaymentReceive(
 
 export function usePaymentReceiveEditPage(
   id: number | null | undefined,
-  props?: Omit<UseQueryOptions<unknown>, 'queryKey' | 'queryFn'>,
+  props?: Omit<
+    UseQueryOptions<PaymentReceiveEditPageResponse>,
+    'queryKey' | 'queryFn'
+  >,
 ) {
   const fetcher = useApiFetcher();
   return useQuery({

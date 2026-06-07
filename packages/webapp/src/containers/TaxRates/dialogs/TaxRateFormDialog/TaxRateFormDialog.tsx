@@ -1,8 +1,9 @@
-// @ts-nocheck
 import React, { lazy } from 'react';
 import styled from 'styled-components';
 import { Dialog, DialogSuspense } from '@/components';
-import withDialogRedux from '@/components/DialogReduxConnect';
+import withDialogRedux, {
+  DialogBaseProps,
+} from '@/components/DialogReduxConnect';
 import { compose } from '@/utils';
 
 const TaxRateFormDialogContent = lazy(() =>
@@ -11,14 +12,16 @@ const TaxRateFormDialogContent = lazy(() =>
   })),
 );
 
-/**
- * Tax rate form dialog.
- */
+interface TaxRateFormDialogProps extends DialogBaseProps {
+  dialogName: string;
+  payload: { action: string; id?: number };
+}
+
 function TaxRateFormDialogInner({
   dialogName,
-  payload = { action: '', id: null },
+  payload = { action: '' },
   isOpen,
-}) {
+}: TaxRateFormDialogProps) {
   return (
     <TaxRateDialog
       name={dialogName}
@@ -30,7 +33,7 @@ function TaxRateFormDialogInner({
       <DialogSuspense>
         <TaxRateFormDialogContent
           dialogName={dialogName}
-          taxRateId={payload.id}
+          taxRateId={payload.id as number}
         />
       </DialogSuspense>
     </TaxRateDialog>

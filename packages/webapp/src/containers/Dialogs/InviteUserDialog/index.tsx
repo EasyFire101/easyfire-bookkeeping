@@ -1,7 +1,8 @@
-// @ts-nocheck
 import React, { lazy } from 'react';
 import { Dialog, DialogSuspense, FormattedMessage as T } from '@/components';
-import withDialogRedux from '@/components/DialogReduxConnect';
+import withDialogRedux, {
+  DialogBaseProps,
+} from '@/components/DialogReduxConnect';
 import { compose } from '@/utils';
 
 const UserFormDialogContent = lazy(() =>
@@ -10,12 +11,16 @@ const UserFormDialogContent = lazy(() =>
   })),
 );
 
-// User form dialog.
+interface UserFormDialogProps extends DialogBaseProps {
+  dialogName: string;
+  payload: { action: string; id: number | null };
+}
+
 function UserFormDialog({
   dialogName,
   payload = { action: '', id: null },
   isOpen,
-}) {
+}: UserFormDialogProps) {
   return (
     <Dialog
       name={dialogName}
@@ -42,7 +47,4 @@ function UserFormDialog({
   );
 }
 
-export const index = compose(
-  // UserFormDialogConnect,
-  withDialogRedux(),
-)(UserFormDialog);
+export const index = compose(withDialogRedux())(UserFormDialog);

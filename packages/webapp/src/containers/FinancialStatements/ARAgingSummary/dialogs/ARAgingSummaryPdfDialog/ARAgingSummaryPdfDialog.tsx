@@ -1,6 +1,5 @@
 import React, { lazy } from 'react';
 import classNames from 'classnames';
-
 import { Dialog, DialogSuspense } from '@/components';
 import withDialogRedux from '@/components/DialogReduxConnect';
 import { CLASSES } from '@/constants/classes';
@@ -33,7 +32,7 @@ function ARAgingSummaryPdfDialogRoot({
       style={{ width: '1000px' }}
     >
       <DialogSuspense>
-        <ARAgingSummaryPdfDialogContent dialogName={dialogName} />
+        <ARAgingSummaryPdfDialogContent />
       </DialogSuspense>
     </Dialog>
   );

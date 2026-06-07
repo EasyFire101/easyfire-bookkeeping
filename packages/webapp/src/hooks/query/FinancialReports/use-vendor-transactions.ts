@@ -29,7 +29,7 @@ export function useVendorsTransactionsReport(
     'queryKey' | 'queryFn'
   >,
 ) {
-  const fetcher = useApiFetcher();
+  const fetcher = useApiFetcher({ enableCamelCaseTransform: true });
   return useQuery({
     ...props,
     queryKey: financialReportsKeys.vendorTransactions(query),

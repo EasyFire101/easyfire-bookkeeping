@@ -35,7 +35,7 @@ export function useCustomersTransactionsReport(
     'queryKey' | 'queryFn'
   >,
 ) {
-  const fetcher = useApiFetcher();
+  const fetcher = useApiFetcher({ enableCamelCaseTransform: true });
   return useQuery({
     ...props,
     queryKey: financialReportsKeys.customerTransactions(query),

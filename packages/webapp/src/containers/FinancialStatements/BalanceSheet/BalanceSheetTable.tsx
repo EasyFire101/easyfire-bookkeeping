@@ -1,7 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
 import intl from 'react-intl-universal';
-
 import { TableStyle } from '@/constants';
 import { ReportDataTable, FinancialSheet } from '@/components';
 import { useBalanceSheetContext } from './BalanceSheetProvider';
@@ -30,8 +29,8 @@ export function BalanceSheetTable({ companyName }: BalanceSheetTableProps) {
       companyName={companyName}
       sheetType={intl.get('balance_sheet')}
       dateText={
-        balanceSheet?.meta?.formatted_date_range ??
-        balanceSheet?.meta?.formatted_as_date
+        balanceSheet?.meta?.formattedDateRange ??
+        balanceSheet?.meta?.formattedAsDate
       }
       basis={balanceSheet?.query.basis}
     >

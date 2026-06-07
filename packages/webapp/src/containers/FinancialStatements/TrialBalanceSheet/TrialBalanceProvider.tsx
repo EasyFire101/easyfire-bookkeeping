@@ -1,4 +1,5 @@
 import { createContext, useContext, useMemo, ReactNode } from 'react';
+import { TrialBalanceTableQuery } from '@bigcapital/sdk-ts';
 import { FinancialReportPage } from '../FinancialReportPage';
 import { useTrialBalanceSheet } from '@/hooks/query';
 import { transformFilterFormToQuery } from '../common';
@@ -10,11 +11,11 @@ type TrialBalanceSheetContextValue = {
   isFetching: boolean;
   isLoading: boolean;
   refetchSheet: UseTrialBalanceSheetResult['refetch'];
-  httpQuery: Record<string, unknown>;
+  httpQuery: TrialBalanceTableQuery;
 };
 
 interface TrialBalanceSheetProviderProps {
-  query: Record<string, unknown>;
+  query: TrialBalanceTableQuery;
   children?: ReactNode;
 }
 
@@ -26,7 +27,10 @@ function TrialBalanceSheetProvider({
   query,
   ...props
 }: TrialBalanceSheetProviderProps) {
-  const httpQuery = useMemo(() => transformFilterFormToQuery(query), [query]);
+  const httpQuery = useMemo(
+    () => transformFilterFormToQuery(query) as TrialBalanceTableQuery,
+    [query],
+  );
 
   const {
     data: trialBalanceSheet,

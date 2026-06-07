@@ -1,20 +1,15 @@
 import React, { useEffect } from 'react';
 import moment from 'moment';
-
 import { FinancialStatement, DashboardPageContent } from '@/components';
-
 import { VendorsBalanceSummaryHeader } from './VendorsBalanceSummaryHeader';
 import { VendorsBalanceSummaryActionsBar } from './VendorsBalanceSummaryActionsBar';
-
 import { VendorsBalanceSummaryProvider } from './VendorsBalanceSummaryProvider';
 import { VendorsSummarySheetLoadingBar } from './components';
 import { VendorBalanceSummaryBody } from './VendorsBalanceSummaryBody';
-
 import {
   withVendorsBalanceSummaryActions,
   WithVendorsBalanceSummaryActionsProps,
 } from './withVendorsBalanceSummaryActions';
-
 import { useVendorsBalanceSummaryQuery } from './utils';
 import { VendorBalanceDialogs } from './VendorBalanceDialogs';
 import { compose } from '@/utils';

@@ -42,7 +42,7 @@ export function GeneralLedgerSheetAlerts() {
   }
   // Can't continue if the cost compute job is not running.
   const meta = (generalLedger as any)?.meta;
-  if (!meta?.is_cost_compute_running) {
+  if (!meta?.isCostComputeRunning) {
     return null;
   }
   return (

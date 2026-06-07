@@ -6398,6 +6398,13 @@ export interface components {
             /** @description List of item costs */
             costs: components["schemas"]["InventoryItemCostDto"][];
         };
+        SaleInvoiceHtmlContentResponseDto: {
+            /**
+             * @description The HTML content of the sale invoice
+             * @example <html>...</html>
+             */
+            htmlContent: string;
+        };
         InvoicePaymentTransactionDto: {
             /**
              * @description The invoice ID
@@ -7113,20 +7120,6 @@ export interface components {
              */
             active: boolean;
         };
-        PaymentReceivedHtmlContentResponseDto: {
-            /**
-             * @description The HTML content of the payment received
-             * @example <html>...</html>
-             */
-            htmlContent: string;
-        };
-        PaymentReceivedStateResponseDto: {
-            /**
-             * @description The ID of the default PDF template for payment received
-             * @example 1
-             */
-            defaultTemplateId: number | null;
-        };
         PaymentReceivedEntryResponseDto: {
             /**
              * @description ID of the entry
@@ -7320,6 +7313,73 @@ export interface components {
              *     ]
              */
             attachments?: components["schemas"]["AttachmentLinkDto"][];
+        };
+        PaymentReceivePageEntryDto: {
+            /**
+             * @description The invoice ID
+             * @example 1
+             */
+            invoiceId: number;
+            /**
+             * @description The entry type
+             * @example invoice
+             */
+            entryType: string;
+            /**
+             * @description The invoice number
+             * @example INV-001
+             */
+            invoiceNo: string;
+            /**
+             * @description The outstanding due amount
+             * @example 1500
+             */
+            dueAmount: number;
+            /**
+             * @description The total invoice amount
+             * @example 2000
+             */
+            amount: number;
+            /**
+             * @description The total payment amount applied
+             * @example 500
+             */
+            totalPaymentAmount: number;
+            /**
+             * @description The payment amount for this entry
+             * @example 500
+             */
+            paymentAmount: number;
+            /**
+             * @description The currency code
+             * @example USD
+             */
+            currencyCode: string;
+            /**
+             * @description The invoice date
+             * @example 2024-03-15
+             */
+            date: string;
+        };
+        PaymentReceiveEditPageResponseDto: {
+            /** @description The payment received details */
+            data: components["schemas"]["PaymentReceivedResponseDto"];
+            /** @description The receivable invoice entries */
+            entries: components["schemas"]["PaymentReceivePageEntryDto"][];
+        };
+        PaymentReceivedHtmlContentResponseDto: {
+            /**
+             * @description The HTML content of the payment received
+             * @example <html>...</html>
+             */
+            htmlContent: string;
+        };
+        PaymentReceivedStateResponseDto: {
+            /**
+             * @description The ID of the default PDF template for payment received
+             * @example 1
+             */
+            defaultTemplateId: number | null;
         };
         CreatePaymentReceivedDto: {
             /**
@@ -9333,6 +9393,13 @@ export interface components {
              * @example 1
              */
             adjustment: number;
+        };
+        SaleReceiptHtmlContentResponseDto: {
+            /**
+             * @description The HTML content of the sale receipt
+             * @example <html>...</html>
+             */
+            htmlContent: string;
         };
         SaleReceiptStateResponseDto: {
             /**
@@ -16793,6 +16860,7 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["SaleInvoiceResponseDto"];
+                    "application/json+html": components["schemas"]["SaleInvoiceHtmlContentResponseDto"];
                 };
             };
             /** @description The sale invoice not found. */
@@ -17090,6 +17158,15 @@ export interface operations {
         };
         requestBody?: never;
         responses: {
+            /** @description The sale invoice HTML content has been successfully retrieved. */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": string;
+                };
+            };
             /** @description The sale invoice not found. */
             404: {
                 headers: {
@@ -17519,9 +17596,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": {
-                        data?: components["schemas"]["TaxRateResponseDto"][];
-                    };
+                    "application/json": components["schemas"]["TaxRateResponseDto"][];
                 };
             };
         };
@@ -17760,12 +17835,14 @@ export interface operations {
         };
         requestBody?: never;
         responses: {
-            /** @description The payment received edit page has been successfully retrieved. */
+            /** @description The payment received edit page data. */
             200: {
                 headers: {
                     [name: string]: unknown;
                 };
-                content?: never;
+                content: {
+                    "application/json": components["schemas"]["PaymentReceiveEditPageResponseDto"];
+                };
             };
         };
     };
@@ -20054,6 +20131,7 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["SaleReceiptResponseDto"];
+                    "application/json+html": components["schemas"]["SaleReceiptHtmlContentResponseDto"];
                 };
             };
             /** @description The sale receipt not found. */
@@ -23244,6 +23322,8 @@ export interface operations {
     BalanceSheetStatementController_balanceSheet: {
         parameters: {
             query: {
+                /** @description Filter out branches (if multiple branches feature is enabled) */
+                branchesIds?: number[];
                 /** @description Type of columns to display in the balance sheet */
                 displayColumnsType: "total" | "date_periods";
                 /** @description Time period for column display */
@@ -24838,6 +24918,8 @@ export interface operations {
     GeneralLedgerController_getGeneralLedger: {
         parameters: {
             query?: {
+                /** @description Filter out branches (if multiple branches feature is enabled) */
+                branchesIds?: number[];
                 /** @description Accounting basis for the report (e.g., cash, accrual) */
                 basis?: string;
                 /** @description Number of decimal places to display */
@@ -26049,6 +26131,8 @@ export interface operations {
     TrialBalanceSheetController_getTrialBalanceSheet: {
         parameters: {
             query?: {
+                /** @description Filter out branches (if multiple branches feature is enabled) */
+                branchesIds?: number[];
                 /** @description Start date for the trial balance sheet */
                 fromDate?: string;
                 /** @description End date for the trial balance sheet */
@@ -26799,6 +26883,8 @@ export interface operations {
     ARAgingSummaryController_get: {
         parameters: {
             query?: {
+                /** @description Filter out branches (if multiple branches feature is enabled) */
+                branchesIds?: number[];
                 /** @description Number of days before the aging period starts */
                 agingDaysBefore?: number;
                 /** @description Number of aging periods to calculate */
@@ -27111,6 +27197,8 @@ export interface operations {
     APAgingSummaryController_get: {
         parameters: {
             query?: {
+                /** @description Filter out branches (if multiple branches feature is enabled) */
+                branchesIds?: number[];
                 /** @description Number of days before the aging period starts */
                 agingDaysBefore?: number;
                 /** @description Number of aging periods to calculate */
@@ -27469,6 +27557,8 @@ export interface operations {
     JournalSheetController_journalSheet: {
         parameters: {
             query?: {
+                /** @description Filter out branches (if multiple branches feature is enabled) */
+                branchesIds?: number[];
                 /** @description Whether to hide cents in the number format */
                 noCents?: boolean;
                 /** @description Whether to divide numbers by 1000 */
@@ -27791,6 +27881,8 @@ export interface operations {
     ProfitLossSheetController_profitLossSheet: {
         parameters: {
             query: {
+                /** @description Filter out branches (if multiple branches feature is enabled) */
+                branchesIds?: number[];
                 /** @description The basis for the profit and loss sheet */
                 basis: string;
                 /** @description Number of decimal places to display */
@@ -28103,6 +28195,8 @@ export interface operations {
     CashflowController_getCashflow: {
         parameters: {
             query?: {
+                /** @description Filter out branches (if multiple branches feature is enabled) */
+                branchesIds?: number[];
                 /** @description Start date for the cash flow statement period */
                 fromDate?: string;
                 /** @description End date for the cash flow statement period */

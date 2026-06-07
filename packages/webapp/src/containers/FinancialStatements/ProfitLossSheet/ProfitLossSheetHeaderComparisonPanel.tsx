@@ -27,7 +27,6 @@ function ProfitLossComaprsionPanelFields() {
       <FFormGroup name={'previousYear'} labelInfo={<FieldHint />}>
         <FCheckbox
           inline={true}
-          small={true}
           label={intl.get('profit_loss_sheet.previous_year')}
           name={'previousYear'}
           onChange={handlePreviousYearCheckBoxChange(form)}
@@ -42,7 +41,6 @@ function ProfitLossComaprsionPanelFields() {
           >
             <FCheckbox
               inline={true}
-              small={true}
               label={intl.get('profit_loss_sheet.total_change')}
               name={'previousYearAmountChange'}
               onChange={handlePreviousYearChangeCheckboxChange(form)}
@@ -56,7 +54,6 @@ function ProfitLossComaprsionPanelFields() {
           >
             <FCheckbox
               inline={true}
-              small={true}
               label={intl.get('profit_loss_sheet.perentage_change')}
               name={'previousYearPercentageChange'}
               onChange={handlePreviousYearPercentageCheckboxChange(form)}
@@ -69,7 +66,6 @@ function ProfitLossComaprsionPanelFields() {
       <FFormGroup name={'previousPeriod'} labelInfo={<FieldHint />}>
         <FCheckbox
           inline={true}
-          small={true}
           label={intl.get('profit_loss_sheet.previous_period')}
           name={'previousPeriod'}
           onChange={handlePreviousPeriodCheckBoxChange(form)}
@@ -84,7 +80,6 @@ function ProfitLossComaprsionPanelFields() {
           >
             <FCheckbox
               inline={true}
-              small={true}
               label={intl.get('profit_loss_sheet.total_change')}
               name={'previousPeriodAmountChange'}
               onChange={handlePreviousPeriodChangeCheckboxChange(form)}
@@ -98,7 +93,6 @@ function ProfitLossComaprsionPanelFields() {
           >
             <FCheckbox
               inline={true}
-              small={true}
               label={intl.get('profit_loss_sheet.perentage_change')}
               name={'previousPeriodPercentageChange'}
               onChange={handlePreviousPeriodPercentageCheckboxChange(form)}
@@ -111,7 +105,6 @@ function ProfitLossComaprsionPanelFields() {
       <FFormGroup name={'percentageColumn'} labelInfo={<FieldHint />}>
         <FCheckbox
           inline={true}
-          small={true}
           label={intl.get('profit_loss_sheet.percentage_of_column')}
           name={'percentageColumn'}
         />
@@ -121,7 +114,6 @@ function ProfitLossComaprsionPanelFields() {
       <FFormGroup name={'percentageRow'} labelInfo={<FieldHint />}>
         <FCheckbox
           inline={true}
-          small={true}
           label={intl.get('profit_loss_sheet.percentage_of_row')}
           name={'percentageRow'}
         />
@@ -131,7 +123,6 @@ function ProfitLossComaprsionPanelFields() {
       <FFormGroup name={'percentageExpense'} labelInfo={<FieldHint />}>
         <FCheckbox
           inline={true}
-          small={true}
           label={intl.get('profit_loss_sheet.percentage_of_expense')}
           name={'percentageExpense'}
         />
@@ -141,7 +132,6 @@ function ProfitLossComaprsionPanelFields() {
       <FFormGroup name={'percentageIncome'} labelInfo={<FieldHint />}>
         <FCheckbox
           inline={true}
-          small={true}
           label={intl.get('profit_loss_sheet.percentage_of_income')}
           name={'percentageIncome'}
         />

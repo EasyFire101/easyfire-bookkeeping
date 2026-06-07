@@ -20,7 +20,7 @@ export function TrialBalanceSheetTable({
   companyName,
 }: TrialBalanceSheetTableProps) {
   // Trial balance sheet context.
-  const { trialBalanceSheet, isLoading } = useTrialBalanceSheetContext();
+  const { trialBalanceSheet } = useTrialBalanceSheetContext();
 
   const table = (trialBalanceSheet as any)?.table;
   const meta = (trialBalanceSheet as any)?.meta;
@@ -32,9 +32,7 @@ export function TrialBalanceSheetTable({
     <FinancialSheet
       companyName={companyName}
       sheetType={intl.get('trial_balance_sheet')}
-      dateText={meta?.formatted_date_range ?? meta?.formatted_as_date}
-      name="trial-balance"
-      loading={isLoading}
+      dateText={meta?.formattedDateRange ?? meta?.formattedAsDate}
       basis={'cash'}
     >
       <TrialBalanceDataTable

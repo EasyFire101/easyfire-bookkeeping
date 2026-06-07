@@ -1,4 +1,4 @@
-import React, { createContext, useContext, ReactNode } from 'react';
+import { createContext, useContext, ReactNode } from 'react';
 import { FinancialHeaderLoadingSkeleton } from '../FinancialHeaderLoadingSkeleton';
 import { useCustomers } from '@/hooks/query';
 
@@ -30,7 +30,7 @@ function CustomersTransactionsGeneralPanelProvider({
   } = useCustomers();
 
   const provider: CustomersTransactionsGeneralPanelContextValue = {
-    customers: customersData?.customers,
+    customers: customersData?.data || [],
     isCustomersLoading,
     isCustomersFetching,
   };

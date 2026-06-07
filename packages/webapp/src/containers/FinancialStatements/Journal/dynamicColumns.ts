@@ -37,7 +37,7 @@ const getReportColWidth = (
 interface DynamicColumn {
   key: string;
   label: string;
-  cell_index: number;
+  cellIndex: number;
   [key: string]: unknown;
 }
 
@@ -45,7 +45,7 @@ interface DynamicColumn {
  * Common column mapper.
  */
 const commonAccessor = R.curry((data: unknown[], column: DynamicColumn) => {
-  const accessor = getTableCellValueAccessor(column.cell_index);
+  const accessor = getTableCellValueAccessor(column.cellIndex);
 
   return {
     key: column.key,
@@ -62,7 +62,7 @@ const commonAccessor = R.curry((data: unknown[], column: DynamicColumn) => {
  */
 const numericColumnAccessor = R.curry(
   (data: unknown[], column: DynamicColumn) => {
-    const accessor = getTableCellValueAccessor(column.cell_index);
+    const accessor = getTableCellValueAccessor(column.cellIndex);
     const width = getReportColWidth(data, accessor, column.label);
 
     return {

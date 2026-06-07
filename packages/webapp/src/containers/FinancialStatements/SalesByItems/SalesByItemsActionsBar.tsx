@@ -10,15 +10,12 @@ import {
 } from '@blueprintjs/core';
 import classNames from 'classnames';
 import { DashboardActionsBar, Icon, FormattedMessage as T } from '@/components';
-
 import NumberFormatDropdown from '@/components/NumberFormatDropdown';
-
 import { withSalesByItems } from './withSalesByItems';
 import {
   withSalesByItemsActions,
   WithSalesByItemsActionsProps,
 } from './withSalesByItemsActions';
-
 import { compose, saveInvoke } from '@/utils';
 import { useSalesByItemsContext } from './SalesByItemProvider';
 import { SalesByItemsSheetExportMenu } from './components';

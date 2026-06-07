@@ -2,6 +2,7 @@ import { createContext, useContext, useMemo } from 'react';
 import { FinancialReportPage } from '../FinancialReportPage';
 import { useSalesByItemsTable } from '@/hooks/query';
 import { transformFilterFormToQuery } from '../common';
+import { SalesByItemsTableQuery } from '@bigcapital/sdk-ts';
 
 type UseSalesByItemsTableResult = ReturnType<typeof useSalesByItemsTable>;
 
@@ -10,7 +11,7 @@ type SalesByItemsContextValue = {
   isFetching: boolean;
   isLoading: boolean;
   refetchSheet: UseSalesByItemsTableResult['refetch'];
-  httpQuery: Record<string, unknown>;
+  httpQuery: SalesByItemsTableQuery;
 };
 
 interface SalesByItemProviderProps {
@@ -24,7 +25,10 @@ const SalesByItemsContext = createContext<SalesByItemsContextValue | undefined>(
 
 function SalesByItemProvider({ query, ...props }: SalesByItemProviderProps) {
   // Transforms the sheet query to http query.
-  const httpQuery = useMemo(() => transformFilterFormToQuery(query), [query]);
+  const httpQuery = useMemo(
+    () => transformFilterFormToQuery(query) as SalesByItemsTableQuery,
+    [query],
+  );
 
   const {
     data: salesByItems,

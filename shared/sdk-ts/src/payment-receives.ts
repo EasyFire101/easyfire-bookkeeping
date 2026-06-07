@@ -18,6 +18,7 @@ export type PaymentReceived = OpResponseBody<OpForPath<typeof PAYMENTS_RECEIVED_
 export type CreatePaymentReceivedBody = OpRequestBody<OpForPath<typeof PAYMENTS_RECEIVED_ROUTES.LIST, 'post'>>;
 export type EditPaymentReceivedBody = OpRequestBody<OpForPath<typeof PAYMENTS_RECEIVED_ROUTES.BY_ID, 'put'>>;
 export type PaymentReceivedStateResponse = OpResponseBody<OpForPath<typeof PAYMENTS_RECEIVED_ROUTES.STATE, 'get'>>;
+export type PaymentReceiveEditPageResponse = OpResponseBody<OpForPath<typeof PAYMENTS_RECEIVED_ROUTES.EDIT_PAGE, 'get'>>;
 export type PaymentReceivedHtmlContentResponse = { htmlContent: string };
 
 export async function fetchPaymentsReceived(fetcher: ApiFetcher): Promise<PaymentsReceivedListResponse> {
@@ -82,7 +83,7 @@ export async function validateBulkDeletePaymentsReceived(
 export async function fetchPaymentReceiveEditPage(
   fetcher: ApiFetcher,
   id: number
-): Promise<unknown> {
+): Promise<PaymentReceiveEditPageResponse> {
   const get = fetcher.path(PAYMENTS_RECEIVED_ROUTES.EDIT_PAGE).method('get').create();
   const { data } = await get({ id });
   return data;

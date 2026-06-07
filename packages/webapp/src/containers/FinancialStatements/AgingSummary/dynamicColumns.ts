@@ -5,7 +5,7 @@ import { Align } from '@/constants';
 interface AgingSummaryColumn {
   key: string;
   label: string;
-  cell_index?: number;
+  cellIndex?: number;
 }
 
 const getTableCellValueAccessor = (index: number) => `cells[${index}].value`;
@@ -14,7 +14,7 @@ const contactNameAccessor = R.curry(
   (data: unknown[], column: AgingSummaryColumn) => ({
     key: column.key,
     Header: column.label,
-    accessor: getTableCellValueAccessor(column.cell_index!),
+    accessor: getTableCellValueAccessor(column.cellIndex!),
     sticky: 'left',
     width: 240,
     textOverview: true,
@@ -23,7 +23,7 @@ const contactNameAccessor = R.curry(
 
 const currentAccessor = R.curry(
   (data: unknown[], column: AgingSummaryColumn) => {
-    const accessor = getTableCellValueAccessor(column.cell_index!);
+    const accessor = getTableCellValueAccessor(column.cellIndex!);
 
     return {
       key: column.key,
@@ -38,12 +38,12 @@ const currentAccessor = R.curry(
 );
 
 const totalAccessor = R.curry((data: unknown[], column: AgingSummaryColumn) => {
-  const accessor = getTableCellValueAccessor(column.cell_index!);
+  const accessor = getTableCellValueAccessor(column.cellIndex!);
 
   return {
     Header: column.label,
     id: column.key,
-    accessor: getTableCellValueAccessor(column.cell_index!),
+    accessor: getTableCellValueAccessor(column.cellIndex!),
     className: column.key,
     width: getColumnWidth(data, accessor, { minWidth: 120 }),
     align: Align.Right,
@@ -53,11 +53,11 @@ const totalAccessor = R.curry((data: unknown[], column: AgingSummaryColumn) => {
 
 const agingPeriodAccessor = R.curry(
   (data: unknown[], column: AgingSummaryColumn) => {
-    const accessor = getTableCellValueAccessor(column.cell_index!);
+    const accessor = getTableCellValueAccessor(column.cellIndex!);
 
     return {
       Header: column.label,
-      id: `${column.key}-${column.cell_index}`,
+      id: `${column.key}-${column.cellIndex}`,
       accessor,
       className: column.key,
       width: getColumnWidth(data, accessor, { minWidth: 120 }),
@@ -77,9 +77,9 @@ const dynamicColumnMapper = R.curry(
     return R.compose(
       R.when(R.pathEq(['key'], 'total'), totalAccessorColumn),
       R.when(R.pathEq(['key'], 'current'), currentAccessorColumn),
-      R.when(R.pathEq(['key'], 'customer_name'), customerNameAccessorColumn),
-      R.when(R.pathEq(['key'], 'vendor_name'), customerNameAccessorColumn),
-      R.when(R.pathEq(['key'], 'aging_period'), agingPeriodAccessorColumn),
+      R.when(R.pathEq(['key'], 'customerName'), customerNameAccessorColumn),
+      R.when(R.pathEq(['key'], 'vendorName'), customerNameAccessorColumn),
+      R.when(R.pathEq(['key'], 'agingPeriod'), agingPeriodAccessorColumn),
     )(column);
   },
 );

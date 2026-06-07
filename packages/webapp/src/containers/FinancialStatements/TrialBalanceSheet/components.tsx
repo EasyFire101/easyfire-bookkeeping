@@ -54,7 +54,7 @@ export function TrialBalanceSheetAlerts() {
     return null;
   }
   // Can't continue if the cost compute job is not running.
-  if (!(trialBalanceSheet as any)?.meta?.is_cost_compute_running) {
+  if (!(trialBalanceSheet as any)?.meta?.isCostComputeRunning) {
     return null;
   }
 

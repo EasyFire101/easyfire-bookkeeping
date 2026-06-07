@@ -1,4 +1,5 @@
 import { createContext, useContext, useMemo, ReactNode } from 'react';
+import { TransactionsByCustomersTableQuery } from '@bigcapital/sdk-ts';
 import { FinancialReportPage } from '../FinancialReportPage';
 import { useCustomersTransactionsReport } from '@/hooks/query';
 import { transformFilterFormToQuery } from '../common';
@@ -33,7 +34,11 @@ function CustomersTransactionsProvider({
   filter,
   ...props
 }: CustomersTransactionsProviderProps) {
-  const query = useMemo(() => transformFilterFormToQuery(filter), [filter]);
+  const query = useMemo(
+    () =>
+      transformFilterFormToQuery(filter) as TransactionsByCustomersTableQuery,
+    [filter],
+  );
 
   // Fetches the customers transactions.
   const {

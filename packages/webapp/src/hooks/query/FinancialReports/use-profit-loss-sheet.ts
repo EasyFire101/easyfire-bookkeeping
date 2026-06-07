@@ -29,7 +29,7 @@ export function useProfitLossSheet(
     'queryKey' | 'queryFn'
   >,
 ) {
-  const fetcher = useApiFetcher();
+  const fetcher = useApiFetcher({ enableCamelCaseTransform: true });
   return useQuery({
     ...props,
     queryKey: financialReportsKeys.profitLoss(query),

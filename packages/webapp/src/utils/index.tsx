@@ -921,7 +921,7 @@ export function ignoreEventFromSelectors(event, selectors) {
 }
 
 export const tableRowTypesToClassnames = ({ original }) => {
-  const rowTypes = _.castArray(original.row_types);
+  const rowTypes = _.castArray(original.rowTypes);
   const rowId = original.id;
 
   const rowTypesClsx = rowTypes.filter((t) => t).map((t) => `row_type--${t}`);

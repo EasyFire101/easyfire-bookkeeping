@@ -4,10 +4,14 @@ import { useWarehouses, useBranches } from '@/hooks/query';
 import { useFeatureCan } from '@/hooks/state';
 import { FinancialHeaderLoadingSkeleton } from '../FinancialHeaderLoadingSkeleton';
 import { Features } from '@/constants';
+import {
+  BranchesListResponse,
+  WarehousesListResponse,
+} from '@bigcapital/sdk-ts';
 
 interface InventoryItemDetailsHeaderDimensionsPanelContextValue {
-  warehouses: Record<string, unknown> | undefined;
-  branches: Record<string, unknown> | undefined;
+  warehouses: WarehousesListResponse | undefined;
+  branches: BranchesListResponse | undefined;
   isWarehouesLoading: boolean;
   isBranchesLoading: boolean;
 }
@@ -39,14 +43,17 @@ function InventoryItemDetailsHeaderDimensionsProvider({
 
   // Fetches the warehouses list.
   const { data: warehouses, isLoading: isWarehouesLoading } = useWarehouses(
-    null,
+    {},
     { enabled: isWarehouseFeatureCan },
   );
 
   // Fetches the branches list.
-  const { data: branches, isLoading: isBranchesLoading } = useBranches(null, {
-    enabled: isBranchesFeatureCan,
-  });
+  const { data: branches, isLoading: isBranchesLoading } = useBranches(
+    {},
+    {
+      enabled: isBranchesFeatureCan,
+    },
+  );
 
   // Provider
   const provider: InventoryItemDetailsHeaderDimensionsPanelContextValue = {

@@ -8,7 +8,7 @@ import { getColumnWidth } from '@/utils';
 interface ReportTableColumn {
   key: string;
   label: string;
-  cell_index?: number;
+  cellIndex?: number;
   children?: ReportTableColumn[];
 }
 

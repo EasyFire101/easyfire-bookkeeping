@@ -1,5 +1,5 @@
 import React from 'react';
-import * as R from 'ramda';
+import { pipe } from 'fp-ts/function';
 import { PurchasesByItemsTable } from './PurchasesByItemsTable';
 import { FinancialReportBody } from '../FinancialReportPage';
 import { FinancialSheetSkeleton } from '@/components';
@@ -26,14 +26,15 @@ function PurchasesByItemsBodyJSX({
       {isLoading ? (
         <FinancialSheetSkeleton />
       ) : (
-        <PurchasesByItemsTable companyName={organizationName?.name} />
+        <PurchasesByItemsTable companyName={organizationName} />
       )}
     </FinancialReportBody>
   );
 }
 
-export const PurchasesByItemsBody = R.compose(
+export const PurchasesByItemsBody = pipe(
+  PurchasesByItemsBodyJSX,
   withCurrentOrganization(({ organization }) => ({
-    organizationName: organization,
+    organizationName: organization.name,
   })),
-)(PurchasesByItemsBodyJSX);
+);

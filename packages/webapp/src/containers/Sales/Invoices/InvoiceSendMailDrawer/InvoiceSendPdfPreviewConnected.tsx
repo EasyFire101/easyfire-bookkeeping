@@ -22,7 +22,7 @@ function InvoiceSendPdfPreviewIframe() {
   if (isLoading && data) {
     return <Spinner size={20} />;
   }
-  const iframeSrcDoc = data?.htmlContent;
+  const iframeSrcDoc = data;
 
   return <SendMailViewPreviewPdfIframe srcDoc={iframeSrcDoc} />;
 }

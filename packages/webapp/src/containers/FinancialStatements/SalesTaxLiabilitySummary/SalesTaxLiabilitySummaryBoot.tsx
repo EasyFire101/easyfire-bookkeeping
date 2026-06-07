@@ -1,4 +1,5 @@
 import React, { createContext, useContext, useMemo, ReactNode } from 'react';
+import { SalesTaxLiabilityPdfQuery, SalesTaxLiabilityTableQuery } from '@bigcapital/sdk-ts';
 import { FinancialReportPage } from '../FinancialReportPage';
 import { transformFilterFormToQuery } from '../common';
 import { useSalesTaxLiabilitySummary } from '@/hooks/query';
@@ -12,7 +13,7 @@ interface SalesTaxLiabilitySummaryContextValue {
   refetchSalesTaxLiabilitySummary: UseSalesTaxLiabilitySummaryResult['refetch'];
   isFetching: boolean;
   isLoading: boolean;
-  query: Record<string, unknown>;
+  query: SalesTaxLiabilityPdfQuery;
   filter: Record<string, unknown>;
 }
 
@@ -33,7 +34,11 @@ function SalesTaxLiabilitySummaryBoot({
   ...props
 }: SalesTaxLiabilitySummaryBootProps) {
   // Transformes the given filter to query.
-  const query = useMemo(() => transformFilterFormToQuery(filter), [filter]);
+  const query = useMemo(
+    () => transformFilterFormToQuery(filter) as SalesTaxLiabilityTableQuery,
+    [filter],
+  );
+
   // Fetches the sales tax liability summary report.
   const {
     data: salesTaxLiabilitySummary,

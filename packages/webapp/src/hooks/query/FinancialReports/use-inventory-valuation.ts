@@ -32,7 +32,7 @@ export function useInventoryValuation(
     'queryKey' | 'queryFn'
   >,
 ) {
-  const fetcher = useApiFetcher();
+  const fetcher = useApiFetcher({ enableCamelCaseTransform: true });
   return useQuery({
     ...props,
     queryKey: financialReportsKeys.inventoryValuation(query),
@@ -47,7 +47,7 @@ export function useInventoryValuationTable(
     'queryKey' | 'queryFn'
   >,
 ) {
-  const fetcher = useApiFetcher();
+  const fetcher = useApiFetcher({ enableCamelCaseTransform: true });
   return useQuery({
     ...props,
     queryKey: financialReportsKeys.inventoryValuation(query),

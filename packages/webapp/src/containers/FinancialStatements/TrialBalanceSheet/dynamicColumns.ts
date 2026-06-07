@@ -9,7 +9,7 @@ const AMOUNT_COLUMNS_MAGIC_SPACING = 10;
 const getTableCellValueAccessor = (index: number) => `cells[${index}].value`;
 
 const accountNameAccessor = R.curry((data: any, column: any) => {
-  const accessor = getTableCellValueAccessor(column.cell_index);
+  const accessor = getTableCellValueAccessor(column.cellIndex);
 
   return {
     Header: column.label,
@@ -21,7 +21,7 @@ const accountNameAccessor = R.curry((data: any, column: any) => {
 });
 
 const amountAccessor = R.curry((data: any, column: any) => {
-  const accessor = getTableCellValueAccessor(column.cell_index);
+  const accessor = getTableCellValueAccessor(column.cellIndex);
 
   return {
     Header: column.label,

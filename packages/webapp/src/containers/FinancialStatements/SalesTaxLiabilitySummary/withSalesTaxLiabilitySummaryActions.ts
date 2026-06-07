@@ -3,13 +3,13 @@ import { Dispatch } from 'redux';
 import { toggleSalesTaxLiabilitySummaryFilterDrawer } from '@/store/financial-statement/financial-statements.actions';
 
 export interface WithSalesTaxLiabilitySummaryActionsProps {
-  toggleSalesTaxLiabilitySummaryFilterDrawer: (toggle: boolean) => void;
+  toggleSalesTaxLiabilitySummaryFilterDrawer: (toggle?: boolean) => void;
 }
 
 export const mapDispatchToProps = (
   dispatch: Dispatch,
 ): WithSalesTaxLiabilitySummaryActionsProps => ({
-  toggleSalesTaxLiabilitySummaryFilterDrawer: (toggle: boolean) =>
+  toggleSalesTaxLiabilitySummaryFilterDrawer: (toggle?: boolean) =>
     dispatch(toggleSalesTaxLiabilitySummaryFilterDrawer(toggle)),
 });
 

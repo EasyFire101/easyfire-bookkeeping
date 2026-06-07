@@ -43,7 +43,7 @@ export function BalanceSheetAlerts() {
     return null;
   }
   // Can't continue if the cost compute job is not running.
-  if (!balanceSheet.meta.is_cost_compute_running) {
+  if (!balanceSheet?.meta?.isCostComputeRunning) {
     return null;
   }
   return (

@@ -26,14 +26,12 @@ export function APAgingSummaryHeaderGeneralContent() {
             name={'asDate'}
             label={intl.get('as_date')}
             labelInfo={<FieldHint />}
-            fill
             fastField
           >
             <FDateInput
               name={'asDate'}
               {...momentFormatter('YYYY/MM/DD')}
               popoverProps={{ position: Position.BOTTOM_LEFT, minimal: true }}
-              minimal
               fill
               fastField
             />

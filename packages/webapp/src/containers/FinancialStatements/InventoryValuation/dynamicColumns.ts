@@ -23,7 +23,7 @@ const getReportColWidth = (
  */
 const commonAccessor = R.curry(
   (data: unknown[], column: Record<string, any>) => {
-    const accessor = getTableCellValueAccessor(column.cell_index);
+    const accessor = getTableCellValueAccessor(column.cellIndex);
 
     return {
       key: column.key,
@@ -41,7 +41,7 @@ const commonAccessor = R.curry(
  */
 const numericColumnAccessor = R.curry(
   (data: unknown[], column: Record<string, any>) => {
-    const accessor = getTableCellValueAccessor(column.cell_index);
+    const accessor = getTableCellValueAccessor(column.cellIndex);
     const width = getReportColWidth(data, accessor, column.label);
 
     return {
@@ -75,7 +75,7 @@ const dynamicColumnMapper = R.curry(
     const _itemNameColumnAccessor = itemNameColumnAccessor(data);
 
     return R.compose(
-      R.when(R.pathEq(['key'], 'item_name'), _itemNameColumnAccessor),
+      R.when(R.pathEq(['key'], 'itemName'), _itemNameColumnAccessor),
       R.when(R.pathEq(['key'], 'quantity'), _numericColumnAccessor),
       R.when(R.pathEq(['key'], 'valuation'), _numericColumnAccessor),
       R.when(R.pathEq(['key'], 'average'), _numericColumnAccessor),

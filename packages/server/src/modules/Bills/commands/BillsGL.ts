@@ -154,22 +154,13 @@ export class BillGL {
 
   /**
    * Retrieves the bill tax GL entries.
-   * @param {IBill} bill
-   * @param {number} taxPayableAccountId
    * @returns {ILedgerEntry[]}
    */
-  // private getBillTaxEntries = () => {
-  //   // Retrieves the non-zero tax entries.
-  //   const nonZeroTaxEntries = this.itemsEntriesService.getNonZeroEntries(
-  //     this.bill.entries,
-  //   );
-  //   const transformTaxEntry = this.getBillTaxEntry(
-  //     this.bill,
-  //     this.taxPayableAccountId,
-  //   );
-
-  //   return nonZeroTaxEntries.map(transformTaxEntry);
-  // };
+  private getBillTaxEntries = (): ILedgerEntry[] => {
+    return this.bill.entries
+      .filter((entry) => entry.taxAmount > 0)
+      .map((entry, index) => this.getBillTaxEntry(entry, index));
+  };
 
   /**
    * Retrieves the purchase discount GL entry.
@@ -221,11 +212,11 @@ export class BillGL {
       (landedCost, index) => this.getBillLandedCostEntry(landedCost, index),
     );
 
-    // Allocate cost entries journal entries.
     return [
       payableEntry,
       ...itemsEntries,
       ...landedCostEntries,
+      ...this.getBillTaxEntries(),
       this.purchaseDiscountEntry,
       this.adjustmentEntry,
     ];

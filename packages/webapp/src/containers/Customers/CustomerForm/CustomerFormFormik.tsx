@@ -146,7 +146,8 @@ function CustomerFormFormikRoot({
       createCustomerMutate(formValues).then(onSuccess).catch(onError);
     } else {
       if (!customer) return;
-      editCustomerMutate([customer.id, formValues])
+
+      editCustomerMutate([customer?.id, formValues])
         .then(onSuccess)
         .catch(onError);
     }

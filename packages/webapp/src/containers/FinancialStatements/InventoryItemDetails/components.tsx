@@ -74,7 +74,7 @@ export function InventoryItemDetailsAlerts() {
     return null;
   }
   // Can't continue if the cost compute job is running.
-  if (!(inventoryItemDetails as any)?.meta?.is_cost_compute_running) {
+  if (!(inventoryItemDetails as any)?.meta?.isCostComputeRunning) {
     return null;
   }
 

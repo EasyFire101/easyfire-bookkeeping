@@ -1,5 +1,3 @@
-// @ts-nocheck
-import * as React from 'react';
 import { FlexProps } from './interfaces';
 import { FlexItem } from './FlexItem';
 import { FlexStyled } from './Flex.style';

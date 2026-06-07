@@ -1,22 +1,14 @@
-import React from 'react';
-import { FastField, Field } from 'formik';
-import { DateInput } from '@blueprintjs/datetime';
-import { FormGroup, Position } from '@blueprintjs/core';
-
+import { Position } from '@blueprintjs/core';
 import {
   ItemsMultiSelect,
   Row,
   Col,
   FieldHint,
   FFormGroup,
+  FDateInput,
 } from '@/components';
 import { filterInventoryValuationOptions } from '../constants';
-import {
-  momentFormatter,
-  tansformDateValue,
-  inputIntent,
-  handleDateChange,
-} from '@/utils';
+import { momentFormatter } from '@/utils';
 import {
   InventoryValuationGeneralPanelProvider,
   useInventoryValuationGeneralPanelContext,
@@ -45,27 +37,20 @@ function InventoryValuationHeaderGeneralPanelContent() {
     <div>
       <Row>
         <Col xs={4}>
-          <FastField name={'asDate'}>
-            {({ form, field: { value }, meta: { error } }: any) => (
-              <FormGroup
-                label={intl.get('as_date')}
-                labelInfo={<FieldHint />}
-                fill={true}
-                intent={inputIntent({ error })}
-              >
-                <DateInput
-                  {...momentFormatter('YYYY/MM/DD')}
-                  value={tansformDateValue(value)}
-                  onChange={handleDateChange((selectedDate: Date) => {
-                    form.setFieldValue('asDate', selectedDate);
-                  })}
-                  popoverProps={{ position: Position.BOTTOM, minimal: true }}
-                  minimal={true}
-                  fill={true}
-                />
-              </FormGroup>
-            )}
-          </FastField>
+          <FFormGroup
+            name={'asDate'}
+            label={intl.get('as_date')}
+            labelInfo={<FieldHint />}
+            fastField
+          >
+            <FDateInput
+              name={'asDate'}
+              {...momentFormatter('YYYY/MM/DD')}
+              popoverProps={{ position: Position.BOTTOM_LEFT, minimal: true }}
+              fill
+              fastField
+            />
+          </FFormGroup>
         </Col>
       </Row>
 

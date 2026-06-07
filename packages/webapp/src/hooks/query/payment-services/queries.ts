@@ -16,7 +16,6 @@ import {
   type GetPaymentServicesResponse,
   type GetPaymentServicesStateResponse,
   type GetPaymentServiceResponse,
-  type UpdatePaymentMethodBody,
   type UpdatePaymentMethodResponse,
 } from '@bigcapital/sdk-ts';
 import { useApiFetcher } from '../../useRequest';

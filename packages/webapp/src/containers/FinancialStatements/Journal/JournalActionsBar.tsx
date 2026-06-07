@@ -8,20 +8,16 @@ import {
   PopoverInteractionKind,
 } from '@blueprintjs/core';
 import classNames from 'classnames';
-
 import { DashboardActionsBar, FormattedMessage as T, Icon } from '@/components';
-
 import { withJournalActions } from './withJournalActions';
-import type { WithJournalActionsProps } from './withJournalActions';
 import { withJournal } from './withJournal';
-import type { WithJournalProps } from './withJournal';
-
 import { compose } from '@/utils';
 import { useJournalSheetContext } from './JournalProvider';
 import { JournalSheetExportMenu } from './components';
 import { withDialogActions } from '@/containers/Dialog/withDialogActions';
-import type { WithDialogActionsProps } from '@/containers/Dialog/withDialogActions';
 import { DialogsName } from '@/constants/dialogs';
+import type { WithDialogActionsProps } from '@/containers/Dialog/withDialogActions';
+import type { WithJournalActionsProps } from './withJournalActions';
 
 type JournalActionsBarProps = {
   isFilterDrawerOpen: boolean;

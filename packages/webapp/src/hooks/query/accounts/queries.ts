@@ -78,7 +78,6 @@ export function useCreateAccount(
 ) {
   const client = useQueryClient();
   const fetcher = useApiFetcher();
-
   return useMutation({
     ...props,
     mutationFn: (values: CreateAccountBody) => createAccount(fetcher, values),
@@ -91,7 +90,6 @@ export function useEditAccount(
 ) {
   const client = useQueryClient();
   const fetcher = useApiFetcher();
-
   return useMutation({
     ...props,
     mutationFn: ([id, values]: [number, EditAccountBody]) =>
@@ -105,7 +103,6 @@ export function useDeleteAccount(
 ) {
   const client = useQueryClient();
   const fetcher = useApiFetcher();
-
   return useMutation({
     ...props,
     mutationFn: (id: number) => deleteAccount(fetcher, id),
@@ -118,7 +115,6 @@ export function useActivateAccount(
 ) {
   const client = useQueryClient();
   const fetcher = useApiFetcher();
-
   return useMutation({
     ...props,
     mutationFn: (id: number) => activateAccount(fetcher, id),
@@ -131,7 +127,6 @@ export function useInactivateAccount(
 ) {
   const queryClient = useQueryClient();
   const fetcher = useApiFetcher();
-
   return useMutation({
     ...props,
     mutationFn: (id: number) => inactivateAccount(fetcher, id),
@@ -148,7 +143,6 @@ export function useBulkDeleteAccounts(
 ) {
   const queryClient = useQueryClient();
   const fetcher = useApiFetcher();
-
   return useMutation({
     ...props,
     mutationFn: ({
@@ -166,7 +160,6 @@ export function useValidateBulkDeleteAccounts(
   props?: UseMutationOptions<ValidateBulkDeleteResponse, Error, number[]>,
 ) {
   const fetcher = useApiFetcher({ enableCamelCaseTransform: true });
-
   return useMutation({
     ...props,
     mutationFn: (ids: number[]) => validateBulkDeleteAccounts(fetcher, ids),
@@ -191,7 +184,6 @@ export function useAccountTransactions(
 
 export function useRefreshAccounts() {
   const queryClient = useQueryClient();
-
   return {
     refresh: () => {
       queryClient.invalidateQueries({ queryKey: accountsKeys.all() });

@@ -68,7 +68,6 @@ export const PreferencesBrandingForm = ({
       formData.append('internalKey', key);
 
       try {
-        // @ts-expect-error
         const uploadedAttachmentRes = await uploadAttachments(formData);
         setSubmitting(false);
 

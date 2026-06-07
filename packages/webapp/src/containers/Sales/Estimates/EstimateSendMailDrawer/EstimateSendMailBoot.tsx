@@ -1,10 +1,8 @@
 import React, { createContext, useContext } from 'react';
 import { Spinner } from '@blueprintjs/core';
 import { useDrawerContext } from '@/components/Drawer/DrawerProvider';
-import {
-  SaleEstimateMailStateResponse,
-  useSaleEstimateMailState,
-} from '@/hooks/query';
+import { useSaleEstimateMailState } from '@/hooks/query';
+import { type SaleEstimateMailStateResponse } from '@bigcapital/sdk-ts';
 
 interface EstimateSendMailBootValues {
   estimateId: number;

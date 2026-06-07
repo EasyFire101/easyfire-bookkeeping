@@ -40,10 +40,10 @@ export const useInventoryValuationTableColumns = () => {
       },
       {
         Header: intl.get('quantity'),
-        accessor: 'quantity_formatted',
+        accessor: 'quantityFormatted',
         Cell: CellTextSpan,
-        className: 'quantity_formatted',
-        width: getColumnWidth(tableRows, `quantity_formatted`, {
+        className: 'quantityFormatted',
+        width: getColumnWidth(tableRows, `quantityFormatted`, {
           minWidth: 120,
         }),
         textOverview: true,
@@ -51,10 +51,10 @@ export const useInventoryValuationTableColumns = () => {
       },
       {
         Header: intl.get('asset_value'),
-        accessor: 'valuation_formatted',
+        accessor: 'valuationFormatted',
         Cell: CellTextSpan,
         className: 'valuation',
-        width: getColumnWidth(tableRows, `valuation_formatted`, {
+        width: getColumnWidth(tableRows, `valuationFormatted`, {
           minWidth: 120,
         }),
         textOverview: true,
@@ -62,10 +62,10 @@ export const useInventoryValuationTableColumns = () => {
       },
       {
         Header: intl.get('average'),
-        accessor: 'average_formatted',
+        accessor: 'averageFormatted',
         Cell: CellTextSpan,
-        className: 'average_formatted',
-        width: getColumnWidth(tableRows, `average_formatted`, {
+        className: 'averageFormatted',
+        width: getColumnWidth(tableRows, `averageFormatted`, {
           minWidth: 120,
         }),
         textOverview: true,

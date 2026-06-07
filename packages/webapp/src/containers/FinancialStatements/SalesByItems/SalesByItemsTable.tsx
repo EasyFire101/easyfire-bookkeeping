@@ -19,8 +19,8 @@ export function SalesByItemsTable({ companyName }: SalesByItemsTableProps) {
   // Sales by items context.
   const { salesByItems, isLoading } = useSalesByItemsContext();
 
-  const table = (salesByItems as any)?.table;
-  const meta = (salesByItems as any)?.meta;
+  const table = salesByItems?.table;
+  const meta = salesByItems?.meta;
 
   // Sales by items table columns.
   const columns = useSalesByItemsTableColumns();
@@ -29,12 +29,11 @@ export function SalesByItemsTable({ companyName }: SalesByItemsTableProps) {
     <SalesByItemsSheet
       companyName={companyName}
       sheetType={intl.get('sales_by_items')}
-      dateText={meta?.formatted_date_range ?? meta?.formatted_as_date}
-      loading={isLoading}
+      dateText={meta?.formattedDateRange ?? meta?.formattedAsDate}
     >
       <SalesByItemsDataTable
         columns={columns}
-        data={table.rows}
+        data={table?.rows ?? []}
         expandable={true}
         expandToggleColumn={1}
         expandColumnSpace={1}

@@ -33,6 +33,7 @@ import { PaymentReceivedResponseDto } from './dtos/PaymentReceivedResponse.dto';
 import { PaginatedResponseDto } from '@/common/dtos/PaginatedResults.dto';
 import { PaymentReceivedStateResponseDto } from './dtos/PaymentReceivedStateResponse.dto';
 import { PaymentReceivedHtmlContentResponseDto } from './dtos/PaymentReceivedHtmlResponse.dto';
+import { PaymentReceiveEditPageResponseDto } from './dtos/PaymentReceiveEditPageResponse.dto';
 import { ApiCommonHeaders } from '@/common/decorators/ApiCommonHeaders';
 import {
   BulkDeleteDto,
@@ -50,6 +51,7 @@ import { PaymentReceiveAction } from './types/PaymentReceived.types';
 @ApiExtraModels(PaginatedResponseDto)
 @ApiExtraModels(PaymentReceivedStateResponseDto)
 @ApiExtraModels(PaymentReceivedHtmlContentResponseDto)
+@ApiExtraModels(PaymentReceiveEditPageResponseDto)
 @ApiExtraModels(ValidateBulkDeleteResponseDto)
 @ApiCommonHeaders()
 @UseGuards(AuthorizationGuard, PermissionGuard)
@@ -75,8 +77,8 @@ export class PaymentReceivesController {
   @Get(':id/edit-page')
   @ApiResponse({
     status: 200,
-    description:
-      'The payment received edit page has been successfully retrieved.',
+    description: 'The payment received edit page data.',
+    schema: { $ref: getSchemaPath(PaymentReceiveEditPageResponseDto) },
   })
   public getPaymentReceiveEditPage(
     @Param('id', ParseIntPipe) paymentReceiveId: number,

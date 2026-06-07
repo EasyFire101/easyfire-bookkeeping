@@ -50,6 +50,7 @@ import { AuthorizationGuard } from '@/modules/Roles/Authorization.guard';
 import { AbilitySubject } from '@/modules/Roles/Roles.types';
 import { SaleInvoiceAction } from './SaleInvoice.types';
 import { InvoicePaymentTransactionDto } from './dtos/InvoicePaymentTransactionResponse.dto';
+import { SaleInvoiceHtmlContentResponseDto } from './dtos/SaleInvoiceHtmlResponse.dto';
 
 @Controller('sale-invoices')
 @ApiTags('Sale Invoices')
@@ -60,6 +61,7 @@ import { InvoicePaymentTransactionDto } from './dtos/InvoicePaymentTransactionRe
 @ApiCommonHeaders()
 @ApiExtraModels(ValidateBulkDeleteResponseDto)
 @ApiExtraModels(InvoicePaymentTransactionDto)
+@ApiExtraModels(SaleInvoiceHtmlContentResponseDto)
 @UseGuards(AuthorizationGuard, PermissionGuard)
 export class SaleInvoicesController {
   constructor(private saleInvoiceApplication: SaleInvoiceApplication) {}
@@ -211,8 +213,13 @@ export class SaleInvoicesController {
   @ApiResponse({
     status: 200,
     description: 'The sale invoice details have been successfully retrieved.',
-    schema: {
-      $ref: getSchemaPath(SaleInvoiceResponseDto),
+    content: {
+      'application/json': {
+        schema: { $ref: getSchemaPath(SaleInvoiceResponseDto) },
+      },
+      'application/json+html': {
+        schema: { $ref: getSchemaPath(SaleInvoiceHtmlContentResponseDto) },
+      },
     },
   })
   @ApiResponse({ status: 404, description: 'The sale invoice not found.' })
@@ -354,6 +361,11 @@ export class SaleInvoicesController {
   @Get(':id/html')
   @RequirePermission(SaleInvoiceAction.View, AbilitySubject.SaleInvoice)
   @ApiOperation({ summary: 'Retrieves the sale invoice HTML.' })
+  @ApiResponse({
+    status: 200,
+    description: 'The sale invoice HTML content has been successfully retrieved.',
+    schema: { type: 'string', example: '<html>...</html>' },
+  })
   @ApiResponse({ status: 404, description: 'The sale invoice not found.' })
   @ApiParam({
     name: 'id',

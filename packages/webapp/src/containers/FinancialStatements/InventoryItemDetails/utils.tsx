@@ -62,9 +62,9 @@ export const dynamicColumns = (
     return R.compose(
       R.cond([
         [R.pathEq(['key'], 'date'), itemNameOrDateColumn(data, index)],
-        [R.pathEq(['key'], 'running_quantity'), numericColumn(data, index)],
-        [R.pathEq(['key'], 'profit_margin'), numericColumn(data, index)],
-        [R.pathEq(['key'], 'running_value'), numericColumn(data, index)],
+        [R.pathEq(['key'], 'runningQuantity'), numericColumn(data, index)],
+        [R.pathEq(['key'], 'profitMargin'), numericColumn(data, index)],
+        [R.pathEq(['key'], 'runningValue'), numericColumn(data, index)],
         [R.pathEq(['key'], 'quantity'), numericColumn(data, index)],
         [R.pathEq(['key'], 'rate'), numericColumn(data, index)],
         [R.pathEq(['key'], 'total'), numericColumn(data, index)],

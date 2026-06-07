@@ -1,20 +1,33 @@
-// @ts-nocheck
 import { connect } from 'react-redux';
 import {
   isDialogOpenFactory,
   getDialogPayloadFactory,
 } from '@/store/dashboard/dashboard.selectors';
+import type { RootState } from '@/store/reducers';
 
-export default (mapState) => {
+export type DialogBaseProps = {
+  isOpen: boolean | undefined;
+  payload: Record<string, unknown>;
+};
+
+function withDialogRedux<TMapped extends object = DialogBaseProps>(
+  mapState?: (base: DialogBaseProps) => TMapped,
+) {
   const isDialogOpen = isDialogOpenFactory();
   const getDialogPayload = getDialogPayloadFactory();
 
-  const mapStateToProps = (state, props) => {
-    const mapped = {
+  const mapStateToProps = (
+    state: RootState,
+    props: { dialogName: string },
+  ): TMapped => {
+    const mapped: DialogBaseProps = {
       isOpen: isDialogOpen(state, props),
       payload: getDialogPayload(state, props),
     };
-    return mapState ? mapState(mapped) : mapped;
+    return (mapState ? mapState(mapped) : mapped) as TMapped;
   };
+
   return connect(mapStateToProps);
-};
+}
+
+export default withDialogRedux;

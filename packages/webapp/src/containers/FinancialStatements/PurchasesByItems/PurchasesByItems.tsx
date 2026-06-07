@@ -1,16 +1,13 @@
-import React, { useEffect, useCallback } from 'react';
+import { useEffect, useCallback } from 'react';
 import moment from 'moment';
-
 import { PurchasesByItemsActionsBar } from './PurchasesByItemsActionsBar';
 import { PurchasesByItemsHeader } from './PurchasesByItemsHeader';
-
 import { FinancialStatement, DashboardPageContent } from '@/components';
 import { PurchasesByItemsLoadingBar } from './components';
 import { PurchasesByItemsProvider } from './PurchasesByItemsProvider';
 import { PurchasesByItemsBody } from './PurchasesByItemsBody';
 import { usePurchasesByItemsQuery } from './utils';
 import { compose } from '@/utils';
-
 import {
   withPurchasesByItemsActions,
   WithPurchasesByItemsActionsProps,
@@ -34,7 +31,7 @@ function PurchasesByItemsInner({
   const handleFilterSubmit = useCallback(
     (filter: Record<string, unknown>) => {
       const parsedFilter = {
-        ...filter,
+      ...filter,
         fromDate: moment(filter.fromDate as string).format('YYYY-MM-DD'),
         toDate: moment(filter.toDate as string).format('YYYY-MM-DD'),
       };

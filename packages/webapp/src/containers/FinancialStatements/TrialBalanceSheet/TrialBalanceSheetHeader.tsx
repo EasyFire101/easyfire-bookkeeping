@@ -5,19 +5,15 @@ import moment from 'moment';
 import { Formik, Form, FormikHelpers } from 'formik';
 import intl from 'react-intl-universal';
 import { Tabs, Tab, Button, Intent } from '@blueprintjs/core';
-
 import { FormattedMessage as T } from '@/components';
-
 import { FinancialStatementHeader } from '../FinancialStatementHeader';
 import { TrialBalanceSheetHeaderGeneralPanel } from './TrialBalanceSheetHeaderGeneralPanel';
 import { TrialBalanceSheetHeaderDimensionsPanel } from './TrialBalanceSheetHeaderDimensionsPanel';
-
 import { withTrialBalance, WithTrialBalanceProps } from './withTrialBalance';
 import {
   withTrialBalanceActions,
   WithTrialBalanceActionsProps,
 } from './withTrialBalanceActions';
-
 import { compose, transformToForm } from '@/utils';
 import { useFeatureCan } from '@/hooks/state';
 import { Features } from '@/constants';
@@ -82,7 +78,7 @@ function TrialBalanceSheetHeaderInner({
       toDate: moment(pageFilter.toDate as string).toDate(),
     },
     defaultValues,
-  );
+  ) as TrialBalanceFormValues;
   // Handle form submit.
   const handleSubmit = (
     values: TrialBalanceFormValues,
@@ -107,7 +103,7 @@ function TrialBalanceSheetHeaderInner({
       isOpen={trialBalanceDrawerFilter}
       drawerProps={{ onClose: handleDrawerClose }}
     >
-      <Formik
+      <Formik<TrialBalanceFormValues>
         initialValues={initialValues}
         validationSchema={validationSchema}
         onSubmit={handleSubmit}

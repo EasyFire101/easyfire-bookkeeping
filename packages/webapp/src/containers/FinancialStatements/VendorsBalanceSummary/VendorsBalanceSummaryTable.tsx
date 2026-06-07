@@ -31,7 +31,7 @@ export function VendorsBalanceSummaryTable({
     <VendorBalanceFinancialSheet
       companyName={organizationName}
       sheetType={intl.get('vendors_balance_summary')}
-      dateText={meta?.formatted_date_range ?? meta?.formatted_as_date}
+      dateText={meta?.formattedDateRange ?? meta?.formattedAsDate}
     >
       <VendorBalanceDataTable
         columns={columns}

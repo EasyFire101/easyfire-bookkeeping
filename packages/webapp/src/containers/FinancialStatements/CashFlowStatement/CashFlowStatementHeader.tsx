@@ -54,7 +54,7 @@ function CashFlowStatementHeaderInner({
       toDate: moment(pageFilter.toDate).toDate(),
     },
     defaultValues,
-  );
+  ) as CashFlowSheetFormValues;
 
   const validationSchema = Yup.object().shape({
     dateRange: Yup.string().optional(),

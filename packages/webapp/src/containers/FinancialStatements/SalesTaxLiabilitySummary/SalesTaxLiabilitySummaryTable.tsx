@@ -15,18 +15,14 @@ interface SalesTaxLiabilitySummaryTableRootProps {
   organizationName: WithCurrentOrganizationProps['organization']['name'];
 }
 
-/**
- * Balance sheet table.
- */
 function SalesTaxLiabilitySummaryTableRoot({
   // #ownProps
   organizationName,
 }: SalesTaxLiabilitySummaryTableRootProps) {
-  // Balance sheet context.
   const { salesTaxLiabilitySummary } = useSalesTaxLiabilitySummaryContext();
 
-  const table = (salesTaxLiabilitySummary as any)?.table;
-  const meta = (salesTaxLiabilitySummary as any)?.meta;
+  const table = salesTaxLiabilitySummary?.table;
+  const meta = salesTaxLiabilitySummary?.meta;
 
   // Retrieve the database columns.
   const columns = useSalesTaxLiabilitySummaryColumns();
@@ -41,8 +37,7 @@ function SalesTaxLiabilitySummaryTableRoot({
     <FinancialSheet
       companyName={organizationName}
       sheetType={'Sales Tax Liability Summary'}
-      dateText={meta?.formatted_date_range ?? meta?.formatted_as_date}
-      basis={''}
+      dateText={meta?.formattedDateRange}
     >
       <SalesTaxLiabilitySummaryDataTable
         columns={columns}

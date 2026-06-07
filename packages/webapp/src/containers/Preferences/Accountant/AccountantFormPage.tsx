@@ -36,7 +36,24 @@ const defaultFormValues = flatten({
     preferredDepositAccount: '',
     preferredAdvanceDeposit: '',
   },
-});
+}) as AccountantFormValues;
+
+interface AccountantFormValues {
+  organization: {
+    accountingBasis: string;
+  };
+  accounts: {
+    accountCodeRequired: boolean;
+    accountCodeUnique: boolean;
+  };
+  billPayments: {
+    withdrawalAccount: string;
+  };
+  paymentReceives: {
+    preferredDepositAccount: string;
+    preferredAdvanceDeposit: string;
+  };
+}
 
 interface AccountantFormPageInnerProps
   extends WithDashboardActionsProps,
@@ -55,10 +72,11 @@ function AccountantFormPageInner({
   const initialValues = unflatten({
     ...defaultFormValues,
     ...transformToForm(flatten(allSettings), defaultFormValues),
-  });
+  }) as AccountantFormValues;
+
   const handleFormSubmit = (
-    values: Record<string, any>,
-    { setSubmitting }: FormikHelpers<Record<string, any>>,
+    values: AccountantFormValues,
+    { setSubmitting }: FormikHelpers<AccountantFormValues>,
   ) => {
     const options = R.compose(
       transferObjectOptionsToArray,

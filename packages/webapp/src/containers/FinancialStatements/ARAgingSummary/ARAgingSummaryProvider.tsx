@@ -2,6 +2,7 @@ import { useMemo, createContext, useContext } from 'react';
 import { FinancialReportPage } from '../FinancialReportPage';
 import { useARAgingSummaryReport } from '@/hooks/query';
 import { transformFilterFormToQuery } from '../common';
+import { ReceivableAgingTableQuery } from '@bigcapital/sdk-ts';
 
 type UseARAgingSummaryResult = ReturnType<typeof useARAgingSummaryReport>;
 
@@ -10,7 +11,7 @@ type ARAgingSummaryContextValue = {
   isARAgingLoading: boolean;
   isARAgingFetching: boolean;
   refetch: UseARAgingSummaryResult['refetch'];
-  httpQuery: Record<string, unknown>;
+  httpQuery: ReceivableAgingTableQuery;
 };
 
 type ARAgingSummaryProviderProps = {
@@ -26,7 +27,10 @@ function ARAgingSummaryProvider({
   filter,
   ...props
 }: ARAgingSummaryProviderProps) {
-  const httpQuery = useMemo(() => transformFilterFormToQuery(filter), [filter]);
+  const httpQuery = useMemo(
+    () => transformFilterFormToQuery(filter) as ReceivableAgingTableQuery,
+    [filter],
+  );
 
   const {
     data: ARAgingSummary,

@@ -35,9 +35,7 @@ export const ImportFileMapBootProvider = ({
     data: importFile,
     isLoading: isImportFileLoading,
     isFetching: isImportFileFetching,
-  } = useImportFileMeta(importId, {
-    enabled: Boolean(importId),
-  });
+  } = useImportFileMeta(importId, { enabled: false });
 
   const value = {
     importFile,

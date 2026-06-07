@@ -1,10 +1,10 @@
 import React from 'react';
 import moment from 'moment';
 import { castArray } from 'lodash';
-
 import { useAppQueryString } from '@/hooks';
 import { transformToForm } from '@/utils';
 import { transformFilterFormToQuery } from '../common';
+import { TrialBalanceTableQuery } from '@bigcapital/sdk-ts';
 
 /**
  * Retrieves the default trial balance query.
@@ -25,7 +25,7 @@ export function getDefaultTrialBalanceQuery() {
  */
 const parseTrialBalanceSheetQuery = (
   locationQuery: Record<string, unknown>,
-) => {
+): TrialBalanceTableQuery => {
   const defaultQuery = getDefaultTrialBalanceQuery();
 
   const transformed = {
@@ -34,7 +34,6 @@ const parseTrialBalanceSheetQuery = (
   };
   return {
     ...transformed,
-
     // Ensures the branches ids is always array.
     branchesIds: castArray(transformed.branchesIds),
   };
@@ -66,6 +65,5 @@ export const useTrialBalanceSheetQuery = () => {
  */
 export const useTrialBalanceSheetHttpQuery = () => {
   const { query } = useTrialBalanceSheetQuery();
-
   return React.useMemo(() => transformFilterFormToQuery(query), [query]);
 };

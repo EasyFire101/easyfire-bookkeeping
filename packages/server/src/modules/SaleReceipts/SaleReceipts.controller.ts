@@ -37,6 +37,7 @@ import {
   BulkDeleteDto,
   ValidateBulkDeleteResponseDto,
 } from '@/common/dtos/BulkDelete.dto';
+import { SaleReceiptHtmlContentResponseDto } from './dtos/SaleReceiptHtmlResponse.dto';
 
 @Controller('sale-receipts')
 @ApiTags('Sale Receipts')
@@ -45,6 +46,7 @@ import {
 @ApiExtraModels(SaleReceiptStateResponseDto)
 @ApiCommonHeaders()
 @ApiExtraModels(ValidateBulkDeleteResponseDto)
+@ApiExtraModels(SaleReceiptHtmlContentResponseDto)
 export class SaleReceiptsController {
   constructor(private saleReceiptApplication: SaleReceiptApplication) {}
 
@@ -150,8 +152,13 @@ export class SaleReceiptsController {
   @ApiResponse({
     status: 200,
     description: 'The sale receipt details have been successfully retrieved.',
-    schema: {
-      $ref: getSchemaPath(SaleReceiptResponseDto),
+    content: {
+      'application/json': {
+        schema: { $ref: getSchemaPath(SaleReceiptResponseDto) },
+      },
+      'application/json+html': {
+        schema: { $ref: getSchemaPath(SaleReceiptHtmlContentResponseDto) },
+      },
     },
   })
   @ApiResponse({ status: 404, description: 'The sale receipt not found.' })

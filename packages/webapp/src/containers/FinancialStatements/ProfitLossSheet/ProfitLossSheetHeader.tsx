@@ -1,4 +1,3 @@
-import React from 'react';
 import moment from 'moment';
 import styled from 'styled-components';
 import { Formik, Form } from 'formik';
@@ -24,9 +23,10 @@ import type { FormikHelpers } from 'formik';
 
 type ProfitLossFormValues = ReturnType<typeof getDefaultProfitLossQuery>;
 
+type FormValues = Partial<ProfitLossFormValues>;
 interface ProfitLossSheetHeaderOwnProps {
-  pageFilter: ProfitLossFormValues;
-  onSubmitFilter: (values: ProfitLossFormValues) => void;
+  pageFilter: FormValues;
+  onSubmitFilter: (values: FormValues) => void;
 }
 
 type ProfitLossSheetHeaderProps = ProfitLossSheetHeaderOwnProps &
@@ -43,13 +43,13 @@ function ProfitLossSheetHeaderInner({
 
   const initialValues = {
     ...pageFilter,
-    fromDate: moment(pageFilter.fromDate).toDate(),
-    toDate: moment(pageFilter.toDate).toDate(),
-  };
+    fromDate: moment(pageFilter.fromDate).toDate().toString(),
+    toDate: moment(pageFilter.toDate).toDate().toString(),
+  } as FormValues;
 
   const handleSubmit = (
-    values: ProfitLossFormValues,
-    _actions: FormikHelpers<ProfitLossFormValues>,
+    values: FormValues,
+    _actions: FormikHelpers<FormValues>,
   ) => {
     onSubmitFilter(values);
     toggleFilterDrawer(false);
@@ -71,7 +71,7 @@ function ProfitLossSheetHeaderInner({
       isOpen={profitLossDrawerFilter}
       drawerProps={{ onClose: handleDrawerClose }}
     >
-      <Formik<ProfitLossFormValues>
+      <Formik<FormValues>
         validationSchema={validationSchema}
         initialValues={initialValues}
         onSubmit={handleSubmit}
