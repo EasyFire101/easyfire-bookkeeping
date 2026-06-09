@@ -6,6 +6,7 @@ import {
   sanitizeResourceName,
   validateSheetEmpty,
 } from './_utils';
+import { validateImportFileMagicBytes } from './ImportMulter.utils';
 import { ResourceService } from '../Resource/ResourceService';
 import { ImportFileCommon } from './ImportFileCommon';
 import { ImportFileDataValidator } from './ImportFileDataValidator';
@@ -67,6 +68,9 @@ export class ImportFileUploadService {
 
     // Reads the imported file into buffer.
     const buffer = await readImportFile(filename);
+
+    // Guard against MIME-type spoofing by verifying actual file magic bytes.
+    await validateImportFileMagicBytes(buffer);
 
     // Parse the buffer file to array data.
     const [sheetData, sheetColumns] = parseSheetData(buffer);
