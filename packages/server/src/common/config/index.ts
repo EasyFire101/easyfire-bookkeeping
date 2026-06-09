@@ -1,4 +1,5 @@
 import app from './app';
+import auth from './auth';
 import systemDatabase from './system-database';
 import tenantDatabase from './tenant-database';
 import signup from './signup';
@@ -23,6 +24,7 @@ import bullBoard from './bull-board';
 
 export const config = [
   app,
+  auth,
   systemDatabase,
   cloud,
   tenantDatabase,

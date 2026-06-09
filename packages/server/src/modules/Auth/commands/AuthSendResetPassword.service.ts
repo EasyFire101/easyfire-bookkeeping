@@ -1,5 +1,5 @@
+import * as crypto from 'crypto';
 import { Inject, Injectable } from '@nestjs/common';
-import * as uniqid from 'uniqid';
 import {
   IAuthSendedResetPassword,
   IAuthSendingResetPassword,
@@ -35,7 +35,7 @@ export class AuthSendResetPasswordService {
 
     if (!user) return;
 
-    const token: string = uniqid();
+    const token: string = crypto.randomBytes(32).toString('hex');
 
     // Triggers sending reset password event.
     await this.eventPublisher.emitAsync(events.auth.sendingResetPassword, {
@@ -44,7 +44,7 @@ export class AuthSendResetPasswordService {
     } as IAuthSendingResetPassword);
 
     // Delete all stored tokens of reset password that associate to the give email.
-    this.deletePasswordResetToken(email);
+    await this.deletePasswordResetToken(email);
 
     // Creates a new password reset row with unique token.
     await this.resetPasswordModel.query().insert({ email, token });
