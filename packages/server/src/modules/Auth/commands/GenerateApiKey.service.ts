@@ -1,4 +1,4 @@
-import { Inject, Injectable } from '@nestjs/common';
+import { Inject, Injectable, NotFoundException } from '@nestjs/common';
 import * as crypto from 'crypto';
 import { ApiKeyModel } from '../models/ApiKey.model';
 import { TenancyContext } from '@/modules/Tenancy/TenancyContext.service';
@@ -43,11 +43,16 @@ export class GenerateApiKey {
    * @returns {Promise<{ id: number; revoked: boolean }>} The id of the revoked API key and a revoked flag.
    */
   async revoke(apiKeyId: number) {
-    // Set the revoked flag to true for the given API key
-    await ApiKeyModel.query()
-      .findById(apiKeyId)
+    const tenant = await this.tenancyContext.getTenant();
+
+    const affected = await this.apiKeyModel
+      .query()
+      .where({ id: apiKeyId, tenantId: tenant.id })
       .patch({ revokedAt: new Date() });
 
+    if (affected === 0) {
+      throw new NotFoundException('API key not found.');
+    }
     return { id: apiKeyId, revoked: true };
   }
 }
