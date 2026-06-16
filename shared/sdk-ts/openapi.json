@@ -23135,10 +23135,41 @@
     "/api/payment-services": {
       "get": {
         "operationId": "PaymentServicesController_getPaymentServicesSpecificInvoice",
-        "parameters": [],
+        "summary": "Retrieves the payment services for the invoice.",
+        "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "Value must be 'Bearer <token>' where <token> is an API key prefixed with 'bc_' or a JWT token.",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "example": "Bearer bc_1234567890abcdef"
+            }
+          },
+          {
+            "name": "organization-id",
+            "in": "header",
+            "description": "Required if Authorization is a JWT token. The organization ID to operate within.",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
         "responses": {
           "200": {
-            "description": ""
+            "description": "Payment services have been successfully retrieved.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/PaymentIntegrationDto"
+                  }
+                }
+              }
+            }
           }
         },
         "tags": [
@@ -23149,10 +23180,38 @@
     "/api/payment-services/state": {
       "get": {
         "operationId": "PaymentServicesController_getPaymentMethodsState",
-        "parameters": [],
+        "summary": "Retrieves the payment methods state (Stripe, etc.).",
+        "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "Value must be 'Bearer <token>' where <token> is an API key prefixed with 'bc_' or a JWT token.",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "example": "Bearer bc_1234567890abcdef"
+            }
+          },
+          {
+            "name": "organization-id",
+            "in": "header",
+            "description": "Required if Authorization is a JWT token. The organization ID to operate within.",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
         "responses": {
           "200": {
-            "description": ""
+            "description": "Payment methods state has been successfully retrieved.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GetPaymentMethodsStateDto"
+                }
+              }
+            }
           }
         },
         "tags": [
@@ -23163,11 +23222,32 @@
     "/api/payment-services/{paymentServiceId}": {
       "get": {
         "operationId": "PaymentServicesController_getPaymentService",
+        "summary": "Retrieves a specific payment service details.",
         "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "Value must be 'Bearer <token>' where <token> is an API key prefixed with 'bc_' or a JWT token.",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "example": "Bearer bc_1234567890abcdef"
+            }
+          },
+          {
+            "name": "organization-id",
+            "in": "header",
+            "description": "Required if Authorization is a JWT token. The organization ID to operate within.",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
           {
             "name": "paymentServiceId",
             "required": true,
             "in": "path",
+            "description": "Payment service id.",
             "schema": {
               "type": "number"
             }
@@ -23175,7 +23255,14 @@
         ],
         "responses": {
           "200": {
-            "description": ""
+            "description": "Payment service details have been successfully retrieved.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PaymentIntegrationDto"
+                }
+              }
+            }
           }
         },
         "tags": [
@@ -23186,11 +23273,32 @@
     "/api/payment-services/{paymentMethodId}": {
       "post": {
         "operationId": "PaymentServicesController_updatePaymentMethod",
+        "summary": "Updates the given payment method.",
         "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "Value must be 'Bearer <token>' where <token> is an API key prefixed with 'bc_' or a JWT token.",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "example": "Bearer bc_1234567890abcdef"
+            }
+          },
+          {
+            "name": "organization-id",
+            "in": "header",
+            "description": "Required if Authorization is a JWT token. The organization ID to operate within.",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
           {
             "name": "paymentMethodId",
             "required": true,
             "in": "path",
+            "description": "Payment method id.",
             "schema": {
               "type": "number"
             }
@@ -23198,6 +23306,7 @@
         ],
         "requestBody": {
           "required": true,
+          "description": "Payment method update payload.",
           "content": {
             "application/json": {
               "schema": {
@@ -23208,7 +23317,14 @@
         },
         "responses": {
           "200": {
-            "description": ""
+            "description": "The payment method has been successfully updated.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PaymentMethodMutationResponseDto"
+                }
+              }
+            }
           }
         },
         "tags": [
@@ -23217,11 +23333,32 @@
       },
       "delete": {
         "operationId": "PaymentServicesController_deletePaymentMethod",
+        "summary": "Deletes the given payment method.",
         "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "Value must be 'Bearer <token>' where <token> is an API key prefixed with 'bc_' or a JWT token.",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "example": "Bearer bc_1234567890abcdef"
+            }
+          },
+          {
+            "name": "organization-id",
+            "in": "header",
+            "description": "Required if Authorization is a JWT token. The organization ID to operate within.",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
           {
             "name": "paymentMethodId",
             "required": true,
             "in": "path",
+            "description": "Payment method id.",
             "schema": {
               "type": "number"
             }
@@ -23229,7 +23366,14 @@
         ],
         "responses": {
           "200": {
-            "description": ""
+            "description": "The payment method has been successfully deleted.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PaymentMethodMutationResponseDto"
+                }
+              }
+            }
           }
         },
         "tags": [
@@ -41035,9 +41179,232 @@
           "organizationId"
         ]
       },
+      "PaymentIntegrationDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "number",
+            "description": "Payment integration id.",
+            "example": 5
+          },
+          "name": {
+            "type": "string",
+            "description": "Display name of the payment integration.",
+            "example": "Stripe"
+          },
+          "service": {
+            "type": "string",
+            "description": "Payment service key (e.g. \"stripe\").",
+            "example": "stripe"
+          },
+          "paymentEnabled": {
+            "type": "boolean",
+            "description": "Whether payment processing is enabled.",
+            "example": true
+          },
+          "payoutEnabled": {
+            "type": "boolean",
+            "description": "Whether payout is enabled.",
+            "example": false
+          },
+          "accountId": {
+            "type": "string",
+            "description": "Connected account id at the provider.",
+            "example": "acct_1MwQ..."
+          },
+          "options": {
+            "type": "object",
+            "description": "Provider-specific options (bank account id, clearing account id, card brand flags, ...).",
+            "additionalProperties": true,
+            "example": {
+              "bankAccountId": 12,
+              "clearingAccountId": 34
+            }
+          },
+          "fullEnabled": {
+            "type": "boolean",
+            "description": "Virtual attribute — true when both payment and payout are enabled.",
+            "example": false
+          },
+          "serviceFormatted": {
+            "type": "string",
+            "description": "Human-readable service label. Present on the list endpoint (added by the transformer).",
+            "example": "Stripe"
+          }
+        },
+        "required": [
+          "id",
+          "name",
+          "service",
+          "paymentEnabled",
+          "payoutEnabled",
+          "accountId",
+          "options",
+          "fullEnabled"
+        ]
+      },
+      "PaymentMethodMutationResponseDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "number",
+            "description": "Id of the affected payment method.",
+            "example": 7
+          },
+          "message": {
+            "type": "string",
+            "description": "Human-readable confirmation message.",
+            "example": "The given payment method has been updated."
+          }
+        },
+        "required": [
+          "id",
+          "message"
+        ]
+      },
+      "StripePaymentMethodsStateDto": {
+        "type": "object",
+        "properties": {
+          "isStripeAccountCreated": {
+            "type": "boolean",
+            "description": "Whether the Stripe account record exists.",
+            "example": true
+          },
+          "isStripePaymentEnabled": {
+            "type": "boolean",
+            "description": "Whether Stripe payments are enabled.",
+            "example": true
+          },
+          "isStripePayoutEnabled": {
+            "type": "boolean",
+            "description": "Whether Stripe payouts are enabled.",
+            "example": false
+          },
+          "isStripeEnabled": {
+            "type": "boolean",
+            "description": "Whether Stripe is enabled overall.",
+            "example": true
+          },
+          "isStripeServerConfigured": {
+            "type": "boolean",
+            "description": "Whether Stripe is configured on the server (keys present).",
+            "example": true
+          },
+          "stripeAccountId": {
+            "type": "string",
+            "description": "Stripe account id, if connected.",
+            "example": "acct_1MwQ...",
+            "nullable": true
+          },
+          "stripePaymentMethodId": {
+            "type": "number",
+            "description": "Internal payment method id of the Stripe integration.",
+            "example": 5,
+            "nullable": true
+          },
+          "stripePublishableKey": {
+            "type": "string",
+            "description": "Stripe publishable key, if configured.",
+            "example": "pk_live_...",
+            "nullable": true
+          },
+          "stripeAuthLink": {
+            "type": "string",
+            "description": "Stripe OAuth authorization link.",
+            "example": "https://connect.stripe.com/..."
+          },
+          "stripeCurrencies": {
+            "description": "Currencies supported by the Stripe integration.",
+            "example": [
+              "USD",
+              "EUR"
+            ],
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "stripeRedirectUrl": {
+            "type": "string",
+            "description": "Redirect URL after Stripe OAuth flow.",
+            "example": "https://app.example.com/settings/payment",
+            "nullable": true
+          }
+        },
+        "required": [
+          "isStripeAccountCreated",
+          "isStripePaymentEnabled",
+          "isStripePayoutEnabled",
+          "isStripeEnabled",
+          "isStripeServerConfigured",
+          "stripeAccountId",
+          "stripePaymentMethodId",
+          "stripePublishableKey",
+          "stripeAuthLink",
+          "stripeCurrencies",
+          "stripeRedirectUrl"
+        ]
+      },
+      "GetPaymentMethodsStateDto": {
+        "type": "object",
+        "properties": {
+          "stripe": {
+            "description": "Stripe payment integration state.",
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/StripePaymentMethodsStateDto"
+              }
+            ]
+          }
+        },
+        "required": [
+          "stripe"
+        ]
+      },
       "EditPaymentMethodOptionsDto": {
         "type": "object",
-        "properties": {}
+        "properties": {
+          "bankAccountId": {
+            "type": "number",
+            "description": "Linked bank account id",
+            "example": 12
+          },
+          "clearningAccountId": {
+            "type": "number",
+            "description": "Linked clearing account id",
+            "example": 34
+          },
+          "showVisa": {
+            "type": "boolean",
+            "description": "Whether Visa is displayed at checkout.",
+            "example": true
+          },
+          "showMasterCard": {
+            "type": "boolean",
+            "description": "Whether MasterCard is displayed at checkout.",
+            "example": true
+          },
+          "showDiscover": {
+            "type": "boolean",
+            "description": "Whether Discover is displayed at checkout.",
+            "example": false
+          },
+          "showAmer": {
+            "type": "boolean",
+            "description": "Whether American Express is displayed at checkout.",
+            "example": false
+          },
+          "showJcb": {
+            "type": "boolean",
+            "description": "Whether JCB is displayed at checkout.",
+            "example": false
+          },
+          "showDiners": {
+            "type": "boolean",
+            "description": "Whether Diners is displayed at checkout.",
+            "example": false
+          }
+        }
       },
       "EditPaymentMethodDTO": {
         "type": "object",
@@ -41052,7 +41419,8 @@
           },
           "name": {
             "type": "string",
-            "description": "Payment method name"
+            "description": "Payment method name",
+            "example": "Stripe"
           }
         }
       },

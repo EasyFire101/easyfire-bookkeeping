@@ -33,10 +33,7 @@ export const useGetPaymentServices = (
 
   return useQuery<GetPaymentServicesResponse, Error>({
     queryKey: paymentServicesKeys.list(),
-    queryFn: () =>
-      fetchGetPaymentServices(fetcher).then(
-        (res) => res?.payment_services as GetPaymentServicesResponse,
-      ),
+    queryFn: () => fetchGetPaymentServices(fetcher),
     ...options,
   });
 };
@@ -125,10 +122,7 @@ export const useGetPaymentMethod = (
 
   return useQuery<GetPaymentServiceResponse, Error>({
     queryKey: paymentServicesKeys.detail(paymentMethodId),
-    queryFn: () =>
-      fetchGetPaymentService(fetcher, paymentMethodId).then(
-        (res) => res?.data as GetPaymentServiceResponse,
-      ),
+    queryFn: () => fetchGetPaymentService(fetcher, paymentMethodId),
     enabled: !!paymentMethodId,
     ...options,
   });

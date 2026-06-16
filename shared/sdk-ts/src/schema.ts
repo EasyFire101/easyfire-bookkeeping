@@ -4365,6 +4365,7 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
+        /** Retrieves the payment services for the invoice. */
         get: operations["PaymentServicesController_getPaymentServicesSpecificInvoice"];
         put?: never;
         post?: never;
@@ -4381,6 +4382,7 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
+        /** Retrieves the payment methods state (Stripe, etc.). */
         get: operations["PaymentServicesController_getPaymentMethodsState"];
         put?: never;
         post?: never;
@@ -4397,6 +4399,7 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
+        /** Retrieves a specific payment service details. */
         get: operations["PaymentServicesController_getPaymentService"];
         put?: never;
         post?: never;
@@ -4415,7 +4418,9 @@ export interface paths {
         };
         get?: never;
         put?: never;
+        /** Updates the given payment method. */
         post: operations["PaymentServicesController_updatePaymentMethod"];
+        /** Deletes the given payment method. */
         delete: operations["PaymentServicesController_deletePaymentMethod"];
         options?: never;
         head?: never;
@@ -14640,11 +14645,183 @@ export interface components {
             /** @description The organization ID to set as default */
             organizationId: string;
         };
-        EditPaymentMethodOptionsDto: Record<string, never>;
+        PaymentIntegrationDto: {
+            /**
+             * @description Payment integration id.
+             * @example 5
+             */
+            id: number;
+            /**
+             * @description Display name of the payment integration.
+             * @example Stripe
+             */
+            name: string;
+            /**
+             * @description Payment service key (e.g. "stripe").
+             * @example stripe
+             */
+            service: string;
+            /**
+             * @description Whether payment processing is enabled.
+             * @example true
+             */
+            paymentEnabled: boolean;
+            /**
+             * @description Whether payout is enabled.
+             * @example false
+             */
+            payoutEnabled: boolean;
+            /**
+             * @description Connected account id at the provider.
+             * @example acct_1MwQ...
+             */
+            accountId: string;
+            /**
+             * @description Provider-specific options (bank account id, clearing account id, card brand flags, ...).
+             * @example {
+             *       "bankAccountId": 12,
+             *       "clearingAccountId": 34
+             *     }
+             */
+            options: {
+                [key: string]: unknown;
+            };
+            /**
+             * @description Virtual attribute — true when both payment and payout are enabled.
+             * @example false
+             */
+            fullEnabled: boolean;
+            /**
+             * @description Human-readable service label. Present on the list endpoint (added by the transformer).
+             * @example Stripe
+             */
+            serviceFormatted?: string;
+        };
+        PaymentMethodMutationResponseDto: {
+            /**
+             * @description Id of the affected payment method.
+             * @example 7
+             */
+            id: number;
+            /**
+             * @description Human-readable confirmation message.
+             * @example The given payment method has been updated.
+             */
+            message: string;
+        };
+        StripePaymentMethodsStateDto: {
+            /**
+             * @description Whether the Stripe account record exists.
+             * @example true
+             */
+            isStripeAccountCreated: boolean;
+            /**
+             * @description Whether Stripe payments are enabled.
+             * @example true
+             */
+            isStripePaymentEnabled: boolean;
+            /**
+             * @description Whether Stripe payouts are enabled.
+             * @example false
+             */
+            isStripePayoutEnabled: boolean;
+            /**
+             * @description Whether Stripe is enabled overall.
+             * @example true
+             */
+            isStripeEnabled: boolean;
+            /**
+             * @description Whether Stripe is configured on the server (keys present).
+             * @example true
+             */
+            isStripeServerConfigured: boolean;
+            /**
+             * @description Stripe account id, if connected.
+             * @example acct_1MwQ...
+             */
+            stripeAccountId: string | null;
+            /**
+             * @description Internal payment method id of the Stripe integration.
+             * @example 5
+             */
+            stripePaymentMethodId: number | null;
+            /**
+             * @description Stripe publishable key, if configured.
+             * @example pk_live_...
+             */
+            stripePublishableKey: string | null;
+            /**
+             * @description Stripe OAuth authorization link.
+             * @example https://connect.stripe.com/...
+             */
+            stripeAuthLink: string;
+            /**
+             * @description Currencies supported by the Stripe integration.
+             * @example [
+             *       "USD",
+             *       "EUR"
+             *     ]
+             */
+            stripeCurrencies: string[];
+            /**
+             * @description Redirect URL after Stripe OAuth flow.
+             * @example https://app.example.com/settings/payment
+             */
+            stripeRedirectUrl: string | null;
+        };
+        GetPaymentMethodsStateDto: {
+            /** @description Stripe payment integration state. */
+            stripe: components["schemas"]["StripePaymentMethodsStateDto"];
+        };
+        EditPaymentMethodOptionsDto: {
+            /**
+             * @description Linked bank account id
+             * @example 12
+             */
+            bankAccountId?: number;
+            /**
+             * @description Linked clearing account id
+             * @example 34
+             */
+            clearningAccountId?: number;
+            /**
+             * @description Whether Visa is displayed at checkout.
+             * @example true
+             */
+            showVisa?: boolean;
+            /**
+             * @description Whether MasterCard is displayed at checkout.
+             * @example true
+             */
+            showMasterCard?: boolean;
+            /**
+             * @description Whether Discover is displayed at checkout.
+             * @example false
+             */
+            showDiscover?: boolean;
+            /**
+             * @description Whether American Express is displayed at checkout.
+             * @example false
+             */
+            showAmer?: boolean;
+            /**
+             * @description Whether JCB is displayed at checkout.
+             * @example false
+             */
+            showJcb?: boolean;
+            /**
+             * @description Whether Diners is displayed at checkout.
+             * @example false
+             */
+            showDiners?: boolean;
+        };
         EditPaymentMethodDTO: {
             /** @description Edit payment method options */
             options?: components["schemas"]["EditPaymentMethodOptionsDto"];
-            /** @description Payment method name */
+            /**
+             * @description Payment method name
+             * @example Stripe
+             */
             name?: string;
         };
         ViewColumn: Record<string, never>;
@@ -29267,95 +29444,139 @@ export interface operations {
     PaymentServicesController_getPaymentServicesSpecificInvoice: {
         parameters: {
             query?: never;
-            header?: never;
+            header: {
+                /** @description Value must be 'Bearer <token>' where <token> is an API key prefixed with 'bc_' or a JWT token. */
+                Authorization: string;
+                /** @description Required if Authorization is a JWT token. The organization ID to operate within. */
+                "organization-id": string;
+            };
             path?: never;
             cookie?: never;
         };
         requestBody?: never;
         responses: {
+            /** @description Payment services have been successfully retrieved. */
             200: {
                 headers: {
                     [name: string]: unknown;
                 };
-                content?: never;
+                content: {
+                    "application/json": components["schemas"]["PaymentIntegrationDto"][];
+                };
             };
         };
     };
     PaymentServicesController_getPaymentMethodsState: {
         parameters: {
             query?: never;
-            header?: never;
+            header: {
+                /** @description Value must be 'Bearer <token>' where <token> is an API key prefixed with 'bc_' or a JWT token. */
+                Authorization: string;
+                /** @description Required if Authorization is a JWT token. The organization ID to operate within. */
+                "organization-id": string;
+            };
             path?: never;
             cookie?: never;
         };
         requestBody?: never;
         responses: {
+            /** @description Payment methods state has been successfully retrieved. */
             200: {
                 headers: {
                     [name: string]: unknown;
                 };
-                content?: never;
+                content: {
+                    "application/json": components["schemas"]["GetPaymentMethodsStateDto"];
+                };
             };
         };
     };
     PaymentServicesController_getPaymentService: {
         parameters: {
             query?: never;
-            header?: never;
+            header: {
+                /** @description Value must be 'Bearer <token>' where <token> is an API key prefixed with 'bc_' or a JWT token. */
+                Authorization: string;
+                /** @description Required if Authorization is a JWT token. The organization ID to operate within. */
+                "organization-id": string;
+            };
             path: {
+                /** @description Payment service id. */
                 paymentServiceId: number;
             };
             cookie?: never;
         };
         requestBody?: never;
         responses: {
+            /** @description Payment service details have been successfully retrieved. */
             200: {
                 headers: {
                     [name: string]: unknown;
                 };
-                content?: never;
+                content: {
+                    "application/json": components["schemas"]["PaymentIntegrationDto"];
+                };
             };
         };
     };
     PaymentServicesController_updatePaymentMethod: {
         parameters: {
             query?: never;
-            header?: never;
+            header: {
+                /** @description Value must be 'Bearer <token>' where <token> is an API key prefixed with 'bc_' or a JWT token. */
+                Authorization: string;
+                /** @description Required if Authorization is a JWT token. The organization ID to operate within. */
+                "organization-id": string;
+            };
             path: {
+                /** @description Payment method id. */
                 paymentMethodId: number;
             };
             cookie?: never;
         };
+        /** @description Payment method update payload. */
         requestBody: {
             content: {
                 "application/json": components["schemas"]["EditPaymentMethodDTO"];
             };
         };
         responses: {
+            /** @description The payment method has been successfully updated. */
             200: {
                 headers: {
                     [name: string]: unknown;
                 };
-                content?: never;
+                content: {
+                    "application/json": components["schemas"]["PaymentMethodMutationResponseDto"];
+                };
             };
         };
     };
     PaymentServicesController_deletePaymentMethod: {
         parameters: {
             query?: never;
-            header?: never;
+            header: {
+                /** @description Value must be 'Bearer <token>' where <token> is an API key prefixed with 'bc_' or a JWT token. */
+                Authorization: string;
+                /** @description Required if Authorization is a JWT token. The organization ID to operate within. */
+                "organization-id": string;
+            };
             path: {
+                /** @description Payment method id. */
                 paymentMethodId: number;
             };
             cookie?: never;
         };
         requestBody?: never;
         responses: {
+            /** @description The payment method has been successfully deleted. */
             200: {
                 headers: {
                     [name: string]: unknown;
                 };
-                content?: never;
+                content: {
+                    "application/json": components["schemas"]["PaymentMethodMutationResponseDto"];
+                };
             };
         };
     };
