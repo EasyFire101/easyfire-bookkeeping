@@ -2,10 +2,18 @@ import {
   useQuery,
   useInfiniteQuery,
   keepPreviousData,
+  InfiniteData,
+  QueryKey,
+  UseInfiniteQueryOptions,
 } from '@tanstack/react-query';
 import { useApiFetcher } from '../../useRequest';
-import { fetchAuditLogs, fetchAuditLogFilterOptions } from '@bigcapital/sdk-ts';
+import {
+  fetchAuditLogs,
+  fetchAuditLogFilterOptions,
+  AuditLogsResponse,
+} from '@bigcapital/sdk-ts';
 import { AUDIT_LOGS, AUDIT_LOG_FILTER_OPTIONS } from './query-keys';
+import { getNextPageFromPagination } from '../utils/infinite-pagination';
 
 export { AuditLogsQueryKeys } from './query-keys';
 
@@ -60,21 +68,31 @@ export function useAuditLogFilterOptionsQuery(props?: Record<string, any>) {
 
 export function useAuditLogsInfinityQuery(
   filters: Record<string, any>,
-  infinityProps?: Record<string, any>,
+  infinityProps?: Omit<
+    UseInfiniteQueryOptions<
+      AuditLogsResponse,
+      Error,
+      InfiniteData<AuditLogsResponse, number>,
+      QueryKey,
+      number
+    >,
+    'queryKey' | 'queryFn' | 'initialPageParam' | 'getNextPageParam'
+  >,
 ) {
   const fetcher = useApiFetcher();
 
-  return useInfiniteQuery({
+  return useInfiniteQuery<
+    AuditLogsResponse,
+    Error,
+    InfiniteData<AuditLogsResponse, number>,
+    QueryKey,
+    number
+  >({
+    ...infinityProps,
     queryKey: [AUDIT_LOGS, filters],
     initialPageParam: 1,
-    queryFn: ({ pageParam = 1 }) =>
+    queryFn: ({ pageParam }) =>
       fetchAuditLogs(fetcher, buildAuditLogsQuery(pageParam, filters)),
-    getNextPageParam: (lastPage: any) => {
-      const { pagination } = lastPage;
-      return pagination.total > pagination.page_size * pagination.page
-        ? pagination.page + 1
-        : undefined;
-    },
-    ...infinityProps,
+    getNextPageParam: (lastPage) => getNextPageFromPagination(lastPage),
   });
 }

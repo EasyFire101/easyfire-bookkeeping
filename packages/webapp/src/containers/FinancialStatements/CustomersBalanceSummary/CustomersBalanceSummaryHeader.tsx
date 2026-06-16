@@ -1,12 +1,10 @@
 import React from 'react';
-
 import styled from 'styled-components';
 import moment from 'moment';
 import { Formik, Form } from 'formik';
 import type { FormikHelpers } from 'formik';
 import { Tabs, Tab, Button, Intent } from '@blueprintjs/core';
 import { FormattedMessage as T } from '@/components';
-
 import { FinancialStatementHeader } from '../FinancialStatementHeader';
 import {
   withCustomersBalanceSummary,
@@ -17,7 +15,6 @@ import {
   WithCustomersBalanceSummaryActionsProps,
 } from './withCustomersBalanceSummaryActions';
 import { CustomersBalanceSummaryGeneralPanel } from './CustomersBalanceSummaryGeneralPanel';
-
 import { compose, transformToForm } from '@/utils';
 import {
   getCustomersBalanceQuerySchema,
@@ -62,7 +59,7 @@ function CustomersBalanceSummaryHeaderInner({
       asDate: moment(pageFilter.asDate).toDate(),
     },
     defaultValues,
-  );
+  ) as CustomerBalanceFormValues;
 
   const handleSubmit = (
     values: CustomerBalanceFormValues,

@@ -3,11 +3,9 @@ import styled from 'styled-components';
 import moment from 'moment';
 import { Button, Intent, Tab, Tabs } from '@blueprintjs/core';
 import { Formik, Form, FormikHelpers } from 'formik';
-
 import { FormattedMessage as T } from '@/components';
 import { useFeatureCan } from '@/hooks/state';
 import { FinancialStatementHeader } from '../../FinancialStatements/FinancialStatementHeader';
-
 import { compose, transformToForm } from '@/utils';
 import {
   getDefaultSalesTaxLiablitySummaryQuery,
@@ -73,7 +71,7 @@ function SalesTaxLiabilitySummaryHeaderInner({
       toDate: moment(pageFilter.toDate).toDate(),
     },
     defaultValues,
-  );
+  ) as SalesTaxLiabilitySummaryFormValues;
 
   // Handle form submit.
   const handleSubmit = (

@@ -2,7 +2,6 @@ import React from 'react';
 import { FastField } from 'formik';
 import { DateInput } from '@blueprintjs/datetime';
 import { FormGroup, Position, Checkbox } from '@blueprintjs/core';
-
 import {
   Row,
   Col,
@@ -44,8 +43,6 @@ export function VendorsBalanceSummaryHeaderGeneralContent() {
               <FormGroup
                 label={intl.get('as_date')}
                 labelInfo={<FieldHint />}
-                fill={true}
-                intent={inputIntent({ error })}
               >
                 <DateInput
                   {...momentFormatter('YYYY/MM/DD')}
@@ -54,7 +51,6 @@ export function VendorsBalanceSummaryHeaderGeneralContent() {
                     form.setFieldValue('asDate', selectedDate);
                   })}
                   popoverProps={{ position: Position.BOTTOM, minimal: true }}
-                  minimal={true}
                   fill={true}
                 />
               </FormGroup>

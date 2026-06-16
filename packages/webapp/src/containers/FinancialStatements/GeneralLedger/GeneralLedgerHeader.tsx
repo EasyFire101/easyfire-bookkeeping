@@ -66,7 +66,7 @@ function GeneralLedgerHeaderInner({
       toDate: moment(pageFilter.toDate).toDate(),
     },
     defaultValues,
-  );
+  ) as GeneralLedgerFormValues;
   // Validation schema.
   const validationSchema = getGeneralLedgerQuerySchema();
 

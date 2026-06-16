@@ -10,9 +10,7 @@ import {
 } from '@blueprintjs/core';
 import classNames from 'classnames';
 import { DashboardActionsBar, Icon, FormattedMessage as T } from '@/components';
-
 import NumberFormatDropdown from '@/components/NumberFormatDropdown';
-
 import {
   withInventoryValuation,
   WithInventoryValuationProps,
@@ -26,7 +24,6 @@ import {
   WithDialogActionsProps,
 } from '@/containers/Dialog/withDialogActions';
 import { useInventoryValuationContext } from './InventoryValuationProvider';
-
 import { compose, saveInvoke } from '@/utils';
 import { InventoryValuationExportMenu } from './components';
 import { DialogsName } from '@/constants/dialogs';

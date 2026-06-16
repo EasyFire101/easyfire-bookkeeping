@@ -3,13 +3,13 @@ import { Dispatch } from 'redux';
 import { toggleTrialBalanceSheetFilterDrawer } from '@/store/financial-statement/financial-statements.actions';
 
 export interface WithTrialBalanceActionsProps {
-  toggleTrialBalanceFilterDrawer: (toggle: boolean) => void;
+  toggleTrialBalanceFilterDrawer: (toggle?: boolean) => void;
 }
 
 export const mapDispatchToProps = (
   dispatch: Dispatch,
 ): WithTrialBalanceActionsProps => ({
-  toggleTrialBalanceFilterDrawer: (toggle: boolean) =>
+  toggleTrialBalanceFilterDrawer: (toggle?: boolean) =>
     dispatch(toggleTrialBalanceSheetFilterDrawer(toggle)),
 });
 

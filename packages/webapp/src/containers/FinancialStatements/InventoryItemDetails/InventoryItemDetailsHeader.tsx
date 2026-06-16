@@ -75,7 +75,7 @@ function InventoryItemDetailsHeaderInner({
       toDate: moment(pageFilter.toDate).toDate(),
     },
     defaultValues,
-  );
+  ) as InventoryItemDetailsFormValues;
 
   // Validation schema.
   const validationSchema = getInventoryItemDetailsQuerySchema();

@@ -10,9 +10,7 @@ import {
 } from '@blueprintjs/core';
 import classNames from 'classnames';
 import { DashboardActionsBar, FormattedMessage as T, Icon } from '@/components';
-
 import NumberFormatDropdown from '@/components/NumberFormatDropdown';
-
 import { withTrialBalance, WithTrialBalanceProps } from './withTrialBalance';
 import {
   withTrialBalanceActions,

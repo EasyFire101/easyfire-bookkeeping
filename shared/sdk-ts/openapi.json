@@ -5378,9 +5378,26 @@
             }
           }
         ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "$ref": "#/components/schemas/UploadImportFileDto"
+              }
+            }
+          }
+        },
         "responses": {
           "200": {
-            "description": "File uploaded successfully"
+            "description": "File uploaded successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UploadImportFileResponseDto"
+                }
+              }
+            }
           }
         },
         "tags": [
@@ -5421,9 +5438,26 @@
             }
           }
         ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ImportMappingBodyDto"
+              }
+            }
+          }
+        },
         "responses": {
           "200": {
-            "description": "Mapping successful"
+            "description": "Mapping successful",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ImportMappingResponseDto"
+                }
+              }
+            }
           }
         },
         "tags": [
@@ -5466,7 +5500,14 @@
         ],
         "responses": {
           "200": {
-            "description": "Preview data"
+            "description": "Preview data",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ImportPreviewResponseDto"
+                }
+              }
+            }
           }
         },
         "tags": [
@@ -5509,7 +5550,14 @@
         ],
         "responses": {
           "200": {
-            "description": "Import processed successfully"
+            "description": "Import processed successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ImportProcessResponseDto"
+                }
+              }
+            }
           }
         },
         "tags": [
@@ -5551,16 +5599,34 @@
           },
           {
             "name": "format",
-            "required": true,
+            "required": false,
             "in": "query",
             "schema": {
+              "enum": [
+                "csv",
+                "xlsx"
+              ],
               "type": "string"
             }
           }
         ],
         "responses": {
           "200": {
-            "description": "Sample data"
+            "description": "Sample data",
+            "content": {
+              "application/csv": {
+                "schema": {
+                  "type": "string",
+                  "format": "binary"
+                }
+              },
+              "application/xlsx": {
+                "schema": {
+                  "type": "string",
+                  "format": "binary"
+                }
+              }
+            }
           }
         },
         "tags": [
@@ -5603,7 +5669,14 @@
         ],
         "responses": {
           "200": {
-            "description": "Import metadata"
+            "description": "Import metadata",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ImportFileMetaResponseDto"
+                }
+              }
+            }
           }
         },
         "tags": [
@@ -28219,6 +28292,364 @@
           "entries",
           "branchId",
           "attachments"
+        ]
+      },
+      "ImportFileImportRefDto": {
+        "type": "object",
+        "properties": {
+          "importId": {
+            "type": "string",
+            "description": "Import session id.",
+            "example": "imp_abc123"
+          },
+          "resource": {
+            "type": "string",
+            "description": "Target resource name.",
+            "example": "Customer"
+          }
+        },
+        "required": [
+          "importId",
+          "resource"
+        ]
+      },
+      "ImportResourceColumnDto": {
+        "type": "object",
+        "properties": {
+          "key": {
+            "type": "string",
+            "description": "Resource column key.",
+            "example": "displayName"
+          },
+          "name": {
+            "type": "string",
+            "description": "Human-readable column name.",
+            "example": "Display Name"
+          },
+          "required": {
+            "type": "boolean",
+            "description": "Whether the column is required.",
+            "example": true
+          },
+          "hint": {
+            "type": "string",
+            "description": "Hint text for the column.",
+            "example": "The name shown on documents."
+          }
+        },
+        "required": [
+          "key",
+          "name"
+        ]
+      },
+      "UploadImportFileResponseDto": {
+        "type": "object",
+        "properties": {
+          "import": {
+            "$ref": "#/components/schemas/ImportFileImportRefDto"
+          },
+          "sheetColumns": {
+            "description": "Columns detected in the uploaded sheet.",
+            "example": [
+              "Name",
+              "Email",
+              "Phone"
+            ],
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "resourceColumns": {
+            "description": "Resource columns available for mapping.",
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ImportResourceColumnDto"
+            }
+          }
+        },
+        "required": [
+          "import",
+          "sheetColumns",
+          "resourceColumns"
+        ]
+      },
+      "ImportMappingResponseDto": {
+        "type": "object",
+        "properties": {
+          "import": {
+            "$ref": "#/components/schemas/ImportFileImportRefDto"
+          }
+        },
+        "required": [
+          "import"
+        ]
+      },
+      "ImportInsertErrorDto": {
+        "type": "object",
+        "properties": {
+          "rowNumber": {
+            "type": "number",
+            "description": "Row number in the sheet.",
+            "example": 12
+          },
+          "errorCode": {
+            "type": "string",
+            "description": "Machine-readable error code.",
+            "example": "CUSTOMER_NAME_REQUIRED"
+          },
+          "errorMessage": {
+            "type": "string",
+            "description": "Human-readable error message.",
+            "example": "Customer display name is required."
+          }
+        },
+        "required": [
+          "rowNumber",
+          "errorCode",
+          "errorMessage"
+        ]
+      },
+      "ImportPreviewResponseDto": {
+        "type": "object",
+        "properties": {
+          "resource": {
+            "type": "string",
+            "description": "Target resource name.",
+            "example": "Customer"
+          },
+          "createdCount": {
+            "type": "number",
+            "description": "Number of created records.",
+            "example": 42
+          },
+          "skippedCount": {
+            "type": "number",
+            "description": "Number of skipped records.",
+            "example": 3
+          },
+          "totalCount": {
+            "type": "number",
+            "description": "Total number of rows.",
+            "example": 45
+          },
+          "errorsCount": {
+            "type": "number",
+            "description": "Number of rows with errors.",
+            "example": 3
+          },
+          "errors": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ImportInsertErrorDto"
+            }
+          },
+          "unmappedColumns": {
+            "description": "Columns from the sheet that were not mapped to any field.",
+            "example": [
+              "Internal Notes"
+            ],
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "unmappedColumnsCount": {
+            "type": "number",
+            "description": "Number of unmapped columns.",
+            "example": 1
+          }
+        },
+        "required": [
+          "resource",
+          "createdCount",
+          "skippedCount",
+          "totalCount",
+          "errorsCount",
+          "errors",
+          "unmappedColumns",
+          "unmappedColumnsCount"
+        ]
+      },
+      "ImportProcessResponseDto": {
+        "type": "object",
+        "properties": {
+          "resource": {
+            "type": "string",
+            "description": "Target resource name.",
+            "example": "Customer"
+          },
+          "createdCount": {
+            "type": "number",
+            "description": "Number of created records.",
+            "example": 42
+          },
+          "skippedCount": {
+            "type": "number",
+            "description": "Number of skipped records.",
+            "example": 3
+          },
+          "totalCount": {
+            "type": "number",
+            "description": "Total number of rows.",
+            "example": 45
+          },
+          "errorsCount": {
+            "type": "number",
+            "description": "Number of rows with errors.",
+            "example": 3
+          },
+          "errors": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ImportInsertErrorDto"
+            }
+          },
+          "unmappedColumns": {
+            "description": "Columns from the sheet that were not mapped to any field.",
+            "example": [
+              "Internal Notes"
+            ],
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "unmappedColumnsCount": {
+            "type": "number",
+            "description": "Number of unmapped columns.",
+            "example": 1
+          }
+        },
+        "required": [
+          "resource",
+          "createdCount",
+          "skippedCount",
+          "totalCount",
+          "errorsCount",
+          "errors",
+          "unmappedColumns",
+          "unmappedColumnsCount"
+        ]
+      },
+      "ImportMappingItemDto": {
+        "type": "object",
+        "properties": {
+          "group": {
+            "type": "string",
+            "description": "Group name when the target field is nested.",
+            "example": "billingAddress"
+          },
+          "from": {
+            "type": "string",
+            "description": "Source column name in the uploaded sheet.",
+            "example": "Customer Name"
+          },
+          "to": {
+            "type": "string",
+            "description": "Target resource field key.",
+            "example": "displayName"
+          },
+          "dateFormat": {
+            "type": "string",
+            "description": "Date format for date-type fields.",
+            "example": "yyyy-MM-dd"
+          }
+        },
+        "required": [
+          "from",
+          "to"
+        ]
+      },
+      "ImportFileMetaResponseDto": {
+        "type": "object",
+        "properties": {
+          "importId": {
+            "type": "string",
+            "description": "Import session id.",
+            "example": "imp_abc123"
+          },
+          "resource": {
+            "type": "string",
+            "description": "Target resource name.",
+            "example": "Customer"
+          },
+          "params": {
+            "type": "string",
+            "description": "Serialized JSON params used at upload time.",
+            "example": "{\"currency\":\"USD\"}",
+            "nullable": true
+          },
+          "map": {
+            "description": "Persisted column mapping (parsed from storage).",
+            "nullable": true,
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ImportMappingItemDto"
+            }
+          },
+          "tenantId": {
+            "type": "number",
+            "description": "Tenant id that owns this import.",
+            "example": 7
+          },
+          "createdAt": {
+            "type": "string",
+            "description": "Creation timestamp.",
+            "example": "2026-06-16T10:28:00.000Z"
+          },
+          "updatedAt": {
+            "type": "string",
+            "description": "Last update timestamp.",
+            "example": "2026-06-16T10:30:00.000Z"
+          }
+        },
+        "required": [
+          "importId",
+          "resource",
+          "params",
+          "map",
+          "tenantId",
+          "createdAt",
+          "updatedAt"
+        ]
+      },
+      "UploadImportFileDto": {
+        "type": "object",
+        "properties": {
+          "file": {
+            "type": "string",
+            "format": "binary",
+            "description": "The xlsx/csv file to import."
+          },
+          "resource": {
+            "type": "string",
+            "description": "Target resource name (e.g. SaleInvoice, Customer, Item).",
+            "example": "Customer"
+          },
+          "params": {
+            "type": "string",
+            "description": "JSON-encoded parameters object specific to the resource.",
+            "example": "{\"currency\":\"USD\"}"
+          }
+        },
+        "required": [
+          "file",
+          "resource"
+        ]
+      },
+      "ImportMappingBodyDto": {
+        "type": "object",
+        "properties": {
+          "mapping": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ImportMappingItemDto"
+            }
+          }
+        },
+        "required": [
+          "mapping"
         ]
       },
       "ModelMetaDefaultSortDto": {

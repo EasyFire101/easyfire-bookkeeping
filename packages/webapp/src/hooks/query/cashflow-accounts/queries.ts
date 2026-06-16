@@ -6,6 +6,8 @@ import {
   UseMutationOptions,
   UseQueryOptions,
   UseInfiniteQueryOptions,
+  InfiniteData,
+  QueryKey,
 } from '@tanstack/react-query';
 import type {
   CreateCashflowTransactionBody,
@@ -124,37 +126,46 @@ export function useDeleteCashflowTransaction(
   });
 }
 
+type AccountTransactionsInfinityPage = Awaited<
+  ReturnType<typeof fetchAccountTransactionsInfinity>
+>;
+type AccountUncategorizedTransactionsInfinityPage = Awaited<
+  ReturnType<typeof fetchAccountUncategorizedTransactions>
+> & { pagination?: { nextPage?: number } };
+
 export function useAccountTransactionsInfinity(
   accountId: number,
   query?: CashflowAccountTransactionsQuery,
   props?: Omit<
     UseInfiniteQueryOptions<
-      unknown,
+      AccountTransactionsInfinityPage,
       Error,
-      unknown,
-      unknown,
-      readonly [
-        string,
-        number | undefined,
-        CashflowAccountTransactionsQuery | undefined,
-      ]
+      InfiniteData<AccountTransactionsInfinityPage, number>,
+      QueryKey,
+      number
     >,
     'queryKey' | 'queryFn' | 'initialPageParam' | 'getNextPageParam'
   >,
 ) {
   const fetcher = useApiFetcher();
 
-  return useInfiniteQuery({
+  return useInfiniteQuery<
+    AccountTransactionsInfinityPage,
+    Error,
+    InfiniteData<AccountTransactionsInfinityPage, number>,
+    QueryKey,
+    number
+  >({
     ...props,
     queryKey: cashflowAccountsKeys.transactionsInfinity(accountId, query),
-    queryFn: ({ pageParam = 1 }) =>
+    queryFn: ({ pageParam }) =>
       fetchAccountTransactionsInfinity(fetcher, accountId, {
         ...query,
+        accountId,
         page: pageParam,
       }),
     initialPageParam: 1,
-    getNextPageParam: (lastPage: { pagination?: { nextPage?: number } }) =>
-      lastPage?.pagination?.nextPage,
+    getNextPageParam: (lastPage) => lastPage?.pagination?.nextPage,
   });
 }
 
@@ -163,32 +174,33 @@ export function useAccountUncategorizedTransactionsInfinity(
   query?: CashflowAccountUncategorizedTransactionsQuery,
   props?: Omit<
     UseInfiniteQueryOptions<
-      unknown,
+      AccountUncategorizedTransactionsInfinityPage,
       Error,
-      unknown,
-      unknown,
-      readonly [
-        string,
-        number | undefined,
-        CashflowAccountUncategorizedTransactionsQuery | undefined,
-      ]
+      InfiniteData<AccountUncategorizedTransactionsInfinityPage, number>,
+      QueryKey,
+      number
     >,
     'queryKey' | 'queryFn' | 'initialPageParam' | 'getNextPageParam'
   >,
 ) {
   const fetcher = useApiFetcher();
 
-  return useInfiniteQuery({
+  return useInfiniteQuery<
+    AccountUncategorizedTransactionsInfinityPage,
+    Error,
+    InfiniteData<AccountUncategorizedTransactionsInfinityPage, number>,
+    QueryKey,
+    number
+  >({
     ...props,
     queryKey: cashflowAccountsKeys.uncategorizedInfinity(accountId, query),
-    queryFn: ({ pageParam = 1 }) =>
+    queryFn: ({ pageParam }) =>
       fetchAccountUncategorizedTransactions(fetcher, accountId, {
         ...query,
         page: pageParam,
-      }),
+      }) as Promise<AccountUncategorizedTransactionsInfinityPage>,
     initialPageParam: 1,
-    getNextPageParam: (lastPage: { pagination?: { nextPage?: number } }) =>
-      lastPage?.pagination?.nextPage,
+    getNextPageParam: (lastPage) => lastPage?.pagination?.nextPage,
   });
 }
 

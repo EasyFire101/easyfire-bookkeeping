@@ -66,7 +66,7 @@ function VendorsBalanceSummaryHeaderInner({
       asDate: moment(pageFilter.asDate as string).toDate(),
     },
     defaultValues,
-  );
+  ) as FormValues;
 
   // handle form submit.
   const handleSubmit = (

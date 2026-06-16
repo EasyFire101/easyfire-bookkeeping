@@ -4,9 +4,7 @@ import styled from 'styled-components';
 import { Formik, Form } from 'formik';
 import type { FormikHelpers } from 'formik';
 import { Tabs, Tab, Button, Intent } from '@blueprintjs/core';
-
 import { FormattedMessage as T } from '@/components';
-
 import { FinancialStatementHeader } from '@/containers/FinancialStatements/FinancialStatementHeader';
 import { InventoryValuationHeaderGeneralPanel } from './InventoryValuationHeaderGeneralPanel';
 import { InventoryValuationHeaderDimensionsPanel } from './InventoryValuationHeaderDimensionsPanel';
@@ -18,7 +16,6 @@ import {
   withInventoryValuationActions,
   WithInventoryValuationActionsProps,
 } from './withInventoryValuationActions';
-
 import { compose, transformToForm } from '@/utils';
 import { useFeatureCan } from '@/hooks/state';
 import { Features } from '@/constants';
@@ -72,7 +69,7 @@ function InventoryValuationHeaderInner({
       asDate: moment(pageFilter.asDate).toDate(),
     },
     defaultQuery,
-  );
+  ) as InventoryValuationFormValues;
 
   // Handle the form of header submit.
   const handleSubmit = (

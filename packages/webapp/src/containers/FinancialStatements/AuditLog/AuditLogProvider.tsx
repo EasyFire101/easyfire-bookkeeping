@@ -1,11 +1,11 @@
 import React, { createContext, useCallback, useContext, useMemo } from 'react';
 import { flatten, map } from 'lodash';
+import type { InfiniteData } from '@tanstack/react-query';
+import type { AuditLogsResponse } from '@bigcapital/sdk-ts';
 import { useAuditLogsInfinityQuery } from '@/hooks/query';
 import { IntersectionObserver } from '@/components';
 
-function flattenInfinityPagesData(data: {
-  pages: { data: Record<string, any>[] }[];
-}) {
+function flattenInfinityPagesData(data: InfiniteData<AuditLogsResponse>) {
   return flatten(map(data.pages, (page) => page.data));
 }
 
@@ -83,13 +83,7 @@ function AuditLogProvider({ query, children }: AuditLogProviderProps) {
 
   const auditLogs = useMemo(
     () =>
-      auditLogsPages
-        ? flattenInfinityPagesData(
-            auditLogsPages as unknown as {
-              pages: { data: Record<string, any>[] }[];
-            },
-          )
-        : [],
+      auditLogsPages ? flattenInfinityPagesData(auditLogsPages) : [],
     [auditLogsPages],
   );
 

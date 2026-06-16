@@ -7520,6 +7520,230 @@ export interface components {
              */
             attachments: string[];
         };
+        ImportFileImportRefDto: {
+            /**
+             * @description Import session id.
+             * @example imp_abc123
+             */
+            importId: string;
+            /**
+             * @description Target resource name.
+             * @example Customer
+             */
+            resource: string;
+        };
+        ImportResourceColumnDto: {
+            /**
+             * @description Resource column key.
+             * @example displayName
+             */
+            key: string;
+            /**
+             * @description Human-readable column name.
+             * @example Display Name
+             */
+            name: string;
+            /**
+             * @description Whether the column is required.
+             * @example true
+             */
+            required?: boolean;
+            /**
+             * @description Hint text for the column.
+             * @example The name shown on documents.
+             */
+            hint?: string;
+        };
+        UploadImportFileResponseDto: {
+            import: components["schemas"]["ImportFileImportRefDto"];
+            /**
+             * @description Columns detected in the uploaded sheet.
+             * @example [
+             *       "Name",
+             *       "Email",
+             *       "Phone"
+             *     ]
+             */
+            sheetColumns: string[];
+            /** @description Resource columns available for mapping. */
+            resourceColumns: components["schemas"]["ImportResourceColumnDto"][];
+        };
+        ImportMappingResponseDto: {
+            import: components["schemas"]["ImportFileImportRefDto"];
+        };
+        ImportInsertErrorDto: {
+            /**
+             * @description Row number in the sheet.
+             * @example 12
+             */
+            rowNumber: number;
+            /**
+             * @description Machine-readable error code.
+             * @example CUSTOMER_NAME_REQUIRED
+             */
+            errorCode: string;
+            /**
+             * @description Human-readable error message.
+             * @example Customer display name is required.
+             */
+            errorMessage: string;
+        };
+        ImportPreviewResponseDto: {
+            /**
+             * @description Target resource name.
+             * @example Customer
+             */
+            resource: string;
+            /**
+             * @description Number of created records.
+             * @example 42
+             */
+            createdCount: number;
+            /**
+             * @description Number of skipped records.
+             * @example 3
+             */
+            skippedCount: number;
+            /**
+             * @description Total number of rows.
+             * @example 45
+             */
+            totalCount: number;
+            /**
+             * @description Number of rows with errors.
+             * @example 3
+             */
+            errorsCount: number;
+            errors: components["schemas"]["ImportInsertErrorDto"][];
+            /**
+             * @description Columns from the sheet that were not mapped to any field.
+             * @example [
+             *       "Internal Notes"
+             *     ]
+             */
+            unmappedColumns: string[];
+            /**
+             * @description Number of unmapped columns.
+             * @example 1
+             */
+            unmappedColumnsCount: number;
+        };
+        ImportProcessResponseDto: {
+            /**
+             * @description Target resource name.
+             * @example Customer
+             */
+            resource: string;
+            /**
+             * @description Number of created records.
+             * @example 42
+             */
+            createdCount: number;
+            /**
+             * @description Number of skipped records.
+             * @example 3
+             */
+            skippedCount: number;
+            /**
+             * @description Total number of rows.
+             * @example 45
+             */
+            totalCount: number;
+            /**
+             * @description Number of rows with errors.
+             * @example 3
+             */
+            errorsCount: number;
+            errors: components["schemas"]["ImportInsertErrorDto"][];
+            /**
+             * @description Columns from the sheet that were not mapped to any field.
+             * @example [
+             *       "Internal Notes"
+             *     ]
+             */
+            unmappedColumns: string[];
+            /**
+             * @description Number of unmapped columns.
+             * @example 1
+             */
+            unmappedColumnsCount: number;
+        };
+        ImportMappingItemDto: {
+            /**
+             * @description Group name when the target field is nested.
+             * @example billingAddress
+             */
+            group?: string;
+            /**
+             * @description Source column name in the uploaded sheet.
+             * @example Customer Name
+             */
+            from: string;
+            /**
+             * @description Target resource field key.
+             * @example displayName
+             */
+            to: string;
+            /**
+             * @description Date format for date-type fields.
+             * @example yyyy-MM-dd
+             */
+            dateFormat?: string;
+        };
+        ImportFileMetaResponseDto: {
+            /**
+             * @description Import session id.
+             * @example imp_abc123
+             */
+            importId: string;
+            /**
+             * @description Target resource name.
+             * @example Customer
+             */
+            resource: string;
+            /**
+             * @description Serialized JSON params used at upload time.
+             * @example {"currency":"USD"}
+             */
+            params: string | null;
+            /** @description Persisted column mapping (parsed from storage). */
+            map: components["schemas"]["ImportMappingItemDto"][] | null;
+            /**
+             * @description Tenant id that owns this import.
+             * @example 7
+             */
+            tenantId: number;
+            /**
+             * @description Creation timestamp.
+             * @example 2026-06-16T10:28:00.000Z
+             */
+            createdAt: string;
+            /**
+             * @description Last update timestamp.
+             * @example 2026-06-16T10:30:00.000Z
+             */
+            updatedAt: string;
+        };
+        UploadImportFileDto: {
+            /**
+             * Format: binary
+             * @description The xlsx/csv file to import.
+             */
+            file: string;
+            /**
+             * @description Target resource name (e.g. SaleInvoice, Customer, Item).
+             * @example Customer
+             */
+            resource: string;
+            /**
+             * @description JSON-encoded parameters object specific to the resource.
+             * @example {"currency":"USD"}
+             */
+            params?: string;
+        };
+        ImportMappingBodyDto: {
+            mapping: components["schemas"]["ImportMappingItemDto"][];
+        };
         ModelMetaDefaultSortDto: {
             /**
              * @description The sort order
@@ -18294,14 +18518,20 @@ export interface operations {
             path?: never;
             cookie?: never;
         };
-        requestBody?: never;
+        requestBody: {
+            content: {
+                "multipart/form-data": components["schemas"]["UploadImportFileDto"];
+            };
+        };
         responses: {
             /** @description File uploaded successfully */
             200: {
                 headers: {
                     [name: string]: unknown;
                 };
-                content?: never;
+                content: {
+                    "application/json": components["schemas"]["UploadImportFileResponseDto"];
+                };
             };
         };
     };
@@ -18319,14 +18549,20 @@ export interface operations {
             };
             cookie?: never;
         };
-        requestBody?: never;
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["ImportMappingBodyDto"];
+            };
+        };
         responses: {
             /** @description Mapping successful */
             200: {
                 headers: {
                     [name: string]: unknown;
                 };
-                content?: never;
+                content: {
+                    "application/json": components["schemas"]["ImportMappingResponseDto"];
+                };
             };
         };
     };
@@ -18351,7 +18587,9 @@ export interface operations {
                 headers: {
                     [name: string]: unknown;
                 };
-                content?: never;
+                content: {
+                    "application/json": components["schemas"]["ImportPreviewResponseDto"];
+                };
             };
         };
     };
@@ -18376,7 +18614,9 @@ export interface operations {
                 headers: {
                     [name: string]: unknown;
                 };
-                content?: never;
+                content: {
+                    "application/json": components["schemas"]["ImportProcessResponseDto"];
+                };
             };
         };
     };
@@ -18384,7 +18624,7 @@ export interface operations {
         parameters: {
             query: {
                 resource: string;
-                format: string;
+                format?: "csv" | "xlsx";
             };
             header: {
                 /** @description Value must be 'Bearer <token>' where <token> is an API key prefixed with 'bc_' or a JWT token. */
@@ -18402,7 +18642,10 @@ export interface operations {
                 headers: {
                     [name: string]: unknown;
                 };
-                content?: never;
+                content: {
+                    "application/csv": string;
+                    "application/xlsx": string;
+                };
             };
         };
     };
@@ -18427,7 +18670,9 @@ export interface operations {
                 headers: {
                     [name: string]: unknown;
                 };
-                content?: never;
+                content: {
+                    "application/json": components["schemas"]["ImportFileMetaResponseDto"];
+                };
             };
         };
     };
