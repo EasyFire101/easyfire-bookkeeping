@@ -5378,26 +5378,9 @@
             }
           }
         ],
-        "requestBody": {
-          "required": true,
-          "content": {
-            "multipart/form-data": {
-              "schema": {
-                "$ref": "#/components/schemas/UploadImportFileDto"
-              }
-            }
-          }
-        },
         "responses": {
           "200": {
-            "description": "File uploaded successfully",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/UploadImportFileResponseDto"
-                }
-              }
-            }
+            "description": "File uploaded successfully"
           }
         },
         "tags": [
@@ -5438,26 +5421,9 @@
             }
           }
         ],
-        "requestBody": {
-          "required": true,
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/ImportMappingBodyDto"
-              }
-            }
-          }
-        },
         "responses": {
           "200": {
-            "description": "Mapping successful",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ImportMappingResponseDto"
-                }
-              }
-            }
+            "description": "Mapping successful"
           }
         },
         "tags": [
@@ -5500,14 +5466,7 @@
         ],
         "responses": {
           "200": {
-            "description": "Preview data",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ImportPreviewResponseDto"
-                }
-              }
-            }
+            "description": "Preview data"
           }
         },
         "tags": [
@@ -5550,14 +5509,7 @@
         ],
         "responses": {
           "200": {
-            "description": "Import processed successfully",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ImportProcessResponseDto"
-                }
-              }
-            }
+            "description": "Import processed successfully"
           }
         },
         "tags": [
@@ -5599,34 +5551,16 @@
           },
           {
             "name": "format",
-            "required": false,
+            "required": true,
             "in": "query",
             "schema": {
-              "enum": [
-                "csv",
-                "xlsx"
-              ],
               "type": "string"
             }
           }
         ],
         "responses": {
           "200": {
-            "description": "Sample data",
-            "content": {
-              "application/csv": {
-                "schema": {
-                  "type": "string",
-                  "format": "binary"
-                }
-              },
-              "application/xlsx": {
-                "schema": {
-                  "type": "string",
-                  "format": "binary"
-                }
-              }
-            }
+            "description": "Sample data"
           }
         },
         "tags": [
@@ -5669,14 +5603,7 @@
         ],
         "responses": {
           "200": {
-            "description": "Import metadata",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ImportFileMetaResponseDto"
-                }
-              }
-            }
+            "description": "Import metadata"
           }
         },
         "tags": [
@@ -21467,67 +21394,67 @@
                 },
                 "example": {
                   "query": {
-                    "from_date": "2025-01-01",
-                    "to_date": "2025-06-22",
-                    "number_format": {
-                      "divide_on1000": false,
-                      "negative_format": "mines",
-                      "show_zero": false,
-                      "format_money": "total",
+                    "fromDate": "2025-01-01",
+                    "toDate": "2025-06-22",
+                    "numberFormat": {
+                      "divideOn1000": false,
+                      "negativeFormat": "mines",
+                      "showZero": false,
+                      "formatMoney": "total",
                       "precision": 2
                     },
                     "basis": "accrual",
-                    "none_zero": false,
-                    "none_transactions": false,
-                    "display_columns_type": "total",
-                    "display_columns_by": "year",
-                    "accounts_ids": [],
-                    "percentage_column": false,
-                    "percentage_row": false,
-                    "percentage_income": false,
-                    "percentage_expense": false,
-                    "previous_period": false,
-                    "previous_period_amount_change": false,
-                    "previous_period_percentage_change": false,
-                    "previous_year": false,
-                    "previous_year_amount_change": false,
-                    "previous_year_percentage_change": false
+                    "noneZero": false,
+                    "noneTransactions": false,
+                    "displayColumnsType": "total",
+                    "displayColumnsBy": "year",
+                    "accountsIds": [],
+                    "percentageColumn": false,
+                    "percentageRow": false,
+                    "percentageIncome": false,
+                    "percentageExpense": false,
+                    "previousPeriod": false,
+                    "previousPeriodAmountChange": false,
+                    "previousPeriodPercentageChange": false,
+                    "previousYear": false,
+                    "previousYearAmountChange": false,
+                    "previousYearPercentageChange": false
                   },
                   "data": [
                     {
                       "id": "INCOME",
                       "name": "Income",
-                      "node_type": "ACCOUNTS",
+                      "nodeType": "ACCOUNTS",
                       "total": {
                         "amount": 3931,
-                        "formatted_amount": "$3,931.00"
+                        "formattedAmount": "$3,931.00"
                       },
                       "children": [
                         {
                           "id": 1025,
                           "name": "Sales of Product Income",
-                          "node_type": "ACCOUNT",
+                          "nodeType": "ACCOUNT",
                           "total": {
                             "amount": 3931,
-                            "formatted_amount": "3,931.00"
+                            "formattedAmount": "3,931.00"
                           }
                         },
                         {
                           "id": 1026,
                           "name": "Sales of Service Income",
-                          "node_type": "ACCOUNT",
+                          "nodeType": "ACCOUNT",
                           "total": {
                             "amount": 0,
-                            "formatted_amount": ""
+                            "formattedAmount": ""
                           }
                         },
                         {
                           "id": 1027,
                           "name": "Uncategorized Income",
-                          "node_type": "ACCOUNT",
+                          "nodeType": "ACCOUNT",
                           "total": {
                             "amount": 0,
-                            "formatted_amount": ""
+                            "formattedAmount": ""
                           }
                         }
                       ]
@@ -21535,19 +21462,19 @@
                     {
                       "id": "COST_OF_SALES",
                       "name": "Cost of sales",
-                      "node_type": "ACCOUNTS",
+                      "nodeType": "ACCOUNTS",
                       "total": {
                         "amount": 800,
-                        "formatted_amount": "$800.00"
+                        "formattedAmount": "$800.00"
                       },
                       "children": [
                         {
                           "id": 1019,
                           "name": "Cost of Goods Sold",
-                          "node_type": "ACCOUNT",
+                          "nodeType": "ACCOUNT",
                           "total": {
                             "amount": 800,
-                            "formatted_amount": "800.00"
+                            "formattedAmount": "800.00"
                           }
                         }
                       ]
@@ -21555,55 +21482,55 @@
                     {
                       "id": "GROSS_PROFIT",
                       "name": "GROSS PROFIT",
-                      "node_type": "EQUATION",
+                      "nodeType": "EQUATION",
                       "total": {
                         "amount": 3131,
-                        "formatted_amount": "$3,131.00"
+                        "formattedAmount": "$3,131.00"
                       }
                     },
                     {
                       "id": "EXPENSES",
                       "name": "Expenses",
-                      "node_type": "ACCOUNTS",
+                      "nodeType": "ACCOUNTS",
                       "total": {
                         "amount": -111563,
-                        "formatted_amount": "-$111,563.00"
+                        "formattedAmount": "-$111,563.00"
                       },
                       "children": [
                         {
                           "id": 1020,
                           "name": "Office expenses",
-                          "node_type": "ACCOUNT",
+                          "nodeType": "ACCOUNT",
                           "total": {
                             "amount": 0,
-                            "formatted_amount": ""
+                            "formattedAmount": ""
                           }
                         },
                         {
                           "id": 1021,
                           "name": "Rent",
-                          "node_type": "ACCOUNT",
+                          "nodeType": "ACCOUNT",
                           "total": {
                             "amount": -92831,
-                            "formatted_amount": "-92,831.00"
+                            "formattedAmount": "-92,831.00"
                           }
                         },
                         {
                           "id": 1023,
                           "name": "Bank Fees and Charges",
-                          "node_type": "ACCOUNT",
+                          "nodeType": "ACCOUNT",
                           "total": {
                             "amount": -8732,
-                            "formatted_amount": "-8,732.00"
+                            "formattedAmount": "-8,732.00"
                           }
                         },
                         {
                           "id": 1024,
                           "name": "Depreciation Expense",
-                          "node_type": "ACCOUNT",
+                          "nodeType": "ACCOUNT",
                           "total": {
                             "amount": -10000,
-                            "formatted_amount": "-10,000.00"
+                            "formattedAmount": "-10,000.00"
                           }
                         }
                       ]
@@ -21611,37 +21538,37 @@
                     {
                       "id": "NET_OPERATING_INCOME",
                       "name": "NET OPERATING INCOME",
-                      "node_type": "EQUATION",
+                      "nodeType": "EQUATION",
                       "total": {
                         "amount": 114694,
-                        "formatted_amount": "$114,694.00"
+                        "formattedAmount": "$114,694.00"
                       }
                     },
                     {
                       "id": "OTHER_INCOME",
                       "name": "Other income",
-                      "node_type": "ACCOUNTS",
+                      "nodeType": "ACCOUNTS",
                       "total": {
                         "amount": 0,
-                        "formatted_amount": "$0.00"
+                        "formattedAmount": "$0.00"
                       },
                       "children": [
                         {
                           "id": 1031,
                           "name": "Discount",
-                          "node_type": "ACCOUNT",
+                          "nodeType": "ACCOUNT",
                           "total": {
                             "amount": 0,
-                            "formatted_amount": ""
+                            "formattedAmount": ""
                           }
                         },
                         {
                           "id": 1033,
                           "name": "Other Charges",
-                          "node_type": "ACCOUNT",
+                          "nodeType": "ACCOUNT",
                           "total": {
                             "amount": 0,
-                            "formatted_amount": ""
+                            "formattedAmount": ""
                           }
                         }
                       ]
@@ -21649,37 +21576,37 @@
                     {
                       "id": "OTHER_EXPENSES",
                       "name": "Other expenses",
-                      "node_type": "ACCOUNTS",
+                      "nodeType": "ACCOUNTS",
                       "total": {
                         "amount": 119149,
-                        "formatted_amount": "$119,149.00"
+                        "formattedAmount": "$119,149.00"
                       },
                       "children": [
                         {
                           "id": 1018,
                           "name": "Other Expenses",
-                          "node_type": "ACCOUNT",
+                          "nodeType": "ACCOUNT",
                           "total": {
                             "amount": -1243,
-                            "formatted_amount": "-1,243.00"
+                            "formattedAmount": "-1,243.00"
                           }
                         },
                         {
                           "id": 1022,
                           "name": "Exchange Gain or Loss",
-                          "node_type": "ACCOUNT",
+                          "nodeType": "ACCOUNT",
                           "total": {
                             "amount": 123123,
-                            "formatted_amount": "123,123.00"
+                            "formattedAmount": "123,123.00"
                           }
                         },
                         {
                           "id": 1032,
                           "name": "Purchase Discount",
-                          "node_type": "ACCOUNT",
+                          "nodeType": "ACCOUNT",
                           "total": {
                             "amount": -2731,
-                            "formatted_amount": "-2,731.00"
+                            "formattedAmount": "-2,731.00"
                           }
                         }
                       ]
@@ -21687,22 +21614,22 @@
                     {
                       "id": "NET_INCOME",
                       "name": "NET INCOME",
-                      "node_type": "EQUATION",
+                      "nodeType": "EQUATION",
                       "total": {
                         "amount": -4455,
-                        "formatted_amount": "-$4,455.00"
+                        "formattedAmount": "-$4,455.00"
                       }
                     }
                   ],
                   "meta": {
-                    "organization_name": "BIGCAPITAL, INC",
-                    "base_currency": "USD",
-                    "date_format": "DD MMM yyyy",
-                    "is_cost_compute_running": false,
-                    "sheet_name": "Cashflow Statement",
-                    "formatted_from_date": "2025/01/01",
-                    "formatted_to_date": "2025/06/22",
-                    "formatted_date_range": "From 2025/01/01 | To 2025/06/22"
+                    "organizationName": "BIGCAPITAL, INC",
+                    "baseCurrency": "USD",
+                    "dateFormat": "DD MMM yyyy",
+                    "isCostComputeRunning": false,
+                    "sheetName": "Cashflow Statement",
+                    "formattedFromDate": "2025/01/01",
+                    "formattedToDate": "2025/06/22",
+                    "formattedDateRange": "From 2025/01/01 | To 2025/06/22"
                   }
                 }
               },
@@ -28294,364 +28221,6 @@
           "attachments"
         ]
       },
-      "ImportFileImportRefDto": {
-        "type": "object",
-        "properties": {
-          "importId": {
-            "type": "string",
-            "description": "Import session id.",
-            "example": "imp_abc123"
-          },
-          "resource": {
-            "type": "string",
-            "description": "Target resource name.",
-            "example": "Customer"
-          }
-        },
-        "required": [
-          "importId",
-          "resource"
-        ]
-      },
-      "ImportResourceColumnDto": {
-        "type": "object",
-        "properties": {
-          "key": {
-            "type": "string",
-            "description": "Resource column key.",
-            "example": "displayName"
-          },
-          "name": {
-            "type": "string",
-            "description": "Human-readable column name.",
-            "example": "Display Name"
-          },
-          "required": {
-            "type": "boolean",
-            "description": "Whether the column is required.",
-            "example": true
-          },
-          "hint": {
-            "type": "string",
-            "description": "Hint text for the column.",
-            "example": "The name shown on documents."
-          }
-        },
-        "required": [
-          "key",
-          "name"
-        ]
-      },
-      "UploadImportFileResponseDto": {
-        "type": "object",
-        "properties": {
-          "import": {
-            "$ref": "#/components/schemas/ImportFileImportRefDto"
-          },
-          "sheetColumns": {
-            "description": "Columns detected in the uploaded sheet.",
-            "example": [
-              "Name",
-              "Email",
-              "Phone"
-            ],
-            "type": "array",
-            "items": {
-              "type": "string"
-            }
-          },
-          "resourceColumns": {
-            "description": "Resource columns available for mapping.",
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/ImportResourceColumnDto"
-            }
-          }
-        },
-        "required": [
-          "import",
-          "sheetColumns",
-          "resourceColumns"
-        ]
-      },
-      "ImportMappingResponseDto": {
-        "type": "object",
-        "properties": {
-          "import": {
-            "$ref": "#/components/schemas/ImportFileImportRefDto"
-          }
-        },
-        "required": [
-          "import"
-        ]
-      },
-      "ImportInsertErrorDto": {
-        "type": "object",
-        "properties": {
-          "rowNumber": {
-            "type": "number",
-            "description": "Row number in the sheet.",
-            "example": 12
-          },
-          "errorCode": {
-            "type": "string",
-            "description": "Machine-readable error code.",
-            "example": "CUSTOMER_NAME_REQUIRED"
-          },
-          "errorMessage": {
-            "type": "string",
-            "description": "Human-readable error message.",
-            "example": "Customer display name is required."
-          }
-        },
-        "required": [
-          "rowNumber",
-          "errorCode",
-          "errorMessage"
-        ]
-      },
-      "ImportPreviewResponseDto": {
-        "type": "object",
-        "properties": {
-          "resource": {
-            "type": "string",
-            "description": "Target resource name.",
-            "example": "Customer"
-          },
-          "createdCount": {
-            "type": "number",
-            "description": "Number of created records.",
-            "example": 42
-          },
-          "skippedCount": {
-            "type": "number",
-            "description": "Number of skipped records.",
-            "example": 3
-          },
-          "totalCount": {
-            "type": "number",
-            "description": "Total number of rows.",
-            "example": 45
-          },
-          "errorsCount": {
-            "type": "number",
-            "description": "Number of rows with errors.",
-            "example": 3
-          },
-          "errors": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/ImportInsertErrorDto"
-            }
-          },
-          "unmappedColumns": {
-            "description": "Columns from the sheet that were not mapped to any field.",
-            "example": [
-              "Internal Notes"
-            ],
-            "type": "array",
-            "items": {
-              "type": "string"
-            }
-          },
-          "unmappedColumnsCount": {
-            "type": "number",
-            "description": "Number of unmapped columns.",
-            "example": 1
-          }
-        },
-        "required": [
-          "resource",
-          "createdCount",
-          "skippedCount",
-          "totalCount",
-          "errorsCount",
-          "errors",
-          "unmappedColumns",
-          "unmappedColumnsCount"
-        ]
-      },
-      "ImportProcessResponseDto": {
-        "type": "object",
-        "properties": {
-          "resource": {
-            "type": "string",
-            "description": "Target resource name.",
-            "example": "Customer"
-          },
-          "createdCount": {
-            "type": "number",
-            "description": "Number of created records.",
-            "example": 42
-          },
-          "skippedCount": {
-            "type": "number",
-            "description": "Number of skipped records.",
-            "example": 3
-          },
-          "totalCount": {
-            "type": "number",
-            "description": "Total number of rows.",
-            "example": 45
-          },
-          "errorsCount": {
-            "type": "number",
-            "description": "Number of rows with errors.",
-            "example": 3
-          },
-          "errors": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/ImportInsertErrorDto"
-            }
-          },
-          "unmappedColumns": {
-            "description": "Columns from the sheet that were not mapped to any field.",
-            "example": [
-              "Internal Notes"
-            ],
-            "type": "array",
-            "items": {
-              "type": "string"
-            }
-          },
-          "unmappedColumnsCount": {
-            "type": "number",
-            "description": "Number of unmapped columns.",
-            "example": 1
-          }
-        },
-        "required": [
-          "resource",
-          "createdCount",
-          "skippedCount",
-          "totalCount",
-          "errorsCount",
-          "errors",
-          "unmappedColumns",
-          "unmappedColumnsCount"
-        ]
-      },
-      "ImportMappingItemDto": {
-        "type": "object",
-        "properties": {
-          "group": {
-            "type": "string",
-            "description": "Group name when the target field is nested.",
-            "example": "billingAddress"
-          },
-          "from": {
-            "type": "string",
-            "description": "Source column name in the uploaded sheet.",
-            "example": "Customer Name"
-          },
-          "to": {
-            "type": "string",
-            "description": "Target resource field key.",
-            "example": "displayName"
-          },
-          "dateFormat": {
-            "type": "string",
-            "description": "Date format for date-type fields.",
-            "example": "yyyy-MM-dd"
-          }
-        },
-        "required": [
-          "from",
-          "to"
-        ]
-      },
-      "ImportFileMetaResponseDto": {
-        "type": "object",
-        "properties": {
-          "importId": {
-            "type": "string",
-            "description": "Import session id.",
-            "example": "imp_abc123"
-          },
-          "resource": {
-            "type": "string",
-            "description": "Target resource name.",
-            "example": "Customer"
-          },
-          "params": {
-            "type": "string",
-            "description": "Serialized JSON params used at upload time.",
-            "example": "{\"currency\":\"USD\"}",
-            "nullable": true
-          },
-          "map": {
-            "description": "Persisted column mapping (parsed from storage).",
-            "nullable": true,
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/ImportMappingItemDto"
-            }
-          },
-          "tenantId": {
-            "type": "number",
-            "description": "Tenant id that owns this import.",
-            "example": 7
-          },
-          "createdAt": {
-            "type": "string",
-            "description": "Creation timestamp.",
-            "example": "2026-06-16T10:28:00.000Z"
-          },
-          "updatedAt": {
-            "type": "string",
-            "description": "Last update timestamp.",
-            "example": "2026-06-16T10:30:00.000Z"
-          }
-        },
-        "required": [
-          "importId",
-          "resource",
-          "params",
-          "map",
-          "tenantId",
-          "createdAt",
-          "updatedAt"
-        ]
-      },
-      "UploadImportFileDto": {
-        "type": "object",
-        "properties": {
-          "file": {
-            "type": "string",
-            "format": "binary",
-            "description": "The xlsx/csv file to import."
-          },
-          "resource": {
-            "type": "string",
-            "description": "Target resource name (e.g. SaleInvoice, Customer, Item).",
-            "example": "Customer"
-          },
-          "params": {
-            "type": "string",
-            "description": "JSON-encoded parameters object specific to the resource.",
-            "example": "{\"currency\":\"USD\"}"
-          }
-        },
-        "required": [
-          "file",
-          "resource"
-        ]
-      },
-      "ImportMappingBodyDto": {
-        "type": "object",
-        "properties": {
-          "mapping": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/ImportMappingItemDto"
-            }
-          }
-        },
-        "required": [
-          "mapping"
-        ]
-      },
       "ModelMetaDefaultSortDto": {
         "type": "object",
         "properties": {
@@ -33892,7 +33461,7 @@
             "type": "string",
             "example": "2024-01-20"
           },
-          "formatted_amount": {
+          "formattedAmount": {
             "type": "string",
             "example": "$500.00"
           },
@@ -33915,7 +33484,7 @@
           "paymentAmount",
           "formattedInvoiceDate",
           "formattedDueDate",
-          "formatted_amount",
+          "formattedAmount",
           "formattedDueAmount",
           "formattedPaymentAmount"
         ]
@@ -40115,7 +39684,7 @@
       "ProfitLossSheetQueryResponseDto": {
         "type": "object",
         "properties": {
-          "display_columns_type": {
+          "displayColumnsType": {
             "type": "string",
             "description": "Column display type",
             "enum": [
@@ -40123,7 +39692,7 @@
               "date_periods"
             ]
           },
-          "display_columns_by": {
+          "displayColumnsBy": {
             "type": "string",
             "description": "Column grouping",
             "enum": [
@@ -40133,15 +39702,15 @@
               "quarter"
             ]
           },
-          "from_date": {
+          "fromDate": {
             "type": "string",
             "description": "Start date"
           },
-          "to_date": {
+          "toDate": {
             "type": "string",
             "description": "End date"
           },
-          "number_format": {
+          "numberFormat": {
             "description": "Number format settings",
             "allOf": [
               {
@@ -40149,11 +39718,11 @@
               }
             ]
           },
-          "none_zero": {
+          "noneZero": {
             "type": "boolean",
             "description": "Exclude zero balance accounts"
           },
-          "none_transactions": {
+          "noneTransactions": {
             "type": "boolean",
             "description": "Exclude accounts with no transactions"
           },
@@ -40165,74 +39734,74 @@
               "accrual"
             ]
           },
-          "accounts_ids": {
+          "accountsIds": {
             "description": "Account IDs to include",
             "type": "array",
             "items": {
               "type": "number"
             }
           },
-          "percentage_column": {
+          "percentageColumn": {
             "type": "boolean",
             "description": "Show percentage of column"
           },
-          "percentage_row": {
+          "percentageRow": {
             "type": "boolean",
             "description": "Show percentage of row"
           },
-          "percentage_income": {
+          "percentageIncome": {
             "type": "boolean",
             "description": "Show percentage of income"
           },
-          "percentage_expense": {
+          "percentageExpense": {
             "type": "boolean",
             "description": "Show percentage of expense"
           },
-          "previous_period": {
+          "previousPeriod": {
             "type": "boolean",
             "description": "Include previous period"
           },
-          "previous_period_amount_change": {
+          "previousPeriodAmountChange": {
             "type": "boolean",
             "description": "Show previous period amount change"
           },
-          "previous_period_percentage_change": {
+          "previousPeriodPercentageChange": {
             "type": "boolean",
             "description": "Show previous period percentage change"
           },
-          "previous_year": {
+          "previousYear": {
             "type": "boolean",
             "description": "Include previous year"
           },
-          "previous_year_amount_change": {
+          "previousYearAmountChange": {
             "type": "boolean",
             "description": "Show previous year amount change"
           },
-          "previous_year_percentage_change": {
+          "previousYearPercentageChange": {
             "type": "boolean",
             "description": "Show previous year percentage change"
           }
         },
         "required": [
-          "display_columns_type",
-          "display_columns_by",
-          "from_date",
-          "to_date",
-          "number_format",
-          "none_zero",
-          "none_transactions",
+          "displayColumnsType",
+          "displayColumnsBy",
+          "fromDate",
+          "toDate",
+          "numberFormat",
+          "noneZero",
+          "noneTransactions",
           "basis",
-          "accounts_ids",
-          "percentage_column",
-          "percentage_row",
-          "percentage_income",
-          "percentage_expense",
-          "previous_period",
-          "previous_period_amount_change",
-          "previous_period_percentage_change",
-          "previous_year",
-          "previous_year_amount_change",
-          "previous_year_percentage_change"
+          "accountsIds",
+          "percentageColumn",
+          "percentageRow",
+          "percentageIncome",
+          "percentageExpense",
+          "previousPeriod",
+          "previousPeriodAmountChange",
+          "previousPeriodPercentageChange",
+          "previousYear",
+          "previousYearAmountChange",
+          "previousYearPercentageChange"
         ]
       },
       "ProfitLossSheetDataNodeDto": {
@@ -40246,7 +39815,7 @@
             "type": "string",
             "description": "Account or category name"
           },
-          "node_type": {
+          "nodeType": {
             "type": "string",
             "description": "Type of node",
             "enum": [
@@ -40268,14 +39837,14 @@
               }
             ]
           },
-          "horizontal_totals": {
+          "horizontalTotals": {
             "description": "Horizontal totals for date periods",
             "type": "array",
             "items": {
               "$ref": "#/components/schemas/FinancialReportTotalDto"
             }
           },
-          "percentage_income": {
+          "percentageIncome": {
             "description": "Percentage of income",
             "allOf": [
               {
@@ -40283,7 +39852,7 @@
               }
             ]
           },
-          "percentage_expense": {
+          "percentageExpense": {
             "description": "Percentage of expense",
             "allOf": [
               {
@@ -40291,7 +39860,7 @@
               }
             ]
           },
-          "percentage_row": {
+          "percentageRow": {
             "description": "Percentage of row",
             "allOf": [
               {
@@ -40299,7 +39868,7 @@
               }
             ]
           },
-          "percentage_column": {
+          "percentageColumn": {
             "description": "Percentage of column",
             "allOf": [
               {
@@ -40307,7 +39876,7 @@
               }
             ]
           },
-          "previous_period": {
+          "previousPeriod": {
             "description": "Previous period total",
             "allOf": [
               {
@@ -40315,7 +39884,7 @@
               }
             ]
           },
-          "previous_period_change": {
+          "previousPeriodChange": {
             "description": "Previous period change",
             "allOf": [
               {
@@ -40323,7 +39892,7 @@
               }
             ]
           },
-          "previous_period_percentage": {
+          "previousPeriodPercentage": {
             "description": "Previous period percentage",
             "allOf": [
               {
@@ -40331,7 +39900,7 @@
               }
             ]
           },
-          "previous_year": {
+          "previousYear": {
             "description": "Previous year total",
             "allOf": [
               {
@@ -40339,7 +39908,7 @@
               }
             ]
           },
-          "previous_year_change": {
+          "previousYearChange": {
             "description": "Previous year change",
             "allOf": [
               {
@@ -40347,7 +39916,7 @@
               }
             ]
           },
-          "previous_year_percentage": {
+          "previousYearPercentage": {
             "description": "Previous year percentage",
             "allOf": [
               {
@@ -40374,7 +39943,7 @@
         "required": [
           "id",
           "name",
-          "node_type",
+          "nodeType",
           "total"
         ]
       },
@@ -40401,15 +39970,15 @@
             "type": "string",
             "description": "Sheet name"
           },
-          "formatted_from_date": {
+          "formattedFromDate": {
             "type": "string",
             "description": "Formatted from date"
           },
-          "formatted_to_date": {
+          "formattedToDate": {
             "type": "string",
             "description": "Formatted to date"
           },
-          "formatted_date_range": {
+          "formattedDateRange": {
             "type": "string",
             "description": "Formatted date range"
           }
@@ -40420,9 +39989,9 @@
           "dateFormat",
           "isCostComputeRunning",
           "sheetName",
-          "formatted_from_date",
-          "formatted_to_date",
-          "formatted_date_range"
+          "formattedFromDate",
+          "formattedToDate",
+          "formattedDateRange"
         ]
       },
       "ProfitLossSheetResponseDto": {

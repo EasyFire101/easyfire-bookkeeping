@@ -9,7 +9,6 @@ import {
   Text,
 } from '@blueprintjs/core';
 import classNames from 'classnames';
-
 import {
   AppToaster,
   Icon,
@@ -26,7 +25,6 @@ import type {
   CashflowStatementCsvQuery,
 } from '@bigcapital/sdk-ts';
 import { FinancialLoadingBar } from '../FinancialLoadingBar';
-
 import { dynamicColumns } from './dynamicColumns';
 import { useCashFlowStatementContext } from './CashFlowStatementProvider';
 import { FinancialComputeAlert } from '../FinancialReportPage';

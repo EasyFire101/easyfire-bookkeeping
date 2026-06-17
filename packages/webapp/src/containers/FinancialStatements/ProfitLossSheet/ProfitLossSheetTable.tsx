@@ -1,13 +1,11 @@
 import React from 'react';
 import styled from 'styled-components';
-
+import intl from 'react-intl-universal';
 import { TableStyle } from '@/constants';
 import {
   ReportDataTable,
   FinancialSheet,
-  FormattedMessage as T,
 } from '@/components';
-
 import { useProfitLossSheetColumns } from './hooks';
 import { useProfitLossSheetContext } from './ProfitLossProvider';
 import { tableRowTypesToClassnames, defaultExpanderReducer } from '@/utils';
@@ -34,7 +32,7 @@ export function ProfitLossSheetTable({
   return (
     <FinancialSheet
       companyName={companyName}
-      sheetType={<T id={'profit_loss_sheet'} />}
+      sheetType={intl.get('profit_loss_sheet')}
       dateText={meta?.formattedDateRange}
       basis={query?.basis}
     >

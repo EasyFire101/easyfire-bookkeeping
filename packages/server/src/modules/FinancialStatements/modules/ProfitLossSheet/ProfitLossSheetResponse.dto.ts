@@ -20,7 +20,7 @@ export class ProfitLossSheetDataNodeDto {
     description: 'Type of node',
     enum: ['ACCOUNTS', 'ACCOUNT', 'EQUATION', 'TOTAL'],
   })
-  node_type: string;
+  nodeType: string;
 
   @ApiPropertyOptional({ description: 'Node type alias' })
   type?: string;
@@ -35,67 +35,67 @@ export class ProfitLossSheetDataNodeDto {
     description: 'Horizontal totals for date periods',
     type: [FinancialReportTotalDto],
   })
-  horizontal_totals?: FinancialReportTotalDto[];
+  horizontalTotals?: FinancialReportTotalDto[];
 
   @ApiPropertyOptional({
     description: 'Percentage of income',
     type: FinancialReportPercentageDto,
   })
-  percentage_income?: FinancialReportPercentageDto;
+  percentageIncome?: FinancialReportPercentageDto;
 
   @ApiPropertyOptional({
     description: 'Percentage of expense',
     type: FinancialReportPercentageDto,
   })
-  percentage_expense?: FinancialReportPercentageDto;
+  percentageExpense?: FinancialReportPercentageDto;
 
   @ApiPropertyOptional({
     description: 'Percentage of row',
     type: FinancialReportPercentageDto,
   })
-  percentage_row?: FinancialReportPercentageDto;
+  percentageRow?: FinancialReportPercentageDto;
 
   @ApiPropertyOptional({
     description: 'Percentage of column',
     type: FinancialReportPercentageDto,
   })
-  percentage_column?: FinancialReportPercentageDto;
+  percentageColumn?: FinancialReportPercentageDto;
 
   @ApiPropertyOptional({
     description: 'Previous period total',
     type: FinancialReportTotalDto,
   })
-  previous_period?: FinancialReportTotalDto;
+  previousPeriod?: FinancialReportTotalDto;
 
   @ApiPropertyOptional({
     description: 'Previous period change',
     type: FinancialReportTotalDto,
   })
-  previous_period_change?: FinancialReportTotalDto;
+  previousPeriodChange?: FinancialReportTotalDto;
 
   @ApiPropertyOptional({
     description: 'Previous period percentage',
     type: FinancialReportPercentageDto,
   })
-  previous_period_percentage?: FinancialReportPercentageDto;
+  previousPeriodPercentage?: FinancialReportPercentageDto;
 
   @ApiPropertyOptional({
     description: 'Previous year total',
     type: FinancialReportTotalDto,
   })
-  previous_year?: FinancialReportTotalDto;
+  previousYear?: FinancialReportTotalDto;
 
   @ApiPropertyOptional({
     description: 'Previous year change',
     type: FinancialReportTotalDto,
   })
-  previous_year_change?: FinancialReportTotalDto;
+  previousYearChange?: FinancialReportTotalDto;
 
   @ApiPropertyOptional({
     description: 'Previous year percentage',
     type: FinancialReportPercentageDto,
   })
-  previous_year_percentage?: FinancialReportPercentageDto;
+  previousYearPercentage?: FinancialReportPercentageDto;
 
   @ApiPropertyOptional({ description: 'Account code' })
   code?: string;
@@ -112,13 +112,13 @@ export class ProfitLossSheetDataNodeDto {
 
 export class ProfitLossSheetMetaDto extends FinancialReportMetaDto {
   @ApiProperty({ description: 'Formatted from date' })
-  formatted_from_date: string;
+  formattedFromDate: string;
 
   @ApiProperty({ description: 'Formatted to date' })
-  formatted_to_date: string;
+  formattedToDate: string;
 
   @ApiProperty({ description: 'Formatted date range' })
-  formatted_date_range: string;
+  formattedDateRange: string;
 }
 
 export class ProfitLossSheetQueryResponseDto {
@@ -126,67 +126,67 @@ export class ProfitLossSheetQueryResponseDto {
     description: 'Column display type',
     enum: ['total', 'date_periods'],
   })
-  display_columns_type: string;
+  displayColumnsType: string;
 
   @ApiProperty({
     description: 'Column grouping',
     enum: ['day', 'month', 'year', 'quarter'],
   })
-  display_columns_by: string;
+  displayColumnsBy: string;
 
   @ApiProperty({ description: 'Start date' })
-  from_date: string;
+  fromDate: string;
 
   @ApiProperty({ description: 'End date' })
-  to_date: string;
+  toDate: string;
 
   @ApiProperty({
     description: 'Number format settings',
     type: NumberFormatQueryDto,
   })
-  number_format: NumberFormatQueryDto;
+  numberFormat: NumberFormatQueryDto;
 
   @ApiProperty({ description: 'Exclude zero balance accounts' })
-  none_zero: boolean;
+  noneZero: boolean;
 
   @ApiProperty({ description: 'Exclude accounts with no transactions' })
-  none_transactions: boolean;
+  noneTransactions: boolean;
 
   @ApiProperty({ description: 'Accounting basis', enum: ['cash', 'accrual'] })
   basis: string;
 
   @ApiProperty({ description: 'Account IDs to include', type: [Number] })
-  accounts_ids: number[];
+  accountsIds: number[];
 
   @ApiProperty({ description: 'Show percentage of column' })
-  percentage_column: boolean;
+  percentageColumn: boolean;
 
   @ApiProperty({ description: 'Show percentage of row' })
-  percentage_row: boolean;
+  percentageRow: boolean;
 
   @ApiProperty({ description: 'Show percentage of income' })
-  percentage_income: boolean;
+  percentageIncome: boolean;
 
   @ApiProperty({ description: 'Show percentage of expense' })
-  percentage_expense: boolean;
+  percentageExpense: boolean;
 
   @ApiProperty({ description: 'Include previous period' })
-  previous_period: boolean;
+  previousPeriod: boolean;
 
   @ApiProperty({ description: 'Show previous period amount change' })
-  previous_period_amount_change: boolean;
+  previousPeriodAmountChange: boolean;
 
   @ApiProperty({ description: 'Show previous period percentage change' })
-  previous_period_percentage_change: boolean;
+  previousPeriodPercentageChange: boolean;
 
   @ApiProperty({ description: 'Include previous year' })
-  previous_year: boolean;
+  previousYear: boolean;
 
   @ApiProperty({ description: 'Show previous year amount change' })
-  previous_year_amount_change: boolean;
+  previousYearAmountChange: boolean;
 
   @ApiProperty({ description: 'Show previous year percentage change' })
-  previous_year_percentage_change: boolean;
+  previousYearPercentageChange: boolean;
 }
 
 export class ProfitLossSheetResponseDto {

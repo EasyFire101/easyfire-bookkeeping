@@ -2,19 +2,19 @@ import { ApiProperty } from '@nestjs/swagger';
 
 export class PaymentLinkAddressDto {
   @ApiProperty({ description: 'Address line 1' })
-  address_1: string;
+  address1: string;
 
   @ApiProperty({ description: 'Address line 2' })
-  address_2: string;
+  address2: string;
 
   @ApiProperty({ description: 'Postal code' })
-  postal_code: string;
+  postalCode: string;
 
   @ApiProperty({ description: 'City' })
   city: string;
 
   @ApiProperty({ description: 'State or province' })
-  state_province: string;
+  stateProvince: string;
 
   @ApiProperty({ description: 'Phone number' })
   phone: string;
