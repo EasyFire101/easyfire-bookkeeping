@@ -15171,6 +15171,24 @@ export interface components {
              */
             password: string;
         };
+        ContactAutoCompleteItemDto: {
+            /**
+             * @description Contact id.
+             * @example 12
+             */
+            id: number;
+            /**
+             * @description Display name of the contact (customer or vendor).
+             * @example Acme Inc.
+             */
+            displayName: string;
+            /**
+             * @description Contact service type.
+             * @example vendor
+             * @enum {string}
+             */
+            contactService: "customer" | "vendor";
+        };
         AuditLogFilterOptionDto: {
             /** @example SaleInvoice */
             key: string;
@@ -30272,25 +30290,43 @@ export interface operations {
     };
     ContactsController_getAutoComplete: {
         parameters: {
-            query?: never;
-            header?: never;
+            query?: {
+                /** @description Maximum number of contacts to return. */
+                limit?: number;
+                /** @description Keyword to filter contacts by display name. */
+                keyword?: string;
+            };
+            header: {
+                /** @description Value must be 'Bearer <token>' where <token> is an API key prefixed with 'bc_' or a JWT token. */
+                Authorization: string;
+                /** @description Required if Authorization is a JWT token. The organization ID to operate within. */
+                "organization-id": string;
+            };
             path?: never;
             cookie?: never;
         };
         requestBody?: never;
         responses: {
+            /** @description Contacts auto-complete list. */
             200: {
                 headers: {
                     [name: string]: unknown;
                 };
-                content?: never;
+                content: {
+                    "application/json": components["schemas"]["ContactAutoCompleteItemDto"][];
+                };
             };
         };
     };
     ContactsController_getContact: {
         parameters: {
             query?: never;
-            header?: never;
+            header: {
+                /** @description Value must be 'Bearer <token>' where <token> is an API key prefixed with 'bc_' or a JWT token. */
+                Authorization: string;
+                /** @description Required if Authorization is a JWT token. The organization ID to operate within. */
+                "organization-id": string;
+            };
             path: {
                 /** @description Contact ID */
                 id: number;
@@ -30311,7 +30347,12 @@ export interface operations {
     ContactsController_activateContact: {
         parameters: {
             query?: never;
-            header?: never;
+            header: {
+                /** @description Value must be 'Bearer <token>' where <token> is an API key prefixed with 'bc_' or a JWT token. */
+                Authorization: string;
+                /** @description Required if Authorization is a JWT token. The organization ID to operate within. */
+                "organization-id": string;
+            };
             path: {
                 /** @description Contact ID */
                 id: number;
@@ -30331,7 +30372,12 @@ export interface operations {
     ContactsController_inactivateContact: {
         parameters: {
             query?: never;
-            header?: never;
+            header: {
+                /** @description Value must be 'Bearer <token>' where <token> is an API key prefixed with 'bc_' or a JWT token. */
+                Authorization: string;
+                /** @description Required if Authorization is a JWT token. The organization ID to operate within. */
+                "organization-id": string;
+            };
             path: {
                 /** @description Contact ID */
                 id: number;

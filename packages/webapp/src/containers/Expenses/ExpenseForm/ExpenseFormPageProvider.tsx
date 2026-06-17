@@ -73,12 +73,12 @@ function ExpenseFormPageProvider({ query, expenseId, ...props }) {
     expenseId,
     submitPayloadRef, // Expose ref for synchronous access
 
-    currencies,
-    customers: customersData?.customers,
+    currencies: currencies ?? [],
+    customers: customersData?.data ?? [],
     expense,
-    accounts,
-    branches,
-    projects: projectsData?.projects,
+    accounts: accounts ?? [],
+    branches: branches ?? [],
+    projects: projectsData?.projects ?? [],
 
     isCurrenciesLoading,
     isExpenseLoading,

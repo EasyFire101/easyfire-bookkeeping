@@ -186,7 +186,6 @@ export function useExpense(
     ...props,
     queryKey: expensesKeys.detail(id),
     queryFn: () => fetchExpense(fetcher, id!),
-    enabled: id != null,
   });
 }
 

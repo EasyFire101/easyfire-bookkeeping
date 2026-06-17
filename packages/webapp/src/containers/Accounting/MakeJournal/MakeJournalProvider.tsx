@@ -70,12 +70,12 @@ function MakeJournalProvider({ journalId, query, ...props }) {
   const isFeatureLoading = isBranchesLoading;
 
   const provider = {
-    accounts,
-    contacts,
-    currencies,
+    accounts: accounts ?? [],
+    contacts: contacts ?? [],
+    currencies: currencies ?? [],
     manualJournal,
-    projects: projectsData?.projects,
-    branches,
+    projects: projectsData?.projects ?? [],
+    branches: branches ?? [],
 
     createJournalMutate,
     editJournalMutate,

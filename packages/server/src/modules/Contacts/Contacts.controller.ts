@@ -6,8 +6,17 @@ import {
   Patch,
   ParseIntPipe,
 } from '@nestjs/common';
-import { ApiTags, ApiOperation, ApiParam, ApiResponse } from '@nestjs/swagger';
+import {
+  ApiTags,
+  ApiOperation,
+  ApiParam,
+  ApiResponse,
+  ApiExtraModels,
+  getSchemaPath,
+} from '@nestjs/swagger';
+import { ApiCommonHeaders } from '@/common/decorators/ApiCommonHeaders';
 import { GetContactsAutoCompleteQuery } from './dtos/GetContactsAutoCompleteQuery.dto';
+import { ContactAutoCompleteItemDto } from './dtos/ContactAutoCompleteItem.dto';
 import { GetAutoCompleteContactsService } from './queries/GetAutoCompleteContacts.service';
 import { GetContactService } from './queries/GetContact.service';
 import { ActivateContactService } from './commands/ActivateContact.service';
@@ -15,6 +24,8 @@ import { InactivateContactService } from './commands/InactivateContact.service';
 
 @Controller('contacts')
 @ApiTags('Contacts')
+@ApiExtraModels(ContactAutoCompleteItemDto)
+@ApiCommonHeaders()
 export class ContactsController {
   constructor(
     private readonly getAutoCompleteService: GetAutoCompleteContactsService,
@@ -25,6 +36,14 @@ export class ContactsController {
 
   @Get('auto-complete')
   @ApiOperation({ summary: 'Get the auto-complete contacts' })
+  @ApiResponse({
+    status: 200,
+    description: 'Contacts auto-complete list.',
+    schema: {
+      type: 'array',
+      items: { $ref: getSchemaPath(ContactAutoCompleteItemDto) },
+    },
+  })
   getAutoComplete(@Query() query: GetContactsAutoCompleteQuery) {
     return this.getAutoCompleteService.autocompleteContacts(query);
   }
