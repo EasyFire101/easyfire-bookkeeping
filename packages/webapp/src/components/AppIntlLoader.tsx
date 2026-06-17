@@ -52,6 +52,15 @@ async function loadYupLocales(currentLocale) {
 }
 
 /**
+ * Dynamically loads the moment.js locale bundle for the given locale.
+ */
+async function loadMomentLocale(currentLocale) {
+  const momentLocale = transformMomentLocale(currentLocale);
+  if (momentLocale === 'en') return;
+  await import(`moment/locale/${momentLocale}`);
+}
+
+/**
  * Modifies the html document direction to RTl if it was rtl-language.
  */
 function useDocumentDirectionModifier(locale, isRTL) {
@@ -88,6 +97,7 @@ function useAppLoadLocales(currentLocale) {
           },
         });
       })
+      .then(() => loadMomentLocale(currentLocale))
       .then(() => {
         moment.locale(transformMomentLocale(currentLocale));
         setIsLoading(false);

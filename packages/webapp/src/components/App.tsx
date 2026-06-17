@@ -6,8 +6,6 @@ import { QueryClientProvider, QueryClient } from '@tanstack/react-query';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 
 import '@/style/App.scss';
-import 'moment/locale/ar-ly';
-import 'moment/locale/es-us';
 
 import AppIntlLoader from './AppIntlLoader';
 import { EnsureAuthenticated } from '@/components/Guards/EnsureAuthenticated';
