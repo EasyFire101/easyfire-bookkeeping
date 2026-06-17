@@ -24,7 +24,9 @@ export function allowSheetExtensions(req, file, cb) {
 // Guards against MIME-type spoofing by inspecting actual file bytes via file-type.
 // CSV files have no magic bytes so fileTypeFromBuffer returns undefined for them;
 // the Multer layer already validated the MIME type in that case, so undefined is allowed.
-export async function validateImportFileMagicBytes(buffer: Buffer): Promise<void> {
+export async function validateImportFileMagicBytes(
+  buffer: Buffer,
+): Promise<void> {
   const detected = await fileTypeFromBuffer(buffer);
 
   // file-type returns undefined for plain text (CSV) — allow through.

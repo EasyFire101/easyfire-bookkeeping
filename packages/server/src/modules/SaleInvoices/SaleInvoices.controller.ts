@@ -363,7 +363,8 @@ export class SaleInvoicesController {
   @ApiOperation({ summary: 'Retrieves the sale invoice HTML.' })
   @ApiResponse({
     status: 200,
-    description: 'The sale invoice HTML content has been successfully retrieved.',
+    description:
+      'The sale invoice HTML content has been successfully retrieved.',
     schema: { type: 'string', example: '<html>...</html>' },
   })
   @ApiResponse({ status: 404, description: 'The sale invoice not found.' })

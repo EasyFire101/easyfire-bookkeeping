@@ -44,11 +44,13 @@ import {
  * ready FormData (with file/resource/params parts) or a plain object that we
  * serialize into FormData on their behalf.
  */
-export type ImportFileUploadInput = FormData | {
-  file: File;
-  resource: string;
-  params?: Record<string, unknown>;
-};
+export type ImportFileUploadInput =
+  | FormData
+  | {
+      file: File;
+      resource: string;
+      params?: Record<string, unknown>;
+    };
 
 function toImportFormData(values: ImportFileUploadInput): FormData {
   if (values instanceof FormData) {
@@ -68,7 +70,11 @@ function toImportFormData(values: ImportFileUploadInput): FormData {
  * (import id, sheet columns, resource columns).
  */
 export function useImportFileUpload(
-  props?: UseMutationOptions<ImportFileUploadResponse, Error, ImportFileUploadInput>,
+  props?: UseMutationOptions<
+    ImportFileUploadResponse,
+    Error,
+    ImportFileUploadInput
+  >,
 ) {
   const fetcher = useApiFetcher({ enableCamelCaseTransform: true });
   return useMutation({
@@ -100,7 +106,10 @@ export function useImportFileMapping(
 
 export function useImportFilePreview(
   importId: string,
-  props?: Omit<UseQueryOptions<ImportPreviewResponse, Error, unknown>, 'queryKey' | 'queryFn'>,
+  props?: Omit<
+    UseQueryOptions<ImportPreviewResponse, Error, unknown>,
+    'queryKey' | 'queryFn'
+  >,
 ) {
   const fetcher = useApiFetcher({ enableCamelCaseTransform: true });
 
@@ -114,7 +123,10 @@ export function useImportFilePreview(
 
 export function useImportFileMeta(
   importId: string,
-  props?: Omit<UseQueryOptions<ImportFileMetaResponse, Error, unknown>, 'queryKey' | 'queryFn'>,
+  props?: Omit<
+    UseQueryOptions<ImportFileMetaResponse, Error, unknown>,
+    'queryKey' | 'queryFn'
+  >,
 ) {
   const fetcher = useApiFetcher({ enableCamelCaseTransform: true });
 

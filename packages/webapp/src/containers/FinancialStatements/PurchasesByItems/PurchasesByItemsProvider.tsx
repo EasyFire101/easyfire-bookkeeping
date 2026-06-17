@@ -30,10 +30,13 @@ function PurchasesByItemsProvider({
   ...props
 }: PurchasesByItemsProviderProps) {
   // Transforms the report query to http query.
-  const httpQuery = useMemo(() => transformFilterFormToQuery(query), [query]) as PurchasesByItemsTableQuery;
+  const httpQuery = useMemo(
+    () => transformFilterFormToQuery(query),
+    [query],
+  ) as PurchasesByItemsTableQuery;
 
   // Handle fetching the purchases by items report based on the given query.
-const {
+  const {
     data: purchaseByItems,
     isFetching,
     isLoading,

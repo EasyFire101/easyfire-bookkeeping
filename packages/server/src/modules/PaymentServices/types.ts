@@ -226,7 +226,8 @@ export class PaymentIntegrationDto {
   accountId: string;
 
   @ApiProperty({
-    description: 'Provider-specific options (bank account id, clearing account id, card brand flags, ...).',
+    description:
+      'Provider-specific options (bank account id, clearing account id, card brand flags, ...).',
     type: 'object',
     additionalProperties: true,
     example: { bankAccountId: 12, clearingAccountId: 34 },
@@ -234,7 +235,8 @@ export class PaymentIntegrationDto {
   options: Record<string, unknown>;
 
   @ApiProperty({
-    description: 'Virtual attribute — true when both payment and payout are enabled.',
+    description:
+      'Virtual attribute — true when both payment and payout are enabled.',
     example: false,
   })
   fullEnabled: boolean;

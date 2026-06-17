@@ -19,7 +19,7 @@ interface JournalSheetProviderProps {
 }
 
 const JournalSheetContext = createContext<JournalSheetContextValue>(
-  {} as JournalSheetContextValue
+  {} as JournalSheetContextValue,
 );
 
 /**

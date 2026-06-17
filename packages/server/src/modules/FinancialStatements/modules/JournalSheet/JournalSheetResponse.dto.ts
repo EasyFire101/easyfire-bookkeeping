@@ -99,7 +99,10 @@ export class JournalSheetQueryResponseDto {
   @ApiProperty({ description: 'Account IDs to include', type: [Number] })
   accountsIds: number[];
 
-  @ApiProperty({ description: 'Number format settings', type: NumberFormatQueryDto })
+  @ApiProperty({
+    description: 'Number format settings',
+    type: NumberFormatQueryDto,
+  })
   numberFormat: NumberFormatQueryDto;
 }
 
