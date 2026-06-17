@@ -24426,10 +24426,60 @@
       "get": {
         "operationId": "ContactsController_getAutoComplete",
         "summary": "Get the auto-complete contacts",
-        "parameters": [],
+        "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "Value must be 'Bearer <token>' where <token> is an API key prefixed with 'bc_' or a JWT token.",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "example": "Bearer bc_1234567890abcdef"
+            }
+          },
+          {
+            "name": "organization-id",
+            "in": "header",
+            "description": "Required if Authorization is a JWT token. The organization ID to operate within.",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "limit",
+            "required": false,
+            "in": "query",
+            "description": "Maximum number of contacts to return.",
+            "schema": {
+              "example": 10,
+              "type": "number"
+            }
+          },
+          {
+            "name": "keyword",
+            "required": false,
+            "in": "query",
+            "description": "Keyword to filter contacts by display name.",
+            "schema": {
+              "example": "Acme",
+              "type": "string"
+            }
+          }
+        ],
         "responses": {
           "200": {
-            "description": ""
+            "description": "Contacts auto-complete list.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/ContactAutoCompleteItemDto"
+                  }
+                }
+              }
+            }
           }
         },
         "tags": [
@@ -24442,6 +24492,25 @@
         "operationId": "ContactsController_getContact",
         "summary": "Get contact by ID (customer or vendor)",
         "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "Value must be 'Bearer <token>' where <token> is an API key prefixed with 'bc_' or a JWT token.",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "example": "Bearer bc_1234567890abcdef"
+            }
+          },
+          {
+            "name": "organization-id",
+            "in": "header",
+            "description": "Required if Authorization is a JWT token. The organization ID to operate within.",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
           {
             "name": "id",
             "required": true,
@@ -24468,6 +24537,25 @@
         "summary": "Activate a contact",
         "parameters": [
           {
+            "name": "Authorization",
+            "in": "header",
+            "description": "Value must be 'Bearer <token>' where <token> is an API key prefixed with 'bc_' or a JWT token.",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "example": "Bearer bc_1234567890abcdef"
+            }
+          },
+          {
+            "name": "organization-id",
+            "in": "header",
+            "description": "Required if Authorization is a JWT token. The organization ID to operate within.",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
             "name": "id",
             "required": true,
             "in": "path",
@@ -24492,6 +24580,25 @@
         "operationId": "ContactsController_inactivateContact",
         "summary": "Inactivate a contact",
         "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "Value must be 'Bearer <token>' where <token> is an API key prefixed with 'bc_' or a JWT token.",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "example": "Bearer bc_1234567890abcdef"
+            }
+          },
+          {
+            "name": "organization-id",
+            "in": "header",
+            "description": "Required if Authorization is a JWT token. The organization ID to operate within.",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
           {
             "name": "id",
             "required": true,
@@ -42315,6 +42422,35 @@
           "firstName",
           "lastName",
           "password"
+        ]
+      },
+      "ContactAutoCompleteItemDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "number",
+            "description": "Contact id.",
+            "example": 12
+          },
+          "displayName": {
+            "type": "string",
+            "description": "Display name of the contact (customer or vendor).",
+            "example": "Acme Inc."
+          },
+          "contactService": {
+            "type": "string",
+            "description": "Contact service type.",
+            "enum": [
+              "customer",
+              "vendor"
+            ],
+            "example": "vendor"
+          }
+        },
+        "required": [
+          "id",
+          "displayName",
+          "contactService"
         ]
       },
       "AuditLogFilterOptionDto": {

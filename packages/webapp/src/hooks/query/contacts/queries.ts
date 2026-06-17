@@ -48,7 +48,6 @@ export function useAutoCompleteContacts(
 ) {
   const fetcher = useApiFetcher();
   const organizationId = useAuthOrganizationId();
-
   return useQuery({
     ...props,
     queryKey: [...contactsKeys.autoComplete(), organizationId],
