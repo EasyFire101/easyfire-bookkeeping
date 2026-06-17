@@ -31,7 +31,7 @@ function PurchasesByItemsInner({
   const handleFilterSubmit = useCallback(
     (filter: Record<string, unknown>) => {
       const parsedFilter = {
-      ...filter,
+        ...filter,
         fromDate: moment(filter.fromDate as string).format('YYYY-MM-DD'),
         toDate: moment(filter.toDate as string).format('YYYY-MM-DD'),
       };

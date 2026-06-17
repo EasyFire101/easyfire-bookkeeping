@@ -21,9 +21,10 @@ interface VendorsTransactionsProviderProps {
   filter: Record<string, unknown>;
 }
 
-const VendorsTransactionsContext = createContext<
-  VendorsTransactionsContextValue
->({} as VendorsTransactionsContextValue);
+const VendorsTransactionsContext =
+  createContext<VendorsTransactionsContextValue>(
+    {} as VendorsTransactionsContextValue,
+  );
 
 /**
  * Vendors transactions provider.
@@ -32,7 +33,10 @@ function VendorsTransactionsProvider({
   filter,
   ...props
 }: VendorsTransactionsProviderProps & { children?: React.ReactNode }) {
-  const httpQuery = useMemo(() => transformFilterFormToQuery(filter), [filter]) as TransactionsByVendorsTableQuery;
+  const httpQuery = useMemo(
+    () => transformFilterFormToQuery(filter),
+    [filter],
+  ) as TransactionsByVendorsTableQuery;
 
   // Fetch vendors transactions based on the given query.
   const {

@@ -40,10 +40,7 @@ export function VendorsBalanceSummaryHeaderGeneralContent() {
               field: { value: any };
               meta: { error: any };
             }) => (
-              <FormGroup
-                label={intl.get('as_date')}
-                labelInfo={<FieldHint />}
-              >
+              <FormGroup label={intl.get('as_date')} labelInfo={<FieldHint />}>
                 <DateInput
                   {...momentFormatter('YYYY/MM/DD')}
                   value={tansformDateValue(value)}

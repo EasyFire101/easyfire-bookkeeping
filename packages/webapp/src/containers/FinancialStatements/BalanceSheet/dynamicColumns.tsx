@@ -287,10 +287,7 @@ const totalColumnsMapper = R.curry((data, column) => {
       R.pathEq(['key'], 'percentageOfColumn'),
       percentageOfColumnAccessor(data),
     ),
-    R.when(
-      R.pathEq(['key'], 'percentageOfRow'),
-      percentageOfRowAccessor(data),
-    ),
+    R.when(R.pathEq(['key'], 'percentageOfRow'), percentageOfRowAccessor(data)),
     // Previous year.
     R.when(R.pathEq(['key'], 'previousYear'), previousYearAccessor(data)),
     R.when(

@@ -1,4 +1,7 @@
-import { IFinancialSheetCommonMeta, INumberFormatQuery } from '../../types/Report.types';
+import {
+  IFinancialSheetCommonMeta,
+  INumberFormatQuery,
+} from '../../types/Report.types';
 import { IFinancialTable } from '../../types/Table.types';
 
 export interface IJournalReportQuery {

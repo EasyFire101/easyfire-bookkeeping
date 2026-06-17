@@ -29,7 +29,7 @@ export class ProfitLossSheetDataNodeDto {
     description: 'Total amount information',
     type: FinancialReportTotalDto,
   })
-  total:FinancialReportTotalDto;
+  total: FinancialReportTotalDto;
 
   @ApiPropertyOptional({
     description: 'Horizontal totals for date periods',

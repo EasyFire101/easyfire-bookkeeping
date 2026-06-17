@@ -5,9 +5,10 @@ export class FinancialSheetBranchesQueryDto {
   @IsArray()
   @IsOptional()
   @ApiProperty({
-    description: 'Filter out branches (if multiple branches feature is enabled)',
+    description:
+      'Filter out branches (if multiple branches feature is enabled)',
     required: false,
-    type: [Number]
+    type: [Number],
   })
   branchesIds: Array<number>;
 }

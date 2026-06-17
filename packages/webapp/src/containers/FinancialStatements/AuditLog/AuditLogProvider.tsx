@@ -82,8 +82,7 @@ function AuditLogProvider({ query, children }: AuditLogProviderProps) {
   } = useAuditLogsInfinityQuery(httpQuery);
 
   const auditLogs = useMemo(
-    () =>
-      auditLogsPages ? flattenInfinityPagesData(auditLogsPages) : [],
+    () => (auditLogsPages ? flattenInfinityPagesData(auditLogsPages) : []),
     [auditLogsPages],
   );
 
