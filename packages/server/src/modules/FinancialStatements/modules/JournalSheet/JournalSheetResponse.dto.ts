@@ -1,9 +1,9 @@
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import {
-  FinancialReportTotalDto,
   FinancialReportMetaDto,
   FinancialTableDataDto,
 } from '../../dtos/FinancialReportResponse.dto';
+import { NumberFormatQueryDto } from '@/modules/BankingTransactions/dtos/NumberFormatQuery.dto';
 
 export class JournalEntryDto {
   @ApiProperty({ description: 'Entry index', type: Number })
@@ -99,11 +99,8 @@ export class JournalSheetQueryResponseDto {
   @ApiProperty({ description: 'Account IDs to include', type: [Number] })
   accountsIds: number[];
 
-  @ApiProperty({ description: 'Number format settings', type: Object })
-  numberFormat: {
-    noCents: boolean;
-    divideOn1000: boolean;
-  };
+  @ApiProperty({ description: 'Number format settings', type: NumberFormatQueryDto })
+  numberFormat: NumberFormatQueryDto;
 }
 
 export class JournalSheetResponseDto {

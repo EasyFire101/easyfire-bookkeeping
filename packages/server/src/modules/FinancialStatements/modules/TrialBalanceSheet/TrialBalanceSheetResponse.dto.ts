@@ -4,6 +4,7 @@ import {
   FinancialReportMetaDto,
   FinancialTableDataDto,
 } from '../../dtos/FinancialReportResponse.dto';
+import { NumberFormatQueryDto } from '@/modules/BankingTransactions/dtos/NumberFormatQuery.dto';
 
 export class TrialBalanceSheetAccountDto {
   @ApiProperty({ description: 'Account ID', type: Number })
@@ -120,6 +121,12 @@ export class TrialBalanceSheetQueryResponseDto {
     enum: ['day', 'month', 'year', 'quarter'],
   })
   displayColumnsBy: string;
+
+  @ApiProperty({
+    description: 'Number format settings',
+    type: NumberFormatQueryDto,
+  })
+  numberFormat: NumberFormatQueryDto;
 }
 
 export class TrialBalanceSheetResponseDto {

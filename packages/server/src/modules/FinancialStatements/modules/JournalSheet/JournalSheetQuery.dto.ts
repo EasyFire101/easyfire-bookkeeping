@@ -1,6 +1,5 @@
 import {
   IsArray,
-  IsBoolean,
   IsDateString,
   IsNumber,
   IsOptional,
@@ -10,24 +9,7 @@ import {
 import { Type } from 'class-transformer';
 import { FinancialSheetBranchesQueryDto } from '../../dtos/FinancialSheetBranchesQuery.dto';
 import { ApiPropertyOptional } from '@nestjs/swagger';
-
-class JournalSheetNumberFormatQueryDto {
-  @ApiPropertyOptional({
-    description: 'Whether to hide cents in the number format',
-    example: false,
-  })
-  @IsBoolean()
-  @IsOptional()
-  noCents: boolean;
-
-  @ApiPropertyOptional({
-    description: 'Whether to divide numbers by 1000',
-    example: false,
-  })
-  @IsBoolean()
-  @IsOptional()
-  divideOn1000: boolean;
-}
+import { NumberFormatQueryDto } from '@/modules/BankingTransactions/dtos/NumberFormatQuery.dto';
 
 export class JournalSheetQueryDto extends FinancialSheetBranchesQueryDto {
   @ApiPropertyOptional({
@@ -47,12 +29,13 @@ export class JournalSheetQueryDto extends FinancialSheetBranchesQueryDto {
   toDate: Date | string;
 
   @ApiPropertyOptional({
-    description: 'Number format options for the journal sheet',
-    example: { noCents: false, divideOn1000: false },
+    type: NumberFormatQueryDto,
+    description: 'Number formatting options',
   })
   @ValidateNested()
-  @Type(() => JournalSheetNumberFormatQueryDto)
-  numberFormat: JournalSheetNumberFormatQueryDto;
+  @Type(() => NumberFormatQueryDto)
+  @IsOptional()
+  numberFormat: NumberFormatQueryDto;
 
   @ApiPropertyOptional({
     description: 'Type of transaction to filter',
