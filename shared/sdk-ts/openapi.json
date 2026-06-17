@@ -19556,6 +19556,65 @@
               "example": "1",
               "type": "number"
             }
+          },
+          {
+            "description": "Number of decimal places to display",
+            "required": false,
+            "name": "precision",
+            "in": "query",
+            "schema": {
+              "example": 2,
+              "type": "number"
+            }
+          },
+          {
+            "description": "Whether to divide the number by 1000",
+            "required": false,
+            "name": "divideOn1000",
+            "in": "query",
+            "schema": {
+              "example": false,
+              "type": "boolean"
+            }
+          },
+          {
+            "description": "Whether to show zero values",
+            "required": false,
+            "name": "showZero",
+            "in": "query",
+            "schema": {
+              "example": true,
+              "type": "boolean"
+            }
+          },
+          {
+            "description": "How to format money values",
+            "required": false,
+            "name": "formatMoney",
+            "in": "query",
+            "schema": {
+              "example": "total",
+              "enum": [
+                "total",
+                "always",
+                "none"
+              ],
+              "type": "string"
+            }
+          },
+          {
+            "description": "How to format negative numbers",
+            "required": false,
+            "name": "negativeFormat",
+            "in": "query",
+            "schema": {
+              "example": "parentheses",
+              "enum": [
+                "parentheses",
+                "mines"
+              ],
+              "type": "string"
+            }
           }
         ],
         "responses": {
@@ -20769,6 +20828,65 @@
             }
           },
           {
+            "description": "Number of decimal places to display",
+            "required": false,
+            "name": "precision",
+            "in": "query",
+            "schema": {
+              "example": 2,
+              "type": "number"
+            }
+          },
+          {
+            "description": "Whether to divide the number by 1000",
+            "required": false,
+            "name": "divideOn1000",
+            "in": "query",
+            "schema": {
+              "example": false,
+              "type": "boolean"
+            }
+          },
+          {
+            "description": "Whether to show zero values",
+            "required": false,
+            "name": "showZero",
+            "in": "query",
+            "schema": {
+              "example": true,
+              "type": "boolean"
+            }
+          },
+          {
+            "description": "How to format money values",
+            "required": false,
+            "name": "formatMoney",
+            "in": "query",
+            "schema": {
+              "example": "total",
+              "enum": [
+                "total",
+                "always",
+                "none"
+              ],
+              "type": "string"
+            }
+          },
+          {
+            "description": "How to format negative numbers",
+            "required": false,
+            "name": "negativeFormat",
+            "in": "query",
+            "schema": {
+              "example": "parentheses",
+              "enum": [
+                "parentheses",
+                "mines"
+              ],
+              "type": "string"
+            }
+          },
+          {
             "name": "accept",
             "required": true,
             "in": "header",
@@ -20836,9 +20954,19 @@
             }
           },
           {
-            "description": "Whether to hide cents in the number format",
+            "description": "Number of decimal places to display",
             "required": false,
-            "name": "noCents",
+            "name": "precision",
+            "in": "query",
+            "schema": {
+              "example": 2,
+              "type": "number"
+            }
+          },
+          {
+            "description": "Whether to divide the number by 1000",
+            "required": false,
+            "name": "divideOn1000",
             "in": "query",
             "schema": {
               "example": false,
@@ -20846,13 +20974,42 @@
             }
           },
           {
-            "description": "Whether to divide numbers by 1000",
+            "description": "Whether to show zero values",
             "required": false,
-            "name": "divideOn1000",
+            "name": "showZero",
             "in": "query",
             "schema": {
-              "example": false,
+              "example": true,
               "type": "boolean"
+            }
+          },
+          {
+            "description": "How to format money values",
+            "required": false,
+            "name": "formatMoney",
+            "in": "query",
+            "schema": {
+              "example": "total",
+              "enum": [
+                "total",
+                "always",
+                "none"
+              ],
+              "type": "string"
+            }
+          },
+          {
+            "description": "How to format negative numbers",
+            "required": false,
+            "name": "negativeFormat",
+            "in": "query",
+            "schema": {
+              "example": "parentheses",
+              "enum": [
+                "parentheses",
+                "mines"
+              ],
+              "type": "string"
             }
           },
           {
@@ -37812,6 +37969,14 @@
               "year",
               "quarter"
             ]
+          },
+          "numberFormat": {
+            "description": "Number format settings",
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/NumberFormatQueryDto"
+              }
+            ]
           }
         },
         "required": [
@@ -37822,7 +37987,8 @@
           "noneTransactions",
           "basis",
           "displayColumnsType",
-          "displayColumnsBy"
+          "displayColumnsBy",
+          "numberFormat"
         ]
       },
       "TrialBalanceSheetAccountDto": {
@@ -39805,8 +39971,12 @@
             }
           },
           "numberFormat": {
-            "type": "object",
-            "description": "Number format settings"
+            "description": "Number format settings",
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/NumberFormatQueryDto"
+              }
+            ]
           }
         },
         "required": [

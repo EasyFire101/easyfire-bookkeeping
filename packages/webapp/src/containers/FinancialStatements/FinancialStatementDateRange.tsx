@@ -20,8 +20,6 @@ export function FinancialStatementDateRange() {
               <FormGroup
                 label={intl.get('report_date_range')}
                 labelInfo={<Hint />}
-                minimal={true}
-                fill={true}
               >
                 <HTMLSelect
                   fill={true}
@@ -59,7 +57,6 @@ export function FinancialStatementDateRange() {
             name={'fromDate'}
             label={intl.get('from_date')}
             labelInfo={<Hint />}
-            fill
             fastField
           >
             <FDateInput
@@ -68,7 +65,6 @@ export function FinancialStatementDateRange() {
               popoverProps={{ minimal: true, position: Position.BOTTOM_LEFT }}
               maxDate={FINANCIAL_REPORT_MAX_DATE}
               canClearSelection={false}
-              minimal
               fill
             />
           </FFormGroup>
@@ -79,7 +75,6 @@ export function FinancialStatementDateRange() {
             name={'toDate'}
             label={intl.get('to_date')}
             labelInfo={<Hint />}
-            fill
             fastField
           >
             <FDateInput
@@ -88,7 +83,6 @@ export function FinancialStatementDateRange() {
               popoverProps={{ minimal: true, position: Position.BOTTOM }}
               canClearSelection={false}
               fill
-              minimal
               maxDate={FINANCIAL_REPORT_MAX_DATE}
             />
           </FFormGroup>

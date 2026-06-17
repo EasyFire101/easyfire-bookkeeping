@@ -13301,6 +13301,8 @@ export interface components {
              * @enum {string}
              */
             displayColumnsBy: "day" | "month" | "year" | "quarter";
+            /** @description Number format settings */
+            numberFormat: components["schemas"]["NumberFormatQueryDto"];
         };
         TrialBalanceSheetAccountDto: {
             /** @description Account ID */
@@ -13919,7 +13921,7 @@ export interface components {
             /** @description Account IDs to include */
             accountsIds: number[];
             /** @description Number format settings */
-            numberFormat: Record<string, never>;
+            numberFormat: components["schemas"]["NumberFormatQueryDto"];
         };
         JournalEntryDto: {
             /** @description Entry index */
@@ -27197,6 +27199,16 @@ export interface operations {
                 referenceType: string;
                 /** @description The ID of the reference */
                 referenceId: number;
+                /** @description Number of decimal places to display */
+                precision?: number;
+                /** @description Whether to divide the number by 1000 */
+                divideOn1000?: boolean;
+                /** @description Whether to show zero values */
+                showZero?: boolean;
+                /** @description How to format money values */
+                formatMoney?: "total" | "always" | "none";
+                /** @description How to format negative numbers */
+                negativeFormat?: "parentheses" | "mines";
             };
             header?: never;
             path?: never;
@@ -27862,6 +27874,16 @@ export interface operations {
                 toDate: string;
                 /** @description Accounting basis for the summary */
                 basis: "cash" | "accrual";
+                /** @description Number of decimal places to display */
+                precision?: number;
+                /** @description Whether to divide the number by 1000 */
+                divideOn1000?: boolean;
+                /** @description Whether to show zero values */
+                showZero?: boolean;
+                /** @description How to format money values */
+                formatMoney?: "total" | "always" | "none";
+                /** @description How to format negative numbers */
+                negativeFormat?: "parentheses" | "mines";
             };
             header: {
                 /** @description Value must be 'Bearer <token>' where <token> is an API key prefixed with 'bc_' or a JWT token. */
@@ -27892,10 +27914,16 @@ export interface operations {
             query?: {
                 /** @description Filter out branches (if multiple branches feature is enabled) */
                 branchesIds?: number[];
-                /** @description Whether to hide cents in the number format */
-                noCents?: boolean;
-                /** @description Whether to divide numbers by 1000 */
+                /** @description Number of decimal places to display */
+                precision?: number;
+                /** @description Whether to divide the number by 1000 */
                 divideOn1000?: boolean;
+                /** @description Whether to show zero values */
+                showZero?: boolean;
+                /** @description How to format money values */
+                formatMoney?: "total" | "always" | "none";
+                /** @description How to format negative numbers */
+                negativeFormat?: "parentheses" | "mines";
                 /** @description Type of transaction to filter */
                 transactionType?: string;
                 /** @description ID of the transaction to filter */

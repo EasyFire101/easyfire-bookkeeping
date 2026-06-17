@@ -10,10 +10,9 @@ import '@/style/App.scss';
 import AppIntlLoader from './AppIntlLoader';
 import { EnsureAuthenticated } from '@/components/Guards/EnsureAuthenticated';
 import { GlobalErrors } from '@/containers/GlobalErrors/GlobalErrors';
-
 import { SplashScreen, DashboardThemeProvider } from '../components';
-import { queryConfig } from '../hooks/query/base';
 import { EnsureUserEmailNotVerified } from './Guards/EnsureUserEmailNotVerified';
+import { queryConfig } from '../hooks/query/base';
 
 const DashboardPrivatePages = lazy(
   () => import('@/components/Dashboard/PrivatePages'),

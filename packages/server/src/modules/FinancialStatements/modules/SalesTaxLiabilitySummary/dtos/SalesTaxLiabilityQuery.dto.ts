@@ -1,5 +1,7 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsDateString, IsEnum, IsNotEmpty, IsOptional } from 'class-validator';
+import { IsDateString, IsEnum, IsNotEmpty, IsOptional, ValidateNested } from 'class-validator';
+import { Type } from 'class-transformer';
+import { NumberFormatQueryDto } from '@/modules/BankingTransactions/dtos/NumberFormatQuery.dto';
 
 export class SalesTaxLiabilitySummaryQueryDto {
   @ApiProperty({
@@ -26,4 +28,14 @@ export class SalesTaxLiabilitySummaryQueryDto {
   @IsEnum(['cash', 'accrual'])
   @IsNotEmpty()
   basis: 'cash' | 'accrual';
+
+  @ApiProperty({
+    type: NumberFormatQueryDto,
+    description: 'Number formatting options',
+    required: false,
+  })
+  @ValidateNested()
+  @Type(() => NumberFormatQueryDto)
+  @IsOptional()
+  numberFormat: NumberFormatQueryDto;
 }

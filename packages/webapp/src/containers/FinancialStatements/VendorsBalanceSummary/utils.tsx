@@ -23,7 +23,6 @@ export const parseVendorsBalanceSummaryQuery = (
   locationQuery: Record<string, unknown>,
 ) => {
   const defaultQuery = getDefaultVendorsBalanceQuery();
-
   const transformed = {
     ...defaultQuery,
     ...transformToForm(locationQuery, defaultQuery),
@@ -36,7 +35,6 @@ export const parseVendorsBalanceSummaryQuery = (
 
 export const useVendorsBalanceSummaryQuery = () => {
   const [locationQuery, setLocationQuery] = useAppQueryString();
-
   const query = useMemo(
     () => parseVendorsBalanceSummaryQuery(locationQuery),
     [locationQuery],
