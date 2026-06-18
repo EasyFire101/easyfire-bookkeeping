@@ -8,12 +8,14 @@ import {
   ApiOperation,
   ApiResponse,
   ApiTags,
+  ApiQuery,
   getSchemaPath,
 } from '@nestjs/swagger';
 import {
   TransactionsByVendorResponseDto,
   TransactionsByVendorTableResponseDto,
 } from './TransactionsByVendorResponse.dto';
+import { NumberFormatQueryDto } from '@/modules/BankingTransactions/dtos/NumberFormatQuery.dto';
 import { TransactionsByVendorQueryDto } from './TransactionsByVendorQuery.dto';
 import { ApiCommonHeaders } from '@/common/decorators/ApiCommonHeaders';
 
@@ -23,6 +25,7 @@ import { ApiCommonHeaders } from '@/common/decorators/ApiCommonHeaders';
 @ApiExtraModels(
   TransactionsByVendorResponseDto,
   TransactionsByVendorTableResponseDto,
+  NumberFormatQueryDto,
 )
 export class TransactionsByVendorController {
   constructor(
@@ -31,6 +34,13 @@ export class TransactionsByVendorController {
 
   @Get()
   @ApiOperation({ summary: 'Get transactions by vendor' })
+  @ApiQuery({
+    name: 'numberFormat',
+    required: false,
+    description:
+      'Number formatting options (serialized as bracket notation, e.g. numberFormat[precision]=2)',
+    schema: { $ref: getSchemaPath(NumberFormatQueryDto) },
+  })
   @ApiResponse({
     status: 200,
     description: 'Transactions by vendor',

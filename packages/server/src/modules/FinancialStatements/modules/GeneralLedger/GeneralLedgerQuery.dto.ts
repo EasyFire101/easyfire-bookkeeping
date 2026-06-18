@@ -40,10 +40,6 @@ export class GeneralLedgerQueryDto extends FinancialSheetBranchesQueryDto {
   @IsOptional()
   basis: string;
 
-  @ApiProperty({
-    description: 'Number format configuration for the report',
-    type: NumberFormatQueryDto,
-  })
   @ValidateNested()
   @Type(() => NumberFormatQueryDto)
   numberFormat: NumberFormatQueryDto;

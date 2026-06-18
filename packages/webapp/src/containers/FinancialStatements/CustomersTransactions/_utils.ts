@@ -5,6 +5,7 @@ import { transformToForm } from '@/utils';
 import { castArray } from 'lodash';
 import { useMemo } from 'react';
 import { useAppQueryString } from '@/hooks';
+import { TransactionsByCustomersTableQuery } from '@bigcapital/sdk-ts';
 
 export const getCustomersTransactionsQuerySchema = () => {
   return Yup.object().shape({
@@ -23,7 +24,7 @@ export const getCustomersTransactionsDefaultQuery = () => ({
   filterByOption: 'with-transactions',
 });
 
-const parseCustomersTransactionsQuery = (query: Record<string, any>) => {
+const parseCustomersTransactionsQuery = (query: Record<string, any>): TransactionsByCustomersTableQuery => {
   const defaultQuery = getCustomersTransactionsDefaultQuery();
 
   const transformedQuery = {
@@ -32,7 +33,7 @@ const parseCustomersTransactionsQuery = (query: Record<string, any>) => {
   };
   return {
     ...transformedQuery,
-    customersIds: castArray(transformedQuery.customersIds),
+    customersIds: castArray(transformedQuery.customersIds).map(Number),
   };
 };
 

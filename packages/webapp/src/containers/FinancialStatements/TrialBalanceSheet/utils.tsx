@@ -9,14 +9,14 @@ import { TrialBalanceTableQuery } from '@bigcapital/sdk-ts';
 /**
  * Retrieves the default trial balance query.
  */
-export function getDefaultTrialBalanceQuery() {
+export function getDefaultTrialBalanceQuery(): TrialBalanceTableQuery {
   return {
     fromDate: moment().startOf('year').format('YYYY-MM-DD'),
     toDate: moment().format('YYYY-MM-DD'),
     basis: 'accrual',
-    filterByOption: 'with-transactions',
-    branchesIds: [] as string[],
-    numberFormat: {} as Record<string, unknown>,
+    // filterByOption: 'with-transactions',
+    branchesIds: [] as number[],
+    // numberFormat: {},
   };
 }
 
@@ -27,7 +27,6 @@ const parseTrialBalanceSheetQuery = (
   locationQuery: Record<string, unknown>,
 ): TrialBalanceTableQuery => {
   const defaultQuery = getDefaultTrialBalanceQuery();
-
   const transformed = {
     ...defaultQuery,
     ...transformToForm(locationQuery, defaultQuery),
@@ -35,7 +34,7 @@ const parseTrialBalanceSheetQuery = (
   return {
     ...transformed,
     // Ensures the branches ids is always array.
-    branchesIds: castArray(transformed.branchesIds),
+    branchesIds: castArray(transformed.branchesIds).map((id) => Number(id)),
   };
 };
 

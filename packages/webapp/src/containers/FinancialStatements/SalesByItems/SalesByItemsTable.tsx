@@ -29,7 +29,7 @@ export function SalesByItemsTable({ companyName }: SalesByItemsTableProps) {
     <SalesByItemsSheet
       companyName={companyName}
       sheetType={intl.get('sales_by_items')}
-      dateText={meta?.formattedDateRange ?? meta?.formattedAsDate}
+      dateText={meta?.formattedDateRange}
     >
       <SalesByItemsDataTable
         columns={columns}

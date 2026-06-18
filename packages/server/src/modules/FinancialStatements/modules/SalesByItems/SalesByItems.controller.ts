@@ -15,8 +15,10 @@ import {
   ApiOperation,
   ApiResponse,
   ApiTags,
+  ApiQuery,
   getSchemaPath,
 } from '@nestjs/swagger';
+import { NumberFormatQueryDto } from '@/modules/BankingTransactions/dtos/NumberFormatQuery.dto';
 import { SalesByItemsQueryDto } from './SalesByItemsQuery.dto';
 import {
   SalesByItemsResponseDto,
@@ -27,7 +29,7 @@ import { ApiCommonHeaders } from '@/common/decorators/ApiCommonHeaders';
 @Controller('/reports/sales-by-items')
 @ApiTags('Reports')
 @ApiCommonHeaders()
-@ApiExtraModels(SalesByItemsResponseDto, SalesByItemsTableResponseDto)
+@ApiExtraModels(SalesByItemsResponseDto, SalesByItemsTableResponseDto, NumberFormatQueryDto)
 export class SalesByItemsController {
   constructor(private readonly salesByItemsApp: SalesByItemsApplication) {}
 
@@ -47,6 +49,13 @@ export class SalesByItemsController {
   @ApiOperation({
     summary: 'Sales by items report',
     description: 'Retrieves the sales by items report.',
+  })
+  @ApiQuery({
+    name: 'numberFormat',
+    required: false,
+    description:
+      'Number formatting options (serialized as bracket notation, e.g. numberFormat[precision]=2)',
+    schema: { $ref: getSchemaPath(NumberFormatQueryDto) },
   })
   public async salesByitems(
     @Query() filter: SalesByItemsQueryDto,

@@ -13,10 +13,12 @@ import {
   ApiExtraModels,
   ApiOperation,
   ApiProduces,
+  ApiQuery,
   ApiResponse,
   ApiTags,
   getSchemaPath,
 } from '@nestjs/swagger';
+import { NumberFormatQueryDto } from '@/modules/BankingTransactions/dtos/NumberFormatQuery.dto';
 import { CashFlowStatementQueryDto } from './CashFlowStatementQuery.dto';
 import { CashflowStatementResponseExample } from './CashflowStatement.swagger';
 import {
@@ -34,7 +36,7 @@ import { ReportsAction } from '../../types/Report.types';
 @ApiTags('Reports')
 @ApiCommonHeaders()
 @UseGuards(AuthorizationGuard, PermissionGuard)
-@ApiExtraModels(CashflowStatementResponseDto, CashflowStatementTableResponseDto)
+@ApiExtraModels(CashflowStatementResponseDto, CashflowStatementTableResponseDto, NumberFormatQueryDto)
 export class CashflowController {
   constructor(private readonly cashflowSheetApp: CashflowSheetApplication) {}
 
@@ -54,6 +56,13 @@ export class CashflowController {
     },
   })
   @ApiOperation({ summary: 'Get cashflow statement report' })
+  @ApiQuery({
+    name: 'numberFormat',
+    required: false,
+    description:
+      'Number formatting options (serialized as bracket notation, e.g. numberFormat[precision]=2)',
+    schema: { $ref: getSchemaPath(NumberFormatQueryDto) },
+  })
   @ApiProduces(
     AcceptType.ApplicationJson,
     AcceptType.ApplicationJsonTable,

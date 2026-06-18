@@ -39,10 +39,6 @@ export class PurchasesByItemsQueryDto {
   @IsOptional()
   itemsIds: number[];
 
-  @ApiPropertyOptional({
-    description: 'Number formatting options for the report',
-    type: NumberFormatQueryDto,
-  })
   @ValidateNested()
   @Type(() => NumberFormatQueryDto)
   @IsOptional()

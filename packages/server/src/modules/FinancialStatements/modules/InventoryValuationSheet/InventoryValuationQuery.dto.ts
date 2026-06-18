@@ -21,11 +21,6 @@ export class InventoryValuationQueryDto {
   @IsOptional()
   asDate: Date | string;
 
-  @ApiPropertyOptional({
-    description: 'Number format options',
-    type: NumberFormatQueryDto,
-    example: { currency: 'USD', decimals: 2 },
-  })
   @ValidateNested()
   @Type(() => NumberFormatQueryDto)
   @IsOptional()

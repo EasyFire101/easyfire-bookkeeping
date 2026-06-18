@@ -43,10 +43,5 @@ export class GetBankTransactionsQueryDto {
   accountId: number;
 
   @IsOptional()
-  @ApiProperty({
-    description: 'Number format options',
-    required: false,
-    type: NumberFormatQueryDto,
-  })
   numberFormat: NumberFormatQueryDto;
 }

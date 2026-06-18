@@ -74,11 +74,6 @@ export class CashFlowStatementQueryDto extends FinancialSheetBranchesQueryDto {
   @IsOptional()
   noneTransactions: boolean;
 
-  @ApiProperty({
-    description: 'Number format configuration',
-    required: true,
-    type: NumberFormatQueryDto,
-  })
   @ValidateNested()
   @Type(() => NumberFormatQueryDto)
   @IsOptional()

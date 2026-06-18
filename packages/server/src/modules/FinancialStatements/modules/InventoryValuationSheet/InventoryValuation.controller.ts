@@ -3,12 +3,14 @@ import {
   ApiExtraModels,
   ApiOperation,
   ApiProduces,
+  ApiQuery,
   ApiResponse,
   ApiTags,
   getSchemaPath,
 } from '@nestjs/swagger';
 import { Controller, Get, Headers, Query, Res } from '@nestjs/common';
 import { InventoryValuationSheetApplication } from './InventoryValuationSheetApplication';
+import { NumberFormatQueryDto } from '@/modules/BankingTransactions/dtos/NumberFormatQuery.dto';
 import { InventoryValuationQueryDto } from './InventoryValuationQuery.dto';
 import { AcceptType } from '@/constants/accept-type';
 import {
@@ -23,6 +25,7 @@ import { ApiCommonHeaders } from '@/common/decorators/ApiCommonHeaders';
 @ApiExtraModels(
   InventoryValuationResponseDto,
   InventoryValuationTableResponseDto,
+  NumberFormatQueryDto,
 )
 export class InventoryValuationController {
   constructor(
@@ -31,6 +34,13 @@ export class InventoryValuationController {
 
   @Get()
   @ApiOperation({ summary: 'Retrieves the inventory valuation sheet' })
+  @ApiQuery({
+    name: 'numberFormat',
+    required: false,
+    description:
+      'Number formatting options (serialized as bracket notation, e.g. numberFormat[precision]=2)',
+    schema: { $ref: getSchemaPath(NumberFormatQueryDto) },
+  })
   @ApiResponse({
     status: 200,
     description: 'The inventory valuation sheet',

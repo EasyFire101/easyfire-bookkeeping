@@ -5,11 +5,13 @@ import {
   ApiTags,
   ApiResponse,
   ApiProduces,
+  ApiQuery,
   getSchemaPath,
 } from '@nestjs/swagger';
 import { Controller, Get, Headers, Query, Res } from '@nestjs/common';
 import { InventoryItemDetailsApplication } from './InventoryItemDetailsApplication';
 import { AcceptType } from '@/constants/accept-type';
+import { NumberFormatQueryDto } from '@/modules/BankingTransactions/dtos/NumberFormatQuery.dto';
 import { InventoryItemDetailsQueryDto } from './InventoryItemDetailsQuery.dto';
 import {
   InventoryItemDetailsResponseDto,
@@ -23,6 +25,7 @@ import { ApiCommonHeaders } from '@/common/decorators/ApiCommonHeaders';
 @ApiExtraModels(
   InventoryItemDetailsResponseDto,
   InventoryItemDetailsTableResponseDto,
+  NumberFormatQueryDto,
 )
 export class InventoryItemDetailsController {
   constructor(
@@ -31,6 +34,13 @@ export class InventoryItemDetailsController {
 
   @Get('/')
   @ApiOperation({ summary: 'Get inventory item details' })
+  @ApiQuery({
+    name: 'numberFormat',
+    required: false,
+    description:
+      'Number formatting options (serialized as bracket notation, e.g. numberFormat[precision]=2)',
+    schema: { $ref: getSchemaPath(NumberFormatQueryDto) },
+  })
   @ApiResponse({
     status: 200,
     description: 'Inventory item details report',

@@ -13,10 +13,12 @@ import {
   ApiExtraModels,
   ApiOperation,
   ApiProduces,
+  ApiQuery,
   ApiResponse,
   ApiTags,
   getSchemaPath,
 } from '@nestjs/swagger';
+import { NumberFormatQueryDto } from '@/modules/BankingTransactions/dtos/NumberFormatQuery.dto';
 import { ARAgingSummaryQueryDto } from './ARAgingSummaryQuery.dto';
 import { ARAgingSummaryResponseExample } from './ARAgingSummary.swagger';
 import {
@@ -34,13 +36,20 @@ import { ReportsAction } from '../../types/Report.types';
 @ApiTags('Reports')
 @ApiCommonHeaders()
 @UseGuards(AuthorizationGuard, PermissionGuard)
-@ApiExtraModels(ARAgingSummaryResponseDto, ARAgingSummaryTableResponseDto)
+@ApiExtraModels(ARAgingSummaryResponseDto, ARAgingSummaryTableResponseDto, NumberFormatQueryDto)
 export class ARAgingSummaryController {
   constructor(private readonly ARAgingSummaryApp: ARAgingSummaryApplication) {}
 
   @Get()
   @RequirePermission(ReportsAction.READ_AR_AGING_SUMMARY, AbilitySubject.Report)
   @ApiOperation({ summary: 'Get receivable aging summary' })
+  @ApiQuery({
+    name: 'numberFormat',
+    required: false,
+    description:
+      'Number formatting options (serialized as bracket notation, e.g. numberFormat[precision]=2)',
+    schema: { $ref: getSchemaPath(NumberFormatQueryDto) },
+  })
   @ApiResponse({
     status: 200,
     description: 'Receivable aging summary response',

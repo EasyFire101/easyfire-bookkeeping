@@ -35,11 +35,6 @@ export class SalesTaxLiabilitySummaryQueryDto {
   @IsNotEmpty()
   basis: 'cash' | 'accrual';
 
-  @ApiProperty({
-    type: NumberFormatQueryDto,
-    description: 'Number formatting options',
-    required: false,
-  })
   @ValidateNested()
   @Type(() => NumberFormatQueryDto)
   @IsOptional()
