@@ -21,12 +21,17 @@ import { BankingTransactionsApplication } from '../BankingTransactionsApplicatio
 import { CreateBankTransactionDto } from '../dtos/CreateBankTransaction.dto';
 import { GetBankTransactionsQueryDto } from '../dtos/GetBankTranasctionsQuery.dto';
 import { BankTransactionResponseDto } from '../dtos/BankTransactionResponse.dto';
+import { NumberFormatQueryDto } from '../dtos/NumberFormatQuery.dto';
 import { PaginatedResponseDto } from '@/common/dtos/PaginatedResults.dto';
 import { ApiCommonHeaders } from '@/common/decorators/ApiCommonHeaders';
 
 @Controller('banking/transactions')
 @ApiTags('Banking Transactions')
-@ApiExtraModels(BankTransactionResponseDto, PaginatedResponseDto)
+@ApiExtraModels(
+  BankTransactionResponseDto,
+  PaginatedResponseDto,
+  NumberFormatQueryDto,
+)
 @ApiCommonHeaders()
 export class BankingTransactionsController {
   constructor(
@@ -65,6 +70,13 @@ export class BankingTransactionsController {
     required: false,
     type: Number,
     description: 'Number of items per page',
+  })
+  @ApiQuery({
+    name: 'numberFormat',
+    required: false,
+    description:
+      'Number formatting options (serialized as bracket notation, e.g. numberFormat[precision]=2)',
+    schema: { $ref: getSchemaPath(NumberFormatQueryDto) },
   })
   async getBankAccountTransactions(
     @Query() query: GetBankTransactionsQueryDto,

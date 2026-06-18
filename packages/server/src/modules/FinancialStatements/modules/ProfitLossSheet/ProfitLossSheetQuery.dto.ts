@@ -31,7 +31,6 @@ export class ProfitLossSheetQueryDto extends FinancialSheetBranchesQueryDto {
   @ApiProperty({ description: 'End date for the profit and loss sheet' })
   toDate: moment.MomentInput;
 
-  @ApiProperty({ description: 'Number format configuration' })
   @ValidateNested()
   @Type(() => NumberFormatQueryDto)
   @IsOptional()

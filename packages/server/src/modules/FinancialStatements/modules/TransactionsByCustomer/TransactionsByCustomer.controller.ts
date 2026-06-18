@@ -4,6 +4,7 @@ import {
   ApiOperation,
   ApiResponse,
   ApiTags,
+  ApiQuery,
   getSchemaPath,
 } from '@nestjs/swagger';
 import {
@@ -14,6 +15,7 @@ import { ITransactionsByCustomersFilter } from './TransactionsByCustomer.types';
 import { TransactionsByCustomerApplication } from './TransactionsByCustomersApplication';
 import { AcceptType } from '@/constants/accept-type';
 import { Response } from 'express';
+import { NumberFormatQueryDto } from '@/modules/BankingTransactions/dtos/NumberFormatQuery.dto';
 import { TransactionsByCustomerQueryDto } from './TransactionsByCustomerQuery.dto';
 import { ApiCommonHeaders } from '@/common/decorators/ApiCommonHeaders';
 
@@ -23,6 +25,7 @@ import { ApiCommonHeaders } from '@/common/decorators/ApiCommonHeaders';
 @ApiExtraModels(
   TransactionsByCustomerResponseDto,
   TransactionsByCustomerTableResponseDto,
+  NumberFormatQueryDto,
 )
 export class TransactionsByCustomerController {
   constructor(
@@ -31,6 +34,13 @@ export class TransactionsByCustomerController {
 
   @Get()
   @ApiOperation({ summary: 'Get transactions by customer' })
+  @ApiQuery({
+    name: 'numberFormat',
+    required: false,
+    description:
+      'Number formatting options (serialized as bracket notation, e.g. numberFormat[precision]=2)',
+    schema: { $ref: getSchemaPath(NumberFormatQueryDto) },
+  })
   @ApiResponse({
     status: 200,
     description: 'Transactions by customer',

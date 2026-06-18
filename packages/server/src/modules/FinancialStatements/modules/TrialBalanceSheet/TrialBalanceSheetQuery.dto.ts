@@ -32,11 +32,6 @@ export class TrialBalanceSheetQueryDto extends FinancialSheetBranchesQueryDto {
   @IsOptional()
   toDate: Date;
 
-  @ApiProperty({
-    description: 'Number format configuration for the report',
-    required: false,
-    type: NumberFormatQueryDto,
-  })
   @ValidateNested()
   @Type(() => NumberFormatQueryDto)
   @IsOptional()

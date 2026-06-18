@@ -3,12 +3,14 @@ import {
   ApiExtraModels,
   ApiOperation,
   ApiProduces,
+  ApiQuery,
   ApiResponse,
   ApiTags,
   getSchemaPath,
 } from '@nestjs/swagger';
 import { Controller, Get, Headers, Query, Res } from '@nestjs/common';
 import { CustomerBalanceSummaryApplication } from './CustomerBalanceSummaryApplication';
+import { NumberFormatQueryDto } from '@/modules/BankingTransactions/dtos/NumberFormatQuery.dto';
 import { CustomerBalanceSummaryQueryDto } from './CustomerBalanceSummaryQuery.dto';
 import { AcceptType } from '@/constants/accept-type';
 import {
@@ -23,6 +25,7 @@ import { ApiCommonHeaders } from '@/common/decorators/ApiCommonHeaders';
 @ApiExtraModels(
   CustomerBalanceSummaryResponseDto,
   CustomerBalanceSummaryTableResponseDto,
+  NumberFormatQueryDto,
 )
 export class CustomerBalanceSummaryController {
   constructor(
@@ -43,6 +46,13 @@ export class CustomerBalanceSummaryController {
     },
   })
   @ApiOperation({ summary: 'Get customer balance summary report' })
+  @ApiQuery({
+    name: 'numberFormat',
+    required: false,
+    description:
+      'Number formatting options (serialized as bracket notation, e.g. numberFormat[precision]=2)',
+    schema: { $ref: getSchemaPath(NumberFormatQueryDto) },
+  })
   @ApiProduces(
     AcceptType.ApplicationJson,
     AcceptType.ApplicationJsonTable,

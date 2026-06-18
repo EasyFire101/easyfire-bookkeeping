@@ -4,6 +4,7 @@ import * as Yup from 'yup';
 import { castArray } from 'lodash';
 import { useAppQueryString } from '@/hooks';
 import { transformToForm } from '@/utils';
+import { VendorBalanceTableQuery } from '@bigcapital/sdk-ts';
 
 export const getDefaultVendorsBalanceQuery = () => {
   return {
@@ -21,7 +22,7 @@ export const getVendorsBalanceQuerySchema = () => {
 
 export const parseVendorsBalanceSummaryQuery = (
   locationQuery: Record<string, unknown>,
-) => {
+): VendorBalanceTableQuery => {
   const defaultQuery = getDefaultVendorsBalanceQuery();
   const transformed = {
     ...defaultQuery,
@@ -29,7 +30,7 @@ export const parseVendorsBalanceSummaryQuery = (
   };
   return {
     ...transformed,
-    vendorsIds: castArray(transformed.vendorsIds),
+    vendorsIds: castArray(transformed.vendorsIds).map((id) => Number(id)),
   };
 };
 

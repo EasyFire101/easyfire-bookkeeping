@@ -29,9 +29,6 @@ export class InventoryItemDetailsQueryDto {
   @ValidateNested()
   @Type(() => NumberFormatQueryDto)
   @IsOptional()
-  @ApiPropertyOptional({
-    description: 'Number format for the inventory item details',
-  })
   numberFormat: NumberFormatQueryDto;
 
   @Transform(({ value }) => parseBoolean(value, false))

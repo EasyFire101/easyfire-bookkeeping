@@ -8,6 +8,7 @@ import type { FormikContextType } from 'formik';
 
 import { transformToForm } from '@/utils';
 import { useAppQueryString } from '@/hooks';
+import { BalanceSheetTableQuery } from '@bigcapital/sdk-ts';
 
 interface FormSetFieldValue {
   setFieldValue: FormikContextType<Record<string, unknown>>['setFieldValue'];
@@ -17,7 +18,7 @@ interface FormSetFieldValue {
  * Retrieves the default balance sheet query.
  * @returns {}
  */
-export const getDefaultBalanceSheetQuery = () => ({
+export const getDefaultBalanceSheetQuery = (): BalanceSheetTableQuery => ({
   fromDate: moment().startOf('year').format('YYYY-MM-DD'),
   toDate: moment().format('YYYY-MM-DD'),
   basis: 'cash',
@@ -37,21 +38,20 @@ export const getDefaultBalanceSheetQuery = () => ({
   percentageOfRow: false,
 
   branchesIds: [],
-  numberFormat: {},
 });
 
-const parseBalanceSheetQuery = (locationQuery: Record<string, unknown>) => {
+const parseBalanceSheetQuery = (
+  locationQuery: Record<string, unknown>,
+): BalanceSheetTableQuery => {
   const defaultQuery = getDefaultBalanceSheetQuery();
-
   const transformed = {
     ...defaultQuery,
     ...transformToForm(locationQuery, defaultQuery),
   };
   return {
     ...transformed,
-
     // Ensures the branches ids is always array.
-    branchesIds: castArray(transformed.branchesIds),
+    branchesIds: castArray(transformed.branchesIds).map(Number),
   };
 };
 

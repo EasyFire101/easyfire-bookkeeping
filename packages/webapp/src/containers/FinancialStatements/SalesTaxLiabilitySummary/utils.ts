@@ -1,8 +1,8 @@
 import React, { useMemo } from 'react';
 import moment from 'moment';
 import * as Yup from 'yup';
-import { castArray } from 'lodash';
 import intl from 'react-intl-universal';
+import { SalesByItemsTableQuery } from '@bigcapital/sdk-ts';
 import { transformToForm } from '@/utils';
 import { useAppQueryString } from '@/hooks';
 import { salesTaxLiabilitySummaryDynamicColumns } from './dynamicColumns';
@@ -22,7 +22,7 @@ export const getDefaultSalesTaxLiablitySummaryQuery = () => ({
  */
 const parseSalesTaxLiabilitySummaryQuery = (
   locationQuery: Record<string, any>,
-) => {
+): SalesByItemsTableQuery => {
   const defaultQuery = getDefaultSalesTaxLiablitySummaryQuery();
 
   const transformed = {
@@ -33,7 +33,7 @@ const parseSalesTaxLiabilitySummaryQuery = (
     ...transformed,
 
     // Ensures the branches ids is always array.
-    branchesIds: castArray(transformed.branchesIds),
+    // branchesIds: castArray(transformed.branchesIds).map(Number),
   };
 };
 

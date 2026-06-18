@@ -49,11 +49,6 @@ export class BalanceSheetQueryDto extends FinancialSheetBranchesQueryDto {
   @IsOptional()
   toDate: string;
 
-  @ApiProperty({
-    type: NumberFormatQueryDto,
-    description: 'Number formatting options',
-    required: false,
-  })
   @ValidateNested()
   @Type(() => NumberFormatQueryDto)
   @IsOptional()

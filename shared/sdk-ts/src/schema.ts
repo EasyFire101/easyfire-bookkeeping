@@ -11991,6 +11991,35 @@ export interface components {
              */
             uncategorizedTransactionId: number;
         };
+        NumberFormatQueryDto: {
+            /**
+             * @description Number of decimal places to display
+             * @example 2
+             */
+            precision?: number;
+            /**
+             * @description Whether to divide the number by 1000
+             * @example false
+             */
+            divideOn1000?: boolean;
+            /**
+             * @description Whether to show zero values
+             * @example true
+             */
+            showZero?: boolean;
+            /**
+             * @description How to format money values
+             * @example total
+             * @enum {string}
+             */
+            formatMoney?: "total" | "always" | "none";
+            /**
+             * @description How to format negative numbers
+             * @example parentheses
+             * @enum {string}
+             */
+            negativeFormat?: "parentheses" | "mines";
+        };
         CreateBankTransactionDto: {
             /**
              * Format: date-time
@@ -12722,35 +12751,6 @@ export interface components {
              * @example sale_invoices
              */
             group: string;
-        };
-        NumberFormatQueryDto: {
-            /**
-             * @description Number of decimal places to display
-             * @example 2
-             */
-            precision?: number;
-            /**
-             * @description Whether to divide the number by 1000
-             * @example false
-             */
-            divideOn1000?: boolean;
-            /**
-             * @description Whether to show zero values
-             * @example true
-             */
-            showZero?: boolean;
-            /**
-             * @description How to format money values
-             * @example total
-             * @enum {string}
-             */
-            formatMoney?: "total" | "always" | "none";
-            /**
-             * @description How to format negative numbers
-             * @example parentheses
-             * @enum {string}
-             */
-            negativeFormat?: "parentheses" | "mines";
         };
         BalanceSheetQueryResponseDto: {
             /**
@@ -22773,16 +22773,8 @@ export interface operations {
                 pageSize?: number;
                 /** @description Bank account ID */
                 accountId: number;
-                /** @description Number of decimal places to display */
-                precision?: number;
-                /** @description Whether to divide the number by 1000 */
-                divideOn1000?: boolean;
-                /** @description Whether to show zero values */
-                showZero?: boolean;
-                /** @description How to format money values */
-                formatMoney?: "total" | "always" | "none";
-                /** @description How to format negative numbers */
-                negativeFormat?: "parentheses" | "mines";
+                /** @description Number formatting options (serialized as bracket notation, e.g. numberFormat[precision]=2) */
+                numberFormat?: components["schemas"]["NumberFormatQueryDto"];
             };
             header: {
                 /** @description Value must be 'Bearer <token>' where <token> is an API key prefixed with 'bc_' or a JWT token. */
@@ -23685,16 +23677,6 @@ export interface operations {
                 fromDate?: string;
                 /** @description End date for the balance sheet period */
                 toDate?: string;
-                /** @description Number of decimal places to display */
-                precision?: number;
-                /** @description Whether to divide the number by 1000 */
-                divideOn1000?: boolean;
-                /** @description Whether to show zero values */
-                showZero?: boolean;
-                /** @description How to format money values */
-                formatMoney?: "total" | "always" | "none";
-                /** @description How to format negative numbers */
-                negativeFormat?: "parentheses" | "mines";
                 /** @description Whether to include accounts with no transactions */
                 noneTransactions?: boolean;
                 /** @description Whether to exclude zero balance accounts */
@@ -23719,6 +23701,8 @@ export interface operations {
                 previousYearAmountChange?: boolean;
                 /** @description Whether to show percentage change from previous year */
                 previousYearPercentageChange?: boolean;
+                /** @description Number formatting options (serialized as bracket notation, e.g. numberFormat[precision]=2) */
+                numberFormat?: components["schemas"]["NumberFormatQueryDto"];
             };
             header: {
                 /** @description Value must be 'Bearer <token>' where <token> is an API key prefixed with 'bc_' or a JWT token. */
@@ -25085,20 +25069,12 @@ export interface operations {
                 toDate?: string;
                 /** @description Array of item IDs to filter the purchases report */
                 itemsIds?: number[];
-                /** @description Number of decimal places to display */
-                precision?: number;
-                /** @description Whether to divide the number by 1000 */
-                divideOn1000?: boolean;
-                /** @description Whether to show zero values */
-                showZero?: boolean;
-                /** @description How to format money values */
-                formatMoney?: "total" | "always" | "none";
-                /** @description How to format negative numbers */
-                negativeFormat?: "parentheses" | "mines";
                 /** @description Whether to exclude items with no transactions */
                 noneTransactions?: boolean;
                 /** @description Whether to include only active items */
                 onlyActive?: boolean;
+                /** @description Number formatting options (serialized as bracket notation, e.g. numberFormat[precision]=2) */
+                numberFormat?: components["schemas"]["NumberFormatQueryDto"];
             };
             header: {
                 /** @description Value must be 'Bearer <token>' where <token> is an API key prefixed with 'bc_' or a JWT token. */
@@ -25129,16 +25105,6 @@ export interface operations {
             query?: {
                 /** @description The date as of which the balance summary is calculated */
                 asDate?: string;
-                /** @description Number of decimal places to display */
-                precision?: number;
-                /** @description Whether to divide the number by 1000 */
-                divideOn1000?: boolean;
-                /** @description Whether to show zero values */
-                showZero?: boolean;
-                /** @description How to format money values */
-                formatMoney?: "total" | "always" | "none";
-                /** @description How to format negative numbers */
-                negativeFormat?: "parentheses" | "mines";
                 /** @description Whether to show the percentage column in the summary */
                 percentageColumn?: boolean;
                 /** @description Whether to exclude contacts with no transactions */
@@ -25147,6 +25113,8 @@ export interface operations {
                 noneZero?: boolean;
                 /** @description Array of customer IDs to filter the summary */
                 customersIds?: number[];
+                /** @description Number formatting options (serialized as bracket notation, e.g. numberFormat[precision]=2) */
+                numberFormat?: components["schemas"]["NumberFormatQueryDto"];
             };
             header: {
                 /** @description Value must be 'Bearer <token>' where <token> is an API key prefixed with 'bc_' or a JWT token. */
@@ -25177,16 +25145,6 @@ export interface operations {
             query?: {
                 /** @description The date as of which the balance summary is calculated */
                 asDate?: string;
-                /** @description Number of decimal places to display */
-                precision?: number;
-                /** @description Whether to divide the number by 1000 */
-                divideOn1000?: boolean;
-                /** @description Whether to show zero values */
-                showZero?: boolean;
-                /** @description How to format money values */
-                formatMoney?: "total" | "always" | "none";
-                /** @description How to format negative numbers */
-                negativeFormat?: "parentheses" | "mines";
                 /** @description Whether to show the percentage column in the summary */
                 percentageColumn?: boolean;
                 /** @description Whether to exclude contacts with no transactions */
@@ -25195,6 +25153,8 @@ export interface operations {
                 noneZero?: boolean;
                 /** @description Array of vendor IDs to filter the summary */
                 vendorsIds?: number[];
+                /** @description Number formatting options (serialized as bracket notation, e.g. numberFormat[precision]=2) */
+                numberFormat?: components["schemas"]["NumberFormatQueryDto"];
             };
             header: {
                 /** @description Value must be 'Bearer <token>' where <token> is an API key prefixed with 'bc_' or a JWT token. */
@@ -25227,22 +25187,14 @@ export interface operations {
                 fromDate?: string;
                 /** @description End date for the sales by items report */
                 toDate?: string;
-                /** @description Number of decimal places to display */
-                precision?: number;
-                /** @description Whether to divide the number by 1000 */
-                divideOn1000?: boolean;
-                /** @description Whether to show zero values */
-                showZero?: boolean;
-                /** @description How to format money values */
-                formatMoney?: "total" | "always" | "none";
-                /** @description How to format negative numbers */
-                negativeFormat?: "parentheses" | "mines";
                 /** @description Whether to exclude items with no transactions */
                 noneTransactions?: boolean;
                 /** @description Whether to include only active items */
                 onlyActive?: boolean;
                 /** @description Array of item IDs to filter the sales report */
                 itemsIds?: number[];
+                /** @description Number formatting options (serialized as bracket notation, e.g. numberFormat[precision]=2) */
+                numberFormat?: components["schemas"]["NumberFormatQueryDto"];
             };
             header: {
                 /** @description Value must be 'Bearer <token>' where <token> is an API key prefixed with 'bc_' or a JWT token. */
@@ -25275,20 +25227,12 @@ export interface operations {
                 branchesIds?: number[];
                 /** @description Accounting basis for the report (e.g., cash, accrual) */
                 basis?: string;
-                /** @description Number of decimal places to display */
-                precision?: number;
-                /** @description Whether to divide the number by 1000 */
-                divideOn1000?: boolean;
-                /** @description Whether to show zero values */
-                showZero?: boolean;
-                /** @description How to format money values */
-                formatMoney?: "total" | "always" | "none";
-                /** @description How to format negative numbers */
-                negativeFormat?: "parentheses" | "mines";
                 /** @description Whether to exclude transactions from the report */
                 noneTransactions?: boolean;
                 /** @description Array of account IDs to filter the report */
                 accountsIds?: number[];
+                /** @description Number formatting options (serialized as bracket notation, e.g. numberFormat[precision]=2) */
+                numberFormat?: components["schemas"]["NumberFormatQueryDto"];
             };
             header: {
                 /** @description Value must be 'Bearer <token>' where <token> is an API key prefixed with 'bc_' or a JWT token. */
@@ -26490,16 +26434,6 @@ export interface operations {
                 fromDate?: string;
                 /** @description End date for the trial balance sheet */
                 toDate?: string;
-                /** @description Number of decimal places to display */
-                precision?: number;
-                /** @description Whether to divide the number by 1000 */
-                divideOn1000?: boolean;
-                /** @description Whether to show zero values */
-                showZero?: boolean;
-                /** @description How to format money values */
-                formatMoney?: "total" | "always" | "none";
-                /** @description How to format negative numbers */
-                negativeFormat?: "parentheses" | "mines";
                 /** @description Accounting basis for the report */
                 basis?: "cash" | "accrual";
                 /** @description Filter out zero balance accounts */
@@ -26510,6 +26444,8 @@ export interface operations {
                 onlyActive?: boolean;
                 /** @description Filter by specific account IDs */
                 accountIds?: number[];
+                /** @description Number formatting options (serialized as bracket notation, e.g. numberFormat[precision]=2) */
+                numberFormat?: components["schemas"]["NumberFormatQueryDto"];
             };
             header: {
                 /** @description Value must be 'Bearer <token>' where <token> is an API key prefixed with 'bc_' or a JWT token. */
@@ -27127,22 +27063,14 @@ export interface operations {
     TransactionsByVendorController_transactionsByVendor: {
         parameters: {
             query?: {
-                /** @description Number of decimal places to display */
-                precision?: number;
-                /** @description Whether to divide the number by 1000 */
-                divideOn1000?: boolean;
-                /** @description Whether to show zero values */
-                showZero?: boolean;
-                /** @description How to format money values */
-                formatMoney?: "total" | "always" | "none";
-                /** @description How to format negative numbers */
-                negativeFormat?: "parentheses" | "mines";
                 /** @description Whether to exclude transactions */
                 noneTransactions?: boolean;
                 /** @description Whether to exclude zero values */
                 noneZero?: boolean;
                 /** @description Array of vendor IDs to include */
                 vendorsIds?: string[];
+                /** @description Number formatting options (serialized as bracket notation, e.g. numberFormat[precision]=2) */
+                numberFormat?: components["schemas"]["NumberFormatQueryDto"];
             };
             header: {
                 /** @description Value must be 'Bearer <token>' where <token> is an API key prefixed with 'bc_' or a JWT token. */
@@ -27171,20 +27099,12 @@ export interface operations {
     TransactionsByCustomerController_transactionsByCustomer: {
         parameters: {
             query?: {
-                /** @description Number of decimal places to display */
-                precision?: number;
-                /** @description Whether to divide the number by 1000 */
-                divideOn1000?: boolean;
-                /** @description Whether to show zero values */
-                showZero?: boolean;
-                /** @description How to format money values */
-                formatMoney?: "total" | "always" | "none";
-                /** @description How to format negative numbers */
-                negativeFormat?: "parentheses" | "mines";
                 /** @description Whether to exclude transactions */
                 noneTransactions?: boolean;
                 /** @description Whether to exclude zero values */
                 noneZero?: boolean;
+                /** @description Number formatting options (serialized as bracket notation, e.g. numberFormat[precision]=2) */
+                numberFormat?: components["schemas"]["NumberFormatQueryDto"];
             };
             header: {
                 /** @description Value must be 'Bearer <token>' where <token> is an API key prefixed with 'bc_' or a JWT token. */
@@ -27217,16 +27137,8 @@ export interface operations {
                 referenceType: string;
                 /** @description The ID of the reference */
                 referenceId: number;
-                /** @description Number of decimal places to display */
-                precision?: number;
-                /** @description Whether to divide the number by 1000 */
-                divideOn1000?: boolean;
-                /** @description Whether to show zero values */
-                showZero?: boolean;
-                /** @description How to format money values */
-                formatMoney?: "total" | "always" | "none";
-                /** @description How to format negative numbers */
-                negativeFormat?: "parentheses" | "mines";
+                /** @description Number formatting options (serialized as bracket notation, e.g. numberFormat[precision]=2) */
+                numberFormat?: components["schemas"]["NumberFormatQueryDto"];
             };
             header?: never;
             path?: never;
@@ -27252,20 +27164,12 @@ export interface operations {
                 agingDaysBefore?: number;
                 /** @description Number of aging periods to calculate */
                 agingPeriods?: number;
-                /** @description Number of decimal places to display */
-                precision?: number;
-                /** @description Whether to divide the number by 1000 */
-                divideOn1000?: boolean;
-                /** @description Whether to show zero values */
-                showZero?: boolean;
-                /** @description How to format money values */
-                formatMoney?: "total" | "always" | "none";
-                /** @description How to format negative numbers */
-                negativeFormat?: "parentheses" | "mines";
                 /** @description Whether to exclude zero values */
                 noneZero?: boolean;
                 /** @description Array of customer IDs to include */
                 customersIds?: string[];
+                /** @description Number formatting options (serialized as bracket notation, e.g. numberFormat[precision]=2) */
+                numberFormat?: components["schemas"]["NumberFormatQueryDto"];
             };
             header: {
                 /** @description Value must be 'Bearer <token>' where <token> is an API key prefixed with 'bc_' or a JWT token. */
@@ -27566,20 +27470,12 @@ export interface operations {
                 agingDaysBefore?: number;
                 /** @description Number of aging periods to calculate */
                 agingPeriods?: number;
-                /** @description Number of decimal places to display */
-                precision?: number;
-                /** @description Whether to divide the number by 1000 */
-                divideOn1000?: boolean;
-                /** @description Whether to show zero values */
-                showZero?: boolean;
-                /** @description How to format money values */
-                formatMoney?: "total" | "always" | "none";
-                /** @description How to format negative numbers */
-                negativeFormat?: "parentheses" | "mines";
                 /** @description Whether to exclude zero values */
                 noneZero?: boolean;
                 /** @description Array of vendor IDs to include */
                 vendorsIds?: string[];
+                /** @description Number formatting options (serialized as bracket notation, e.g. numberFormat[precision]=2) */
+                numberFormat?: components["schemas"]["NumberFormatQueryDto"];
             };
             header: {
                 /** @description Value must be 'Bearer <token>' where <token> is an API key prefixed with 'bc_' or a JWT token. */
@@ -27788,16 +27684,6 @@ export interface operations {
     InventoryItemDetailsController_inventoryItemDetails: {
         parameters: {
             query?: {
-                /** @description Number of decimal places to display */
-                precision?: number;
-                /** @description Whether to divide the number by 1000 */
-                divideOn1000?: boolean;
-                /** @description Whether to show zero values */
-                showZero?: boolean;
-                /** @description How to format money values */
-                formatMoney?: "total" | "always" | "none";
-                /** @description How to format negative numbers */
-                negativeFormat?: "parentheses" | "mines";
                 /** @description Whether to exclude transactions */
                 noneTransactions?: boolean;
                 /** @description Items IDs for the inventory item details */
@@ -27806,6 +27692,8 @@ export interface operations {
                 warehousesIds?: string[];
                 /** @description Branches IDs for the inventory item details */
                 branchesIds?: string[];
+                /** @description Number formatting options (serialized as bracket notation, e.g. numberFormat[precision]=2) */
+                numberFormat?: components["schemas"]["NumberFormatQueryDto"];
             };
             header: {
                 /** @description Value must be 'Bearer <token>' where <token> is an API key prefixed with 'bc_' or a JWT token. */
@@ -27836,16 +27724,6 @@ export interface operations {
             query?: {
                 /** @description The date for which the inventory valuation is requested */
                 asDate?: string;
-                /** @description Number of decimal places to display */
-                precision?: number;
-                /** @description Whether to divide the number by 1000 */
-                divideOn1000?: boolean;
-                /** @description Whether to show zero values */
-                showZero?: boolean;
-                /** @description How to format money values */
-                formatMoney?: "total" | "always" | "none";
-                /** @description How to format negative numbers */
-                negativeFormat?: "parentheses" | "mines";
                 /** @description Whether to exclude transactions */
                 noneTransactions?: boolean;
                 /** @description Whether to exclude zero values */
@@ -27858,6 +27736,8 @@ export interface operations {
                 warehousesIds?: number[];
                 /** @description Array of branch IDs to filter */
                 branchesIds?: number[];
+                /** @description Number formatting options (serialized as bracket notation, e.g. numberFormat[precision]=2) */
+                numberFormat?: components["schemas"]["NumberFormatQueryDto"];
             };
             header: {
                 /** @description Value must be 'Bearer <token>' where <token> is an API key prefixed with 'bc_' or a JWT token. */
@@ -27892,16 +27772,8 @@ export interface operations {
                 toDate: string;
                 /** @description Accounting basis for the summary */
                 basis: "cash" | "accrual";
-                /** @description Number of decimal places to display */
-                precision?: number;
-                /** @description Whether to divide the number by 1000 */
-                divideOn1000?: boolean;
-                /** @description Whether to show zero values */
-                showZero?: boolean;
-                /** @description How to format money values */
-                formatMoney?: "total" | "always" | "none";
-                /** @description How to format negative numbers */
-                negativeFormat?: "parentheses" | "mines";
+                /** @description Number formatting options (serialized as bracket notation, e.g. numberFormat[precision]=2) */
+                numberFormat?: components["schemas"]["NumberFormatQueryDto"];
             };
             header: {
                 /** @description Value must be 'Bearer <token>' where <token> is an API key prefixed with 'bc_' or a JWT token. */
@@ -27932,16 +27804,6 @@ export interface operations {
             query?: {
                 /** @description Filter out branches (if multiple branches feature is enabled) */
                 branchesIds?: number[];
-                /** @description Number of decimal places to display */
-                precision?: number;
-                /** @description Whether to divide the number by 1000 */
-                divideOn1000?: boolean;
-                /** @description Whether to show zero values */
-                showZero?: boolean;
-                /** @description How to format money values */
-                formatMoney?: "total" | "always" | "none";
-                /** @description How to format negative numbers */
-                negativeFormat?: "parentheses" | "mines";
                 /** @description Type of transaction to filter */
                 transactionType?: string;
                 /** @description ID of the transaction to filter */
@@ -27950,6 +27812,8 @@ export interface operations {
                 fromRange?: number;
                 /** @description End range for filtering */
                 toRange?: number;
+                /** @description Number formatting options (serialized as bracket notation, e.g. numberFormat[precision]=2) */
+                numberFormat?: components["schemas"]["NumberFormatQueryDto"];
             };
             header: {
                 /** @description Value must be 'Bearer <token>' where <token> is an API key prefixed with 'bc_' or a JWT token. */
@@ -28264,16 +28128,6 @@ export interface operations {
                 branchesIds?: number[];
                 /** @description The basis for the profit and loss sheet */
                 basis: string;
-                /** @description Number of decimal places to display */
-                precision?: number;
-                /** @description Whether to divide the number by 1000 */
-                divideOn1000?: boolean;
-                /** @description Whether to show zero values */
-                showZero?: boolean;
-                /** @description How to format money values */
-                formatMoney?: "total" | "always" | "none";
-                /** @description How to format negative numbers */
-                negativeFormat?: "parentheses" | "mines";
                 /** @description Whether to exclude zero values */
                 noneZero?: boolean;
                 /** @description Whether to exclude transactions */
@@ -28304,6 +28158,8 @@ export interface operations {
                 previousYearAmountChange?: boolean;
                 /** @description Whether to show previous year percentage change */
                 previousYearPercentageChange?: boolean;
+                /** @description Number formatting options (serialized as bracket notation, e.g. numberFormat[precision]=2) */
+                numberFormat?: components["schemas"]["NumberFormatQueryDto"];
             };
             header: {
                 /** @description Value must be 'Bearer <token>' where <token> is an API key prefixed with 'bc_' or a JWT token. */
@@ -28588,18 +28444,10 @@ export interface operations {
                 noneZero?: boolean;
                 /** @description Filter out transactions */
                 noneTransactions?: boolean;
-                /** @description Number of decimal places to display */
-                precision?: number;
-                /** @description Whether to divide the number by 1000 */
-                divideOn1000?: boolean;
-                /** @description Whether to show zero values */
-                showZero?: boolean;
-                /** @description How to format money values */
-                formatMoney?: "total" | "always" | "none";
-                /** @description How to format negative numbers */
-                negativeFormat?: "parentheses" | "mines";
                 /** @description Basis for the cash flow statement */
                 basis?: string;
+                /** @description Number formatting options (serialized as bracket notation, e.g. numberFormat[precision]=2) */
+                numberFormat?: components["schemas"]["NumberFormatQueryDto"];
             };
             header: {
                 /** @description Value must be 'Bearer <token>' where <token> is an API key prefixed with 'bc_' or a JWT token. */

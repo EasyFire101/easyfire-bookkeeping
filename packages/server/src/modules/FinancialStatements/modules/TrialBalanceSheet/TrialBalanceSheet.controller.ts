@@ -3,6 +3,7 @@ import {
   ApiExtraModels,
   ApiOperation,
   ApiProduces,
+  ApiQuery,
   ApiResponse,
   ApiTags,
   getSchemaPath,
@@ -11,6 +12,7 @@ import { castArray } from 'lodash';
 import { Response } from 'express';
 import { AcceptType } from '@/constants/accept-type';
 import { TrialBalanceSheetApplication } from './TrialBalanceSheetApplication';
+import { NumberFormatQueryDto } from '@/modules/BankingTransactions/dtos/NumberFormatQuery.dto';
 import { TrialBalanceSheetQueryDto } from './TrialBalanceSheetQuery.dto';
 import { TrialBalanceSheetResponseExample } from './TrialBalanceSheet.swagger';
 import {
@@ -22,7 +24,11 @@ import { ApiCommonHeaders } from '@/common/decorators/ApiCommonHeaders';
 @Controller('reports/trial-balance-sheet')
 @ApiTags('Reports')
 @ApiCommonHeaders()
-@ApiExtraModels(TrialBalanceSheetResponseDto, TrialBalanceSheetTableResponseDto)
+@ApiExtraModels(
+  TrialBalanceSheetResponseDto,
+  TrialBalanceSheetTableResponseDto,
+  NumberFormatQueryDto,
+)
 export class TrialBalanceSheetController {
   constructor(
     private readonly trialBalanceSheetApp: TrialBalanceSheetApplication,
@@ -30,6 +36,13 @@ export class TrialBalanceSheetController {
 
   @Get()
   @ApiOperation({ summary: 'Get trial balance sheet' })
+  @ApiQuery({
+    name: 'numberFormat',
+    required: false,
+    description:
+      'Number formatting options (serialized as bracket notation, e.g. numberFormat[precision]=2)',
+    schema: { $ref: getSchemaPath(NumberFormatQueryDto) },
+  })
   @ApiResponse({
     status: 200,
     description: 'Trial balance sheet',

@@ -28,10 +28,6 @@ export class JournalSheetQueryDto extends FinancialSheetBranchesQueryDto {
   @IsOptional()
   toDate: Date | string;
 
-  @ApiPropertyOptional({
-    type: NumberFormatQueryDto,
-    description: 'Number formatting options',
-  })
   @ValidateNested()
   @Type(() => NumberFormatQueryDto)
   @IsOptional()
