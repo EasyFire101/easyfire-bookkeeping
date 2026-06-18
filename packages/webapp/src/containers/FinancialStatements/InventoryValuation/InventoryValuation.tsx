@@ -61,7 +61,7 @@ function InventoryValuationInner({
   return (
     <InventoryValuationProvider query={query}>
       <InventoryValuationActionsBar
-        numberFormat={query.numberFormat as Record<string, unknown>}
+        numberFormat={query.numberFormat}
         onNumberFormatSubmit={handleNumberFormatSubmit}
       />
       <InventoryValuationLoadingBar />

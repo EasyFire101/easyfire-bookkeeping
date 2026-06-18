@@ -1,18 +1,15 @@
-import React, { useEffect, useCallback } from 'react';
+import { useEffect, useCallback } from 'react';
 import moment from 'moment';
-
 import { SalesByItemsBody } from './SalesByItemsBody';
 import { SalesByItemProvider } from './SalesByItemProvider';
 import { SalesByItemsLoadingBar } from './components';
 import { FinancialStatement, DashboardPageContent } from '@/components';
 import { SalesByItemsActionsBar } from './SalesByItemsActionsBar';
 import { SalesByItemsHeader } from './SalesByItemsHeader';
-
 import {
   withSalesByItemsActions,
   WithSalesByItemsActionsProps,
 } from './withSalesByItemsActions';
-
 import { useSalesByItemsQuery } from './utils';
 import { compose } from '@/utils';
 import { SalesByItemsDialogs } from './SalesByitemsDialogs';
@@ -59,7 +56,7 @@ function SalesByItemsInner({
   return (
     <SalesByItemProvider query={query}>
       <SalesByItemsActionsBar
-        numberFormat={query.numberFormat as Record<string, unknown>}
+        numberFormat={query.numberFormat}
         onNumberFormatSubmit={handleNumberFormatSubmit}
       />
       <SalesByItemsLoadingBar />

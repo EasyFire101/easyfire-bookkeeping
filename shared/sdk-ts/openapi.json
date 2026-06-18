@@ -25465,6 +25465,11 @@
       "WarehouseResponseDto": {
         "type": "object",
         "properties": {
+          "id": {
+            "type": "number",
+            "description": "The unique identifier of the warehouse",
+            "example": 1
+          },
           "name": {
             "type": "string",
             "description": "The name of the warehouse",
@@ -25497,6 +25502,7 @@
           }
         },
         "required": [
+          "id",
           "name",
           "code",
           "city",
@@ -29104,6 +29110,11 @@
       "CustomerResponseDto": {
         "type": "object",
         "properties": {
+          "id": {
+            "type": "number",
+            "example": 1,
+            "description": "Customer id."
+          },
           "balance": {
             "type": "number",
             "example": 1500
@@ -29257,6 +29268,7 @@
           }
         },
         "required": [
+          "id",
           "balance",
           "currencyCode",
           "openingBalance",
@@ -30226,6 +30238,11 @@
       "SaleEstimateResponseDto": {
         "type": "object",
         "properties": {
+          "id": {
+            "type": "number",
+            "description": "Unique identifier of the sale estimate",
+            "example": 1
+          },
           "customerId": {
             "type": "number",
             "description": "Unique identifier of the customer",
@@ -30427,6 +30444,7 @@
           }
         },
         "required": [
+          "id",
           "customerId",
           "estimateDate",
           "expirationDate",
