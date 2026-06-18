@@ -5,6 +5,12 @@ import { AttachmentLinkDto } from '@/modules/Attachments/dtos/Attachment.dto';
 
 export class SaleEstimateResponseDto {
   // Model attributes
+  @ApiProperty({
+    description: 'Unique identifier of the sale estimate',
+    example: 1,
+  })
+  id: number;
+
   @ApiProperty({ description: 'Unique identifier of the customer', example: 1 })
   customerId: number;
 

@@ -5948,6 +5948,11 @@ export interface components {
         };
         WarehouseResponseDto: {
             /**
+             * @description The unique identifier of the warehouse
+             * @example 1
+             */
+            id: number;
+            /**
              * @description The name of the warehouse
              * @example Main Warehouse
              */
@@ -8465,6 +8470,11 @@ export interface components {
             nonDeletableIds: number[];
         };
         CustomerResponseDto: {
+            /**
+             * @description Customer id.
+             * @example 1
+             */
+            id: number;
             /** @example 1500 */
             balance: number;
             /** @example USD */
@@ -9083,6 +9093,11 @@ export interface components {
             skipUndeletable: boolean;
         };
         SaleEstimateResponseDto: {
+            /**
+             * @description Unique identifier of the sale estimate
+             * @example 1
+             */
+            id: number;
             /**
              * @description Unique identifier of the customer
              * @example 1

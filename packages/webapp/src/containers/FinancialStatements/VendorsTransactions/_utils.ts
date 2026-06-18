@@ -4,6 +4,7 @@ import moment from 'moment';
 import { useMemo } from 'react';
 import { transformToForm } from '@/utils';
 import { useAppQueryString } from '@/hooks';
+import { TransactionsByVendorsTableQuery } from '@bigcapital/sdk-ts';
 
 /**
  * The validation schema of vendors transactions.
@@ -30,7 +31,9 @@ export const getVendorsTransactionsDefaultQuery = () => ({
 /**
  * Parses the query of vendors transactions.
  */
-const parseVendorsTransactionsQuery = (query: Record<string, unknown>) => {
+const parseVendorsTransactionsQuery = (
+  query: Record<string, unknown>,
+): TransactionsByVendorsTableQuery => {
   const defaultQuery = getVendorsTransactionsDefaultQuery();
   const transformed = {
     ...defaultQuery,

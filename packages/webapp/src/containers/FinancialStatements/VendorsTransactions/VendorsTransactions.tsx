@@ -1,19 +1,15 @@
 import React, { useEffect } from 'react';
 import moment from 'moment';
-
 import { FinancialStatement, DashboardPageContent } from '@/components';
 import { VendorsTransactionsBody } from './VendorsTransactionsBody';
 import { VendorsTransactionsProvider } from './VendorsTransactionsProvider';
 import { VendorsTransactionsLoadingBar } from './components';
-
 import { VendorsTransactionsHeader } from './VendorsTransactionsHeader';
 import { VendorsTransactionsActionsBar } from './VendorsTransactionsActionsBar';
-
 import {
   withVendorsTransactionsActions,
   WithVendorsTransactionsActionsProps,
 } from './withVendorsTransactionsActions';
-
 import { compose } from '@/utils';
 import { useVendorsTransactionsQuery } from './_utils';
 import { VendorTransactionsDialogs } from './VendorTransactionsDialogs';
@@ -40,7 +36,6 @@ function VendorsTransactionsInner({
     };
     setFilter({ ..._filter });
   };
-
   // Handle number format submit.
   const handleNumberFormatSubmit = (values: Record<string, unknown>) => {
     setFilter({
@@ -59,7 +54,7 @@ function VendorsTransactionsInner({
   return (
     <VendorsTransactionsProvider filter={filter}>
       <VendorsTransactionsActionsBar
-        numberFormat={filter.numberFormat as Record<string, unknown>}
+        numberFormat={filter.numberFormat}
         onNumberFormatSubmit={handleNumberFormatSubmit}
       />
       <VendorsTransactionsLoadingBar />

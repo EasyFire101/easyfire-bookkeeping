@@ -57,7 +57,7 @@ function PurchasesByItemsInner({
   return (
     <PurchasesByItemsProvider query={query}>
       <PurchasesByItemsActionsBar
-        numberFormat={query.numberFormat as Record<string, unknown>}
+        numberFormat={query.numberFormat}
         onNumberFormatSubmit={handleNumberFormatSubmit}
       />
       <PurchasesByItemsLoadingBar />

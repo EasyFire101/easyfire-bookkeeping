@@ -56,7 +56,7 @@ export function ProfitLossSheetAlerts() {
     return null;
   }
   // Can't continue if the cost compute job is not running.
-  if (!profitLossSheet.meta.isCostComputeRunning) {
+  if (!profitLossSheet?.meta?.isCostComputeRunning) {
     return null;
   }
   return (

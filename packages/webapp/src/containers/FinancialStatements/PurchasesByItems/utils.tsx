@@ -2,6 +2,7 @@ import React from 'react';
 import moment from 'moment';
 import * as Yup from 'yup';
 import intl from 'react-intl-universal';
+import { PurchasesByItemsTableQuery } from '@bigcapital/sdk-ts';
 import { useAppQueryString } from '@/hooks';
 import { transformToForm } from '@/utils';
 import { castArray } from 'lodash';
@@ -13,7 +14,7 @@ export const getDefaultPurchasesByItemsQuery = () => ({
   fromDate: moment().startOf('month').format('YYYY-MM-DD'),
   toDate: moment().format('YYYY-MM-DD'),
   filterByOption: 'with-transactions',
-  itemsIds: [] as string[],
+  itemsIds: [] as number[],
 });
 
 /**
@@ -32,16 +33,17 @@ export const getPurchasesByItemsQuerySchema = () => {
 /**
  * Parses the purchases by items query.
  */
-const parsePurchasesByItemsQuery = (locationQuery: Record<string, unknown>) => {
+const parsePurchasesByItemsQuery = (
+  locationQuery: Record<string, unknown>,
+): PurchasesByItemsTableQuery => {
   const defaultQuery = getDefaultPurchasesByItemsQuery();
-
   const transformed = {
     ...defaultQuery,
     ...transformToForm(locationQuery, defaultQuery),
   };
   return {
     ...transformed,
-    itemsIds: castArray(transformed.itemsIds),
+    itemsIds: castArray(transformed.itemsIds).map(Number),
   };
 };
 
