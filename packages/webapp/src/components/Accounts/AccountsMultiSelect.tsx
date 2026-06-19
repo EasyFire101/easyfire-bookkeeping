@@ -9,7 +9,9 @@ import { useDialogActions } from '@/hooks/state/dashboard';
 import { SelectOptionProps } from '@blueprintjs-formik/select';
 import { Account } from '@bigcapital/sdk-ts';
 
-export interface AccountSelectModel extends Partial<Account>, SelectOptionProps {}
+export interface AccountSelectModel
+  extends Partial<Account>,
+    SelectOptionProps {}
 type MultiSelectProps = React.ComponentProps<typeof FMultiSelect>;
 
 interface AccountsMultiSelectProps extends Omit<MultiSelectProps, 'items'> {

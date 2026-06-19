@@ -5,7 +5,9 @@ import { FormikSelect } from '@blueprintjs-formik/select';
 import styled from 'styled-components';
 import clsx from 'classnames';
 
-export function FSelect<T extends SelectOptionProps = SelectOptionProps>({ ...props }) {
+export function FSelect<T extends SelectOptionProps = SelectOptionProps>({
+  ...props
+}) {
   const input = ({ activeItem, text, label, value }) => (
     <SelectButton
       text={text || props.placeholder || 'Select an item ...'}

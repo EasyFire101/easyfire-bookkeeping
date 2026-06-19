@@ -3,7 +3,12 @@ import intl from 'react-intl-universal';
 import { MenuItem } from '@blueprintjs/core';
 import { ItemRenderer, ItemPredicate } from '@blueprintjs/select';
 import { DialogsName } from '@/constants/dialogs';
-import { AccountSelectModel, FSuggest, Suggest, FormattedMessage as T } from '@/components';
+import {
+  AccountSelectModel,
+  FSuggest,
+  Suggest,
+  FormattedMessage as T,
+} from '@/components';
 import { withDialogActions } from '@/containers/Dialog/withDialogActions';
 import { usePreprocessingAccounts } from './_hooks';
 
@@ -28,7 +33,9 @@ const createNewItemRenderer = (
 };
 
 // Create new item from the given query string.
-const createNewItemFromQuery = (name: string): Partial<AccountSelectModel> => ({ name });
+const createNewItemFromQuery = (name: string): Partial<AccountSelectModel> => ({
+  name,
+});
 // Filters accounts items.
 const filterAccountsPredicater: AccountItemPredicate = (
   query: string,

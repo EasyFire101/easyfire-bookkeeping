@@ -2,7 +2,10 @@ import { ApiProperty } from '@nestjs/swagger';
 import { AddressItem } from '@/modules/MailNotification/MailNotification.types';
 
 export class PaymentReceiveMailAddressItemDto implements AddressItem {
-  @ApiProperty({ description: 'The email address', example: 'john@example.com' })
+  @ApiProperty({
+    description: 'The email address',
+    example: 'john@example.com',
+  })
   mail: string;
 
   @ApiProperty({
@@ -49,7 +52,10 @@ export class PaymentReceiveMailOptsDto {
   })
   bcc?: Array<string>;
 
-  @ApiProperty({ description: 'The email subject', example: 'Payment Received' })
+  @ApiProperty({
+    description: 'The email subject',
+    example: 'Payment Received',
+  })
   subject: string;
 
   @ApiProperty({

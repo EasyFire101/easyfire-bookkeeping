@@ -38,7 +38,9 @@ function AccountUncategorizedTransactionsBootRoot({
   });
   // Memorized the cashflow account transactions.
   const uncategorizedTransactions = useFlattenInfinityPages(
-    isUncategorizedTransactionsSuccess ? uncategorizedTransactionsPage : undefined,
+    isUncategorizedTransactionsSuccess
+      ? uncategorizedTransactionsPage
+      : undefined,
   );
   // Handle the observer ineraction.
   const handleObserverInteract = React.useCallback(() => {

@@ -29,7 +29,7 @@ function GLHeaderGeneralPaneContent() {
   if (!accounts) {
     return null;
   }
-  
+
   return (
     <React.Fragment>
       <FinancialStatementDateRange />

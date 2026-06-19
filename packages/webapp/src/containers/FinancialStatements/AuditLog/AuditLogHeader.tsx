@@ -170,7 +170,9 @@ export function AuditLogHeader({
                       itemPredicate={auditLogSelectItemPredicate}
                       placeholder={'All'}
                       popoverProps={{ minimal: true }}
-                      tagInputProps={{ inputProps: { disabled: isFilterOptionsLoading } }}
+                      tagInputProps={{
+                        inputProps: { disabled: isFilterOptionsLoading },
+                      }}
                       fill
                       resetOnSelect
                       fastField
@@ -187,7 +189,9 @@ export function AuditLogHeader({
                       itemPredicate={auditLogSelectItemPredicate}
                       placeholder={'All'}
                       popoverProps={{ minimal: true }}
-                      tagInputProps={{ inputProps: { disabled: isFilterOptionsLoading } }}
+                      tagInputProps={{
+                        inputProps: { disabled: isFilterOptionsLoading },
+                      }}
                       fill
                       resetOnSelect
                       fastField
