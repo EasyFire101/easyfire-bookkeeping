@@ -1,13 +1,8 @@
 import React, { createContext, useCallback, useContext, useMemo } from 'react';
-import { flatten, map } from 'lodash';
-import type { InfiniteData } from '@tanstack/react-query';
 import type { AuditLogsResponse } from '@bigcapital/sdk-ts';
 import { useAuditLogsInfinityQuery } from '@/hooks/query';
+import { useFlattenInfinityPages } from '@/hooks/utils';
 import { IntersectionObserver } from '@/components';
-
-function flattenInfinityPagesData(data: InfiniteData<AuditLogsResponse>) {
-  return flatten(map(data.pages, (page) => page.data));
-}
 
 interface AuditLogQuery {
   subject?: string | string[];
@@ -81,10 +76,10 @@ function AuditLogProvider({ query, children }: AuditLogProviderProps) {
     refetch,
   } = useAuditLogsInfinityQuery(httpQuery);
 
-  const auditLogs = useMemo(
-    () => (auditLogsPages ? flattenInfinityPagesData(auditLogsPages) : []),
-    [auditLogsPages],
-  );
+  const auditLogs = useFlattenInfinityPages<
+    AuditLogsResponse,
+    Record<string, any>
+  >(auditLogsPages, (page) => page.data);
 
   const handleObserverInteract = useCallback(() => {
     if (!isFetching && hasNextPage) {

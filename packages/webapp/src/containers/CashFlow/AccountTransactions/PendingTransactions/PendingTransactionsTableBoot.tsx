@@ -1,15 +1,11 @@
 // @ts-nocheck
 import React from 'react';
-import { flatten, map } from 'lodash';
 import { IntersectionObserver } from '@/components';
 import { useAccountTransactionsContext } from '../AccountTransactionsProvider';
 import { usePendingBankTransactionsInfinity } from '@/hooks/query/banking';
+import { useFlattenInfinityPages } from '@/hooks/utils';
 
 const PendingTransactionsContext = React.createContext();
-
-function flattenInfinityPagesData(data) {
-  return flatten(map(data.pages, (page) => page.data));
-}
 
 /**
  * Account pending transctions provider.
@@ -31,12 +27,8 @@ function PendingTransactionsBoot({ children }) {
     page_size: 50,
   });
   // Memorized the cashflow account transactions.
-  const pendingTransactions = React.useMemo(
-    () =>
-      isPendingTransactionsSuccess
-        ? flattenInfinityPagesData(pendingTransactionsPage)
-        : [],
-    [pendingTransactionsPage, isPendingTransactionsSuccess],
+  const pendingTransactions = useFlattenInfinityPages(
+    isPendingTransactionsSuccess ? pendingTransactionsPage : undefined,
   );
   // Handle the observer ineraction.
   const handleObserverInteract = React.useCallback(() => {

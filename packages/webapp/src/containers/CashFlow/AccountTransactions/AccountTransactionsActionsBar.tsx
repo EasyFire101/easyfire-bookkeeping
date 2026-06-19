@@ -36,7 +36,6 @@ import { useRefreshCashflowTransactions } from '@/hooks/query';
 import { useAccountTransactionsContext } from './AccountTransactionsProvider';
 import { useMediaQuery } from '@/hooks/useMediaQuery';
 import { useAppShellContext } from '@/components/AppShell/AppContentShell/AppContentShellProvider';
-
 import { withDialogActions } from '@/containers/Dialog/withDialogActions';
 import { withSettings } from '@/containers/Settings/withSettings';
 import { withSettingsActions } from '@/containers/Settings/withSettingsActions';
@@ -48,7 +47,6 @@ import {
   useExcludeUncategorizedTransactions,
   useUnexcludeUncategorizedTransactions,
 } from '@/hooks/query/banking';
-
 import { DialogsName } from '@/constants/dialogs';
 import { compose } from '@/utils';
 

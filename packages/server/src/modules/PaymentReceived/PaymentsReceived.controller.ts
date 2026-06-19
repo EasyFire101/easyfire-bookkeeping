@@ -1,5 +1,6 @@
 import { Response } from 'express';
 import {
+  ApiBody,
   ApiExtraModels,
   ApiOperation,
   ApiResponse,
@@ -34,6 +35,9 @@ import { PaginatedResponseDto } from '@/common/dtos/PaginatedResults.dto';
 import { PaymentReceivedStateResponseDto } from './dtos/PaymentReceivedStateResponse.dto';
 import { PaymentReceivedHtmlContentResponseDto } from './dtos/PaymentReceivedHtmlResponse.dto';
 import { PaymentReceiveEditPageResponseDto } from './dtos/PaymentReceiveEditPageResponse.dto';
+import { PaymentReceiveMailOptsDto } from './dtos/PaymentReceiveMailOpts.dto';
+import { PaymentReceiveMailStateResponseDto } from './dtos/PaymentReceiveMailStateResponse.dto';
+import { PaymentReceiveMailResponseDto } from './dtos/PaymentReceiveMailResponse.dto';
 import { ApiCommonHeaders } from '@/common/decorators/ApiCommonHeaders';
 import {
   BulkDeleteDto,
@@ -52,6 +56,9 @@ import { PaymentReceiveAction } from './types/PaymentReceived.types';
 @ApiExtraModels(PaymentReceivedStateResponseDto)
 @ApiExtraModels(PaymentReceivedHtmlContentResponseDto)
 @ApiExtraModels(PaymentReceiveEditPageResponseDto)
+@ApiExtraModels(PaymentReceiveMailOptsDto)
+@ApiExtraModels(PaymentReceiveMailStateResponseDto)
+@ApiExtraModels(PaymentReceiveMailResponseDto)
 @ApiExtraModels(ValidateBulkDeleteResponseDto)
 @ApiCommonHeaders()
 @UseGuards(AuthorizationGuard, PermissionGuard)
@@ -60,9 +67,14 @@ export class PaymentReceivesController {
 
   @Post(':id/mail')
   @HttpCode(200)
+  @ApiBody({
+    description: 'The payment receive mail options',
+    type: PaymentReceiveMailOptsDto,
+  })
   @ApiResponse({
     status: 200,
     description: 'The payment receive mail has been successfully sent.',
+    schema: { $ref: getSchemaPath(PaymentReceiveMailResponseDto) },
   })
   public sendPaymentReceiveMail(
     @Param('id', ParseIntPipe) paymentReceiveId: number,
@@ -93,6 +105,7 @@ export class PaymentReceivesController {
     status: 200,
     description:
       'The payment receive mail options have been successfully retrieved.',
+    schema: { $ref: getSchemaPath(PaymentReceiveMailStateResponseDto) },
   })
   public getPaymentReceiveMailOptions(
     @Param('id', ParseIntPipe) paymentReceiveId: number,

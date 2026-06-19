@@ -19,6 +19,9 @@ export type CreatePaymentReceivedBody = OpRequestBody<OpForPath<typeof PAYMENTS_
 export type EditPaymentReceivedBody = OpRequestBody<OpForPath<typeof PAYMENTS_RECEIVED_ROUTES.BY_ID, 'put'>>;
 export type PaymentReceivedStateResponse = OpResponseBody<OpForPath<typeof PAYMENTS_RECEIVED_ROUTES.STATE, 'get'>>;
 export type PaymentReceiveEditPageResponse = OpResponseBody<OpForPath<typeof PAYMENTS_RECEIVED_ROUTES.EDIT_PAGE, 'get'>>;
+export type PaymentReceiveMailStateResponse = OpResponseBody<OpForPath<typeof PAYMENTS_RECEIVED_ROUTES.MAIL, 'get'>>;
+export type SendPaymentReceiveMailBody = OpRequestBody<OpForPath<typeof PAYMENTS_RECEIVED_ROUTES.MAIL, 'post'>>;
+export type SendPaymentReceiveMailResponse = OpResponseBody<OpForPath<typeof PAYMENTS_RECEIVED_ROUTES.MAIL, 'post'>>;
 export type PaymentReceivedHtmlContentResponse = { htmlContent: string };
 
 export async function fetchPaymentsReceived(fetcher: ApiFetcher): Promise<PaymentsReceivedListResponse> {
@@ -92,20 +95,20 @@ export async function fetchPaymentReceiveEditPage(
 export async function fetchPaymentReceiveMail(
   fetcher: ApiFetcher,
   id: number
-): Promise<unknown> {
+): Promise<PaymentReceiveMailStateResponse> {
   const get = fetcher.path(PAYMENTS_RECEIVED_ROUTES.MAIL).method('get').create();
   const { data } = await get({ id });
-  return data;
+  return data as PaymentReceiveMailStateResponse;
 }
 
 export async function sendPaymentReceiveMail(
   fetcher: ApiFetcher,
   id: number,
-  body: Record<string, unknown>
-): Promise<unknown> {
+  body: SendPaymentReceiveMailBody
+): Promise<SendPaymentReceiveMailResponse> {
   const post = fetcher.path(PAYMENTS_RECEIVED_ROUTES.MAIL).method('post').create();
-  const { data } = await post({ id, ...body } as never);
-  return data;
+  const { data } = await post({ id, ...body });
+  return data as SendPaymentReceiveMailResponse;
 }
 
 export async function fetchPaymentReceivedState(

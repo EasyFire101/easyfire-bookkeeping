@@ -1,18 +1,14 @@
 // @ts-nocheck
 
 import React from 'react';
-import { flatten, map } from 'lodash';
 import * as R from 'ramda';
 import { IntersectionObserver } from '@/components';
 import { useAccountUncategorizedTransactionsInfinity } from '@/hooks/query';
+import { useFlattenInfinityPages } from '@/hooks/utils';
 import { useAccountTransactionsContext } from './AccountTransactionsProvider';
 import { withBanking } from '../withBanking';
 
 const AccountUncategorizedTransactionsContext = React.createContext();
-
-function flattenInfinityPagesData(data) {
-  return flatten(map(data.pages, (page) => page.data));
-}
 
 /**
  * Account un-categorized transactions provider.
@@ -41,12 +37,10 @@ function AccountUncategorizedTransactionsBootRoot({
     max_date: uncategorizedTransactionsFilter?.toDate || null,
   });
   // Memorized the cashflow account transactions.
-  const uncategorizedTransactions = React.useMemo(
-    () =>
-      isUncategorizedTransactionsSuccess
-        ? flattenInfinityPagesData(uncategorizedTransactionsPage)
-        : [],
-    [uncategorizedTransactionsPage, isUncategorizedTransactionsSuccess],
+  const uncategorizedTransactions = useFlattenInfinityPages(
+    isUncategorizedTransactionsSuccess
+      ? uncategorizedTransactionsPage
+      : undefined,
   );
   // Handle the observer ineraction.
   const handleObserverInteract = React.useCallback(() => {

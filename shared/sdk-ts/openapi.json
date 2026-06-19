@@ -4734,9 +4734,27 @@
             }
           }
         ],
+        "requestBody": {
+          "required": true,
+          "description": "The payment receive mail options",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PaymentReceiveMailOptsDto"
+              }
+            }
+          }
+        },
         "responses": {
           "200": {
-            "description": "The payment receive mail has been successfully sent."
+            "description": "The payment receive mail has been successfully sent.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PaymentReceiveMailResponseDto"
+                }
+              }
+            }
           }
         },
         "tags": [
@@ -4776,7 +4794,14 @@
         ],
         "responses": {
           "200": {
-            "description": "The payment receive mail options have been successfully retrieved."
+            "description": "The payment receive mail options have been successfully retrieved.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PaymentReceiveMailStateResponseDto"
+                }
+              }
+            }
           }
         },
         "tags": [
@@ -27080,6 +27105,288 @@
           "isNonRecoverable",
           "isCompound",
           "active"
+        ]
+      },
+      "PaymentReceiveMailResponseDto": {
+        "type": "object",
+        "properties": {
+          "success": {
+            "type": "boolean",
+            "description": "Whether the mail was successfully queued/sent",
+            "example": true
+          },
+          "message": {
+            "type": "string",
+            "description": "Optional status message"
+          }
+        },
+        "required": [
+          "success"
+        ]
+      },
+      "PaymentReceiveMailEntryDto": {
+        "type": "object",
+        "properties": {
+          "invoiceNumber": {
+            "type": "string",
+            "description": "The invoice number",
+            "example": "INV-001"
+          },
+          "paidAmount": {
+            "type": "string",
+            "description": "The formatted paid amount",
+            "example": "$500.00"
+          }
+        },
+        "required": [
+          "invoiceNumber",
+          "paidAmount"
+        ]
+      },
+      "PaymentReceiveMailAddressItemDto": {
+        "type": "object",
+        "properties": {
+          "mail": {
+            "type": "string",
+            "description": "The email address",
+            "example": "john@example.com"
+          },
+          "label": {
+            "type": "string",
+            "description": "The display label for the address",
+            "example": "John Doe"
+          },
+          "primary": {
+            "type": "boolean",
+            "description": "Whether this is the primary address",
+            "example": true
+          }
+        },
+        "required": [
+          "mail",
+          "label"
+        ]
+      },
+      "PaymentReceiveMailStateResponseDto": {
+        "type": "object",
+        "properties": {
+          "companyName": {
+            "type": "string",
+            "description": "The organization company name",
+            "example": "Acme Inc."
+          },
+          "companyLogoUri": {
+            "type": "string",
+            "description": "The company logo URI",
+            "example": "https://example.com/logo.png"
+          },
+          "primaryColor": {
+            "type": "string",
+            "description": "The primary brand color",
+            "example": "#2563eb"
+          },
+          "customerName": {
+            "type": "string",
+            "description": "The customer display name",
+            "example": "John Doe"
+          },
+          "entries": {
+            "description": "The payment invoice entries",
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/PaymentReceiveMailEntryDto"
+            }
+          },
+          "from": {
+            "description": "Sender email addresses",
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "to": {
+            "description": "Recipient email addresses",
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "cc": {
+            "description": "CC recipient email addresses",
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "bcc": {
+            "description": "BCC recipient email addresses",
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "subject": {
+            "type": "string",
+            "description": "The email subject"
+          },
+          "message": {
+            "type": "string",
+            "description": "The email body message"
+          },
+          "fromOptions": {
+            "description": "Available sender address options",
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/PaymentReceiveMailAddressItemDto"
+            }
+          },
+          "toOptions": {
+            "description": "Available recipient address options",
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/PaymentReceiveMailAddressItemDto"
+            }
+          },
+          "paymentDate": {
+            "type": "string",
+            "description": "The ISO payment date",
+            "example": "2024-03-15"
+          },
+          "paymentDateFormatted": {
+            "type": "string",
+            "description": "The human-readable payment date",
+            "example": "March 15, 2024"
+          },
+          "total": {
+            "type": "number",
+            "description": "The numeric payment total",
+            "example": 500
+          },
+          "totalFormatted": {
+            "type": "string",
+            "description": "The formatted payment total",
+            "example": "$500.00"
+          },
+          "subtotal": {
+            "type": "number",
+            "description": "The numeric payment subtotal",
+            "example": 500
+          },
+          "subtotalFormatted": {
+            "type": "string",
+            "description": "The formatted payment subtotal",
+            "example": "$500.00"
+          },
+          "paymentNumber": {
+            "type": "string",
+            "description": "The payment receive number",
+            "example": "PR-0001"
+          },
+          "formatArgs": {
+            "type": "object",
+            "description": "Template format arguments"
+          }
+        },
+        "required": [
+          "companyName",
+          "customerName",
+          "entries",
+          "from",
+          "to",
+          "subject",
+          "message",
+          "fromOptions",
+          "toOptions",
+          "paymentDate",
+          "paymentDateFormatted",
+          "total",
+          "totalFormatted",
+          "subtotal",
+          "subtotalFormatted",
+          "paymentNumber"
+        ]
+      },
+      "PaymentReceiveMailOptsDto": {
+        "type": "object",
+        "properties": {
+          "from": {
+            "description": "Sender email addresses",
+            "example": [
+              "billing@company.com"
+            ],
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "to": {
+            "description": "Recipient email addresses",
+            "example": [
+              "customer@example.com"
+            ],
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "cc": {
+            "description": "CC recipient email addresses",
+            "example": [
+              "accounting@company.com"
+            ],
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "bcc": {
+            "description": "BCC recipient email addresses",
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "subject": {
+            "type": "string",
+            "description": "The email subject",
+            "example": "Payment Received"
+          },
+          "message": {
+            "type": "string",
+            "description": "The email body message",
+            "example": "We have received your payment."
+          },
+          "toOptions": {
+            "description": "Available recipient address options",
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/PaymentReceiveMailAddressItemDto"
+            }
+          },
+          "fromOptions": {
+            "description": "Available sender address options",
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/PaymentReceiveMailAddressItemDto"
+            }
+          },
+          "formatArgs": {
+            "type": "object",
+            "description": "Template format arguments"
+          },
+          "attachPdf": {
+            "type": "boolean",
+            "description": "Whether to attach the payment PDF",
+            "example": true
+          }
+        },
+        "required": [
+          "from",
+          "to",
+          "subject",
+          "message",
+          "toOptions",
+          "fromOptions"
         ]
       },
       "PaymentReceivedEntryResponseDto": {

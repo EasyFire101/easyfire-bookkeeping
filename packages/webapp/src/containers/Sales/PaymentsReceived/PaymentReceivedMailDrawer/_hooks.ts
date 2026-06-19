@@ -17,7 +17,7 @@ export const usePaymentReceivedMailFormatArgs = (): Record<string, string> => {
   const { paymentReceivedMailState } = usePaymentReceivedSendMailBoot();
 
   return useMemo(() => {
-    return transformEmailArgs(paymentReceivedMailState?.formatArgs || {});
+    return transformEmailArgs(paymentReceivedMailState?.formatArgs ?? {});
   }, [paymentReceivedMailState]);
 };
 

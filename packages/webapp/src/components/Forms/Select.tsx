@@ -5,7 +5,9 @@ import { FormikSelect } from '@blueprintjs-formik/select';
 import styled from 'styled-components';
 import clsx from 'classnames';
 
-export function FSelect({ ...props }) {
+export function FSelect<T extends SelectOptionProps = SelectOptionProps>({
+  ...props
+}) {
   const input = ({ activeItem, text, label, value }) => (
     <SelectButton
       text={text || props.placeholder || 'Select an item ...'}
@@ -14,7 +16,7 @@ export function FSelect({ ...props }) {
       className={clsx({ 'is-selected': !!text }, props.className)}
     />
   );
-  return <FormikSelect input={input} fill={true} {...props} />;
+  return <FormikSelect<T> input={input} fill={true} {...props} />;
 }
 
 export const SelectButton = styled(Button)`

@@ -17,6 +17,9 @@ import type {
   PaymentReceivedStateResponse,
   PaymentReceivedHtmlContentResponse,
   PaymentReceiveEditPageResponse,
+  PaymentReceiveMailStateResponse,
+  SendPaymentReceiveMailBody,
+  SendPaymentReceiveMailResponse,
 } from '@bigcapital/sdk-ts';
 import {
   fetchPaymentsReceived,
@@ -253,31 +256,16 @@ export function usePdfPaymentReceive(paymentReceiveId: number) {
   return useRequestPdf({ url: `payments-received/${paymentReceiveId}` });
 }
 
-interface SendPaymentReceiveMailValues {
-  to: string[] | string;
-  cc?: string[] | string;
-  bcc?: string[] | string;
-  subject: string;
-  message: string;
-  from?: string[] | string;
-  attachPdf?: boolean;
-}
-
-interface SendPaymentReceiveMailResponse {
-  success: boolean;
-  message?: string;
-}
-
 export function useSendPaymentReceiveMail(
   props?: UseMutationOptions<
     SendPaymentReceiveMailResponse,
     Error,
-    [number, SendPaymentReceiveMailValues]
+    [number, SendPaymentReceiveMailBody]
   >,
 ): UseMutationResult<
   SendPaymentReceiveMailResponse,
   Error,
-  [number, SendPaymentReceiveMailValues],
+  [number, SendPaymentReceiveMailBody],
   unknown
 > {
   const queryClient = useQueryClient();
@@ -285,50 +273,22 @@ export function useSendPaymentReceiveMail(
 
   return useMutation({
     ...props,
-    mutationFn: ([id, values]: [number, SendPaymentReceiveMailValues]) =>
-      sendPaymentReceiveMail(
-        fetcher,
-        id,
-        values as unknown as Record<string, unknown>,
-      ) as Promise<SendPaymentReceiveMailResponse>,
+    mutationFn: ([id, values]: [number, SendPaymentReceiveMailBody]) =>
+      sendPaymentReceiveMail(fetcher, id, values),
     onSuccess: () => commonInvalidateQueries(queryClient),
   });
 }
 
-export interface GetPaymentReceivedMailStateResponse {
-  companyName: string;
-  companyLogoUri?: string;
-  primaryColor?: string;
-  customerName: string;
-  entries: Array<{ invoiceNumber: string; paidAmount: string }>;
-  from: Array<string>;
-  fromOptions: Array<{ mail: string; label: string; primary: boolean }>;
-  paymentDate: string;
-  paymentDateFormatted: string;
-  to: Array<string>;
-  toOptions: Array<{ mail: string; label: string; primary: boolean }>;
-  total: number;
-  totalFormatted: string;
-  subtotal: number;
-  subtotalFormatted: string;
-  paymentNumber: string;
-  formatArgs: Record<string, unknown>;
-}
-
 export function usePaymentReceivedMailState(
   paymentReceiveId: number,
-  props?: UseQueryOptions<GetPaymentReceivedMailStateResponse, Error>,
-): UseQueryResult<GetPaymentReceivedMailStateResponse, Error> {
+  props?: UseQueryOptions<PaymentReceiveMailStateResponse, Error>,
+): UseQueryResult<PaymentReceiveMailStateResponse, Error> {
   const fetcher = useApiFetcher({ enableCamelCaseTransform: true });
 
   return useQuery({
     ...props,
     queryKey: paymentReceivesKeys.mailOptions(paymentReceiveId),
-    queryFn: () =>
-      fetchPaymentReceiveMail(
-        fetcher,
-        paymentReceiveId,
-      ) as Promise<GetPaymentReceivedMailStateResponse>,
+    queryFn: () => fetchPaymentReceiveMail(fetcher, paymentReceiveId),
   });
 }
 

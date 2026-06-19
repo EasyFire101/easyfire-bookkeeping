@@ -1,10 +1,10 @@
 // @ts-nocheck
 import React from 'react';
-import { flatten, map } from 'lodash';
 import * as R from 'ramda';
 import { IntersectionObserver, NumericInputCell } from '@/components';
 import { useAccountTransactionsContext } from '../AccountTransactionsProvider';
 import { useRecognizedBankTransactionsInfinity } from '@/hooks/query/banking';
+import { useFlattenInfinityPages } from '@/hooks/utils';
 import { withBanking } from '../../withBanking';
 
 interface RecognizedTransactionsContextValue {
@@ -17,10 +17,6 @@ const RecognizedTransactionsContext =
   React.createContext<RecognizedTransactionsContextValue>(
     {} as RecognizedTransactionsContextValue,
   );
-
-function flattenInfinityPagesData(data) {
-  return flatten(map(data.pages, (page) => page.data));
-}
 
 interface RecognizedTransactionsTableBootProps {
   children: React.ReactNode;
@@ -53,12 +49,8 @@ function RecognizedTransactionsTableBootRoot({
     max_date: uncategorizedTransactionsFilter?.toDate || null,
   });
   // Memorized the cashflow account transactions.
-  const recognizedTransactions = React.useMemo(
-    () =>
-      isRecognizedTransactionsSuccess
-        ? flattenInfinityPagesData(recognizedTransactionsPage)
-        : [],
-    [recognizedTransactionsPage, isRecognizedTransactionsSuccess],
+  const recognizedTransactions = useFlattenInfinityPages(
+    isRecognizedTransactionsSuccess ? recognizedTransactionsPage : undefined,
   );
   // Handle the observer ineraction.
   const handleObserverInteract = React.useCallback(() => {

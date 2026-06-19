@@ -7130,6 +7130,167 @@ export interface components {
              */
             active: boolean;
         };
+        PaymentReceiveMailResponseDto: {
+            /**
+             * @description Whether the mail was successfully queued/sent
+             * @example true
+             */
+            success: boolean;
+            /** @description Optional status message */
+            message?: string;
+        };
+        PaymentReceiveMailEntryDto: {
+            /**
+             * @description The invoice number
+             * @example INV-001
+             */
+            invoiceNumber: string;
+            /**
+             * @description The formatted paid amount
+             * @example $500.00
+             */
+            paidAmount: string;
+        };
+        PaymentReceiveMailAddressItemDto: {
+            /**
+             * @description The email address
+             * @example john@example.com
+             */
+            mail: string;
+            /**
+             * @description The display label for the address
+             * @example John Doe
+             */
+            label: string;
+            /**
+             * @description Whether this is the primary address
+             * @example true
+             */
+            primary?: boolean;
+        };
+        PaymentReceiveMailStateResponseDto: {
+            /**
+             * @description The organization company name
+             * @example Acme Inc.
+             */
+            companyName: string;
+            /**
+             * @description The company logo URI
+             * @example https://example.com/logo.png
+             */
+            companyLogoUri?: string;
+            /**
+             * @description The primary brand color
+             * @example #2563eb
+             */
+            primaryColor?: string;
+            /**
+             * @description The customer display name
+             * @example John Doe
+             */
+            customerName: string;
+            /** @description The payment invoice entries */
+            entries: components["schemas"]["PaymentReceiveMailEntryDto"][];
+            /** @description Sender email addresses */
+            from: string[];
+            /** @description Recipient email addresses */
+            to: string[];
+            /** @description CC recipient email addresses */
+            cc?: string[];
+            /** @description BCC recipient email addresses */
+            bcc?: string[];
+            /** @description The email subject */
+            subject: string;
+            /** @description The email body message */
+            message: string;
+            /** @description Available sender address options */
+            fromOptions: components["schemas"]["PaymentReceiveMailAddressItemDto"][];
+            /** @description Available recipient address options */
+            toOptions: components["schemas"]["PaymentReceiveMailAddressItemDto"][];
+            /**
+             * @description The ISO payment date
+             * @example 2024-03-15
+             */
+            paymentDate: string;
+            /**
+             * @description The human-readable payment date
+             * @example March 15, 2024
+             */
+            paymentDateFormatted: string;
+            /**
+             * @description The numeric payment total
+             * @example 500
+             */
+            total: number;
+            /**
+             * @description The formatted payment total
+             * @example $500.00
+             */
+            totalFormatted: string;
+            /**
+             * @description The numeric payment subtotal
+             * @example 500
+             */
+            subtotal: number;
+            /**
+             * @description The formatted payment subtotal
+             * @example $500.00
+             */
+            subtotalFormatted: string;
+            /**
+             * @description The payment receive number
+             * @example PR-0001
+             */
+            paymentNumber: string;
+            /** @description Template format arguments */
+            formatArgs?: Record<string, never>;
+        };
+        PaymentReceiveMailOptsDto: {
+            /**
+             * @description Sender email addresses
+             * @example [
+             *       "billing@company.com"
+             *     ]
+             */
+            from: string[];
+            /**
+             * @description Recipient email addresses
+             * @example [
+             *       "customer@example.com"
+             *     ]
+             */
+            to: string[];
+            /**
+             * @description CC recipient email addresses
+             * @example [
+             *       "accounting@company.com"
+             *     ]
+             */
+            cc?: string[];
+            /** @description BCC recipient email addresses */
+            bcc?: string[];
+            /**
+             * @description The email subject
+             * @example Payment Received
+             */
+            subject: string;
+            /**
+             * @description The email body message
+             * @example We have received your payment.
+             */
+            message: string;
+            /** @description Available recipient address options */
+            toOptions: components["schemas"]["PaymentReceiveMailAddressItemDto"][];
+            /** @description Available sender address options */
+            fromOptions: components["schemas"]["PaymentReceiveMailAddressItemDto"][];
+            /** @description Template format arguments */
+            formatArgs?: Record<string, never>;
+            /**
+             * @description Whether to attach the payment PDF
+             * @example true
+             */
+            attachPdf?: boolean;
+        };
         PaymentReceivedEntryResponseDto: {
             /**
              * @description ID of the entry
@@ -18128,7 +18289,9 @@ export interface operations {
                 headers: {
                     [name: string]: unknown;
                 };
-                content?: never;
+                content: {
+                    "application/json": components["schemas"]["PaymentReceiveMailStateResponseDto"];
+                };
             };
         };
     };
@@ -18146,14 +18309,21 @@ export interface operations {
             };
             cookie?: never;
         };
-        requestBody?: never;
+        /** @description The payment receive mail options */
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["PaymentReceiveMailOptsDto"];
+            };
+        };
         responses: {
             /** @description The payment receive mail has been successfully sent. */
             200: {
                 headers: {
                     [name: string]: unknown;
                 };
-                content?: never;
+                content: {
+                    "application/json": components["schemas"]["PaymentReceiveMailResponseDto"];
+                };
             };
         };
     };
