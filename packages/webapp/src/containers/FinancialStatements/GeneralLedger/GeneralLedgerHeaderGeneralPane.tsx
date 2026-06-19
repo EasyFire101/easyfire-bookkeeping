@@ -26,6 +26,10 @@ export function GLHeaderGeneralPane() {
 function GLHeaderGeneralPaneContent() {
   const { accounts } = useGLGeneralPanelContext();
 
+  if (!accounts) {
+    return null;
+  }
+  
   return (
     <React.Fragment>
       <FinancialStatementDateRange />

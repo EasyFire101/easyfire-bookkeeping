@@ -8,3 +8,4 @@ export * from './useIntersectionObserver';
 export * from './useAbilityContext';
 export * from './useCustomCompareEffect';
 export * from './useDeepCompareEffect';
+export * from './useFlattenInfinityPages';

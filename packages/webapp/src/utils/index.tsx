@@ -12,6 +12,7 @@ import { isEqual, castArray, isEmpty, includes, pickBy } from 'lodash';
 import jsCookie from 'js-cookie';
 import { deepMapKeys } from './map-key-deep';
 export * from './deep';
+export * from './flatten-infinity-pages';
 
 /** Strips leading slash from a path segment to avoid double slashes when joining with a base (e.g. `/api/` + path). */
 export const normalizeApiPath = (path) => (path || '').replace(/^\//, '');

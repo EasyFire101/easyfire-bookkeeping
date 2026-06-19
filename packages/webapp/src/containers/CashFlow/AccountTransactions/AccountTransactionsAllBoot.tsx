@@ -1,15 +1,11 @@
 // @ts-nocheck
 import React from 'react';
-import { flatten, map } from 'lodash';
 import { IntersectionObserver } from '@/components';
 import { useAccountTransactionsInfinity } from '@/hooks/query';
+import { useFlattenInfinityPages } from '@/hooks/utils';
 import { useAccountTransactionsContext } from './AccountTransactionsProvider';
 
 const AccountTransactionsAllBootContext = React.createContext();
-
-function flattenInfinityPages(data) {
-  return flatten(map(data.pages, (page) => page.transactions));
-}
 
 interface AccountTransactionsAllPoviderProps {
   children: React.ReactNode;
@@ -37,12 +33,9 @@ function AccountTransactionsAllProvider({
     account_id: accountId,
   });
   // Memorized the cashflow account transactions.
-  const cashflowTransactions = React.useMemo(
-    () =>
-      isCashflowTransactionsSuccess
-        ? flattenInfinityPages(cashflowTransactionsPages)
-        : [],
-    [cashflowTransactionsPages, isCashflowTransactionsSuccess],
+  const cashflowTransactions = useFlattenInfinityPages(
+    isCashflowTransactionsSuccess ? cashflowTransactionsPages : undefined,
+    (page) => page.transactions,
   );
   // Handle the observer ineraction.
   const handleObserverInteract = React.useCallback(() => {
