@@ -30,7 +30,6 @@ function BadDebtFormInner({
   closeDialog,
 }) {
   const baseCurrency = useCurrentOrganizationBaseCurrency();
-
   const { invoice, dialogName, createBadDebtMutate } = useBadDebtContext();
 
   // Initial form values

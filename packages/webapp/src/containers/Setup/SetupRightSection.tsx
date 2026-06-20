@@ -5,7 +5,10 @@ import { x } from '@xstyled/emotion';
 import { SetupWizardContent } from './SetupWizardContent';
 
 import { useCurrentOrganization } from '@/hooks/query';
-import { useSubscription, useIsOrganizationSetupCompleted } from '@/hooks/state';
+import {
+  useSubscription,
+  useIsOrganizationSetupCompleted,
+} from '@/hooks/state';
 
 /**
  * Wizard setup right section.

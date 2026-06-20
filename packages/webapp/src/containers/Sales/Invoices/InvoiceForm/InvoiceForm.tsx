@@ -211,4 +211,3 @@ export const InvoiceForm = compose(
     invoiceTermsConditions: invoiceSettings?.termsConditions,
   })),
 )(InvoiceFormRoot);
-

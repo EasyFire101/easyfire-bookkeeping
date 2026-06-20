@@ -11,7 +11,10 @@ import styled, { x } from '@xstyled/emotion';
 
 import { Icon, FormattedMessage as T } from '@/components';
 
-import { useAuthenticatedAccount, useCurrentOrganizationMetadata } from '@/hooks/query';
+import {
+  useAuthenticatedAccount,
+  useCurrentOrganizationMetadata,
+} from '@/hooks/query';
 import { useWorkspaces } from '@/ee/workspaces/hooks/query/workspaces';
 import { useAuthOrganizationId, useAuthActions } from '@/hooks/state';
 import { useSwitchOrganization } from '@/ee/workspaces/hooks/useSwitchOrganization';
@@ -261,6 +264,4 @@ function SidebarHeadJSX({
   );
 }
 
-export const SidebarHead = compose(
-  withDrawerActions,
-)(SidebarHeadJSX);
+export const SidebarHead = compose(withDrawerActions)(SidebarHeadJSX);

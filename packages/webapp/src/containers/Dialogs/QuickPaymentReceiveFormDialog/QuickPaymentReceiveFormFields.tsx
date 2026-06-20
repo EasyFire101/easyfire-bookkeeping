@@ -35,9 +35,7 @@ import { withSettings } from '@/containers/Settings/withSettings';
 /**
  * Quick payment receive form fields.
  */
-function QuickPaymentReceiveFormFieldsInner({
-  paymentReceiveAutoIncrement,
-}) {
+function QuickPaymentReceiveFormFieldsInner({ paymentReceiveAutoIncrement }) {
   const baseCurrency = useCurrentOrganizationBaseCurrency();
 
   const { accounts, branches, baseCurrency } = useQuickPaymentReceiveContext();

@@ -76,6 +76,6 @@ function InventoryValuationInner({
   );
 }
 
-export const InventoryValuation = compose(
-  withInventoryValuationActions,
-)(InventoryValuationInner);
+export const InventoryValuation = compose(withInventoryValuationActions)(
+  InventoryValuationInner,
+);

@@ -41,7 +41,8 @@ export function AmountDisplayedBaseCurrencyMessageJSX() {
   );
 }
 
-export const AmountDisplayedBaseCurrencyMessage = AmountDisplayedBaseCurrencyMessageJSX;
+export const AmountDisplayedBaseCurrencyMessage =
+  AmountDisplayedBaseCurrencyMessageJSX;
 
 const Message = styled.div`
   font-size: 10px;

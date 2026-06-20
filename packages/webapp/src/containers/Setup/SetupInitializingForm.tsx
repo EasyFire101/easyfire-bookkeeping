@@ -13,9 +13,7 @@ import { withOrganizationActions } from '@/containers/Organization/withOrganizat
 /**
  * Setup initializing step form.
  */
-function SetupInitializingFormInner({
-  setOrganizationSetupCompleted,
-}) {
+function SetupInitializingFormInner({ setOrganizationSetupCompleted }) {
   const {
     data: organization,
     refetch,
