@@ -5,9 +5,7 @@ import { DashboardInsider } from '@/components/Dashboard';
 import { HomepageContent } from './HomepageContent';
 
 import { withDashboardActions } from '@/containers/Dashboard/withDashboardActions';
-import { withCurrentOrganization } from '@/containers/Organization/withCurrentOrganization';
-
-import { compose } from '@/utils';
+import { useCurrentOrganizationName } from '@/hooks/query';
 
 /**
  * Dashboard homepage.
@@ -15,13 +13,12 @@ import { compose } from '@/utils';
 function DashboardHomepage({
   // #withDashboardActions
   changePageTitle,
-
-  // #withCurrentOrganization
-  organization,
 }) {
+  const organizationName = useCurrentOrganizationName();
+
   useEffect(() => {
-    changePageTitle(organization.name);
-  }, [organization.name, changePageTitle]);
+    changePageTitle(organizationName);
+  }, [organizationName, changePageTitle]);
 
   return (
     <DashboardInsider name="homepage">
@@ -30,7 +27,4 @@ function DashboardHomepage({
   );
 }
 
-export const Homepage = compose(
-  withDashboardActions,
-  withCurrentOrganization(({ organization }) => ({ organization })),
-)(DashboardHomepage);
+export const Homepage = withDashboardActions(DashboardHomepage);

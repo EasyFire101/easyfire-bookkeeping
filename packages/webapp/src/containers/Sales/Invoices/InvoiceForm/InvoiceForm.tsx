@@ -20,9 +20,9 @@ import { InvoiceFormTopBar } from './InvoiceFormTopBar';
 
 import { withDashboardActions } from '@/containers/Dashboard/withDashboardActions';
 import { withSettings } from '@/containers/Settings/withSettings';
-import { withCurrentOrganization } from '@/containers/Organization/withCurrentOrganization';
 
 import { AppToaster, Box } from '@/components';
+import { useCurrentOrganizationBaseCurrency } from '@/hooks/query';
 import { compose, orderingLinesIndexes, transactionNumber } from '@/utils';
 import { useInvoiceFormContext } from './InvoiceFormProvider';
 import { InvoiceFormActions } from './InvoiceFormActions';
@@ -49,10 +49,9 @@ function InvoiceFormRoot({
   invoiceAutoIncrementMode,
   invoiceCustomerNotes,
   invoiceTermsConditions,
-
-  // #withCurrentOrganization
-  organization: { base_currency },
 }) {
+  const baseCurrency = useCurrentOrganizationBaseCurrency();
+
   const history = useHistory();
 
   // Invoice form context.
@@ -84,7 +83,7 @@ function InvoiceFormRoot({
             invoice_no: invoiceNumber,
           }),
           entries: orderingLinesIndexes(defaultInvoice.entries),
-          currency_code: base_currency,
+          currency_code: baseCurrency,
           invoice_message: defaultTo(invoiceCustomerNotes, ''),
           terms_conditions: defaultTo(invoiceTermsConditions, ''),
           pdf_template_id: saleInvoiceState?.defaultTemplateId,
@@ -211,5 +210,5 @@ export const InvoiceForm = compose(
     invoiceCustomerNotes: invoiceSettings?.customerNotes,
     invoiceTermsConditions: invoiceSettings?.termsConditions,
   })),
-  withCurrentOrganization(),
 )(InvoiceFormRoot);
+

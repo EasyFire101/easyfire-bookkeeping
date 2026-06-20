@@ -31,16 +31,14 @@ import { inputIntent, momentFormatter } from '@/utils';
 import { useSetPrimaryBranchToForm } from './utils';
 import { useQuickPaymentMadeContext } from './QuickPaymentMadeFormProvider';
 
-import { withCurrentOrganization } from '@/containers/Organization/withCurrentOrganization';
-import { compose } from '@/utils';
+import { useCurrentOrganizationBaseCurrency } from '@/hooks/query';
 
 /**
  * Quick payment made form fields.
  */
-function QuickPaymentMadeFormFieldsInner({
-  // #withCurrentOrganization
-  organization: { base_currency },
-}) {
+function QuickPaymentMadeFormFieldsInner() {
+  const baseCurrency = useCurrentOrganizationBaseCurrency();
+
   const { accounts, branches, baseCurrency } = useQuickPaymentMadeContext();
 
   // Intl context.
@@ -96,11 +94,11 @@ function QuickPaymentMadeFormFieldsInner({
         </ControlGroup>
       </FFormGroup>
 
-      <If condition={!isEqual(base_currency, values.currency_code)}>
+      <If condition={!isEqual(baseCurrency, values.currency_code)}>
         {/*------------ exchange rate -----------*/}
         <ExchangeRateMutedField
           name={'exchange_rate'}
-          fromCurrency={base_currency}
+          fromCurrency={baseCurrency}
           toCurrency={values.currency_code}
           formGroupProps={{ label: '', inline: false }}
           date={values.payment_date}
@@ -163,9 +161,7 @@ function QuickPaymentMadeFormFieldsInner({
   );
 }
 
-export const QuickPaymentMadeFormFields = compose(withCurrentOrganization())(
-  QuickPaymentMadeFormFieldsInner,
-);
+export const QuickPaymentMadeFormFields = QuickPaymentMadeFormFieldsInner;
 
 export const BranchRowDivider = styled.div`
   height: 1px;

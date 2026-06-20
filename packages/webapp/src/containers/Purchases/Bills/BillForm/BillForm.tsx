@@ -19,7 +19,7 @@ import { BillFormTopBar } from './BillFormTopBar';
 import { AppToaster, Box } from '@/components';
 import { PageForm } from '@/components/PageForm';
 import { useBillFormContext } from './BillFormProvider';
-import { compose, safeSumBy } from '@/utils';
+import { safeSumBy } from '@/utils';
 import {
   defaultBill,
   filterNonZeroEntries,
@@ -27,16 +27,15 @@ import {
   transformFormValuesToRequest,
   handleErrors,
 } from './utils';
-import { withCurrentOrganization } from '@/containers/Organization/withCurrentOrganization';
+import { useCurrentOrganizationBaseCurrency } from '@/hooks/query';
 import { BillFormEntriesActions } from './BillFormEntriesActions';
 
 /**
  * Bill form.
  */
-function BillFormInner({
-  // #withCurrentOrganization
-  organization: { base_currency },
-}) {
+function BillFormInner() {
+  const baseCurrency = useCurrentOrganizationBaseCurrency();
+
   const history = useHistory();
 
   // Bill form context.
@@ -52,10 +51,10 @@ function BillFormInner({
           }
         : {
             ...defaultBill,
-            currency_code: base_currency,
+            currency_code: baseCurrency,
           }),
     }),
-    [bill, base_currency],
+    [bill, baseCurrency],
   );
 
   // Handles form submit.
@@ -147,4 +146,4 @@ function BillFormInner({
     </Formik>
   );
 }
-export const BillForm = compose(withCurrentOrganization())(BillFormInner);
+export const BillForm = BillFormInner;

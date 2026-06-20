@@ -36,7 +36,7 @@ import {
   Icon,
   VendorDrawerLink,
 } from '@/components';
-import { withCurrentOrganization } from '@/containers/Organization/withCurrentOrganization';
+import { useCurrentOrganizationBaseCurrency } from '@/hooks/query';
 import { usePaymentMadeFormContext } from './PaymentMadeFormProvider';
 import { ACCOUNT_TYPE } from '@/constants/accountTypes';
 import { PaymentMadeExchangeRateInputField } from './components';
@@ -73,7 +73,9 @@ const getFieldsStyle = (theme: Theme) => css`
 /**
  * Payment made form header fields.
  */
-function PaymentMadeFormHeaderFieldsInner({ organization: { base_currency } }) {
+function PaymentMadeFormHeaderFieldsInner() {
+  const baseCurrency = useCurrentOrganizationBaseCurrency();
+
   // Formik form context.
   const {
     values: { entries, currency_code },
@@ -262,9 +264,7 @@ function PaymentFormVendorSelect() {
   );
 }
 
-export const PaymentMadeFormHeaderFields = compose(withCurrentOrganization())(
-  PaymentMadeFormHeaderFieldsInner,
-);
+export const PaymentMadeFormHeaderFields = PaymentMadeFormHeaderFieldsInner;
 
 const VendorButtonLink = styled(VendorDrawerLink)`
   font-size: 11px;

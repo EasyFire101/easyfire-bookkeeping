@@ -22,10 +22,10 @@ import { ReceiptFormTopBar } from './ReceiptFormTopbar';
 
 import { withDashboardActions } from '@/containers/Dashboard/withDashboardActions';
 import { withSettings } from '@/containers/Settings/withSettings';
-import { withCurrentOrganization } from '@/containers/Organization/withCurrentOrganization';
 
 import { AppToaster } from '@/components';
 import { compose, orderingLinesIndexes, transactionNumber } from '@/utils';
+import { useCurrentOrganizationBaseCurrency } from '@/hooks/query';
 import {
   transformToEditForm,
   defaultReceipt,
@@ -50,10 +50,9 @@ function ReceiptFormRoot({
   receiptTermsConditions,
   receiptMessage,
   preferredDepositAccount,
-
-  // #withCurrentOrganization
-  organization: { base_currency },
 }) {
+  const baseCurrency = useCurrentOrganizationBaseCurrency();
+
   const history = useHistory();
 
   // Receipt form context.
@@ -82,7 +81,7 @@ function ReceiptFormRoot({
           }),
           deposit_account_id: parseInt(preferredDepositAccount),
           entries: orderingLinesIndexes(defaultReceipt.entries),
-          currency_code: base_currency,
+          currency_code: baseCurrency,
           receipt_message: receiptMessage,
           terms_conditions: receiptTermsConditions,
           pdf_template_id: saleReceiptState?.defaultTemplateId,
@@ -199,5 +198,4 @@ export const ReceiptForm = compose(
     receiptTermsConditions: receiptSettings?.termsConditions,
     preferredDepositAccount: receiptSettings?.preferredDepositAccount,
   })),
-  withCurrentOrganization(),
 )(ReceiptFormRoot);

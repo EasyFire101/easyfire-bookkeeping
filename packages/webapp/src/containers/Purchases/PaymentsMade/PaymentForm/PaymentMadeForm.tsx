@@ -22,7 +22,7 @@ import { usePaymentMadeFormContext } from './PaymentMadeFormProvider';
 import { compose, orderingLinesIndexes } from '@/utils';
 
 import { withSettings } from '@/containers/Settings/withSettings';
-import { withCurrentOrganization } from '@/containers/Organization/withCurrentOrganization';
+import { useCurrentOrganizationBaseCurrency } from '@/hooks/query';
 import { withDialogActions } from '@/containers/Dialog/withDialogActions';
 import { PageForm } from '@/components/PageForm';
 
@@ -45,12 +45,11 @@ function PaymentMadeFormInner({
   // #withSettings
   preferredPaymentAccount,
 
-  // #withCurrentOrganization
-  organization: { base_currency },
-
   // #withDialogActions
   openDialog,
 }) {
+  const baseCurrency = useCurrentOrganizationBaseCurrency();
+
   const history = useHistory();
 
   // Payment made form context.
@@ -75,7 +74,7 @@ function PaymentMadeFormInner({
         : {
             ...defaultPaymentMade,
             payment_account_id: defaultTo(preferredPaymentAccount),
-            currency_code: base_currency,
+            currency_code: baseCurrency,
             entries: orderingLinesIndexes(defaultPaymentMade.entries),
           }),
     }),
@@ -192,6 +191,5 @@ export const PaymentMadeForm = compose(
     paymentNumberPrefix: billPaymentSettings?.number_prefix,
     preferredPaymentAccount: parseInt(billPaymentSettings?.withdrawalAccount),
   })),
-  withCurrentOrganization(),
   withDialogActions,
 )(PaymentMadeFormInner);

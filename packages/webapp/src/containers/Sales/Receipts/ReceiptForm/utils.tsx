@@ -17,7 +17,7 @@ import {
   updateItemsEntriesTotal,
   ensureEntriesHaveEmptyLine,
 } from '@/containers/Entries/utils';
-import { useCurrentOrganization } from '@/hooks/state';
+import { useCurrentOrganizationBaseCurrency } from '@/hooks/query';
 import { getEntriesTotal } from '@/containers/Entries/utils';
 import {
   transformAttachmentsToForm,
@@ -349,11 +349,11 @@ export const useReceiptDueAmountFormatted = () => {
  */
 export const useReceiptIsForeignCustomer = () => {
   const { values } = useFormikContext();
-  const currentOrganization = useCurrentOrganization();
+  const baseCurrency = useCurrentOrganizationBaseCurrency();
 
   const isForeignCustomer = React.useMemo(
-    () => values.currency_code !== currentOrganization.base_currency,
-    [values.currency_code, currentOrganization.base_currency],
+    () => values.currency_code !== baseCurrency,
+    [values.currency_code, baseCurrency],
   );
   return isForeignCustomer;
 };

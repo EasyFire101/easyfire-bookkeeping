@@ -33,7 +33,7 @@ import {
 } from './utils';
 
 import { withSettings } from '@/containers/Settings/withSettings';
-import { withCurrentOrganization } from '@/containers/Organization/withCurrentOrganization';
+import { useCurrentOrganizationBaseCurrency } from '@/hooks/query';
 
 /**
  * Vendor Credit note form.
@@ -43,10 +43,9 @@ function VendorCreditNoteFormInner({
   vendorcreditAutoIncrement,
   vendorcreditNumberPrefix,
   vendorcreditNextNumber,
-
-  // #withCurrentOrganization
-  organization: { base_currency },
 }) {
+  const baseCurrency = useCurrentOrganizationBaseCurrency();
+
   const history = useHistory();
 
   // Vendor Credit note form context.
@@ -77,11 +76,11 @@ function VendorCreditNoteFormInner({
             ...(vendorcreditAutoIncrement && {
               vendor_credit_number: vendorCreditNumber,
             }),
-            currency_code: base_currency,
+            currency_code: baseCurrency,
             ...newVendorCredit,
           }),
     }),
-    [vendorCredit, base_currency],
+    [vendorCredit, baseCurrency],
   );
 
   // Handles form submit.
@@ -186,5 +185,4 @@ export const VendorCreditNoteForm = compose(
     vendorcreditNextNumber: vendorsCreditNoteSetting?.nextNumber,
     vendorcreditNumberPrefix: vendorsCreditNoteSetting?.numberPrefix,
   })),
-  withCurrentOrganization(),
 )(VendorCreditNoteFormInner);

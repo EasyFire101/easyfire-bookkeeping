@@ -6,7 +6,7 @@ import { useFormikContext } from 'formik';
 import * as R from 'ramda';
 
 import { ExchangeRateInputGroup } from '@/components';
-import { useCurrentOrganization } from '@/hooks/state';
+import { useCurrentOrganizationBaseCurrency } from '@/hooks/query';
 import { useReceiptIsForeignCustomer, useReceiptTotal } from './utils';
 import { useUpdateEffect } from '@/hooks';
 import { transactionNumber } from '@/utils';
@@ -24,7 +24,7 @@ import { DialogsName } from '@/constants/dialogs';
  * @returns {JSX.Element}
  */
 function ReceiptExchangeRateInputFieldRoot({ ...props }) {
-  const currentOrganization = useCurrentOrganization();
+  const baseCurrency = useCurrentOrganizationBaseCurrency();
   const isForeignCustomer = useReceiptIsForeignCustomer();
   const { values } = useFormikContext();
 
@@ -36,7 +36,7 @@ function ReceiptExchangeRateInputFieldRoot({ ...props }) {
     <ExchangeRateInputGroup
       name={'exchange_rate'}
       fromCurrency={values.currency_code}
-      toCurrency={currentOrganization.base_currency}
+      toCurrency={baseCurrency}
       formGroupProps={{ label: ' ', inline: true }}
       withPopoverRecalcConfirm
       {...props}

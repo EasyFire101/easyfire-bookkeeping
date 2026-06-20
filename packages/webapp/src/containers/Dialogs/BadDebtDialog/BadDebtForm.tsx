@@ -13,7 +13,7 @@ import { transformErrors } from './utils';
 import { BadDebtFormContent } from './BadDebtFormContent';
 
 import { withDialogActions } from '@/containers/Dialog/withDialogActions';
-import { withCurrentOrganization } from '@/containers/Organization/withCurrentOrganization';
+import { useCurrentOrganizationBaseCurrency } from '@/hooks/query';
 
 import { useBadDebtContext } from './BadDebtFormProvider';
 
@@ -28,10 +28,9 @@ const defaultInitialValues = {
 function BadDebtFormInner({
   // #withDialogActions
   closeDialog,
-
-  // #withCurrentOrganization
-  organization: { base_currency },
 }) {
+  const baseCurrency = useCurrentOrganizationBaseCurrency();
+
   const { invoice, dialogName, createBadDebtMutate } = useBadDebtContext();
 
   // Initial form values
@@ -79,7 +78,4 @@ function BadDebtFormInner({
   );
 }
 
-export const BadDebtForm = compose(
-  withDialogActions,
-  withCurrentOrganization(),
-)(BadDebtFormInner);
+export const BadDebtForm = compose(withDialogActions)(BadDebtFormInner);

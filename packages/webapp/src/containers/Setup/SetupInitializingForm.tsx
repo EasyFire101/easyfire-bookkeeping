@@ -1,7 +1,6 @@
 // @ts-nocheck
 import React from 'react';
 import { ProgressBar, Intent } from '@blueprintjs/core';
-import * as R from 'ramda';
 import { x } from '@xstyled/emotion';
 import { css } from '@emotion/css';
 import { useIsDarkMode } from '@/hooks/useDarkMode';
@@ -10,17 +9,18 @@ import { useJob, useCurrentOrganization } from '@/hooks/query';
 import { FormattedMessage as T } from '@/components';
 
 import { withOrganizationActions } from '@/containers/Organization/withOrganizationActions';
-import { withCurrentOrganization } from '@/containers/Organization/withCurrentOrganization';
-import { withOrganization } from '../Organization/withOrganization';
 
 /**
  * Setup initializing step form.
  */
 function SetupInitializingFormInner({
   setOrganizationSetupCompleted,
-  organization,
 }) {
-  const { refetch, isSuccess } = useCurrentOrganization({ enabled: false });
+  const {
+    data: organization,
+    refetch,
+    isSuccess,
+  } = useCurrentOrganization({ enabled: false });
 
   // Job done state.
   const [isJobDone, setIsJobDone] = React.useState(false);
@@ -28,9 +28,9 @@ function SetupInitializingFormInner({
   const {
     data: { isRunning, isWaiting, isFailed, isCompleted },
     isFetching: isJobFetching,
-  } = useJob(organization?.build_job_id, {
+  } = useJob(organization?.buildJobId, {
     refetchInterval: 2000,
-    enabled: !!organization?.build_job_id,
+    enabled: !!organization?.buildJobId,
   });
 
   React.useEffect(() => {
@@ -62,13 +62,9 @@ function SetupInitializingFormInner({
   );
 }
 
-export const SetupInitializingForm = R.compose(
-  withOrganizationActions,
-  withCurrentOrganization(({ organizationTenantId }) => ({
-    organizationId: organizationTenantId,
-  })),
-  withOrganization(({ organization }) => ({ organization })),
-)(SetupInitializingFormInner);
+export const SetupInitializingForm = withOrganizationActions(
+  SetupInitializingFormInner,
+);
 
 /**
  * State initializing failed state.

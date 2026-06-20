@@ -5,7 +5,7 @@ import { Button } from '@blueprintjs/core';
 import * as R from 'ramda';
 import { useFormikContext } from 'formik';
 import { ExchangeRateInputGroup } from '@/components';
-import { useCurrentOrganization } from '@/hooks/state';
+import { useCurrentOrganizationBaseCurrency } from '@/hooks/query';
 import { useEstimateIsForeignCustomer, useEstimateSubtotal } from './utils';
 import { transactionNumber } from '@/utils';
 import { useUpdateEffect } from '@/hooks';
@@ -23,7 +23,7 @@ import { DialogsName } from '@/constants/dialogs';
  * @returns {JSX.Element}
  */
 function EstimateExchangeRateInputFieldRoot({ ...props }) {
-  const currentOrganization = useCurrentOrganization();
+  const baseCurrency = useCurrentOrganizationBaseCurrency();
   const { values } = useFormikContext();
   const isForeignCustomer = useEstimateIsForeignCustomer();
 
@@ -35,7 +35,7 @@ function EstimateExchangeRateInputFieldRoot({ ...props }) {
     <ExchangeRateInputGroup
       name={'exchange_rate'}
       fromCurrency={values.currency_code}
-      toCurrency={currentOrganization.base_currency}
+      toCurrency={baseCurrency}
       formGroupProps={{ label: ' ', inline: true }}
       withPopoverRecalcConfirm
       {...props}

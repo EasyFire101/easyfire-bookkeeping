@@ -23,10 +23,10 @@ import {
 } from './components';
 
 import { withSettings } from '@/containers/Settings/withSettings';
-import { withCurrentOrganization } from '@/containers/Organization/withCurrentOrganization';
 
 import { AppToaster } from '@/components';
 import { compose, transactionNumber, orderingLinesIndexes } from '@/utils';
+import { useCurrentOrganizationBaseCurrency } from '@/hooks/query';
 import { useEstimateFormContext } from './EstimateFormProvider';
 import {
   transformToEditForm,
@@ -47,10 +47,9 @@ function EstimateFormInner({
   estimateAutoIncrementMode,
   estimateCustomerNotes,
   estimateTermsConditions,
-
-  // #withCurrentOrganization
-  organization: { base_currency },
 }) {
+  const baseCurrency = useCurrentOrganizationBaseCurrency();
+
   const history = useHistory();
   const {
     estimate,
@@ -77,7 +76,7 @@ function EstimateFormInner({
             estimate_number: estimateNumber,
           }),
           entries: orderingLinesIndexes(defaultEstimate.entries),
-          currency_code: base_currency,
+          currency_code: baseCurrency,
           terms_conditions: defaultTo(estimateTermsConditions, ''),
           note: defaultTo(estimateCustomerNotes, ''),
           pdf_template_id: saleEstimateState?.defaultTemplateId,
@@ -195,5 +194,4 @@ export const EstimateForm = compose(
     estimateCustomerNotes: estimatesSettings?.customerNotes,
     estimateTermsConditions: estimatesSettings?.termsConditions,
   })),
-  withCurrentOrganization(),
 )(EstimateFormInner);

@@ -17,10 +17,10 @@ import { useExpenseFormContext } from './ExpenseFormPageProvider';
 
 import { withDashboardActions } from '@/containers/Dashboard/withDashboardActions';
 import { withSettings } from '@/containers/Settings/withSettings';
-import { withCurrentOrganization } from '@/containers/Organization/withCurrentOrganization';
 
 import { AppToaster, Box } from '@/components';
 import { PageForm } from '@/components/PageForm';
+import { useCurrentOrganizationBaseCurrency } from '@/hooks/query';
 import {
   CreateExpenseFormSchema,
   EditExpenseFormSchema,
@@ -39,9 +39,9 @@ import { compose } from '@/utils';
 function ExpenseFormInner({
   // #withSettings
   preferredPaymentAccount,
-  // #withCurrentOrganization
-  organization: { base_currency },
 }) {
+  const baseCurrency = useCurrentOrganizationBaseCurrency();
+
   // Expense form context.
   const {
     editExpenseMutate,
@@ -65,11 +65,11 @@ function ExpenseFormInner({
           }
         : {
             ...defaultExpense,
-            currency_code: base_currency,
+            currency_code: baseCurrency,
             payment_account_id: defaultTo(preferredPaymentAccount, ''),
           }),
     }),
-    [expense, base_currency, preferredPaymentAccount],
+    [expense, baseCurrency, preferredPaymentAccount],
   );
 
   //  Handle form submit.
@@ -176,5 +176,4 @@ export const ExpenseForm = compose(
       10,
     ),
   })),
-  withCurrentOrganization(),
 )(ExpenseFormInner);

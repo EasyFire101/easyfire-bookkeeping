@@ -8,16 +8,17 @@ import {
   Col,
   Row,
 } from '@/components';
-import { withCurrentOrganization } from '@/containers/Organization/withCurrentOrganization';
 import { accountsFieldShouldUpdate } from './utils';
 import { ACCOUNT_TYPE } from '@/constants/accountTypes';
 import { useItemFormContext } from './ItemFormProvider';
-import { compose } from '@/utils';
+import { useCurrentOrganizationBaseCurrency } from '@/hooks/query';
 
 /**
  * Item form inventory sections.
  */
-function ItemFormInventorySectionInner({ organization: { base_currency } }) {
+function ItemFormInventorySectionInner() {
+  const baseCurrency = useCurrentOrganizationBaseCurrency();
+
   const { accounts } = useItemFormContext();
 
   return (
@@ -52,6 +53,4 @@ function ItemFormInventorySectionInner({ organization: { base_currency } }) {
   );
 }
 
-export const ItemFormInventorySection = compose(withCurrentOrganization())(
-  ItemFormInventorySectionInner,
-);
+export const ItemFormInventorySection = ItemFormInventorySectionInner;

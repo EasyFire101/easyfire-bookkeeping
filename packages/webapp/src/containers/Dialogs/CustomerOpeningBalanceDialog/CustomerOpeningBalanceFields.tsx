@@ -21,18 +21,16 @@ import { FMoneyInputGroup, FFormGroup, FDateInput } from '@/components/Forms';
 import { useCustomerOpeningBalanceContext } from './CustomerOpeningBalanceFormProvider';
 import { useSetPrimaryBranchToForm } from './utils';
 
-import { withCurrentOrganization } from '@/containers/Organization/withCurrentOrganization';
-import { compose } from '@/utils';
+import { useCurrentOrganizationBaseCurrency } from '@/hooks/query';
 import intl from 'react-intl-universal';
 
 /**
  * Customer Opening balance fields.
  * @returns
  */
-function CustomerOpeningBalanceFieldsInner({
-  // #withCurrentOrganization
-  organization: { base_currency },
-}) {
+function CustomerOpeningBalanceFieldsInner() {
+  const baseCurrency = useCurrentOrganizationBaseCurrency();
+
   // Formik context.
   const { values } = useFormikContext();
 
@@ -78,11 +76,11 @@ function CustomerOpeningBalanceFieldsInner({
         />
       </FFormGroup>
 
-      <If condition={!isEqual(base_currency, customer.currency_code)}>
+      <If condition={!isEqual(baseCurrency, customer.currency_code)}>
         {/*------------ Opening balance exchange rate -----------*/}
         <ExchangeRateMutedField
           name={'opening_balance_exchange_rate'}
-          fromCurrency={base_currency}
+          fromCurrency={baseCurrency}
           toCurrency={customer.currency_code}
           formGroupProps={{ label: '', inline: false }}
           date={values.opening_balance_at}
@@ -110,6 +108,4 @@ function CustomerOpeningBalanceFieldsInner({
     </div>
   );
 }
-export const CustomerOpeningBalanceFields = compose(withCurrentOrganization())(
-  CustomerOpeningBalanceFieldsInner,
-);
+export const CustomerOpeningBalanceFields = CustomerOpeningBalanceFieldsInner;

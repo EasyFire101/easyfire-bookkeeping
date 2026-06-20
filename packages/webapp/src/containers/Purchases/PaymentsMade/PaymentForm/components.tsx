@@ -5,7 +5,7 @@ import moment from 'moment';
 import { Money, ExchangeRateInputGroup } from '@/components';
 import { MoneyFieldCell } from '@/components/DataTableCells';
 import { useFormikContext } from 'formik';
-import { useCurrentOrganization } from '@/hooks/state';
+import { useCurrentOrganizationBaseCurrency } from '@/hooks/query';
 import { usePaymentMadeIsForeignCustomer } from './utils';
 
 function BillNumberAccessor(row) {
@@ -74,7 +74,7 @@ export function usePaymentMadeEntriesTableColumns() {
  * @returns {JSX.Element}
  */
 export function PaymentMadeExchangeRateInputField({ ...props }) {
-  const currentOrganization = useCurrentOrganization();
+  const baseCurrency = useCurrentOrganizationBaseCurrency();
   const { values } = useFormikContext();
 
   const isForeignCustomer = usePaymentMadeIsForeignCustomer();
@@ -86,7 +86,7 @@ export function PaymentMadeExchangeRateInputField({ ...props }) {
   return (
     <ExchangeRateInputGroup
       fromCurrency={values.currency_code}
-      toCurrency={currentOrganization.base_currency}
+      toCurrency={baseCurrency}
       {...props}
     />
   );

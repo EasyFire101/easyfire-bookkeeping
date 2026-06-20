@@ -21,7 +21,7 @@ import {
   assignEntriesTaxAmount,
   aggregateItemEntriesTaxRates,
 } from '@/containers/Entries/utils';
-import { useCurrentOrganization } from '@/hooks/state';
+import { useCurrentOrganizationBaseCurrency } from '@/hooks/query';
 import {
   isLandedCostDisabled,
   getEntriesTotal,
@@ -266,11 +266,11 @@ export const useSetPrimaryWarehouseToForm = () => {
  */
 export const useBillIsForeignCustomer = () => {
   const { values } = useFormikContext();
-  const currentOrganization = useCurrentOrganization();
+  const baseCurrency = useCurrentOrganizationBaseCurrency();
 
   const isForeignCustomer = React.useMemo(
-    () => values.currency_code !== currentOrganization.base_currency,
-    [values.currency_code, currentOrganization.base_currency],
+    () => values.currency_code !== baseCurrency,
+    [values.currency_code, baseCurrency],
   );
   return isForeignCustomer;
 };

@@ -10,18 +10,16 @@ import {
   InputPrependText,
 } from '@/components';
 import { EstimateAmount } from './utils';
-import { withCurrentOrganization } from '@/containers/Organization/withCurrentOrganization';
-import { compose } from '@/utils';
+import { useCurrentOrganizationBaseCurrency } from '@/hooks/query';
 import intl from 'react-intl-universal';
 
 /**
  * Project task form fields.
  * @returns
  */
-function ProjectTaskFormFieldsInner({
-  // #withCurrentOrganization
-  organization: { base_currency },
-}) {
+function ProjectTaskFormFieldsInner() {
+  const baseCurrency = useCurrentOrganizationBaseCurrency();
+
   // Formik context.
   const { values } = useFormikContext();
 
@@ -62,11 +60,9 @@ function ProjectTaskFormFieldsInner({
         </Col>
       </Row>
       {/*------------ Estimated Amount -----------*/}
-      <EstimateAmount baseCurrency={base_currency} />
+      <EstimateAmount baseCurrency={baseCurrency} />
     </div>
   );
 }
 
-export const ProjectTaskFormFields = compose(withCurrentOrganization())(
-  ProjectTaskFormFieldsInner,
-);
+export const ProjectTaskFormFields = ProjectTaskFormFieldsInner;

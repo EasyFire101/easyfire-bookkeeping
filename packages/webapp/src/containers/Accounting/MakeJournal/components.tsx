@@ -23,7 +23,8 @@ import {
 
 import { CellType, Features, Align } from '@/constants';
 
-import { useCurrentOrganization, useFeatureCan } from '@/hooks/state';
+import { useFeatureCan } from '@/hooks/state';
+import { useCurrentOrganizationBaseCurrency } from '@/hooks/query';
 import { useJournalIsForeign } from './utils';
 import { withSettings } from '@/containers/Settings/withSettings';
 import { transactionNumber } from '@/utils';
@@ -187,7 +188,7 @@ export const useJournalTableEntriesColumns = () => {
  * @returns {JSX.Element}
  */
 export function JournalExchangeRateInputField({ ...props }) {
-  const currentOrganization = useCurrentOrganization();
+  const baseCurrency = useCurrentOrganizationBaseCurrency();
   const { values } = useFormikContext();
 
   const isForeignJouranl = useJournalIsForeign();
@@ -199,7 +200,7 @@ export function JournalExchangeRateInputField({ ...props }) {
   return (
     <ExchangeRateInputGroup
       fromCurrency={values.currency_code}
-      toCurrency={currentOrganization.base_currency}
+      toCurrency={baseCurrency}
       {...props}
     />
   );

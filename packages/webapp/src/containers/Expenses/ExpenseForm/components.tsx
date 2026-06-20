@@ -20,7 +20,8 @@ import {
 } from '@/components/DataTableCells';
 import { CellType, Features, Align } from '@/constants';
 
-import { useCurrentOrganization, useFeatureCan } from '@/hooks/state';
+import { useFeatureCan } from '@/hooks/state';
+import { useCurrentOrganizationBaseCurrency } from '@/hooks/query';
 import { useExpensesIsForeign } from './utils';
 
 /**
@@ -168,7 +169,7 @@ export function useExpenseFormTableColumns({ landedCost }) {
  * @returns {JSX.Element}
  */
 export function ExpensesExchangeRateInputField({ ...props }) {
-  const currentOrganization = useCurrentOrganization();
+  const baseCurrency = useCurrentOrganizationBaseCurrency();
   const { values } = useFormikContext();
 
   const isForeignJouranl = useExpensesIsForeign();
@@ -180,7 +181,7 @@ export function ExpensesExchangeRateInputField({ ...props }) {
   return (
     <ExchangeRateInputGroup
       fromCurrency={values.currency_code}
-      toCurrency={currentOrganization.base_currency}
+      toCurrency={baseCurrency}
       {...props}
     />
   );

@@ -14728,7 +14728,7 @@ export interface components {
              */
             databaseBatch?: string | null;
             /** @description Organization metadata */
-            metadata: components["schemas"]["OrganizationMetadataResponseDto"][];
+            metadata: components["schemas"]["OrganizationMetadataResponseDto"];
             /**
              * @description Whether the organization is ready
              * @example true

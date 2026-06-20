@@ -24,20 +24,19 @@ import {
   FInputGroup,
   FTextArea,
 } from '@/components';
-import { momentFormatter, compose } from '@/utils';
+import { momentFormatter } from '@/utils';
 import { useAutofocus } from '@/hooks';
+import { useCurrentOrganizationBaseCurrency } from '@/hooks/query';
 import { Features, ACCOUNT_TYPE } from '@/constants';
 import { useSetPrimaryBranchToForm } from './utils';
 import { useRefundVendorCreditContext } from './RefundVendorCreditFormProvider';
-import { withCurrentOrganization } from '@/containers/Organization/withCurrentOrganization';
 
 /**
  * Refund Vendor credit form fields.
  */
-function RefundVendorCreditFormFieldsInner({
-  // #withCurrentOrganization
-  organization: { base_currency },
-}) {
+function RefundVendorCreditFormFieldsInner() {
+  const baseCurrency = useCurrentOrganizationBaseCurrency();
+
   const { accounts, branches } = useRefundVendorCreditContext();
   const { values } = useFormikContext();
 
@@ -128,11 +127,11 @@ function RefundVendorCreditFormFieldsInner({
         </ControlGroup>
       </FFormGroup>
 
-      <If condition={!isEqual(base_currency, values.currency_code)}>
+      <If condition={!isEqual(baseCurrency, values.currency_code)}>
         {/*------------ exchange rate -----------*/}
         <ExchangeRateMutedField
           name={'exchange_rate'}
-          fromCurrency={base_currency}
+          fromCurrency={baseCurrency}
           toCurrency={values.currency_code}
           formGroupProps={{ label: '', inline: false }}
           date={values.date}
@@ -163,9 +162,7 @@ function RefundVendorCreditFormFieldsInner({
   );
 }
 
-export const RefundVendorCreditFormFields = compose(withCurrentOrganization())(
-  RefundVendorCreditFormFieldsInner,
-);
+export const RefundVendorCreditFormFields = RefundVendorCreditFormFieldsInner;
 
 export const BranchRowDivider = styled.div`
   --x-divider-color: #ebf1f6;

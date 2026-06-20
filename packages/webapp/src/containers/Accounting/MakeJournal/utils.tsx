@@ -17,7 +17,7 @@ import {
 import { AppToaster } from '@/components';
 import { useFormikContext } from 'formik';
 import { useMakeJournalFormContext } from './MakeJournalProvider';
-import { useCurrentOrganization } from '@/hooks/state';
+import { useCurrentOrganizationBaseCurrency } from '@/hooks/query';
 import { transformAttachmentsToForm } from '@/containers/Attachments/utils';
 
 const ERROR = {
@@ -302,11 +302,11 @@ export const useManualJournalTotalFormatted = () => {
  */
 export const useJournalIsForeign = () => {
   const { values } = useFormikContext();
-  const currentOrganization = useCurrentOrganization();
+  const baseCurrency = useCurrentOrganizationBaseCurrency();
 
   const isForeignJournal = React.useMemo(
-    () => values.currency_code !== currentOrganization.base_currency,
-    [values.currency_code, currentOrganization.base_currency],
+    () => values.currency_code !== baseCurrency,
+    [values.currency_code, baseCurrency],
   );
   return isForeignJournal;
 };
