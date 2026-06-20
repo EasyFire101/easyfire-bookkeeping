@@ -72,12 +72,20 @@ const commonInvalidateQueries = (
 export function useCashflowAccounts(
   query?: Record<string, unknown>,
   props?: Omit<
-    UseQueryOptions<BankingAccountsListResponse, Error, BankingAccountsListResponse>,
+    UseQueryOptions<
+      BankingAccountsListResponse,
+      Error,
+      BankingAccountsListResponse
+    >,
     'queryKey' | 'queryFn'
   >,
 ) {
   const fetcher = useApiFetcher();
-  return useQuery<BankingAccountsListResponse, Error, BankingAccountsListResponse>({
+  return useQuery<
+    BankingAccountsListResponse,
+    Error,
+    BankingAccountsListResponse
+  >({
     ...props,
     queryKey: cashflowAccountsKeys.list(query),
     queryFn: () => fetchCashflowAccounts(fetcher),
@@ -103,13 +111,21 @@ export function useCreateCashflowTransaction(
 export function useCashflowTransaction(
   id: number | null | undefined,
   props?: Omit<
-    UseQueryOptions<BankingTransactionResponse, Error, BankingTransactionResponse>,
+    UseQueryOptions<
+      BankingTransactionResponse,
+      Error,
+      BankingTransactionResponse
+    >,
     'queryKey' | 'queryFn'
   >,
 ) {
   const fetcher = useApiFetcher();
 
-  return useQuery<BankingTransactionResponse, Error, BankingTransactionResponse>({
+  return useQuery<
+    BankingTransactionResponse,
+    Error,
+    BankingTransactionResponse
+  >({
     ...props,
     queryKey: cashflowAccountsKeys.transaction(id),
     queryFn: () => fetchCashflowTransaction(fetcher, id!),
@@ -237,13 +253,21 @@ export function useRefreshCashflowTransactions() {
 export function useUncategorizedTransaction(
   id: number | null | undefined,
   props?: Omit<
-    UseQueryOptions<UncategorizedTransactionResponse, Error, UncategorizedTransactionResponse>,
+    UseQueryOptions<
+      UncategorizedTransactionResponse,
+      Error,
+      UncategorizedTransactionResponse
+    >,
     'queryKey' | 'queryFn'
   >,
 ) {
   const fetcher = useApiFetcher();
 
-  return useQuery<UncategorizedTransactionResponse, Error, UncategorizedTransactionResponse>({
+  return useQuery<
+    UncategorizedTransactionResponse,
+    Error,
+    UncategorizedTransactionResponse
+  >({
     ...props,
     queryKey: cashflowAccountsKeys.uncategorizedTransaction(id),
     queryFn: () => fetchUncategorizedTransaction(fetcher, id!),

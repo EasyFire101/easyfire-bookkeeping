@@ -6,7 +6,7 @@ import type {
   TaxRatesListResponse,
   CreateItemBody,
   EditItemBody,
-  ItemCategoriesListResponse
+  ItemCategoriesListResponse,
 } from '@bigcapital/sdk-ts';
 import {
   useItem,

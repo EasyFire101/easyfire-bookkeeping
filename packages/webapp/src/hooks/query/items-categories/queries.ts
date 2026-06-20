@@ -91,13 +91,15 @@ export function useItemsCategories(
   >,
 ) {
   const fetcher = useApiFetcher();
-  return useQuery<ItemCategoriesListResponse, Error, ItemCategoriesListResponse>(
-    {
-      ...props,
-      queryKey: [...itemsCategoriesKeys.all(), query],
-      queryFn: () => fetchItemCategories(fetcher),
-    },
-  );
+  return useQuery<
+    ItemCategoriesListResponse,
+    Error,
+    ItemCategoriesListResponse
+  >({
+    ...props,
+    queryKey: [...itemsCategoriesKeys.all(), query],
+    queryFn: () => fetchItemCategories(fetcher),
+  });
 }
 
 export function useItemCategory(

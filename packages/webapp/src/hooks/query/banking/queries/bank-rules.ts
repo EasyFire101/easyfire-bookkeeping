@@ -33,7 +33,11 @@ const commonInvalidateQueries = (queryClient: QueryClient) => {
 };
 
 export function useCreateBankRule(
-  options?: UseMutationOptions<CreateBankRuleResponse, Error, CreateBankRuleBody>,
+  options?: UseMutationOptions<
+    CreateBankRuleResponse,
+    Error,
+    CreateBankRuleBody
+  >,
 ): UseMutationResult<CreateBankRuleResponse, Error, CreateBankRuleBody> {
   const queryClient = useQueryClient();
   const fetcher = useApiFetcher();
