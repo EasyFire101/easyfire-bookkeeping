@@ -19,12 +19,17 @@ export default function BuildingWorkspaceStep({
   const isDarkMode = useIsDarkMode();
 
   const {
-    data: { isRunning, isWaiting, isFailed, isCompleted },
+    data: jobState,
     isFetching: isJobFetching,
   } = useJob(jobId, {
     refetchInterval: 2000,
     enabled: !!jobId,
   });
+
+  const isRunning = jobState?.isRunning;
+  const isWaiting = jobState?.isWaiting; 
+  const isFailed = jobState?.isFailed;
+  const isCompleted = jobState?.isCompleted;
 
   useEffect(() => {
     if (isCompleted) {
