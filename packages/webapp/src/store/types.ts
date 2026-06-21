@@ -25,7 +25,6 @@ export * from './vendors/vendors.types';
 export * from './payment-receives/payment-receives.type';
 export * from './payment-mades/payment-mades.type';
 export * from './organizations/organizations.types';
-export * from './subscription/subscription.types';
 export * from './inventory-adjustments/inventory-adjustment.type';
 export * from './credit-note/credit-note.type';
 export * from './vendor-credit/vendor-credit.type';

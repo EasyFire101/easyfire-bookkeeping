@@ -29,7 +29,6 @@ import { vendorsPersistReducer as vendors } from './vendors/vendors.reducer';
 import { paymentReceivesPersistReducer as paymentReceives } from './payment-receives/payment-receives.reducer';
 import { paymentMadesPersistReducer as paymentMades } from './payment-mades/payment-mades.reducer';
 import { organizationsReducer as organizations } from './organizations/organizations.reducers';
-import { subscriptionsReducer as subscriptions } from './subscription/subscription.reducer';
 import { inventoryAdjustmentsPersistReducer as inventoryAdjustments } from './inventory-adjustments/inventory-adjustment.reducer';
 import { SubscriptionPlansSlice } from './plans/plans.reducer';
 import { creditNotesPersistReducer as creditNotes } from './credit-note/credit-note.reducer';
@@ -41,7 +40,6 @@ import { PlaidSlice } from './banking/banking.reducer';
 const appReducer = combineReducers({
   authentication,
   organizations,
-  subscriptions,
   dashboard,
   users,
   accounts,

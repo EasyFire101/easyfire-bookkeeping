@@ -4,6 +4,7 @@ import styled from 'styled-components';
 import intl from 'react-intl-universal';
 import { FastField, ErrorMessage, useFormikContext } from 'formik';
 import { useAutofocus } from '@/hooks';
+import { useCurrentOrganizationBaseCurrency } from '@/hooks/query';
 import { isEqual } from 'lodash';
 import { Classes, Position, ControlGroup } from '@blueprintjs/core';
 import classNames from 'classnames';
@@ -29,19 +30,14 @@ import {
 import { momentFormatter, compose } from '@/utils';
 import { useSetPrimaryBranchToForm } from './utils';
 import { useQuickPaymentReceiveContext } from './QuickPaymentReceiveFormProvider';
-import { withCurrentOrganization } from '@/containers/Organization/withCurrentOrganization';
 import { withSettings } from '@/containers/Settings/withSettings';
 
 /**
  * Quick payment receive form fields.
  */
-function QuickPaymentReceiveFormFieldsInner({
-  paymentReceiveAutoIncrement,
-
-  // #withCurrentOrganization
-  organization: { base_currency },
-}) {
-  const { accounts, branches, baseCurrency } = useQuickPaymentReceiveContext();
+function QuickPaymentReceiveFormFieldsInner({ paymentReceiveAutoIncrement }) {
+  const baseCurrency = useCurrentOrganizationBaseCurrency();
+  const { accounts, branches } = useQuickPaymentReceiveContext();
 
   // Intl context.
   const { values } = useFormikContext();
@@ -107,11 +103,11 @@ function QuickPaymentReceiveFormFieldsInner({
         </ControlGroup>
       </FFormGroup>
 
-      <If condition={!isEqual(base_currency, values.currency_code)}>
+      <If condition={!isEqual(baseCurrency, values.currency_code)}>
         {/*------------ exchange rate -----------*/}
         <ExchangeRateMutedField
           name={'exchange_rate'}
-          fromCurrency={base_currency}
+          fromCurrency={baseCurrency}
           toCurrency={values.currency_code}
           formGroupProps={{ label: '', inline: false }}
           date={values.payment_date}
@@ -177,7 +173,6 @@ export const QuickPaymentReceiveFormFields = compose(
   withSettings(({ paymentReceiveSettings }) => ({
     paymentReceiveAutoIncrement: paymentReceiveSettings?.autoIncrement,
   })),
-  withCurrentOrganization(),
 )(QuickPaymentReceiveFormFieldsInner);
 
 export const BranchRowDivider = styled.div`

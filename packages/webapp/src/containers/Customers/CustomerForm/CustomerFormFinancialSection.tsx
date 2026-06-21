@@ -22,7 +22,7 @@ import {
   useIsCustomerForeignCurrency,
   useSetPrimaryBranchToForm,
 } from './utils';
-import { useCurrentOrganization } from '@/hooks/state';
+import { useCurrentOrganizationBaseCurrency } from '@/hooks/query';
 import { CustomerFormSectionTitle } from './CustomerFormSectionTitle';
 import intl from 'react-intl-universal';
 
@@ -135,7 +135,7 @@ function CustomerOpeningBalanceField() {
 function CustomerOpeningBalanceExchangeRateField() {
   const { values } = useFormikContext();
   const { customerId } = useCustomerFormContext();
-  const currentOrganization = useCurrentOrganization();
+  const baseCurrency = useCurrentOrganizationBaseCurrency();
 
   const isForeignJouranl = useIsCustomerForeignCurrency();
 
@@ -146,7 +146,7 @@ function CustomerOpeningBalanceExchangeRateField() {
   return (
     <ExchangeRateInputGroup
       fromCurrency={values.currency_code}
-      toCurrency={currentOrganization.base_currency}
+      toCurrency={baseCurrency}
       name={'opening_balance_exchange_rate'}
       onRecalcConfirm={() => {}}
       onCancel={() => {}}

@@ -5,10 +5,10 @@ import * as R from 'ramda';
 import { useHistory } from 'react-router-dom';
 
 import { useAbilityContext } from '@/hooks';
+import { useSubscription } from '@/hooks/query';
 import {
   useSidebarSubmnuActions,
   useDialogActions,
-  useSubscription,
   useSidebarSubmenu,
   useFeatureCan,
 } from '@/hooks/state';

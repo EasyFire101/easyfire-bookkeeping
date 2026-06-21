@@ -15,7 +15,6 @@ import { PaymentMadesEmptyStatus } from './PaymentMadesEmptyStatus';
 
 import { withPaymentMade } from './withPaymentMade';
 import { withPaymentMadeActions } from './withPaymentMadeActions';
-import { withCurrentOrganization } from '@/containers/Organization/withCurrentOrganization';
 import { withAlertActions } from '@/containers/Alert/withAlertActions';
 import { withDrawerActions } from '@/containers/Drawer/withDrawerActions';
 import { withSettings } from '@/containers/Settings/withSettings';
@@ -138,7 +137,6 @@ export const PaymentMadesTable = compose(
   withPaymentMade(({ paymentMadesTableState }) => ({ paymentMadesTableState })),
   withAlertActions,
   withDrawerActions,
-  withCurrentOrganization(),
   withSettings(({ billPaymentSettings }) => ({
     paymentMadesTableSize: billPaymentSettings?.tableSize,
   })),

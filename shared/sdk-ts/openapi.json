@@ -40827,10 +40827,11 @@
           },
           "metadata": {
             "description": "Organization metadata",
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/OrganizationMetadataResponseDto"
-            }
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/OrganizationMetadataResponseDto"
+              }
+            ]
           },
           "isReady": {
             "type": "boolean",

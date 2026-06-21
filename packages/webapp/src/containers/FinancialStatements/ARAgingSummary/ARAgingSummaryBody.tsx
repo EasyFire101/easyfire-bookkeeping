@@ -1,21 +1,14 @@
 import React from 'react';
-import * as R from 'ramda';
 
 import { ARAgingSummaryTable } from './ARAgingSummaryTable';
 import { FinancialReportBody } from '../FinancialReportPage';
 import { FinancialSheetSkeleton } from '@/components';
 import { useARAgingSummaryContext } from './ARAgingSummaryProvider';
 
-import {
-  withCurrentOrganization,
-  WithCurrentOrganizationProps,
-} from '@/containers/Organization/withCurrentOrganization';
+import { useCurrentOrganizationName } from '@/hooks/query';
 
-interface ARAgingSummaryBodyProps {
-  organizationName: WithCurrentOrganizationProps['organization']['name'];
-}
-
-function ARAgingSummaryBodyJSX({ organizationName }: ARAgingSummaryBodyProps) {
+function ARAgingSummaryBodyJSX() {
+  const organizationName = useCurrentOrganizationName();
   const { isARAgingLoading } = useARAgingSummaryContext();
 
   return (
@@ -29,8 +22,4 @@ function ARAgingSummaryBodyJSX({ organizationName }: ARAgingSummaryBodyProps) {
   );
 }
 
-export const ARAgingSummaryBody = R.compose(
-  withCurrentOrganization(({ organization }) => ({
-    organizationName: organization?.name,
-  })),
-)(ARAgingSummaryBodyJSX);
+export const ARAgingSummaryBody = ARAgingSummaryBodyJSX;

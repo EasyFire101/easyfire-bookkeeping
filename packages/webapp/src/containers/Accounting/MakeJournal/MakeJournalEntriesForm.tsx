@@ -23,7 +23,7 @@ import { MakeJournalFormDialogs } from './MakeJournalFormDialogs';
 import { MakeJournalFormTopBar } from './MakeJournalFormTopBar';
 
 import { withSettings } from '@/containers/Settings/withSettings';
-import { withCurrentOrganization } from '@/containers/Organization/withCurrentOrganization';
+import { useCurrentOrganizationBaseCurrency } from '@/hooks/query';
 
 import { AppToaster } from '@/components';
 import { PageForm } from '@/components/PageForm';
@@ -44,10 +44,9 @@ function MakeJournalEntriesFormInner({
   journalNextNumber,
   journalNumberPrefix,
   journalAutoIncrement,
-
-  // #withCurrentOrganization
-  organization: { base_currency },
 }) {
+  const baseCurrency = useCurrentOrganizationBaseCurrency();
+
   // Journal form context.
   const {
     createJournalMutate,
@@ -78,10 +77,10 @@ function MakeJournalEntriesFormInner({
             ...(journalAutoIncrement && {
               journal_number: journalNumber,
             }),
-            currency_code: base_currency,
+            currency_code: baseCurrency,
           }),
     }),
-    [manualJournal, base_currency, journalNumber, journalAutoIncrement],
+    [manualJournal, baseCurrency, journalNumber, journalAutoIncrement],
   );
 
   // Handle the form submiting.
@@ -215,5 +214,4 @@ export const MakeJournalEntriesForm = compose(
     journalNumberPrefix: manualJournalsSettings?.numberPrefix,
     journalAutoIncrement: manualJournalsSettings?.autoIncrement,
   })),
-  withCurrentOrganization(),
 )(MakeJournalEntriesFormInner);

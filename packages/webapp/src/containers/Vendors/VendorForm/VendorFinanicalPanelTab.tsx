@@ -22,7 +22,7 @@ import {
   useSetPrimaryBranchToForm,
 } from './utils';
 import { useVendorFormContext } from './VendorFormProvider';
-import { useCurrentOrganization } from '@/hooks/state';
+import { useCurrentOrganizationBaseCurrency } from '@/hooks/query';
 import intl from 'react-intl-universal';
 
 /**
@@ -151,7 +151,7 @@ function VendorOpeningBalanceExchangeRateField() {
   const { values } = useFormikContext();
   const { vendorId } = useVendorFormContext();
   const isForeignVendor = useIsVendorForeignCurrency();
-  const currentOrganization = useCurrentOrganization();
+  const baseCurrency = useCurrentOrganizationBaseCurrency();
 
   // Cannot continue if the current vendor does not have foreign currency.
   if (!isForeignVendor || vendorId) {
@@ -166,7 +166,7 @@ function VendorOpeningBalanceExchangeRateField() {
     >
       <ExchangeRateInputGroup
         fromCurrency={values.currency_code}
-        toCurrency={currentOrganization.base_currency}
+        toCurrency={baseCurrency}
         name={'opening_balance_exchange_rate'}
         fastField
       />

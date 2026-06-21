@@ -15,19 +15,15 @@ import {
 
 import { VendorFormContent } from './VendorFormContent';
 
-import { withCurrentOrganization } from '@/containers/Organization/withCurrentOrganization';
-
 import { useVendorFormContext } from './VendorFormProvider';
-import { compose, transformToForm, safeInvoke, parseBoolean } from '@/utils';
+import { transformToForm, safeInvoke, parseBoolean } from '@/utils';
 import { defaultInitialValues } from './utils';
+import { useCurrentOrganizationBaseCurrency } from '@/hooks/query';
 
 /**
  * Vendor form.
  */
 function VendorFormFormikBase({
-  // #withCurrentOrganization
-  organization: { base_currency },
-
   // #ownProps
   initialValues,
   onSubmitSuccess,
@@ -35,6 +31,8 @@ function VendorFormFormikBase({
   onCancel,
   className,
 }) {
+  const baseCurrency = useCurrentOrganizationBaseCurrency();
+
   // Vendor form context.
   const {
     vendorId,
@@ -51,11 +49,11 @@ function VendorFormFormikBase({
     () => ({
       ...defaultInitialValues,
       ...transformToForm(initialValues, defaultInitialValues),
-      currency_code: base_currency,
+      currency_code: baseCurrency,
       ...transformToForm(vendor, defaultInitialValues),
       ...transformToForm(contactDuplicate, defaultInitialValues),
     }),
-    [vendor, contactDuplicate, base_currency, initialValues],
+    [vendor, contactDuplicate, baseCurrency, initialValues],
   );
 
   // Handles the form submit.
@@ -127,6 +125,4 @@ const VendorFormFields = styled.div`
   }
 `;
 
-export const VendorFormFormik = compose(withCurrentOrganization())(
-  VendorFormFormikBase,
-);
+export const VendorFormFormik = VendorFormFormikBase;

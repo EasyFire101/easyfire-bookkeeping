@@ -14,7 +14,7 @@ import {
   orderingLinesIndexes,
   formattedAmount,
 } from '@/utils';
-import { useCurrentOrganization } from '@/hooks/state';
+import { useCurrentOrganizationBaseCurrency } from '@/hooks/query';
 import {
   transformAttachmentsToForm,
   transformAttachmentsToRequest,
@@ -281,11 +281,11 @@ export const usePaymentReceivedTotalExceededAmount = () => {
  */
 export const useEstimateIsForeignCustomer = () => {
   const { values } = useFormikContext();
-  const currentOrganization = useCurrentOrganization();
+  const baseCurrency = useCurrentOrganizationBaseCurrency();
 
   const isForeignCustomer = React.useMemo(
-    () => values.currency_code !== currentOrganization.base_currency,
-    [values.currency_code, currentOrganization.base_currency],
+    () => values.currency_code !== baseCurrency,
+    [values.currency_code, baseCurrency],
   );
   return isForeignCustomer;
 };

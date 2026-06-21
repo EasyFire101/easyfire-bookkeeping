@@ -17,7 +17,6 @@ import { PaymentReceiveFormTopBar } from './PaymentReceiveFormTopBar';
 import { PaymentReceiveInnerProvider } from './PaymentReceiveInnerProvider';
 
 import { withSettings } from '@/containers/Settings/withSettings';
-import { withCurrentOrganization } from '@/containers/Organization/withCurrentOrganization';
 import { withDialogActions } from '@/containers/Dialog/withDialogActions';
 
 import {
@@ -26,6 +25,7 @@ import {
 } from './PaymentReceiveForm.schema';
 import { AppToaster } from '@/components';
 import { transactionNumber, compose } from '@/utils';
+import { useCurrentOrganizationBaseCurrency } from '@/hooks/query';
 
 import { usePaymentReceiveFormContext } from './PaymentReceiveFormProvider';
 import {
@@ -49,12 +49,11 @@ function PaymentReceiveFormRoot({
   paymentReceiveNumberPrefix,
   paymentReceiveAutoIncrement,
 
-  // #withCurrentOrganization
-  organization: { base_currency },
-
   // #withDialogActions
   openDialog,
 }) {
+  const baseCurrency = useCurrentOrganizationBaseCurrency();
+
   const history = useHistory();
 
   // Payment receive form context.
@@ -87,7 +86,7 @@ function PaymentReceiveFormRoot({
             payment_receive_no: nextPaymentNumber,
           }),
           deposit_account_id: defaultTo(preferredDepositAccount, ''),
-          currency_code: base_currency,
+          currency_code: baseCurrency,
           pdf_template_id: paymentReceivedState?.defaultTemplateId,
         }),
   };
@@ -210,6 +209,5 @@ export const PaymentReceivedForm = compose(
     paymentReceiveAutoIncrement: paymentReceiveSettings?.autoIncrement,
     preferredDepositAccount: paymentReceiveSettings?.preferredDepositAccount,
   })),
-  withCurrentOrganization(),
   withDialogActions,
 )(PaymentReceiveFormRoot);

@@ -16,7 +16,7 @@ import {
 import { FormattedMessage as T } from '@/components';
 
 import { useItemFormContext } from './ItemFormProvider';
-import { withCurrentOrganization } from '@/containers/Organization/withCurrentOrganization';
+import { useCurrentOrganizationBaseCurrency } from '@/hooks/query';
 import { ACCOUNT_PARENT_TYPE } from '@/constants/accountTypes';
 import {
   sellDescriptionFieldShouldUpdate,
@@ -27,14 +27,16 @@ import {
   purchaseDescFieldShouldUpdate,
   taxRateFieldShouldUpdate,
 } from './utils';
-import { compose, inputIntent } from '@/utils';
+import { inputIntent } from '@/utils';
 import { TaxRatesSelect } from '@/components/TaxRates/TaxRatesSelect';
 import intl from 'react-intl-universal';
 
 /**
  * Item form body.
  */
-function ItemFormBodyInner({ organization: { base_currency } }) {
+function ItemFormBodyInner() {
+  const baseCurrency = useCurrentOrganizationBaseCurrency();
+
   const { accounts, taxRates } = useItemFormContext();
   const { values } = useFormikContext();
 
@@ -68,7 +70,7 @@ function ItemFormBodyInner({ organization: { base_currency } }) {
             fastField
           >
             <ControlGroup>
-              <InputPrependText text={base_currency} />
+              <InputPrependText text={baseCurrency} />
               <FMoneyInputGroup
                 name={'sell_price'}
                 shouldUpdate={sellPriceFieldShouldUpdate}
@@ -163,7 +165,7 @@ function ItemFormBodyInner({ organization: { base_currency } }) {
             fastField
           >
             <ControlGroup>
-              <InputPrependText text={base_currency} />
+              <InputPrependText text={baseCurrency} />
 
               <FMoneyInputGroup
                 name={'cost_price'}
@@ -244,6 +246,4 @@ function ItemFormBodyInner({ organization: { base_currency } }) {
   );
 }
 
-export const ItemFormBody = compose(withCurrentOrganization())(
-  ItemFormBodyInner,
-);
+export const ItemFormBody = ItemFormBodyInner;

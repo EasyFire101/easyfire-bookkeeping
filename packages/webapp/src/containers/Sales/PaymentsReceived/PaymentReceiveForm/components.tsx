@@ -8,7 +8,7 @@ import * as R from 'ramda';
 
 import { Money, ExchangeRateInputGroup, MoneyFieldCell } from '@/components';
 
-import { useCurrentOrganization } from '@/hooks/state';
+import { useCurrentOrganizationBaseCurrency } from '@/hooks/query';
 import { useEstimateIsForeignCustomer } from './utils';
 import { transactionNumber } from '@/utils';
 import { withSettings } from '@/containers/Settings/withSettings';
@@ -90,7 +90,7 @@ export const usePaymentReceiveEntriesColumns = () => {
  * @returns {JSX.Element}
  */
 export function PaymentReceiveExchangeRateInputField({ ...props }) {
-  const currentOrganization = useCurrentOrganization();
+  const baseCurrency = useCurrentOrganizationBaseCurrency();
   const { values } = useFormikContext();
 
   const isForeignCustomer = useEstimateIsForeignCustomer();
@@ -102,7 +102,7 @@ export function PaymentReceiveExchangeRateInputField({ ...props }) {
   return (
     <ExchangeRateInputGroup
       fromCurrency={values.currency_code}
-      toCurrency={currentOrganization.base_currency}
+      toCurrency={baseCurrency}
       {...props}
     />
   );

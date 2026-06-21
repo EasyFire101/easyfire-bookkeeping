@@ -2,7 +2,7 @@
 import React from 'react';
 import { useFormikContext } from 'formik';
 import { ExchangeRateInputGroup } from '@/components';
-import { useCurrentOrganization } from '@/hooks/state';
+import { useCurrentOrganizationBaseCurrency } from '@/hooks/query';
 import { useVendorNoteIsForeignCustomer } from './utils';
 
 /**
@@ -10,7 +10,7 @@ import { useVendorNoteIsForeignCustomer } from './utils';
  * @returns {JSX.Element}
  */
 export function VendorCreditNoteExchangeRateInputField({ ...props }) {
-  const currentOrganization = useCurrentOrganization();
+  const baseCurrency = useCurrentOrganizationBaseCurrency();
   const { values } = useFormikContext();
 
   const isForeignCustomer = useVendorNoteIsForeignCustomer();
@@ -22,7 +22,7 @@ export function VendorCreditNoteExchangeRateInputField({ ...props }) {
   return (
     <ExchangeRateInputGroup
       fromCurrency={values.currency_code}
-      toCurrency={currentOrganization.base_currency}
+      toCurrency={baseCurrency}
       {...props}
     />
   );

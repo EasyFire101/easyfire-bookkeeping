@@ -4086,6 +4086,23 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/subscription/lemon": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Get Lemon Squeezy subscription details for the current tenant */
+        get: operations["SubscriptionsController_getLemonSubscriptions"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/subscription/lemon/checkout_url": {
         parameters: {
             query?: never;
@@ -14728,7 +14745,7 @@ export interface components {
              */
             databaseBatch?: string | null;
             /** @description Organization metadata */
-            metadata: components["schemas"]["OrganizationMetadataResponseDto"][];
+            metadata: components["schemas"]["OrganizationMetadataResponseDto"];
             /**
              * @description Whether the organization is ready
              * @example true
@@ -14744,6 +14761,47 @@ export interface components {
              * @example false
              */
             isUpgradeRunning: boolean;
+        };
+        SubscriptionResponseDto: {
+            id?: number;
+            slug: string;
+            status: string;
+            active: boolean;
+            inactive: boolean;
+            onTrial: boolean;
+            canceled: boolean;
+            ended: boolean;
+            paymentStatus: string;
+            startsAt?: string | null;
+            endsAt?: string | null;
+            canceledAt?: string | null;
+            trialEndsAt?: string | null;
+            statusFormatted: string;
+            canceledAtFormatted?: string | null;
+            endsAtFormatted?: string | null;
+            trialStartsAtFormatted?: string | null;
+            trialEndsAtFormatted?: string | null;
+            planName: string;
+            planSlug: string;
+            planPrice: number;
+            planPriceCurrency: string;
+            planPriceFormatted: string;
+            planPeriod: string;
+        };
+        SubscriptionsListResponseDto: {
+            subscriptions: components["schemas"]["SubscriptionResponseDto"][];
+        };
+        LemonSubscriptionUrlsDto: {
+            updatePaymentMethod?: string;
+            customerPortal?: string;
+            [key: string]: unknown;
+        };
+        LemonSubscriptionResponseDto: {
+            slug: string;
+            urls: components["schemas"]["LemonSubscriptionUrlsDto"];
+        };
+        LemonSubscriptionsListResponseDto: {
+            lemonSubscriptions: components["schemas"]["LemonSubscriptionResponseDto"][];
         };
         BuildOrganizationDto: {
             /**
@@ -29250,7 +29308,29 @@ export interface operations {
                 headers: {
                     [name: string]: unknown;
                 };
-                content?: never;
+                content: {
+                    "application/json": components["schemas"]["SubscriptionsListResponseDto"];
+                };
+            };
+        };
+    };
+    SubscriptionsController_getLemonSubscriptions: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Lemon subscription details retrieved successfully */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["LemonSubscriptionsListResponseDto"];
+                };
             };
         };
     };

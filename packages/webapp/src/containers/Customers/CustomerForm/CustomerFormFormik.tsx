@@ -4,11 +4,11 @@ import { Formik, Form, FormikHelpers } from 'formik';
 import { Intent } from '@blueprintjs/core';
 import styled from 'styled-components';
 import { CreateCustomerForm, EditCustomerForm } from './CustomerForm.schema';
-import { compose, transformToForm, saveInvoke, parseBoolean } from '@/utils';
+import { transformToForm, saveInvoke, parseBoolean } from '@/utils';
 import { useCustomerFormContext } from './CustomerFormProvider';
 import { defaultInitialValues } from './utils';
 import { AppToaster } from '@/components';
-import { withCurrentOrganization } from '@/containers/Organization/withCurrentOrganization';
+import { useCurrentOrganizationBaseCurrency } from '@/hooks/query';
 import { CustomerFormContent } from './CustomerFormContent';
 
 type CustomerFormValues = {
@@ -56,10 +56,6 @@ type CustomerFormSubmitPayload = {
 };
 
 type CustomerFormFormikRootProps = {
-  organization: {
-    base_currency: string;
-  };
-
   // #ownProps
   initialValues?: Partial<CustomerFormValues>;
   onSubmitSuccess?: (
@@ -81,8 +77,6 @@ type CustomerFormFormikRootProps = {
 const EMPTY_INITIAL_VALUES: Partial<CustomerFormValues> = {};
 
 function CustomerFormFormikRoot({
-  organization: { base_currency },
-
   // #ownProps
   initialValues: initialCustomerValues = EMPTY_INITIAL_VALUES,
   onSubmitSuccess,
@@ -90,6 +84,8 @@ function CustomerFormFormikRoot({
   // `onCancel` is accepted for compatibility but currently not used.
   className,
 }: CustomerFormFormikRootProps) {
+  const baseCurrency = useCurrentOrganizationBaseCurrency();
+
   const {
     customer,
     submitPayload,
@@ -103,14 +99,14 @@ function CustomerFormFormikRoot({
     () =>
       ({
         ...defaultInitialValues,
-        currency_code: base_currency,
+        currency_code: baseCurrency,
         ...transformToForm(
           contactDuplicate ?? customer ?? {},
           defaultInitialValues,
         ),
         ...transformToForm(initialCustomerValues, defaultInitialValues),
       }) as CustomerFormValues,
-    [customer, contactDuplicate, base_currency, initialCustomerValues],
+    [customer, contactDuplicate, baseCurrency, initialCustomerValues],
   );
 
   // Handles the form submit.
@@ -181,6 +177,4 @@ const CustomerFormFields = styled.div`
   }
 `;
 
-export const CustomerFormFormik = compose(withCurrentOrganization(undefined))(
-  CustomerFormFormikRoot,
-);
+export const CustomerFormFormik = CustomerFormFormikRoot;

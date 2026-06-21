@@ -3,7 +3,7 @@ import React, { useEffect, useRef } from 'react';
 import { useFormikContext } from 'formik';
 import * as R from 'ramda';
 import { ExchangeRateInputGroup } from '@/components';
-import { useCurrentOrganization } from '@/hooks/state';
+import { useCurrentOrganizationBaseCurrency } from '@/hooks/query';
 import { useCreditNoteIsForeignCustomer, useCreditNoteSubtotal } from './utils';
 import { withSettings } from '@/containers/Settings/withSettings';
 import { transactionNumber } from '@/utils';
@@ -20,7 +20,7 @@ import { DialogsName } from '@/constants/dialogs';
  * @returns {JSX.Element}
  */
 function CreditNoteExchangeRateInputFieldRoot({ ...props }) {
-  const currentOrganization = useCurrentOrganization();
+  const baseCurrency = useCurrentOrganizationBaseCurrency();
   const { values } = useFormikContext();
   const isForeignCustomer = useCreditNoteIsForeignCustomer();
 
@@ -32,7 +32,7 @@ function CreditNoteExchangeRateInputFieldRoot({ ...props }) {
     <ExchangeRateInputGroup
       name={'exchange_rate'}
       fromCurrency={values.currency_code}
-      toCurrency={currentOrganization.base_currency}
+      toCurrency={baseCurrency}
       formGroupProps={{ label: ' ', inline: true }}
       withPopoverRecalcConfirm
       {...props}

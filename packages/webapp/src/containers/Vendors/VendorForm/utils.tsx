@@ -5,7 +5,7 @@ import { useFormikContext } from 'formik';
 import { first } from 'lodash';
 
 import { useVendorFormContext } from './VendorFormProvider';
-import { useCurrentOrganization } from '@/hooks/state';
+import { useCurrentOrganizationBaseCurrency } from '@/hooks/query';
 
 export const defaultInitialValues = {
   salutation: '',
@@ -66,10 +66,10 @@ export const useSetPrimaryBranchToForm = () => {
  * @returns {boolean}
  */
 export const useIsVendorForeignCurrency = () => {
-  const currentOrganization = useCurrentOrganization();
+  const baseCurrency = useCurrentOrganizationBaseCurrency();
   const { values } = useFormikContext();
 
-  return currentOrganization.base_currency !== values.currency_code;
+  return baseCurrency !== values.currency_code;
 };
 
 /**

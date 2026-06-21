@@ -12,15 +12,11 @@ import {
   withInventoryValuationActions,
   WithInventoryValuationActionsProps,
 } from './withInventoryValuationActions';
-import {
-  withCurrentOrganization,
-  WithCurrentOrganizationProps,
-} from '@/containers/Organization/withCurrentOrganization';
+import { useCurrentOrganizationName } from '@/hooks/query';
 import { InventoryValuationDialogs } from './InventoryValuationDialogs';
 
 interface InventoryValuationProps {
   toggleInventoryValuationFilterDrawer: WithInventoryValuationActionsProps['toggleInventoryValuationFilterDrawer'];
-  organizationName: WithCurrentOrganizationProps['organization']['name'];
 }
 
 /**
@@ -30,6 +26,7 @@ function InventoryValuationInner({
   // #withInventoryValuationActions
   toggleInventoryValuationFilterDrawer,
 }: InventoryValuationProps) {
+  const organizationName = useCurrentOrganizationName();
   const { query, setLocationQuery } = useInventoryValuationQuery();
 
   // Handle filter form submit.
@@ -79,9 +76,6 @@ function InventoryValuationInner({
   );
 }
 
-export const InventoryValuation = compose(
-  withInventoryValuationActions,
-  withCurrentOrganization(({ organization }) => ({
-    organizationName: organization.name,
-  })),
-)(InventoryValuationInner);
+export const InventoryValuation = compose(withInventoryValuationActions)(
+  InventoryValuationInner,
+);

@@ -17,7 +17,7 @@ import { useMoneyOutDialogContext } from './MoneyOutDialogProvider';
 
 import { withSettings } from '@/containers/Settings/withSettings';
 import { withDialogActions } from '@/containers/Dialog/withDialogActions';
-import { withCurrentOrganization } from '@/containers/Organization/withCurrentOrganization';
+import { useCurrentOrganizationBaseCurrency } from '@/hooks/query';
 
 import { compose, transactionNumber } from '@/utils';
 
@@ -38,14 +38,13 @@ function MoneyOutFormInner({
   // #withDialogActions
   closeDialog,
 
-  // #withCurrentOrganization
-  organization: { base_currency },
-
   // #withSettings
   transactionNextNumber,
   transactionNumberPrefix,
   transactionIncrementMode,
 }) {
+  const baseCurrency = useCurrentOrganizationBaseCurrency();
+
   const {
     dialogName,
     accountId,
@@ -62,7 +61,7 @@ function MoneyOutFormInner({
   // Initial form values.
   const initialValues = {
     ...defaultInitialValues,
-    currency_code: base_currency,
+    currency_code: baseCurrency,
     transaction_type: accountType,
     ...(transactionIncrementMode && {
       transaction_number: transactionNo,
@@ -103,7 +102,6 @@ function MoneyOutFormInner({
 
 export const MoneyOutForm = compose(
   withDialogActions,
-  withCurrentOrganization(),
   withSettings(({ cashflowSetting }) => ({
     transactionNextNumber: cashflowSetting?.nextNumber,
     transactionNumberPrefix: cashflowSetting?.numberPrefix,

@@ -38,22 +38,19 @@ import {
   momentFormatter,
   tansformDateValue,
   handleDateChange,
-  compose,
 } from '@/utils';
 import { useAutofocus } from '@/hooks';
+import { useCurrentOrganizationBaseCurrency } from '@/hooks/query';
 import { ACCOUNT_TYPE } from '@/constants/accountTypes';
 import { useSetPrimaryBranchToForm } from './utils';
 import { useRefundCreditNoteContext } from './RefundCreditNoteFormProvider';
 
-import { withCurrentOrganization } from '@/containers/Organization/withCurrentOrganization';
-
 /**
  * Refund credit note form fields.
  */
-function RefundCreditNoteFormFieldsInner({
-  // #withCurrentOrganization
-  organization: { base_currency },
-}) {
+function RefundCreditNoteFormFieldsInner() {
+  const baseCurrency = useCurrentOrganizationBaseCurrency();
+
   const { accounts, branches } = useRefundCreditNoteContext();
   const { values } = useFormikContext();
 
@@ -144,10 +141,10 @@ function RefundCreditNoteFormFieldsInner({
       </FFormGroup>
 
       {/*------------ exchange rate -----------*/}
-      <If condition={!isEqual(base_currency, values.currency_code)}>
+      <If condition={!isEqual(baseCurrency, values.currency_code)}>
         <ExchangeRateMutedField
           name={'exchange_rate'}
-          fromCurrency={base_currency}
+          fromCurrency={baseCurrency}
           toCurrency={values.currency_code}
           formGroupProps={{ label: '', inline: false }}
           date={values.date}
@@ -178,9 +175,7 @@ function RefundCreditNoteFormFieldsInner({
   );
 }
 
-export const RefundCreditNoteFormFields = compose(withCurrentOrganization())(
-  RefundCreditNoteFormFieldsInner,
-);
+export const RefundCreditNoteFormFields = RefundCreditNoteFormFieldsInner;
 
 export const BranchRowDivider = styled.div`
   --x-divider-color: #ebf1f6;

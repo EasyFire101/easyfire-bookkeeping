@@ -16,7 +16,7 @@ import {
 } from '@/utils';
 import { ERROR } from '@/constants/errors';
 import { AppToaster } from '@/components';
-import { useCurrentOrganization } from '@/hooks/state';
+import { useCurrentOrganizationBaseCurrency } from '@/hooks/query';
 import {
   aggregateItemEntriesTaxRates,
   assignEntriesTaxAmount,
@@ -375,11 +375,11 @@ export const useInvoiceAdjustmentAmountFormatted = () => {
  */
 export const useInvoiceIsForeignCustomer = () => {
   const { values } = useFormikContext();
-  const currentOrganization = useCurrentOrganization();
+  const baseCurrency = useCurrentOrganizationBaseCurrency();
 
   const isForeignCustomer = React.useMemo(
-    () => values.currency_code !== currentOrganization.base_currency,
-    [values.currency_code, currentOrganization.base_currency],
+    () => values.currency_code !== baseCurrency,
+    [values.currency_code, baseCurrency],
   );
   return isForeignCustomer;
 };

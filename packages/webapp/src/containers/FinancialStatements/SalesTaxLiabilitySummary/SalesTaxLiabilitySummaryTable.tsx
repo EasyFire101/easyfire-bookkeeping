@@ -4,21 +4,11 @@ import { TableStyle } from '@/constants';
 import { ReportDataTable, FinancialSheet } from '@/components';
 import { defaultExpanderReducer, tableRowTypesToClassnames } from '@/utils';
 import { useSalesTaxLiabilitySummaryContext } from './SalesTaxLiabilitySummaryBoot';
-import {
-  withCurrentOrganization,
-  WithCurrentOrganizationProps,
-} from '@/containers/Organization/withCurrentOrganization';
+import { useCurrentOrganizationName } from '@/hooks/query';
 import { useSalesTaxLiabilitySummaryColumns } from './utils';
-import { compose } from 'ramda';
 
-interface SalesTaxLiabilitySummaryTableRootProps {
-  organizationName: WithCurrentOrganizationProps['organization']['name'];
-}
-
-function SalesTaxLiabilitySummaryTableRoot({
-  // #ownProps
-  organizationName,
-}: SalesTaxLiabilitySummaryTableRootProps) {
+function SalesTaxLiabilitySummaryTableRoot() {
+  const organizationName = useCurrentOrganizationName();
   const { salesTaxLiabilitySummary } = useSalesTaxLiabilitySummaryContext();
 
   const table = salesTaxLiabilitySummary?.table;
@@ -96,8 +86,4 @@ const SalesTaxLiabilitySummaryDataTable = styled(ReportDataTable)`
   }
 `;
 
-export const SalesTaxLiabilitySummaryTable = compose(
-  withCurrentOrganization(({ organization }) => ({
-    organizationName: organization.name,
-  })),
-)(SalesTaxLiabilitySummaryTableRoot);
+export const SalesTaxLiabilitySummaryTable = SalesTaxLiabilitySummaryTableRoot;

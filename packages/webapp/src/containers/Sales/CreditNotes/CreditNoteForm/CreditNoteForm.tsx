@@ -37,12 +37,12 @@ import {
 } from '@/utils';
 
 import { withSettings } from '@/containers/Settings/withSettings';
-import { withCurrentOrganization } from '@/containers/Organization/withCurrentOrganization';
 import {
   CreditNoteExchangeRateSync,
   CreditNoteSyncIncrementSettingsToForm,
 } from './components';
 import { PageForm } from '@/components/PageForm';
+import { useCurrentOrganizationBaseCurrency } from '@/hooks/query';
 
 /**
  * Credit note form.
@@ -54,10 +54,9 @@ function CreditNoteFormInner({
   creditNextNumber,
   creditCustomerNotes,
   creditTermsConditions,
-
-  // #withCurrentOrganization
-  organization: { base_currency },
 }) {
+  const baseCurrency = useCurrentOrganizationBaseCurrency();
+
   const history = useHistory();
 
   // Credit note form context.
@@ -84,7 +83,7 @@ function CreditNoteFormInner({
             credit_note_number: creditNumber,
           }),
           entries: orderingLinesIndexes(defaultCreditNote.entries),
-          currency_code: base_currency,
+          currency_code: baseCurrency,
           terms_conditions: defaultTo(creditTermsConditions, ''),
           note: defaultTo(creditCustomerNotes, ''),
           pdf_template_id: creditNoteState?.defaultTemplateId,
@@ -195,5 +194,4 @@ export const CreditNoteForm = compose(
     creditCustomerNotes: creditNoteSettings?.customerNotes,
     creditTermsConditions: creditNoteSettings?.termsConditions,
   })),
-  withCurrentOrganization(),
 )(CreditNoteFormInner);
