@@ -2207,6 +2207,96 @@
         ]
       }
     },
+    "/api/accounts/bulk-activate": {
+      "post": {
+        "operationId": "AccountsController_bulkActivateAccounts",
+        "summary": "Activates multiple accounts in bulk.",
+        "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "Value must be 'Bearer <token>' where <token> is an API key prefixed with 'bc_' or a JWT token.",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "example": "Bearer bc_1234567890abcdef"
+            }
+          },
+          {
+            "name": "organization-id",
+            "in": "header",
+            "description": "Required if Authorization is a JWT token. The organization ID to operate within.",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/BulkActivateAccountsDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "The accounts have been successfully activated."
+          }
+        },
+        "tags": [
+          "Accounts"
+        ]
+      }
+    },
+    "/api/accounts/bulk-inactivate": {
+      "post": {
+        "operationId": "AccountsController_bulkInactivateAccounts",
+        "summary": "Inactivates multiple accounts in bulk.",
+        "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "Value must be 'Bearer <token>' where <token> is an API key prefixed with 'bc_' or a JWT token.",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "example": "Bearer bc_1234567890abcdef"
+            }
+          },
+          {
+            "name": "organization-id",
+            "in": "header",
+            "description": "Required if Authorization is a JWT token. The organization ID to operate within.",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/BulkActivateAccountsDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "The accounts have been successfully inactivated."
+          }
+        },
+        "tags": [
+          "Accounts"
+        ]
+      }
+    },
     "/api/accounts": {
       "post": {
         "operationId": "AccountsController_createAccount",
@@ -21854,7 +21944,36 @@
         "parameters": [],
         "responses": {
           "200": {
-            "description": "List of subscriptions retrieved successfully"
+            "description": "List of subscriptions retrieved successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SubscriptionsListResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "Subscriptions"
+        ]
+      }
+    },
+    "/api/subscription/lemon": {
+      "get": {
+        "operationId": "SubscriptionsController_getLemonSubscriptions",
+        "summary": "Get Lemon Squeezy subscription details for the current tenant",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Lemon subscription details retrieved successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/LemonSubscriptionsListResponseDto"
+                }
+              }
+            }
           }
         },
         "tags": [
@@ -26018,6 +26137,26 @@
             "type": "boolean",
             "description": "When true, undeletable items will be skipped and only deletable ones will be removed.",
             "default": false
+          }
+        },
+        "required": [
+          "ids"
+        ]
+      },
+      "BulkActivateAccountsDto": {
+        "type": "object",
+        "properties": {
+          "ids": {
+            "description": "Array of account IDs to activate or inactivate",
+            "example": [
+              1,
+              2,
+              3
+            ],
+            "type": "array",
+            "items": {
+              "type": "number"
+            }
           }
         },
         "required": [
@@ -40615,6 +40754,201 @@
           "roleName",
           "roleDescription",
           "permissions"
+        ]
+      },
+      "SubscriptionResponseDto": {
+        "type": "object",
+        "properties": {
+          "slug": {
+            "type": "string",
+            "example": "main"
+          },
+          "status": {
+            "type": "string",
+            "example": "active",
+            "enum": [
+              "active",
+              "inactive",
+              "on_trial",
+              "canceled"
+            ]
+          },
+          "active": {
+            "type": "boolean",
+            "example": true
+          },
+          "inactive": {
+            "type": "boolean",
+            "example": false
+          },
+          "onTrial": {
+            "type": "boolean",
+            "example": false
+          },
+          "canceled": {
+            "type": "boolean",
+            "example": false
+          },
+          "ended": {
+            "type": "boolean",
+            "example": false
+          },
+          "paymentStatus": {
+            "type": "string",
+            "example": "succeed",
+            "enum": [
+              "succeed",
+              "failed"
+            ]
+          },
+          "startsAt": {
+            "format": "date-time",
+            "type": "string",
+            "example": "2024-01-01T00:00:00.000Z",
+            "nullable": true
+          },
+          "endsAt": {
+            "format": "date-time",
+            "type": "string",
+            "example": "2024-02-01T00:00:00.000Z",
+            "nullable": true
+          },
+          "canceledAt": {
+            "format": "date-time",
+            "type": "string",
+            "example": null,
+            "nullable": true
+          },
+          "trialEndsAt": {
+            "format": "date-time",
+            "type": "string",
+            "example": "2024-01-07T00:00:00.000Z",
+            "nullable": true
+          },
+          "statusFormatted": {
+            "type": "string",
+            "example": "Active"
+          },
+          "canceledAtFormatted": {
+            "type": "string",
+            "example": null,
+            "nullable": true
+          },
+          "endsAtFormatted": {
+            "type": "string",
+            "example": "Jan 1, 2024",
+            "nullable": true
+          },
+          "trialStartsAtFormatted": {
+            "type": "string",
+            "example": null,
+            "nullable": true
+          },
+          "trialEndsAtFormatted": {
+            "type": "string",
+            "example": "Jan 7, 2024",
+            "nullable": true
+          },
+          "planName": {
+            "type": "string",
+            "example": "Standard"
+          },
+          "planSlug": {
+            "type": "string",
+            "example": "standard"
+          },
+          "planPrice": {
+            "type": "number",
+            "example": 10
+          },
+          "planPriceCurrency": {
+            "type": "string",
+            "example": "USD"
+          },
+          "planPriceFormatted": {
+            "type": "string",
+            "example": "$10"
+          },
+          "planPeriod": {
+            "type": "string",
+            "example": "month"
+          }
+        },
+        "required": [
+          "slug",
+          "status",
+          "active",
+          "inactive",
+          "onTrial",
+          "canceled",
+          "ended",
+          "paymentStatus",
+          "statusFormatted",
+          "planName",
+          "planSlug",
+          "planPrice",
+          "planPriceCurrency",
+          "planPriceFormatted",
+          "planPeriod"
+        ]
+      },
+      "SubscriptionsListResponseDto": {
+        "type": "object",
+        "properties": {
+          "subscriptions": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/SubscriptionResponseDto"
+            }
+          }
+        },
+        "required": [
+          "subscriptions"
+        ]
+      },
+      "LemonSubscriptionUrlsDto": {
+        "type": "object",
+        "properties": {
+          "updatePaymentMethod": {
+            "type": "string",
+            "example": "https://.../update-payment-method",
+            "nullable": true
+          },
+          "customerPortal": {
+            "type": "string",
+            "example": "https://.../customer-portal",
+            "nullable": true
+          }
+        }
+      },
+      "LemonSubscriptionResponseDto": {
+        "type": "object",
+        "properties": {
+          "slug": {
+            "type": "string",
+            "example": "main"
+          },
+          "urls": {
+            "$ref": "#/components/schemas/LemonSubscriptionUrlsDto"
+          }
+        },
+        "required": [
+          "slug",
+          "urls"
+        ]
+      },
+      "LemonSubscriptionsListResponseDto": {
+        "type": "object",
+        "properties": {
+          "lemonSubscriptions": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/LemonSubscriptionResponseDto"
+            }
+          }
+        },
+        "required": [
+          "lemonSubscriptions"
         ]
       },
       "OrgBaseCurrencyMutateLockDto": {

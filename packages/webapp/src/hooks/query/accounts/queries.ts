@@ -24,6 +24,8 @@ import {
   activateAccount,
   inactivateAccount,
   bulkDeleteAccounts,
+  bulkActivateAccounts,
+  bulkInactivateAccounts,
   validateBulkDeleteAccounts,
   AccountTypesList,
   AccountTransactionsList,
@@ -152,6 +154,32 @@ export function useBulkDeleteAccounts(
       ids: number[];
       skipUndeletable?: boolean;
     }) => bulkDeleteAccounts(fetcher, { ids, skipUndeletable }),
+    onSuccess: () => commonInvalidateQueries(queryClient),
+  });
+}
+
+export function useBulkActivateAccounts(
+  props?: UseMutationOptions<void, Error, { ids: number[] }>,
+) {
+  const queryClient = useQueryClient();
+  const fetcher = useApiFetcher();
+  return useMutation({
+    ...props,
+    mutationFn: ({ ids }: { ids: number[] }) =>
+      bulkActivateAccounts(fetcher, { ids }),
+    onSuccess: () => commonInvalidateQueries(queryClient),
+  });
+}
+
+export function useBulkInactivateAccounts(
+  props?: UseMutationOptions<void, Error, { ids: number[] }>,
+) {
+  const queryClient = useQueryClient();
+  const fetcher = useApiFetcher();
+  return useMutation({
+    ...props,
+    mutationFn: ({ ids }: { ids: number[] }) =>
+      bulkInactivateAccounts(fetcher, { ids }),
     onSuccess: () => commonInvalidateQueries(queryClient),
   });
 }
