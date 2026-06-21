@@ -123,11 +123,7 @@ function VendorCreditNoteFormInner({
       }
     };
     // Handle the request error.
-    const onError = ({
-      response: {
-        data: { errors },
-      },
-    }) => {
+    const onError = ({ data: { errors } }) => {
       setSubmitting(false);
     };
     if (isNewMode) {

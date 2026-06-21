@@ -81,9 +81,7 @@ function ItemCategoryFormInner({
     // Handle the response error.
     const onError = (error) => {
       const {
-        response: {
-          data: { errors },
-        },
+        data: { errors },
       } = error;
 
       transformErrors(errors, { setErrors });

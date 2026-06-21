@@ -54,15 +54,9 @@ function PaymentReceivedDeleteAlertInner({
         });
         closeDrawer(DRAWERS.PAYMENT_RECEIVED_DETAILS);
       })
-      .catch(
-        ({
-          response: {
-            data: { errors },
-          },
-        }) => {
-          handleDeleteErrors(errors);
-        },
-      )
+      .catch(({ data: { errors } }) => {
+        handleDeleteErrors(errors);
+      })
       .finally(() => {
         closeAlert(name);
       });

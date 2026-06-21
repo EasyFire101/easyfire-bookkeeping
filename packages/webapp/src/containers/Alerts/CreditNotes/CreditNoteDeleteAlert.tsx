@@ -49,15 +49,9 @@ function CreditNoteDeleteAlertInner({
         });
         closeDrawer(DRAWERS.CREDIT_NOTE_DETAILS);
       })
-      .catch(
-        ({
-          response: {
-            data: { errors },
-          },
-        }) => {
-          handleDeleteErrors(errors);
-        },
-      )
+      .catch(({ data: { errors } }) => {
+        handleDeleteErrors(errors);
+      })
       .finally(() => {
         closeAlert(name);
       });

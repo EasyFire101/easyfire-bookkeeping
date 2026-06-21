@@ -46,15 +46,9 @@ function ExpenseDeleteAlertInner({
         });
         closeDrawer(DRAWERS.EXPENSE_DETAILS);
       })
-      .catch(
-        ({
-          response: {
-            data: { errors },
-          },
-        }) => {
-          handleDeleteErrors(errors);
-        },
-      )
+      .catch(({ data: { errors } }) => {
+        handleDeleteErrors(errors);
+      })
       .finally(() => {
         closeAlert('expense-delete');
       });

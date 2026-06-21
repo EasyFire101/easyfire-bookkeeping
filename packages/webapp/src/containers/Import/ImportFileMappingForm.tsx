@@ -30,7 +30,7 @@ export function ImportFileMappingForm({
         setSubmitting(false);
         setStep(2);
       })
-      .catch(({ response: { data } }) => {
+      .catch(({ data }) => {
         if (data.errors.find((e) => e.type === 'DUPLICATED_FROM_MAP_ATTR')) {
           AppToaster.show({
             message: 'Selected the same sheet columns to multiple fields.',

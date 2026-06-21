@@ -50,24 +50,18 @@ function EstimateDeleteAlertInner({
         });
         closeDrawer(DRAWERS.ESTIMATE_DETAILS);
       })
-      .catch(
-        ({
-          response: {
-            data: { errors },
-          },
-        }) => {
-          if (
-            errors.find((e) => e.type === 'SALE_ESTIMATE_CONVERTED_TO_INVOICE')
-          ) {
-            AppToaster.show({
-              intent: Intent.DANGER,
-              message: intl.get(
-                'estimate.delete.error.estimate_converted_to_invoice',
-              ),
-            });
-          }
-        },
-      )
+      .catch(({ data: { errors } }) => {
+        if (
+          errors.find((e) => e.type === 'SALE_ESTIMATE_CONVERTED_TO_INVOICE')
+        ) {
+          AppToaster.show({
+            intent: Intent.DANGER,
+            message: intl.get(
+              'estimate.delete.error.estimate_converted_to_invoice',
+            ),
+          });
+        }
+      })
       .finally(() => {
         closeAlert(name);
       });

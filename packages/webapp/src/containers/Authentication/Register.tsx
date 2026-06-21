@@ -40,18 +40,12 @@ export function RegisterUserForm() {
         authLoginMutate({
           email: values.email,
           password: values.password,
-        }).catch(
-          ({
-            response: {
-              data: { errors },
-            },
-          }) => {
-            AppToaster.show({
-              message: intl.get('something_wentwrong'),
-              intent: Intent.SUCCESS,
-            });
-          },
-        );
+        }).catch(({ data: { errors } }) => {
+          AppToaster.show({
+            message: intl.get('something_wentwrong'),
+            intent: Intent.SUCCESS,
+          });
+        });
       })
       .catch(({ response }) => {
         const {

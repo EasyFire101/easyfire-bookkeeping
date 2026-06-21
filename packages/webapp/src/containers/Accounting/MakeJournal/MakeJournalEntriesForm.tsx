@@ -126,11 +126,7 @@ function MakeJournalEntriesFormInner({
       attachments,
     };
     // Handle the request error.
-    const handleError = ({
-      response: {
-        data: { errors },
-      },
-    }) => {
+    const handleError = ({ data: { errors } }) => {
       transformErrors(errors, { setErrors });
       setSubmitting(false);
     };

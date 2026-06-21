@@ -19,7 +19,8 @@ function AccountBulkInactivateAlertInner({
   // #withAlertActions
   closeAlert,
 }) {
-  const { mutateAsync: bulkInactivate, isPending } = useBulkInactivateAccounts();
+  const { mutateAsync: bulkInactivate, isPending } =
+    useBulkInactivateAccounts();
 
   // Handle alert cancel.
   const handleCancel = () => {

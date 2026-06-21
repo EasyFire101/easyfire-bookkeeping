@@ -80,9 +80,7 @@ function AccountFormDialogContent({
     // Handle request error.
     const handleError = (error) => {
       const {
-        response: {
-          data: { errors },
-        },
+        data: { errors },
       } = error;
 
       const errorsTransformed = transformApiErrors(errors);

@@ -57,15 +57,9 @@ function ItemDeleteAlertInner({
         setItemsTableState({ page: 1 });
         closeDrawer(DRAWERS.ITEM_DETAILS);
       })
-      .catch(
-        ({
-          response: {
-            data: { errors },
-          },
-        }) => {
-          handleDeleteErrors(errors);
-        },
-      )
+      .catch(({ data: { errors } }) => {
+        handleDeleteErrors(errors);
+      })
       .finally(() => {
         closeAlert(name);
       });

@@ -66,21 +66,15 @@ function UsersDataTableInner({
           intent: Intent.SUCCESS,
         });
       })
-      .catch(
-        ({
-          response: {
-            data: { errors },
-          },
-        }) => {
-          if (errors.find((e) => e.type === 'USER_RECENTLY_INVITED')) {
-            AppToaster.show({
-              message:
-                'This person was recently invited. No need to invite them again just yet.',
-              intent: Intent.WARNING,
-            });
-          }
-        },
-      );
+      .catch(({ data: { errors } }) => {
+        if (errors.find((e) => e.type === 'USER_RECENTLY_INVITED')) {
+          AppToaster.show({
+            message:
+              'This person was recently invited. No need to invite them again just yet.',
+            intent: Intent.WARNING,
+          });
+        }
+      });
   });
 
   return (

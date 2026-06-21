@@ -51,16 +51,10 @@ function AccountDeleteAlertInner({
         closeAlert(name);
         closeDrawer(DRAWERS.ACCOUNT_DETAILS);
       })
-      .catch(
-        ({
-          response: {
-            data: { errors },
-          },
-        }) => {
-          handleDeleteErrors(errors);
-          closeAlert(name);
-        },
-      );
+      .catch(({ data: { errors } }) => {
+        handleDeleteErrors(errors);
+        closeAlert(name);
+      });
   };
 
   return (

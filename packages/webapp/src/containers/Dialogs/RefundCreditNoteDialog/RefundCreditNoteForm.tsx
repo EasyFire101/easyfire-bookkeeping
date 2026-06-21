@@ -54,11 +54,7 @@ function RefundCreditNoteFormInner({
       closeDialog(dialogName);
     };
     // Handle request response errors.
-    const onError = ({
-      response: {
-        data: { errors },
-      },
-    }) => {
+    const onError = ({ data: { errors } }) => {
       setSubmitting(false);
     };
     createRefundCreditNoteMutate([creditNote.id, form])

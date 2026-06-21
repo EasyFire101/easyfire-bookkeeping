@@ -51,13 +51,7 @@ function WarehouseTransferDeleteAlertInner({
         });
         closeDrawer(DRAWERS.WAREHOUSE_TRANSFER_DETAILS);
       })
-      .catch(
-        ({
-          response: {
-            data: { errors },
-          },
-        }) => {},
-      )
+      .catch(({ data: { errors } }) => {})
       .finally(() => {
         closeAlert(name);
       });

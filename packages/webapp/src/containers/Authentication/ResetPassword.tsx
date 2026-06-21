@@ -44,23 +44,17 @@ export function ResetPassword() {
         history.push('/auth/login');
         setSubmitting(false);
       })
-      .catch(
-        ({
-          response: {
-            data: { errors },
-          },
-        }) => {
-          if (errors.find((e) => e.type === 'TOKEN_INVALID')) {
-            AppToaster.show({
-              message: intl.get('an_unexpected_error_occurred'),
-              intent: Intent.DANGER,
-              position: Position.BOTTOM,
-            });
-            history.push('/auth/login');
-          }
-          setSubmitting(false);
-        },
-      );
+      .catch(({ data: { errors } }) => {
+        if (errors.find((e) => e.type === 'TOKEN_INVALID')) {
+          AppToaster.show({
+            message: intl.get('an_unexpected_error_occurred'),
+            intent: Intent.DANGER,
+            position: Position.BOTTOM,
+          });
+          history.push('/auth/login');
+        }
+        setSubmitting(false);
+      });
   };
 
   return (

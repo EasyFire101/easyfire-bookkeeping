@@ -48,15 +48,9 @@ function PaymentMadeDeleteAlertInner({
         });
         closeDrawer(DRAWERS.PAYMENT_MADE_DETAILS);
       })
-      .catch(
-        ({
-          response: {
-            data: { errors },
-          },
-        }) => {
-          handleDeleteErrors(errors);
-        },
-      )
+      .catch(({ data: { errors } }) => {
+        handleDeleteErrors(errors);
+      })
       .finally(() => {
         closeAlert(name);
       });

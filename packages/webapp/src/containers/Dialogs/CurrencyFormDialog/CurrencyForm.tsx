@@ -71,11 +71,7 @@ function CurrencyFormInner({
       afterSubmit(response);
     };
     // Handle the response error.
-    const onError = ({
-      response: {
-        data: { errors },
-      },
-    }) => {
+    const onError = ({ data: { errors } }) => {
       if (errors.find((e) => e.type === 'CURRENCY_CODE_EXISTS')) {
         AppToaster.show({
           message: 'The given currency code is already exists.',

@@ -229,9 +229,7 @@ export function transformItemsTableState(tableState) {
  */
 export const transformSubmitRequestErrors = (error) => {
   const {
-    response: {
-      data: { errors },
-    },
+    data: { errors },
   } = error;
   const fields = {};
 

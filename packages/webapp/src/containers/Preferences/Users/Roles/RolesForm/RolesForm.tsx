@@ -80,11 +80,7 @@ function RolesFormInner({
       history.push('/preferences/users');
     };
 
-    const onError = ({
-      response: {
-        data: { errors },
-      },
-    }) => {
+    const onError = ({ data: { errors } }) => {
       setSubmitting(false);
       handleDeleteErrors(errors);
     };

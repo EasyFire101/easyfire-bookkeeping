@@ -58,9 +58,7 @@ function UserFormInner({
     // Handle the response error.
     const onError = (error) => {
       const {
-        response: {
-          data: { errors },
-        },
+        data: { errors },
       } = error;
       transformErrors(errors, { setErrors, setCalloutCode });
       setSubmitting(false);

@@ -49,16 +49,10 @@ function JournalDeleteAlertInner({
         closeAlert(name);
         closeDrawer(DRAWERS.JOURNAL_DETAILS);
       })
-      .catch(
-        ({
-          response: {
-            data: { errors },
-          },
-        }) => {
-          handleDeleteErrors(errors);
-          closeAlert(name);
-        },
-      );
+      .catch(({ data: { errors } }) => {
+        handleDeleteErrors(errors);
+        closeAlert(name);
+      });
   };
 
   return (

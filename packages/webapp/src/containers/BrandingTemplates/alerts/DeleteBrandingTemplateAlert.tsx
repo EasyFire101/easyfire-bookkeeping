@@ -35,30 +35,24 @@ function DeleteBrandingTemplateAlertInner({
         });
         closeAlert(name);
       })
-      .catch(
-        ({
-          response: {
-            data: { errors },
-          },
-        }) => {
-          if (
-            errors.find(
-              (error) => error.type === 'CANNOT_DELETE_PREDEFINED_PDF_TEMPLATE',
-            )
-          ) {
-            AppToaster.show({
-              message: 'Cannot delete a predefined branding template.',
-              intent: Intent.DANGER,
-            });
-          } else {
-            AppToaster.show({
-              message: 'Something went wrong.',
-              intent: Intent.DANGER,
-            });
-          }
-          closeAlert(name);
-        },
-      );
+      .catch(({ data: { errors } }) => {
+        if (
+          errors.find(
+            (error) => error.type === 'CANNOT_DELETE_PREDEFINED_PDF_TEMPLATE',
+          )
+        ) {
+          AppToaster.show({
+            message: 'Cannot delete a predefined branding template.',
+            intent: Intent.DANGER,
+          });
+        } else {
+          AppToaster.show({
+            message: 'Something went wrong.',
+            intent: Intent.DANGER,
+          });
+        }
+        closeAlert(name);
+      });
   };
 
   const handleCancel = () => {

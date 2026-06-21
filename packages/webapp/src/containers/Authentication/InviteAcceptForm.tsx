@@ -52,28 +52,22 @@ export function InviteAcceptForm() {
         });
         history.push('/auth/login');
       })
-      .catch(
-        ({
-          response: {
-            data: { errors },
-          },
-        }) => {
-          if (errors.find((e) => e.type === 'INVITE_TOKEN_INVALID')) {
-            AppToaster.show({
-              message: intl.get('an_unexpected_error_occurred'),
-              intent: Intent.DANGER,
-              position: Position.BOTTOM,
-            });
-            history.push('/auth/login');
-          }
-          if (errors.find((e) => e.type === 'PHONE_MUMNER.ALREADY.EXISTS')) {
-            setErrors({
-              phone_number: 'This phone number is used in another account.',
-            });
-          }
-          setSubmitting(false);
-        },
-      );
+      .catch(({ data: { errors } }) => {
+        if (errors.find((e) => e.type === 'INVITE_TOKEN_INVALID')) {
+          AppToaster.show({
+            message: intl.get('an_unexpected_error_occurred'),
+            intent: Intent.DANGER,
+            position: Position.BOTTOM,
+          });
+          history.push('/auth/login');
+        }
+        if (errors.find((e) => e.type === 'PHONE_MUMNER.ALREADY.EXISTS')) {
+          setErrors({
+            phone_number: 'This phone number is used in another account.',
+          });
+        }
+        setSubmitting(false);
+      });
   };
 
   return (

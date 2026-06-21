@@ -48,15 +48,9 @@ function VendorCreditDeleteAlertInner({
         });
         closeDrawer(DRAWERS.VENDOR_CREDIT_DETAILS);
       })
-      .catch(
-        ({
-          response: {
-            data: { errors },
-          },
-        }) => {
-          handleDeleteErrors(errors);
-        },
-      )
+      .catch(({ data: { errors } }) => {
+        handleDeleteErrors(errors);
+      })
       .finally(() => {
         closeAlert(name);
       });

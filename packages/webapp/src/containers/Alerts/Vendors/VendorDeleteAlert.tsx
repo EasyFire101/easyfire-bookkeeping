@@ -51,15 +51,9 @@ function VendorDeleteAlertInner({
         });
         closeDrawer(DRAWERS.VENDOR_DETAILS);
       })
-      .catch(
-        ({
-          response: {
-            data: { errors },
-          },
-        }) => {
-          transformErrors(errors);
-        },
-      )
+      .catch(({ data: { errors } }) => {
+        transformErrors(errors);
+      })
       .finally(() => {
         closeAlert(name);
       });

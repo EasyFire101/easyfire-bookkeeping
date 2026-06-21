@@ -50,15 +50,9 @@ function CustomerDeleteAlertInner({
         });
         closeDrawer(DRAWERS.CUSTOMER_DETAILS);
       })
-      .catch(
-        ({
-          response: {
-            data: { errors },
-          },
-        }) => {
-          transformErrors(errors);
-        },
-      )
+      .catch(({ data: { errors } }) => {
+        transformErrors(errors);
+      })
       .finally(() => {
         closeAlert(name);
       });

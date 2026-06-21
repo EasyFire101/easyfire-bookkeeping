@@ -40,21 +40,15 @@ function UserDeleteAlertInner({
         });
         closeAlert(name);
       })
-      .catch(
-        ({
-          response: {
-            data: { errors },
-          },
-        }) => {
-          if (errors.find((e) => e.type === 'CANNOT_DELETE_LAST_USER')) {
-            AppToaster.show({
-              message: 'Cannot delete the last user in the system.',
-              intent: Intent.DANGER,
-            });
-          }
-          closeAlert(name);
-        },
-      );
+      .catch(({ data: { errors } }) => {
+        if (errors.find((e) => e.type === 'CANNOT_DELETE_LAST_USER')) {
+          AppToaster.show({
+            message: 'Cannot delete the last user in the system.',
+            intent: Intent.DANGER,
+          });
+        }
+        closeAlert(name);
+      });
   };
 
   return (

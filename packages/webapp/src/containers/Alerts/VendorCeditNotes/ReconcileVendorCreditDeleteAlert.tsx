@@ -48,13 +48,7 @@ function ReconcileVendorCreditDeleteAlertInner({
         });
         // closeDrawer('vendor-credit-detail-drawer');
       })
-      .catch(
-        ({
-          response: {
-            data: { errors },
-          },
-        }) => {},
-      )
+      .catch(({ data: { errors } }) => {})
       .finally(() => {
         closeAlert(name);
       });

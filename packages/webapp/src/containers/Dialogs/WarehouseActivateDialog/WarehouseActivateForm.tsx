@@ -41,11 +41,7 @@ function WarehouseActivateFormInner({
     };
 
     // Handle request response errors.
-    const onError = ({
-      response: {
-        data: { errors },
-      },
-    }) => {
+    const onError = ({ data: { errors } }) => {
       if (errors) {
       }
       setSubmitting(false);

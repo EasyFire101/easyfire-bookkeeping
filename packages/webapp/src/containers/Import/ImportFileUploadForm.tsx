@@ -61,7 +61,7 @@ export function ImportFileUploadForm({
         setStep(ImportStepperStep.Mapping);
         setSubmitting(false);
       })
-      .catch(({ response: { data } }) => {
+      .catch(({ data }) => {
         if (
           data.errors.find(
             (er) => er.type === 'IMPORTED_FILE_EXTENSION_INVALID',
