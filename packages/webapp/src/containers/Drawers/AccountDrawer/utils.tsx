@@ -34,9 +34,7 @@ export const useAccountReadEntriesColumns = () => {
       },
       {
         Header: intl.get('credit'),
-        accessor: isFCYCurrencyType
-          ? 'formattedFcCredit'
-          : 'formattedCredit',
+        accessor: isFCYCurrencyType ? 'formattedFcCredit' : 'formattedCredit',
         width: 80,
         className: 'credit',
         align: 'right',

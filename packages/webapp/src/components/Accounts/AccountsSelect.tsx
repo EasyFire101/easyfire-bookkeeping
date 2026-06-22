@@ -93,7 +93,7 @@ export function AccountsSelect({
   // Maybe inject new item props to select component.
   const maybeCreateNewItemRenderer = allowCreate
     ? createNewItemRenderer
-    : undefined
+    : undefined;
   const maybeCreateNewItemFromQuery = allowCreate
     ? createNewItemFromQuery
     : undefined;
