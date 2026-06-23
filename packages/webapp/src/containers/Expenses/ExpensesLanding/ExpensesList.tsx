@@ -12,9 +12,9 @@ import type { WithExpensesActionsProps } from './withExpensesActions';
 
 interface ExpensesListInnerProps
   extends Pick<
-    WithExpensesProps,
-    'expensesTableState' | 'expensesTableStateChanged'
-  >,
+      WithExpensesProps,
+      'expensesTableState' | 'expensesTableStateChanged'
+    >,
     Pick<WithExpensesActionsProps, 'resetExpensesTableState'> {}
 
 /**

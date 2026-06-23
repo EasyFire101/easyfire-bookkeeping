@@ -24,9 +24,9 @@ type ExpensesListContextValue = {
   isEmptyStatus: boolean;
 };
 
-const ExpensesListContext = createContext<
-  ExpensesListContextValue | undefined
->(undefined);
+const ExpensesListContext = createContext<ExpensesListContextValue | undefined>(
+  undefined,
+);
 
 type ExpensesListProviderProps = {
   query?: GetExpensesQuery;
