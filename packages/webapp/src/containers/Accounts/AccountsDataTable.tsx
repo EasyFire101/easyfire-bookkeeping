@@ -1,6 +1,5 @@
 // @ts-nocheck
 import React from 'react';
-
 import {
   TableFastCell,
   DataTable,
@@ -11,13 +10,10 @@ import {
 import { useAccountsTableColumns, rowClassNames } from './utils';
 import { ActionsMenu } from './components';
 import { AccountDialogAction } from '@/containers/Dialogs/AccountDialog/utils';
-
 import { useAccountsChartContext } from './AccountsChartProvider';
 import { useMemorizedColumnsWidths } from '@/hooks';
-
 import { TABLES } from '@/constants/tables';
 import { DialogsName } from '@/constants/dialogs';
-
 import { withSettings } from '@/containers/Settings/withSettings';
 import { withAlertActions } from '@/containers/Alert/withAlertActions';
 import { withDialogActions } from '@/containers/Dialog/withDialogActions';

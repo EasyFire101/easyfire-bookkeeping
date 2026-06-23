@@ -15,7 +15,7 @@ import {
   useAuthenticatedAccount,
   useCurrentOrganizationMetadata,
 } from '@/hooks/query';
-import { useWorkspaces } from '@/ee/workspaces/hooks/query/workspaces';
+import { useWorkspaces } from '@/ee/workspaces/hooks/query';
 import { useAuthOrganizationId, useAuthActions } from '@/hooks/state';
 import { useSwitchOrganization } from '@/ee/workspaces/hooks/useSwitchOrganization';
 import { DRAWERS } from '@/constants/drawers';

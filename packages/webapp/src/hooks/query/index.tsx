@@ -36,7 +36,7 @@ export * from './subscription';
 export * from './organization';
 export * from './landed-cost';
 export * from './views';
-export * from '@/ee/workspaces/hooks/query/workspaces';
+export * from '@/ee/workspaces/hooks/query';
 export * from './GenericResource';
 export * from './jobs';
 export * from './cashflow-accounts';

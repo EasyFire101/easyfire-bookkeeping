@@ -12,7 +12,7 @@ import {
 import { FormattedMessage as T, AppToaster } from '@/components';
 import intl from 'react-intl-universal';
 import { x } from '@xstyled/emotion';
-import { useDeleteWorkspace } from '@/ee/workspaces/hooks/query/workspaces';
+import { useDeleteWorkspace } from '@/ee/workspaces/hooks/query';
 import withDialogRedux from '@/components/DialogReduxConnect';
 import { withDialogActions } from '@/containers/Dialog/withDialogActions';
 import { compose } from '@/utils';

@@ -86,7 +86,6 @@ export const PreferencesBrandingForm = ({
       omit(excludedPrivateValues, ['logoUri']),
     );
     // Update organization branding.
-    // @ts-expect-error
     await updateOrganization({ ...__values });
 
     AppToaster.show({

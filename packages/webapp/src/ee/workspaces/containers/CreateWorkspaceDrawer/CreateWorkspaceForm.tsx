@@ -2,7 +2,7 @@ import React from 'react';
 import { Formik, Form, FormikHelpers } from 'formik';
 import { Button, Intent, Classes } from '@blueprintjs/core';
 import { getAllCountries } from '@bigcapital/utils';
-import { isAxiosError } from 'axios';
+import { ApiError } from 'openapi-typescript-fetch';
 import { x } from '@xstyled/emotion';
 import {
   Col,
@@ -24,10 +24,7 @@ type FFormGroupWithFastField = typeof FFormGroup & {
 };
 const FFormGroupField = FFormGroup as FFormGroupWithFastField;
 import { useIsDarkMode } from '@/hooks/useDarkMode';
-import {
-  useCreateWorkspace,
-  type CreateWorkspaceRequest,
-} from '@/ee/workspaces/hooks/query/workspaces';
+import { useCreateWorkspace } from '@/ee/workspaces/hooks/query';
 import { getFiscalYear } from '@/constants/fiscalYearOptions';
 import { getLanguages } from '@/constants/languagesOptions';
 import { getAllCurrenciesOptions } from '@/constants/currencies';
@@ -35,7 +32,6 @@ import {
   getSetupOrganizationValidation,
   type SetupOrganizationFormValues,
 } from '@/containers/Setup/SetupOrganization.schema';
-import { transfromToSnakeCase } from '@/utils';
 import intl from 'react-intl-universal';
 
 const countries = getAllCountries();
@@ -78,8 +74,7 @@ export default function CreateWorkspaceForm({
     { setSubmitting, setErrors }: FormikHelpers<SetupOrganizationFormValues>,
   ) => {
     try {
-      const payload = transfromToSnakeCase(values) as CreateWorkspaceRequest;
-      const result = await createWorkspaceMutate(payload);
+      const result = await createWorkspaceMutate(values);
       setSubmitting(false);
       onSubmitting({
         organizationId: result.organizationId,
@@ -88,13 +83,12 @@ export default function CreateWorkspaceForm({
     } catch (error: unknown) {
       setSubmitting(false);
       if (
-        isAxiosError(error) &&
-        error.response?.data &&
-        typeof error.response.data === 'object' &&
-        error.response.data !== null &&
-        'errors' in error.response.data
+        error instanceof ApiError &&
+        error.data &&
+        typeof error.data === 'object' &&
+        'errors' in error.data
       ) {
-        const { errors } = error.response.data as {
+        const { errors } = error.data as {
           errors: Record<string, string>;
         };
         if (errors && typeof errors === 'object') {

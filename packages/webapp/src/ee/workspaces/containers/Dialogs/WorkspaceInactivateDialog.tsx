@@ -7,7 +7,7 @@ import { x } from '@xstyled/emotion';
 import {
   useInactivateWorkspace,
   useActivateWorkspace,
-} from '@/ee/workspaces/hooks/query/workspaces';
+} from '@/ee/workspaces/hooks/query';
 import withDialogRedux from '@/components/DialogReduxConnect';
 import { withDialogActions } from '@/containers/Dialog/withDialogActions';
 import { compose } from '@/utils';

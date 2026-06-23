@@ -8,7 +8,7 @@ import { DRAWERS } from '@/constants/drawers';
 import {
   useWorkspaces,
   useSetDefaultWorkspace,
-} from '@/ee/workspaces/hooks/query/workspaces';
+} from '@/ee/workspaces/hooks/query';
 import { useAuthOrganizationId } from '@/hooks/state';
 import OrganizationsListTable from './OrganizationsListTable';
 import { OrganizationsListDrawerHeader } from './OrganizationsListDrawerHeader';

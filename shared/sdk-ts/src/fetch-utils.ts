@@ -5,6 +5,7 @@ import {
   createSnakeCaseRequestMiddleware,
   NESTED_QUERY_HEADER,
 } from './middleware/snake-case-request-middleware';
+import { createErrorReporterMiddleware } from './middleware/error-reporter-middleware';
 
 /**
  * Splits a query object into a primitive-only payload and a per-call `init`
@@ -58,6 +59,8 @@ export interface CreateApiFetcherConfig {
   disableCamelCaseTransform?: boolean;
   /** Set to true to disable automatic camelCase to snake_case transformation on requests */
   disableSnakeCaseTransform?: boolean;
+  /** Invoked with the rejection from any failed request, after which the error is re-thrown. Use for global side effects like surfacing toasts or triggering logout. */
+  onError?: (error: unknown) => void;
 }
 
 /**
@@ -81,6 +84,7 @@ export function createApiFetcher(config?: CreateApiFetcherConfig): ApiFetcher {
     use: [
       ...(parsedConfig.disableSnakeCaseTransform ? [] : [createSnakeCaseRequestMiddleware()]),
       ...(parsedConfig.disableCamelCaseTransform ? [] : [createCamelCaseMiddleware()]),
+      ...(parsedConfig.onError ? [createErrorReporterMiddleware(parsedConfig.onError)] : []),
     ],
   });
   return fetcher;

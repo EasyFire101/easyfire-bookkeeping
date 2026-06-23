@@ -2,7 +2,7 @@
 import React, { useCallback } from 'react';
 import { useHistory } from 'react-router-dom';
 
-import { EstimatesEmptyStatus as InvoicesEmptyStatus } from './InvoicesEmptyStatus';
+import { InvoicesEmptyStatus } from './InvoicesEmptyStatus';
 
 import { TABLES } from '@/constants/tables';
 import {

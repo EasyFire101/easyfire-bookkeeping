@@ -507,8 +507,8 @@ export const transformToCamelCase = (object) => {
   return deepMapKeys(object, (key) => _.camelCase(key));
 };
 
-export const transfromToSnakeCase = (object) => {
-  return deepMapKeys(object, (key) => _.snakeCase(key));
+export const transfromToSnakeCase = (object: Record<string, any>) => {
+  return deepMapKeys<any>(object, (key) => _.snakeCase(key));
 };
 
 export const transformTableQueryToParams = (object) => {
@@ -591,7 +591,7 @@ function transformFilterRoles(filterRoles) {
 /**
  * Transformes the table state to url query.
  */
-export function transformTableStateToQuery(tableState) {
+export function transformTableStateToQuery(tableState: Record<string, any>) {
   const { pageSize, pageIndex, viewSlug, sortBy } = tableState;
 
   const query = {

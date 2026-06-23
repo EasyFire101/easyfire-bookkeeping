@@ -8,6 +8,8 @@ import {
   useSetGlobalErrors,
   useAuthToken,
 } from './state';
+import type { ApiError } from 'openapi-typescript-fetch';
+import { useApiFetcherOnError } from './useApiFetcherOnError';
 import { getCookie, normalizeApiPath } from '../utils';
 
 export default function useApiRequest() {
@@ -134,6 +136,7 @@ export function useApiFetcher(options?: {
   const token = useAuthToken();
   const organizationId = useAuthOrganizationId();
   const currentLocale = getCookie('locale');
+  const onError = useApiFetcherOnError();
 
   return React.useMemo(() => {
     const headers: Record<string, string> = {
@@ -148,12 +151,20 @@ export function useApiFetcher(options?: {
     if (currentLocale) {
       headers['Accept-Language'] = currentLocale;
     }
+
     return createApiFetcher({
       baseUrl: '',
       init: { headers },
       disableCamelCaseTransform: !options?.enableCamelCaseTransform,
+      onError,
     });
-  }, [token, organizationId, currentLocale, options?.enableCamelCaseTransform]);
+  }, [
+    token,
+    organizationId,
+    currentLocale,
+    options?.enableCamelCaseTransform,
+    onError,
+  ]);
 }
 
 /**

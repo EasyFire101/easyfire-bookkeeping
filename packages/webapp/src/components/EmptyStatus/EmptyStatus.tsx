@@ -1,8 +1,20 @@
-// @ts-nocheck
 import React from 'react';
 import clsx from 'classnames';
 
 import Style from '@/style/components/DataTable/DataTableEmptyStatus.module.scss';
+
+interface EmptyStatusProps {
+  title?: React.ReactNode;
+  description?: React.ReactNode;
+  action?: React.ReactNode;
+  children?: React.ReactNode;
+  classNames?: {
+    root?: string;
+    title?: string;
+    description?: string;
+    actions?: string;
+  };
+}
 
 /**
  * Datatable empty status.
@@ -13,7 +25,7 @@ export function EmptyStatus({
   action,
   children,
   classNames,
-}) {
+}: EmptyStatusProps) {
   return (
     <div className={clsx(Style.root, classNames?.root)}>
       <h1 className={clsx(Style.root_title, classNames?.title)}>{title}</h1>

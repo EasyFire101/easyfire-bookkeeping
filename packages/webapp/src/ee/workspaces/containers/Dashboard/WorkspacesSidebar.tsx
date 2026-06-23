@@ -2,7 +2,7 @@
 import React, { useState } from 'react';
 import * as R from 'ramda';
 import { Tooltip, Position, Spinner, Icon } from '@blueprintjs/core';
-import { useWorkspaces } from '@/ee/workspaces/hooks/query/workspaces';
+import { useWorkspaces } from '@/ee/workspaces/hooks/query';
 import { useAuthOrganizationId } from '@/hooks/state';
 import { useSwitchOrganization } from '@/ee/workspaces/hooks/useSwitchOrganization';
 import { withDrawerActions } from '@/containers/Drawer/withDrawerActions';

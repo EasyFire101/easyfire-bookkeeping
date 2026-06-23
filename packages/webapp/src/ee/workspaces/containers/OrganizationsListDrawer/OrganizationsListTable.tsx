@@ -15,7 +15,7 @@ import {
 import { x } from '@xstyled/emotion';
 import styled from '@xstyled/emotion';
 import { DataTable, TableSkeletonRows, AppToaster } from '@/components';
-import { useSetDefaultWorkspace } from '@/ee/workspaces/hooks/query/workspaces';
+import { useSetDefaultWorkspace } from '@/ee/workspaces/hooks/query';
 import { useAuthOrganizationId } from '@/hooks/state';
 import { useSwitchOrganization } from '@/ee/workspaces/hooks/useSwitchOrganization';
 import { compose } from '@/utils';
