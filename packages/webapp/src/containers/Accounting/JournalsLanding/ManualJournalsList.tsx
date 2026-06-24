@@ -9,6 +9,8 @@ import { transformTableStateToQuery, compose } from '@/utils';
 import { ManualJournalsListProvider } from './ManualJournalsListProvider';
 import { ManualJournalsDataTable } from './ManualJournalsDataTable';
 import { ManualJournalActionsBar as ManualJournalsActionsBar } from './ManualJournalActionsBar';
+import { ManualJournalsListDrawers } from './ManualJournalsListDrawers';
+import { ManualJournalsListDialogs } from './ManualJournalsListDialogs';
 import { withManualJournals } from './withManualJournals';
 
 /**
@@ -25,6 +27,8 @@ function ManualJournalsTable({
       tableStateChanged={journalsTableStateChanged}
     >
       <ManualJournalsActionsBar />
+      <ManualJournalsListDrawers />
+      <ManualJournalsListDialogs />
 
       <DashboardPageContent>
         <ManualJournalsDataTable />

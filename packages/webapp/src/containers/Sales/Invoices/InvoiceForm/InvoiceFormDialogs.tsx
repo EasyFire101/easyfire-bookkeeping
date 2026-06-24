@@ -1,6 +1,7 @@
 // @ts-nocheck
 import { useFormikContext } from 'formik';
 import { index as InvoiceNumberDialog } from '@/containers/Dialogs/InvoiceNumberDialog';
+import { InvoiceExchangeRateChangeDialog } from '@/containers/Sales/Invoices/InvoiceForm/Dialogs/InvoiceExchangeRateChangeDialog';
 import { DialogsName } from '@/constants/dialogs';
 
 /**
@@ -26,6 +27,9 @@ export function InvoiceFormDialogs() {
       <InvoiceNumberDialog
         dialogName={DialogsName.InvoiceNumberSettings}
         onConfirm={handleInvoiceNumberFormConfirm}
+      />
+      <InvoiceExchangeRateChangeDialog
+        dialogName={DialogsName.InvoiceExchangeRateChangeNotice}
       />
     </>
   );

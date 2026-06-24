@@ -97,6 +97,24 @@ export function useEstimate(
   });
 }
 
+/**
+ * Variant of {@link useEstimate} that enables the snake_case → camelCase
+ * response transform, so the returned data matches the `SaleEstimate` SDK type
+ * at runtime. Use this for new camelCase-consuming code (e.g. detail drawers).
+ */
+export function useEstimateDetail(
+  id: number | null | undefined,
+  props?: Omit<UseQueryOptions<SaleEstimate>, 'queryKey' | 'queryFn'>,
+) {
+  const fetcher = useApiFetcher({ enableCamelCaseTransform: true });
+  return useQuery({
+    ...props,
+    queryKey: estimatesKeys.detail(id),
+    queryFn: () => fetchSaleEstimate(fetcher, id!),
+    enabled: id != null,
+  });
+}
+
 export function useEstimates(
   query?: Record<string, unknown>,
   props?: Omit<

@@ -8,6 +8,8 @@ import { InvoicesListProvider } from './InvoicesListProvider';
 
 import { InvoicesDataTable } from './InvoicesDataTable';
 import { InvoicesActionsBar } from './InvoicesActionsBar';
+import { InvoicesListDrawers } from './InvoicesListDrawers';
+import { InvoicesListDialogs } from './InvoicesListDialogs';
 
 import { withInvoices } from './withInvoices';
 import { withInvoiceActions } from './withInvoiceActions';
@@ -40,6 +42,8 @@ function InvoicesListInner({
       tableStateChanged={invoicesTableStateChanged}
     >
       <InvoicesActionsBar />
+      <InvoicesListDrawers />
+      <InvoicesListDialogs />
 
       <DashboardPageContent>
         <InvoicesDataTable />

@@ -2,6 +2,8 @@
 import React from 'react';
 import { useFormikContext } from 'formik';
 import { index as CreditNoteNumberDialog } from '@/containers/Dialogs/CreditNoteNumberDialog';
+import { InvoiceExchangeRateChangeDialog } from '@/containers/Sales/Invoices/InvoiceForm/Dialogs/InvoiceExchangeRateChangeDialog';
+import { DialogsName } from '@/constants/dialogs';
 
 /**
  * Credit note form dialogs.
@@ -22,9 +24,14 @@ export function CreditNoteFormDialogs() {
   };
 
   return (
-    <CreditNoteNumberDialog
-      dialogName={'credit-number-form'}
-      onConfirm={handleCreditNumberFormConfirm}
-    />
+    <>
+      <CreditNoteNumberDialog
+        dialogName={'credit-number-form'}
+        onConfirm={handleCreditNumberFormConfirm}
+      />
+      <InvoiceExchangeRateChangeDialog
+        dialogName={DialogsName.InvoiceExchangeRateChangeNotice}
+      />
+    </>
   );
 }

@@ -7,6 +7,8 @@ import { withExpenses } from './withExpenses';
 import { withExpensesActions } from './withExpensesActions';
 import { compose, transformTableStateToQuery } from '@/utils';
 import { ExpensesListProvider } from './ExpensesListProvider';
+import { ExpensesListDrawers } from './ExpensesListDrawers';
+import { ExpensesListDialogs } from './ExpensesListDialogs';
 import type { WithExpensesProps } from './withExpenses';
 import type { WithExpensesActionsProps } from './withExpensesActions';
 
@@ -42,6 +44,8 @@ function ExpensesListInner({
       tableStateChanged={expensesTableStateChanged}
     >
       <ExpenseActionsBar />
+      <ExpensesListDrawers />
+      <ExpensesListDialogs />
 
       <DashboardPageContent>
         <ExpenseDataTable />

@@ -1,6 +1,3 @@
-// @ts-nocheck
-import React from 'react';
-
 import { CommercialDocEntriesTable } from '@/components';
 
 import { useEstimateDetailDrawerContext } from './EstimateDetailDrawerProvider';
@@ -12,9 +9,8 @@ import { TableStyle } from '@/constants';
  * Estimate detail table.
  */
 export function EstimateDetailTable() {
-  const {
-    estimate: { entries },
-  } = useEstimateDetailDrawerContext();
+  const { estimate } = useEstimateDetailDrawerContext();
+  const entries = estimate?.entries || [];
 
   // Estimate entries table columns.
   const columns = useEstimateReadonlyEntriesColumns();
@@ -25,7 +21,7 @@ export function EstimateDetailTable() {
       data={entries}
       initialHiddenColumns={
         // If any entry has no discount, hide the discount column.
-        entries?.some((e) => e.discount_formatted) ? [] : ['discount']
+        entries?.some((e) => e.discountFormatted) ? [] : ['discount']
       }
       styleName={TableStyle.Constrant}
     />

@@ -6,6 +6,7 @@ import '@/style/pages/Vendors/List.scss';
 import { DashboardPageContent } from '@/components';
 
 import { VendorsListProvider } from './VendorsListProvider';
+import { VendorsListDialogs } from './VendorsListDialogs';
 import { VendorActionsBar } from './VendorActionsBar';
 import { VendorsTable } from './VendorsTable';
 
@@ -41,6 +42,7 @@ function VendorsListInner({
       tableStateChanged={vendorsTableStateChanged}
     >
       <VendorActionsBar />
+      <VendorsListDialogs />
 
       <DashboardPageContent>
         <VendorsTable />

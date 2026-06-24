@@ -9,6 +9,8 @@ import { ItemsListProvider } from './ItemsListProvider';
 
 import { ItemsActionsBar } from './ItemsActionsBar';
 import { ItemsDataTable } from './ItemsDataTable';
+import { ItemsListDrawers } from './ItemsListDrawers';
+import { ItemsListDialogs } from './ItemsListDialogs';
 
 import { withItems } from './withItems';
 import { withItemsActions } from './withItemsActions';
@@ -38,6 +40,8 @@ function ItemsListInner({
       tableStateChanged={itemsTableStateChanged}
     >
       <ItemsActionsBar />
+      <ItemsListDrawers />
+      <ItemsListDialogs />
 
       <DashboardPageContent>
         <ItemsDataTable />

@@ -13,12 +13,19 @@ export const TotalLineTextStyle = {
   Bold: 'Bold',
 };
 
+interface TotalLinesProps {
+  children?: React.ReactNode;
+  amountColWidth?: string | number;
+  labelColWidth?: string | number;
+  className?: string;
+}
+
 export function TotalLines({
   children,
   amountColWidth,
   labelColWidth,
   className,
-}) {
+}: TotalLinesProps) {
   return (
     <TotalLinesRoot
       className={className}
@@ -30,7 +37,21 @@ export function TotalLines({
   );
 }
 
-export function TotalLine({ title, value, borderStyle, textStyle, className }) {
+interface TotalLineProps {
+  title?: React.ReactNode;
+  value?: React.ReactNode;
+  borderStyle?: string;
+  textStyle?: string;
+  className?: string;
+}
+
+export function TotalLine({
+  title,
+  value,
+  borderStyle,
+  textStyle,
+  className,
+}: TotalLineProps) {
   return (
     <TotalLinePrimitive
       borderStyle={borderStyle}

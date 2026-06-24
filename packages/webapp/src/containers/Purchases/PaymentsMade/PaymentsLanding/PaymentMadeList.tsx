@@ -7,6 +7,7 @@ import { DashboardPageContent } from '@/components';
 import { PaymentMadesListProvider } from './PaymentMadesListProvider';
 import { PaymentMadeActionsBar } from './PaymentMadeActionsBar';
 import { PaymentMadesTable } from './PaymentMadesTable';
+import { PaymentMadeListDrawers } from './PaymentMadeListDrawers';
 
 import { withPaymentMade } from './withPaymentMade';
 import { withPaymentMadeActions } from './withPaymentMadeActions';
@@ -38,6 +39,7 @@ function PaymentMadeListInner({
       tableStateChanged={paymentsTableStateChanged}
     >
       <PaymentMadeActionsBar />
+      <PaymentMadeListDrawers />
 
       <DashboardPageContent>
         <PaymentMadesTable />

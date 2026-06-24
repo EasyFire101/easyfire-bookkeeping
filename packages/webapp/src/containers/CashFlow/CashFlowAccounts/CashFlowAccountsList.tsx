@@ -1,19 +1,16 @@
 // @ts-nocheck
 import React, { useEffect } from 'react';
 import { compose } from 'lodash/fp';
-
 import '@/style/pages/CashFlow/CashFlowAccounts/List.scss';
-
 import { DashboardPageContent } from '@/components';
 import { CashFlowAccountsProvider } from './CashFlowAccountsProvider';
-
 import { CashflowAccountsGrid } from './CashflowAccountsGrid';
 import { CashFlowAccountsActionsBar } from './CashFlowAccountsActionsBar';
 import { CashflowAccountsPlaidLink } from './CashflowAccountsPlaidLink';
 import { CashflowAccountsLoadingBar } from './CashFlowAccountsLoadingBar';
-
 import { withCashflowAccounts } from '@/containers/CashFlow/AccountTransactions/withCashflowAccounts';
 import { withCashflowAccountsTableActions } from '@/containers/CashFlow/AccountTransactions/withCashflowAccountsTableActions';
+import { CashFlowDrawers } from '@/containers/CashFlow/CashFlowDrawers';
 
 /**
  * Cashflow accounts list.
@@ -35,6 +32,7 @@ function CashFlowAccountsListInner({
 
   return (
     <CashFlowAccountsProvider tableState={cashflowAccountsTableState}>
+      <CashFlowDrawers />
       <CashFlowAccountsActionsBar />
       <CashflowAccountsLoadingBar />
 

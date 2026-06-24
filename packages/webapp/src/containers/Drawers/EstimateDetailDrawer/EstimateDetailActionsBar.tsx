@@ -1,6 +1,4 @@
-// @ts-nocheck
 import { useHistory } from 'react-router-dom';
-
 import {
   Button,
   NavbarGroup,
@@ -8,12 +6,19 @@ import {
   NavbarDivider,
   Intent,
 } from '@blueprintjs/core';
-
 import { useEstimateDetailDrawerContext } from './EstimateDetailDrawerProvider';
-
-import { withDialogActions } from '@/containers/Dialog/withDialogActions';
-import { withAlertActions } from '@/containers/Alert/withAlertActions';
-import { withDrawerActions } from '@/containers/Drawer/withDrawerActions';
+import {
+  withDialogActions,
+  WithDialogActionsProps,
+} from '@/containers/Dialog/withDialogActions';
+import {
+  withAlertActions,
+  WithAlertActionsProps,
+} from '@/containers/Alert/withAlertActions';
+import {
+  withDrawerActions,
+  WithDrawerActionsProps,
+} from '@/containers/Drawer/withDrawerActions';
 import {
   SaleEstimateAction,
   AbilitySubject,
@@ -27,9 +32,13 @@ import {
   Can,
   If,
 } from '@/components';
-
 import { compose } from '@/utils';
 import { DRAWERS } from '@/constants/drawers';
+
+interface EstimateDetailActionsBarInnerProps
+  extends WithDialogActionsProps,
+    WithAlertActionsProps,
+    WithDrawerActionsProps {}
 
 /**
  * Estimate read-only details actions bar of the drawer.
@@ -44,7 +53,7 @@ function EstimateDetailActionsBarInner({
   // #withDrawerActions
   closeDrawer,
   openDrawer,
-}) {
+}: EstimateDetailActionsBarInnerProps) {
   // Estimate details drawer context.
   const { estimateId, estimate } = useEstimateDetailDrawerContext();
 
@@ -83,6 +92,10 @@ function EstimateDetailActionsBarInner({
     openDrawer(DRAWERS.ESTIMATE_SEND_MAIL, { estimateId });
   };
 
+  if (!estimate) {
+    return null;
+  }
+
   return (
     <DrawerActionsBar>
       <NavbarGroup>
@@ -96,7 +109,7 @@ function EstimateDetailActionsBarInner({
           <NavbarDivider />
         </Can>
         <Can I={SaleInvoiceAction.Create} a={AbilitySubject.Invoice}>
-          <If condition={!estimate.is_converted_to_invoice}>
+          <If condition={!estimate.isConvertedToInvoice}>
             <Button
               className={Classes.MINIMAL}
               intent={Intent.SUCCESS}

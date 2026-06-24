@@ -8,6 +8,8 @@ import { BillsListProvider } from './BillsListProvider';
 
 import { BillsActionsBar } from './BillsActionsBar';
 import { BillsTable } from './BillsTable';
+import { BillsListDrawers } from './BillsListDrawers';
+import { BillsListDialogs } from './BillsListDialogs';
 
 import { withBills } from './withBills';
 import { withBillsActions } from './withBillsActions';
@@ -39,6 +41,8 @@ function BillsListInner({
       tableStateChanged={billsTableStateChanged}
     >
       <BillsActionsBar />
+      <BillsListDrawers />
+      <BillsListDialogs />
 
       <DashboardPageContent>
         <BillsTable />

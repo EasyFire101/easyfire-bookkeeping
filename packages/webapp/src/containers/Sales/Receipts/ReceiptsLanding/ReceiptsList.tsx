@@ -11,6 +11,8 @@ import { withReceipts } from './withReceipts';
 import { withReceiptsActions } from './withReceiptsActions';
 
 import { ReceiptsListProvider } from './ReceiptsListProvider';
+import { ReceiptsListDrawers } from './ReceiptsListDrawers';
+import { ReceiptsListDialogs } from './ReceiptsListDialogs';
 import { transformTableStateToQuery, compose } from '@/utils';
 
 /**
@@ -37,6 +39,9 @@ function ReceiptsListInner({
       query={transformTableStateToQuery(receiptTableState)}
       tableStateChanged={receiptsTableStateChanged}
     >
+      <ReceiptsListDrawers />
+      <ReceiptsListDialogs />
+
       <DashboardPageContent>
         <ReceiptActionsBar />
 

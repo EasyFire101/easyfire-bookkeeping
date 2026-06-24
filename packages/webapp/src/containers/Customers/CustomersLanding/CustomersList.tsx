@@ -8,6 +8,7 @@ import { DashboardPageContent } from '@/components';
 import { CustomersActionsBar } from './CustomersActionsBar';
 import { CustomersTable } from './CustomersTable';
 import { CustomersListProvider } from './CustomersListProvider';
+import { CustomersListDialogs } from './CustomersListDialogs';
 
 import { withCustomers } from './withCustomers';
 import { withCustomersActions } from './withCustomersActions';
@@ -41,6 +42,7 @@ function CustomersListInner({
       tableStateChanged={customersTableStateChanged}
     >
       <CustomersActionsBar />
+      <CustomersListDialogs />
 
       <DashboardPageContent>
         <CustomersTable />

@@ -1,7 +1,6 @@
-// @ts-nocheck
 import React from 'react';
 import { Drawer, DrawerSuspense } from '@/components';
-import { withDrawers } from '@/containers/Drawer/withDrawers';
+import { withDrawers, WithDrawersProps } from '@/containers/Drawer/withDrawers';
 
 import { compose } from '@/utils';
 
@@ -11,12 +10,18 @@ const EstimateDetailDrawerContent = React.lazy(() =>
   })),
 );
 
+interface EstimateDetailDrawerProps extends WithDrawersProps {
+  name: string;
+}
+
 function EstimateDetailDrawer({
   name,
   // #withDrawer
   isOpen,
-  payload: { estimateId },
-}) {
+  payload,
+}: EstimateDetailDrawerProps) {
+  const estimateId = payload?.estimateId as number | undefined;
+
   return (
     <Drawer
       isOpen={isOpen}

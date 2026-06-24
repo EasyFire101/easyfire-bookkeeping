@@ -11,6 +11,7 @@ import { DRAWERS } from '@/constants/drawers';
 import { useBillingPageBoot } from './BillingPageBoot';
 import { useLemonSubscription } from '@/hooks/query/subscription';
 import { getSubscriptionStatusText } from './_utils';
+import { SubscriptionsDrawers } from './SubscriptionsDrawers';
 
 function SubscriptionRoot({ openAlert, openDrawer }) {
   const { mainSubscription } = useBillingPageBoot();
@@ -36,6 +37,7 @@ function SubscriptionRoot({ openAlert, openDrawer }) {
 
   return (
     <Card className={styles.root}>
+      <SubscriptionsDrawers />
       <Stack spacing={6}>
         <h1 className={styles.title}>{mainSubscription.planName}</h1>
 

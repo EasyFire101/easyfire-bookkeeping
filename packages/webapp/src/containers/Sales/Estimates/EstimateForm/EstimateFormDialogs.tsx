@@ -2,6 +2,8 @@
 import React from 'react';
 import { useFormikContext } from 'formik';
 import { index as EstimateNumberDialog } from '@/containers/Dialogs/EstimateNumberDialog';
+import { InvoiceExchangeRateChangeDialog } from '@/containers/Sales/Invoices/InvoiceForm/Dialogs/InvoiceExchangeRateChangeDialog';
+import { DialogsName } from '@/constants/dialogs';
 
 /**
  * Estimate form dialogs.
@@ -24,6 +26,9 @@ export function EstimateFormDialogs() {
       <EstimateNumberDialog
         dialogName={'estimate-number-form'}
         onConfirm={handleEstimateNumberFormConfirm}
+      />
+      <InvoiceExchangeRateChangeDialog
+        dialogName={DialogsName.InvoiceExchangeRateChangeNotice}
       />
     </>
   );

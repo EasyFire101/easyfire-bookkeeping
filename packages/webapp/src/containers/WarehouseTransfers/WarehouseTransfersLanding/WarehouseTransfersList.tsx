@@ -1,13 +1,12 @@
 // @ts-nocheck
 import React from 'react';
-
 import { DashboardPageContent } from '@/components';
 import { WarehouseTransfersActionsBar } from './WarehouseTransfersActionsBar';
 import { WarehouseTransfersDataTable } from './WarehouseTransfersDataTable';
 import { withWarehouseTransfers } from './withWarehouseTransfers';
 import { withWarehouseTransfersActions } from './withWarehouseTransfersActions';
-
 import { WarehouseTransfersListProvider } from './WarehouseTransfersListProvider';
+import { WarehouseTransfersListDrawers } from './WarehouseTransfersListDrawers';
 import { transformTableStateToQuery, compose } from '@/utils';
 
 function WarehouseTransfersListInner({
@@ -32,6 +31,7 @@ function WarehouseTransfersListInner({
       tableStateChanged={warehouseTransferTableStateChanged}
     >
       <WarehouseTransfersActionsBar />
+      <WarehouseTransfersListDrawers />
 
       <DashboardPageContent>
         <WarehouseTransfersDataTable />

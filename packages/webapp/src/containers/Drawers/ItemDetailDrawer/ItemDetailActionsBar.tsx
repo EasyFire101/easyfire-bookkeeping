@@ -1,4 +1,3 @@
-// @ts-nocheck
 import React from 'react';
 import { useHistory } from 'react-router-dom';
 import {
@@ -14,6 +13,8 @@ import { ItemAction, AbilitySubject } from '@/constants/abilityOption';
 
 import { withAlertActions } from '@/containers/Alert/withAlertActions';
 import { withDrawerActions } from '@/containers/Drawer/withDrawerActions';
+import type { WithAlertActionsProps } from '@/containers/Alert/withAlertActions';
+import type { WithDrawerActionsProps } from '@/containers/Drawer/withDrawerActions';
 
 import {
   Icon,
@@ -26,16 +27,17 @@ import { ItemDetailActionsMoreBtn } from './ItemDetailActionsMoreBtn';
 import { compose } from '@/utils';
 import { DRAWERS } from '@/constants/drawers';
 
+interface ItemDetailActionsBarInnerProps
+  extends Pick<WithAlertActionsProps, 'openAlert'>,
+    Pick<WithDrawerActionsProps, 'closeDrawer'> {}
+
 /**
  * Item action-bar of readonly details drawer.
  */
 function ItemDetailActionsBarInner({
-  // #withAlertActions
   openAlert,
-
-  // #withDrawerActions
   closeDrawer,
-}) {
+}: ItemDetailActionsBarInnerProps) {
   // Item readonly drawer context.
   const { itemId } = useItemDetailDrawerContext();
 

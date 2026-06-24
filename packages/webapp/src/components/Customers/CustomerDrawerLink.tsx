@@ -3,8 +3,17 @@ import React from 'react';
 import * as R from 'ramda';
 
 import { ButtonLink } from '../Button';
-import { withDrawerActions } from '@/containers/Drawer/withDrawerActions';
+import {
+  withDrawerActions,
+  WithDrawerActionsProps,
+} from '@/containers/Drawer/withDrawerActions';
 import { DRAWERS } from '@/constants/drawers';
+
+interface CustomerDrawerLinkComponentProps extends WithDrawerActionsProps {
+  children?: React.ReactNode;
+  customerId?: number;
+  className?: string;
+}
 
 function CustomerDrawerLinkComponent({
   // #ownProps
@@ -14,9 +23,9 @@ function CustomerDrawerLinkComponent({
 
   // #withDrawerActions
   openDrawer,
-}) {
+}: CustomerDrawerLinkComponentProps) {
   // Handle view customer drawer.
-  const handleCustomerDrawer = (event) => {
+  const handleCustomerDrawer = (event: React.MouseEvent) => {
     openDrawer(DRAWERS.CUSTOMER_DETAILS, { customerId });
     event.preventDefault();
   };

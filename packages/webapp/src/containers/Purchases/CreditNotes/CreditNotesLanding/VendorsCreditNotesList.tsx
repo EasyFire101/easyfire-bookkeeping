@@ -1,16 +1,14 @@
 // @ts-nocheck
 import React from 'react';
-
 import '@/style/pages/VendorsCreditNote/List.scss';
-
 import { DashboardPageContent } from '@/components';
 import { VendorsCreditNoteActionsBar } from './VendorsCreditNoteActionsBar';
 import { VendorsCreditNoteDataTable } from './VendorsCreditNoteDataTable';
-
 import { withVendorsCreditNotes } from './withVendorsCreditNotes';
 import { withVendorsCreditNotesActions } from './withVendorsCreditNotesActions';
-
 import { VendorsCreditNoteListProvider } from './VendorsCreditNoteListProvider';
+import { VendorsCreditNotesListDrawers } from './VendorsCreditNotesListDrawers';
+import { VendorsCreditNotesListDialogs } from './VendorsCreditNotesListDialogs';
 import { transformTableStateToQuery, compose } from '@/utils';
 
 function VendorsCreditNotesListInner({
@@ -35,6 +33,9 @@ function VendorsCreditNotesListInner({
       tableStateChanged={vendorsCreditNoteTableStateChanged}
     >
       <VendorsCreditNoteActionsBar />
+      <VendorsCreditNotesListDrawers />
+      <VendorsCreditNotesListDialogs />
+
       <DashboardPageContent>
         <VendorsCreditNoteDataTable />
       </DashboardPageContent>

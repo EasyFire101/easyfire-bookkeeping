@@ -1,5 +1,3 @@
-// @ts-nocheck
-import React from 'react';
 import styled from 'styled-components';
 import intl from 'react-intl-universal';
 import { Tab } from '@blueprintjs/core';
@@ -11,7 +9,6 @@ import { EstimateDetailTab as EstimateDetailPanel } from './EstimateDetailPanel'
 
 /**
  * Estimate details tabs.
- * @returns {React.JSX}
  */
 function EstimateDetailsTabs() {
   return (

@@ -18,6 +18,7 @@ import { AppContentShell } from '@/components/AppShell';
 import { AccountTransactionsAside } from './AccountTransactionsAside';
 import { AccountTransactionsLoadingBar } from './components';
 import { withBanking } from '../withBanking';
+import { CashFlowDrawers } from '@/containers/CashFlow/CashFlowDrawers';
 
 /**
  * Account transactions list.
@@ -28,6 +29,8 @@ function AccountTransactionsListRoot({
 }) {
   return (
     <AccountTransactionsProvider>
+      <CashFlowDrawers />
+
       <AppContentShell hideAside={!openMatchingTransactionAside}>
         <AccountTransactionsMain />
         <AccountTransactionsAside />

@@ -1,4 +1,3 @@
-// @ts-nocheck
 import React from 'react';
 import intl from 'react-intl-universal';
 import { getColumnWidth } from '@/utils';
@@ -9,10 +8,8 @@ import { useEstimateDetailDrawerContext } from './EstimateDetailDrawerProvider';
  * Retrieve table columns of estimate readonly entries details.
  */
 export const useEstimateReadonlyEntriesColumns = () => {
-  // estimate details drawer context.
-  const {
-    estimate: { entries },
-  } = useEstimateDetailDrawerContext();
+  const { estimate } = useEstimateDetailDrawerContext();
+  const entries = estimate?.entries ?? [];
 
   return React.useMemo(
     () => [
@@ -35,8 +32,8 @@ export const useEstimateReadonlyEntriesColumns = () => {
       },
       {
         Header: intl.get('quantity'),
-        accessor: 'quantity_formatted',
-        width: getColumnWidth(entries, 'quantity_formatted', {
+        accessor: 'quantityFormatted',
+        width: getColumnWidth(entries, 'quantityFormatted', {
           minWidth: 60,
           magicSpacing: 5,
         }),
@@ -46,8 +43,8 @@ export const useEstimateReadonlyEntriesColumns = () => {
       },
       {
         Header: intl.get('rate'),
-        accessor: 'rate_formatted',
-        width: getColumnWidth(entries, 'rate_formatted', {
+        accessor: 'rateFormatted',
+        width: getColumnWidth(entries, 'rateFormatted', {
           minWidth: 60,
           magicSpacing: 5,
         }),
@@ -58,19 +55,19 @@ export const useEstimateReadonlyEntriesColumns = () => {
       {
         id: 'discount',
         Header: 'Discount',
-        accessor: 'discount_formatted',
+        accessor: 'discountFormatted',
         align: 'right',
         disableSortBy: true,
         textOverview: true,
-        width: getColumnWidth(entries, 'discount_formatted', {
+        width: getColumnWidth(entries, 'discountFormatted', {
           minWidth: 60,
           magicSpacing: 5,
         }),
       },
       {
         Header: intl.get('amount'),
-        accessor: 'total_formatted',
-        width: getColumnWidth(entries, 'total_formatted', {
+        accessor: 'totalFormatted',
+        width: getColumnWidth(entries, 'totalFormatted', {
           minWidth: 60,
           magicSpacing: 5,
         }),
@@ -79,6 +76,6 @@ export const useEstimateReadonlyEntriesColumns = () => {
         textOverview: true,
       },
     ],
-    [],
+    [entries],
   );
 };

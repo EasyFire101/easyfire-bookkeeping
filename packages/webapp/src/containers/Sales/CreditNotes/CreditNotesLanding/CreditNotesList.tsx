@@ -11,6 +11,8 @@ import { withCreditNotes } from './withCreditNotes';
 import { withCreditNotesActions } from './withCreditNotesActions';
 
 import { CreditNotesListProvider } from './CreditNotesListProvider';
+import { CreditNotesListDrawers } from './CreditNotesListDrawers';
+import { CreditNotesListDialogs } from './CreditNotesListDialogs';
 import { transformTableStateToQuery, compose } from '@/utils';
 
 function CreditNotesListInner({
@@ -35,6 +37,8 @@ function CreditNotesListInner({
       tableStateChanged={creditNoteTableStateChanged}
     >
       <CreditNotesActionsBar />
+      <CreditNotesListDrawers />
+      <CreditNotesListDialogs />
 
       <DashboardPageContent>
         <CreditNotesDataTable />

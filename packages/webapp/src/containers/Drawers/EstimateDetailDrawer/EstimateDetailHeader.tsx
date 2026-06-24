@@ -1,4 +1,3 @@
-// @ts-nocheck
 import React from 'react';
 import intl from 'react-intl-universal';
 import styled from 'styled-components';
@@ -7,8 +6,6 @@ import { defaultTo } from 'lodash';
 import {
   CommercialDocHeader,
   CommercialDocTopHeader,
-  FormatDate,
-  T,
   DetailsMenu,
   DetailItem,
   Row,
@@ -25,12 +22,16 @@ import { EstimateDetailsStatus } from './components';
 export function EstimateDetailHeader() {
   const { estimate } = useEstimateDetailDrawerContext();
 
+  if (!estimate) {
+    return null;
+  }
+
   return (
     <CommercialDocHeader>
       <CommercialDocTopHeader>
         <DetailsMenu>
           <AmountEstimateDetail label={intl.get('amount')}>
-            <span class="big-number">{estimate.total_formatted}</span>
+            <span className="big-number">{estimate.totalFormatted}</span>
           </AmountEstimateDetail>
 
           <EstimateStatusDetail>
@@ -44,27 +45,27 @@ export function EstimateDetailHeader() {
           <DetailsMenu direction={'horizantal'} minLabelSize={'180px'}>
             <DetailItem
               label={intl.get('estimate.details.estimate_number')}
-              children={defaultTo(estimate.estimate_number, '-')}
+              children={defaultTo(estimate.estimateNumber, '-')}
             />
 
             <DetailItem label={intl.get('customer_name')}>
-              <CustomerDrawerLink customerId={estimate.customer_id}>
-                {estimate.customer?.display_name}
+              <CustomerDrawerLink customerId={estimate.customerId}>
+                {estimate.customer?.displayName}
               </CustomerDrawerLink>
             </DetailItem>
 
             <DetailItem
               label={intl.get('estimate_date')}
-              children={estimate.formatted_estimate_date}
+              children={estimate.formattedEstimateDate}
             />
 
             <DetailItem
               label={intl.get('expiration_date')}
-              children={estimate.formatted_expiration_date}
+              children={estimate.formattedExpirationDate}
             />
             <ExchangeRateDetailItem
-              exchangeRate={estimate?.exchange_rate}
-              toCurrency={estimate?.currency_code}
+              exchangeRate={estimate?.exchangeRate}
+              toCurrency={estimate?.currencyCode}
             />
           </DetailsMenu>
         </Col>
@@ -81,7 +82,7 @@ export function EstimateDetailHeader() {
             />
             <DetailItem
               label={intl.get('estimate.details.created_at')}
-              children={estimate.formatted_created_at}
+              children={estimate.formattedCreatedAt}
             />
           </DetailsMenu>
         </Col>

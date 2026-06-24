@@ -7,6 +7,7 @@ import { DashboardContentTable, DashboardPageContent } from '@/components';
 
 import { InventoryAdjustmentsProvider } from './InventoryAdjustmentsProvider';
 import { InventoryAdjustmentTable } from './InventoryAdjustmentTable';
+import { InventoryAdjustmentListDrawers } from './InventoryAdjustmentListDrawers';
 
 import { withInventoryAdjustments } from './withInventoryAdjustments';
 
@@ -23,6 +24,8 @@ function InventoryAdjustmentListInner({
     <InventoryAdjustmentsProvider
       query={transformTableStateToQuery(inventoryAdjustmentTableState)}
     >
+      <InventoryAdjustmentListDrawers />
+
       <DashboardPageContent>
         <DashboardContentTable>
           <InventoryAdjustmentTable />

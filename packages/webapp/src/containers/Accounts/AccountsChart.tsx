@@ -4,6 +4,8 @@ import { DashboardPageContent, DashboardContentTable } from '@/components';
 import { AccountsChartProvider } from './AccountsChartProvider';
 import { AccountsActionsBar } from './AccountsActionsBar';
 import { AccountsDataTable } from './AccountsDataTable';
+import { AccountsChartDrawers } from './AccountsChartDrawers';
+import { AccountsChartDialogs } from './AccountsChartDialogs';
 import { withAccounts } from '@/containers/Accounts/withAccounts';
 import { withAccountsTableActions } from './withAccountsTableActions';
 import { transformAccountsStateToQuery } from './utils';
@@ -40,6 +42,8 @@ function AccountsChartInner({
       tableStateChanged={accountsTableStateChanged}
     >
       <AccountsActionsBar />
+      <AccountsChartDrawers />
+      <AccountsChartDialogs />
 
       <DashboardPageContent>
         <DashboardContentTable>

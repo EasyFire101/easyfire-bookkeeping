@@ -7,10 +7,10 @@ import { DashboardPageContent } from '@/components';
 import { PaymentsReceivedListProvider } from './PaymentsReceivedListProvider';
 import { PaymentsReceivedTable as PaymentReceivesTable } from './PaymentsReceivedTable';
 import { PaymentsReceivedActionsBar } from './PaymentsReceivedActionsBar';
-
+import { PaymentsReceivedListDrawers } from './PaymentsReceivedListDrawers';
+import { PaymentsReceivedListDialogs } from './PaymentsReceivedListDialogs';
 import { withPaymentsReceived } from './withPaymentsReceived';
 import { withPaymentsReceivedActions } from './withPaymentsReceivedActions';
-
 import { compose, transformTableStateToQuery } from '@/utils';
 
 function PaymentsReceivedListInner({
@@ -35,6 +35,8 @@ function PaymentsReceivedListInner({
       tableStateChanged={paymentsTableStateChanged}
     >
       <PaymentsReceivedActionsBar />
+      <PaymentsReceivedListDrawers />
+      <PaymentsReceivedListDialogs />
 
       <DashboardPageContent>
         <PaymentReceivesTable />
