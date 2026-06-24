@@ -13,8 +13,14 @@ import {
 
 import { Icon, T, Choose, Can } from '@/components';
 import { AbilitySubject, SaleEstimateAction } from '@/constants/abilityOption';
-import { withAlertActions, WithAlertActionsProps } from '@/containers/Alert/withAlertActions';
-import { useEstimateDetailDrawerContext, EstimateDetail } from './EstimateDetailDrawerProvider';
+import {
+  withAlertActions,
+  WithAlertActionsProps,
+} from '@/containers/Alert/withAlertActions';
+import {
+  useEstimateDetailDrawerContext,
+  EstimateDetail,
+} from './EstimateDetailDrawerProvider';
 
 interface EstimateDetailsStatusProps {
   estimate: Pick<
@@ -26,7 +32,9 @@ interface EstimateDetailsStatusProps {
 /**
  * Estimate details status.
  */
-export function EstimateDetailsStatus({ estimate }: EstimateDetailsStatusProps) {
+export function EstimateDetailsStatus({
+  estimate,
+}: EstimateDetailsStatusProps) {
   return (
     <Choose>
       <Choose.When condition={!!estimate.isApproved}>
@@ -147,4 +155,6 @@ function EstimateMoreMenuItemsInner({
   );
 }
 
-export const EstimateMoreMenuItems = withAlertActions(EstimateMoreMenuItemsInner);
+export const EstimateMoreMenuItems = withAlertActions(
+  EstimateMoreMenuItemsInner,
+);

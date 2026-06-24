@@ -60,10 +60,9 @@ function EstimateDetailDrawerProvider({
   const { featureCan } = useFeatureCan();
 
   // Fetches the estimate by the given id.
-  const { data, isLoading: isEstimateLoading } = useEstimateDetail(
-    estimateId,
-    { enabled: !!estimateId },
-  );
+  const { data, isLoading: isEstimateLoading } = useEstimateDetail(estimateId, {
+    enabled: !!estimateId,
+  });
   const estimate = data as EstimateDetail | undefined;
 
   const provider: EstimateDetailDrawerContextValue = {

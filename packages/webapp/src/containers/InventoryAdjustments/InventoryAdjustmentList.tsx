@@ -25,7 +25,7 @@ function InventoryAdjustmentListInner({
       query={transformTableStateToQuery(inventoryAdjustmentTableState)}
     >
       <InventoryAdjustmentListDrawers />
-      
+
       <DashboardPageContent>
         <DashboardContentTable>
           <InventoryAdjustmentTable />

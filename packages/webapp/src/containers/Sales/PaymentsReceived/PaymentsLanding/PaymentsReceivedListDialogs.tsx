@@ -8,9 +8,7 @@ export function PaymentsReceivedListDialogs() {
       <PaymentReceivedBulkDeleteDialog
         dialogName={DialogsName.PaymentReceivedBulkDelete}
       />
-      <PaymentReceivePdfPreviewDialog
-        dialogName={DialogsName.PaymentPdfForm}
-      />
+      <PaymentReceivePdfPreviewDialog dialogName={DialogsName.PaymentPdfForm} />
     </>
   );
 }

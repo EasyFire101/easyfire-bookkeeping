@@ -9,7 +9,11 @@ interface DrawerLoadingProps {
   children?: React.ReactNode;
 }
 
-export function DrawerLoading({ loading, mount = false, children }: DrawerLoadingProps) {
+export function DrawerLoading({
+  loading,
+  mount = false,
+  children,
+}: DrawerLoadingProps) {
   return (
     <LoadingIndicator loading={loading} mount={mount}>
       {children}

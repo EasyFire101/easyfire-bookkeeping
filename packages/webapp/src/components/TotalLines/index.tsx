@@ -45,7 +45,13 @@ interface TotalLineProps {
   className?: string;
 }
 
-export function TotalLine({ title, value, borderStyle, textStyle, className }: TotalLineProps) {
+export function TotalLine({
+  title,
+  value,
+  borderStyle,
+  textStyle,
+  className,
+}: TotalLineProps) {
   return (
     <TotalLinePrimitive
       borderStyle={borderStyle}

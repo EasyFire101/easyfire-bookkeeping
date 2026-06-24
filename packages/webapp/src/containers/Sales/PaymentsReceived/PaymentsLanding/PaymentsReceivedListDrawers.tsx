@@ -5,9 +5,7 @@ import { DRAWERS } from '@/constants/drawers';
 export function PaymentsReceivedListDrawers() {
   return (
     <>
-      <PaymentReceiveDetailDrawer
-        name={DRAWERS.PAYMENT_RECEIVED_DETAILS}
-      />
+      <PaymentReceiveDetailDrawer name={DRAWERS.PAYMENT_RECEIVED_DETAILS} />
       <PaymentReceivedSendMailDrawer
         name={DRAWERS.PAYMENT_RECEIVED_SEND_MAIL}
       />

@@ -8,9 +8,7 @@ export function CreditNotesListDialogs() {
       <CreditNoteBulkDeleteDialog
         dialogName={DialogsName.CreditNoteBulkDelete}
       />
-      <CreditNotePdfPreviewDialog
-        dialogName={DialogsName.CreditNotePdfForm}
-      />
+      <CreditNotePdfPreviewDialog dialogName={DialogsName.CreditNotePdfForm} />
     </>
   );
 }

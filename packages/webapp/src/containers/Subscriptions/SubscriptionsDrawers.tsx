@@ -4,9 +4,7 @@ import { DRAWERS } from '@/constants/drawers';
 export function SubscriptionsDrawers() {
   return (
     <>
-      <ChangeSubscriptionPlanDrawer
-        name={DRAWERS.CHANGE_SUBSCARIPTION_PLAN}
-      />
+      <ChangeSubscriptionPlanDrawer name={DRAWERS.CHANGE_SUBSCARIPTION_PLAN} />
     </>
   );
 }

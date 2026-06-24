@@ -18,9 +18,7 @@ export function CashFlowDrawers() {
       <ManualJournalDrawer name={DRAWERS.JOURNAL_DETAILS} />
       <ExpenseDrawer name={DRAWERS.EXPENSE_DETAILS} />
       <ReceiptDetailDrawer name={DRAWERS.RECEIPT_DETAILS} />
-      <PaymentReceiveDetailDrawer
-        name={DRAWERS.PAYMENT_RECEIVED_DETAILS}
-      />
+      <PaymentReceiveDetailDrawer name={DRAWERS.PAYMENT_RECEIVED_DETAILS} />
       <PaymentMadeDetailDrawer name={DRAWERS.PAYMENT_MADE_DETAILS} />
       <InventoryAdjustmentDetailDrawer
         name={DRAWERS.INVENTORY_ADJUSTMENT_DETAILS}
@@ -28,15 +26,11 @@ export function CashFlowDrawers() {
       <CashflowTransactionDetailDrawer
         name={DRAWERS.CASHFLOW_TRNASACTION_DETAILS}
       />
-      <RefundCreditNoteDetailDrawer
-        name={DRAWERS.REFUND_CREDIT_NOTE_DETAILS}
-      />
+      <RefundCreditNoteDetailDrawer name={DRAWERS.REFUND_CREDIT_NOTE_DETAILS} />
       <RefundVendorCreditDetailDrawer
         name={DRAWERS.REFUND_VENDOR_CREDIT_DETAILS}
       />
-      <CategorizeTransactionDrawer
-        name={DRAWERS.CATEGORIZE_TRANSACTION}
-      />
+      <CategorizeTransactionDrawer name={DRAWERS.CATEGORIZE_TRANSACTION} />
     </>
   );
 }
