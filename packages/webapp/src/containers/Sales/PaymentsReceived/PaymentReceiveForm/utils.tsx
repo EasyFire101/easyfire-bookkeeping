@@ -24,46 +24,46 @@ import { convertBrandingTemplatesToOptions } from '@/containers/BrandingTemplate
 // Default payment receive entry.
 export const defaultPaymentReceiveEntry = {
   index: '',
-  payment_amount: '',
-  invoice_id: '',
-  invoice_no: '',
-  due_amount: '',
+  paymentAmount: '',
+  invoiceId: '',
+  invoiceNo: '',
+  dueAmount: '',
   date: '',
   amount: '',
-  currency_code: '',
+  currencyCode: '',
 };
 
 // Form initial values.
 export const defaultPaymentReceive = {
-  customer_id: '',
-  deposit_account_id: '',
-  payment_date: moment(new Date()).format('YYYY-MM-DD'),
-  reference_no: '',
-  payment_receive_no: '',
+  customerId: '',
+  depositAccountId: '',
+  paymentDate: moment(new Date()).format('YYYY-MM-DD'),
+  referenceNo: '',
+  paymentReceiveNo: '',
   // Holds the payment number that entered manually only.
-  payment_receive_no_manually: '',
+  paymentReceiveNoManually: '',
   statement: '',
   amount: '',
-  currency_code: '',
-  exchange_rate: 1,
+  currencyCode: '',
+  exchangeRate: 1,
   entries: [],
   attachments: [],
-  branch_id: '',
-  pdf_template_id: '',
+  branchId: '',
+  pdfTemplateId: '',
 };
 
 export const defaultRequestPaymentEntry = {
   index: '',
-  payment_amount: '',
-  invoice_id: '',
+  paymentAmount: '',
+  invoiceId: '',
 };
 
 export const defaultRequestPayment = {
-  customer_id: '',
-  deposit_account_id: '',
-  payment_date: '',
-  payment_receive_no: '',
-  branch_id: '',
+  customerId: '',
+  depositAccountId: '',
+  paymentDate: '',
+  paymentReceiveNo: '',
+  branchId: '',
   statement: '',
   entries: [],
 };
@@ -76,7 +76,7 @@ export const transformToEditForm = (paymentReceive, paymentReceiveEntries) => ({
   entries: [
     ...paymentReceiveEntries.map((paymentReceiveEntry) => ({
       ...transformToForm(paymentReceiveEntry, defaultPaymentReceiveEntry),
-      payment_amount: paymentReceiveEntry.payment_amount || '',
+      paymentAmount: paymentReceiveEntry.paymentAmount || '',
     })),
   ],
   attachments: transformAttachmentsToForm(paymentReceive),
@@ -88,16 +88,16 @@ export const transformToEditForm = (paymentReceive, paymentReceiveEntries) => ({
 export const transformInvoicesNewPageEntries = (invoices) => [
   ...invoices.map((invoice, index) => ({
     index: index + 1,
-    invoice_id: invoice.id,
-    entry_type: 'invoice',
-    due_amount: invoice.due_amount,
+    invoiceId: invoice.id,
+    entryType: 'invoice',
+    dueAmount: invoice.due_amount,
     date: invoice.invoice_date,
     amount: invoice.balance,
-    currency_code: invoice.currency_code,
-    payment_amount: '',
-    invoice_no: invoice.invoice_no,
-    branch_id: invoice.branch_id,
-    total_payment_amount: invoice.payment_amount,
+    currencyCode: invoice.currency_code,
+    paymentAmount: '',
+    invoiceNo: invoice.invoice_no,
+    branchId: invoice.branch_id,
+    totalPaymentAmount: invoice.payment_amount,
   })),
 ];
 
@@ -106,19 +106,19 @@ export const transformEntriesToEditForm = (receivableEntries) => [
 ];
 
 export const clearAllPaymentEntries = (entries) => [
-  ...entries.map((entry) => ({ ...entry, payment_amount: 0 })),
+  ...entries.map((entry) => ({ ...entry, paymentAmount: 0 })),
 ];
 
 export const amountPaymentEntries = (amount, entries) => {
   let total = amount;
 
   return entries.map((item) => {
-    const diff = Math.min(item.due_amount, total);
+    const diff = Math.min(item.dueAmount, total);
     total -= Math.max(diff, 0);
 
     return {
       ...item,
-      payment_amount: diff,
+      paymentAmount: diff,
     };
   });
 };
@@ -126,7 +126,7 @@ export const amountPaymentEntries = (amount, entries) => {
 export const fullAmountPaymentEntries = (entries) => {
   return entries.map((item) => ({
     ...item,
-    payment_amount: item.due_amount,
+    paymentAmount: item.dueAmount,
   }));
 };
 
@@ -154,9 +154,9 @@ export const accountsFieldShouldUpdate = (newProps, oldProps) => {
  * Tranformes form values to request.
  */
 export const transformFormToRequest = (form) => {
-  // Filters entries that have no `invoice_id` and `payment_amount`.
+  // Filters entries that have no `invoiceId` and `paymentAmount`.
   const entries = form.entries
-    .filter((entry) => entry.invoice_id && entry.payment_amount)
+    .filter((entry) => entry.invoiceId && entry.paymentAmount)
     .map((entry) => ({
       ...pick(entry, Object.keys(defaultRequestPaymentEntry)),
     }));
@@ -164,11 +164,11 @@ export const transformFormToRequest = (form) => {
   const attachments = transformAttachmentsToRequest(form);
 
   return {
-    ...omit(form, ['payment_receive_no_manually', 'payment_receive_no']),
-    // The `payment_receive_no_manually` will be presented just if the auto-increment
+    ...omit(form, ['paymentReceiveNoManually', 'paymentReceiveNo']),
+    // The `paymentReceiveNoManually` will be presented just if the auto-increment
     // is disable, always both attributes hold the same value in manual mode.
-    ...(form.payment_receive_no_manually && {
-      payment_receive_no: form.payment_receive_no,
+    ...(form.paymentReceiveNoManually && {
+      paymentReceiveNo: form.paymentReceiveNo,
     }),
     entries: orderingLinesIndexes(entries),
     attachments,
@@ -185,7 +185,7 @@ export const useSetPrimaryBranchToForm = () => {
       const primaryBranch = branches.find((b) => b.primary) || first(branches);
 
       if (primaryBranch) {
-        setFieldValue('branch_id', primaryBranch.id);
+        setFieldValue('branchId', primaryBranch.id);
       }
     }
   }, [isBranchesSuccess, setFieldValue, branches, isNewMode]);
@@ -199,13 +199,13 @@ export const transformErrors = (errors, { setFieldError }) => {
 
   if (getError('PAYMENT_RECEIVE_NO_EXISTS')) {
     setFieldError(
-      'payment_receive_no',
+      'paymentReceiveNo',
       intl.get('payment_number_is_not_unique'),
     );
   }
   if (getError('PAYMENT_RECEIVE_NO_REQUIRED')) {
     setFieldError(
-      'payment_receive_no',
+      'paymentReceiveNo',
       intl.get('payment_received.field.error.payment_receive_no_required'),
     );
   }
@@ -224,12 +224,12 @@ export const transformErrors = (errors, { setFieldError }) => {
  */
 export const usePaymentReceiveTotals = () => {
   const {
-    values: { entries, currency_code: currencyCode },
+    values: { entries, currencyCode },
   } = useFormikContext();
 
   // Retrieves the invoice entries total.
   const total = React.useMemo(
-    () => sumBy(entries, 'payment_amount'),
+    () => sumBy(entries, 'paymentAmount'),
     [entries],
   );
 
@@ -257,7 +257,7 @@ export const usePaymentReceivedTotalAppliedAmount = () => {
   } = useFormikContext();
 
   // Retrieves the invoice entries total.
-  return React.useMemo(() => sumBy(entries, 'payment_amount'), [entries]);
+  return React.useMemo(() => sumBy(entries, 'paymentAmount'), [entries]);
 };
 
 export const usePaymentReceivedTotalAmount = () => {
@@ -284,8 +284,8 @@ export const useEstimateIsForeignCustomer = () => {
   const baseCurrency = useCurrentOrganizationBaseCurrency();
 
   const isForeignCustomer = React.useMemo(
-    () => values.currency_code !== baseCurrency,
-    [values.currency_code, baseCurrency],
+    () => values.currencyCode !== baseCurrency,
+    [values.currencyCode, baseCurrency],
   );
   return isForeignCustomer;
 };
@@ -295,13 +295,13 @@ export const resetFormState = ({ initialValues, values, resetForm }) => {
     values: {
       // Reset the all values except the brand id.
       ...initialValues,
-      brand_id: values.brand_id,
+      brandId: values.brandId,
     },
   });
 };
 
 export const getExceededAmountFromValues = (values) => {
-  const totalApplied = sumBy(values.entries, 'payment_amount');
+  const totalApplied = sumBy(values.entries, 'paymentAmount');
   const totalAmount = values.amount;
 
   return totalAmount - totalApplied;

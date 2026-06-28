@@ -51,7 +51,7 @@ function BillFormInner() {
           }
         : {
             ...defaultBill,
-            currency_code: baseCurrency,
+            currencyCode: baseCurrency,
           }),
     }),
     [bill, baseCurrency],

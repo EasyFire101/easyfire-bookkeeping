@@ -26,9 +26,9 @@ export function DecrementAdjustmentFields() {
     <Row className={'row--decrement-fields'}>
       {/*------------ Quantity on hand  -----------*/}
       <Col className={'col--quantity-on-hand'}>
-        <FFormGroup name={'quantity_on_hand'} label={intl.get('qty_on_hand')}>
+        <FFormGroup name={'quantityOnHand'} label={intl.get('qty_on_hand')}>
           <FInputGroup
-            name={'quantity_on_hand'}
+            name={'quantityOnHand'}
             disabled={true}
             medium={'true'}
           />
@@ -49,10 +49,10 @@ export function DecrementAdjustmentFields() {
             inputRef={(ref) => (decrementFieldRef.current = ref)}
             onBlurValue={(value) => {
               setFieldValue(
-                'new_quantity',
+                'newQuantity',
                 decrementQuantity(
                   toSafeNumber(value),
-                  toSafeNumber(values.quantity_on_hand),
+                  toSafeNumber(values.quantityOnHand),
                 ),
               );
             }}
@@ -66,13 +66,13 @@ export function DecrementAdjustmentFields() {
       {/*------------ New quantity -----------*/}
       <Col className={'col--quantity'}>
         <FFormGroup
-          name={'new_quantity'}
+          name={'newQuantity'}
           label={intl.get('new_quantity')}
           fill
           fastField
         >
           <FMoneyInputGroup
-            name={'new_quantity'}
+            name={'newQuantity'}
             allowDecimals={false}
             allowNegativeValue={true}
             onBlurValue={(value) => {
@@ -80,7 +80,7 @@ export function DecrementAdjustmentFields() {
                 'quantity',
                 decrementQuantity(
                   toSafeNumber(value),
-                  toSafeNumber(values.quantity_on_hand),
+                  toSafeNumber(values.quantityOnHand),
                 ),
               );
             }}

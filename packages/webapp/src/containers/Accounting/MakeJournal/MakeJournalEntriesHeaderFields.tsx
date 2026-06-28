@@ -98,27 +98,27 @@ export function MakeJournalEntriesHeader({}) {
 
       {/*------------ Journal type  -----------*/}
       <FFormGroup
-        name={'journal_type'}
+        name={'journalType'}
         label={intl.get('journal_type')}
         inline
         fastField
       >
-        <FInputGroup name={'journal_type'} minimal fill />
+        <FInputGroup name={'journalType'} minimal fill />
       </FFormGroup>
 
       {/*------------ Currency  -----------*/}
       <FFormGroup
-        name={'currency_code'}
+        name={'currencyCode'}
         label={intl.get('currency')}
         inline
         fastField
       >
         <FSelect
-          name={'currency_code'}
+          name={'currencyCode'}
           items={currencies}
           onItemChange={(currencyItem) => {
-            form.setFieldValue('currency_code', currencyItem.currency_code);
-            form.setFieldValue('exchange_rate', '');
+            form.setFieldValue('currencyCode', currencyItem.currency_code);
+            form.setFieldValue('exchangeRate', '');
           }}
           popoverProps={{
             inline: true,
@@ -134,7 +134,7 @@ export function MakeJournalEntriesHeader({}) {
 
       {/* ----------- Exchange rate ----------- */}
       <JournalExchangeRateInputField
-        name={'exchange_rate'}
+        name={'exchangeRate'}
         formGroupProps={{ label: ' ', inline: true }}
       />
     </Stack>

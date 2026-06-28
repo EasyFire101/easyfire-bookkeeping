@@ -32,7 +32,7 @@ export function ExpenseFormEntriesField({ linesNumber = 4 }) {
           }}
           defaultEntry={defaultExpenseEntry}
           linesNumber={linesNumber}
-          currencyCode={values.currency_code}
+          currencyCode={values.currencyCode}
         />
       )}
     </FastField>

@@ -5723,6 +5723,64 @@ export interface components {
              */
             mediaIds?: number[];
         };
+        ItemLinkDto: {
+            /**
+             * @description The name of the item
+             * @example Consulting service
+             */
+            name: string;
+        };
+        InventoryAdjustmentEntryResponseDto: {
+            /**
+             * @description The unique identifier of the inventory adjustment entry
+             * @example 1
+             */
+            id: number;
+            /**
+             * @description The unique identifier of the inventory adjustment
+             * @example 1
+             */
+            adjustmentId: number;
+            /**
+             * @description The index of the entry
+             * @example 1
+             */
+            index: number;
+            /**
+             * @description The id of the item
+             * @example 1
+             */
+            itemId: number;
+            /**
+             * @description The quantity of the entry
+             * @example 10
+             */
+            quantity: number;
+            /**
+             * @description The cost of the entry
+             * @example 100
+             */
+            cost: number;
+            /**
+             * @description The value of the entry
+             * @example 1000
+             */
+            value: number;
+            /** @description The nested item summary */
+            item?: components["schemas"]["ItemLinkDto"];
+        };
+        InventoryAdjustmentAccountDto: {
+            /**
+             * @description The unique identifier of the adjustment account
+             * @example 100
+             */
+            id: number;
+            /**
+             * @description The name of the adjustment account
+             * @example Inventory Adjustment
+             */
+            name: string;
+        };
         InventoryAdjustmentResponseDto: {
             /**
              * @description The unique identifier of the inventory adjustment
@@ -5750,6 +5808,8 @@ export interface components {
              * @example 100
              */
             adjustmentAccountId: number;
+            /** @description The nested adjustment account summary */
+            adjustmentAccount?: components["schemas"]["InventoryAdjustmentAccountDto"];
             /**
              * @description The reason for the adjustment
              * @example Stock count discrepancy
@@ -5791,7 +5851,7 @@ export interface components {
              */
             createdAt: string;
             /** @description The entries associated with this adjustment */
-            entries: unknown[][];
+            entries: components["schemas"]["InventoryAdjustmentEntryResponseDto"][];
         };
         InventoryAdjustmentsPaginationDto: {
             /** @example 1 */
@@ -6073,6 +6133,38 @@ export interface components {
             email: string;
             /** @description The website of the warehouse */
             website: string;
+        };
+        ItemWarehousesResponseDto: {
+            /**
+             * @description The unique identifier of the warehouse.
+             * @example 1
+             */
+            warehouseId: number;
+            /**
+             * @description The name of the warehouse.
+             * @example Main Warehouse
+             */
+            warehouseName: string;
+            /**
+             * @description The code of the warehouse.
+             * @example WH-001
+             */
+            warehouseCode: string;
+            /**
+             * @description The quantity on hand of the item in the warehouse.
+             * @example 150
+             */
+            quantityOnHand: number;
+            /**
+             * @description The formatted quantity on hand of the item in the warehouse.
+             * @example 150
+             */
+            quantityOnHandFormatted: string;
+            /**
+             * @description The quantity available for sale in the warehouse.
+             * @example 150
+             */
+            availableForSale: number;
         };
         ValidateBulkDeleteResponseDto: {
             /**
@@ -6574,6 +6666,8 @@ export interface components {
              * @example 1
              */
             itemId: number;
+            /** @description The nested item summary */
+            item?: components["schemas"]["ItemLinkDto"];
             /**
              * @description The rate of the item entry
              * @example 1
@@ -6644,6 +6738,82 @@ export interface components {
              * @example 1021
              */
             costAccountId: number;
+            /**
+             * @description The computed amount of the item entry (quantity * rate)
+             * @example 100
+             */
+            amount?: number;
+            /**
+             * @description Formatted quantity of the item entry
+             * @example 12
+             */
+            quantityFormatted?: string;
+            /**
+             * @description Formatted rate of the item entry
+             * @example $10.00
+             */
+            rateFormatted?: string;
+            /**
+             * @description Formatted discount amount of the item entry
+             * @example $2.00
+             */
+            discountFormatted?: string;
+            /**
+             * @description Formatted total of the item entry
+             * @example $118.00
+             */
+            totalFormatted?: string;
+        };
+        SaleInvoiceTaxEntryDto: {
+            /**
+             * @description The unique identifier of the tax rate transaction
+             * @example 1
+             */
+            id: number;
+            /**
+             * @description The name of the tax rate
+             * @example VAT
+             */
+            name: string;
+            /**
+             * @description The code of the tax rate
+             * @example VAT-15
+             */
+            taxRateCode: string;
+            /**
+             * @description The rate of the tax
+             * @example 15
+             */
+            taxRate: number;
+            /**
+             * @description The id of the tax rate
+             * @example 1
+             */
+            taxRateId: number;
+            /**
+             * @description The computed tax amount
+             * @example 150
+             */
+            taxRateAmount: number;
+            /**
+             * @description The formatted tax rate amount
+             * @example $150.00
+             */
+            taxRateAmountFormatted: string;
+        };
+        BranchLinkDto: {
+            /**
+             * @description The name of the branch
+             * @example Main Office
+             */
+            name: string;
+        };
+        CustomerLinkDto: {
+            /**
+             * @description The display name of the customer
+             * @example Acme Inc.
+             */
+            displayName: string;
         };
         AttachmentLinkDto: Record<string, never>;
         PaymentMethodDto: {
@@ -6718,6 +6888,8 @@ export interface components {
             isInclusiveTax?: boolean;
             /** @description The line items of the invoice */
             entries: components["schemas"]["ItemEntryDto"][];
+            /** @description The tax entries of the invoice */
+            taxes?: components["schemas"]["SaleInvoiceTaxEntryDto"][];
             /**
              * @description Whether the invoice has been delivered
              * @example false
@@ -6739,6 +6911,10 @@ export interface components {
              * @example 1
              */
             branchId?: number;
+            /** @description The nested branch summary */
+            branch?: components["schemas"]["BranchLinkDto"];
+            /** @description The nested customer summary */
+            customer?: components["schemas"]["CustomerLinkDto"];
             /**
              * @description The ID of the project
              * @example 1
@@ -6753,6 +6929,11 @@ export interface components {
              * @example 10
              */
             discount?: number;
+            /**
+             * @description The computed discount amount
+             * @example 10
+             */
+            discountAmount?: number;
             /**
              * @description The type of discount (percentage or fixed)
              * @example percentage
@@ -6820,6 +7001,11 @@ export interface components {
              */
             isFullyPaid: boolean;
             /**
+             * @description Whether the invoice is written off as bad debt
+             * @example false
+             */
+            isWrittenoff?: boolean;
+            /**
              * Format: date-time
              * @description The date when the invoice was created
              * @example 2023-01-01T00:00:00Z
@@ -6831,6 +7017,91 @@ export interface components {
              * @example 2023-01-02T00:00:00Z
              */
             updatedAt?: string;
+            /**
+             * @description Formatted invoice date
+             * @example 2023-01-01
+             */
+            invoiceDateFormatted: string;
+            /**
+             * @description Formatted due date
+             * @example 2023-01-15
+             */
+            dueDateFormatted: string;
+            /**
+             * @description Formatted created at date
+             * @example 2023-01-01
+             */
+            createdAtFormatted: string;
+            /**
+             * @description Formatted due amount
+             * @example $500.00
+             */
+            dueAmountFormatted: string;
+            /**
+             * @description Formatted payment amount
+             * @example $500.00
+             */
+            paymentAmountFormatted: string;
+            /**
+             * @description Formatted balance amount
+             * @example $500.00
+             */
+            balanceAmountFormatted: string;
+            /**
+             * @description Formatted exchange rate
+             * @example 1.00
+             */
+            exchangeRateFormatted: string;
+            /**
+             * @description Formatted subtotal
+             * @example $900.00
+             */
+            subtotalFormatted: string;
+            /**
+             * @description Formatted subtotal in local currency
+             * @example $900.00
+             */
+            subtotalLocalFormatted: string;
+            /**
+             * @description Formatted subtotal excluding tax
+             * @example $800.00
+             */
+            subtotalExludingTaxFormatted: string;
+            /**
+             * @description Formatted tax amount withheld
+             * @example $50.00
+             */
+            taxAmountWithheldFormatted: string;
+            /**
+             * @description Formatted tax amount withheld in local currency
+             * @example $50.00
+             */
+            taxAmountWithheldLocalFormatted: string;
+            /**
+             * @description Formatted total
+             * @example $1,000.00
+             */
+            totalFormatted: string;
+            /**
+             * @description Formatted total in local currency
+             * @example $1,000.00
+             */
+            totalLocalFormatted: string;
+            /**
+             * @description Formatted discount amount
+             * @example $10.00
+             */
+            discountAmountFormatted: string;
+            /**
+             * @description Formatted discount percentage
+             * @example 10%
+             */
+            discountPercentageFormatted: string;
+            /**
+             * @description Formatted adjustment amount
+             * @example $5.00
+             */
+            adjustmentFormatted: string;
         };
         CreateSaleInvoiceDto: {
             /**
@@ -8191,6 +8462,13 @@ export interface components {
              * @example 50
              */
             unallocatedCostAmount: number;
+            /** @description The expense account associated with this category */
+            expenseAccount?: components["schemas"]["AccountResponseDto"];
+            /**
+             * @description The formatted amount of the expense category
+             * @example $100.00
+             */
+            amountFormatted?: string;
         };
         ExpenseResponseDto: {
             /**
@@ -8311,6 +8589,38 @@ export interface components {
              * @example 1000
              */
             billableAmount: number;
+            /**
+             * @description The formatted total amount of the expense
+             * @example $1,000.00
+             */
+            formattedAmount?: string;
+            /**
+             * @description The formatted landed cost amount of the expense
+             * @example $800.00
+             */
+            formattedLandedCostAmount?: string;
+            /**
+             * @description The formatted allocated cost amount of the expense
+             * @example $200.00
+             */
+            formattedAllocatedCostAmount?: string;
+            /**
+             * @description The formatted payment date of the expense
+             * @example 2024-03-20
+             */
+            formattedDate?: string;
+            /**
+             * @description The formatted creation date of the expense
+             * @example 2024-03-20
+             */
+            formattedCreatedAt?: string;
+            /**
+             * @description The formatted publication date of the expense
+             * @example 2024-03-20
+             */
+            formattedPublishedAt?: string;
+            /** @description The branch associated with the expense */
+            branch?: components["schemas"]["BranchResponseDto"];
             /** @description The categories associated with this expense */
             categories: components["schemas"]["ExpenseCategoryResponseDto"][];
         };
@@ -9943,6 +10253,16 @@ export interface components {
              */
             discountAmountFormatted: string;
             /**
+             * @description The discount amount computed from the discount type
+             * @example 100
+             */
+            discountAmount?: number;
+            /**
+             * @description The formatted paid amount
+             * @example 1,000.00
+             */
+            paidFormatted?: string;
+            /**
              * @description The formatted discount percentage
              * @example 10%
              */
@@ -10229,6 +10549,13 @@ export interface components {
              */
             paymentAccountSlug: string;
         };
+        VendorLinkDto: {
+            /**
+             * @description The display name of the vendor
+             * @example Acme Supplies Ltd.
+             */
+            displayName: string;
+        };
         BillResponseDto: {
             /**
              * @description The unique identifier of the bill
@@ -10262,6 +10589,8 @@ export interface components {
              * @example 1001
              */
             vendorId: number;
+            /** @description The nested vendor summary */
+            vendor?: components["schemas"]["VendorLinkDto"];
             /**
              * @description The exchange rate for currency conversion
              * @example 1.25
@@ -10284,6 +10613,8 @@ export interface components {
             isInclusiveTax?: boolean;
             /** @description The line items of the bill */
             entries: components["schemas"]["ItemEntryDto"][];
+            /** @description The tax entries of the bill */
+            taxes?: components["schemas"]["SaleInvoiceTaxEntryDto"][];
             /**
              * @description The ID of the warehouse
              * @example 101
@@ -10308,6 +10639,11 @@ export interface components {
              * @example 100
              */
             discount?: number;
+            /**
+             * @description The computed discount amount
+             * @example 100
+             */
+            discountAmount?: number;
             /**
              * @description The type of discount (percentage or fixed)
              * @example amount
@@ -10370,6 +10706,11 @@ export interface components {
              */
             isFullyPaid: boolean;
             /**
+             * @description Whether the bill is currently open for editing
+             * @example false
+             */
+            isOpen?: boolean;
+            /**
              * Format: date-time
              * @description The date when the bill was created
              * @example 2024-03-15T00:00:00Z
@@ -10381,6 +10722,91 @@ export interface components {
              * @example 2024-03-16T00:00:00Z
              */
             updatedAt?: string;
+            /**
+             * @description Formatted bill date
+             * @example 2024-03-15
+             */
+            formattedBillDate?: string;
+            /**
+             * @description Formatted due date
+             * @example 2024-04-15
+             */
+            formattedDueDate?: string;
+            /**
+             * @description Formatted created at date
+             * @example 2024-03-15
+             */
+            formattedCreatedAt?: string;
+            /**
+             * @description Formatted bill amount
+             * @example $1,000.00
+             */
+            formattedAmount?: string;
+            /**
+             * @description Formatted payment amount
+             * @example $500.00
+             */
+            formattedPaymentAmount?: string;
+            /**
+             * @description Formatted balance amount
+             * @example $500.00
+             */
+            formattedBalance?: string;
+            /**
+             * @description Formatted due amount
+             * @example $500.00
+             */
+            formattedDueAmount?: string;
+            /**
+             * @description Formatted exchange rate
+             * @example 1.25
+             */
+            formattedExchangeRate?: string;
+            /**
+             * @description Formatted subtotal
+             * @example $900.00
+             */
+            subtotalFormatted?: string;
+            /**
+             * @description Formatted subtotal in local currency
+             * @example $900.00
+             */
+            subtotalLocalFormatted?: string;
+            /**
+             * @description Formatted subtotal excluding tax
+             * @example $800.00
+             */
+            subtotalExcludingTaxFormatted?: string;
+            /**
+             * @description Formatted tax amount withheld in local currency
+             * @example $50.00
+             */
+            taxAmountWithheldLocalFormatted?: string;
+            /**
+             * @description Formatted total
+             * @example $1,000.00
+             */
+            totalFormatted?: string;
+            /**
+             * @description Formatted total in local currency
+             * @example $1,000.00
+             */
+            totalLocalFormatted?: string;
+            /**
+             * @description Formatted discount amount
+             * @example $100.00
+             */
+            discountAmountFormatted?: string;
+            /**
+             * @description Formatted discount percentage
+             * @example 10%
+             */
+            discountPercentageFormatted?: string;
+            /**
+             * @description Formatted adjustment amount
+             * @example $50.00
+             */
+            adjustmentFormatted?: string;
         };
         BillEntryDto: {
             /**
@@ -10393,6 +10819,8 @@ export interface components {
              * @example 1
              */
             itemId: number;
+            /** @description The nested item summary */
+            item?: components["schemas"]["ItemLinkDto"];
             /**
              * @description The rate of the item entry
              * @example 1
@@ -10463,6 +10891,31 @@ export interface components {
              * @example 1021
              */
             costAccountId: number;
+            /**
+             * @description The computed amount of the item entry (quantity * rate)
+             * @example 100
+             */
+            amount?: number;
+            /**
+             * @description Formatted quantity of the item entry
+             * @example 12
+             */
+            quantityFormatted?: string;
+            /**
+             * @description Formatted rate of the item entry
+             * @example $10.00
+             */
+            rateFormatted?: string;
+            /**
+             * @description Formatted discount amount of the item entry
+             * @example $2.00
+             */
+            discountFormatted?: string;
+            /**
+             * @description Formatted total of the item entry
+             * @example $118.00
+             */
+            totalFormatted?: string;
             /**
              * @description Flag indicating whether the entry contributes to landed cost
              * @example true
@@ -10643,6 +11096,88 @@ export interface components {
              * @example 50
              */
             adjustment?: number;
+        };
+        BillLandedCostTransactionDto: {
+            /**
+             * @description The unique identifier of the landed cost transaction
+             * @example 1
+             */
+            id: number;
+            /**
+             * @description The bill id the landed cost is allocated to
+             * @example 10
+             */
+            billId?: number;
+            /**
+             * @description The id of the source transaction the cost was allocated from
+             * @example 5
+             */
+            fromTransactionId?: number;
+            /**
+             * @description The type of the source transaction (Bill or Expense)
+             * @example Expense
+             */
+            fromTransactionType?: string;
+            /**
+             * @description The entry id of the source transaction
+             * @example 2
+             */
+            fromTransactionEntryId?: number;
+            /**
+             * @description The allocation method used to distribute the cost
+             * @example quantity
+             */
+            allocationMethod?: string;
+            /**
+             * @description The translated label of the allocation method
+             * @example Quantity
+             */
+            allocationMethodFormatted?: string;
+            /**
+             * @description The cost account id the landed cost is posted to
+             * @example 1020
+             */
+            costAccountId?: number;
+            /**
+             * @description The description of the landed cost transaction
+             * @example Freight charges
+             */
+            description?: string;
+            /**
+             * @description The allocated landed cost amount
+             * @example 150
+             */
+            amount?: number;
+            /**
+             * @description The allocated landed cost amount in the base currency
+             * @example 150
+             */
+            localAmount?: number;
+            /**
+             * @description The currency code of the landed cost transaction
+             * @example USD
+             */
+            currencyCode?: string;
+            /**
+             * @description The exchange rate applied to the amount
+             * @example 1
+             */
+            exchangeRate?: number;
+            /**
+             * @description The resolved name of the source item or expense account
+             * @example Widget A
+             */
+            name?: string;
+            /**
+             * @description Formatted allocated amount
+             * @example $150.00
+             */
+            formattedAmount?: string;
+            /**
+             * @description Formatted allocated amount in the base currency
+             * @example $150.00
+             */
+            formattedLocalAmount?: string;
         };
         AllocateBillLandedCostDto: Record<string, never>;
         ManualJournalEntryResponseDto: {
@@ -10922,6 +11457,16 @@ export interface components {
              * @example false
              */
             isClosed: boolean;
+            /**
+             * @description Whether the credit note is draft
+             * @example false
+             */
+            isDraft?: boolean;
+            /**
+             * @description Whether the credit note is published
+             * @example true
+             */
+            isPublished?: boolean;
             /** @description The line items of the credit note */
             entries: components["schemas"]["ItemEntryDto"][];
             /**
@@ -10934,6 +11479,10 @@ export interface components {
              * @example 1
              */
             branchId?: number;
+            /** @description The nested branch summary */
+            branch?: components["schemas"]["BranchLinkDto"];
+            /** @description The nested customer summary */
+            customer?: components["schemas"]["CustomerLinkDto"];
             /** @description The attachments of the credit note */
             attachments?: components["schemas"]["AttachmentLinkDto"][];
             /**
@@ -11398,6 +11947,251 @@ export interface components {
              */
             entries: components["schemas"]["ApplyCreditNoteInvoiceEntryDto"][];
         };
+        VendorCreditResponseDto: {
+            /**
+             * @description The unique identifier of the vendor credit
+             * @example 1
+             */
+            id: number;
+            /**
+             * @description The vendor credit number
+             * @example VC-2024-001
+             */
+            vendorCreditNumber: string;
+            /**
+             * Format: date-time
+             * @description The date of the vendor credit
+             * @example 2024-03-15T00:00:00Z
+             */
+            vendorCreditDate: string;
+            /**
+             * @description The reference number
+             * @example PO-2024-001
+             */
+            referenceNo?: string;
+            /**
+             * @description The ID of the vendor
+             * @example 1001
+             */
+            vendorId: number;
+            /**
+             * @description The vendor credit amount
+             * @example 1000
+             */
+            amount: number;
+            /**
+             * @description The currency code
+             * @example USD
+             */
+            currencyCode?: string;
+            /**
+             * @description The exchange rate for currency conversion
+             * @example 1.25
+             */
+            exchangeRate?: number;
+            /**
+             * @description Additional notes about the vendor credit
+             * @example Credit for returned goods
+             */
+            note?: string;
+            /**
+             * Format: date-time
+             * @description The date the vendor credit was opened
+             * @example 2024-03-15T00:00:00Z
+             */
+            openedAt?: string;
+            /**
+             * @description The ID of the user who created the vendor credit
+             * @example 1
+             */
+            userId: number;
+            /**
+             * @description The amount already refunded
+             * @example 0
+             */
+            refundedAmount: number;
+            /**
+             * @description The amount already invoiced (applied to bills)
+             * @example 0
+             */
+            invoicedAmount: number;
+            /**
+             * @description The adjustment amount
+             * @example 0
+             */
+            adjustment?: number;
+            /**
+             * @description The discount value
+             * @example 0
+             */
+            discount?: number;
+            /**
+             * @description The type of discount (percentage or fixed)
+             * @example amount
+             * @enum {string}
+             */
+            discountType?: "percentage" | "amount";
+            /**
+             * @description The ID of the branch
+             * @example 1
+             */
+            branchId?: number;
+            /**
+             * @description The ID of the warehouse
+             * @example 1
+             */
+            warehouseId?: number;
+            /** @description The line items of the vendor credit */
+            entries: components["schemas"]["ItemEntryDto"][];
+            /** @description Branch details */
+            branch?: components["schemas"]["BranchResponseDto"];
+            /** @description Vendor details */
+            vendor?: components["schemas"]["VendorResponseDto"];
+            /** @description The attachments of the vendor credit */
+            attachments?: components["schemas"]["AttachmentLinkDto"][];
+            /**
+             * @description Whether the vendor credit is in draft state
+             * @example false
+             */
+            isDraft: boolean;
+            /**
+             * @description Whether the vendor credit has been published
+             * @example true
+             */
+            isPublished: boolean;
+            /**
+             * @description Whether the vendor credit is open (has remaining credits)
+             * @example true
+             */
+            isOpen: boolean;
+            /**
+             * @description Whether the vendor credit is closed (no remaining credits)
+             * @example false
+             */
+            isClosed: boolean;
+            /**
+             * @description The remaining credits available
+             * @example 1000
+             */
+            creditsRemaining: number;
+            /**
+             * @description The subtotal (equal to amount)
+             * @example 1000
+             */
+            subtotal: number;
+            /**
+             * @description The total amount after discount and adjustment
+             * @example 950
+             */
+            total: number;
+            /**
+             * @description The amount in the local currency
+             * @example 1250
+             */
+            localAmount?: number;
+            /**
+             * @description The subtotal in the local currency
+             * @example 1250
+             */
+            subtotalLocal?: number;
+            /**
+             * @description The total in the local currency
+             * @example 1187.5
+             */
+            totalLocal?: number;
+            /**
+             * @description The computed discount amount
+             * @example 50
+             */
+            discountAmount?: number;
+            /**
+             * @description The computed discount amount in local currency
+             * @example 62.5
+             */
+            discountAmountLocal?: number | null;
+            /**
+             * @description The discount percentage (only when discountType is Percentage)
+             * @example 10
+             */
+            discountPercentage?: number | null;
+            /**
+             * @description The adjustment amount in local currency
+             * @example 0
+             */
+            adjustmentLocal?: number | null;
+            /**
+             * @description Formatted vendor credit date
+             * @example 2024-03-15
+             */
+            formattedVendorCreditDate?: string;
+            /**
+             * @description Formatted created at date
+             * @example 2024-03-15
+             */
+            formattedCreatedAt?: string;
+            /**
+             * @description Formatted vendor credit amount
+             * @example $1,000.00
+             */
+            formattedAmount?: string;
+            /**
+             * @description Formatted subtotal
+             * @example 1,000.00
+             */
+            formattedSubtotal?: string;
+            /**
+             * @description Formatted credits remaining
+             * @example $1,000.00
+             */
+            formattedCreditsRemaining?: string;
+            /**
+             * @description Formatted invoiced amount
+             * @example $0.00
+             */
+            formattedInvoicedAmount?: string;
+            /**
+             * @description Formatted discount amount
+             * @example $50.00
+             */
+            discountAmountFormatted?: string;
+            /**
+             * @description Formatted discount amount in local currency
+             * @example $62.50
+             */
+            discountAmountLocalFormatted?: string;
+            /**
+             * @description Formatted discount percentage
+             * @example 10%
+             */
+            discountPercentageFormatted?: string;
+            /**
+             * @description Formatted adjustment amount
+             * @example $0.00
+             */
+            adjustmentFormatted?: string;
+            /**
+             * @description Formatted adjustment amount in local currency
+             * @example $0.00
+             */
+            adjustmentLocalFormatted?: string;
+            /**
+             * @description Formatted total amount
+             * @example $950.00
+             */
+            totalFormatted?: string;
+            /**
+             * Format: date-time
+             * @description The date when the vendor credit was created
+             * @example 2024-03-15T00:00:00Z
+             */
+            createdAt: string;
+            /**
+             * Format: date-time
+             * @description The date when the vendor credit was last updated
+             * @example 2024-03-16T00:00:00Z
+             */
+            updatedAt?: string;
+        };
         CreateVendorCreditDto: {
             /**
              * @description The id of the vendor
@@ -11569,6 +12363,76 @@ export interface components {
              * @example 1
              */
             adjustment: number;
+        };
+        VendorCreditAppliedBillResponseDto: {
+            /**
+             * @description The unique identifier of the applied bill record
+             * @example 1
+             */
+            id: number;
+            /**
+             * @description The amount of the vendor credit applied to the bill
+             * @example 500
+             */
+            amount: number;
+            /**
+             * @description The ID of the bill the vendor credit was applied to
+             * @example 1001
+             */
+            billId: number;
+            /**
+             * @description The ID of the vendor credit
+             * @example 2001
+             */
+            vendorCreditId: number;
+            /**
+             * @description The vendor credit number
+             * @example VC-2024-001
+             */
+            vendorCreditNumber?: string;
+            /**
+             * Format: date-time
+             * @description The vendor credit date
+             * @example 2024-03-15T00:00:00Z
+             */
+            vendorCreditDate?: string;
+            /**
+             * @description Formatted vendor credit date
+             * @example 2024-03-15
+             */
+            formattedVendorCreditDate?: string;
+            /**
+             * @description The bill number
+             * @example BILL-2024-001
+             */
+            billNumber?: string;
+            /**
+             * @description The bill reference number
+             * @example PO-2024-001
+             */
+            billReferenceNo?: string;
+            /**
+             * @description Formatted bill date
+             * @example 2024-03-10
+             */
+            formattedBillDate?: string;
+            /**
+             * @description Formatted applied amount
+             * @example $500.00
+             */
+            formattedAmount?: string;
+            /**
+             * Format: date-time
+             * @description The date when the applied bill record was created
+             * @example 2024-03-15T00:00:00Z
+             */
+            createdAt: string;
+            /**
+             * Format: date-time
+             * @description The date when the applied bill record was last updated
+             * @example 2024-03-16T00:00:00Z
+             */
+            updatedAt?: string;
         };
         ApplyVendorCreditToBillEntryDto: {
             /**
@@ -11881,6 +12745,83 @@ export interface components {
              *     ]
              */
             attachments: string[];
+        };
+        RefundVendorCreditResponseDto: {
+            /**
+             * @description The unique identifier of the refund transaction
+             * @example 1
+             */
+            id: number;
+            /**
+             * @description The ID of the vendor credit being refunded
+             * @example 1001
+             */
+            vendorCreditId: number;
+            /**
+             * @description The refund amount
+             * @example 500
+             */
+            amount: number;
+            /**
+             * @description The currency code
+             * @example USD
+             */
+            currencyCode: string;
+            /**
+             * @description The exchange rate for currency conversion
+             * @example 1
+             */
+            exchangeRate: number;
+            /**
+             * @description The reference number
+             * @example REF-2024-001
+             */
+            referenceNo: string;
+            /**
+             * @description The deposit account ID
+             * @example 10
+             */
+            depositAccountId: number;
+            /**
+             * @description A description of the refund
+             * @example Refund for overpayment
+             */
+            description?: string;
+            /**
+             * @description The ID of the branch
+             * @example 1
+             */
+            branchId?: number;
+            /**
+             * Format: date-time
+             * @description The date of the refund
+             * @example 2024-03-15T00:00:00Z
+             */
+            date: string;
+            /** @description The deposit account the refund was paid into */
+            depositAccount?: components["schemas"]["AccountResponseDto"];
+            /**
+             * @description Formatted refund amount
+             * @example $500.00
+             */
+            formattedAmount?: string;
+            /**
+             * @description Formatted refund date
+             * @example 2024-03-15
+             */
+            formattedDate?: string;
+            /**
+             * Format: date-time
+             * @description The date when the refund was created
+             * @example 2024-03-15T00:00:00Z
+             */
+            createdAt: string;
+            /**
+             * Format: date-time
+             * @description The date when the refund was last updated
+             * @example 2024-03-16T00:00:00Z
+             */
+            updatedAt?: string;
         };
         RefundVendorCreditDto: {
             /**
@@ -13782,6 +14723,45 @@ export interface components {
             query: components["schemas"]["TransactionsByCustomerQueryResponseDto"];
             /** @description Report metadata */
             meta: components["schemas"]["TransactionsByCustomerMetaDto"];
+        };
+        TransactionByReferenceDateDto: {
+            /** @description Formatted date string */
+            formattedDate: string;
+            /**
+             * Format: date-time
+             * @description Raw transaction date
+             */
+            date: string;
+        };
+        TransactionByReferenceTransactionDto: {
+            /** @description Transaction date */
+            date: components["schemas"]["TransactionByReferenceDateDto"];
+            /** @description Credit amount */
+            credit: components["schemas"]["FinancialReportTotalDto"];
+            /** @description Debit amount */
+            debit: components["schemas"]["FinancialReportTotalDto"];
+            /** @description Contact type */
+            contactType: string;
+            /** @description Formatted contact type */
+            formattedContactType: string;
+            /** @description Contact ID */
+            contactId: number;
+            /** @description Reference type */
+            referenceType: string;
+            /** @description Formatted reference type */
+            formattedReferenceType: string;
+            /** @description Reference ID */
+            referenceId: number;
+            /** @description Account name */
+            accountName: string;
+            /** @description Account code */
+            accountCode: string;
+            /** @description Account ID */
+            accountId: number;
+        };
+        TransactionsByReferenceResponseDto: {
+            /** @description Transactions linked to the given reference */
+            transactions: components["schemas"]["TransactionByReferenceTransactionDto"][];
         };
         ARAgingSummaryQueryResponseDto: {
             /** @description As-of date */
@@ -16886,7 +17866,9 @@ export interface operations {
                 headers: {
                     [name: string]: unknown;
                 };
-                content?: never;
+                content: {
+                    "application/json": components["schemas"]["ItemWarehousesResponseDto"][];
+                };
             };
             /** @description The item not found. */
             404: {
@@ -21349,7 +22331,12 @@ export interface operations {
                 headers: {
                     [name: string]: unknown;
                 };
-                content?: never;
+                content: {
+                    "application/json": {
+                        billId?: number;
+                        data?: components["schemas"]["BillLandedCostTransactionDto"][];
+                    };
+                };
             };
         };
     };
@@ -22364,11 +23351,14 @@ export interface operations {
         };
         requestBody?: never;
         responses: {
+            /** @description The vendor credit details have been successfully retrieved. */
             200: {
                 headers: {
                     [name: string]: unknown;
                 };
-                content?: never;
+                content: {
+                    "application/json": components["schemas"]["VendorCreditResponseDto"];
+                };
             };
         };
     };
@@ -22516,11 +23506,14 @@ export interface operations {
         };
         requestBody?: never;
         responses: {
+            /** @description The bills applied to the vendor credit have been successfully retrieved. */
             200: {
                 headers: {
                     [name: string]: unknown;
                 };
-                content?: never;
+                content: {
+                    "application/json": components["schemas"]["VendorCreditAppliedBillResponseDto"][];
+                };
             };
         };
     };
@@ -22804,11 +23797,14 @@ export interface operations {
         };
         requestBody?: never;
         responses: {
+            /** @description The vendor credit refunds have been successfully retrieved. */
             200: {
                 headers: {
                     [name: string]: unknown;
                 };
-                content?: never;
+                content: {
+                    "application/json": components["schemas"]["RefundVendorCreditResponseDto"][];
+                };
             };
         };
     };
@@ -27535,7 +28531,9 @@ export interface operations {
                 headers: {
                     [name: string]: unknown;
                 };
-                content?: never;
+                content: {
+                    "application/json": components["schemas"]["TransactionsByReferenceResponseDto"];
+                };
             };
         };
     };

@@ -1,10 +1,19 @@
 // @ts-nocheck
-import { useQueryClient, useMutation, useQuery } from '@tanstack/react-query';
+import {
+  useQueryClient,
+  useMutation,
+  useQuery,
+  type UseQueryOptions,
+} from '@tanstack/react-query';
 import {
   fetchLandedCostTransactions,
   allocateLandedCost,
   deleteAllocatedLandedCost,
   fetchBillLandedCostTransactions,
+} from '@bigcapital/sdk-ts';
+import type {
+  BillLandedCostTransaction,
+  BillLandedCostTransactionsResponse,
 } from '@bigcapital/sdk-ts';
 import { useApiFetcher } from '../../useRequest';
 import { landedCostKeys } from './query-keys';
@@ -55,14 +64,24 @@ export function useLandedCostTransaction(query, props) {
   });
 }
 
-export function useBillLocatedLandedCost(id, props) {
+export function useBillLocatedLandedCost(
+  id: number | null | undefined,
+  props?: Omit<
+    UseQueryOptions<
+      BillLandedCostTransactionsResponse,
+      Error,
+      BillLandedCostTransaction[]
+    >,
+    'queryKey' | 'queryFn'
+  >,
+) {
   const fetcher = useApiFetcher();
 
   return useQuery({
     ...props,
     queryKey: landedCostKeys.transaction(id),
-    queryFn: () => fetchBillLandedCostTransactions(fetcher, id),
-    select: (data) => (data as { data?: unknown[] })?.data ?? [],
+    queryFn: () => fetchBillLandedCostTransactions(fetcher, id!),
+    select: (data) => data.data ?? [],
     enabled: id != null,
   });
 }

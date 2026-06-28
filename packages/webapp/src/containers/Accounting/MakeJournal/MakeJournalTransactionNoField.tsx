@@ -40,7 +40,7 @@ export const MakeJournalTransactionNoField = R.compose(
   const handleJournalNoBlur = (event) => {
     const newValue = event.target.value;
 
-    if (values.journal_number !== newValue && journalAutoIncrement) {
+    if (values.journalNumber !== newValue && journalAutoIncrement) {
       openDialog('journal-number-form', {
         initialFormValues: {
           onceManualNumber: newValue,
@@ -49,14 +49,14 @@ export const MakeJournalTransactionNoField = R.compose(
       });
     }
     if (!journalAutoIncrement) {
-      setFieldValue('journal_number', newValue);
-      setFieldValue('journal_number_manually', newValue);
+      setFieldValue('journalNumber', newValue);
+      setFieldValue('journalNumberManually', newValue);
     }
   };
 
   return (
     <FFormGroup
-      name={'journal_number'}
+      name={'journalNumber'}
       label={intl.get('journal_no')}
       labelInfo={
         <>
@@ -70,7 +70,7 @@ export const MakeJournalTransactionNoField = R.compose(
     >
       <ControlGroup fill={true}>
         <FInputGroup
-          name={'journal_number'}
+          name={'journalNumber'}
           fill={true}
           asyncControl={true}
           onBlur={handleJournalNoBlur}

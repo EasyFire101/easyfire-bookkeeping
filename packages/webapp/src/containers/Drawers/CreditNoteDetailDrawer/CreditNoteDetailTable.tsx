@@ -1,4 +1,3 @@
-// @ts-nocheck
 import React from 'react';
 
 import { CommercialDocEntriesTable } from '@/components';
@@ -8,12 +7,10 @@ import { useCreditNoteReadOnlyEntriesColumns } from './utils';
 
 /**
  * Credit note detail table.
- * @returns {React.JSX}
  */
 export function CreditNoteDetailTable() {
-  const {
-    creditNote: { entries },
-  } = useCreditNoteDetailDrawerContext();
+  const { creditNote } = useCreditNoteDetailDrawerContext();
+  const entries = creditNote?.entries ?? [];
 
   // Credit note entries table columns.
   const columns = useCreditNoteReadOnlyEntriesColumns();
@@ -24,7 +21,7 @@ export function CreditNoteDetailTable() {
       data={entries}
       initialHiddenColumns={
         // If any entry has no discount, hide the discount column.
-        entries?.some((e) => e.discount_formatted) ? [] : ['discount']
+        entries.some((e) => e.discountFormatted) ? [] : ['discount']
       }
       className={'table-constrant'}
     />

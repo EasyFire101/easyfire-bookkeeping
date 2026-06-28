@@ -30,7 +30,7 @@ export function BillFormBody({ defaultBill }) {
           items={items}
           errors={error}
           linesNumber={4}
-          currencyCode={values.currency_code}
+          currencyCode={values.currencyCode}
           itemType={ITEM_TYPE.PURCHASABLE}
           taxRates={taxRates}
           landedCost={true}

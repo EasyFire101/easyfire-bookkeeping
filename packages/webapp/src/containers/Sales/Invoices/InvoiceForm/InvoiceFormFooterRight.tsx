@@ -24,7 +24,7 @@ import { DiscountTotalLine } from './DiscountTotalLine';
 
 export function InvoiceFormFooterRight() {
   const {
-    values: { inclusive_exclusive_tax, currency_code },
+    values: { inclusiveExclusiveTax, currencyCode },
   } = useFormikContext();
 
   const taxEntries = useInvoiceAggregatedTaxRates();
@@ -40,7 +40,7 @@ export function InvoiceFormFooterRight() {
       <TotalLine
         title={
           <>
-            {inclusive_exclusive_tax === TaxType.Inclusive
+            {inclusiveExclusiveTax === TaxType.Inclusive
               ? 'Subtotal (Tax Inclusive)'
               : 'Subtotal'}
           </>
@@ -48,7 +48,7 @@ export function InvoiceFormFooterRight() {
         value={subtotalFormatted}
       />
       <DiscountTotalLine
-        currencyCode={currency_code}
+        currencyCode={currencyCode}
         discountAmount={discountAmount}
       />
       <AdjustmentTotalLine adjustmentAmount={adjustmentAmount} />
@@ -62,7 +62,7 @@ export function InvoiceFormFooterRight() {
         />
       ))}
       <TotalLine
-        title={`Total (${currency_code})`}
+        title={`Total (${currencyCode})`}
         value={totalFormatted}
         borderStyle={TotalLineBorderStyle.SingleDark}
         textStyle={TotalLineTextStyle.Bold}

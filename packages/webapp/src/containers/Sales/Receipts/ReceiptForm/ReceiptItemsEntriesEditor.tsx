@@ -29,7 +29,7 @@ export function ReceiptItemsEntriesEditor({ defaultReceipt }) {
             items={items}
             errors={error}
             linesNumber={4}
-            currencyCode={values.currency_code}
+            currencyCode={values.currencyCode}
             enableTaxRates={false}
           />
         )}

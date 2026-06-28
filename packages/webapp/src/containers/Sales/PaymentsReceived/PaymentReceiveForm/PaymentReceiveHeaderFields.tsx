@@ -79,19 +79,19 @@ export function PaymentReceiveHeaderFields() {
 
   // Formik form context.
   const {
-    values: { entries, currency_code },
+    values: { entries, currencyCode },
     setFieldValue,
   } = useFormikContext();
 
   // Calculates the full-amount received.
   const totalDueAmount = useMemo(
-    () => safeSumBy(entries, 'due_amount'),
+    () => safeSumBy(entries, 'dueAmount'),
     [entries],
   );
   // Handle receive full-amount link click.
   const handleReceiveFullAmountClick = () => {
     const newEntries = fullAmountPaymentEntries(entries);
-    const fullAmount = safeSumBy(newEntries, 'payment_amount');
+    const fullAmount = safeSumBy(newEntries, 'paymentAmount');
 
     setFieldValue('entries', newEntries);
     setFieldValue('amount', fullAmount);
@@ -109,20 +109,20 @@ export function PaymentReceiveHeaderFields() {
 
       {/* ----------- Exchange rate ----------- */}
       <PaymentReceiveExchangeRateInputField
-        name={'exchange_rate'}
+        name={'exchangeRate'}
         formGroupProps={{ label: ' ', inline: true }}
       />
 
       {/* ------------- Payment date ------------- */}
       <FFormGroup
-        name={'payment_date'}
+        name={'paymentDate'}
         label={intl.get('payment_date')}
         labelInfo={<FieldRequiredHint />}
         inline
         fastField
       >
         <FDateInput
-          name={'payment_date'}
+          name={'paymentDate'}
           formatDate={(date) => date.toLocaleDateString()}
           parseDate={(str) => new Date(str)}
           popoverProps={{ position: Position.BOTTOM_LEFT, minimal: true }}
@@ -144,7 +144,7 @@ export function PaymentReceiveHeaderFields() {
         fastField
       >
         <ControlGroup>
-          <InputPrependText text={currency_code} />
+          <InputPrependText text={currencyCode} />
           <FMoneyInputGroup
             name={'amount'}
             onBlurValue={onFullAmountBlur}
@@ -176,7 +176,7 @@ export function PaymentReceiveHeaderFields() {
             minimal
           >
             <T id={'receive_full_amount'} /> (
-            <Money amount={totalDueAmount} currency={currency_code} />)
+            <Money amount={totalDueAmount} currency={currencyCode} />)
           </Button>
         )}
       </FFormGroup>
@@ -186,7 +186,7 @@ export function PaymentReceiveHeaderFields() {
 
       {/* ------------ Deposit account ------------ */}
       <FFormGroup
-        name={'deposit_account_id'}
+        name={'depositAccountId'}
         label={intl.get('deposit_to')}
         inline={true}
         labelInfo={<FieldRequiredHint />}
@@ -195,7 +195,7 @@ export function PaymentReceiveHeaderFields() {
         fastField={true}
       >
         <AccountsSelect
-          name={'deposit_account_id'}
+          name={'depositAccountId'}
           items={accounts}
           labelInfo={<FieldRequiredHint />}
           placeholder={<T id={'select_deposit_account'} />}
@@ -212,24 +212,24 @@ export function PaymentReceiveHeaderFields() {
 
       {/* ------------ Reference No. ------------ */}
       <FFormGroup
-        name={'reference_no'}
+        name={'referenceNo'}
         label={intl.get('reference')}
         inline
         fastField
       >
-        <InputGroup name={'reference_no'} minimal fastField />
+        <InputGroup name={'referenceNo'} minimal fastField />
       </FFormGroup>
 
       {/*------------ Project name -----------*/}
       <FeatureCan feature={Features.Projects}>
         <FFormGroup
-          name={'project_id'}
+          name={'projectId'}
           label={intl.get('payment_receive.project_name.label')}
           inline={true}
           className={classNames('form-group--select-list', Classes.FILL)}
         >
           <ProjectsSelect
-            name={'project_id'}
+            name={'projectId'}
             projects={projects}
             input={PaymentReceiveProjectSelectButton}
             popoverFill={true}
@@ -261,19 +261,19 @@ function PaymentReceiveCustomerSelect() {
       label={intl.get('customer_name')}
       inline={true}
       labelInfo={<FieldRequiredHint />}
-      name={'customer_id'}
+      name={'customerId'}
       fastField={true}
       shouldUpdate={customersFieldShouldUpdate}
       shouldUpdateDeps={{ items: customers }}
     >
       <CustomersSelect
-        name={'customer_id'}
+        name={'customerId'}
         items={customers}
         placeholder={<T id={'select_customer_account'} />}
         onItemChange={(customer) => {
-          setFieldValue('customer_id', customer.id);
-          setFieldValue('full_amount', '');
-          setFieldValue('currency_code', customer?.currency_code);
+          setFieldValue('customerId', customer.id);
+          setFieldValue('fullAmount', '');
+          setFieldValue('currencyCode', customer?.currency_code);
         }}
         popoverFill={true}
         disabled={!isNewMode}
@@ -282,8 +282,8 @@ function PaymentReceiveCustomerSelect() {
         shouldUpdate={customersFieldShouldUpdate}
         shouldUpdateDeps={{ items: customers }}
       />
-      {values.customer_id && (
-        <CustomerButtonLink customerId={values.customer_id}>
+      {values.customerId && (
+        <CustomerButtonLink customerId={values.customerId}>
           <T id={'view_customer_details'} />
         </CustomerButtonLink>
       )}

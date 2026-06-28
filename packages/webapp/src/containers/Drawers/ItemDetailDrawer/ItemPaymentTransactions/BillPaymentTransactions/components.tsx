@@ -1,4 +1,3 @@
-// @ts-nocheck
 import React from 'react';
 import intl from 'react-intl-universal';
 import clsx from 'classnames';
@@ -8,6 +7,17 @@ import { CLASSES } from '@/constants/classes';
 import { Can, FormatDateCell, Icon } from '@/components';
 import { safeCallback } from '@/utils';
 import { BillAction, AbilitySubject } from '@/constants/abilityOption';
+import type { ItemAssociatedBillsResponse } from '@bigcapital/sdk-ts';
+
+export type ItemBillTransaction = ItemAssociatedBillsResponse[number];
+
+interface ActionsMenuProps {
+  row: { original: ItemBillTransaction };
+  payload: {
+    onEdit: (row: ItemBillTransaction) => void;
+    onDelete: (row: ItemBillTransaction) => void;
+  };
+}
 
 /**
  * Table actions menu.
@@ -15,7 +25,7 @@ import { BillAction, AbilitySubject } from '@/constants/abilityOption';
 export function ActionsMenu({
   row: { original },
   payload: { onEdit, onDelete },
-}) {
+}: ActionsMenuProps) {
   return (
     <Menu>
       <Can I={BillAction.Edit} a={AbilitySubject.Bill}>
@@ -47,7 +57,7 @@ export const useBillTransactionsColumns = () => {
       {
         id: 'bill_date',
         Header: intl.get('date'),
-        accessor: 'formatted_bill_date',
+        accessor: 'formattedBillDate',
         Cell: FormatDateCell,
         width: 120,
         className: 'bill_date',
@@ -55,7 +65,7 @@ export const useBillTransactionsColumns = () => {
       {
         id: 'vendor',
         Header: intl.get('vendor'),
-        accessor: 'vendor_display_name',
+        accessor: 'vendorDisplayName',
         width: 140,
         className: 'vendor',
         textOverview: true,
@@ -63,7 +73,8 @@ export const useBillTransactionsColumns = () => {
       {
         id: 'bill_number',
         Header: intl.get('bill_number'),
-        accessor: (row) => (row.bill_number ? `${row.bill_number}` : null),
+        accessor: (row: ItemBillTransaction) =>
+          row.billNumber ? `${row.billNumber}` : null,
         width: 100,
         className: 'bill_number',
       },
@@ -77,7 +88,7 @@ export const useBillTransactionsColumns = () => {
       {
         id: 'rate',
         Header: 'Rate',
-        accessor: 'formatted_rate',
+        accessor: 'formattedRate',
         align: 'right',
         width: 100,
         className: clsx(CLASSES.FONT_BOLD),
@@ -86,7 +97,7 @@ export const useBillTransactionsColumns = () => {
       {
         id: 'amount',
         Header: intl.get('total'),
-        accessor: 'formatted_amount',
+        accessor: 'formattedAmount',
         align: 'right',
         width: 100,
         className: clsx(CLASSES.FONT_BOLD),

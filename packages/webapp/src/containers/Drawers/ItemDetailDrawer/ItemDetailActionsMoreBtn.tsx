@@ -1,4 +1,3 @@
-// @ts-nocheck
 import React from 'react';
 import * as R from 'ramda';
 import { Can, Icon, T } from '@/components';
@@ -16,19 +15,20 @@ import {
 } from '@/constants/abilityOption';
 import { useItemDetailDrawerContext } from './ItemDetailDrawerProvider';
 import { withDialogActions } from '@/containers/Dialog/withDialogActions';
+import type { WithDialogActionsProps } from '@/containers/Dialog/withDialogActions';
+
+interface ItemDetailActionsMoreBtnInnerProps
+  extends Pick<WithDialogActionsProps, 'openDialog'> {}
 
 /**
- * Invoice details more actions menu.
- * @returns {React.JSX}
+ * Item details more actions menu.
  */
-export const ItemDetailActionsMoreBtn = R.compose(withDialogActions)(({
-  //#withDialogActions,
+const ItemDetailActionsMoreBtnInner = ({
   openDialog,
-}) => {
+}: ItemDetailActionsMoreBtnInnerProps) => {
   const { itemId, item } = useItemDetailDrawerContext();
 
-  // Cannot continue if the item type is not inventory.
-  if (item.type !== 'inventory') return null;
+  if (!item || item.type !== 'inventory') return null;
 
   const handleInventoryAdjustment = () => {
     openDialog('inventory-adjustment', { itemId });
@@ -59,4 +59,8 @@ export const ItemDetailActionsMoreBtn = R.compose(withDialogActions)(({
       <Button icon={<Icon icon="more-vert" iconSize={16} />} minimal={true} />
     </Popover>
   );
-});
+};
+
+export const ItemDetailActionsMoreBtn = R.compose(withDialogActions)(
+  ItemDetailActionsMoreBtnInner,
+);

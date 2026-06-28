@@ -82,7 +82,7 @@ export function BillFloatingActions() {
       className={classNames(CLASSES.PAGE_FORM_FLOATING_ACTIONS)}
     >
       {/* ----------- Save And Open ----------- */}
-      <If condition={!bill || !bill?.is_open}>
+      <If condition={!bill || !bill?.isOpen}>
         <ButtonGroup>
           <Button
             disabled={isSubmitting}
@@ -148,7 +148,7 @@ export function BillFloatingActions() {
         </ButtonGroup>
       </If>
       {/* ----------- Save and New ----------- */}
-      <If condition={bill && bill?.is_open}>
+      <If condition={bill && bill?.isOpen}>
         <ButtonGroup>
           <Button
             loading={isSubmitting}

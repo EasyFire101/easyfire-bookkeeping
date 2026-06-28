@@ -14,7 +14,13 @@ export class ItemEntryTransformer extends Transformer<
    * @returns {Array}
    */
   public includeAttributes = (): string[] => {
-    return ['quantityFormatted', 'rateFormatted', 'totalFormatted'];
+    return [
+      'quantityFormatted',
+      'rateFormatted',
+      'discountFormatted',
+      'totalFormatted',
+      'item',
+    ];
   };
 
   /**
@@ -39,6 +45,18 @@ export class ItemEntryTransformer extends Transformer<
   };
 
   /**
+   * Retrieves the formatted discount amount of item entry.
+   * @param {IItemEntry} entry
+   * @returns {string}
+   */
+  protected discountFormatted = (entry: ItemEntry): string => {
+    return this.formatNumber(entry.discountAmount, {
+      currencyCode: this.context.currencyCode,
+      excerptZero: true,
+    });
+  };
+
+  /**
    * Retrieves the formatted total of item entry.
    * @param {IItemEntry} entry
    * @returns {string}
@@ -49,4 +67,16 @@ export class ItemEntryTransformer extends Transformer<
       money: false,
     });
   };
+
+  /**
+   * Project the nested item summary.
+   *
+   * Shadows the base Transformer's `item()` projection helper within this
+   * subclass scope. Safe because ItemEntryTransformer never delegates to the
+   * base helper — only CreditNoteTransformer does, on its own instance.
+   * @param {IItemEntry} entry
+   * @returns {{ name: string } | undefined}
+   */
+  public item = (entry: ItemEntry) =>
+    entry.item ? { name: entry.item.name } : undefined;
 }

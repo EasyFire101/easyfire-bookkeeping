@@ -71,14 +71,14 @@ export function InvoiceFormHeaderFields() {
 
       {/* ----------- Invoice date ----------- */}
       <FFormGroup
-        name={'invoice_date'}
+        name={'invoiceDate'}
         label={intl.get('invoice_date')}
         labelInfo={<FieldRequiredHint />}
         inline
         fastField
       >
         <FDateInput
-          name={'invoice_date'}
+          name={'invoiceDate'}
           formatDate={(date) => date.toLocaleDateString()}
           parseDate={(str) => new Date(str)}
           popoverProps={{
@@ -96,14 +96,14 @@ export function InvoiceFormHeaderFields() {
 
       {/* ----------- Due date ----------- */}
       <FFormGroup
-        name={'due_date'}
+        name={'dueDate'}
         label={intl.get('due_date')}
         labelInfo={<FieldRequiredHint />}
         inline
         fastField
       >
         <FDateInput
-          name={'due_date'}
+          name={'dueDate'}
           formatDate={(date) => date.toLocaleDateString()}
           parseDate={(str) => new Date(str)}
           popoverProps={{
@@ -124,26 +124,26 @@ export function InvoiceFormHeaderFields() {
       <InvoiceFormInvoiceNumberField />
 
       {/* ----------- Reference ----------- */}
-      <FFormGroup name={'reference_no'} label={intl.get('reference')} inline>
-        <FInputGroup name={'reference_no'} minimal={true} />
+      <FFormGroup name={'referenceNo'} label={intl.get('reference')} inline>
+        <FInputGroup name={'referenceNo'} minimal={true} />
       </FFormGroup>
 
       {/*------------ Project name -----------*/}
       <FeatureCan feature={Features.Projects}>
         <FFormGroup
-          name={'project_id'}
+          name={'projectId'}
           label={intl.get('invoice.project_name.label')}
           inline={true}
           className={classNames('form-group--select-list', Classes.FILL)}
         >
           <ProjectsSelect
-            name={'project_id'}
+            name={'projectId'}
             projects={projects}
             input={InvoiceProjectSelectButton}
             popoverFill={true}
           />
-          {values?.project_id && (
-            <ProjectBillableEntriesLink projectId={values?.project_id}>
+          {values?.projectId && (
+            <ProjectBillableEntriesLink projectId={values?.projectId}>
               <T id={'add_billable_entries'} />
             </ProjectBillableEntriesLink>
           )}
@@ -166,16 +166,16 @@ function InvoiceFormCustomerSelect() {
   // Handles the customer item change.
   const handleItemChange = (customer) => {
     // If the customer id has changed change the customer id and currency code.
-    if (values.customer_id !== customer.id) {
-      setFieldValue('customer_id', customer.id);
-      setFieldValue('currency_code', customer?.currency_code);
+    if (values.customerId !== customer.id) {
+      setFieldValue('customerId', customer.id);
+      setFieldValue('currencyCode', customer?.currency_code);
     }
     updateEntries(customer);
   };
 
   return (
     <FFormGroup
-      name={'customer_id'}
+      name={'customerId'}
       label={intl.get('customer_name')}
       inline={true}
       labelInfo={<FieldRequiredHint />}
@@ -184,7 +184,7 @@ function InvoiceFormCustomerSelect() {
       shouldUpdateDeps={{ items: customers }}
     >
       <CustomersSelect
-        name={'customer_id'}
+        name={'customerId'}
         items={customers}
         placeholder={<T id={'select_customer_account'} />}
         onItemChange={handleItemChange}
@@ -193,8 +193,8 @@ function InvoiceFormCustomerSelect() {
         shouldUpdate={customerNameFieldShouldUpdate}
         shouldUpdateDeps={{ items: customers }}
       />
-      {values.customer_id && (
-        <CustomerButtonLink customerId={values.customer_id}>
+      {values.customerId && (
+        <CustomerButtonLink customerId={values.customerId}>
           <T id={'view_customer_details'} />
         </CustomerButtonLink>
       )}

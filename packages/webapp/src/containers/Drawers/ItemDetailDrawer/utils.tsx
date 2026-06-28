@@ -1,14 +1,15 @@
-// @ts-nocheck
 import React from 'react';
 import styled from 'styled-components';
 import { Intent, Tag } from '@blueprintjs/core';
 import { Choose, FormattedMessage as T } from '@/components';
+import type { Item } from '@bigcapital/sdk-ts';
 
 /**
- * items inactive status.
- * @returns {React.JSX}
+ * Items inactive status badge alongside the item name.
  */
-export function inactiveStatus(item) {
+export function inactiveStatus(item: Item | undefined) {
+  if (!item) return null;
+
   return (
     <Choose>
       <Choose.When condition={!item.active}>

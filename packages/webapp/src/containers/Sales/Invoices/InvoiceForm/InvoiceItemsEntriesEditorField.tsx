@@ -36,8 +36,8 @@ export function InvoiceItemsEntriesEditorField() {
           itemType={ITEM_TYPE.SELLABLE}
           errors={error}
           linesNumber={4}
-          currencyCode={values.currency_code}
-          isInclusiveTax={values.inclusive_exclusive_tax === TaxType.Inclusive}
+          currencyCode={values.currencyCode}
+          isInclusiveTax={values.inclusiveExclusiveTax === TaxType.Inclusive}
         />
       )}
     </FastField>

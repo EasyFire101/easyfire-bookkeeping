@@ -1,7 +1,5 @@
-// @ts-nocheck
 import React from 'react';
 import { useHistory } from 'react-router-dom';
-
 import {
   Button,
   NavbarGroup,
@@ -12,10 +10,18 @@ import {
 import { useVendorCreditDetailDrawerContext } from './VendorCreditDetailDrawerProvider';
 import { VendorCreditMenuItem } from './utils';
 import { VendorCreditAction, AbilitySubject } from '@/constants/abilityOption';
-import { withDialogActions } from '@/containers/Dialog/withDialogActions';
-import { withAlertActions } from '@/containers/Alert/withAlertActions';
-import { withDrawerActions } from '@/containers/Drawer/withDrawerActions';
-
+import {
+  withDialogActions,
+  WithDialogActionsProps,
+} from '@/containers/Dialog/withDialogActions';
+import {
+  withAlertActions,
+  WithAlertActionsProps,
+} from '@/containers/Alert/withAlertActions';
+import {
+  withDrawerActions,
+  WithDrawerActionsProps,
+} from '@/containers/Drawer/withDrawerActions';
 import {
   If,
   Icon,
@@ -23,9 +29,13 @@ import {
   DrawerActionsBar,
   Can,
 } from '@/components';
-
 import { compose } from '@/utils';
 import { DRAWERS } from '@/constants/drawers';
+
+interface VendorCreditDetailActionsBarInnerProps
+  extends WithDialogActionsProps,
+    WithAlertActionsProps,
+    WithDrawerActionsProps {}
 
 /**
  * Vendor credit detail actions bar.
@@ -39,7 +49,7 @@ function VendorCreditDetailActionsBarInner({
 
   // #withDrawerActions
   closeDrawer,
-}) {
+}: VendorCreditDetailActionsBarInnerProps) {
   const history = useHistory();
   const { vendorCreditId, vendorCredit } = useVendorCreditDetailDrawerContext();
 
@@ -62,6 +72,10 @@ function VendorCreditDetailActionsBarInner({
     openDialog('reconcile-vendor-credit', { vendorCreditId });
   };
 
+  if (!vendorCredit) {
+    return null;
+  }
+
   return (
     <DrawerActionsBar>
       <NavbarGroup>
@@ -75,7 +89,7 @@ function VendorCreditDetailActionsBarInner({
           <NavbarDivider />
         </Can>
         <Can I={VendorCreditAction.Refund} a={AbilitySubject.VendorCredit}>
-          <If condition={!vendorCredit.is_closed && !vendorCredit.is_draft}>
+          <If condition={!vendorCredit.isClosed && !vendorCredit.isDraft}>
             <Button
               className={Classes.MINIMAL}
               icon={<Icon icon="arrow-downward" iconSize={18} />}
@@ -95,7 +109,7 @@ function VendorCreditDetailActionsBarInner({
           />
         </Can>
         <Can I={VendorCreditAction.Edit} a={AbilitySubject.VendorCredit}>
-          <If condition={!vendorCredit.is_closed && !vendorCredit.is_draft}>
+          <If condition={!vendorCredit.isClosed && !vendorCredit.isDraft}>
             <NavbarDivider />
             <VendorCreditMenuItem
               payload={{

@@ -1,4 +1,3 @@
-// @ts-nocheck
 import React from 'react';
 import {
   CommercialDocFooter,
@@ -20,9 +19,9 @@ export function BillDetailFooter() {
   return (
     <CommercialDocFooter>
       <DetailsMenu direction={'horizantal'} minLabelSize={'180px'}>
-        <If condition={bill.note}>
+        <If condition={!!bill?.note}>
           <DetailItem label={intl.get('note')} multiline>
-            {bill.note}
+            {bill?.note}
           </DetailItem>
         </If>
       </DetailsMenu>

@@ -1,10 +1,18 @@
-// @ts-nocheck
 import React from 'react';
 import * as R from 'ramda';
 
 import { ButtonLink } from '../Button';
-import { withDrawerActions } from '@/containers/Drawer/withDrawerActions';
+import {
+  withDrawerActions,
+  WithDrawerActionsProps,
+} from '@/containers/Drawer/withDrawerActions';
 import { DRAWERS } from '@/constants/drawers';
+
+interface VendorDrawerLinkComponentProps extends WithDrawerActionsProps {
+  children?: React.ReactNode;
+  vendorId?: number;
+  className?: string;
+}
 
 function VendorDrawerLinkComponent({
   // #ownProps
@@ -14,9 +22,9 @@ function VendorDrawerLinkComponent({
 
   // #withDrawerActions
   openDrawer,
-}) {
+}: VendorDrawerLinkComponentProps) {
   // Handle view customer drawer.
-  const handleVendorDrawer = (event) => {
+  const handleVendorDrawer = (event: React.MouseEvent) => {
     openDrawer(DRAWERS.VENDOR_DETAILS, { vendorId });
     event.preventDefault();
   };

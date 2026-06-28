@@ -38,7 +38,7 @@ import {
 
 import useApiRequest, { useApiFetcher } from '../../useRequest';
 import { useRequestQuery } from '../../useQueryRequest';
-import { saveInvoke, transformToCamelCase } from '@/utils';
+import { saveInvoke } from '@/utils';
 import { useRequestPdf } from '../../useRequestPdf';
 import { paymentReceivesKeys } from './query-keys';
 import { invoicesKeys } from '../invoices/query-keys';
@@ -178,7 +178,7 @@ export function usePaymentReceive(
   id: number | null | undefined,
   props?: Omit<UseQueryOptions<PaymentReceived>, 'queryKey' | 'queryFn'>,
 ) {
-  const fetcher = useApiFetcher();
+  const fetcher = useApiFetcher({ enableCamelCaseTransform: true });
   return useQuery({
     ...props,
     queryKey: paymentReceivesKeys.detail(id),

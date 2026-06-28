@@ -1,7 +1,5 @@
-// @ts-nocheck
 import React from 'react';
 import { useHistory } from 'react-router-dom';
-
 import {
   Button,
   NavbarGroup,
@@ -9,10 +7,18 @@ import {
   NavbarDivider,
   Intent,
 } from '@blueprintjs/core';
-
-import { withDialogActions } from '@/containers/Dialog/withDialogActions';
-import { withAlertActions } from '@/containers/Alert/withAlertActions';
-import { withDrawerActions } from '@/containers/Drawer/withDrawerActions';
+import {
+  withDialogActions,
+  WithDialogActionsProps,
+} from '@/containers/Dialog/withDialogActions';
+import {
+  withAlertActions,
+  WithAlertActionsProps,
+} from '@/containers/Alert/withAlertActions';
+import {
+  withDrawerActions,
+  WithDrawerActionsProps,
+} from '@/containers/Drawer/withDrawerActions';
 import {
   Can,
   Icon,
@@ -25,9 +31,13 @@ import { SaleReceiptAction, AbilitySubject } from '@/constants/abilityOption';
 import { safeCallback, compose } from '@/utils';
 import { DRAWERS } from '@/constants/drawers';
 
+interface ReceiptDetailActionBarInnerProps
+  extends WithDialogActionsProps,
+    WithAlertActionsProps,
+    WithDrawerActionsProps {}
+
 /**
  * Receipt details actions bar.
- * @returns {React.JSX}
  */
 function ReceiptDetailActionBarInner({
   // #withDialogActions
@@ -39,7 +49,7 @@ function ReceiptDetailActionBarInner({
   // #withDrawerActions
   closeDrawer,
   openDrawer,
-}) {
+}: ReceiptDetailActionBarInnerProps) {
   const history = useHistory();
   const { receiptId } = useReceiptDetailDrawerContext();
 

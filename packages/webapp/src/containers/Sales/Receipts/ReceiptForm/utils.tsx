@@ -29,7 +29,7 @@ export const MIN_LINES_NUMBER = 1;
 
 export const defaultReceiptEntry = {
   index: 0,
-  item_id: '',
+  itemId: '',
   rate: '',
   discount: '',
   quantity: '',
@@ -39,7 +39,7 @@ export const defaultReceiptEntry = {
 
 const defaultReceiptEntryReq = {
   index: 0,
-  item_id: '',
+  itemId: '',
   rate: '',
   discount: '',
   quantity: '',
@@ -47,25 +47,25 @@ const defaultReceiptEntryReq = {
 };
 
 export const defaultReceipt = {
-  customer_id: '',
-  deposit_account_id: '',
-  receipt_number: '',
+  customerId: '',
+  depositAccountId: '',
+  receiptNumber: '',
   // Holds the receipt number that entered manually only.
-  receipt_number_manually: '',
-  receipt_date: moment(new Date()).format('YYYY-MM-DD'),
-  reference_no: '',
-  receipt_message: '',
-  terms_conditions: '',
+  receiptNumberManually: '',
+  receiptDate: moment(new Date()).format('YYYY-MM-DD'),
+  referenceNo: '',
+  receiptMessage: '',
+  termsConditions: '',
   closed: '',
-  branch_id: '',
-  warehouse_id: '',
-  exchange_rate: 1,
-  currency_code: '',
+  branchId: '',
+  warehouseId: '',
+  exchangeRate: 1,
+  currencyCode: '',
   entries: [...repeatValue(defaultReceiptEntry, MIN_LINES_NUMBER)],
   attachments: [],
-  pdf_template_id: '',
+  pdfTemplateId: '',
   discount: '',
-  discount_type: 'amount',
+  discountType: 'amount',
   adjustment: '',
 };
 
@@ -137,12 +137,12 @@ export const customersFieldShouldUpdate = (newProps, oldProps) => {
 export const handleErrors = (errors, { setErrors }) => {
   if (errors.some((e) => e.type === ERRORS.SALE_RECEIPT_NUMBER_NOT_UNIQUE)) {
     setErrors({
-      receipt_number: intl.get('sale_receipt_number_not_unique'),
+      receiptNumber: intl.get('sale_receipt_number_not_unique'),
     });
   }
   if (errors.some((e) => e.type === ERRORS.SALE_RECEIPT_NO_IS_REQUIRED)) {
     setErrors({
-      receipt_number: intl.get('receipt.field.error.receipt_number_required'),
+      receiptNumber: intl.get('receipt.field.error.receipt_number_required'),
     });
   }
 };
@@ -154,14 +154,14 @@ export const handleErrors = (errors, { setErrors }) => {
  */
 export const transformFormValuesToRequest = (values) => {
   const entries = values.entries.filter(
-    (item) => item.item_id && item.quantity,
+    (item) => item.itemId && item.quantity,
   );
   const attachments = transformAttachmentsToRequest(values);
 
   return {
-    ...omit(values, ['receipt_number_manually', 'receipt_number']),
-    ...(values.receipt_number_manually && {
-      receipt_number: values.receipt_number,
+    ...omit(values, ['receiptNumberManually', 'receiptNumber']),
+    ...(values.receiptNumberManually && {
+      receiptNumber: values.receiptNumber,
     }),
     entries: entries.map((entry) => ({
       ...transformToForm(entry, defaultReceiptEntryReq),
@@ -182,7 +182,7 @@ export const useSetPrimaryWarehouseToForm = () => {
         warehouses.find((b) => b.primary) || first(warehouses);
 
       if (primaryWarehouse) {
-        setFieldValue('warehouse_id', primaryWarehouse.id);
+        setFieldValue('warehouseId', primaryWarehouse.id);
       }
     }
   }, [isWarehousesSuccess, setFieldValue, warehouses, isNewMode]);
@@ -197,7 +197,7 @@ export const useSetPrimaryBranchToForm = () => {
       const primaryBranch = branches.find((b) => b.primary) || first(branches);
 
       if (primaryBranch) {
-        setFieldValue('branch_id', primaryBranch.id);
+        setFieldValue('branchId', primaryBranch.id);
       }
     }
   }, [isBranchesSuccess, setFieldValue, branches, isNewMode]);
@@ -226,7 +226,7 @@ export const useReceiptSubtotalFormatted = () => {
   const subtotal = useReceiptSubtotal();
   const { values } = useFormikContext();
 
-  return formattedAmount(subtotal, values.currency_code, { money: true });
+  return formattedAmount(subtotal, values.currencyCode, { money: true });
 };
 
 /**
@@ -238,7 +238,7 @@ export const useReceiptDiscountAmount = () => {
   const subtotal = useReceiptSubtotal();
   const discount = toSafeNumber(values.discount);
 
-  return values?.discount_type === 'percentage'
+  return values?.discountType === 'percentage'
     ? (subtotal * discount) / 100
     : discount;
 };
@@ -251,7 +251,7 @@ export const useReceiptDiscountAmountFormatted = () => {
   const { values } = useFormikContext();
   const discount = useReceiptDiscountAmount();
 
-  return formattedAmount(discount, values.currency_code);
+  return formattedAmount(discount, values.currencyCode);
 };
 
 /**
@@ -273,7 +273,7 @@ export const useReceiptAdjustmentFormatted = () => {
   const { values } = useFormikContext();
   const adjustment = useReceiptAdjustmentAmount();
 
-  return formattedAmount(adjustment, values.currency_code);
+  return formattedAmount(adjustment, values.currencyCode);
 };
 
 /**
@@ -299,7 +299,7 @@ export const useReceiptTotalFormatted = () => {
   const total = useReceiptTotal();
   const { values } = useFormikContext();
 
-  return formattedAmount(total, values.currency_code);
+  return formattedAmount(total, values.currencyCode);
 };
 
 /**
@@ -318,7 +318,7 @@ export const useReceiptPaidAmountFormatted = () => {
   const paidAmount = useReceiptPaidAmount();
   const { values } = useFormikContext();
 
-  return formattedAmount(paidAmount, values.currency_code);
+  return formattedAmount(paidAmount, values.currencyCode);
 };
 
 /**
@@ -340,7 +340,7 @@ export const useReceiptDueAmountFormatted = () => {
   const dueAmount = useReceiptDueAmount();
   const { values } = useFormikContext();
 
-  return formattedAmount(dueAmount, values.currency_code);
+  return formattedAmount(dueAmount, values.currencyCode);
 };
 
 /**
@@ -352,8 +352,8 @@ export const useReceiptIsForeignCustomer = () => {
   const baseCurrency = useCurrentOrganizationBaseCurrency();
 
   const isForeignCustomer = React.useMemo(
-    () => values.currency_code !== baseCurrency,
-    [values.currency_code, baseCurrency],
+    () => values.currencyCode !== baseCurrency,
+    [values.currencyCode, baseCurrency],
   );
   return isForeignCustomer;
 };
@@ -363,8 +363,8 @@ export const resetFormState = ({ initialValues, values, resetForm }) => {
     values: {
       // Reset the all values except the warehouse and brand id.
       ...initialValues,
-      warehouse_id: values.warehouse_id,
-      brand_id: values.brand_id,
+      warehouseId: values.warehouseId,
+      brandId: values.brandId,
     },
   });
 };

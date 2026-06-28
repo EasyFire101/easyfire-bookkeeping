@@ -1,4 +1,3 @@
-// @ts-nocheck
 import React from 'react';
 
 import { CommercialDocEntriesTable } from '@/components';
@@ -20,7 +19,7 @@ export function ManualJournalDrawerTable() {
   return (
     <CommercialDocEntriesTable
       columns={columns}
-      data={manualJournal.entries}
+      data={manualJournal?.entries ?? []}
       styleName={TableStyle.Constrant}
     />
   );

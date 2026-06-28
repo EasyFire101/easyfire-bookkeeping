@@ -38,32 +38,32 @@ export const MIN_LINES_NUMBER = 1;
 // Default bill entry.
 export const defaultBillEntry = {
   index: 0,
-  item_id: '',
+  itemId: '',
   rate: '',
   discount: '',
   quantity: '',
   description: '',
   amount: '',
-  landed_cost: false,
-  tax_rate_id: '',
-  tax_rate: '',
-  tax_amount: '',
+  landedCost: false,
+  taxRateId: '',
+  taxRate: '',
+  taxAmount: '',
 };
 
 // Default bill.
 export const defaultBill = {
-  vendor_id: '',
-  bill_number: '',
-  bill_date: moment(new Date()).format('YYYY-MM-DD'),
-  due_date: moment(new Date()).format('YYYY-MM-DD'),
-  reference_no: '',
-  inclusive_exclusive_tax: TaxType.Inclusive,
+  vendorId: '',
+  billNumber: '',
+  billDate: moment(new Date()).format('YYYY-MM-DD'),
+  dueDate: moment(new Date()).format('YYYY-MM-DD'),
+  referenceNo: '',
+  inclusiveExclusiveTax: TaxType.Inclusive,
   note: '',
   open: '',
-  branch_id: '',
-  warehouse_id: '',
-  exchange_rate: 1,
-  currency_code: '',
+  branchId: '',
+  warehouseId: '',
+  exchangeRate: 1,
+  currencyCode: '',
   entries: [...repeatValue(defaultBillEntry, MIN_LINES_NUMBER)],
   attachments: [],
 
@@ -72,7 +72,7 @@ export const defaultBill = {
 
   // Discount
   discount: '',
-  discount_type: 'amount',
+  discountType: 'amount',
 };
 
 export const ERRORS = {
@@ -89,7 +89,7 @@ export const transformToEditForm = (bill) => {
   const initialEntries = [
     ...bill.entries.map((entry) => ({
       ...transformToForm(entry, defaultBillEntry),
-      landed_cost_disabled: isLandedCostDisabled(entry.item),
+      landedCostDisabled: isLandedCostDisabled(entry.item),
     })),
     ...repeatValue(
       defaultBillEntry,
@@ -105,7 +105,7 @@ export const transformToEditForm = (bill) => {
 
   return {
     ...transformToForm(bill, defaultBill),
-    inclusive_exclusive_tax: bill.is_inclusive_tax
+    inclusiveExclusiveTax: bill.isInclusiveTax
       ? TaxType.Inclusive
       : TaxType.Exclusive,
     entries,
@@ -128,7 +128,7 @@ export const transformEntriesToSubmit = (entries) => {
  * Filters the givne non-zero entries.
  */
 export const filterNonZeroEntries = (entries) => {
-  return entries.filter((item) => item.item_id && item.quantity);
+  return entries.filter((item) => item.itemId && item.quantity);
 };
 
 /**
@@ -204,7 +204,7 @@ export const entriesFieldShouldUpdate = (newProps, oldProps) => {
 export const handleErrors = (errors, { setErrors }) => {
   if (errors.some((e) => e.type === ERRORS.BILL_NUMBER_EXISTS)) {
     setErrors({
-      bill_number: intl.get('bill_number_exists'),
+      billNumber: intl.get('bill_number_exists'),
     });
   }
   if (
@@ -238,7 +238,7 @@ export const useSetPrimaryBranchToForm = () => {
       const primaryBranch = branches.find((b) => b.primary) || first(branches);
 
       if (primaryBranch) {
-        setFieldValue('branch_id', primaryBranch.id);
+        setFieldValue('branchId', primaryBranch.id);
       }
     }
   }, [isBranchesSuccess, setFieldValue, branches, isNewMode]);
@@ -254,7 +254,7 @@ export const useSetPrimaryWarehouseToForm = () => {
         warehouses.find((b) => b.primary) || first(warehouses);
 
       if (primaryWarehouse) {
-        setFieldValue('warehouse_id', primaryWarehouse.id);
+        setFieldValue('warehouseId', primaryWarehouse.id);
       }
     }
   }, [isWarehousesSuccess, setFieldValue, warehouses, isNewMode]);
@@ -269,8 +269,8 @@ export const useBillIsForeignCustomer = () => {
   const baseCurrency = useCurrentOrganizationBaseCurrency();
 
   const isForeignCustomer = React.useMemo(
-    () => values.currency_code !== baseCurrency,
-    [values.currency_code, baseCurrency],
+    () => values.currencyCode !== baseCurrency,
+    [values.currencyCode, baseCurrency],
   );
   return isForeignCustomer;
 };
@@ -297,8 +297,8 @@ export const useBillAggregatedTaxRates = () => {
   const { taxRates } = useBillFormContext();
 
   const aggregateTaxRates = React.useMemo(
-    () => aggregateItemEntriesTaxRates(values.currency_code, taxRates),
-    [values.currency_code, taxRates],
+    () => aggregateItemEntriesTaxRates(values.currencyCode, taxRates),
+    [values.currencyCode, taxRates],
   );
   // Calculate the total tax amount of bill entries.
   return React.useMemo(() => {
@@ -327,7 +327,7 @@ export const useBillSubtotalFormatted = () => {
   const subtotal = useBillSubtotal();
   const { values } = useFormikContext();
 
-  return formattedAmount(subtotal, values.currency_code);
+  return formattedAmount(subtotal, values.currencyCode);
 };
 
 /**
@@ -339,7 +339,7 @@ export const useBillDiscountAmount = () => {
   const subtotal = useBillSubtotal();
   const discount = toSafeNumber(values.discount);
 
-  return values?.discount_type === 'percentage'
+  return values?.discountType === 'percentage'
     ? (subtotal * discount) / 100
     : discount;
 };
@@ -352,7 +352,7 @@ export const useBillDiscountAmountFormatted = () => {
   const discountAmount = useBillDiscountAmount();
   const { values } = useFormikContext();
 
-  return formattedAmount(discountAmount, values.currency_code);
+  return formattedAmount(discountAmount, values.currencyCode);
 };
 
 /**
@@ -373,7 +373,7 @@ export const useBillAdjustmentAmountFormatted = () => {
   const adjustmentAmount = useBillAdjustmentAmount();
   const { values } = useFormikContext();
 
-  return formattedAmount(adjustmentAmount, values.currency_code);
+  return formattedAmount(adjustmentAmount, values.currencyCode);
 };
 
 /**
@@ -385,8 +385,8 @@ export const useBillTotalTaxAmount = () => {
 
   return React.useMemo(() => {
     return chain(values.entries)
-      .filter((entry) => entry.tax_amount)
-      .sumBy('tax_amount')
+      .filter((entry) => entry.taxAmount)
+      .sumBy('taxAmount')
       .value();
   }, [values.entries]);
 };
@@ -398,7 +398,7 @@ export const useBillTotalTaxAmount = () => {
 export const useIsBillTaxExclusive = () => {
   const { values } = useFormikContext();
 
-  return values.inclusive_exclusive_tax === TaxType.Exclusive;
+  return values.inclusiveExclusiveTax === TaxType.Exclusive;
 };
 
 /**
@@ -427,7 +427,7 @@ export const useBillTotalFormatted = () => {
   const total = useBillTotal();
   const { values } = useFormikContext();
 
-  return formattedAmount(total, values.currency_code);
+  return formattedAmount(total, values.currencyCode);
 };
 
 /**
@@ -448,7 +448,7 @@ export const useBillPaidAmountFormatted = () => {
   const paidAmount = useBillPaidAmount();
   const { values } = useFormikContext();
 
-  return formattedAmount(paidAmount, values.currency_code);
+  return formattedAmount(paidAmount, values.currencyCode);
 };
 
 /**
@@ -470,5 +470,5 @@ export const useBillDueAmountFormatted = () => {
   const dueAmount = useBillDueAmount();
   const { values } = useFormikContext();
 
-  return formattedAmount(dueAmount, values.currency_code);
+  return formattedAmount(dueAmount, values.currencyCode);
 };

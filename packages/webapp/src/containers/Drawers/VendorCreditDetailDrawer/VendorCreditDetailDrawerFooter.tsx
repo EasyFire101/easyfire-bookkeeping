@@ -1,5 +1,3 @@
-// @ts-nocheck
-import React from 'react';
 import styled from 'styled-components';
 
 import {
@@ -17,35 +15,38 @@ import { useVendorCreditDetailDrawerContext } from './VendorCreditDetailDrawerPr
 export function VendorCreditDetailDrawerFooter() {
   const { vendorCredit } = useVendorCreditDetailDrawerContext();
 
+  if (!vendorCredit) {
+    return null;
+  }
   return (
     <VendorCreditFooterRoot>
       <VendorCreditTotalLines labelColWidth={'180px'} amountColWidth={'180px'}>
         <TotalLine
           title={<T id={'vendor_credit.drawer.label_subtotal'} />}
-          value={vendorCredit.formatted_subtotal}
+          value={vendorCredit.formattedSubtotal}
           borderStyle={TotalLineBorderStyle.SingleDark}
         />
-        {vendorCredit?.discount_amount_formatted && (
+        {vendorCredit?.discountAmountFormatted && (
           <TotalLine
             title={
-              vendorCredit.discount_percentage_formatted
-                ? `Discount [${vendorCredit.discount_percentage_formatted}]`
+              vendorCredit.discountPercentageFormatted
+                ? `Discount [${vendorCredit.discountPercentageFormatted}]`
                 : 'Discount'
             }
-            value={vendorCredit.discount_amount_formatted}
+            value={vendorCredit.discountAmountFormatted}
             textStyle={TotalLineTextStyle.Regular}
           />
         )}
-        {vendorCredit?.adjustment_formatted && (
+        {vendorCredit?.adjustmentFormatted && (
           <TotalLine
             title={'Adjustment'}
-            value={vendorCredit.adjustment_formatted}
+            value={vendorCredit.adjustmentFormatted}
             textStyle={TotalLineTextStyle.Regular}
           />
         )}
         <TotalLine
           title={<T id={'vendor_credit.drawer.label_total'} />}
-          value={vendorCredit.total_formatted}
+          value={vendorCredit.totalFormatted}
           borderStyle={TotalLineBorderStyle.DoubleDark}
           textStyle={TotalLineTextStyle.Bold}
         />

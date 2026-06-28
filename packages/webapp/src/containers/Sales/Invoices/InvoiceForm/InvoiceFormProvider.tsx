@@ -26,7 +26,7 @@ import {
   useCreateInvoice,
   useEditInvoice,
   useSettingsInvoices,
-  useEstimate,
+  useEstimateDetail as useEstimate,
   useGetSaleInvoiceState,
 } from '@/hooks/query';
 import { useProjects } from '@/containers/Projects/hooks';
@@ -134,7 +134,7 @@ function InvoiceFormProvider({
 
   const newInvoice = !isEmpty(estimate)
     ? transformToEditForm({
-        ...pick(estimate, ['customer_id', 'currency_code', 'entries']),
+        ...pick(estimate, ['customerId', 'currencyCode', 'entries']),
       })
     : ([] as []);
 

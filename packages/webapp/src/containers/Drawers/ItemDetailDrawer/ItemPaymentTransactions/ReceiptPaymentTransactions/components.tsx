@@ -1,4 +1,3 @@
-// @ts-nocheck
 import React from 'react';
 import intl from 'react-intl-universal';
 import { Intent, Menu, MenuItem, MenuDivider } from '@blueprintjs/core';
@@ -8,6 +7,17 @@ import { safeCallback } from '@/utils';
 import { CLASSES } from '@/constants/classes';
 import { Can, FormatDateCell, Icon } from '@/components';
 import { SaleReceiptAction, AbilitySubject } from '@/constants/abilityOption';
+import type { ItemAssociatedReceiptsResponse } from '@bigcapital/sdk-ts';
+
+export type ItemReceiptTransaction = ItemAssociatedReceiptsResponse[number];
+
+interface ActionsMenuProps {
+  row: { original: ItemReceiptTransaction };
+  payload: {
+    onEdit: (row: ItemReceiptTransaction) => void;
+    onDelete: (row: ItemReceiptTransaction) => void;
+  };
+}
 
 /**
  * Table actions menu.
@@ -15,7 +25,7 @@ import { SaleReceiptAction, AbilitySubject } from '@/constants/abilityOption';
 export function ActionsMenu({
   row: { original },
   payload: { onEdit, onDelete },
-}) {
+}: ActionsMenuProps) {
   return (
     <Menu>
       <Can I={SaleReceiptAction.Edit} a={AbilitySubject.Receipt}>
@@ -47,7 +57,7 @@ export const useReceiptTransactionsColumns = () => {
       {
         id: 'receipt_date',
         Header: intl.get('date'),
-        accessor: 'formatted_receipt_date',
+        accessor: 'formattedReceiptDate',
         Cell: FormatDateCell,
         width: 120,
         className: 'receipt_date',
@@ -56,7 +66,7 @@ export const useReceiptTransactionsColumns = () => {
       {
         id: 'customer',
         Header: intl.get('customer'),
-        accessor: 'customer_display_name',
+        accessor: 'customerDisplayName',
         width: 140,
         className: 'customer',
         textOverview: true,
@@ -64,7 +74,7 @@ export const useReceiptTransactionsColumns = () => {
       {
         id: 'receipt_number',
         Header: intl.get('receipt_no'),
-        accessor: 'receip_number',
+        accessor: 'receipNumber',
         width: 120,
         className: 'receipt_number',
         clickable: true,
@@ -73,14 +83,14 @@ export const useReceiptTransactionsColumns = () => {
       {
         id: 'qunatity',
         Header: intl.get('item.drawer_quantity_sold'),
-        accessor: 'quantity',
+        accessor: 'formattedQuantity',
         align: 'right',
         width: 100,
       },
       {
         id: 'rate',
         Header: 'Rate',
-        accessor: 'formatted_rate',
+        accessor: 'formattedRate',
         align: 'right',
         width: 100,
         className: clsx(CLASSES.FONT_BOLD),
@@ -89,7 +99,7 @@ export const useReceiptTransactionsColumns = () => {
       {
         id: 'amount',
         Header: intl.get('total'),
-        accessor: 'formatted_amount',
+        accessor: 'formattedAmount',
         align: 'right',
         width: 100,
         className: clsx(CLASSES.FONT_BOLD),

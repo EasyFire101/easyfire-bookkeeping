@@ -15,13 +15,10 @@ import {
   Menu,
   MenuItem,
 } from '@blueprintjs/core';
-
 import { useCustomerDetailsDrawerContext } from './CustomerDetailsDrawerProvider';
-
 import { withAlertActions } from '@/containers/Alert/withAlertActions';
 import { withDialogActions } from '@/containers/Dialog/withDialogActions';
 import { withDrawerActions } from '@/containers/Drawer/withDrawerActions';
-
 import {
   Can,
   Icon,

@@ -25,7 +25,7 @@ import {
  * Publish accessor
  */
 export const PublishAccessor = (r) => {
-  return r.is_published ? (
+  return r.publishedAt ? (
     <Tag minimal={true} round={true}>
       <T id={'published'} />
     </Tag>
@@ -40,9 +40,9 @@ export const PublishAccessor = (r) => {
  * Type column accessor.
  */
 export const TypeAccessor = (row) => {
-  return row.formatted_type ? (
+  return row.formattedType ? (
     <Tag minimal={true} round={true} intent={Intent.NONE}>
-      {row.formatted_type}
+      {row.formattedType}
     </Tag>
   ) : (
     ''
@@ -112,7 +112,7 @@ export const ActionsMenu = ({
         a={AbilitySubject.InventoryAdjustment}
       >
         <MenuDivider />
-        <If condition={!original.is_published}>
+        <If condition={!original.publishedAt}>
           <MenuItem
             icon={<Icon icon={'arrow-to-top'} size={16} />}
             text={intl.get('publish_adjustment')}
@@ -179,7 +179,7 @@ export const useInventoryAdjustmentsColumns = () => {
       {
         id: 'reference_no',
         Header: intl.get('reference_no'),
-        accessor: 'reference_no',
+        accessor: 'referenceNo',
         className: 'reference_no',
         width: 100,
         clickable: true,
@@ -195,7 +195,7 @@ export const useInventoryAdjustmentsColumns = () => {
       {
         id: 'created_at',
         Header: intl.get('created_at'),
-        accessor: (r) => moment(r.created_at).format('YYYY MMM DD'),
+        accessor: (r) => moment(r.createdAt).format('YYYY MMM DD'),
         width: 125,
         className: 'created_at',
         clickable: true,

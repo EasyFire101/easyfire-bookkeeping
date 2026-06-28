@@ -13,6 +13,9 @@ import type {
   CreateRefundVendorCreditBody,
   ApplyVendorCreditToBillsBody,
   ValidateBulkDeleteVendorCreditsResponse,
+  VendorCredit,
+  VendorCreditRefund,
+  VendorCreditAppliedBill,
 } from '@bigcapital/sdk-ts';
 import {
   fetchVendorCredits,
@@ -182,7 +185,7 @@ export function useVendorCredits(
 
 export function useVendorCredit(
   id: number | null | undefined,
-  props?: Omit<UseQueryOptions<unknown>, 'queryKey' | 'queryFn'>,
+  props?: Omit<UseQueryOptions<VendorCredit>, 'queryKey' | 'queryFn'>,
   _requestProps?: unknown,
 ) {
   const fetcher = useApiFetcher();
@@ -244,7 +247,7 @@ export function useDeleteRefundVendorCredit(
 
 export function useRefundVendorCredit(
   id: number | null | undefined,
-  props?: Omit<UseQueryOptions<unknown>, 'queryKey' | 'queryFn'>,
+  props?: Omit<UseQueryOptions<VendorCreditRefund[]>, 'queryKey' | 'queryFn'>,
   _requestProps?: unknown,
 ) {
   const fetcher = useApiFetcher();
@@ -311,7 +314,7 @@ export function useReconcileVendorCredit(
 
 export function useReconcileVendorCredits(
   id: number | null | undefined,
-  props?: Omit<UseQueryOptions<unknown>, 'queryKey' | 'queryFn'>,
+  props?: Omit<UseQueryOptions<VendorCreditAppliedBill[]>, 'queryKey' | 'queryFn'>,
   _requestProps?: unknown,
 ) {
   const fetcher = useApiFetcher();

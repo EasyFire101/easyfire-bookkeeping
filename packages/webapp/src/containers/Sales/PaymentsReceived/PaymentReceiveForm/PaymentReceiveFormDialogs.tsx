@@ -13,11 +13,11 @@ export function PaymentReceiveFormDialogs() {
   const handleUpdatePaymentNumber = (settings) => {
     // Set the payment transaction no. that cames from dialog to the form.
     // the `payment_receive_no_manually` will be empty except the increment mode is not auto.
-    setFieldValue('payment_receive_no', settings.transactionNumber);
-    setFieldValue('payment_receive_no_manually', '');
+    setFieldValue('paymentReceiveNo', settings.transactionNumber);
+    setFieldValue('paymentReceiveNoManually', '');
 
     if (settings.incrementMode !== 'auto') {
-      setFieldValue('payment_receive_no_manually', settings.transactionNumber);
+      setFieldValue('paymentReceiveNoManually', settings.transactionNumber);
     }
   };
 

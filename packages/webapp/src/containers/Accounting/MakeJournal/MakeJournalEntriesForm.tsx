@@ -75,9 +75,9 @@ function MakeJournalEntriesFormInner({
             // If the auto-increment mode is enabled, take the next journal
             // number from the settings.
             ...(journalAutoIncrement && {
-              journal_number: journalNumber,
+              journalNumber,
             }),
-            currency_code: baseCurrency,
+            currencyCode: baseCurrency,
           }),
     }),
     [manualJournal, baseCurrency, journalNumber, journalAutoIncrement],
@@ -117,9 +117,9 @@ function MakeJournalEntriesFormInner({
     }
     const attachments = transformAttachmentsToRequest(values);
     const form = {
-      ...omit(values, ['journal_number_manually']),
-      ...(values.journal_number_manually && {
-        journal_number: values.journal_number,
+      ...omit(values, ['journalNumberManually']),
+      ...(values.journalNumberManually && {
+        journalNumber: values.journalNumber,
       }),
       entries: R.compose(orderingLinesIndexes)(entries),
       publish: submitPayload.publish,
@@ -137,7 +137,7 @@ function MakeJournalEntriesFormInner({
           isNewMode
             ? 'the_journal_has_been_created_successfully'
             : 'the_journal_has_been_edited_successfully',
-          { number: values.journal_number },
+          { number: values.journalNumber },
         ),
         intent: Intent.SUCCESS,
       });

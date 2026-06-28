@@ -16,6 +16,7 @@ import type {
   ItemAssociatedBillsResponse,
   ItemAssociatedEstimatesResponse,
   ItemAssociatedReceiptsResponse,
+  ItemWarehousesResponse,
 } from '@bigcapital/sdk-ts';
 import {
   fetchItems,
@@ -209,7 +210,7 @@ export function useItemAssociatedInvoiceTransactions(
     'queryKey' | 'queryFn'
   >,
 ) {
-  const fetcher = useApiFetcher();
+  const fetcher = useApiFetcher({ enableCamelCaseTransform: true });
   return useQuery({
     ...props,
     queryKey: itemsKeys.associatedInvoices(id),
@@ -225,7 +226,7 @@ export function useItemAssociatedEstimateTransactions(
     'queryKey' | 'queryFn'
   >,
 ) {
-  const fetcher = useApiFetcher();
+  const fetcher = useApiFetcher({ enableCamelCaseTransform: true });
   return useQuery({
     ...props,
     queryKey: itemsKeys.associatedEstimates(id),
@@ -241,7 +242,7 @@ export function useItemAssociatedReceiptTransactions(
     'queryKey' | 'queryFn'
   >,
 ) {
-  const fetcher = useApiFetcher();
+  const fetcher = useApiFetcher({ enableCamelCaseTransform: true });
   return useQuery({
     ...props,
     queryKey: itemsKeys.associatedReceipts(id),
@@ -257,7 +258,7 @@ export function useItemAssociatedBillTransactions(
     'queryKey' | 'queryFn'
   >,
 ) {
-  const fetcher = useApiFetcher();
+  const fetcher = useApiFetcher({ enableCamelCaseTransform: true });
   return useQuery({
     ...props,
     queryKey: itemsKeys.associatedBills(id),
@@ -268,9 +269,9 @@ export function useItemAssociatedBillTransactions(
 
 export function useItemWarehouseLocation(
   id: number | null | undefined,
-  props?: Omit<UseQueryOptions<unknown[]>, 'queryKey' | 'queryFn'>,
+  props?: Omit<UseQueryOptions<ItemWarehousesResponse>, 'queryKey' | 'queryFn'>,
 ) {
-  const fetcher = useApiFetcher();
+  const fetcher = useApiFetcher({ enableCamelCaseTransform: true });
   return useQuery({
     ...props,
     queryKey: itemsKeys.warehousesLocation(id),

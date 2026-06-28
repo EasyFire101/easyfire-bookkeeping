@@ -25,7 +25,7 @@ import {
   validateBulkDeleteManualJournals,
 } from '@bigcapital/sdk-ts';
 import { useApiFetcher } from '../../useRequest';
-import { manualJournalsKeys, MANUAL_JOURNAL } from './query-keys';
+import { manualJournalsKeys } from './query-keys';
 import { accountsKeys } from '../accounts/query-keys';
 import { customersKeys } from '../customers/query-keys';
 import { vendorsKeys } from '../vendors/query-keys';
@@ -180,7 +180,6 @@ export function useJournals(
   >,
 ) {
   const fetcher = useApiFetcher();
-
   return useQuery({
     ...props,
     queryKey: manualJournalsKeys.list(query ?? undefined),
@@ -192,8 +191,7 @@ export function useJournal(
   id: number | null | undefined,
   props?: Omit<UseQueryOptions<ManualJournal>, 'queryKey' | 'queryFn'>,
 ) {
-  const fetcher = useApiFetcher();
-
+  const fetcher = useApiFetcher({ enableCamelCaseTransform: true });
   return useQuery({
     ...props,
     queryKey: manualJournalsKeys.detail(id),
@@ -204,7 +202,6 @@ export function useJournal(
 
 export function useRefreshJournals() {
   const queryClient = useQueryClient();
-
   return {
     refresh: () => {
       queryClient.invalidateQueries({ queryKey: manualJournalsKeys.all() });

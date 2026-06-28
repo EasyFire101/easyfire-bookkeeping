@@ -78,7 +78,7 @@ function PaymentMadeFormHeaderFieldsInner() {
 
   // Formik form context.
   const {
-    values: { entries, currency_code },
+    values: { entries, currencyCode },
     setFieldValue,
   } = useFormikContext();
 
@@ -90,14 +90,14 @@ function PaymentMadeFormHeaderFieldsInner() {
 
   // Sumation of payable full-amount.
   const payableFullAmount = useMemo(
-    () => safeSumBy(entries, 'due_amount'),
+    () => safeSumBy(entries, 'dueAmount'),
     [entries],
   );
 
   // Handle receive full-amount click.
   const handleReceiveFullAmountClick = () => {
     const newEntries = fullAmountPaymentEntries(entries);
-    const fullAmount = safeSumBy(newEntries, 'payment_amount');
+    const fullAmount = safeSumBy(newEntries, 'paymentAmount');
 
     setFieldValue('entries', newEntries);
     setFieldValue('amount', fullAmount);
@@ -116,13 +116,13 @@ function PaymentMadeFormHeaderFieldsInner() {
 
       {/* ----------- Exchange rate ----------- */}
       <PaymentMadeExchangeRateInputField
-        name={'exchange_rate'}
+        name={'exchangeRate'}
         formGroupProps={{ label: ' ', inline: true }}
       />
 
       {/* ------------ Payment date ------------ */}
       <FFormGroup
-        name={'payment_date'}
+        name={'paymentDate'}
         label={intl.get('payment_date')}
         labelInfo={<FieldRequiredHint />}
         inline
@@ -130,7 +130,7 @@ function PaymentMadeFormHeaderFieldsInner() {
         fastField
       >
         <FDateInput
-          name={'payment_date'}
+          name={'paymentDate'}
           {...momentFormatter('YYYY/MM/DD')}
           popoverProps={{ position: Position.BOTTOM, minimal: true }}
           inputProps={{ leftIcon: <Icon icon={'date-range'} /> }}
@@ -148,7 +148,7 @@ function PaymentMadeFormHeaderFieldsInner() {
         fastField
       >
         <ControlGroup>
-          <InputPrependText text={currency_code} />
+          <InputPrependText text={currencyCode} />
           <FMoneyInputGroup
             fastField
             name={'amount'}
@@ -164,24 +164,24 @@ function PaymentMadeFormHeaderFieldsInner() {
             minimal={true}
           >
             <T id={'receive_full_amount'} /> (
-            <Money amount={payableFullAmount} currency={currency_code} />)
+            <Money amount={payableFullAmount} currency={currencyCode} />)
           </Button>
         )}
       </FFormGroup>
 
       {/* ------------ Payment number ------------ */}
       <FFormGroup
-        name={'payment_number'}
+        name={'paymentNumber'}
         label={intl.get('payment_no')}
         inline={true}
         fastField
       >
-        <FInputGroup name={'payment_number'} minimal={true} fastField />
+        <FInputGroup name={'paymentNumber'} minimal={true} fastField />
       </FFormGroup>
 
       {/* ------------ Payment account ------------ */}
       <FFormGroup
-        name={'payment_account_id'}
+        name={'paymentAccountId'}
         label={intl.get('payment_account')}
         labelInfo={<FieldRequiredHint />}
         items={accounts}
@@ -190,7 +190,7 @@ function PaymentMadeFormHeaderFieldsInner() {
         fastField={true}
       >
         <AccountsSelect
-          name={'payment_account_id'}
+          name={'paymentAccountId'}
           items={accounts}
           placeholder={<T id={'select_payment_account'} />}
           labelInfo={<FieldRequiredHint />}
@@ -232,7 +232,7 @@ function PaymentFormVendorSelect() {
 
   return (
     <FFormGroup
-      name={'vendor_id'}
+      name={'vendorId'}
       label={intl.get('vendor_name')}
       labelInfo={<FieldRequiredHint />}
       inline={true}
@@ -241,12 +241,12 @@ function PaymentFormVendorSelect() {
       shouldUpdateDeps={{ items: vendors }}
     >
       <VendorsSelect
-        name={'vendor_id'}
+        name={'vendorId'}
         items={vendors}
         placeholder={<T id={'select_vender_account'} />}
         onItemChange={(contact) => {
-          setFieldValue('vendor_id', contact.id);
-          setFieldValue('currency_code', contact?.currency_code);
+          setFieldValue('vendorId', contact.id);
+          setFieldValue('currencyCode', contact?.currency_code);
           setPaymentVendorId(contact.id);
         }}
         disabled={!isNewMode}
@@ -255,8 +255,8 @@ function PaymentFormVendorSelect() {
         shouldUpdate={vendorsFieldShouldUpdate}
         shouldUpdateDeps={{ items: vendors }}
       />
-      {values.vendor_id && (
-        <VendorButtonLink vendorId={values.vendor_id}>
+      {values.vendorId && (
+        <VendorButtonLink vendorId={values.vendorId}>
           <T id={'view_vendor_details'} />
         </VendorButtonLink>
       )}

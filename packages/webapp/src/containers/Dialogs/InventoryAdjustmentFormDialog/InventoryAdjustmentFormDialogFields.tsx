@@ -62,11 +62,11 @@ export function InventoryAdjustmentFormDialogFields() {
   const handleAdjustmentTypeChange = (type) => {
     const result = diffQuantity(
       toSafeNumber(values.quantity),
-      toSafeNumber(values.quantity_on_hand),
+      toSafeNumber(values.quantityOnHand),
       type.value,
     );
     setFieldValue('type', type.value);
-    setFieldValue('new_quantity', result);
+    setFieldValue('newQuantity', result);
   };
 
   return (
@@ -76,7 +76,7 @@ export function InventoryAdjustmentFormDialogFields() {
           <Col xs={5}>
             <FormGroup label={intl.get('branch')} fill>
               <BranchSelect
-                name={'branch_id'}
+                name={'branchId'}
                 branches={branches}
                 popoverProps={{ minimal: true }}
               />
@@ -87,7 +87,7 @@ export function InventoryAdjustmentFormDialogFields() {
           <Col xs={5}>
             <FormGroup label={intl.get('warehouse')} fill>
               <WarehouseSelect
-                name={'warehouse_id'}
+                name={'warehouseId'}
                 warehouses={warehouses}
                 popoverProps={{ minimal: true }}
               />
@@ -150,13 +150,13 @@ export function InventoryAdjustmentFormDialogFields() {
 
       {/*------------ Adjustment account -----------*/}
       <FFormGroup
-        name={'adjustment_account_id'}
+        name={'adjustmentAccountId'}
         label={intl.get('adjustment_account')}
         labelInfo={<FieldRequiredHint />}
         fill
       >
         <FAccountsSuggestField
-          name={'adjustment_account_id'}
+          name={'adjustmentAccountId'}
           items={accounts}
           inputProps={{
             placeholder: intl.get('select_adjustment_account'),
@@ -168,11 +168,11 @@ export function InventoryAdjustmentFormDialogFields() {
 
       {/*------------ Reference -----------*/}
       <FFormGroup
-        name={'reference_no'}
+        name={'referenceNo'}
         label={intl.get('reference_no')}
         fastField
       >
-        <FInputGroup name={'reference_no'} fastField />
+        <FInputGroup name={'referenceNo'} fastField />
       </FFormGroup>
 
       {/*------------ Adjustment reasons -----------*/}

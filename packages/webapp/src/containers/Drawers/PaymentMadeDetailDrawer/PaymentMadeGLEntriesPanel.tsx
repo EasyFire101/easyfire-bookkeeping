@@ -1,4 +1,3 @@
-// @ts-nocheck
 import React from 'react';
 import styled from 'styled-components';
 
@@ -13,28 +12,25 @@ import { usePaymentMadeDetailContext } from './PaymentMadeDetailProvider';
 
 /**
  * Payment made GL entries table panel.
- * @returns {React.JSX}
  */
 export function PaymentMadeGLEntriesPanel() {
   const { paymentMadeId } = usePaymentMadeDetailContext();
 
   // Handle fetch transaction by reference.
-  const {
-    data: { transactions },
-    isLoading: isTransactionLoading,
-  } = useTransactionsByReference(
+  const { data, isLoading: isTransactionsLoading } = useTransactionsByReference(
     {
-      reference_id: paymentMadeId,
-      reference_type: 'BillPayment',
+      referenceId: paymentMadeId as number,
+      referenceType: 'BillPayment',
     },
     { enabled: !!paymentMadeId },
   );
+  const transactions = data?.transactions ?? [];
 
   return (
     <PaymentMadeGLEntriesRoot>
       <AmountDisplayedBaseCurrencyMessage />
       <JournalEntriesTable
-        loading={isTransactionLoading}
+        loading={isTransactionsLoading}
         transactions={transactions}
       />
     </PaymentMadeGLEntriesRoot>

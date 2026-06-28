@@ -80,13 +80,13 @@ function InvoiceFormRoot({
           // If the auto-increment mode is enabled, take the next invoice
           // number from the settings.
           ...(invoiceAutoIncrementMode && {
-            invoice_no: invoiceNumber,
+            invoiceNo: invoiceNumber,
           }),
           entries: orderingLinesIndexes(defaultInvoice.entries),
-          currency_code: baseCurrency,
-          invoice_message: defaultTo(invoiceCustomerNotes, ''),
-          terms_conditions: defaultTo(invoiceTermsConditions, ''),
-          pdf_template_id: saleInvoiceState?.defaultTemplateId,
+          currencyCode: baseCurrency,
+          invoiceMessage: defaultTo(invoiceCustomerNotes, ''),
+          termsConditions: defaultTo(invoiceTermsConditions, ''),
+          pdfTemplateId: saleInvoiceState?.defaultTemplateId,
           ...newInvoice,
         }),
   };
@@ -95,7 +95,7 @@ function InvoiceFormRoot({
     setSubmitting(true);
 
     const entries = values.entries.filter(
-      (item) => item.item_id && item.quantity,
+      (item) => item.itemId && item.quantity,
     );
     const totalQuantity = sumBy(entries, (entry) => parseInt(entry.quantity));
 
@@ -112,7 +112,7 @@ function InvoiceFormRoot({
     const form = {
       ...transformValueToRequest(values),
       delivered: submitPayload.deliver,
-      from_estimate_id: estimateId,
+      fromEstimateId: estimateId,
     };
     // Handle the request success.
     const onSuccess = () => {
@@ -121,7 +121,7 @@ function InvoiceFormRoot({
           isNewMode
             ? 'the_invoice_has_been_created_successfully'
             : 'the_invoice_has_been_edited_successfully',
-          { number: values.invoice_no },
+          { number: values.invoiceNo },
         ),
         intent: Intent.SUCCESS,
       });

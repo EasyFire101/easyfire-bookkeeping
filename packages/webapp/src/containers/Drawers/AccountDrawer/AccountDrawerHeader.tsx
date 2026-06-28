@@ -1,4 +1,3 @@
-// @ts-nocheck
 import React from 'react';
 import { isEmpty } from 'lodash';
 
@@ -12,6 +11,10 @@ import intl from 'react-intl-universal';
 export function AccountDrawerHeader() {
   const { account } = useAccountDrawerContext();
 
+  if (!account) {
+    return null;
+  }
+
   return (
     <div className={'account-drawer__content-header'}>
       <DetailsMenu>
@@ -19,7 +22,7 @@ export function AccountDrawerHeader() {
           name={'closing-balance'}
           label={intl.get('closing_balance')}
         >
-          <h3 class={'big-number'}>{account?.formattedAmount}</h3>
+          <h3 className={'big-number'}>{account?.formattedAmount}</h3>
         </DetailItem>
 
         <DetailItem name={'account-type'} label={intl.get('account_type')}>

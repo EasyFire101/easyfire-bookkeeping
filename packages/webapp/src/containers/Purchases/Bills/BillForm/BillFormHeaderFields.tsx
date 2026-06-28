@@ -65,13 +65,13 @@ function BillFormHeader() {
 
       {/* ----------- Exchange rate ----------- */}
       <BillExchangeRateInputField
-        name={'exchange_rate'}
+        name={'exchangeRate'}
         formGroupProps={{ label: ' ', inline: true }}
       />
 
       {/* ------- Bill date ------- */}
       <FFormGroup
-        name={'bill_date'}
+        name={'billDate'}
         label={intl.get('bill_date')}
         inline
         labelInfo={<FieldRequiredHint />}
@@ -79,7 +79,7 @@ function BillFormHeader() {
         fastField
       >
         <FDateInput
-          name={'bill_date'}
+          name={'billDate'}
           {...momentFormatter('YYYY/MM/DD')}
           popoverProps={{ position: Position.BOTTOM, minimal: true }}
           inputProps={{ leftIcon: <Icon icon={'date-range'} /> }}
@@ -90,14 +90,14 @@ function BillFormHeader() {
 
       {/* ------- Due date ------- */}
       <FFormGroup
-        name={'due_date'}
+        name={'dueDate'}
         label={intl.get('due_date')}
         inline
         fill
         fastField
       >
         <FDateInput
-          name={'due_date'}
+          name={'dueDate'}
           {...momentFormatter('YYYY/MM/DD')}
           popoverProps={{ position: Position.BOTTOM, minimal: true }}
           inputProps={{
@@ -110,36 +110,36 @@ function BillFormHeader() {
 
       {/* ------- Bill number ------- */}
       <FFormGroup
-        name={'bill_number'}
+        name={'billNumber'}
         label={intl.get('bill_number')}
         inline
         fill
         fastField
       >
-        <FInputGroup name={'bill_number'} minimal={true} fastField />
+        <FInputGroup name={'billNumber'} minimal={true} fastField />
       </FFormGroup>
 
       {/* ------- Reference ------- */}
       <FFormGroup
-        name={'reference_no'}
+        name={'referenceNo'}
         label={intl.get('reference')}
         inline={true}
         fill
         fastField
       >
-        <FInputGroup name={'reference_no'} minimal={true} fastField />
+        <FInputGroup name={'referenceNo'} minimal={true} fastField />
       </FFormGroup>
 
       {/*------------ Project name -----------*/}
       <FeatureCan feature={Features.Projects}>
         <FFormGroup
-          name={'project_id'}
+          name={'projectId'}
           label={intl.get('bill.project_name.label')}
           inline={true}
           className={classNames('form-group--select-list', Classes.FILL)}
         >
           <ProjectsSelect
-            name={'project_id'}
+            name={'projectId'}
             projects={projects}
             input={BillProjectSelectButton}
             popoverFill={true}
@@ -160,7 +160,7 @@ function BillFormVendorField() {
 
   return (
     <FFormGroup
-      name={'vendor_id'}
+      name={'vendorId'}
       label={intl.get('vendor_name')}
       inline={true}
       labelInfo={<FieldRequiredHint />}
@@ -169,20 +169,20 @@ function BillFormVendorField() {
       shouldUpdateDeps={{ items: vendors }}
     >
       <VendorsSelect
-        name={'vendor_id'}
+        name={'vendorId'}
         items={vendors}
         placeholder={<T id={'select_vender_account'} />}
         onItemChange={(contact) => {
-          setFieldValue('vendor_id', contact.id);
-          setFieldValue('currency_code', contact?.currency_code);
+          setFieldValue('vendorId', contact.id);
+          setFieldValue('currencyCode', contact?.currency_code);
         }}
         allowCreate={true}
         fastField={true}
         shouldUpdate={vendorsFieldShouldUpdate}
         shouldUpdateDeps={{ items: vendors }}
       />
-      {values.vendor_id && (
-        <VendorButtonLink vendorId={values.vendor_id}>
+      {values.vendorId && (
+        <VendorButtonLink vendorId={values.vendorId}>
           <T id={'view_vendor_details'} />
         </VendorButtonLink>
       )}

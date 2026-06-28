@@ -1,4 +1,3 @@
-// @ts-nocheck
 import React from 'react';
 import { Card } from '@/components';
 
@@ -21,16 +20,14 @@ export function CreditNoteGLEntriesTable() {
   const columns = useJournalEntriesTransactionsColumns();
 
   // Handle fetch transaction by reference.
-  const {
-    data: { transactions },
-    isLoading: isTransactionLoading,
-  } = useTransactionsByReference(
+  const { data, isLoading: isTransactionLoading } = useTransactionsByReference(
     {
-      reference_id: creditNoteId,
-      reference_type: 'creditNote',
+      referenceId: creditNoteId ?? 0,
+      referenceType: 'creditNote',
     },
     { enabled: !!creditNoteId },
   );
+  const transactions = data?.transactions ?? [];
 
   return (
     <Card>
@@ -38,7 +35,7 @@ export function CreditNoteGLEntriesTable() {
 
       <JournalEntriesTable
         columns={columns}
-        data={transactions}
+        transactions={transactions}
         loading={isTransactionLoading}
       />
     </Card>

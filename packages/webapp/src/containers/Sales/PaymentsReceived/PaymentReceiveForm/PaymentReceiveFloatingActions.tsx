@@ -128,14 +128,14 @@ export function PaymentReceiveFormFloatingActions() {
       <Group spacing={0}>
         {/* ----------- Branding Template Select ----------- */}
         <BrandingThemeFormGroup
-          name={'pdf_template_id'}
+          name={'pdfTemplateId'}
           label={'Branding'}
           inline
           fastField
           style={{ marginLeft: 20 }}
         >
           <FSelect
-            name={'pdf_template_id'}
+            name={'pdfTemplateId'}
             items={brandingTemplatesOpts}
             input={({ activeItem, text, label, value }) => (
               <BrandingThemeSelectButton text={text || 'Brand Theme'} minimal />

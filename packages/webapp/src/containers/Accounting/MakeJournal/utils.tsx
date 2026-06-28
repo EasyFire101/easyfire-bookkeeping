@@ -37,26 +37,26 @@ export const MIN_LINES_NUMBER = 1;
 export const DEFAULT_LINES_NUMBER = 1;
 
 export const defaultEntry = {
-  account_id: '',
+  accountId: '',
   credit: '',
   debit: '',
-  contact_id: '',
-  branch_id: '',
-  project_id: '',
+  contactId: '',
+  branchId: '',
+  projectId: '',
   note: '',
 };
 
 export const defaultManualJournal = {
-  journal_number: '',
-  journal_number_manually: '',
-  journal_type: 'Journal',
+  journalNumber: '',
+  journalNumberManually: '',
+  journalType: 'Journal',
   date: moment(new Date()).format('YYYY-MM-DD'),
   description: '',
   reference: '',
-  currency_code: '',
+  currencyCode: '',
   publish: '',
-  branch_id: '',
-  exchange_rate: 1,
+  branchId: '',
+  exchangeRate: 1,
   entries: [...repeatValue(defaultEntry, DEFAULT_LINES_NUMBER)],
   attachments: [],
 };
@@ -113,7 +113,7 @@ export const updateAdjustEntries = (rowIndex, columnId, value) => (rows) => {
   const oldCredit = get(rows, `[${rowIndex}].credit`);
   const oldDebit = get(rows, `[${rowIndex}].debit`);
 
-  if (columnId === 'account_id' && !oldCredit && !oldDebit) {
+  if (columnId === 'accountId' && !oldCredit && !oldDebit) {
     const adjustment = adjustmentEntries(rows);
 
     if (adjustment.credit) {
@@ -145,7 +145,7 @@ export const transformErrors = (resErrors, { setErrors, errors }) => {
     toastMessages.push(
       intl.get('should_select_customers_with_entries_have_receivable_account'),
     );
-    setEntriesErrors(error.indexes, 'contact_id', 'error');
+    setEntriesErrors(error.indexes, 'contactId', 'error');
   }
   if ((error = getError(ERROR.ENTRIES_SHOULD_ASSIGN_WITH_CONTACT))) {
     if (error.meta.find((meta) => meta.contact_type === 'customer')) {
@@ -159,12 +159,12 @@ export const transformErrors = (resErrors, { setErrors, errors }) => {
       );
     }
     const indexes = error.meta.map((meta) => meta.indexes).flat();
-    setEntriesErrors(indexes, 'contact_id', 'error');
+    setEntriesErrors(indexes, 'contactId', 'error');
   }
   if ((error = getError(ERROR.JOURNAL_NUMBER_ALREADY_EXISTS))) {
     newErrors = setWith(
       newErrors,
-      'journal_number',
+      'journalNumber',
       intl.get('journal_number_is_already_used'),
     );
   }
@@ -221,7 +221,7 @@ export const useSetPrimaryBranchToForm = () => {
       const primaryBranch = branches.find((b) => b.primary) || first(branches);
 
       if (primaryBranch) {
-        setFieldValue('branch_id', primaryBranch.id);
+        setFieldValue('branchId', primaryBranch.id);
       }
     }
   }, [isBranchesSuccess, setFieldValue, branches, isNewMode]);
@@ -238,7 +238,7 @@ export const useManualJournalCreditTotalFormatted = () => {
   const totalCredit = useManualJournalCreditTotal();
   const { values } = useFormikContext();
 
-  return formattedAmount(totalCredit, values.currency_code);
+  return formattedAmount(totalCredit, values.currencyCode);
 };
 
 export const useManualJournalDebitTotal = () => {
@@ -252,7 +252,7 @@ export const useManualJournalDebitTotalFormatted = () => {
   const totalDebit = useManualJournalDebitTotal();
   const { values } = useFormikContext();
 
-  return formattedAmount(totalDebit, values.currency_code);
+  return formattedAmount(totalDebit, values.currencyCode);
 };
 
 export const useManualJournalSubtotal = () => {
@@ -266,7 +266,7 @@ export const useManualJournalSubtotalFormatted = () => {
   const subtotal = useManualJournalSubtotal();
   const { values } = useFormikContext();
 
-  return formattedAmount(subtotal, values.currency_code);
+  return formattedAmount(subtotal, values.currencyCode);
 };
 
 export const useManualJournalTotalDifference = () => {
@@ -280,7 +280,7 @@ export const useManualJournalTotalDifferenceFormatted = () => {
   const difference = useManualJournalTotalDifference();
   const { values } = useFormikContext();
 
-  return formattedAmount(difference, values.currency_code);
+  return formattedAmount(difference, values.currencyCode);
 };
 
 export const useManualJournalTotal = () => {
@@ -293,7 +293,7 @@ export const useManualJournalTotalFormatted = () => {
   const total = useManualJournalTotal();
   const { values } = useFormikContext();
 
-  return formattedAmount(total, values.currency_code);
+  return formattedAmount(total, values.currencyCode);
 };
 
 /**
@@ -305,8 +305,8 @@ export const useJournalIsForeign = () => {
   const baseCurrency = useCurrentOrganizationBaseCurrency();
 
   const isForeignJournal = React.useMemo(
-    () => values.currency_code !== baseCurrency,
-    [values.currency_code, baseCurrency],
+    () => values.currencyCode !== baseCurrency,
+    [values.currencyCode, baseCurrency],
   );
   return isForeignJournal;
 };

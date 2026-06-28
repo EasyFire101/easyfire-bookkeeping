@@ -7,15 +7,10 @@ import {
   NavbarDivider,
   Intent,
 } from '@blueprintjs/core';
-
 import { useItemDetailDrawerContext } from './ItemDetailDrawerProvider';
 import { ItemAction, AbilitySubject } from '@/constants/abilityOption';
-
 import { withAlertActions } from '@/containers/Alert/withAlertActions';
 import { withDrawerActions } from '@/containers/Drawer/withDrawerActions';
-import type { WithAlertActionsProps } from '@/containers/Alert/withAlertActions';
-import type { WithDrawerActionsProps } from '@/containers/Drawer/withDrawerActions';
-
 import {
   Icon,
   FormattedMessage as T,
@@ -23,9 +18,10 @@ import {
   DrawerActionsBar,
 } from '@/components';
 import { ItemDetailActionsMoreBtn } from './ItemDetailActionsMoreBtn';
-
 import { compose } from '@/utils';
 import { DRAWERS } from '@/constants/drawers';
+import type { WithAlertActionsProps } from '@/containers/Alert/withAlertActions';
+import type { WithDrawerActionsProps } from '@/containers/Drawer/withDrawerActions';
 
 interface ItemDetailActionsBarInnerProps
   extends Pick<WithAlertActionsProps, 'openAlert'>,

@@ -34,8 +34,8 @@ function ReceiptExchangeRateInputFieldRoot({ ...props }) {
   }
   return (
     <ExchangeRateInputGroup
-      name={'exchange_rate'}
-      fromCurrency={values.currency_code}
+      name={'exchangeRate'}
+      fromCurrency={values.currencyCode}
       toCurrency={baseCurrency}
       formGroupProps={{ label: ' ', inline: true }}
       withPopoverRecalcConfirm
@@ -75,7 +75,7 @@ export const ReceiptSyncIncrementSettingsToForm = R.compose(
     if (!receiptAutoIncrement) return;
 
     setFieldValue(
-      'receipt_number',
+      'receiptNumber',
       transactionNumber(receiptNumberPrefix, receiptNextNumber),
     );
   }, [

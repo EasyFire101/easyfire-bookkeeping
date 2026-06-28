@@ -39,53 +39,53 @@ export const MIN_LINES_NUMBER = 1;
 // Default invoice entry object.
 export const defaultInvoiceEntry = {
   index: 0,
-  item_id: '',
+  itemId: '',
   rate: '',
   discount: '',
   quantity: '',
   description: '',
   amount: '',
-  tax_rate_id: '',
-  tax_rate: '',
-  tax_amount: '',
+  taxRateId: '',
+  taxRate: '',
+  taxAmount: '',
 };
 
 // Default invoice object.
 export const defaultInvoice = {
-  customer_id: '',
-  invoice_date: moment(new Date()).format('YYYY-MM-DD'),
-  due_date: moment().format('YYYY-MM-DD'),
+  customerId: '',
+  invoiceDate: moment(new Date()).format('YYYY-MM-DD'),
+  dueDate: moment().format('YYYY-MM-DD'),
   delivered: '',
-  invoice_no: '',
-  inclusive_exclusive_tax: TaxType.Inclusive,
+  invoiceNo: '',
+  inclusiveExclusiveTax: TaxType.Inclusive,
   // Holds the invoice number that entered manually only.
-  invoice_no_manually: '',
-  reference_no: '',
-  invoice_message: '',
-  terms_conditions: '',
-  exchange_rate: '1',
-  currency_code: '',
-  branch_id: '',
-  warehouse_id: '',
-  project_id: '',
-  pdf_template_id: '',
+  invoiceNoManually: '',
+  referenceNo: '',
+  invoiceMessage: '',
+  termsConditions: '',
+  exchangeRate: '1',
+  currencyCode: '',
+  branchId: '',
+  warehouseId: '',
+  projectId: '',
+  pdfTemplateId: '',
   entries: [...repeatValue(defaultInvoiceEntry, MIN_LINES_NUMBER)],
   attachments: [],
-  payment_methods: {},
+  paymentMethods: {},
   discount: '',
-  discount_type: 'amount',
+  discountType: 'amount',
   adjustment: '',
 };
 
 // Invoice entry request schema.
 export const defaultReqInvoiceEntry = {
   index: 0,
-  item_id: '',
+  itemId: '',
   rate: '',
   discount: '',
   quantity: '',
   description: '',
-  tax_rate_id: '',
+  taxRateId: '',
 };
 
 /**
@@ -108,12 +108,12 @@ export function transformToEditForm(invoice) {
 
   return {
     ...transformToForm(invoice, defaultInvoice),
-    inclusive_exclusive_tax: invoice.is_inclusive_tax
+    inclusiveExclusiveTax: invoice.isInclusiveTax
       ? TaxType.Inclusive
       : TaxType.Exclusive,
     entries,
     attachments: transformAttachmentsToForm(invoice),
-    payment_methods: transformPaymentMethodsToForm(invoice?.payment_methods),
+    paymentMethods: transformPaymentMethodsToForm(invoice?.paymentMethods),
   };
 }
 
@@ -123,7 +123,7 @@ export function transformToEditForm(invoice) {
 export const transformErrors = (errors, { setErrors }) => {
   if (errors.some((e) => e.type === ERROR.SALE_INVOICE_NUMBER_IS_EXISTS)) {
     setErrors({
-      invoice_no: intl.get('sale_invoice_number_is_exists'),
+      invoiceNo: intl.get('sale_invoice_number_is_exists'),
     });
   }
   if (
@@ -151,7 +151,7 @@ export const transformErrors = (errors, { setErrors }) => {
     errors.some((error) => error.type === ERROR.SALE_INVOICE_NO_IS_REQUIRED)
   ) {
     setErrors({
-      invoice_no: intl.get('invoice.field.error.invoice_no_required'),
+      invoiceNo: intl.get('invoice.field.error.invoice_no_required'),
     });
   }
 };
@@ -208,7 +208,7 @@ const transformEntriesToRequest = (entries) => {
  * Filters the givne non-zero entries.
  */
 const filterNonZeroEntries = (entries) => {
-  return entries.filter((item) => item.item_id && item.quantity);
+  return entries.filter((item) => item.itemId && item.quantity);
 };
 
 /**
@@ -217,47 +217,47 @@ const filterNonZeroEntries = (entries) => {
 export function transformValueToRequest(values) {
   return {
     ...omit(values, [
-      'invoice_no',
-      'invoice_no_manually',
-      'inclusive_exclusive_tax',
+      'invoiceNo',
+      'invoiceNoManually',
+      'inclusiveExclusiveTax',
     ]),
-    // The `invoice_no_manually` will be presented just if the auto-increment
+    // The `invoiceNoManually` will be presented just if the auto-increment
     // is disable, always both attributes hold the same value in manual mode.
-    ...(values.invoice_no_manually && {
-      invoice_no: values.invoice_no,
+    ...(values.invoiceNoManually && {
+      invoiceNo: values.invoiceNo,
     }),
-    is_inclusive_tax: values.inclusive_exclusive_tax === TaxType.Inclusive,
+    isInclusiveTax: values.inclusiveExclusiveTax === TaxType.Inclusive,
     entries: transformEntriesToRequest(values.entries),
     delivered: false,
     attachments: transformAttachmentsToRequest(values),
-    payment_methods: transformPaymentMethodsToRequest(values?.payment_methods),
+    paymentMethods: transformPaymentMethodsToRequest(values?.paymentMethods),
   };
 }
 
 /**
  * Transformes the form payment methods to request.
  * @param {Record<string, { enable: boolean }>} paymentMethods
- * @returns {Array<{ payment_integration_id: string; enable: boolean }>}
+ * @returns {Array<{ paymentIntegrationId: string; enable: boolean }>}
  */
 const transformPaymentMethodsToRequest = (
   paymentMethods: Record<string, { enable: boolean }>,
-): Array<{ payment_integration_id: string; enable: boolean }> => {
+): Array<{ paymentIntegrationId: string; enable: boolean }> => {
   return Object.entries(paymentMethods).map(([paymentMethodId, method]) => ({
-    payment_integration_id: +paymentMethodId,
+    paymentIntegrationId: +paymentMethodId,
     enable: method.enable,
   }));
 };
 
 /**
  * Transformes payment methods from request to form.
- * @param {Array<{ payment_integration_id: number; enable: boolean }>} paymentMethods
+ * @param {Array<{ paymentIntegrationId: number; enable: boolean }>} paymentMethods
  * @returns {Record<string, { enable: boolean }>}
  */
 const transformPaymentMethodsToForm = (
-  paymentMethods: Array<{ payment_integration_id: number; enable: boolean }>,
+  paymentMethods: Array<{ paymentIntegrationId: number; enable: boolean }>,
 ): Record<string, { enable: boolean }> => {
   return paymentMethods?.reduce((acc, method) => {
-    acc[method.payment_integration_id] = { enable: method.enable };
+    acc[method.paymentIntegrationId] = { enable: method.enable };
     return acc;
   }, {});
 };
@@ -273,7 +273,7 @@ export const useSetPrimaryWarehouseToForm = () => {
         warehouses.find((b) => b.primary) || first(warehouses);
 
       if (primaryWarehouse) {
-        setFieldValue('warehouse_id', primaryWarehouse.id);
+        setFieldValue('warehouseId', primaryWarehouse.id);
       }
     }
   }, [isWarehousesSuccess, setFieldValue, warehouses, isNewMode]);
@@ -288,7 +288,7 @@ export const useSetPrimaryBranchToForm = () => {
       const primaryBranch = branches.find((b) => b.primary) || first(branches);
 
       if (primaryBranch) {
-        setFieldValue('branch_id', primaryBranch.id);
+        setFieldValue('branchId', primaryBranch.id);
       }
     }
   }, [isBranchesSuccess, setFieldValue, branches, isNewMode]);
@@ -315,7 +315,7 @@ export const useInvoiceSubtotalFormatted = () => {
   const subtotal = useInvoiceSubtotal();
   const { values } = useFormikContext();
 
-  return formattedAmount(subtotal, values.currency_code);
+  return formattedAmount(subtotal, values.currencyCode);
 };
 
 /**
@@ -327,7 +327,7 @@ export const useInvoiceDiscountAmount = () => {
   const subtotal = useInvoiceSubtotal();
   const discount = toSafeNumber(values.discount);
 
-  return values?.discount_type === 'percentage'
+  return values?.discountType === 'percentage'
     ? (subtotal * discount) / 100
     : discount;
 };
@@ -339,10 +339,10 @@ export const useInvoiceDiscountAmount = () => {
 export const useInvoiceDiscountAmountFormatted = () => {
   const discountAmount = useInvoiceDiscountAmount();
   const {
-    values: { currency_code },
+    values: { currencyCode },
   } = useFormikContext();
 
-  return formattedAmount(discountAmount, currency_code);
+  return formattedAmount(discountAmount, currencyCode);
 };
 
 /**
@@ -363,10 +363,10 @@ export const useInvoiceAdjustmentAmount = () => {
 export const useInvoiceAdjustmentAmountFormatted = () => {
   const adjustmentAmount = useInvoiceAdjustmentAmount();
   const {
-    values: { currency_code },
+    values: { currencyCode },
   } = useFormikContext();
 
-  return formattedAmount(adjustmentAmount, currency_code);
+  return formattedAmount(adjustmentAmount, currencyCode);
 };
 
 /**
@@ -378,8 +378,8 @@ export const useInvoiceIsForeignCustomer = () => {
   const baseCurrency = useCurrentOrganizationBaseCurrency();
 
   const isForeignCustomer = React.useMemo(
-    () => values.currency_code !== baseCurrency,
-    [values.currency_code, baseCurrency],
+    () => values.currencyCode !== baseCurrency,
+    [values.currencyCode, baseCurrency],
   );
   return isForeignCustomer;
 };
@@ -392,8 +392,8 @@ export const resetFormState = ({ initialValues, values, resetForm }) => {
     values: {
       // Reset the all values except the warehouse and brand id.
       ...initialValues,
-      warehouse_id: values.warehouse_id,
-      brand_id: values.brand_id,
+      warehouseId: values.warehouseId,
+      brandId: values.brandId,
     },
   });
 };
@@ -420,8 +420,8 @@ export const useInvoiceAggregatedTaxRates = () => {
   const { taxRates } = useInvoiceFormContext();
 
   const aggregateTaxRates = React.useMemo(
-    () => aggregateItemEntriesTaxRates(values.currency_code, taxRates),
-    [values.currency_code, taxRates],
+    () => aggregateItemEntriesTaxRates(values.currencyCode, taxRates),
+    [values.currencyCode, taxRates],
   );
   // Calculate the total tax amount of invoice entries.
   return React.useMemo(() => {
@@ -437,8 +437,8 @@ export const useInvoiceTotalTaxAmount = () => {
   const { values } = useFormikContext();
 
   return React.useMemo(() => {
-    const filteredEntries = values.entries.filter((entry) => entry.tax_amount);
-    return sumBy(filteredEntries, 'tax_amount');
+    const filteredEntries = values.entries.filter((entry) => entry.taxAmount);
+    return sumBy(filteredEntries, 'taxAmount');
   }, [values.entries]);
 };
 
@@ -468,7 +468,7 @@ export const useInvoiceTotalFormatted = () => {
   const total = useInvoiceTotal();
   const { values } = useFormikContext();
 
-  return formattedAmount(total, values.currency_code);
+  return formattedAmount(total, values.currencyCode);
 };
 
 /**
@@ -478,7 +478,7 @@ export const useInvoiceTotalFormatted = () => {
 export const useInvoicePaidAmount = () => {
   const { invoice } = useInvoiceFormContext();
 
-  return toSafeNumber(invoice?.payment_amount);
+  return toSafeNumber(invoice?.paymentAmount);
 };
 
 /**
@@ -489,7 +489,7 @@ export const useInvoicePaidAmountFormatted = () => {
   const paidAmount = useInvoicePaidAmount();
   const { values } = useFormikContext();
 
-  return formattedAmount(paidAmount, values.currency_code);
+  return formattedAmount(paidAmount, values.currencyCode);
 };
 
 /**
@@ -511,7 +511,7 @@ export const useInvoiceDueAmountFormatted = () => {
   const dueAmount = useInvoiceDueAmount();
   const { values } = useFormikContext();
 
-  return formattedAmount(dueAmount, values.currency_code);
+  return formattedAmount(dueAmount, values.currencyCode);
 };
 
 /**
@@ -521,7 +521,7 @@ export const useInvoiceDueAmountFormatted = () => {
 export const useIsInvoiceTaxInclusive = () => {
   const { values } = useFormikContext();
 
-  return values.inclusive_exclusive_tax === TaxType.Inclusive;
+  return values.inclusiveExclusiveTax === TaxType.Inclusive;
 };
 
 /**
@@ -531,7 +531,7 @@ export const useIsInvoiceTaxInclusive = () => {
 export const useIsInvoiceTaxExclusive = () => {
   const { values } = useFormikContext();
 
-  return values.inclusive_exclusive_tax === TaxType.Exclusive;
+  return values.inclusiveExclusiveTax === TaxType.Exclusive;
 };
 
 /**
@@ -541,7 +541,7 @@ export const useIsInvoiceTaxExclusive = () => {
 export const useInvoiceCurrencyCode = () => {
   const { values } = useFormikContext();
 
-  return values.currency_code;
+  return values.currencyCode;
 };
 
 export const useInvoiceFormBrandingTemplatesOptions = () => {

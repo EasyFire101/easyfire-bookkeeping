@@ -1,7 +1,6 @@
-// @ts-nocheck
 import React, { lazy } from 'react';
 import { Drawer, DrawerSuspense } from '@/components';
-import { withDrawers } from '@/containers/Drawer/withDrawers';
+import { withDrawers, WithDrawersProps } from '@/containers/Drawer/withDrawers';
 
 import { compose } from '@/utils';
 
@@ -11,6 +10,10 @@ const AccountDrawerContent = lazy(() =>
   })),
 );
 
+interface AccountDrawerProps extends WithDrawersProps {
+  name: string;
+}
+
 /**
  * Account drawer.
  */
@@ -18,8 +21,10 @@ function AccountDrawer({
   name,
   // #withDrawer
   isOpen,
-  payload: { accountId },
-}) {
+  payload,
+}: AccountDrawerProps) {
+  const accountId = payload?.accountId as number | undefined;
+
   return (
     <Drawer
       isOpen={isOpen}

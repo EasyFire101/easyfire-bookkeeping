@@ -1,9 +1,7 @@
-// @ts-nocheck
 import React from 'react';
 import intl from 'react-intl-universal';
 import styled from 'styled-components';
 import { Tab } from '@blueprintjs/core';
-
 import { useAbilityContext } from '@/hooks/utils';
 import { DrawerMainTabs } from '@/components';
 import { CreditNoteDetailActionsBar } from './CreditNoteDetailActionsBar';
@@ -15,7 +13,6 @@ import { CreditNoteAction, AbilitySubject } from '@/constants/abilityOption';
 
 /**
  * Credit Note view detail.
- * @returns {React.JSX}
  */
 export function CreditNoteDetail() {
   return (
@@ -28,7 +25,6 @@ export function CreditNoteDetail() {
 
 /**
  * Credit note details tabs.
- * @returns {React.JSX}
  */
 function CreditNoteDetailsTabs() {
   const ability = useAbilityContext();

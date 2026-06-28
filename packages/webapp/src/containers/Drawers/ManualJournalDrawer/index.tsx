@@ -1,7 +1,9 @@
-// @ts-nocheck
 import React, { lazy } from 'react';
 import { Drawer, DrawerSuspense } from '@/components';
-import { withDrawers } from '@/containers/Drawer/withDrawers';
+import {
+  withDrawers,
+  WithDrawersProps,
+} from '@/containers/Drawer/withDrawers';
 
 import { compose } from '@/utils';
 
@@ -11,6 +13,10 @@ const ManualJournalDrawerContent = lazy(() =>
   })),
 );
 
+interface ManualJournalDrawerProps extends WithDrawersProps {
+  name: string;
+}
+
 /**
  * Manual journal drawer.
  */
@@ -19,8 +25,10 @@ function ManualJournalDrawer({
 
   // #withDrawer
   isOpen,
-  payload: { manualJournalId },
-}) {
+  payload,
+}: ManualJournalDrawerProps) {
+  const manualJournalId = payload?.manualJournalId as number | undefined;
+
   return (
     <Drawer
       isOpen={isOpen}

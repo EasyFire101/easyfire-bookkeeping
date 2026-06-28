@@ -27,26 +27,26 @@ export const ERRORS = {
 
 // Default payment made entry values.
 export const defaultPaymentMadeEntry = {
-  bill_id: '',
-  payment_amount: '',
-  currency_code: '',
+  billId: '',
+  paymentAmount: '',
+  currencyCode: '',
   id: null,
-  due_amount: null,
+  dueAmount: null,
   amount: '',
 };
 
 // Default initial values of payment made.
 export const defaultPaymentMade = {
   amount: '',
-  vendor_id: '',
-  payment_account_id: '',
-  payment_date: moment(new Date()).format('YYYY-MM-DD'),
+  vendorId: '',
+  paymentAccountId: '',
+  paymentDate: moment(new Date()).format('YYYY-MM-DD'),
   reference: '',
-  payment_number: '',
+  paymentNumber: '',
   statement: '',
-  currency_code: '',
-  branch_id: '',
-  exchange_rate: 1,
+  currencyCode: '',
+  branchId: '',
+  exchangeRate: 1,
   entries: [],
   attachments: [],
 };
@@ -59,7 +59,7 @@ export const transformToEditForm = (paymentMade, paymentMadeEntries) => {
     entries: [
       ...paymentMadeEntries.map((paymentMadeEntry) => ({
         ...transformToForm(paymentMadeEntry, defaultPaymentMadeEntry),
-        payment_amount: paymentMadeEntry.payment_amount || '',
+        paymentAmount: paymentMadeEntry.paymentAmount || '',
       })),
     ],
     attachments,
@@ -72,8 +72,8 @@ export const transformToEditForm = (paymentMade, paymentMadeEntries) => {
 export const transformToNewPageEntries = (entries) => {
   return entries.map((entry) => ({
     ...transformToForm(entry, defaultPaymentMadeEntry),
-    payment_amount: '',
-    currency_code: entry.currency_code,
+    paymentAmount: '',
+    currencyCode: entry.currency_code,
   }));
 };
 
@@ -101,11 +101,11 @@ export const accountsFieldShouldUpdate = (newProps, oldProps) => {
  * Transformes the form values to request body.
  */
 export const transformFormToRequest = (form) => {
-  // Filters entries that have no `bill_id` or `payment_amount`.
+  // Filters entries that have no `billId` or `paymentAmount`.
   const entries = form.entries
-    .filter((item) => item.bill_id && item.payment_amount)
+    .filter((item) => item.billId && item.paymentAmount)
     .map((entry) => ({
-      ...pick(entry, ['payment_amount', 'bill_id']),
+      ...pick(entry, ['paymentAmount', 'billId']),
     }));
 
   const attachments = transformAttachmentsToRequest(form);
@@ -123,7 +123,7 @@ export const useSetPrimaryBranchToForm = () => {
       const primaryBranch = branches.find((b) => b.primary) || first(branches);
 
       if (primaryBranch) {
-        setFieldValue('branch_id', primaryBranch.id);
+        setFieldValue('branchId', primaryBranch.id);
       }
     }
   }, [isBranchesSuccess, setFieldValue, branches, isNewMode]);
@@ -136,7 +136,7 @@ export const transformErrors = (errors, { setFieldError }) => {
   const getError = (errorType) => errors.find((e) => e.type === errorType);
 
   if (getError(PAYMENT_MADE_ERRORS.PAYMENT_NUMBER_NOT_UNIQUE)) {
-    setFieldError('payment_number', intl.get('payment_number_is_not_unique'));
+    setFieldError('paymentNumber', intl.get('payment_number_is_not_unique'));
   }
   if (getError(PAYMENT_MADE_ERRORS.WITHDRAWAL_ACCOUNT_CURRENCY_INVALID)) {
     AppToaster.show({
@@ -150,12 +150,12 @@ export const transformErrors = (errors, { setFieldError }) => {
 
 export const usePaymentMadeTotals = () => {
   const {
-    values: { entries, currency_code: currencyCode },
+    values: { entries, currencyCode },
   } = useFormikContext();
 
   // Retrieves the invoice entries total.
   const total = React.useMemo(
-    () => sumBy(entries, 'payment_amount'),
+    () => sumBy(entries, 'paymentAmount'),
     [entries],
   );
 
@@ -191,7 +191,7 @@ export const usePaymentMadeAppliedAmount = () => {
   } = useFormikContext();
 
   // Retrieves the invoice entries total.
-  return React.useMemo(() => sumBy(entries, 'payment_amount'), [entries]);
+  return React.useMemo(() => sumBy(entries, 'paymentAmount'), [entries]);
 };
 
 export const usePaymentMadeExcessAmount = () => {
@@ -210,14 +210,14 @@ export const usePaymentMadeIsForeignCustomer = () => {
   const baseCurrency = useCurrentOrganizationBaseCurrency();
 
   const isForeignCustomer = React.useMemo(
-    () => values.currency_code !== baseCurrency,
-    [values.currency_code, baseCurrency],
+    () => values.currencyCode !== baseCurrency,
+    [values.currencyCode, baseCurrency],
   );
   return isForeignCustomer;
 };
 
 export const getPaymentExcessAmountFromValues = (values) => {
-  const appliedAmount = sumBy(values.entries, 'payment_amount');
+  const appliedAmount = sumBy(values.entries, 'paymentAmount');
   const totalAmount = values.amount;
 
   return Math.abs(totalAmount - appliedAmount);

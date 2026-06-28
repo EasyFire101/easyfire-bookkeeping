@@ -1,4 +1,3 @@
-// @ts-nocheck
 import styled from 'styled-components';
 import {
   T,
@@ -20,28 +19,28 @@ export function CreditNoteDetailTableFooter() {
       <CreditNoteTotalLines labelColWidth={'180px'} amountColWidth={'180px'}>
         <TotalLine
           title={<T id={'credit_note.drawer.label_subtotal'} />}
-          value={creditNote.formatted_subtotal}
+          value={creditNote?.formattedSubtotal}
           borderStyle={TotalLineBorderStyle.SingleDark}
         />
-        {creditNote.discount_amount > 0 && (
+        {(creditNote?.discountAmount ?? 0) > 0 && (
           <TotalLine
             title={
-              creditNote.discount_percentage_formatted
-                ? `Discount [${creditNote.discount_percentage_formatted}]`
+              creditNote?.discountPercentageFormatted
+                ? `Discount [${creditNote.discountPercentageFormatted}]`
                 : 'Discount'
             }
-            value={creditNote.discount_amount_formatted}
+            value={creditNote?.discountAmountFormatted}
           />
         )}
-        {creditNote.adjustment_formatted && (
+        {creditNote?.adjustmentFormatted && (
           <TotalLine
             title={'Adjustment'}
-            value={creditNote.adjustment_formatted}
+            value={creditNote.adjustmentFormatted}
           />
         )}
         <TotalLine
           title={<T id={'credit_note.drawer.label_total'} />}
-          value={creditNote.total_formatted}
+          value={creditNote?.totalFormatted}
           borderStyle={TotalLineBorderStyle.DoubleDark}
           textStyle={TotalLineTextStyle.Bold}
         />

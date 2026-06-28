@@ -2,19 +2,19 @@ import React from 'react';
 import type { Item } from '@bigcapital/sdk-ts';
 import { DrawerHeaderContent, DrawerLoading } from '@/components';
 import { useItem } from '@/hooks/query';
-import { inactiveStatus } from './utlis';
+import { inactiveStatus } from './utils';
 import { DRAWERS } from '@/constants/drawers';
 
 export interface ItemDetailDrawerContextValue {
   item: Item | undefined;
-  itemId: number;
+  itemId: number | undefined;
   isItemLoading: boolean;
   value: string;
   setValue: React.Dispatch<React.SetStateAction<string>>;
 }
 
 interface ItemDetailDrawerProviderProps {
-  itemId: number;
+  itemId: number | undefined;
   children?: React.ReactNode;
 }
 

@@ -42,7 +42,7 @@ export const ReceiptFormReceiptNumberField = R.compose(
 
     // Show the confirmation dialog if the value has changed and auto-increment
     // mode is enabled.
-    if (values.receipt_number !== newValue && receiptAutoIncrement) {
+    if (values.receiptNumber !== newValue && receiptAutoIncrement) {
       openDialog('receipt-number-form', {
         initialFormValues: {
           onceManualNumber: newValue,
@@ -53,23 +53,23 @@ export const ReceiptFormReceiptNumberField = R.compose(
     // Setting the receipt number to the form will be manually in case
     // auto-increment is disable.
     if (!receiptAutoIncrement) {
-      setFieldValue('receipt_number', newValue);
-      setFieldValue('receipt_number_manually', newValue);
+      setFieldValue('receiptNumber', newValue);
+      setFieldValue('receiptNumberManually', newValue);
     }
   };
 
   return (
     <FFormGroup
-      name={'receipt_number'}
+      name={'receiptNumber'}
       label={intl.get('receipt')}
       inline={true}
       labelInfo={<FieldRequiredHint />}
     >
       <ControlGroup fill={true}>
         <FInputGroup
-          name={'receipt_number'}
+          name={'receiptNumber'}
           minimal={true}
-          value={values.receipt_number}
+          value={values.receiptNumber}
           asyncControl={true}
           onBlur={handleReceiptNoBlur}
           onChange={() => {}}

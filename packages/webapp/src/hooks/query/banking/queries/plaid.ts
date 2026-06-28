@@ -16,7 +16,6 @@ export function useGetPlaidLinkToken(
   props?: UseMutationOptions<PlaidLinkTokenResponse, Error, void>,
 ) {
   const fetcher = useApiFetcher();
-
   return useMutation({
     ...props,
     mutationFn: () => fetchPlaidLinkToken(fetcher),

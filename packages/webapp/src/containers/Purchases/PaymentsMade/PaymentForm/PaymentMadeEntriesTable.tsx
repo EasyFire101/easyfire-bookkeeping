@@ -29,7 +29,7 @@ export function PaymentMadeEntriesTable({
 
   // Formik context.
   const {
-    values: { vendor_id },
+    values: { vendorId },
     errors,
   } = useFormikContext();
 
@@ -45,7 +45,7 @@ export function PaymentMadeEntriesTable({
   );
   // Detarmines the right no results message before selecting vendor and after
   // selecting vendor id.
-  const noResultsMessage = vendor_id ? (
+  const noResultsMessage = vendorId ? (
     <T
       id={
         'there_is_no_payable_bills_for_this_vendor_that_can_be_applied_for_this_payment'

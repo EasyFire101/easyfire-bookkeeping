@@ -83,11 +83,11 @@ function PaymentReceiveFormRoot({
           // If the auto-increment mode is enabled, take the next payment
           // number from the settings.
           ...(paymentReceiveAutoIncrement && {
-            payment_receive_no: nextPaymentNumber,
+            paymentReceiveNo: nextPaymentNumber,
           }),
-          deposit_account_id: defaultTo(preferredDepositAccount, ''),
-          currency_code: baseCurrency,
-          pdf_template_id: paymentReceivedState?.defaultTemplateId,
+          depositAccountId: defaultTo(preferredDepositAccount, ''),
+          currencyCode: baseCurrency,
+          pdfTemplateId: paymentReceivedState?.defaultTemplateId,
         }),
   };
   // Handle form submit.

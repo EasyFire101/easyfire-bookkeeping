@@ -36,7 +36,7 @@ export function MakeJournalEntriesTable({
   const handleUpdateData = (rowIndex, columnId, value) => {
     const newRows = compose(
       // Auto-adding new lines.
-      updateAutoAddNewLine(defaultEntry, ['account_id', 'credit', 'debit']),
+      updateAutoAddNewLine(defaultEntry, ['accountId', 'credit', 'debit']),
       // Update items entries total.
       updateAdjustEntries(rowIndex, columnId, value),
       // Update entry of the given row index and column id.
@@ -72,7 +72,7 @@ export function MakeJournalEntriesTable({
         contacts,
         branches,
         projects,
-        autoFocus: ['account_id', 0],
+        autoFocus: ['accountId', 0],
         currencyCode,
       }}
     />

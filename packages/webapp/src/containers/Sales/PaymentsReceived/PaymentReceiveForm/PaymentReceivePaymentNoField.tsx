@@ -43,7 +43,7 @@ export const PaymentReceivePaymentNoField = R.compose(
 
     // Show the confirmation dialog if the value has changed and auto-increment
     // mode is enabled.
-    if (values.payment_receive_no !== newValue && paymentReceiveAutoIncrement) {
+    if (values.paymentReceiveNo !== newValue && paymentReceiveAutoIncrement) {
       openDialog('payment-receive-number-form', {
         initialFormValues: {
           onceManualNumber: newValue,
@@ -54,22 +54,22 @@ export const PaymentReceivePaymentNoField = R.compose(
     // Setting the payment number to the form will be manually in case
     // auto-increment is disable.
     if (!paymentReceiveAutoIncrement) {
-      setFieldValue('payment_receive_no', newValue);
-      setFieldValue('payment_receive_no_manually', newValue);
+      setFieldValue('paymentReceiveNo', newValue);
+      setFieldValue('paymentReceiveNoManually', newValue);
     }
   };
   return (
     <FFormGroup
-      name={'payment_receive_no'}
+      name={'paymentReceiveNo'}
       label={intl.get('payment_received_no')}
       inline={true}
       labelInfo={<FieldRequiredHint />}
     >
       <ControlGroup fill={true}>
         <FInputGroup
-          name={'payment_receive_no'}
+          name={'paymentReceiveNo'}
           minimal={true}
-          value={values.payment_receive_no}
+          value={values.paymentReceiveNo}
           asyncControl={true}
           onBlur={handlePaymentNoBlur}
           onChange={() => {}}

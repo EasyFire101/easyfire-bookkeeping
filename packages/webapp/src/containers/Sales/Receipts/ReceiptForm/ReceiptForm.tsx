@@ -77,14 +77,14 @@ function ReceiptFormRoot({
       : {
           ...defaultReceipt,
           ...(receiptAutoIncrement && {
-            receipt_number: nextReceiptNumber,
+            receiptNumber: nextReceiptNumber,
           }),
-          deposit_account_id: parseInt(preferredDepositAccount),
+          depositAccountId: parseInt(preferredDepositAccount),
           entries: orderingLinesIndexes(defaultReceipt.entries),
-          currency_code: baseCurrency,
-          receipt_message: receiptMessage,
-          terms_conditions: receiptTermsConditions,
-          pdf_template_id: saleReceiptState?.defaultTemplateId,
+          currencyCode: baseCurrency,
+          receiptMessage: receiptMessage,
+          termsConditions: receiptTermsConditions,
+          pdfTemplateId: saleReceiptState?.defaultTemplateId,
         }),
   };
   // Handle the form submit.
@@ -93,7 +93,7 @@ function ReceiptFormRoot({
     { setErrors, setSubmitting, resetForm },
   ) => {
     const entries = values.entries.filter(
-      (item) => item.item_id && item.quantity,
+      (item) => item.itemId && item.quantity,
     );
     const totalQuantity = sumBy(entries, (entry) => parseInt(entry.quantity));
 
@@ -116,7 +116,7 @@ function ReceiptFormRoot({
           isNewMode
             ? 'the_receipt_has_been_created_successfully'
             : 'the_receipt_has_been_edited_successfully',
-          { number: values.receipt_number },
+          { number: values.receiptNumber },
         ),
         intent: Intent.SUCCESS,
       });

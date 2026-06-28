@@ -1,4 +1,3 @@
-// @ts-nocheck
 import React from 'react';
 import intl from 'react-intl-universal';
 import { DrawerHeaderContent, DrawerLoading } from '@/components';
@@ -6,22 +5,38 @@ import { Features } from '@/constants';
 import { useInvoice } from '@/hooks/query';
 import { useFeatureCan } from '@/hooks/state';
 import { DRAWERS } from '@/constants/drawers';
+import type { SaleInvoice } from '@bigcapital/sdk-ts';
 
-const InvoiceDetailDrawerContext = React.createContext();
+export interface InvoiceDetailDrawerContextValue {
+  invoiceId: number | undefined;
+  invoice: SaleInvoice | undefined;
+}
+
+interface InvoiceDetailDrawerProviderProps {
+  invoiceId: number | undefined;
+}
+
+const InvoiceDetailDrawerContext = React.createContext<
+  InvoiceDetailDrawerContextValue | undefined
+>(undefined);
+
 /**
  * Invoice detail provider.
  */
-function InvoiceDetailDrawerProvider({ invoiceId, ...props }) {
+function InvoiceDetailDrawerProvider({
+  invoiceId,
+  ...props
+}: InvoiceDetailDrawerProviderProps & { children?: React.ReactNode }) {
   // Features guard.
   const { featureCan } = useFeatureCan();
 
   // Fetch sale invoice details.
-  const { data: invoice, isLoading: isInvoiceLoading } = useInvoice(invoiceId, {
+  const { isLoading: isInvoiceLoading, data: invoice } = useInvoice(invoiceId, {
     enabled: !!invoiceId,
   });
 
   // Provider.
-  const provider = {
+  const provider: InvoiceDetailDrawerContextValue = {
     invoiceId,
     invoice,
   };
@@ -31,7 +46,7 @@ function InvoiceDetailDrawerProvider({ invoiceId, ...props }) {
       <DrawerHeaderContent
         name={DRAWERS.INVOICE_DETAILS}
         title={intl.get('invoice_details.drawer.title', {
-          invoiceNumber: invoice?.invoice_no,
+          invoiceNumber: invoice?.invoiceNo,
         })}
         subTitle={
           featureCan(Features.Branches)
@@ -46,7 +61,14 @@ function InvoiceDetailDrawerProvider({ invoiceId, ...props }) {
   );
 }
 
-const useInvoiceDetailDrawerContext = () =>
-  React.useContext(InvoiceDetailDrawerContext);
+const useInvoiceDetailDrawerContext = (): InvoiceDetailDrawerContextValue => {
+  const ctx = React.useContext(InvoiceDetailDrawerContext);
+  if (ctx === undefined) {
+    throw new Error(
+      'useInvoiceDetailDrawerContext must be used within an InvoiceDetailDrawerProvider',
+    );
+  }
+  return ctx;
+};
 
 export { InvoiceDetailDrawerProvider, useInvoiceDetailDrawerContext };

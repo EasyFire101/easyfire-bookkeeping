@@ -23,7 +23,7 @@ export function BillExchangeRateInputField({ ...props }) {
   }
   return (
     <ExchangeRateInputGroup
-      fromCurrency={values.currency_code}
+      fromCurrency={values.currencyCode}
       toCurrency={baseCurrency}
       {...props}
     />

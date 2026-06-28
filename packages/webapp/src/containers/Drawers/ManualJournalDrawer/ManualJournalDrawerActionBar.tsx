@@ -1,4 +1,3 @@
-// @ts-nocheck
 import React from 'react';
 import { useHistory } from 'react-router-dom';
 import {
@@ -14,15 +13,22 @@ import {
   Can,
   FormattedMessage as T,
 } from '@/components';
-
-import { withAlertActions } from '@/containers/Alert/withAlertActions';
-import { withDrawerActions } from '@/containers/Drawer/withDrawerActions';
-
+import {
+  withAlertActions,
+  WithAlertActionsProps,
+} from '@/containers/Alert/withAlertActions';
+import {
+  withDrawerActions,
+  WithDrawerActionsProps,
+} from '@/containers/Drawer/withDrawerActions';
 import { useManualJournalDrawerContext } from './ManualJournalDrawerProvider';
 import { ManualJournalAction, AbilitySubject } from '@/constants/abilityOption';
-
 import { compose } from '@/utils';
 import { DRAWERS } from '@/constants/drawers';
+
+interface ManualJournalDrawerActionBarInnerProps
+  extends WithAlertActionsProps,
+    WithDrawerActionsProps {}
 
 /**
  * Manual journal action bar.
@@ -33,7 +39,7 @@ function ManualJournalDrawerActionBarInner({
 
   // #withDrawerActions
   closeDrawer,
-}) {
+}: ManualJournalDrawerActionBarInnerProps) {
   const history = useHistory();
   const { manualJournalId } = useManualJournalDrawerContext();
 

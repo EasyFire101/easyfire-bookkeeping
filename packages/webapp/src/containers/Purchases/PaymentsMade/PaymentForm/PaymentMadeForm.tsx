@@ -73,8 +73,8 @@ function PaymentMadeFormInner({
           }
         : {
             ...defaultPaymentMade,
-            payment_account_id: defaultTo(preferredPaymentAccount),
-            currency_code: baseCurrency,
+            paymentAccountId: defaultTo(preferredPaymentAccount),
+            currencyCode: baseCurrency,
             entries: orderingLinesIndexes(defaultPaymentMade.entries),
           }),
     }),

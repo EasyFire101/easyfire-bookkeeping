@@ -1,4 +1,3 @@
-// @ts-nocheck
 import React from 'react';
 import intl from 'react-intl-universal';
 import styled from 'styled-components';
@@ -25,12 +24,16 @@ import { BillDetailsStatus } from './utils';
 export function BillDetailHeader() {
   const { bill } = useBillDrawerContext();
 
+  if (!bill) {
+    return null;
+  }
+
   return (
     <CommercialDocHeader>
       <CommercialDocTopHeader>
         <DetailsMenu>
           <AmountDetailItem label={intl.get('amount')}>
-            <h3 class="big-number">{bill.total_formatted}</h3>
+            <h3 className="big-number">{bill.totalFormatted}</h3>
           </AmountDetailItem>
           <StatusDetailItem>
             <BillDetailsStatus bill={bill} />
@@ -41,26 +44,26 @@ export function BillDetailHeader() {
         <Col xs={6}>
           <DetailsMenu direction={'horizantal'} minLabelSize={'180px'}>
             <DetailItem label={intl.get('bill_date')}>
-              {bill.formatted_bill_date}
+              {bill.formattedBillDate}
             </DetailItem>
 
             <DetailItem label={intl.get('due_date')}>
-              {bill.formatted_due_date}
+              {bill.formattedDueDate}
             </DetailItem>
 
             <DetailItem label={intl.get('vendor_name')}>
-              <VendorDrawerLink vendorId={bill.vendor_id}>
-                {bill.vendor?.display_name}
+              <VendorDrawerLink vendorId={bill.vendorId}>
+                {bill.vendor?.displayName}
               </VendorDrawerLink>
             </DetailItem>
 
             <DetailItem label={intl.get('bill.details.bill_number')}>
-              {defaultTo(bill.bill_number, '-')}
+              {defaultTo(bill.billNumber, '-')}
             </DetailItem>
 
             <ExchangeRateDetailItem
-              exchangeRate={bill?.exchange_rate}
-              toCurrency={bill?.currency_code}
+              exchangeRate={bill?.exchangeRate}
+              toCurrency={bill?.currencyCode}
             />
           </DetailsMenu>
         </Col>
@@ -71,15 +74,15 @@ export function BillDetailHeader() {
             textAlign={'right'}
           >
             <DetailItem label={intl.get('due_amount')}>
-              <strong>{bill.formatted_due_amount}</strong>
+              <strong>{bill.formattedDueAmount}</strong>
             </DetailItem>
             <DetailItem
               label={intl.get('reference')}
-              children={defaultTo(bill.reference_no, '--')}
+              children={defaultTo(bill.referenceNo, '--')}
             />
             <DetailItem
               label={intl.get('bill.details.created_at')}
-              children={bill.formatted_created_at}
+              children={bill.formattedCreatedAt}
             />
           </DetailsMenu>
         </Col>

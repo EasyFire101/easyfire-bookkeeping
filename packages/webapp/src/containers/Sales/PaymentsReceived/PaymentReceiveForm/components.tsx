@@ -24,14 +24,14 @@ function InvoiceDateCell({ value }) {
  * Invoice number table cell accessor.
  */
 function InvNumberCellAccessor(row) {
-  return row?.invoice_no ? `#${row?.invoice_no || ''}` : '-';
+  return row?.invoiceNo ? `#${row?.invoiceNo || ''}` : '-';
 }
 
 /**
  * Mobey table cell.
  */
 function MoneyTableCell({ row: { original }, value }) {
-  return <Money amount={value} currency={original.currency_code} />;
+  return <Money amount={value} currency={original.currencyCode} />;
 }
 
 /**
@@ -42,8 +42,8 @@ export const usePaymentReceiveEntriesColumns = () => {
     () => [
       {
         Header: 'Invoice date',
-        id: 'invoice_date',
-        accessor: 'invoice_date',
+        id: 'invoiceDate',
+        accessor: 'invoiceDate',
         Cell: InvoiceDateCell,
         disableSortBy: true,
         disableResizing: true,
@@ -66,7 +66,7 @@ export const usePaymentReceiveEntriesColumns = () => {
       },
       {
         Header: intl.get('amount_due'),
-        accessor: 'due_amount',
+        accessor: 'dueAmount',
         Cell: MoneyTableCell,
         disableSortBy: true,
         width: 150,
@@ -74,7 +74,7 @@ export const usePaymentReceiveEntriesColumns = () => {
       },
       {
         Header: intl.get('payment_amount'),
-        accessor: 'payment_amount',
+        accessor: 'paymentAmount',
         Cell: MoneyFieldCell,
         disableSortBy: true,
         width: 150,
@@ -101,7 +101,7 @@ export function PaymentReceiveExchangeRateInputField({ ...props }) {
   }
   return (
     <ExchangeRateInputGroup
-      fromCurrency={values.currency_code}
+      fromCurrency={values.currencyCode}
       toCurrency={baseCurrency}
       {...props}
     />
@@ -137,7 +137,7 @@ export const PaymentReceiveSyncIncrementSettingsToForm = R.compose(
     if (!paymentReceiveAutoIncrement) return;
 
     setFieldValue(
-      'payment_receive_no',
+      'paymentReceiveNo',
       transactionNumber(paymentReceiveNumberPrefix, paymentReceiveNextNumber),
     );
   }, [

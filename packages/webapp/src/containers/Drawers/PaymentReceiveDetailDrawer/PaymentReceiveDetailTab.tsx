@@ -1,4 +1,3 @@
-// @ts-nocheck
 import styled from 'styled-components';
 
 import { CommercialDocBox } from '@/components';
@@ -10,7 +9,6 @@ import { PaymentReceiveDetailFooter } from './PaymentReceiveDetailFooter';
 
 /**
  * Payment receive - overview panel.
- * @returns {React.JSX}
  */
 export function PaymentReceiveDetailTab() {
   return (

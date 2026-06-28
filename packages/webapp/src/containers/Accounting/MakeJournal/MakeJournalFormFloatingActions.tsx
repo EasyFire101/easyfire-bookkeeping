@@ -82,7 +82,7 @@ export function MakeJournalFloatingAction() {
       className={classNames(CLASSES.PAGE_FORM_FLOATING_ACTIONS)}
     >
       {/* ----------- Save And Publish ----------- */}
-      <If condition={!manualJournal || !manualJournal?.is_published}>
+      <If condition={!manualJournal || !manualJournal?.isPublished}>
         <ButtonGroup>
           <Button
             loading={isSubmitting}
@@ -148,7 +148,7 @@ export function MakeJournalFloatingAction() {
         </ButtonGroup>
       </If>
       {/* ----------- Save and New ----------- */}
-      <If condition={manualJournal && manualJournal?.is_published}>
+      <If condition={manualJournal && manualJournal?.isPublished}>
         <ButtonGroup>
           <Button
             loading={isSubmitting}

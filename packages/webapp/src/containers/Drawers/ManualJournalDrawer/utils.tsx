@@ -1,4 +1,3 @@
-// @ts-nocheck
 import intl from 'react-intl-universal';
 import React from 'react';
 import { Tag, Intent } from '@blueprintjs/core';
@@ -12,15 +11,24 @@ import {
 import { Features } from '@/constants';
 import { getColumnWidth } from '@/utils';
 import { useFeatureCan } from '@/hooks/state';
-import { useManualJournalDrawerContext } from './ManualJournalDrawerProvider';
+import {
+  useManualJournalDrawerContext,
+  ManualJournalDetail,
+} from './ManualJournalDrawerProvider';
+
+interface ManualJournalDetailsStatusProps {
+  manualJournal: ManualJournalDetail;
+}
 
 /**
  * Publish column accessor.
  */
-export function ManualJournalDetailsStatus({ manualJournal }) {
+export function ManualJournalDetailsStatus({
+  manualJournal,
+}: ManualJournalDetailsStatusProps) {
   return (
     <Choose>
-      <Choose.When condition={!!manualJournal.is_published}>
+      <Choose.When condition={!!manualJournal.isPublished}>
         <Tag minimal={true} round={true}>
           <T id={'published'} />
         </Tag>
@@ -42,9 +50,8 @@ export const useManualJournalEntriesColumns = () => {
   const { featureCan } = useFeatureCan();
 
   // manual journal details drawer context.
-  const {
-    manualJournal: { entries },
-  } = useManualJournalDrawerContext();
+  const { manualJournal } = useManualJournalDrawerContext();
+  const entries = manualJournal?.entries ?? [];
 
   return React.useMemo(
     () => [

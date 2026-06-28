@@ -1,6 +1,3 @@
-// @ts-nocheck
-import React from 'react';
-
 import { CommercialDocBox } from '@/components';
 
 import { VendorCreditDetailHeader } from './VendorCreditDetailHeader';

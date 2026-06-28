@@ -9,12 +9,12 @@ export function ReceiptFormFooterLeft() {
     <React.Fragment>
       {/* --------- Receipt message --------- */}
       <ReceiptMsgFormGroup
-        name={'receipt_message'}
+        name={'receiptMessage'}
         label={intl.get('receipt_form.label.receipt_message')}
         hintText={'Will be displayed on the Receipt'}
       >
         <FEditableText
-          name={'receipt_message'}
+          name={'receiptMessage'}
           placeholder={intl.get('receipt_form.receipt_message.placeholder')}
           multiline
           fastField
@@ -24,10 +24,10 @@ export function ReceiptFormFooterLeft() {
       {/* --------- Terms and conditions --------- */}
       <TermsConditsFormGroup
         label={intl.get('receipt_form.label.terms_conditions')}
-        name={'terms_conditions'}
+        name={'termsConditions'}
       >
         <FEditableText
-          name={'terms_conditions'}
+          name={'termsConditions'}
           placeholder={intl.get(
             'receipt_form.terms_and_conditions.placeholder',
           )}

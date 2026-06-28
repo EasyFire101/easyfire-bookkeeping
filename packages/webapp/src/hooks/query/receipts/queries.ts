@@ -168,7 +168,6 @@ export function useReceipts(
   props?: UseQueryOptions<SaleReceiptsListResponse, Error>,
 ) {
   const fetcher = useApiFetcher();
-
   return useQuery({
     ...props,
     queryKey: receiptsKeys.list(query),
@@ -178,9 +177,9 @@ export function useReceipts(
 
 export function useReceipt(
   id: number | null | undefined,
-  props?: UseQueryOptions<SaleReceipt, Error>,
+  props?: Omit<UseQueryOptions<SaleReceipt>, 'queryKey' | 'queryFn'>,
 ) {
-  const fetcher = useApiFetcher();
+  const fetcher = useApiFetcher({ enableCamelCaseTransform: true });
   return useQuery({
     ...props,
     queryKey: receiptsKeys.detail(id),

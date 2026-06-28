@@ -27,18 +27,18 @@ export function BillExclusiveInclusiveSelect(props) {
       item.key,
       values.entries,
     );
-    setFieldValue('inclusive_exclusive_tax', item.key);
+    setFieldValue('inclusiveExclusiveTax', item.key);
     setFieldValue('entries', newEntries);
   };
 
   return (
     <InclusiveFormGroup
-      name={'inclusive_exclusive_tax'}
+      name={'inclusiveExclusiveTax'}
       label={'Amounts are'}
       inline={true}
     >
       <FSelect
-        name={'inclusive_exclusive_tax'}
+        name={'inclusiveExclusiveTax'}
         items={InclusiveTaxOptions}
         textAccessor={'label'}
         labelAccessor={() => ''}

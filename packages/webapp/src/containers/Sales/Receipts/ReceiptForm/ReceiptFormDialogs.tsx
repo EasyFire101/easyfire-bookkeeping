@@ -15,11 +15,11 @@ export function ReceiptFormDialogs() {
   const handleReceiptNumberFormConfirm = (settings) => {
     // Set the receipt transaction no. that cames from dialog to the form.
     // the `receipt_no_manually` will be empty except the increment mode is not auto.
-    setFieldValue('receipt_number', settings.transactionNumber);
-    setFieldValue('receipt_number_manually', '');
+    setFieldValue('receiptNumber', settings.transactionNumber);
+    setFieldValue('receiptNumberManually', '');
 
     if (settings.incrementMode !== 'auto') {
-      setFieldValue('receipt_number_manually', settings.transactionNumber);
+      setFieldValue('receiptNumberManually', settings.transactionNumber);
     }
   };
 

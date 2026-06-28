@@ -1,4 +1,3 @@
-// @ts-nocheck
 import React from 'react';
 
 import { CommercialDocEntriesTable } from '@/components';
@@ -12,16 +11,17 @@ import { TableStyle } from '@/constants';
  * Payment made read-only details table.
  */
 export function PaymentMadeDetailTable() {
-  // Retrieve payment made entries columns.
-  const columns = usePaymentMadeEntriesColumns();
-
   // Payment made details context.
   const { paymentMade } = usePaymentMadeDetailContext();
+  const entries = paymentMade?.entries ?? [];
+
+  // Retrieve payment made entries columns.
+  const columns = usePaymentMadeEntriesColumns();
 
   return (
     <CommercialDocEntriesTable
       columns={columns}
-      data={paymentMade.entries}
+      data={entries}
       styleName={TableStyle.Constrant}
     />
   );

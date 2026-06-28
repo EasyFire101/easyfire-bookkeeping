@@ -1,4 +1,3 @@
-// @ts-nocheck
 import React from 'react';
 import styled from 'styled-components';
 
@@ -17,6 +16,10 @@ import { usePaymentMadeDetailContext } from './PaymentMadeDetailProvider';
 export function PaymentMadeDetailTableFooter() {
   const { paymentMade } = usePaymentMadeDetailContext();
 
+  if (!paymentMade) {
+    return null;
+  }
+
   return (
     <PaymentMadeFooterRoot>
       <PaymentMadeTotalLines labelColWidth={'180px'} amountColWidth={'180px'}>
@@ -27,7 +30,7 @@ export function PaymentMadeDetailTableFooter() {
         />
         <TotalLine
           title={<T id={'payment_made.details.total'} />}
-          value={paymentMade.formatted_amount}
+          value={paymentMade.formattedAmount}
           borderStyle={TotalLineBorderStyle.DoubleDark}
           textStyle={TotalLineTextStyle.Bold}
         />

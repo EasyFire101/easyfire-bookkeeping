@@ -1,11 +1,8 @@
-// @ts-nocheck
 import React from 'react';
 import styled from 'styled-components';
-
 import { Card } from '@/components';
 import { ItemManuTransaction } from './utils';
 import { ItemPaymentTransactionsContent as ItemPaymentTransactionContent } from './ItemPaymentTransactionContent';
-
 import { useItemDetailDrawerContext } from '../ItemDetailDrawerProvider';
 
 export function ItemPaymentTransactions() {
@@ -14,20 +11,18 @@ export function ItemPaymentTransactions() {
   return (
     <Card>
       <ItemTransactionsHeader />
-      <ItemPaymentTransactionContent tansactionType={value} />
+      <ItemPaymentTransactionContent transactionType={value} />
     </Card>
   );
 }
 
 /**
  * Item transactions header.
- * @returns {React.JSX}
  */
 export function ItemTransactionsHeader() {
   const { setValue } = useItemDetailDrawerContext();
 
-  // handle item change.
-  const handleItemChange = (item) => {
+  const handleItemChange = (item: string) => {
     setValue(item);
   };
   return (

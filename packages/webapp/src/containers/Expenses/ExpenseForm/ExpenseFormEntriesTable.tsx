@@ -37,7 +37,7 @@ export function ExpenseFormEntriesTable({
     (rowIndex, columnId, value) => {
       const newRows = compose(
         // Update auto-adding new line.
-        updateAutoAddNewLine(defaultEntry, ['expense_account_id']),
+        updateAutoAddNewLine(defaultEntry, ['expenseAccountId']),
         // Update the row value of the given row index and column id.
         updateTableCell(rowIndex, columnId, value),
       )(entries);
@@ -74,7 +74,7 @@ export function ExpenseFormEntriesTable({
         errors: error,
         updateData: handleUpdateData,
         removeRow: handleRemoveRow,
-        autoFocus: ['expense_account_id', 0],
+        autoFocus: ['expenseAccountId', 0],
         currencyCode,
       }}
     />

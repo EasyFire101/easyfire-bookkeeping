@@ -22,7 +22,7 @@ import { DiscountTotalLine } from '@/containers/Sales/Invoices/InvoiceForm/Disco
 
 export function BillFormFooterRight() {
   const {
-    values: { inclusive_exclusive_tax, currency_code },
+    values: { inclusiveExclusiveTax, currencyCode },
   } = useFormikContext();
 
   const dueAmountFormatted = useBillDueAmountFormatted();
@@ -38,7 +38,7 @@ export function BillFormFooterRight() {
       <TotalLine
         title={
           <>
-            {inclusive_exclusive_tax === TaxType.Inclusive
+            {inclusiveExclusiveTax === TaxType.Inclusive
               ? 'Subtotal (Tax Inclusive)'
               : 'Subtotal'}
           </>
@@ -46,7 +46,7 @@ export function BillFormFooterRight() {
         value={subtotalFormatted}
       />
       <DiscountTotalLine
-        currencyCode={currency_code}
+        currencyCode={currencyCode}
         discountAmount={discountAmount}
       />
       <AdjustmentTotalLine adjustmentAmount={adjustmentAmount} />
@@ -59,7 +59,7 @@ export function BillFormFooterRight() {
         />
       ))}
       <TotalLine
-        title={`TOTAL (${currency_code})`}
+        title={`TOTAL (${currencyCode})`}
         value={totalFormatted}
         borderStyle={TotalLineBorderStyle.SingleDark}
         textStyle={TotalLineTextStyle.Bold}

@@ -1,4 +1,3 @@
-// @ts-nocheck
 import React from 'react';
 import { useHistory } from 'react-router-dom';
 import {
@@ -8,13 +7,19 @@ import {
   NavbarDivider,
   Intent,
 } from '@blueprintjs/core';
-
 import { useCreditNoteDetailDrawerContext } from './CreditNoteDetailDrawerProvider';
-
-import { withDialogActions } from '@/containers/Dialog/withDialogActions';
-import { withAlertActions } from '@/containers/Alert/withAlertActions';
-import { withDrawerActions } from '@/containers/Drawer/withDrawerActions';
-
+import {
+  withDialogActions,
+  WithDialogActionsProps,
+} from '@/containers/Dialog/withDialogActions';
+import {
+  withAlertActions,
+  WithAlertActionsProps,
+} from '@/containers/Alert/withAlertActions';
+import {
+  withDrawerActions,
+  WithDrawerActionsProps,
+} from '@/containers/Drawer/withDrawerActions';
 import {
   DrawerActionsBar,
   Can,
@@ -23,10 +28,14 @@ import {
   If,
 } from '@/components';
 import { CreditNoteAction, AbilitySubject } from '@/constants/abilityOption';
-
 import { compose } from '@/utils';
 import { CreditNoteMenuItem } from './utils';
 import { DRAWERS } from '@/constants/drawers';
+
+interface CreditNoteDetailActionsBarInnerProps
+  extends WithDialogActionsProps,
+    WithAlertActionsProps,
+    WithDrawerActionsProps {}
 
 /**
  * Credit note detail actions bar.
@@ -40,10 +49,14 @@ function CreditNoteDetailActionsBarInner({
 
   // #withDrawerActions
   closeDrawer,
-}) {
+}: CreditNoteDetailActionsBarInnerProps) {
   const { creditNoteId, creditNote } = useCreditNoteDetailDrawerContext();
 
   const history = useHistory();
+
+  if (!creditNote) {
+    return null;
+  }
 
   // Handle edit credit note.
   const handleEditCreditNote = () => {
@@ -82,7 +95,7 @@ function CreditNoteDetailActionsBarInner({
           <NavbarDivider />
         </Can>
         <Can I={CreditNoteAction.Refund} a={AbilitySubject.CreditNote}>
-          <If condition={!creditNote.is_closed && !creditNote.is_draft}>
+          <If condition={!creditNote.isClosed && !creditNote.isDraft}>
             <Button
               className={Classes.MINIMAL}
               icon={<Icon icon="arrow-upward" iconSize={18} />}
@@ -110,7 +123,7 @@ function CreditNoteDetailActionsBarInner({
           />
         </Can>
         <Can I={CreditNoteAction.Edit} a={AbilitySubject.CreditNote}>
-          <If condition={creditNote.is_published && !creditNote.is_closed}>
+          <If condition={!!creditNote.isPublished && !creditNote.isClosed}>
             <NavbarDivider />
             <CreditNoteMenuItem
               payload={{

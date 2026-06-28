@@ -18,7 +18,7 @@ function InventoryAdjustmentsProvider({ query, ...props }) {
 
   // Provider payload.
   const provider = {
-    inventoryAdjustments: inventoryAdjustmentsData?.inventoryAdjustments,
+    inventoryAdjustments: inventoryAdjustmentsData?.data,
     isAdjustmentsLoading,
     isAdjustmentsFetching,
     pagination: inventoryAdjustmentsData?.pagination,

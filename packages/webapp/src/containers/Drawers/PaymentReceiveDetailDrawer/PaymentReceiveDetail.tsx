@@ -1,4 +1,3 @@
-// @ts-nocheck
 import React from 'react';
 import intl from 'react-intl-universal';
 import styled from 'styled-components';
@@ -12,7 +11,6 @@ import { PaymentReceiveGLEntriesPanel } from './PaymentReceiveGLEntriesPanel';
 
 /**
  * Payment receive details tabs.
- * @returns {React.JSX}
  */
 function PaymentReceiveDetailsTabs() {
   return (
@@ -33,7 +31,6 @@ function PaymentReceiveDetailsTabs() {
 
 /**
  * Payment receive view detail.
- * @returns {React.JSX}
  */
 export function PaymentReceiveDetail() {
   return (

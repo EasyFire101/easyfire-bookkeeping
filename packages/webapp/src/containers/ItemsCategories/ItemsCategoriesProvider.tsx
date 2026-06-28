@@ -18,7 +18,7 @@ function ItemsCategoriesProvider({ tableState, ...props }) {
     data: itemsCategoriesData,
     isFetching: isCategoriesFetching,
     isLoading: isCategoriesLoading,
-  } = useItemsCategories(query, { keepPreviousData: true });
+  } = useItemsCategories(query);
 
   // Fetch the accounts resource fields.
   const {
@@ -38,8 +38,7 @@ function ItemsCategoriesProvider({ tableState, ...props }) {
     isResourceLoading,
     isResourceFetching,
 
-    itemsCategories: itemsCategoriesData?.itemsCategories,
-    pagination: itemsCategoriesData?.pagination,
+    itemsCategories: itemsCategoriesData,
     query,
   };
 

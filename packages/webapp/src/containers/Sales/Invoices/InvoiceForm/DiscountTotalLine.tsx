@@ -76,7 +76,7 @@ export function DiscountTotalLine({
               name={'discount'}
               rightElement={
                 <FSelect
-                  name={'discount_type'}
+                  name={'discountType'}
                   items={discountTypeItems}
                   input={discountButtonInput}
                   filterable={false}

@@ -20,16 +20,16 @@ import { compose } from '@/utils';
 const defaultInitialValues = {
   date: moment(new Date()).format('YYYY-MM-DD'),
   type: 'decrement',
-  adjustment_account_id: '',
-  item_id: '',
+  adjustmentAccountId: '',
+  itemId: '',
   reason: '',
   cost: '',
   quantity: '',
-  reference_no: '',
-  quantity_on_hand: '',
+  referenceNo: '',
+  quantityOnHand: '',
   publish: '',
-  branch_id: '',
-  warehouse_id: '',
+  branchId: '',
+  warehouseId: '',
 };
 
 /**
@@ -45,14 +45,14 @@ function InventoryAdjustmentFormInner({
   // Initial form values.
   const initialValues = {
     ...defaultInitialValues,
-    item_id: itemId,
-    quantity_on_hand: get(item, 'quantity_on_hand', 0),
+    itemId: itemId,
+    quantityOnHand: get(item, 'quantity_on_hand', 0),
   };
 
   // Handles the form submit.
   const handleFormSubmit = (values, { setSubmitting, setErrors }) => {
     const form = {
-      ...omit(values, ['quantity_on_hand', 'new_quantity', 'action']),
+      ...omit(values, ['quantityOnHand', 'newQuantity', 'action']),
       publish: submitPayload.publish,
     };
     setSubmitting(true);

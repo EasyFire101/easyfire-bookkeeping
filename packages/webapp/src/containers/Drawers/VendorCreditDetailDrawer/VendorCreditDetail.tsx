@@ -1,7 +1,5 @@
-// @ts-nocheck
-import React from 'react';
-import intl from 'react-intl-universal';
 import styled from 'styled-components';
+import intl from 'react-intl-universal';
 import { Tab } from '@blueprintjs/core';
 
 import { useAbilityContext } from '@/hooks/utils';

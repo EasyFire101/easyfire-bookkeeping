@@ -1,4 +1,3 @@
-// @ts-nocheck
 import React from 'react';
 import intl from 'react-intl-universal';
 import styled from 'styled-components';
@@ -11,10 +10,8 @@ import { PaymentMadeDetailTab } from './PaymentMadeDetailTab';
 import { PaymentMadeGLEntriesPanel } from './PaymentMadeGLEntriesPanel';
 
 /**
- * Payment made - view detail.
- * @returns {React.JSX}
+ * Payment made details tabs.
  */
-
 function PaymentMadeDetailsTabs() {
   return (
     <DrawerMainTabs defaultSelectedTabId="details">
@@ -34,7 +31,6 @@ function PaymentMadeDetailsTabs() {
 
 /**
  * Payment made view detail.
- * @returns {React.JSX}
  */
 export function PaymentMadeDetail() {
   return (

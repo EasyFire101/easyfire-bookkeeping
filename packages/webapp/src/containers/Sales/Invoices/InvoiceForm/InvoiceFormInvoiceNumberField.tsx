@@ -44,7 +44,7 @@ export const InvoiceFormInvoiceNumberField = R.compose(
 
     // Show the confirmation dialog if the value has changed and auto-increment
     // mode is enabled.
-    if (values.invoice_no !== newValue && invoiceAutoIncrement) {
+    if (values.invoiceNo !== newValue && invoiceAutoIncrement) {
       openDialog(DialogsName.InvoiceNumberSettings, {
         initialFormValues: {
           onceManualNumber: newValue,
@@ -55,14 +55,14 @@ export const InvoiceFormInvoiceNumberField = R.compose(
     // Setting the invoice number to the form will be manually in case
     // auto-increment is disable.
     if (!invoiceAutoIncrement) {
-      setFieldValue('invoice_no', newValue);
-      setFieldValue('invoice_no_manually', newValue);
+      setFieldValue('invoiceNo', newValue);
+      setFieldValue('invoiceNoManually', newValue);
     }
   };
 
   return (
     <FFormGroup
-      name={'invoice_no'}
+      name={'invoiceNo'}
       label={intl.get('invoice_no')}
       labelInfo={<FieldRequiredHint />}
       inline={true}
@@ -70,7 +70,7 @@ export const InvoiceFormInvoiceNumberField = R.compose(
     >
       <ControlGroup fill={true}>
         <FInputGroup
-          name={'invoice_no'}
+          name={'invoiceNo'}
           minimal={true}
           asyncControl={true}
           onBlur={handleInvoiceNoBlur}

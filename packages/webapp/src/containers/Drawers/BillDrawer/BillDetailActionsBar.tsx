@@ -1,7 +1,5 @@
-// @ts-nocheck
 import React from 'react';
 import { useHistory } from 'react-router-dom';
-
 import {
   Button,
   NavbarGroup,
@@ -9,13 +7,19 @@ import {
   NavbarDivider,
   Intent,
 } from '@blueprintjs/core';
-
 import { useBillDrawerContext } from './BillDrawerProvider';
-
-import { withDialogActions } from '@/containers/Dialog/withDialogActions';
-import { withAlertActions } from '@/containers/Alert/withAlertActions';
-import { withDrawerActions } from '@/containers/Drawer/withDrawerActions';
-
+import {
+  withDialogActions,
+  WithDialogActionsProps,
+} from '@/containers/Dialog/withDialogActions';
+import {
+  withAlertActions,
+  WithAlertActionsProps,
+} from '@/containers/Alert/withAlertActions';
+import {
+  withDrawerActions,
+  WithDrawerActionsProps,
+} from '@/containers/Drawer/withDrawerActions';
 import {
   Can,
   If,
@@ -29,9 +33,13 @@ import {
   AbilitySubject,
 } from '@/constants/abilityOption';
 import { BillMenuItem } from './utils';
-
 import { safeCallback, compose } from '@/utils';
 import { DRAWERS } from '@/constants/drawers';
+
+interface BillDetailActionsBarInnerProps
+  extends WithDialogActionsProps,
+    WithAlertActionsProps,
+    WithDrawerActionsProps {}
 
 function BillDetailActionsBarInner({
   // #withDialogActions
@@ -42,7 +50,7 @@ function BillDetailActionsBarInner({
 
   // #withDrawerActions
   closeDrawer,
-}) {
+}: BillDetailActionsBarInnerProps) {
   const history = useHistory();
 
   const { billId, bill } = useBillDrawerContext();
@@ -89,7 +97,7 @@ function BillDetailActionsBarInner({
           <NavbarDivider />
         </Can>
         <Can I={PaymentMadeAction.Create} a={AbilitySubject.PaymentMade}>
-          <If condition={bill.is_open && !bill.is_fully_paid}>
+          <If condition={!!bill?.isOpen && !bill?.isFullyPaid}>
             <Button
               className={Classes.MINIMAL}
               icon={<Icon icon="arrow-upward" iconSize={16} />}

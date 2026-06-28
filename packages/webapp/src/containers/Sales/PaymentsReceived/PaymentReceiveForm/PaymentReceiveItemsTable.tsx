@@ -27,12 +27,12 @@ export function PaymentReceiveItemsTable({
 
   // Formik context.
   const {
-    values: { customer_id },
+    values: { customerId },
     errors,
   } = useFormikContext();
 
   // No results message.
-  const noResultsMessage = customer_id ? (
+  const noResultsMessage = customerId ? (
     <T id={'there_is_no_receivable_invoices_for_this_customer'} />
   ) : (
     <T id={'please_select_a_customer_to_display_all_open_invoices_for_it'} />

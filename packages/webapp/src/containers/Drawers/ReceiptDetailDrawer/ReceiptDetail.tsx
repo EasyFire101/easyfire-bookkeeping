@@ -1,4 +1,3 @@
-// @ts-nocheck
 import React from 'react';
 import intl from 'react-intl-universal';
 import styled from 'styled-components';
@@ -11,7 +10,6 @@ import { ReceiptDetailsGLEntriesPanel } from './ReceiptDetailsGLEntriesPanel';
 
 /**
  * Receipt view detail.
- * @returns {React.JSX}
  */
 export function ReceiptDetail() {
   return (
@@ -24,7 +22,6 @@ export function ReceiptDetail() {
 
 /**
  * Receipt details tabs bar.
- * @returns {React.JSX}
  */
 function ReceiptDetailsTabs() {
   return (

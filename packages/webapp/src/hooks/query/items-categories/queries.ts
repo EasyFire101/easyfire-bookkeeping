@@ -90,7 +90,7 @@ export function useItemsCategories(
     'queryKey' | 'queryFn' | 'select'
   >,
 ) {
-  const fetcher = useApiFetcher();
+  const fetcher = useApiFetcher({ enableCamelCaseTransform: true });
   return useQuery<
     ItemCategoriesListResponse,
     Error,

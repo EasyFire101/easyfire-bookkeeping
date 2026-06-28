@@ -14,11 +14,11 @@ export function InvoiceFormDialogs() {
   const handleInvoiceNumberFormConfirm = (settings) => {
     // Set the invoice transaction no. that cames from dialog to the form.
     // the `invoice_no_manually` will be empty except the increment mode is not auto.
-    setFieldValue('invoice_no', settings.transactionNumber);
-    setFieldValue('invoice_no_manually', '');
+    setFieldValue('invoiceNo', settings.transactionNumber);
+    setFieldValue('invoiceNoManually', '');
 
     if (settings.incrementMode !== 'auto') {
-      setFieldValue('invoice_no_manually', settings.transactionNumber);
+      setFieldValue('invoiceNoManually', settings.transactionNumber);
     }
   };
 

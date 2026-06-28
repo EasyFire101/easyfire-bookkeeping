@@ -72,7 +72,6 @@ export function useCreateExpense(
 ) {
   const queryClient = useQueryClient();
   const fetcher = useApiFetcher();
-
   return useMutation({
     ...props,
     mutationFn: (values: CreateExpenseBody) => createExpense(fetcher, values),
@@ -87,7 +86,6 @@ export function useEditExpense(
 ) {
   const queryClient = useQueryClient();
   const fetcher = useApiFetcher();
-
   return useMutation({
     ...props,
     mutationFn: ([id, values]: [number, EditExpenseBody]) =>
@@ -104,7 +102,6 @@ export function useDeleteExpense(
 ) {
   const queryClient = useQueryClient();
   const fetcher = useApiFetcher();
-
   return useMutation({
     ...props,
     mutationFn: (id: number) => deleteExpense(fetcher, id),
@@ -120,7 +117,6 @@ export function usePublishExpense(
 ) {
   const queryClient = useQueryClient();
   const fetcher = useApiFetcher();
-
   return useMutation({
     ...props,
     mutationFn: (id: number) => publishExpense(fetcher, id),
@@ -136,7 +132,6 @@ export function useBulkDeleteExpenses(
 ) {
   const queryClient = useQueryClient();
   const fetcher = useApiFetcher();
-
   return useMutation({
     ...props,
     mutationFn: ({ ids, skipUndeletable = false }: BulkDeleteExpensesBody) =>
@@ -155,7 +150,6 @@ export function useValidateBulkDeleteExpenses(
   >,
 ) {
   const fetcher = useApiFetcher({ enableCamelCaseTransform: true });
-
   return useMutation({
     ...props,
     mutationFn: (ids: number[]) =>
@@ -168,7 +162,6 @@ export function useExpenses(
   props?: Omit<UseQueryOptions<ExpensesListResponse>, 'queryKey' | 'queryFn'>,
 ) {
   const fetcher = useApiFetcher();
-
   return useQuery({
     ...props,
     queryKey: expensesKeys.list(query ?? undefined),
@@ -180,8 +173,7 @@ export function useExpense(
   id: number | null | undefined,
   props?: Omit<UseQueryOptions<Expense>, 'queryKey' | 'queryFn'>,
 ) {
-  const fetcher = useApiFetcher();
-
+  const fetcher = useApiFetcher({ enableCamelCaseTransform: true });
   return useQuery({
     ...props,
     queryKey: expensesKeys.detail(id),
@@ -191,7 +183,6 @@ export function useExpense(
 
 export function useRefreshExpenses() {
   const queryClient = useQueryClient();
-
   return {
     refresh: () => {
       queryClient.invalidateQueries({ queryKey: expensesKeys.all() });

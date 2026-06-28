@@ -1,4 +1,3 @@
-// @ts-nocheck
 import React from 'react';
 import {
   CommercialDocFooter,
@@ -17,24 +16,28 @@ import intl from 'react-intl-universal';
 export function InvoiceDetailFooter() {
   const { invoice } = useInvoiceDetailDrawerContext();
 
-  if (!invoice.terms_conditions && !invoice.invoice_message) {
+  if (!invoice) {
+    return null;
+  }
+
+  if (!invoice.termsConditions && !invoice.invoiceMessage) {
     return null;
   }
   return (
     <CommercialDocFooter>
       <DetailsMenu direction={'horizantal'} minLabelSize={'180px'}>
-        <If condition={invoice.terms_conditions}>
+        <If condition={!!invoice.termsConditions}>
           <DetailItem label={intl.get('terms_conditions')} multiline>
-            {invoice.terms_conditions}
+            {invoice.termsConditions}
           </DetailItem>
         </If>
 
-        <If condition={invoice.invoice_message}>
+        <If condition={!!invoice.invoiceMessage}>
           <DetailItem
             label={intl.get('invoice.details.invoice_message')}
             multiline
           >
-            {invoice.invoice_message}
+            {invoice.invoiceMessage}
           </DetailItem>
         </If>
       </DetailsMenu>

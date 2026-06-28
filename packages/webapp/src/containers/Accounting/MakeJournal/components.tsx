@@ -104,8 +104,8 @@ export const useJournalTableEntriesColumns = () => {
     () => [
       {
         Header: intl.get('account'),
-        id: 'account_id',
-        accessor: 'account_id',
+        id: 'accountId',
+        accessor: 'accountId',
         Cell: AccountsListFieldCell,
         disableSortBy: true,
         width: 160,
@@ -129,8 +129,8 @@ export const useJournalTableEntriesColumns = () => {
       },
       {
         Header: ContactHeaderCell,
-        id: 'contact_id',
-        accessor: 'contact_id',
+        id: 'contactId',
+        accessor: 'contactId',
         Cell: ContactsListFieldCell,
         disableSortBy: true,
         width: 120,
@@ -140,8 +140,8 @@ export const useJournalTableEntriesColumns = () => {
         ? [
             {
               Header: intl.get('project'),
-              id: 'project_id',
-              accessor: 'project_id',
+              id: 'projectId',
+              accessor: 'projectId',
               Cell: ProjectsListFieldCell,
               className: 'project_id',
               disableSortBy: true,
@@ -154,8 +154,8 @@ export const useJournalTableEntriesColumns = () => {
         ? [
             {
               Header: intl.get('branch'),
-              id: 'branch_id',
-              accessor: 'branch_id',
+              id: 'branchId',
+              accessor: 'branchId',
               Cell: BranchesListFieldCell,
               disableSortBy: true,
               width: 120,
@@ -199,7 +199,7 @@ export function JournalExchangeRateInputField({ ...props }) {
   }
   return (
     <ExchangeRateInputGroup
-      fromCurrency={values.currency_code}
+      fromCurrency={values.currencyCode}
       toCurrency={baseCurrency}
       {...props}
     />
@@ -224,7 +224,7 @@ export const JournalSyncIncrementSettingsToForm = R.compose(
     if (!journalAutoIncrement) return null;
 
     setFieldValue(
-      'journal_number',
+      'journalNumber',
       transactionNumber(journalNumberPrefix, journalNextNumber),
     );
   }, [

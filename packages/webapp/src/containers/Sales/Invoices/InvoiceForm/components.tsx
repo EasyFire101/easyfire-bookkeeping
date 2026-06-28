@@ -40,8 +40,8 @@ const InvoiceExchangeRateInputFieldRoot = ({ ...props }) => {
   }
   return (
     <ExchangeRateInputGroup
-      name={'exchange_rate'}
-      fromCurrency={values.currency_code}
+      name={'exchangeRate'}
+      fromCurrency={values.currencyCode}
       toCurrency={baseCurrency}
       formGroupProps={{ label: ' ', inline: true }}
       withPopoverRecalcConfirm
@@ -84,7 +84,7 @@ export const InvoiceNoSyncSettingsToForm = R.compose(
     if (!invoiceAutoIncrement) return null;
 
     setFieldValue(
-      'invoice_no',
+      'invoiceNo',
       transactionNumber(invoiceNumberPrefix, invoiceNextNumber),
     );
   }, [setFieldValue, invoiceNumberPrefix, invoiceNextNumber]);

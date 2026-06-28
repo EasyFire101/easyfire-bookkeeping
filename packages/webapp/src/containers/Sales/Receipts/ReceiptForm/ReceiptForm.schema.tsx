@@ -5,17 +5,17 @@ import { DATATYPES_LENGTH } from '@/constants/dataTypes';
 import { isBlank } from '@/utils';
 
 const Schema = Yup.object().shape({
-  customer_id: Yup.string().label(intl.get('customer_name_')).required(),
-  receipt_date: Yup.date().required().label(intl.get('receipt_date_')),
-  receipt_number: Yup.string()
+  customerId: Yup.string().label(intl.get('customer_name_')).required(),
+  receiptDate: Yup.date().required().label(intl.get('receipt_date_')),
+  receiptNumber: Yup.string()
     .nullable()
     .max(DATATYPES_LENGTH.STRING)
     .label(intl.get('receipt_no_')),
-  deposit_account_id: Yup.number()
+  depositAccountId: Yup.number()
     .required()
     .label(intl.get('deposit_account_')),
-  reference_no: Yup.string().min(1).max(DATATYPES_LENGTH.STRING),
-  receipt_message: Yup.string()
+  referenceNo: Yup.string().min(1).max(DATATYPES_LENGTH.STRING),
+  receiptMessage: Yup.string()
     .trim()
     .min(1)
     .max(DATATYPES_LENGTH.STRING)
@@ -26,9 +26,9 @@ const Schema = Yup.object().shape({
     .max(DATATYPES_LENGTH.TEXT)
     .label(intl.get('note')),
   closed: Yup.boolean(),
-  branch_id: Yup.string(),
-  warehouse_id: Yup.string(),
-  exchange_rate: Yup.number(),
+  branchId: Yup.string(),
+  warehouseId: Yup.string(),
+  exchangeRate: Yup.number(),
   entries: Yup.array().of(
     Yup.object().shape({
       quantity: Yup.number()
@@ -39,7 +39,7 @@ const Schema = Yup.object().shape({
           then: Yup.number().required(),
         }),
       rate: Yup.number().nullable().max(DATATYPES_LENGTH.INT_10),
-      item_id: Yup.number()
+      itemId: Yup.number()
         .nullable()
         .when(['quantity', 'rate'], {
           is: (quantity, rate) => !isBlank(quantity) && !isBlank(rate),

@@ -1,4 +1,4 @@
-// @ts-nocheck
+import React from 'react';
 import styled from 'styled-components';
 
 import { Card } from '@/components';
@@ -12,22 +12,19 @@ import { usePaymentReceiveDetailContext } from './PaymentReceiveDetailProvider';
 
 /**
  * Payment receive GL entries table panel.
- * @returns {React.JSX}
  */
 export function PaymentReceiveGLEntriesPanel() {
   const { paymentReceiveId } = usePaymentReceiveDetailContext();
 
   // Handle fetch transaction by reference.
-  const {
-    data: { transactions },
-    isLoading: isTransactionsLoading,
-  } = useTransactionsByReference(
+  const { data, isLoading: isTransactionsLoading } = useTransactionsByReference(
     {
-      reference_id: paymentReceiveId,
-      reference_type: 'paymentReceive',
+      referenceId: paymentReceiveId as number,
+      referenceType: 'PaymentReceive',
     },
     { enabled: !!paymentReceiveId },
   );
+  const transactions = data?.transactions ?? [];
 
   return (
     <PaymentReceiveGLEntriesRoot>

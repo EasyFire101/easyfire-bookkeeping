@@ -65,8 +65,8 @@ function ExpenseFormInner({
           }
         : {
             ...defaultExpense,
-            currency_code: baseCurrency,
-            payment_account_id: defaultTo(preferredPaymentAccount, ''),
+            currencyCode: baseCurrency,
+            paymentAccountId: defaultTo(preferredPaymentAccount, ''),
           }),
     }),
     [expense, baseCurrency, preferredPaymentAccount],
@@ -100,7 +100,7 @@ function ExpenseFormInner({
           isNewMode
             ? 'the_expense_has_been_created_successfully'
             : 'the_expense_has_been_edited_successfully',
-          { number: values.payment_account_id },
+          { number: values.paymentAccountId },
         ),
         intent: Intent.SUCCESS,
       });

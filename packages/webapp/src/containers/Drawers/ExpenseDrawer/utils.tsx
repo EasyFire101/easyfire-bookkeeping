@@ -1,4 +1,3 @@
-// @ts-nocheck
 import React from 'react';
 import intl from 'react-intl-universal';
 
@@ -11,15 +10,14 @@ import { getColumnWidth } from '@/utils';
  */
 export const useExpenseReadEntriesColumns = () => {
   // Expense drawer context.
-  const {
-    expense: { categories },
-  } = useExpenseDrawerContext();
+  const { expense } = useExpenseDrawerContext();
+  const categories = expense?.categories ?? [];
 
   return React.useMemo(
     () => [
       {
         Header: intl.get('expense_account'),
-        accessor: 'expense_account.name',
+        accessor: 'expenseAccount.name',
         Cell: TextOverviewTooltipCell,
         width: 110,
         disableSortBy: true,
@@ -36,7 +34,7 @@ export const useExpenseReadEntriesColumns = () => {
       },
       {
         Header: intl.get('amount'),
-        accessor: 'amount_formatted',
+        accessor: 'amountFormatted',
         width: getColumnWidth(categories, 'amount', {
           minWidth: 60,
           magicSpacing: 5,
@@ -46,6 +44,6 @@ export const useExpenseReadEntriesColumns = () => {
         align: 'right',
       },
     ],
-    [],
+    [categories],
   );
 };

@@ -1,6 +1,8 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { ItemEntryDto } from '@/modules/TransactionItemEntry/dto/ItemEntry.dto';
 import { AttachmentLinkDto } from '@/modules/Attachments/dtos/Attachment.dto';
+import { CustomerLinkDto } from '@/modules/Customers/dtos/CustomerLink.dto';
+import { BranchLinkDto } from '@/modules/Branches/dtos/BranchLink.dto';
 import { DiscountType } from '@/common/types/Discount';
 
 export class CreditNoteResponseDto {
@@ -70,6 +72,20 @@ export class CreditNoteResponseDto {
   isClosed: boolean;
 
   @ApiProperty({
+    description: 'Whether the credit note is draft',
+    example: false,
+    required: false,
+  })
+  isDraft?: boolean;
+
+  @ApiProperty({
+    description: 'Whether the credit note is published',
+    example: true,
+    required: false,
+  })
+  isPublished?: boolean;
+
+  @ApiProperty({
     description: 'The line items of the credit note',
     type: [ItemEntryDto],
   })
@@ -88,6 +104,20 @@ export class CreditNoteResponseDto {
     required: false,
   })
   branchId?: number;
+
+  @ApiProperty({
+    description: 'The nested branch summary',
+    type: BranchLinkDto,
+    required: false,
+  })
+  branch?: BranchLinkDto;
+
+  @ApiProperty({
+    description: 'The nested customer summary',
+    type: CustomerLinkDto,
+    required: false,
+  })
+  customer?: CustomerLinkDto;
 
   @ApiProperty({
     description: 'The attachments of the credit note',

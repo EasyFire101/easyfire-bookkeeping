@@ -204,10 +204,9 @@ export function useDeliverInvoice(
 
 export function useInvoice(
   invoiceId: number | null | undefined,
-  props?: UseQueryOptions<SaleInvoice, Error>,
+  props?: Omit<UseQueryOptions<SaleInvoice>, 'queryKey' | 'queryFn'>,
 ) {
-  const fetcher = useApiFetcher();
-
+  const fetcher = useApiFetcher({ enableCamelCaseTransform: true });
   return useQuery({
     ...props,
     queryKey: invoicesKeys.detail(invoiceId),
@@ -338,15 +337,18 @@ export function useInvoiceSMSDetail(
 }
 
 export function useInvoicePaymentTransactions(
-  invoiceId: number,
-  props?: UseQueryOptions<InvoicePaymentTransactionsResponse, Error>,
+  invoiceId: number | null | undefined,
+  props?: Omit<
+    UseQueryOptions<InvoicePaymentTransactionsResponse>,
+    'queryKey' | 'queryFn'
+  >,
 ) {
-  const fetcher = useApiFetcher();
-
+  const fetcher = useApiFetcher({ enableCamelCaseTransform: true });
   return useQuery({
     ...props,
     queryKey: invoicesKeys.paymentTransactions(invoiceId),
-    queryFn: () => fetchInvoicePayments(fetcher, invoiceId),
+    queryFn: () => fetchInvoicePayments(fetcher, invoiceId!),
+    enabled: invoiceId != null,
   });
 }
 

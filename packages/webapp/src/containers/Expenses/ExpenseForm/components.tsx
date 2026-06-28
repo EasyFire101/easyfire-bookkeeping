@@ -100,8 +100,8 @@ export function useExpenseFormTableColumns({ landedCost }) {
     () => [
       {
         Header: ExpenseCategoryHeaderCell,
-        id: 'expense_account_id',
-        accessor: 'expense_account_id',
+        id: 'expenseAccountId',
+        accessor: 'expenseAccountId',
         Cell: AccountsListFieldCell,
         className: 'expense_account_id',
         disableSortBy: true,
@@ -128,8 +128,8 @@ export function useExpenseFormTableColumns({ landedCost }) {
         ? [
             {
               Header: intl.get('project'),
-              id: 'project_id',
-              accessor: 'project_id',
+              id: 'projectId',
+              accessor: 'projectId',
               Cell: ProjectsListFieldCell,
               className: 'project_id',
               disableSortBy: true,
@@ -142,7 +142,7 @@ export function useExpenseFormTableColumns({ landedCost }) {
         ? [
             {
               Header: LandedCostHeaderCell,
-              accessor: 'landed_cost',
+              accessor: 'landedCost',
               Cell: CheckBoxFieldCell,
               disableSortBy: true,
               disableResizing: true,
@@ -180,7 +180,7 @@ export function ExpensesExchangeRateInputField({ ...props }) {
   }
   return (
     <ExchangeRateInputGroup
-      fromCurrency={values.currency_code}
+      fromCurrency={values.currencyCode}
       toCurrency={baseCurrency}
       {...props}
     />

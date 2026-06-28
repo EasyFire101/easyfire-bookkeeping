@@ -157,7 +157,7 @@ export function useBill(
   id: number | null | undefined,
   props?: Omit<UseQueryOptions<Bill>, 'queryKey' | 'queryFn'>,
 ) {
-  const fetcher = useApiFetcher();
+  const fetcher = useApiFetcher({ enableCamelCaseTransform: true });
   return useQuery({
     ...props,
     queryKey: billsKeys.detail(id),
@@ -196,7 +196,7 @@ export function useBillPaymentTransactions(
     'queryKey' | 'queryFn'
   >,
 ) {
-  const fetcher = useApiFetcher();
+  const fetcher = useApiFetcher({ enableCamelCaseTransform: true });
   return useQuery({
     ...props,
     queryKey: billsKeys.paymentTransactions(id),

@@ -19,7 +19,7 @@ export function PaymentMadeFormBody() {
             onUpdateData={(newEntries) => {
               setFieldValue('entries', newEntries);
             }}
-            currencyCode={values.currency_code}
+            currencyCode={values.currencyCode}
           />
         )}
       </FastField>

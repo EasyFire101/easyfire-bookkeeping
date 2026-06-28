@@ -1,7 +1,5 @@
-// @ts-nocheck
 import React from 'react';
 import styled from 'styled-components';
-
 import {
   T,
   TotalLineTextStyle,
@@ -13,10 +11,13 @@ import { usePaymentReceiveDetailContext } from './PaymentReceiveDetailProvider';
 
 /**
  * Payment receive detail table footer.
- * @returns {React.JSX}
  */
 export function PaymentReceiveDetailTableFooter() {
   const { paymentReceive } = usePaymentReceiveDetailContext();
+
+  if (!paymentReceive) {
+    return null;
+  }
 
   return (
     <PaymentReceiveDetailsFooterRoot>
@@ -26,11 +27,11 @@ export function PaymentReceiveDetailTableFooter() {
       >
         <TotalLine
           title={<T id={'payment_receive.details.subtotal'} />}
-          value={paymentReceive.subtotal_formatted}
+          value={paymentReceive.subtotalFormatted}
         />
         <TotalLine
           title={<T id={'payment_receive.details.total'} />}
-          value={paymentReceive.formatted_amount}
+          value={paymentReceive.formattedAmount}
           borderStyle={TotalLineBorderStyle.DoubleDark}
           textStyle={TotalLineTextStyle.Bold}
         />

@@ -41,7 +41,7 @@ export function MakeJournalEntriesField() {
             defaultEntry={defaultEntry}
             initialLinesNumber={MIN_LINES_NUMBER}
             error={error}
-            currencyCode={values.currency_code}
+            currencyCode={values.currencyCode}
           />
         )}
       </FastField>

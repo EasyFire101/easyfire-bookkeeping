@@ -60,21 +60,21 @@ export function ExpenseFormHeader() {
 
   return (
     <Stack spacing={18} flex={1} className={fieldsClassName}>
-      <FastField name={'payment_date'}>
+      <FastField name={'paymentDate'}>
         {({ form, field: { value }, meta: { error, touched } }) => (
           <FormGroup
             label={intl.get('payment_date')}
             labelInfo={<Hint />}
             className={classNames('form-group--select-list', Classes.FILL)}
             intent={inputIntent({ error, touched })}
-            helperText={<ErrorMessage name="payment_date" />}
+            helperText={<ErrorMessage name="paymentDate" />}
             inline={true}
           >
             <DateInput
               {...momentFormatter('YYYY/MM/DD')}
               value={tansformDateValue(value)}
               onChange={handleDateChange((formattedDate) => {
-                form.setFieldValue('payment_date', formattedDate);
+                form.setFieldValue('paymentDate', formattedDate);
               })}
               popoverProps={{ position: Position.BOTTOM, minimal: true }}
             />
@@ -83,7 +83,7 @@ export function ExpenseFormHeader() {
       </FastField>
 
       <FFormGroup
-        name={'payment_account_id'}
+        name={'paymentAccountId'}
         items={accounts}
         label={intl.get('payment_account')}
         labelInfo={<FieldRequiredHint />}
@@ -92,7 +92,7 @@ export function ExpenseFormHeader() {
         shouldUpdate={accountsFieldShouldUpdate}
       >
         <AccountsSelect
-          name={'payment_account_id'}
+          name={'paymentAccountId'}
           items={accounts}
           placeholder={<T id={'select_payment_account'} />}
           filterByTypes={SUPPORTED_EXPENSE_PAYMENT_ACCOUNT_TYPES}
@@ -104,14 +104,14 @@ export function ExpenseFormHeader() {
       </FFormGroup>
 
       <FFormGroup
-        name={'currency_code'}
+        name={'currencyCode'}
         label={intl.get('currency')}
         className={classNames(Classes.FILL)}
         inline={true}
         fastField={true}
       >
         <FSelect
-          name={'currency_code'}
+          name={'currencyCode'}
           items={currencies}
           valueAccessor={'currency_code'}
           textAccessor={'currency_code'}
@@ -124,18 +124,18 @@ export function ExpenseFormHeader() {
 
       {/* ----------- Exchange rate ----------- */}
       <ExpensesExchangeRateInputField
-        name={'exchange_rate'}
+        name={'exchangeRate'}
         formGroupProps={{ label: ' ', inline: true }}
       />
 
       {/* ----------- Reference No. ----------- */}
       <FFormGroup
-        name={'reference_no'}
+        name={'referenceNo'}
         label={intl.get('reference_no')}
         inline={true}
         fastField
       >
-        <FInputGroup minimal={true} name={'reference_no'} fastField />
+        <FInputGroup minimal={true} name={'referenceNo'} fastField />
       </FFormGroup>
 
       {/* ----------- Customer ----------- */}
@@ -156,13 +156,13 @@ function ExpenseFormCustomerSelect() {
       label={intl.get('customer')}
       labelInfo={<Hint />}
       inline={true}
-      name={'customer_id'}
+      name={'customerId'}
       fastField={true}
       shouldUpdateDeps={{ items: customers }}
       shouldUpdate={customersFieldShouldUpdate}
     >
       <CustomersSelect
-        name={'customer_id'}
+        name={'customerId'}
         items={customers}
         placeholder={<T id={'select_customer_account'} />}
         allowCreate={true}

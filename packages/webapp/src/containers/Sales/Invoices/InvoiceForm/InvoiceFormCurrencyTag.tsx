@@ -11,7 +11,7 @@ import { useInvoiceFormContext } from './InvoiceFormProvider';
 export function InvoiceFormCurrencyTag() {
   const { isForeignCustomer } = useInvoiceFormContext();
   const {
-    values: { currency_code },
+    values: { currencyCode },
   } = useFormikContext();
 
   if (!isForeignCustomer) {
@@ -19,7 +19,7 @@ export function InvoiceFormCurrencyTag() {
   }
   return (
     <BaseCurrencyRoot>
-      <BaseCurrency currency={currency_code} />
+      <BaseCurrency currency={currencyCode} />
     </BaseCurrencyRoot>
   );
 }

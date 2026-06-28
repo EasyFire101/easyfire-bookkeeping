@@ -9,7 +9,7 @@ import { useCurrentOrganizationBaseCurrency } from '@/hooks/query';
 import { usePaymentMadeIsForeignCustomer } from './utils';
 
 function BillNumberAccessor(row) {
-  return row?.bill_no ? row?.bill_no : '-';
+  return row?.billNo ? row?.billNo : '-';
 }
 
 function BillDateCell({ value }) {
@@ -20,7 +20,7 @@ function BillDateCell({ value }) {
  * Mobey table cell.
  */
 function MoneyTableCell({ row: { original }, value }) {
-  return <Money amount={value} currency={original.currency_code} />;
+  return <Money amount={value} currency={original.currencyCode} />;
 }
 
 /**
@@ -31,8 +31,8 @@ export function usePaymentMadeEntriesTableColumns() {
     () => [
       {
         Header: 'Bill date',
-        id: 'bill_date',
-        accessor: 'bill_date',
+        id: 'billDate',
+        accessor: 'billDate',
         Cell: BillDateCell,
         disableSortBy: true,
         width: 120,
@@ -52,14 +52,14 @@ export function usePaymentMadeEntriesTableColumns() {
       },
       {
         Header: intl.get('amount_due'),
-        accessor: 'due_amount',
+        accessor: 'dueAmount',
         Cell: MoneyTableCell,
         disableSortBy: true,
         width: 150,
       },
       {
         Header: intl.get('payment_amount'),
-        accessor: 'payment_amount',
+        accessor: 'paymentAmount',
         Cell: MoneyFieldCell,
         disableSortBy: true,
         width: 150,
@@ -85,7 +85,7 @@ export function PaymentMadeExchangeRateInputField({ ...props }) {
   }
   return (
     <ExchangeRateInputGroup
-      fromCurrency={values.currency_code}
+      fromCurrency={values.currencyCode}
       toCurrency={baseCurrency}
       {...props}
     />

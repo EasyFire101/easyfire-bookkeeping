@@ -1,4 +1,3 @@
-// @ts-nocheck
 import React from 'react';
 
 import { CommercialDocEntriesTable } from '@/components';
@@ -9,9 +8,8 @@ import { useBillReadonlyEntriesTableColumns } from './utils';
 import { TableStyle } from '@/constants';
 
 export function BillDetailTable() {
-  const {
-    bill: { entries },
-  } = useBillDrawerContext();
+  const { bill } = useBillDrawerContext();
+  const entries = bill?.entries ?? [];
 
   // Retrieve bill readonly entries table columns.
   const columns = useBillReadonlyEntriesTableColumns();
@@ -22,7 +20,7 @@ export function BillDetailTable() {
       data={entries}
       initialHiddenColumns={
         // If any entry has no discount, hide the discount column.
-        entries?.some((e) => e.discount_formatted) ? [] : ['discount']
+        entries?.some((e) => e.discountFormatted) ? [] : ['discount']
       }
       styleName={TableStyle.Constrant}
     />
