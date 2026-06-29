@@ -131,11 +131,10 @@ export function useFetchItemRow({ landedCost, itemType, notifyNewRow }) {
         rate: price,
         description,
         quantity: 1,
-        tax_rate_id: taxRateId,
         ...(landedCost
           ? {
-              landed_cost: false,
-              landed_cost_disabled: landedCostDisabled,
+              landedCost: false,
+              landedCostDisabled: landedCostDisabled,
             }
           : {}),
         taxRateId,
@@ -190,11 +189,11 @@ export const assignEntriesTaxRate = R.curry((taxRates, entries) => {
   const taxRatesById = keyBy(taxRates, 'id');
 
   return entries.map((entry) => {
-    const taxRate = taxRatesById[entry.tax_rate_id];
+    const taxRate = taxRatesById[entry.taxRateId];
 
     return {
       ...entry,
-      tax_rate: taxRate?.rate || 0,
+      taxRate: taxRate?.rate || 0,
     };
   });
 });
@@ -209,12 +208,12 @@ export const assignEntriesTaxAmount = R.curry(
   (isInclusiveTax: boolean, entries) => {
     return entries.map((entry) => {
       const taxAmount = isInclusiveTax
-        ? getInclusiveTaxAmount(entry.amount, entry.tax_rate)
-        : getExlusiveTaxAmount(entry.amount, entry.tax_rate);
+        ? getInclusiveTaxAmount(entry.amount, entry.taxRate)
+        : getExlusiveTaxAmount(entry.amount, entry.taxRate);
 
       return {
         ...entry,
-        tax_amount: taxAmount,
+        taxAmount,
       };
     });
   },
@@ -254,7 +253,7 @@ export const useComposeRowsOnEditTableCell = () => {
         assignEntriesTaxAmount(isInclusiveTax),
         assignEntriesTaxRate(taxRates),
         orderingLinesIndexes,
-        updateAutoAddNewLine(defaultEntry, ['item_id']),
+        updateAutoAddNewLine(defaultEntry, ['itemId']),
         updateItemsEntriesTotal,
         updateTableCell(rowIndex, columnId, value),
       )(localValue);
@@ -295,13 +294,13 @@ export const aggregateItemEntriesTaxRates = R.curry(
     const taxRatesById = keyBy(taxRates, 'id');
 
     // Calculate the total tax amount of invoice entries.
-    const filteredEntries = entries.filter((e) => e.tax_rate_id);
-    const groupedTaxRates = groupBy(filteredEntries, 'tax_rate_id');
+    const filteredEntries = entries.filter((e) => e.taxRateId);
+    const groupedTaxRates = groupBy(filteredEntries, 'taxRateId');
 
     return Object.keys(groupedTaxRates).map((taxRateId) => {
       const taxRate = taxRatesById[taxRateId];
       const taxRates = groupedTaxRates[taxRateId];
-      const totalTaxAmount = sumBy(taxRates, 'tax_amount');
+      const totalTaxAmount = sumBy(taxRates, 'taxAmount');
       const taxAmountFormatted = formattedAmount(totalTaxAmount, currencyCode);
 
       return {

@@ -1,4 +1,3 @@
-// @ts-nocheck
 import React from 'react';
 import styled from 'styled-components';
 import { useFormikContext } from 'formik';
@@ -10,14 +9,18 @@ import {
   TotalLineTextStyle,
   FormatNumber,
 } from '@/components';
-import { usePaymentMadeExcessAmount, usePaymentMadeTotals } from './utils';
+import {
+  usePaymentMadeExcessAmount,
+  usePaymentMadeTotals,
+  type PaymentMadeFormValues,
+} from './utils';
 
 export function PaymentMadeFormFooterRight() {
   const { formattedSubtotal, formattedTotal } = usePaymentMadeTotals();
   const excessAmount = usePaymentMadeExcessAmount();
   const {
-    values: { currency_code: currencyCode },
-  } = useFormikContext();
+    values: { currencyCode },
+  } = useFormikContext<PaymentMadeFormValues>();
 
   return (
     <PaymentMadeTotalLines labelColWidth={'180px'} amountColWidth={'180px'}>
@@ -33,7 +36,9 @@ export function PaymentMadeFormFooterRight() {
       />
       <TotalLine
         title={'Excess Amount'}
-        value={<FormatNumber value={excessAmount} currency={currencyCode} />}
+        value={
+          <FormatNumber value={excessAmount} currency={currencyCode} noZero={false} />
+        }
         textStyle={TotalLineTextStyle.Regular}
       />
     </PaymentMadeTotalLines>

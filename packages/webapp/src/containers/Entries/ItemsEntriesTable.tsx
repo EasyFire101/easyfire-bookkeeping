@@ -1,10 +1,8 @@
 // @ts-nocheck
 import React, { useCallback } from 'react';
 import classNames from 'classnames';
-
 import { CLASSES } from '@/constants/classes';
 import { DataTableEditable } from '@/components';
-
 import { useEditableItemsEntriesColumns } from './components';
 import {
   useFetchItemRow,
@@ -91,7 +89,7 @@ function ItemEntriesTableRoot() {
   // Handles the editor data update.
   const handleUpdateData = useCallback(
     (rowIndex, columnId, value) => {
-      if (columnId === 'item_id') {
+      if (columnId === 'itemId') {
         setItemRow({ rowIndex, columnId, itemId: value });
       }
       const newRows = composeRowsOnEditCell(rowIndex, columnId, value);
@@ -121,7 +119,7 @@ function ItemEntriesTableRoot() {
         errors: errors || [],
         updateData: handleUpdateData,
         removeRow: handleRemoveRow,
-        autoFocus: ['item_id', 0],
+        autoFocus: ['itemId', 0],
         currencyCode,
       }}
     />
@@ -131,7 +129,7 @@ function ItemEntriesTableRoot() {
 ItemsEntriesTable.defaultProps = {
   defaultEntry: {
     index: 0,
-    item_id: '',
+    itemId: '',
     description: '',
     quantity: '',
     rate: '',

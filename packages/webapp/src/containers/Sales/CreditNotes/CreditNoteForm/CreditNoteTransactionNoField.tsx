@@ -1,6 +1,7 @@
 import React from 'react';
 import { Position, ControlGroup } from '@blueprintjs/core';
 import { useFormikContext } from 'formik';
+import intl from 'react-intl-universal';
 import {
   FieldRequiredHint,
   InputPrependButton,
@@ -11,13 +12,11 @@ import {
 } from '@/components';
 import { withSettings } from '@/containers/Settings/withSettings';
 import { withDialogActions } from '@/containers/Dialog/withDialogActions';
-import type { WithDialogActionsProps } from '@/containers/Dialog/withDialogActions';
-import intl from 'react-intl-universal';
 import { compose } from '@/utils';
+import type { WithDialogActionsProps } from '@/containers/Dialog/withDialogActions';
 import type { CreditNoteFormValues } from './utils';
 
-type CreditNoteTransactionNoFieldProps = {
-  openDialog: WithDialogActionsProps['openDialog'];
+interface CreditNoteTransactionNoFieldProps extends Pick<WithDialogActionsProps, 'openDialog'> {
   creditAutoIncrement?: boolean;
 };
 
@@ -68,7 +67,6 @@ const CreditNoteTransactionNoFieldInner = ({
       <ControlGroup fill={true}>
         <FInputGroup
           name={'creditNoteNumber'}
-          value={values.creditNoteNumber}
           asyncControl={true}
           onBlur={handleCreditNoBlur}
           onChange={() => {}}

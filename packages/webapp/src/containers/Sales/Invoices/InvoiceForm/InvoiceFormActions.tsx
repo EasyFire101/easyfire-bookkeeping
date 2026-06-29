@@ -5,8 +5,8 @@ import { InclusiveButtonOptions } from './constants';
 import { FFormGroup, FSelect } from '@/components';
 import { EntriesActionsBar } from '@/containers/Entries/EntriesActionBar';
 import { composeEntriesOnEditInclusiveTax } from './utils';
-import type { InvoiceFormValues } from './utils';
 import { TaxType } from '@/interfaces/TaxRates';
+import type { InvoiceFormValues } from './utils';
 
 /**
  * Invoice form actions.

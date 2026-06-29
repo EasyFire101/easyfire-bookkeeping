@@ -99,9 +99,9 @@ export function useEditableItemsEntriesColumns() {
   return React.useMemo(
     () => [
       {
-        id: 'item_id',
+        id: 'itemId',
         Header: ItemHeaderCell,
-        accessor: 'item_id',
+        accessor: 'itemId',
         Cell: ItemsListCell,
         disableSortBy: true,
         width: 130,
@@ -136,7 +136,7 @@ export function useEditableItemsEntriesColumns() {
         ? [
             {
               Header: 'Tax rate',
-              accessor: 'tax_rate_id',
+              accessor: 'taxRateId',
               Cell: TaxRatesSuggestInputCell,
               disableSortBy: true,
               width: 110,
@@ -163,10 +163,10 @@ export function useEditableItemsEntriesColumns() {
         ? [
             {
               Header: LandedCostHeaderCell,
-              accessor: 'landed_cost',
+              accessor: 'landedCost',
               Cell: CheckBoxFieldCell,
               width: 100,
-              disabledAccessor: 'landed_cost_disabled',
+              disabledAccessor: 'landedCostDisabled',
               disableSortBy: true,
               disableResizing: true,
               align: Align.Center,

@@ -1,4 +1,3 @@
-// @ts-nocheck
 import React from 'react';
 import styled from 'styled-components';
 import { useFormikContext } from 'formik';
@@ -8,14 +7,15 @@ import {
   useVendorCreditDiscountAmountFormatted,
   useVendorCreditSubtotalFormatted,
   useVendorCreditTotalFormatted,
+  type VendorCreditFormValues,
 } from './utils';
 import { DiscountTotalLine } from '@/containers/Sales/Invoices/InvoiceForm/DiscountTotalLine';
 import { AdjustmentTotalLine } from '@/containers/Sales/Invoices/InvoiceForm/AdjustmentTotalLine';
 
 export function VendorCreditNoteFormFooterRight() {
   const {
-    values: { currency_code },
-  } = useFormikContext();
+    values: { currencyCode },
+  } = useFormikContext<VendorCreditFormValues>();
   const totalFormatted = useVendorCreditTotalFormatted();
   const subtotalFormatted = useVendorCreditSubtotalFormatted();
 
@@ -32,7 +32,7 @@ export function VendorCreditNoteFormFooterRight() {
         value={subtotalFormatted}
       />
       <DiscountTotalLine
-        currencyCode={currency_code}
+        currencyCode={currencyCode}
         discountAmount={discountAmountFormatted}
       />
       <AdjustmentTotalLine adjustmentAmount={adjustmentAmountFormatted} />

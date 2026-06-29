@@ -1,4 +1,3 @@
-// @ts-nocheck
 import React from 'react';
 import { Alignment, NavbarGroup, Classes } from '@blueprintjs/core';
 import { useSetPrimaryBranchToForm } from './utils';
@@ -15,7 +14,6 @@ import { Features } from '@/constants';
 
 /**
  * Payment made from top bar.
- * @returns
  */
 export function PaymentMadeFormTopBar() {
   // Features guard.

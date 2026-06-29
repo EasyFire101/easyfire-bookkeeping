@@ -88,7 +88,7 @@ export function useEstimate(
   id: number | null | undefined,
   props?: Omit<UseQueryOptions<SaleEstimate>, 'queryKey' | 'queryFn'>,
 ) {
-  const fetcher = useApiFetcher();
+  const fetcher = useApiFetcher({ enableCamelCaseTransform: true });
   return useQuery({
     ...props,
     queryKey: estimatesKeys.detail(id),

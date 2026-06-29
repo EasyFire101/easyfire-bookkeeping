@@ -1,10 +1,8 @@
-// @ts-nocheck
 import React from 'react';
 import {
   Alignment,
   NavbarGroup,
   NavbarDivider,
-  Button,
   Classes,
 } from '@blueprintjs/core';
 import {
@@ -13,7 +11,6 @@ import {
 } from './utils';
 import { useFeatureCan } from '@/hooks/state';
 import {
-  Icon,
   BranchSelect,
   FeatureCan,
   WarehouseSelect,
@@ -26,8 +23,7 @@ import { useVendorCreditNoteFormContext } from './VendorCreditNoteFormProvider';
 import { Features } from '@/constants';
 
 /**
- * Vendor Credit note form topbar .
- * @returns {JSX.Element}
+ * Vendor Credit note form topbar.
  */
 export function VendorCreditNoteFormTopBar() {
   // Features guard.
@@ -69,7 +65,7 @@ function VendorCreditNoteFormSelectBranch() {
     <DetailsBarSkeletonBase className={Classes.SKELETON} />
   ) : (
     <BranchSelect
-      name={'branch_id'}
+      name={'branchId'}
       branches={branches}
       input={FormBranchSelectButton}
       popoverProps={{ minimal: true }}
@@ -86,7 +82,7 @@ function VendorCreditFormSelectWarehouse() {
     <DetailsBarSkeletonBase className={Classes.SKELETON} />
   ) : (
     <WarehouseSelect
-      name={'warehouse_id'}
+      name={'warehouseId'}
       warehouses={warehouses}
       input={FormWarehouseSelectButton}
       popoverProps={{ minimal: true }}

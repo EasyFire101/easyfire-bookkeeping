@@ -1,4 +1,3 @@
-// @ts-nocheck
 import React from 'react';
 import intl from 'react-intl-universal';
 import moment from 'moment';
@@ -6,20 +5,31 @@ import { Money, ExchangeRateInputGroup } from '@/components';
 import { MoneyFieldCell } from '@/components/DataTableCells';
 import { useFormikContext } from 'formik';
 import { useCurrentOrganizationBaseCurrency } from '@/hooks/query';
-import { usePaymentMadeIsForeignCustomer } from './utils';
+import { usePaymentMadeIsForeignCustomer, type PaymentMadeFormValues } from './utils';
 
-function BillNumberAccessor(row) {
+type Row = {
+  billNo?: string;
+  currencyCode?: string;
+};
+
+function BillNumberAccessor(row: Row): string {
   return row?.billNo ? row?.billNo : '-';
 }
 
-function BillDateCell({ value }) {
-  return moment(value).format('YYYY MMM DD');
+function BillDateCell({ value }: { value: string }) {
+  return <span>{moment(value).format('YYYY MMM DD')}</span>;
 }
 
 /**
- * Mobey table cell.
+ * Money table cell.
  */
-function MoneyTableCell({ row: { original }, value }) {
+function MoneyTableCell({
+  row: { original },
+  value,
+}: {
+  row: { original: Row };
+  value: string | number;
+}) {
   return <Money amount={value} currency={original.currencyCode} />;
 }
 
@@ -69,13 +79,19 @@ export function usePaymentMadeEntriesTableColumns() {
   );
 }
 
+type ExchangeRateInputFieldProps = Omit<
+  React.ComponentProps<typeof ExchangeRateInputGroup>,
+  'fromCurrency' | 'toCurrency'
+> & { name?: string; formGroupProps?: { label: string; inline: boolean } };
+
 /**
- * payment made exchange rate input field.
- * @returns {JSX.Element}
+ * Payment made exchange rate input field.
  */
-export function PaymentMadeExchangeRateInputField({ ...props }) {
+export function PaymentMadeExchangeRateInputField(
+  props: ExchangeRateInputFieldProps,
+) {
   const baseCurrency = useCurrentOrganizationBaseCurrency();
-  const { values } = useFormikContext();
+  const { values } = useFormikContext<PaymentMadeFormValues>();
 
   const isForeignCustomer = usePaymentMadeIsForeignCustomer();
 
@@ -86,7 +102,7 @@ export function PaymentMadeExchangeRateInputField({ ...props }) {
   return (
     <ExchangeRateInputGroup
       fromCurrency={values.currencyCode}
-      toCurrency={baseCurrency}
+      toCurrency={baseCurrency ?? ''}
       {...props}
     />
   );

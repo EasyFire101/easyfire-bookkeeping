@@ -1,19 +1,16 @@
-import React, { useMemo } from 'react';
+import { useMemo } from 'react';
 import intl from 'react-intl-universal';
 import { Formik, Form, type FormikHelpers } from 'formik';
 import { Intent } from '@blueprintjs/core';
 import { useHistory } from 'react-router-dom';
 import { isEmpty } from 'lodash';
-import { CLASSES } from '@/constants/classes';
 import { css } from '@emotion/css';
-
 import { EditBillFormSchema, CreateBillFormSchema } from './BillForm.schema';
 import { BillFormHeader } from './BillFormHeader';
 import { BillFloatingActions } from './BillFloatingActions';
 import { BillFormFooter } from './BillFormFooter';
 import { BillFormBody as BillItemsEntriesEditor } from './BillItemsEntriesEditor';
 import { BillFormTopBar } from './BillFormTopBar';
-
 import { AppToaster, Box } from '@/components';
 import { PageForm } from '@/components/PageForm';
 import { useBillFormContext } from './BillFormProvider';

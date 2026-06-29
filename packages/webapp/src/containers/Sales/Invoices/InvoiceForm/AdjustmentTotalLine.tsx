@@ -1,9 +1,9 @@
-import type { CSSProperties } from 'react';
 import { css } from '@emotion/css';
 import { x } from '@xstyled/emotion';
 import clsx from 'classnames';
 import { FFormGroup, FInputGroup, TotalLinePrimitive } from '@/components';
 import { useIsDarkMode } from '@/hooks/useDarkMode';
+import type { CSSProperties } from 'react';
 
 const borderColorStyle = (isDarkMode: boolean): CSSProperties =>
   ({

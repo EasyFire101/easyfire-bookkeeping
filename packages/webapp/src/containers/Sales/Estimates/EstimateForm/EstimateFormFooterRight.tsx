@@ -1,4 +1,3 @@
-import React from 'react';
 import styled from 'styled-components';
 import { useFormikContext } from 'formik';
 import { T, TotalLines, TotalLine, TotalLineTextStyle } from '@/components';
@@ -8,9 +7,9 @@ import {
   useEstimateSubtotalFormatted,
   useEstimateTotalFormatted,
 } from './utils';
-import type { EstimateFormValues } from './utils';
 import { AdjustmentTotalLine } from '../../Invoices/InvoiceForm/AdjustmentTotalLine';
 import { DiscountTotalLine } from '../../Invoices/InvoiceForm/DiscountTotalLine';
+import type { EstimateFormValues } from './utils';
 
 export function EstimateFormFooterRight() {
   const {

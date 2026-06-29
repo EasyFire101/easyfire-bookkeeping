@@ -3,6 +3,9 @@ import classNames from 'classnames';
 import { Position, Classes } from '@blueprintjs/core';
 import { useFormikContext } from 'formik';
 import { css } from '@emotion/css';
+import { useTheme } from '@emotion/react';
+import { Theme } from '@xstyled/emotion';
+import intl from 'react-intl-universal';
 import {
   FeatureCan,
   FFormGroup,
@@ -16,7 +19,6 @@ import {
   FDateInput,
 } from '@/components';
 import { customersFieldShouldUpdate } from './utils';
-import type { EstimateFormValues } from './utils';
 import { Features } from '@/constants';
 import { ProjectsSelect } from '@/containers/Projects/components';
 import {
@@ -26,9 +28,7 @@ import {
 import { EstimateFormEstimateNumberField } from './EstimateFormEstimateNumberField';
 import { useEstimateFormContext } from './EstimateFormProvider';
 import { useCustomerUpdateExRate } from '@/containers/Entries/withExRateItemEntriesPriceRecalc';
-import { useTheme } from '@emotion/react';
-import { Theme } from '@xstyled/emotion';
-import intl from 'react-intl-universal';
+import type { EstimateFormValues } from './utils';
 
 const getEstimateFieldsStyle = (theme: Theme) => css`
   .${theme.bpPrefix}-form-group {

@@ -1,4 +1,3 @@
-// @ts-nocheck
 import React from 'react';
 import classNames from 'classnames';
 import {
@@ -17,6 +16,7 @@ import { useHistory } from 'react-router-dom';
 import { useFormikContext } from 'formik';
 import { usePaymentMadeFormContext } from './PaymentMadeFormProvider';
 import { CLASSES } from '@/constants/classes';
+import type { PaymentMadeFormValues } from './utils';
 
 /**
  * Payment made floating actions bar.
@@ -26,34 +26,35 @@ export function PaymentMadeFloatingActions() {
   const history = useHistory();
 
   // Formik context.
-  const { isSubmitting, resetForm, submitForm } = useFormikContext();
+  const { isSubmitting, resetForm, submitForm } =
+    useFormikContext<PaymentMadeFormValues>();
 
   // Payment made form context.
   const { setSubmitPayload, paymentMadeId } = usePaymentMadeFormContext();
 
   // Handle submit button click.
-  const handleSubmitBtnClick = (event) => {
+  const handleSubmitBtnClick = () => {
     setSubmitPayload({ redirect: true });
   };
 
   // Handle clear button click.
-  const handleClearBtnClick = (event) => {
+  const handleClearBtnClick = () => {
     resetForm();
   };
 
   // Handle cancel button click.
-  const handleCancelBtnClick = (event) => {
+  const handleCancelBtnClick = () => {
     history.goBack();
   };
 
   // Handle submit & new button click.
-  const handleSubmitAndNewClick = (event) => {
+  const handleSubmitAndNewClick = () => {
     setSubmitPayload({ redirect: false, resetForm: true });
     submitForm();
   };
 
   // Handle submit & continue editing button click.
-  const handleSubmitContinueEditingBtnClick = (event) => {
+  const handleSubmitContinueEditingBtnClick = () => {
     setSubmitPayload({ redirect: false, publish: true });
     submitForm();
   };

@@ -188,7 +188,7 @@ export function useVendorCredit(
   props?: Omit<UseQueryOptions<VendorCredit>, 'queryKey' | 'queryFn'>,
   _requestProps?: unknown,
 ) {
-  const fetcher = useApiFetcher();
+  const fetcher = useApiFetcher({ enableCamelCaseTransform: true });
 
   return useQuery({
     ...props,

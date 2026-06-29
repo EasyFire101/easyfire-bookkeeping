@@ -214,7 +214,7 @@ export function useCreditNote(
   props?: Omit<UseQueryOptions<CreditNote>, 'queryKey' | 'queryFn'>,
   _requestProps?: Record<string, unknown>,
 ) {
-  const fetcher = useApiFetcher();
+  const fetcher = useApiFetcher({ enableCamelCaseTransform: true });
   return useQuery({
     ...props,
     queryKey: creditNotesKeys.detail(id),

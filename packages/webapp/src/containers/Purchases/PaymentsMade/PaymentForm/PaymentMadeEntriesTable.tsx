@@ -1,4 +1,3 @@
-// @ts-nocheck
 import React, { useCallback } from 'react';
 import classNames from 'classnames';
 import {
@@ -12,6 +11,13 @@ import { usePaymentMadeEntriesTableColumns } from './components';
 import { usePaymentMadeInnerContext } from './PaymentMadeInnerProvider';
 import { compose, updateTableCell } from '@/utils';
 import { useFormikContext } from 'formik';
+import type { PaymentMadeEntry, PaymentMadeFormValues } from './utils';
+
+type PaymentMadeEntriesTableProps = {
+  onUpdateData: (entries: PaymentMadeEntry[]) => void;
+  entries: PaymentMadeEntry[];
+  currencyCode: string;
+};
 
 /**
  * Payment made items table.
@@ -20,7 +26,7 @@ export function PaymentMadeEntriesTable({
   onUpdateData,
   entries,
   currencyCode,
-}) {
+}: PaymentMadeEntriesTableProps) {
   // Payment made inner context.
   const { isNewEntriesFetching } = usePaymentMadeInnerContext();
 
@@ -31,11 +37,11 @@ export function PaymentMadeEntriesTable({
   const {
     values: { vendorId },
     errors,
-  } = useFormikContext();
+  } = useFormikContext<PaymentMadeFormValues>();
 
   // Handle update data.
   const handleUpdateData = useCallback(
-    (rowIndex, columnId, value) => {
+    (rowIndex: number, columnId: string, value: unknown) => {
       const newRows = compose(updateTableCell(rowIndex, columnId, value))(
         entries,
       );
@@ -57,6 +63,7 @@ export function PaymentMadeEntriesTable({
 
   return (
     <CloudLoadingIndicator isLoading={isNewEntriesFetching}>
+      {/* @ts-expect-error DataTableEditable requires actions/name props not provided here */}
       <DataTableEditable
         progressBarLoading={isNewEntriesFetching}
         className={classNames(CLASSES.DATATABLE_EDITOR_ITEMS_ENTRIES)}
@@ -64,7 +71,7 @@ export function PaymentMadeEntriesTable({
         data={entries}
         spinnerProps={false}
         payload={{
-          errors: errors?.entries || [],
+          errors: (errors?.entries || []) as unknown[],
           updateData: handleUpdateData,
           currencyCode,
         }}
