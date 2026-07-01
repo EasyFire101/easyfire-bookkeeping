@@ -8,7 +8,6 @@ import {
 import type {
   ItemCategory,
   ItemCategoriesListResponse,
-  ItemsCategoriesListResult,
   CreateItemCategoryBody,
   EditItemCategoryBody,
 } from '@bigcapital/sdk-ts';
@@ -90,7 +89,7 @@ export function useItemsCategories(
     'queryKey' | 'queryFn' | 'select'
   >,
 ) {
-  const fetcher = useApiFetcher();
+  const fetcher = useApiFetcher({ enableCamelCaseTransform: true });
   return useQuery<
     ItemCategoriesListResponse,
     Error,
@@ -98,6 +97,8 @@ export function useItemsCategories(
   >({
     ...props,
     queryKey: [...itemsCategoriesKeys.all(), query],
+    // FIXME: `fetchItemCategories` ignores the `query` arg — preserved from
+    // the @ts-nocheck original.
     queryFn: () => fetchItemCategories(fetcher),
   });
 }

@@ -1,13 +1,14 @@
-// @ts-nocheck
 import React from 'react';
 import { ExchangeRateMutedField } from '@/components';
 import { useForeignAccount } from './utils';
 import { useFormikContext } from 'formik';
+import type { Account } from '@bigcapital/sdk-ts';
 import { useMoneyInFieldsContext } from './MoneyInFieldsProvider';
+import type { MoneyInFormValues } from './types';
 
 export function MoneyInExchangeRateField() {
   const { account } = useMoneyInFieldsContext();
-  const { values } = useFormikContext();
+  const { values } = useFormikContext<MoneyInFormValues>();
 
   const isForeigAccount = useForeignAccount();
 
@@ -15,12 +16,12 @@ export function MoneyInExchangeRateField() {
 
   return (
     <ExchangeRateMutedField
-      name={'exchange_rate'}
-      fromCurrency={values.currency_code}
-      toCurrency={account.currencyCode}
+      name={'exchangeRate'}
+      fromCurrency={values.currencyCode}
+      toCurrency={(account as Account | undefined)?.currencyCode}
       formGroupProps={{ label: '', inline: false }}
       date={values.date}
-      exchangeRate={values.exchange_rate}
+      exchangeRate={values.exchangeRate}
     />
   );
 }

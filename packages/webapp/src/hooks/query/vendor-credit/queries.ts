@@ -13,6 +13,8 @@ import type {
   CreateRefundVendorCreditBody,
   ApplyVendorCreditToBillsBody,
   ValidateBulkDeleteVendorCreditsResponse,
+  VendorCreditsListResponse,
+  VendorCredit,
 } from '@bigcapital/sdk-ts';
 import {
   fetchVendorCredits,
@@ -169,9 +171,9 @@ export function useValidateBulkDeleteVendorCredits(
  */
 export function useVendorCredits(
   query?: GetVendorCreditsQuery,
-  props?: Omit<UseQueryOptions<unknown>, 'queryKey' | 'queryFn'>,
+  props?: UseQueryOptions<VendorCreditsListResponse, Error>,
 ) {
-  const fetcher = useApiFetcher();
+  const fetcher = useApiFetcher({ enableCamelCaseTransform: true });
 
   return useQuery({
     ...props,

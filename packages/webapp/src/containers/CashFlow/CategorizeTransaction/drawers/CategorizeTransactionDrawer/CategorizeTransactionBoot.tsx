@@ -1,28 +1,32 @@
-// @ts-nocheck
 import React, { useMemo } from 'react';
 import { first } from 'lodash';
 import { DrawerLoading } from '@/components';
 import { useAccounts, useBranches } from '@/hooks/query';
 import { useFeatureCan } from '@/hooks/state';
 import { Features } from '@/constants';
-import { Spinner } from '@blueprintjs/core';
-import {
+import type { AccountsList, BranchesListResponse } from '@bigcapital/sdk-ts';
+import type {
   GetAutofillCategorizeTransaction,
-  useGetAutofillCategorizeTransaction,
 } from '@/hooks/query/banking';
+import { useGetAutofillCategorizeTransaction } from '@/hooks/query/banking';
 
 interface CategorizeTransactionBootProps {
   uncategorizedTransactionsIds: Array<number>;
-  children: React.ReactNode;
+  children?: React.ReactNode;
+}
+
+interface PrimaryBranch {
+  id: number;
+  primary?: boolean;
 }
 
 interface CategorizeTransactionBootValue {
-  branches: any;
-  accounts: any;
+  branches: BranchesListResponse | undefined;
+  accounts: AccountsList | undefined;
   isBranchesLoading: boolean;
   isAccountsLoading: boolean;
-  primaryBranch: any;
-  autofillCategorizeValues: null | GetAutofillCategorizeTransaction;
+  primaryBranch: PrimaryBranch | undefined;
+  autofillCategorizeValues: GetAutofillCategorizeTransaction | null | undefined;
   isAutofillCategorizeValuesLoading: boolean;
 }
 
@@ -36,7 +40,7 @@ const CategorizeTransactionBootContext =
  */
 function CategorizeTransactionBoot({
   uncategorizedTransactionsIds,
-  ...props
+  children,
 }: CategorizeTransactionBootProps) {
   // Detarmines whether the feature is enabled.
   const { featureCan } = useFeatureCan();
@@ -54,16 +58,16 @@ function CategorizeTransactionBoot({
   const {
     data: autofillCategorizeValues,
     isLoading: isAutofillCategorizeValuesLoading,
-  } = useGetAutofillCategorizeTransaction(uncategorizedTransactionsIds, {});
+  } = useGetAutofillCategorizeTransaction(uncategorizedTransactionsIds);
 
   // Retrieves the primary branch.
-  const primaryBranch = useMemo(
-    () => branches?.find((b) => b.primary) || first(branches),
-    [branches],
-  );
+  const primaryBranch = useMemo(() => {
+    const list = (branches ?? []) as Array<PrimaryBranch>;
+    return list.find((b) => b.primary) || first(list);
+  }, [branches]);
 
-  const provider = {
-    branches,
+  const provider: CategorizeTransactionBootValue = {
+    branches: branches as BranchesListResponse | undefined,
     accounts,
     isBranchesLoading,
     isAccountsLoading,
@@ -74,19 +78,16 @@ function CategorizeTransactionBoot({
   const isLoading =
     isBranchesLoading || isAccountsLoading || isAutofillCategorizeValuesLoading;
 
-  if (isLoading) {
-    <Spinner size={30} />;
-  }
   return (
     <DrawerLoading loading={isLoading}>
-      <CategorizeTransactionBootContext.Provider value={provider} {...props} />
+      <CategorizeTransactionBootContext.Provider value={provider}>
+        {children}
+      </CategorizeTransactionBootContext.Provider>
     </DrawerLoading>
   );
 }
 
 const useCategorizeTransactionBoot = () =>
-  React.useContext<CategorizeTransactionBootValue>(
-    CategorizeTransactionBootContext,
-  );
+  React.useContext(CategorizeTransactionBootContext);
 
 export { CategorizeTransactionBoot, useCategorizeTransactionBoot };

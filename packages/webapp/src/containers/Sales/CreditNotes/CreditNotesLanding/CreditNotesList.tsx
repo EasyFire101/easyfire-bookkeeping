@@ -1,29 +1,32 @@
-// @ts-nocheck
 import React from 'react';
-
 import '@/style/pages/CreditNote/List.scss';
-
 import { DashboardPageContent } from '@/components';
 import { CreditNotesActionsBar } from './CreditNotesActionsBar';
 import { CreditNotesDataTable } from './CreditNotesDataTable';
-
 import { withCreditNotes } from './withCreditNotes';
 import { withCreditNotesActions } from './withCreditNotesActions';
-
 import { CreditNotesListProvider } from './CreditNotesListProvider';
 import { CreditNotesListDrawers } from './CreditNotesListDrawers';
 import { CreditNotesListDialogs } from './CreditNotesListDialogs';
 import { transformTableStateToQuery, compose } from '@/utils';
+import type { WithCreditNotesProps } from './withCreditNotes';
+
+interface WithCreditNotesActionsProps {
+  resetCreditNotesTableState: () => void;
+}
+
+interface CreditNotesListProps
+  extends Pick<
+    WithCreditNotesProps,
+    'creditNoteTableState' | 'creditNoteTableStateChanged'
+  >,
+    WithCreditNotesActionsProps {}
 
 function CreditNotesListInner({
-  // #withCreditNotes
   creditNoteTableState,
   creditNoteTableStateChanged,
-
-  // #withCreditNotesActions
   resetCreditNotesTableState,
-}) {
-  // Resets the credit note table state once the page unmount.
+}: CreditNotesListProps) {
   React.useEffect(
     () => () => {
       resetCreditNotesTableState();

@@ -1,4 +1,3 @@
-// @ts-nocheck
 import React, { useCallback } from 'react';
 import { useHistory } from 'react-router-dom';
 
@@ -13,53 +12,66 @@ import {
 import { BillsEmptyStatus } from './BillsEmptyStatus';
 
 import { withBills } from './withBills';
+import type { WithBillsProps } from './withBills';
 import { withBillsActions } from './withBillsActions';
 import { withAlertActions } from '@/containers/Alert/withAlertActions';
+import type { WithAlertActionsProps } from '@/containers/Alert/withAlertActions';
 import { withDialogActions } from '@/containers/Dialog/withDialogActions';
+import type { WithDialogActionsProps } from '@/containers/Dialog/withDialogActions';
 import { withDrawerActions } from '@/containers/Drawer/withDrawerActions';
+import type { WithDrawerActionsProps } from '@/containers/Drawer/withDrawerActions';
 import { withSettings } from '@/containers/Settings/withSettings';
 
 import { useBillsTableColumns, ActionsMenu } from './components';
+import type { BillTableRow } from './components';
 import { useBillsListContext } from './BillsListProvider';
 import { useMemorizedColumnsWidths } from '@/hooks';
 
 import { compose } from '@/utils';
 import { DRAWERS } from '@/constants/drawers';
 
-/**
- * Bills transactions datatable.
- */
+interface WithBillsActionsProps {
+  setBillsTableState: (state: Record<string, any>) => void;
+  setBillsSelectedRows: (ids: number[]) => void;
+}
+
+interface WithSettingsProps {
+  billsTableSize?: string | null;
+}
+
+interface BillsDataTableProps
+  extends Pick<WithBillsProps, 'billsTableState'>,
+    WithBillsActionsProps,
+    WithAlertActionsProps,
+    WithDialogActionsProps,
+    WithDrawerActionsProps,
+    WithSettingsProps {}
+
 function BillsDataTable({
-  // #withBillsActions
   setBillsTableState,
   setBillsSelectedRows,
-
-  // #withBills
   billsTableState,
-
-  // #withAlerts
   openAlert,
-
-  // #withDialogActions
   openDialog,
-
-  // #withDrawerActions
   openDrawer,
-
-  // #withSettings
   billsTableSize,
-}) {
-  // Bills list context.
+}: BillsDataTableProps) {
   const { bills, pagination, isBillsLoading, isBillsFetching, isEmptyStatus } =
     useBillsListContext();
 
   const history = useHistory();
-
-  // Bills table columns.
   const columns = useBillsTableColumns();
 
   const handleFetchData = useCallback(
-    ({ pageIndex, pageSize, sortBy }) => {
+    ({
+      pageIndex,
+      pageSize,
+      sortBy,
+    }: {
+      pageSize: number;
+      pageIndex: number;
+      sortBy: Array<{ id: string; desc: boolean }>;
+    }) => {
       setBillsTableState({
         pageIndex,
         pageSize,
@@ -69,53 +81,47 @@ function BillsDataTable({
     [setBillsTableState],
   );
 
-  // Handle bill edit action.
-  const handleEditBill = (bill) => {
+  const handleEditBill = (bill: BillTableRow) => {
     history.push(`/bills/${bill.id}/edit`);
   };
 
-  // Handle convert to vendor credit.
-  const handleConvertToVendorCredit = ({ id }) => {
+  const handleConvertToVendorCredit = ({ id }: BillTableRow) => {
     history.push(`/vendor-credits/new?from_bill_id=${id}`, { billId: id });
   };
 
-  // Handle bill delete action.
-  const handleDeleteBill = (bill) => {
+  const handleDeleteBill = (bill: BillTableRow) => {
     openAlert('bill-delete', { billId: bill.id });
   };
 
-  // Handle bill open action.
-  const handleOpenBill = (bill) => {
+  const handleOpenBill = (bill: BillTableRow) => {
     openAlert('bill-open', { billId: bill.id });
   };
 
-  // Handle quick payment made action.
-  const handleQuickPaymentMade = ({ id }) => {
+  const handleQuickPaymentMade = ({ id }: BillTableRow) => {
     openDialog('quick-payment-made', { billId: id });
   };
 
-  // handle allocate landed cost.
-  const handleAllocateLandedCost = ({ id }) => {
+  const handleAllocateLandedCost = ({ id }: BillTableRow) => {
     openDialog('allocate-landed-cost', { billId: id });
   };
 
-  // Handle view detail bill.
-  const handleViewDetailBill = ({ id }) => {
+  const handleViewDetailBill = ({ id }: BillTableRow) => {
     openDrawer(DRAWERS.BILL_DETAILS, { billId: id });
   };
 
-  // Handle cell click.
-  const handleCellClick = (cell, event) => {
+  const handleCellClick = (cell: any, _event: React.MouseEvent) => {
     openDrawer(DRAWERS.BILL_DETAILS, { billId: cell.row.original.id });
   };
 
-  // Handle selected rows change.
-  const handleSelectedRowsChange = (selectedFlatRows) => {
-    const selectedIds = selectedFlatRows?.map((row) => row.original.id) || [];
-    setBillsSelectedRows(selectedIds);
-  };
+  const handleSelectedRowsChange = useCallback(
+    (selectedFlatRows: Array<{ original: BillTableRow }>) => {
+      const selectedIds =
+        selectedFlatRows?.map((row) => row.original.id) || [];
+      setBillsSelectedRows(selectedIds);
+    },
+    [setBillsSelectedRows],
+  );
 
-  // Local storage memorizing columns widths.
   const [initialColumnsWidths, , handleColumnResizing] =
     useMemorizedColumnsWidths(TABLES.BILLS);
 
@@ -167,7 +173,7 @@ export const BillsTable = compose(
   withAlertActions,
   withDrawerActions,
   withDialogActions,
-  withSettings(({ billsettings }) => ({
+  withSettings(({ billsettings }: any) => ({
     billsTableSize: billsettings?.tableSize,
   })),
 )(BillsDataTable);

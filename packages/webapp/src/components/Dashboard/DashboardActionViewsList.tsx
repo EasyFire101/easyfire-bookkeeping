@@ -19,10 +19,16 @@ import { Icon } from '@/components';
  */
 export function DashboardActionViewsList({
   resourceName,
-  allMenuItem,
+  allMenuItem = false,
   allMenuItemText,
-  views,
+  views = [],
   onChange,
+}: {
+  resourceName: string;
+  allMenuItem?: boolean;
+  allMenuItemText?: React.ReactNode;
+  views: any;
+  onChange?: (view: any) => void;
 }) {
   const handleClickViewItem = (view) => {
     onChange && onChange(view);

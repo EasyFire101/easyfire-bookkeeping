@@ -1,5 +1,13 @@
-// @ts-nocheck
 import React, { createContext, useState } from 'react';
+import type {
+  ManualJournal,
+  CreateManualJournalBody,
+  EditManualJournalBody,
+  AccountsList,
+  BranchesListResponse,
+  CurrenciesListResponse,
+  ContactsAutoCompleteResponse,
+} from '@bigcapital/sdk-ts';
 import { Features } from '@/constants';
 import { useFeatureCan } from '@/hooks/state';
 import { DashboardInsider } from '@/components';
@@ -15,12 +23,56 @@ import {
 } from '@/hooks/query';
 import { useProjects } from '@/containers/Projects/hooks';
 
-const MakeJournalFormContext = createContext();
+type MakeJournalFormSubmitPayload = {
+  redirect?: boolean;
+  publish?: boolean;
+  resetForm?: boolean;
+};
+
+type MakeJournalFormContextValue = {
+  accounts: AccountsList;
+  contacts: ContactsAutoCompleteResponse;
+  currencies: CurrenciesListResponse;
+  branches: BranchesListResponse;
+  manualJournal: ManualJournal | undefined;
+  projects: unknown[];
+  submitPayload: MakeJournalFormSubmitPayload;
+  isNewMode: boolean;
+
+  createJournalMutate: (values: CreateManualJournalBody) => Promise<void>;
+  editJournalMutate: (args: [number, EditManualJournalBody]) => Promise<void>;
+
+  isAccountsLoading: boolean;
+  isContactsLoading: boolean;
+  isCurrenciesLoading: boolean;
+  isJournalLoading: boolean;
+  isFeatureLoading: boolean;
+  isSettingsLoading: boolean;
+  isBranchesLoading: boolean;
+  isBranchesSuccess: boolean;
+  setSubmitPayload: React.Dispatch<
+    React.SetStateAction<MakeJournalFormSubmitPayload>
+  >;
+};
+
+type MakeJournalProviderProps = {
+  journalId?: number | string;
+  query?: Record<string, unknown>;
+  children?: React.ReactNode;
+};
+
+const MakeJournalFormContext = createContext<
+  MakeJournalFormContextValue | undefined
+>(undefined);
 
 /**
  * Make journal form provider.
  */
-function MakeJournalProvider({ journalId, query, ...props }) {
+function MakeJournalProvider({
+  journalId,
+  query,
+  ...props
+}: MakeJournalProviderProps) {
   // Features guard.
   const { featureCan } = useFeatureCan();
   const isBranchFeatureCan = featureCan(Features.Branches);
@@ -38,7 +90,7 @@ function MakeJournalProvider({ journalId, query, ...props }) {
 
   // Load the details of the given manual journal.
   const { data: manualJournal, isLoading: isJournalLoading } = useJournal(
-    journalId,
+    journalId ? Number(journalId) : undefined,
     {
       enabled: !!journalId,
     },
@@ -64,12 +116,14 @@ function MakeJournalProvider({ journalId, query, ...props }) {
   );
 
   // Submit form payload.
-  const [submitPayload, setSubmitPayload] = useState({});
+  const [submitPayload, setSubmitPayload] = useState<MakeJournalFormSubmitPayload>(
+    {},
+  );
 
-  // Determines whether the warehouse and branches are loading.
-  const isFeatureLoading = isBranchesLoading;
+  // Determines whether the branches are loading.
+  const isFeatureLoading = isBranchesLoading || isProjectsLoading;
 
-  const provider = {
+  const provider: MakeJournalFormContextValue = {
     accounts: accounts ?? [],
     contacts: contacts ?? [],
     currencies: currencies ?? [],
@@ -86,6 +140,7 @@ function MakeJournalProvider({ journalId, query, ...props }) {
     isJournalLoading,
     isFeatureLoading,
     isSettingsLoading,
+    isBranchesLoading,
     isBranchesSuccess,
     isNewMode: !journalId,
 
@@ -110,7 +165,14 @@ function MakeJournalProvider({ journalId, query, ...props }) {
   );
 }
 
-const useMakeJournalFormContext = () =>
-  React.useContext(MakeJournalFormContext);
+const useMakeJournalFormContext = (): MakeJournalFormContextValue => {
+  const ctx = React.useContext(MakeJournalFormContext);
+  if (!ctx) {
+    throw new Error(
+      'useMakeJournalFormContext must be used within a MakeJournalProvider',
+    );
+  }
+  return ctx;
+};
 
 export { MakeJournalProvider, useMakeJournalFormContext };

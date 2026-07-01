@@ -1,4 +1,3 @@
-// @ts-nocheck
 import React from 'react';
 import clsx from 'classnames';
 import { Intent } from '@blueprintjs/core';
@@ -15,16 +14,37 @@ import { BankAccountDataTable } from '../components/BankAccountDataTable';
 
 import { withSettings } from '@/containers/Settings/withSettings';
 import { withBankingActions } from '../../withBankingActions';
+import type { WithBankingActionsProps } from '../../withBankingActions';
 import { withBanking } from '../../withBanking';
+import type { WithBankingProps } from '../../withBanking';
 
 import { useMemorizedColumnsWidths } from '@/hooks';
 import { useAccountUncategorizedTransactionsContext } from '../AllTransactionsUncategorizedBoot';
 import { useExcludeUncategorizedTransaction } from '@/hooks/query/banking';
 import { useAccountUncategorizedTransactionsColumns } from './hooks';
+import type { UncategorizedTransactionRow } from './hooks';
 import { useAccountTransactionsContext } from '../AccountTransactionsProvider';
 
 import { compose } from '@/utils';
 import styles from './AccountTransactionsUncategorizedTable.module.scss';
+
+interface WithSettingsProps {
+  cashflowTansactionsTableSize?: string | null;
+}
+
+interface AccountTransactionsDataTableProps
+  extends WithSettingsProps,
+    Pick<
+      WithBankingProps,
+      'openMatchingTransactionAside' | 'enableMultipleCategorization'
+    >,
+    Pick<
+      WithBankingActionsProps,
+      | 'setUncategorizedTransactionIdForMatching'
+      | 'setUncategorizedTransactionsSelected'
+      | 'addTransactionsToCategorizeSelected'
+      | 'setTransactionsToCategorizeSelected'
+    > {}
 
 /**
  * Account transactions data table.
@@ -34,16 +54,14 @@ function AccountTransactionsDataTable({
   cashflowTansactionsTableSize,
 
   // #withBanking
-  openMatchingTransactionAside,
   enableMultipleCategorization,
 
   // #withBankingActions
   setUncategorizedTransactionIdForMatching,
   setUncategorizedTransactionsSelected,
-
   addTransactionsToCategorizeSelected,
   setTransactionsToCategorizeSelected,
-}) {
+}: AccountTransactionsDataTableProps) {
   // Retrieve table columns.
   const columns = useAccountUncategorizedTransactionsColumns();
   const { scrollableRef } = useAccountTransactionsContext();
@@ -63,24 +81,39 @@ function AccountTransactionsDataTable({
     useMemorizedColumnsWidths(TABLES.UNCATEGORIZED_BANK_TRANSACTION);
 
   // Handle cell click.
-  const handleCellClick = (cell) => {
+  const handleCellClick = (cell: {
+    row: { original: UncategorizedTransactionRow };
+  }) => {
+    const id = cell.row.original.id;
+    if (id == null) return;
     if (enableMultipleCategorization) {
-      addTransactionsToCategorizeSelected(cell.row.original.id);
+      addTransactionsToCategorizeSelected(id);
     } else {
-      setTransactionsToCategorizeSelected(cell.row.original.id);
+      setTransactionsToCategorizeSelected([id]);
     }
   };
   // Handles categorize button click.
-  const handleCategorizeBtnClick = (transaction) => {
+  const handleCategorizeBtnClick = (
+    transaction: UncategorizedTransactionRow,
+  ) => {
+    if (transaction.id == null) return;
     setUncategorizedTransactionIdForMatching(transaction.id);
   };
   // handles table selected rows change.
-  const handleSelectedRowsChange = (selected) => {
-    const transactionIds = selected.map((r) => r.original.id);
+  const handleSelectedRowsChange = (
+    selected: Array<{ original: UncategorizedTransactionRow }>,
+  ) => {
+    const transactionIds =
+      selected
+        ?.map((r) => r.original.id)
+        .filter((id): id is number => id != null) ?? [];
     setUncategorizedTransactionsSelected(transactionIds);
   };
   // Handle exclude transaction.
-  const handleExcludeTransaction = (transaction) => {
+  const handleExcludeTransaction = (
+    transaction: UncategorizedTransactionRow,
+  ) => {
+    if (transaction.id == null) return;
     excludeTransaction(transaction.id)
       .then(() => {
         AppToaster.show({

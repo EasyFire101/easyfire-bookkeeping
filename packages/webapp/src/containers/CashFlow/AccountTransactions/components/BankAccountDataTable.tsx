@@ -4,6 +4,7 @@ import styles from './BankAccountDataTable.module.scss';
 
 interface BankAccountDataTableProps {
   className?: string;
+  [key: string]: unknown;
 }
 
 export function BankAccountDataTable({

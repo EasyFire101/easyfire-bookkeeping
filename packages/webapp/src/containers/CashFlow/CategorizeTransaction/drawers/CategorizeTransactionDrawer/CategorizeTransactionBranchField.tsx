@@ -1,4 +1,3 @@
-// @ts-nocheck
 import { FFormGroup, FeatureCan } from '@/components';
 import { useCategorizeTransactionBoot } from './CategorizeTransactionBoot';
 import { Features } from '@/constants';
@@ -12,7 +11,7 @@ export function CategorizeTransactionBranchField() {
       <FFormGroup name={'branchId'} label={'Branch'} fastField inline>
         <BranchSuggestField
           name={'branchId'}
-          items={branches}
+          items={branches ?? []}
           popoverProps={{ minimal: true }}
           fill
         />

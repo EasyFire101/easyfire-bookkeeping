@@ -1,9 +1,13 @@
-// @ts-nocheck
+import React, { useEffect, useState } from 'react';
 import { isEmpty } from 'lodash';
-import * as R from 'ramda';
-import { useEffect, useState } from 'react';
 import { AnchorButton, Button, Intent, Tag, Text } from '@blueprintjs/core';
-import { FastField, FastFieldProps, Formik, useFormikContext } from 'formik';
+import {
+  FastField,
+  FastFieldProps,
+  Formik,
+  FormikHelpers,
+  useFormikContext,
+} from 'formik';
 import { AppToaster, Box, FormatNumber, Group, Stack } from '@/components';
 import {
   MatchingTransactionBoot,
@@ -11,40 +15,48 @@ import {
 } from './MatchingTransactionBoot';
 import {
   MatchTransactionCheckbox,
-  MatchTransactionCheckboxProps,
 } from './MatchTransactionCheckbox';
+import type { MatchTransactionCheckboxProps } from './MatchTransactionCheckbox';
 import { useMatchUncategorizedTransaction } from '@/hooks/query/banking';
-import { MatchingTransactionFormValues } from './types';
+import type { MatchingTransactionFormValues } from './types';
 import {
   transformToReq,
   useGetPendingAmountMatched,
   useIsShowReconcileTransactionLink,
 } from './utils';
 import { useCategorizeTransactionTabsBoot } from './CategorizeTransactionTabsBoot';
-import {
-  WithBankingActionsProps,
-  withBankingActions,
-} from '../withBankingActions';
+import { withBankingActions } from '../withBankingActions';
+import type { WithBankingActionsProps } from '../withBankingActions';
 import { withBanking } from '../withBanking';
+import type { WithBankingProps } from '../withBanking';
 import { MatchingReconcileTransactionForm } from './MatchingReconcileTransactionAside/MatchingReconcileTransactionForm';
 import { useIsDarkMode } from '@/hooks/useDarkMode';
+import { compose } from '@/utils';
 import styles from './CategorizeTransactionAside.module.scss';
 
-const initialValues = {
+const initialValues: MatchingTransactionFormValues = {
   matched: {},
 };
 
+interface MatchingBankTransactionRootProps
+  extends Pick<
+      WithBankingActionsProps,
+      'closeMatchingTransactionAside'
+    >,
+    Pick<WithBankingProps, 'transactionsToCategorizeIdsSelected'> {}
+
+interface ReconcileSubmitPayload {
+  refId: number;
+  refType: string;
+}
+
 /**
  * Renders the bank transaction matching form.
- * @returns {React.ReactNode}
  */
 function MatchingBankTransactionRoot({
   // #withBankingActions
   closeMatchingTransactionAside,
-
-  // #withBanking
-  transactionsToCategorizeIdsSelected,
-}) {
+}: MatchingBankTransactionRootProps) {
   const { uncategorizedTransactionIds } = useCategorizeTransactionTabsBoot();
   const { mutateAsync: matchTransaction } = useMatchUncategorizedTransaction();
 
@@ -63,6 +75,8 @@ function MatchingBankTransactionRoot({
       return;
     }
     setSubmitting(true);
+    // @ts-expect-error SDK `MatchTransactionBody.matchedTransactions` is typed
+    // as `string[]` but the schema example and runtime expect objects.
     matchTransaction(_values)
       .then(() => {
         AppToaster.show({
@@ -72,9 +86,9 @@ function MatchingBankTransactionRoot({
         setSubmitting(false);
         closeMatchingTransactionAside();
       })
-      .catch((err) => {
+      .catch((err: { response?: { data?: { errors?: Array<{ type: string }> } } }) => {
         if (
-          err.response?.data.errors.find(
+          err.response?.data?.errors?.find(
             (e) => e.type === 'TOTAL_MATCHING_TRANSACTIONS_INVALID',
           )
         ) {
@@ -104,37 +118,39 @@ function MatchingBankTransactionRoot({
   );
 }
 
-export const MatchingBankTransaction = R.compose(
+export const MatchingBankTransaction = compose(
   withBankingActions,
   withBanking(({ transactionsToCategorizeIdsSelected }) => ({
     transactionsToCategorizeIdsSelected,
   })),
 )(MatchingBankTransactionRoot);
 
+interface MatchingBankTransactionFormContentProps
+  extends Pick<
+    WithBankingProps,
+    'openReconcileMatchingTransaction'
+  > {}
+
 /**
  * Matching bank transaction form content.
- * @returns {React.ReactNode}
  */
-const MatchingBankTransactionFormContent = R.compose(
-  withBankingActions,
+const MatchingBankTransactionFormContent = compose(
   withBanking(({ openReconcileMatchingTransaction }) => ({
     openReconcileMatchingTransaction,
   })),
 )(({
-  // #withBanking
+  // #withBanking — boolean state for whether the reconcile aside is open
   openReconcileMatchingTransaction,
-}) => {
+}: MatchingBankTransactionFormContentProps) => {
   const {
     isMatchingTransactionsFetching,
     isMatchingTransactionsSuccess,
     matches,
   } = useMatchingTransactionBoot();
-  const [pending, setPending] = useState<null | {
-    refId: number;
-    refType: string;
-  }>(null);
+  const [pending, setPending] = useState<ReconcileSubmitPayload | null>(null);
 
-  const { setFieldValue } = useFormikContext();
+  const { setFieldValue } =
+    useFormikContext<MatchingTransactionFormValues>();
 
   // This effect is responsible for automatically marking a transaction as matched
   // when the matching process is successful and not currently fetching.
@@ -145,7 +161,7 @@ const MatchingBankTransactionFormContent = R.compose(
       !isMatchingTransactionsFetching
     ) {
       const foundMatch = matches?.find(
-        (m) =>
+        (m: { referenceType: string; referenceId: number }) =>
           m.referenceType === pending?.refType &&
           m.referenceId === pending?.refId,
       );
@@ -162,8 +178,8 @@ const MatchingBankTransactionFormContent = R.compose(
     setFieldValue,
   ]);
 
-  const handleReconcileFormSubmitSuccess = (payload) => {
-    setPending({ refId: payload.id, refType: payload.type });
+  const handleReconcileFormSubmitSuccess = (payload: ReconcileSubmitPayload) => {
+    setPending({ refId: payload.refId, refType: payload.refType });
   };
 
   return (
@@ -189,9 +205,16 @@ function MatchingBankTransactionContent() {
   );
 }
 
+interface MatchItem {
+  transsactionTypeFormatted: string;
+  amountFormatted: string;
+  dateFormatted: string;
+  referenceType: string;
+  referenceId: number;
+}
+
 /**
  * Renders the perfect match transactions.
- * @returns {React.ReactNode}
  */
 function PerfectMatchingTransactions() {
   const { perfectMatches, perfectMatchesCount } = useMatchingTransactionBoot();
@@ -212,7 +235,7 @@ function PerfectMatchingTransactions() {
       </Box>
 
       <Stack spacing={9} style={{ padding: '12px 15px' }}>
-        {perfectMatches.map((match, index) => (
+        {perfectMatches.map((match: MatchItem, index: number) => (
           <MatchTransactionField
             key={index}
             label={`${match.transsactionTypeFormatted} for ${match.amountFormatted}`}
@@ -228,12 +251,11 @@ function PerfectMatchingTransactions() {
 
 /**
  * Renders the possible match transactions.
- * @returns {React.ReactNode}
  */
 function PossibleMatchingTransactions() {
   const { possibleMatches } = useMatchingTransactionBoot();
 
-  // Can't continue if the possible matches is emoty.
+  // Can't continue if the possible matches is empty.
   if (isEmpty(possibleMatches)) {
     return null;
   }
@@ -246,7 +268,7 @@ function PossibleMatchingTransactions() {
       </Box>
 
       <Stack spacing={9} style={{ padding: '12px 15px' }}>
-        {possibleMatches.map((match, index) => (
+        {possibleMatches.map((match: MatchItem, index: number) => (
           <MatchTransactionField
             key={index}
             label={
@@ -264,6 +286,7 @@ function PossibleMatchingTransactions() {
     </>
   );
 }
+
 interface MatchTransactionFieldProps
   extends Omit<
     MatchTransactionCheckboxProps,
@@ -286,7 +309,7 @@ function MatchTransactionField({
         <MatchTransactionCheckbox
           {...props}
           active={!!value}
-          onChange={(state) => {
+          onChange={(state: boolean) => {
             form.setFieldValue(name, state);
           }}
         />
@@ -295,17 +318,21 @@ function MatchTransactionField({
   );
 }
 
-interface MatchTransctionFooterProps extends WithBankingActionsProps {}
+interface MatchTransctionFooterProps
+  extends Pick<
+    WithBankingActionsProps,
+    'closeMatchingTransactionAside' | 'openReconcileMatchingTransaction'
+  > {}
 
 /**
  * Renders the match transactions footer.
- * @returns {React.ReactNode}
  */
-const MatchTransactionFooter = R.compose(withBankingActions)(({
+const MatchTransactionFooter = compose(withBankingActions)(({
   closeMatchingTransactionAside,
   openReconcileMatchingTransaction,
 }: MatchTransctionFooterProps) => {
-  const { submitForm, isSubmitting } = useFormikContext();
+  const { submitForm, isSubmitting } =
+    useFormikContext<MatchingTransactionFormValues>();
   const totalPending = useGetPendingAmountMatched();
   const showReconcileLink = useIsShowReconcileTransactionLink();
   const submitDisabled = totalPending !== 0;
@@ -343,7 +370,7 @@ const MatchTransactionFooter = R.compose(withBankingActions)(({
             }}
             tagName="span"
           >
-            Pending <FormatNumber value={totalPending} currency={'USD'} />
+            Pending <FormatNumber value={totalPending} currency={'USD'} noZero={false} />
           </Text>
         </Group>
       </Box>

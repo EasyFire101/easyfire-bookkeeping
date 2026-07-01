@@ -1,4 +1,3 @@
-// @ts-nocheck
 import React from 'react';
 import {
   Button,
@@ -14,107 +13,95 @@ import {
   Position,
 } from '@blueprintjs/core';
 import { useHistory } from 'react-router-dom';
-
 import {
   FormattedMessage as T,
   AdvancedFilterPopover,
-  If,
   Icon,
   Can,
   DashboardActionViewsList,
   DashboardFilterButton,
   DashboardRowsHeightButton,
   DashboardActionsBar,
-  FSelect,
 } from '@/components';
-
 import { withEstimates } from './withEstimates';
 import { withEstimatesActions } from './withEstimatesActions';
 import { withSettings } from '@/containers/Settings/withSettings';
 import { withSettingsActions } from '@/containers/Settings/withSettingsActions';
 import { withDialogActions } from '@/containers/Dialog/withDialogActions';
-
 import { useEstimatesListContext } from './EstimatesListProvider';
 import { useRefreshEstimates } from '@/hooks/query/estimates';
 import { useDownloadExportPdf } from '@/hooks/query/FinancialReports/use-export-pdf';
 import { useBulkDeleteEstimatesDialog } from './hooks/use-bulk-delete-estimates-dialog';
-
 import { SaleEstimateAction, AbilitySubject } from '@/constants/abilityOption';
 import { compose } from '@/utils';
 import { DialogsName } from '@/constants/dialogs';
 import { withDrawerActions } from '@/containers/Drawer/withDrawerActions';
 import { DRAWERS } from '@/constants/drawers';
 import { isEmpty } from 'lodash';
-import {
-  BrandingThemeFormGroup,
-  BrandingThemeSelectButton,
-} from '@/containers/BrandingTemplates/BrandingTemplatesSelectFields';
+import type { WithDrawerActionsProps } from '@/containers/Drawer/withDrawerActions';
+import type { WithEstimatesProps } from './withEstimates';
+import type { WithDialogActionsProps } from '@/containers/Dialog/withDialogActions';
 
-/**
- * Estimates list actions bar.
- */
+interface WithEstimatesActionsProps {
+  setEstimatesTableState: (state: Record<string, any>) => void;
+}
+
+interface WithSettingsActionsProps {
+  addSetting: (group: string, key: string, value: any) => void;
+}
+
+interface WithSettingsProps {
+  estimatesTableSize?: string | null;
+}
+
+interface EstimateActionsBarProps
+  extends Pick<WithEstimatesProps, 'estimatesSelectedRows'>,
+    WithEstimatesActionsProps,
+    WithSettingsActionsProps,
+    WithDialogActionsProps,
+    WithDrawerActionsProps,
+    WithSettingsProps {
+  estimatesFilterRoles: any[];
+}
+
 function EstimateActionsBar({
-  // #withEstimateActions
   setEstimatesTableState,
-
-  // #withEstimates
   estimatesFilterRoles,
   estimatesSelectedRows = [],
-
-  // #withSettings
   estimatesTableSize,
-
-  // #withDialogActions
   openDialog,
-
-  // #withDrawerActions
   openDrawer,
-
-  // #withSettingsActions
   addSetting,
-}) {
+}: EstimateActionsBarProps) {
   const history = useHistory();
-
-  // Estimates list context.
   const { estimatesViews, fields } = useEstimatesListContext();
-
-  // Exports pdf document.
   const { downloadAsync: downloadExportPdf } = useDownloadExportPdf();
 
-  // Handle click a new sale estimate.
   const onClickNewEstimate = () => {
     history.push('/estimates/new');
   };
-  // Estimates refresh action.
   const { refresh } = useRefreshEstimates();
 
-  // Handle tab change.
-  const handleTabChange = (view) => {
+  const handleTabChange = (view: { slug?: string } | null) => {
     setEstimatesTableState({
       viewSlug: view ? view.slug : null,
     });
   };
-  // Handle click a refresh sale estimates
   const handleRefreshBtnClick = () => {
     refresh();
   };
-  // Handle table row size change.
-  const handleTableRowSizeChange = (size) => {
+  const handleTableRowSizeChange = (size: any) => {
     addSetting('salesEstimates', 'tableSize', size);
   };
-  // Handle the import button click.
   const handleImportBtnClick = () => {
     history.push('/estimates/import');
   };
-  // Handle the export button click.
   const handleExportBtnClick = () => {
     openDialog(DialogsName.Export, { resource: 'sale_estimate' });
   };
-  // Handles the print button click.
   const handlePrintBtnClick = () => {
     downloadExportPdf({ resource: 'SaleEstimate' });
   };
-  // Handle customize button clicl.
   const handleCustomizeBtnClick = () => {
     openDrawer(DRAWERS.BRANDING_TEMPLATES, { resource: 'SaleEstimate' });
   };
@@ -122,9 +109,8 @@ function EstimateActionsBar({
   const { openBulkDeleteDialog, isValidatingBulkDeleteEstimates } =
     useBulkDeleteEstimatesDialog();
 
-  // Handle bulk estimates delete.
   const handleBulkDelete = () => {
-    openBulkDeleteDialog(estimatesSelectedRows);
+    openBulkDeleteDialog(estimatesSelectedRows as number[]);
   };
 
   if (!isEmpty(estimatesSelectedRows)) {
@@ -168,7 +154,7 @@ function EstimateActionsBar({
             conditions: estimatesFilterRoles,
             defaultFieldKey: 'estimate_number',
             fields: fields,
-            onFilterChange: (filterConditions) => {
+            onFilterChange: (filterConditions: any) => {
               setEstimatesTableState({ filterRoles: filterConditions });
             },
           }}
@@ -180,7 +166,7 @@ function EstimateActionsBar({
         <NavbarDivider />
         <Button
           className={Classes.MINIMAL}
-          icon={<Icon icon={'print-16'} iconSize={'16'} />}
+          icon={<Icon icon={'print-16'} iconSize={16} />}
           text={<T id={'print'} />}
           onClick={handlePrintBtnClick}
         />
@@ -192,7 +178,7 @@ function EstimateActionsBar({
         />
         <Button
           className={Classes.MINIMAL}
-          icon={<Icon icon={'file-export-16'} iconSize={'16'} />}
+          icon={<Icon icon={'file-export-16'} iconSize={16} />}
           text={<T id={'export'} />}
           onClick={handleExportBtnClick}
         />
@@ -241,7 +227,7 @@ export const EstimatesActionsBar = compose(
     estimatesFilterRoles: estimatesTableState.filterRoles,
     estimatesSelectedRows: estimatesSelectedRows || [],
   })),
-  withSettings(({ estimatesSettings }) => ({
+  withSettings(({ estimatesSettings }: any) => ({
     estimatesTableSize: estimatesSettings?.tableSize,
   })),
   withDialogActions,

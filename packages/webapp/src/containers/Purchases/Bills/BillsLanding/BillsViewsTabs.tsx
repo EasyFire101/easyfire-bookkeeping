@@ -1,4 +1,3 @@
-// @ts-nocheck
 import React from 'react';
 
 import { Alignment, Navbar, NavbarGroup } from '@blueprintjs/core';
@@ -6,25 +5,27 @@ import { DashboardViewsTabs } from '@/components';
 import { useBillsListContext } from './BillsListProvider';
 
 import { withBills } from './withBills';
+import type { WithBillsProps } from './withBills';
 import { withBillsActions } from './withBillsActions';
 
 import { compose, transfromViewsToTabs } from '@/utils';
 
-/**
- * Bills view tabs.
- */
-function BillViewTabs({
-  // #withBillsActions
-  setBillsTableState,
+interface WithBillsActionsProps {
+  setBillsTableState: (state: Record<string, any>) => void;
+}
 
-  // #withBills
+interface BillViewTabsProps {
+  setBillsTableState: WithBillsActionsProps['setBillsTableState'];
+  billsCurrentView: string;
+}
+
+function BillViewTabs({
+  setBillsTableState,
   billsCurrentView,
-}) {
-  // Bills list context.
+}: BillViewTabsProps) {
   const { billsViews } = useBillsListContext();
 
-  // Handle tab chaging.
-  const handleTabsChange = (viewSlug) => {
+  const handleTabsChange = (viewSlug: string | null) => {
     setBillsTableState({
       viewSlug: viewSlug || null,
     });
@@ -48,7 +49,7 @@ function BillViewTabs({
 
 export const BillsViewsTabs = compose(
   withBillsActions,
-  withBills(({ billsTableState }) => ({
+  withBills(({ billsTableState }: WithBillsProps) => ({
     billsCurrentView: billsTableState.viewSlug,
   })),
 )(BillViewTabs);

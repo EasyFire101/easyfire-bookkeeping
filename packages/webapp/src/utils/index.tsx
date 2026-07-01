@@ -186,7 +186,7 @@ export const defaultExpanderReducer = (tableRows, level) => {
   return expended;
 };
 
-export function formattedAmount(cents, currencyCode = '', props) {
+export function formattedAmount(cents, currencyCode = '', props = {}) {
   const currency = Currency[currencyCode];
 
   const parsedCurrency = {

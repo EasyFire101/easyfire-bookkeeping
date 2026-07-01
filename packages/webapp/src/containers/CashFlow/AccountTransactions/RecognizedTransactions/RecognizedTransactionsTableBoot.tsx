@@ -1,29 +1,31 @@
-// @ts-nocheck
 import React from 'react';
-import * as R from 'ramda';
-import { IntersectionObserver, NumericInputCell } from '@/components';
+import type { BankTransactionsListPage } from '@bigcapital/sdk-ts';
+import { IntersectionObserver } from '@/components';
 import { useAccountTransactionsContext } from '../AccountTransactionsProvider';
 import { useRecognizedBankTransactionsInfinity } from '@/hooks/query/banking';
 import { useFlattenInfinityPages } from '@/hooks/utils';
 import { withBanking } from '../../withBanking';
+import type { WithBankingProps } from '../../withBanking';
+import { compose } from '@/utils';
+import type { RecognizedTransactionRow } from './_utils';
 
-interface RecognizedTransactionsContextValue {
-  isRecongizedTransactionsLoading: boolean;
+export interface RecognizedTransactionsContextValue {
+  recognizedTransactions: RecognizedTransactionRow[];
+  isRecognizedTransactionsLoading: boolean;
   isRecognizedTransactionsFetching: boolean;
-  recognizedTransactions: Array<any>;
 }
 
-const RecognizedTransactionsContext =
-  React.createContext<RecognizedTransactionsContextValue>(
-    {} as RecognizedTransactionsContextValue,
-  );
-
-interface RecognizedTransactionsTableBootProps {
+interface RecognizedTransactionsTableBootProps
+  extends Pick<WithBankingProps, 'uncategorizedTransactionsFilter'> {
   children: React.ReactNode;
 }
 
+const RecognizedTransactionsContext = React.createContext<RecognizedTransactionsContextValue>(
+  {} as RecognizedTransactionsContextValue,
+);
+
 /**
- * Account uncategorized transctions provider.
+ * Account recognized transactions provider.
  */
 function RecognizedTransactionsTableBootRoot({
   // #withBanking
@@ -33,57 +35,57 @@ function RecognizedTransactionsTableBootRoot({
 }: RecognizedTransactionsTableBootProps) {
   const { accountId } = useAccountTransactionsContext();
 
-  // Fetches the uncategorized transactions.
+  // Fetches the recognized transactions.
   const {
     data: recognizedTransactionsPage,
     isFetching: isRecognizedTransactionsFetching,
-    isLoading: isRecongizedTransactionsLoading,
+    isLoading: isRecognizedTransactionsLoading,
     isSuccess: isRecognizedTransactionsSuccess,
-    isFetchingNextPage: isUncategorizedTransactionFetchNextPage,
-    fetchNextPage: fetchNextrecognizedTransactionsPage,
-    hasNextPage: hasUncategorizedTransactionsNextPage,
+    hasNextPage: hasRecognizedTransactionsNextPage,
+    fetchNextPage: fetchNextRecognizedTransactionsPage,
   } = useRecognizedBankTransactionsInfinity({
-    page_size: 50,
-    account_id: accountId,
-    min_date: uncategorizedTransactionsFilter.fromDate || null,
-    max_date: uncategorizedTransactionsFilter?.toDate || null,
+    pageSize: 50,
+    accountId,
+    minDate: uncategorizedTransactionsFilter?.fromDate || undefined,
+    maxDate: uncategorizedTransactionsFilter?.toDate || undefined,
   });
-  // Memorized the cashflow account transactions.
-  const recognizedTransactions = useFlattenInfinityPages(
+  // Memorized the recognized transactions.
+  const recognizedTransactions = useFlattenInfinityPages<
+    BankTransactionsListPage,
+    RecognizedTransactionRow
+  >(
     isRecognizedTransactionsSuccess ? recognizedTransactionsPage : undefined,
+    (page) => (page?.data ?? []) as RecognizedTransactionRow[],
   );
   // Handle the observer ineraction.
   const handleObserverInteract = React.useCallback(() => {
     if (
       !isRecognizedTransactionsFetching &&
-      hasUncategorizedTransactionsNextPage
+      hasRecognizedTransactionsNextPage
     ) {
-      fetchNextrecognizedTransactionsPage();
+      fetchNextRecognizedTransactionsPage();
     }
   }, [
     isRecognizedTransactionsFetching,
-    hasUncategorizedTransactionsNextPage,
-    fetchNextrecognizedTransactionsPage,
+    hasRecognizedTransactionsNextPage,
+    fetchNextRecognizedTransactionsPage,
   ]);
   // Provider payload.
-  const provider = {
+  const provider: RecognizedTransactionsContextValue = {
     recognizedTransactions: recognizedTransactions ?? [],
     isRecognizedTransactionsFetching,
-    isRecongizedTransactionsLoading,
+    isRecognizedTransactionsLoading,
   };
 
   return (
     <RecognizedTransactionsContext.Provider value={provider}>
       {children}
-      <IntersectionObserver
-        onIntersect={handleObserverInteract}
-        enabled={!isUncategorizedTransactionFetchNextPage}
-      />
+      <IntersectionObserver onIntersect={handleObserverInteract} />
     </RecognizedTransactionsContext.Provider>
   );
 }
 
-const RecognizedTransactionsTableBoot = R.compose(
+const RecognizedTransactionsTableBoot = compose(
   withBanking(({ uncategorizedTransactionsFilter }) => ({
     uncategorizedTransactionsFilter,
   })),

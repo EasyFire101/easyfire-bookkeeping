@@ -1,7 +1,5 @@
-// @ts-nocheck
 import React from 'react';
 import { Intent } from '@blueprintjs/core';
-import * as R from 'ramda';
 import {
   TableFastCell,
   TableSkeletonRows,
@@ -13,21 +11,22 @@ import { TABLES } from '@/constants/tables';
 
 import { useMemorizedColumnsWidths } from '@/hooks';
 import { useExcludedTransactionsColumns } from './_utils';
+import type { ExcludedTransactionRow } from './_utils';
 import { useExcludedTransactionsBoot } from './ExcludedTransactionsTableBoot';
 import { useAccountTransactionsContext } from '../AccountTransactionsProvider';
 import { useUnexcludeUncategorizedTransaction } from '@/hooks/query/banking';
 
 import { ActionsMenu } from './_components';
 import { BankAccountDataTable } from '../components/BankAccountDataTable';
-import {
-  WithBankingActionsProps,
-  withBankingActions,
-} from '../../withBankingActions';
+import { withBankingActions } from '../../withBankingActions';
+import type { WithBankingActionsProps } from '../../withBankingActions';
+import { compose } from '@/utils';
 
-interface ExcludeTransactionsTableProps extends WithBankingActionsProps {}
+interface ExcludeTransactionsTableProps
+  extends Pick<WithBankingActionsProps, 'setExcludedTransactionsSelected'> {}
 
 /**
- * Renders the recognized account transactions datatable.
+ * Renders the excluded account transactions datatable.
  */
 function ExcludedTransactionsTableRoot({
   // #withBankingActions
@@ -51,10 +50,14 @@ function ExcludedTransactionsTableRoot({
     useMemorizedColumnsWidths(TABLES.UNCATEGORIZED_ACCOUNT_TRANSACTIONS);
 
   // Handle cell click.
-  const handleCellClick = (cell, event) => {};
+  const handleCellClick = (
+    _cell: { row: { original: ExcludedTransactionRow } },
+    _event: React.MouseEvent,
+  ) => {};
 
   // Handle restore button click.
-  const handleRestoreClick = (transaction) => {
+  const handleRestoreClick = (transaction: ExcludedTransactionRow) => {
+    if (transaction.id == null) return;
     unexcludeBankTransaction(transaction.id)
       .then(() => {
         AppToaster.show({
@@ -62,7 +65,7 @@ function ExcludedTransactionsTableRoot({
           intent: Intent.SUCCESS,
         });
       })
-      .catch((error) => {
+      .catch(() => {
         AppToaster.show({
           message: 'Something went wrong.',
           intent: Intent.DANGER,
@@ -71,9 +74,12 @@ function ExcludedTransactionsTableRoot({
   };
 
   // Handle selected rows change.
-  const handleSelectedRowsChange = (selected) => {
-    const _selectedIds = selected?.map((row) => row.original.id);
-    setExcludedTransactionsSelected(_selectedIds);
+  const handleSelectedRowsChange = (
+    selected: Array<{ original: ExcludedTransactionRow }>,
+  ) => {
+    const selectedIds =
+      selected?.map((row) => row.original.id).filter((id): id is number => id != null) ?? [];
+    setExcludedTransactionsSelected(selectedIds);
   };
 
   return (
@@ -95,8 +101,7 @@ function ExcludedTransactionsTableRoot({
       ContextMenu={ActionsMenu}
       onCellClick={handleCellClick}
       // #TableVirtualizedListRows props.
-      vListrowHeight={'small' == 'small' ? 32 : 40}
-      vListrowHeight={40}
+      vListrowHeight={32}
       vListOverscanRowCount={0}
       initialColumnsWidths={initialColumnsWidths}
       onColumnResizing={handleColumnResizing}
@@ -112,6 +117,6 @@ function ExcludedTransactionsTableRoot({
   );
 }
 
-export const ExcludedTransactionsTable = R.compose(withBankingActions)(
+export const ExcludedTransactionsTable = compose(withBankingActions)(
   ExcludedTransactionsTableRoot,
 );

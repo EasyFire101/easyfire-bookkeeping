@@ -1,9 +1,6 @@
-// @ts-nocheck
 import React, { useCallback } from 'react';
 import { useHistory } from 'react-router-dom';
-
 import { InvoicesEmptyStatus } from './InvoicesEmptyStatus';
-
 import { TABLES } from '@/constants/tables';
 import {
   DataTable,
@@ -11,7 +8,6 @@ import {
   TableSkeletonHeader,
   TableSkeletonRows,
 } from '@/components';
-
 import { withInvoices } from './withInvoices';
 import { withInvoiceActions } from './withInvoiceActions';
 import { withAlertActions } from '@/containers/Alert/withAlertActions';
@@ -19,41 +15,45 @@ import { withDrawerActions } from '@/containers/Drawer/withDrawerActions';
 import { withDialogActions } from '@/containers/Dialog/withDialogActions';
 import { withDashboardActions } from '@/containers/Dashboard/withDashboardActions';
 import { withSettings } from '@/containers/Settings/withSettings';
-
 import { useMemorizedColumnsWidths } from '@/hooks';
 import { useInvoicesTableColumns, ActionsMenu } from './components';
 import { useInvoicesListContext } from './InvoicesListProvider';
-
 import { compose } from '@/utils';
 import { DRAWERS } from '@/constants/drawers';
-import { DialogsName } from '@/constants/dialogs';
+import type { WithDialogActionsProps } from '@/containers/Dialog/withDialogActions';
+import type { InvoiceTableRow } from './components';
+import type { WithDrawerActionsProps } from '@/containers/Drawer/withDrawerActions';
+import type { WithAlertActionsProps } from '@/containers/Alert/withAlertActions';
+import type { WithInvoicesProps } from './withInvoices';
 
-/**
- * Invoices datatable.
- */
+interface WithInvoiceActionsProps {
+  setInvoicesTableState: (state: Record<string, any>) => void;
+  setInvoicesSelectedRows: (ids: number[]) => void;
+}
+
+interface WithSettingsProps {
+  invoicesTableSize?: string | null;
+}
+
+interface InvoicesDataTableProps
+  extends Pick<WithInvoicesProps, 'invoicesTableState'>,
+    WithInvoiceActionsProps,
+    WithAlertActionsProps,
+    WithDrawerActionsProps,
+    WithDialogActionsProps,
+    WithSettingsProps {}
+
 function InvoicesDataTableInner({
-  // #withInvoicesActions
   setInvoicesTableState,
   setInvoicesSelectedRows,
-
-  // #withInvoices
   invoicesTableState,
-
-  // #withAlertActions
   openAlert,
-
-  // #withDrawerActions
   openDrawer,
-
-  // #withDialogAction
   openDialog,
-
-  // #withSettings
   invoicesTableSize,
-}) {
+}: InvoicesDataTableProps) {
   const history = useHistory();
 
-  // Invoices list context.
   const {
     invoices,
     pagination,
@@ -62,61 +62,57 @@ function InvoicesDataTableInner({
     isInvoicesFetching,
   } = useInvoicesListContext();
 
-  // Invoices table columns.
   const columns = useInvoicesTableColumns();
 
-  // Handle delete sale invoice.
-  const handleDeleteInvoice = ({ id }) => {
+  const handleDeleteInvoice = ({ id }: InvoiceTableRow) => {
     openAlert('invoice-delete', { invoiceId: id });
   };
 
-  // Handle cancel/confirm invoice deliver.
-  const handleDeliverInvoice = ({ id }) => {
+  const handleDeliverInvoice = ({ id }: InvoiceTableRow) => {
     openAlert('invoice-deliver', { invoiceId: id });
   };
 
-  // Handle edit sale invoice.
-  const handleEditInvoice = (invoice) => {
+  const handleEditInvoice = (invoice: InvoiceTableRow) => {
     history.push(`/invoices/${invoice.id}/edit`);
   };
 
-  // Handle convert to credit note.
-  const handleConvertToCreitNote = ({ id }) => {
+  const handleConvertToCreitNote = ({ id }: InvoiceTableRow) => {
     history.push(`/credit-notes/new?from_invoice_id=${id}`, { invoiceId: id });
   };
 
-  // handle quick payment receive.
-  const handleQuickPaymentReceive = ({ id }) => {
+  const handleQuickPaymentReceive = ({ id }: InvoiceTableRow) => {
     openDialog('quick-payment-receive', { invoiceId: id });
   };
 
-  // Handle view detail invoice.
-  const handleViewDetailInvoice = ({ id }) => {
+  const handleViewDetailInvoice = ({ id }: InvoiceTableRow) => {
     openDrawer(DRAWERS.INVOICE_DETAILS, { invoiceId: id });
   };
 
-  // Handle print invoices.
-  const handlePrintInvoice = ({ id }) => {
+  const handlePrintInvoice = ({ id }: InvoiceTableRow) => {
     openDialog('invoice-pdf-preview', { invoiceId: id });
   };
 
-  // Handle send mail invoice.
-  const handleSendMailInvoice = ({ id }) => {
+  const handleSendMailInvoice = ({ id }: InvoiceTableRow) => {
     openDrawer(DRAWERS.INVOICE_SEND_MAIL, { invoiceId: id });
   };
 
-  // Handle cell click.
-  const handleCellClick = (cell, event) => {
+  const handleCellClick = (cell: any, _event: React.MouseEvent) => {
     openDrawer(DRAWERS.INVOICE_DETAILS, { invoiceId: cell.row.original.id });
   };
 
-  // Local storage memorizing columns widths.
   const [initialColumnsWidths, , handleColumnResizing] =
     useMemorizedColumnsWidths(TABLES.INVOICES);
 
-  // Handles fetch data once the table state change.
   const handleDataTableFetchData = useCallback(
-    ({ pageSize, pageIndex, sortBy }) => {
+    ({
+      pageSize,
+      pageIndex,
+      sortBy,
+    }: {
+      pageSize: number;
+      pageIndex: number;
+      sortBy: Array<{ id: string; desc: boolean }>;
+    }) => {
       setInvoicesTableState({
         pageSize,
         pageIndex,
@@ -126,16 +122,15 @@ function InvoicesDataTableInner({
     [setInvoicesTableState],
   );
 
-  // Handle selected rows change.
   const handleSelectedRowsChange = useCallback(
-    (selectedFlatRows) => {
-      const selectedIds = selectedFlatRows?.map((row) => row.original.id) || [];
+    (selectedFlatRows: Array<{ original: InvoiceTableRow }>) => {
+      const selectedIds =
+        selectedFlatRows?.map((row) => row.original.id) || [];
       setInvoicesSelectedRows(selectedIds);
     },
     [setInvoicesSelectedRows],
   );
 
-  // Display invoice empty status instead of the table.
   if (isEmptyStatus) {
     return <InvoicesEmptyStatus />;
   }

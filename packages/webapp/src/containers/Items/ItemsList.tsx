@@ -1,4 +1,3 @@
-// @ts-nocheck
 import React from 'react';
 import { compose } from '@/utils';
 
@@ -13,7 +12,16 @@ import { ItemsListDrawers } from './ItemsListDrawers';
 import { ItemsListDialogs } from './ItemsListDialogs';
 
 import { withItems } from './withItems';
+import type { WithItemsProps } from './withItems';
 import { withItemsActions } from './withItemsActions';
+import type { WithItemsActionsProps } from './withItemsActions';
+
+interface ItemsListInnerProps
+  extends Pick<
+      WithItemsProps,
+      'itemsTableState' | 'itemsTableStateChanged'
+    >,
+    WithItemsActionsProps {}
 
 /**
  * Items list.
@@ -25,7 +33,7 @@ function ItemsListInner({
 
   // #withItemsActions
   resetItemsTableState,
-}) {
+}: ItemsListInnerProps) {
   // Resets items table query state once the page unmount.
   React.useEffect(
     () => () => {

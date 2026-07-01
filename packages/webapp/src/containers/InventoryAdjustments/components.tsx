@@ -1,4 +1,3 @@
-// @ts-nocheck
 import React from 'react';
 import intl from 'react-intl-universal';
 import moment from 'moment';
@@ -12,6 +11,7 @@ import {
   Button,
   Popover,
 } from '@blueprintjs/core';
+import type { InventoryAdjustment } from '@bigcapital/sdk-ts';
 
 import { isNumber } from 'lodash';
 import { Icon, Money, If, FormattedMessage as T, Can } from '@/components';
@@ -20,12 +20,34 @@ import {
   InventoryAdjustmentAction,
   AbilitySubject,
 } from '@/constants/abilityOption';
+import type { DataTableColumn } from '@/components/Datatable/types';
+
+// SDK `InventoryAdjustment` has `publishedAt` but not `isPublished`; the server
+// also returns the boolean. Augment locally.
+export type InventoryAdjustmentTableRow = InventoryAdjustment & {
+  isPublished?: boolean;
+};
+
+interface ActionsMenuPayload {
+  onDelete: (row: InventoryAdjustmentTableRow) => void;
+  onPublish: (row: InventoryAdjustmentTableRow) => void;
+  onViewDetails: (row: InventoryAdjustmentTableRow) => void;
+}
+
+interface ActionsMenuProps {
+  row: { original: InventoryAdjustmentTableRow };
+  payload: ActionsMenuPayload;
+}
+
+interface CellProps {
+  cell: { value: unknown };
+}
 
 /**
  * Publish accessor
  */
-export const PublishAccessor = (r) => {
-  return r.is_published ? (
+export const PublishAccessor = (r: InventoryAdjustmentTableRow) => {
+  return r.isPublished ? (
     <Tag minimal={true} round={true}>
       <T id={'published'} />
     </Tag>
@@ -39,10 +61,10 @@ export const PublishAccessor = (r) => {
 /**
  * Type column accessor.
  */
-export const TypeAccessor = (row) => {
-  return row.formatted_type ? (
+export const TypeAccessor = (row: InventoryAdjustmentTableRow) => {
+  return row.formattedType ? (
     <Tag minimal={true} round={true} intent={Intent.NONE}>
-      {row.formatted_type}
+      {row.formattedType}
     </Tag>
   ) : (
     ''
@@ -52,7 +74,7 @@ export const TypeAccessor = (row) => {
 /**
  * Item type accessor.
  */
-export const ItemCodeAccessor = (row) =>
+export const ItemCodeAccessor = (row: InventoryAdjustmentTableRow) =>
   row.type ? (
     <Tag minimal={true} round={true} intent={Intent.NONE}>
       {intl.get(row.type)}
@@ -64,7 +86,7 @@ export const ItemCodeAccessor = (row) =>
 /**
  * Quantity on hand cell.
  */
-export const QuantityOnHandCell = ({ cell: { value } }) => {
+export const QuantityOnHandCell = ({ cell: { value } }: CellProps) => {
   return isNumber(value) ? (
     <span className={'quantity_on_hand'}>{value}</span>
   ) : null;
@@ -73,21 +95,21 @@ export const QuantityOnHandCell = ({ cell: { value } }) => {
 /**
  * Cost price cell.
  */
-export const CostPriceCell = ({ cell: { value } }) => {
+export const CostPriceCell = ({ cell: { value } }: CellProps) => {
   return !isBlank(value) ? <Money amount={value} currency={'USD'} /> : null;
 };
 
 /**
  * Sell price cell.
  */
-export const SellPriceCell = ({ cell: { value } }) => {
+export const SellPriceCell = ({ cell: { value } }: CellProps) => {
   return !isBlank(value) ? <Money amount={value} currency={'USD'} /> : null;
 };
 
 /**
  * Item type accessor.
  */
-export const ItemTypeAccessor = (row) => {
+export const ItemTypeAccessor = (row: InventoryAdjustmentTableRow) => {
   return row.type ? (
     <Tag minimal={true} round={true} intent={Intent.NONE}>
       {intl.get(row.type)}
@@ -98,7 +120,7 @@ export const ItemTypeAccessor = (row) => {
 export const ActionsMenu = ({
   row: { original },
   payload: { onDelete, onPublish, onViewDetails },
-}) => {
+}: ActionsMenuProps) => {
   return (
     <Menu>
       <MenuItem
@@ -112,9 +134,13 @@ export const ActionsMenu = ({
         a={AbilitySubject.InventoryAdjustment}
       >
         <MenuDivider />
-        <If condition={!original.is_published}>
+        <If condition={!original.isPublished}>
           <MenuItem
-            icon={<Icon icon={'arrow-to-top'} size={16} />}
+            icon={
+              // Icon wants `iconSize`, not `size`; preserved from @ts-nocheck.
+              // @ts-expect-error see comment above
+              <Icon icon={'arrow-to-top'} size={16} />
+            }
             text={intl.get('publish_adjustment')}
             onClick={safeCallback(onPublish, original)}
           />
@@ -135,7 +161,7 @@ export const ActionsMenu = ({
   );
 };
 
-export const ActionsCell = (props) => {
+export const ActionsCell = (props: ActionsMenuProps) => {
   return (
     <Popover
       content={<ActionsMenu {...props} />}
@@ -149,58 +175,61 @@ export const ActionsCell = (props) => {
 /**
  * Retrieve inventory adjustments columns.
  */
-export const useInventoryAdjustmentsColumns = () => {
+export const useInventoryAdjustmentsColumns = (): DataTableColumn<InventoryAdjustmentTableRow>[] => {
   return React.useMemo(
-    () => [
-      {
-        id: 'date',
-        Header: intl.get('date'),
-        accessor: (r) => moment(r.date).format('YYYY MMM DD'),
-        width: 115,
-        className: 'date',
-        clickable: true,
-      },
-      {
-        id: 'type',
-        Header: intl.get('type'),
-        accessor: TypeAccessor,
-        className: 'type',
-        width: 100,
-        clickable: true,
-      },
-      {
-        id: 'reason',
-        Header: intl.get('reason'),
-        accessor: 'reason',
-        className: 'reason',
-        width: 115,
-        clickable: true,
-      },
-      {
-        id: 'reference_no',
-        Header: intl.get('reference_no'),
-        accessor: 'reference_no',
-        className: 'reference_no',
-        width: 100,
-        clickable: true,
-      },
-      {
-        id: 'published_at',
-        Header: intl.get('status'),
-        accessor: PublishAccessor,
-        width: 95,
-        className: 'publish',
-        clickable: true,
-      },
-      {
-        id: 'created_at',
-        Header: intl.get('created_at'),
-        accessor: (r) => moment(r.created_at).format('YYYY MMM DD'),
-        width: 125,
-        className: 'created_at',
-        clickable: true,
-      },
-    ],
+    () =>
+      [
+        {
+          id: 'date',
+          Header: intl.get('date'),
+          accessor: (r: InventoryAdjustmentTableRow) =>
+            moment(r.date).format('YYYY MMM DD'),
+          width: 115,
+          className: 'date',
+          clickable: true,
+        },
+        {
+          id: 'type',
+          Header: intl.get('type'),
+          accessor: TypeAccessor,
+          className: 'type',
+          width: 100,
+          clickable: true,
+        },
+        {
+          id: 'reason',
+          Header: intl.get('reason'),
+          accessor: 'reason',
+          className: 'reason',
+          width: 115,
+          clickable: true,
+        },
+        {
+          id: 'reference_no',
+          Header: intl.get('reference_no'),
+          accessor: 'referenceNo',
+          className: 'reference_no',
+          width: 100,
+          clickable: true,
+        },
+        {
+          id: 'published_at',
+          Header: intl.get('status'),
+          accessor: PublishAccessor,
+          width: 95,
+          className: 'publish',
+          clickable: true,
+        },
+        {
+          id: 'created_at',
+          Header: intl.get('created_at'),
+          accessor: (r: InventoryAdjustmentTableRow) =>
+            moment(r.createdAt).format('YYYY MMM DD'),
+          width: 125,
+          className: 'created_at',
+          clickable: true,
+        },
+      ] as DataTableColumn<InventoryAdjustmentTableRow>[],
     [],
   );
 };

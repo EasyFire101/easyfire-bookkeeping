@@ -1,6 +1,5 @@
-// @ts-nocheck
 import React from 'react';
-import { Group, PageForm, PageFormBigNumber } from '@/components';
+import { PageForm, PageFormBigNumber } from '@/components';
 import { MakeJournalEntriesHeader as MakeJournalEntriesHeaderFields } from './MakeJournalEntriesHeaderFields';
 import { useManualJournalTotalFormatted } from './utils';
 import intl from 'react-intl-universal';

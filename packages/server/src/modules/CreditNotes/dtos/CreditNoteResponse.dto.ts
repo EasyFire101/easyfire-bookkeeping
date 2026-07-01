@@ -1,6 +1,8 @@
 import { ApiProperty } from '@nestjs/swagger';
+import { Type } from 'class-transformer';
 import { ItemEntryDto } from '@/modules/TransactionItemEntry/dto/ItemEntry.dto';
 import { AttachmentLinkDto } from '@/modules/Attachments/dtos/Attachment.dto';
+import { CustomerResponseDto } from '@/modules/Customers/dtos/CustomerResponse.dto';
 import { DiscountType } from '@/common/types/Discount';
 
 export class CreditNoteResponseDto {
@@ -263,4 +265,23 @@ export class CreditNoteResponseDto {
     example: '$1,000.00',
   })
   totalLocalFormatted: string;
+
+  @ApiProperty({
+    description: 'The customer of the credit note',
+    type: () => CustomerResponseDto,
+  })
+  @Type(() => CustomerResponseDto)
+  customer: CustomerResponseDto;
+
+  @ApiProperty({
+    description: 'Whether the credit note is draft',
+    example: false,
+  })
+  isDraft: boolean;
+
+  @ApiProperty({
+    description: 'Whether the credit note is published',
+    example: true,
+  })
+  isPublished: boolean;
 }

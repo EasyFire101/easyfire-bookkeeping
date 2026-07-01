@@ -1,30 +1,31 @@
-// @ts-nocheck
 import React from 'react';
 import { Alignment, Navbar, NavbarGroup } from '@blueprintjs/core';
 
 import { DashboardViewsTabs } from '@/components';
 
 import { withVendorsCreditNotes } from './withVendorsCreditNotes';
+import type { WithVendorsCreditNotesProps } from './withVendorsCreditNotes';
 import { withVendorsCreditNotesActions } from './withVendorsCreditNotesActions';
 
 import { compose, transfromViewsToTabs } from '@/utils';
 import { useVendorsCreditNoteListContext } from './VendorsCreditNoteListProvider';
 
-/**
- * Vendors Credit note views tabs.
- */
-function VendorsCreditNoteViewTabsInner({
-  // #withVendorsCreditNotes
-  vendorCreditCurrentView,
+interface WithVendorsCreditNotesActionsProps {
+  setVendorsCreditNoteTableState: (state: Record<string, any>) => void;
+}
 
-  // #withVendorsCreditNotesActions
+interface VendorsCreditNoteViewTabsProps {
+  vendorCreditCurrentView: string;
+  setVendorsCreditNoteTableState: WithVendorsCreditNotesActionsProps['setVendorsCreditNoteTableState'];
+}
+
+function VendorsCreditNoteViewTabsInner({
+  vendorCreditCurrentView,
   setVendorsCreditNoteTableState,
-}) {
-  // vendor credit list context.
+}: VendorsCreditNoteViewTabsProps) {
   const { VendorCreditsViews } = useVendorsCreditNoteListContext();
 
-  // Handle tab change.
-  const handleTabsChange = (viewSlug) => {
+  const handleTabsChange = (viewSlug: string | null) => {
     setVendorsCreditNoteTableState({ viewSlug: viewSlug || null });
   };
 
@@ -45,7 +46,7 @@ function VendorsCreditNoteViewTabsInner({
 
 export const VendorsCreditNoteViewTabs = compose(
   withVendorsCreditNotesActions,
-  withVendorsCreditNotes(({ vendorsCreditNoteTableState }) => ({
+  withVendorsCreditNotes(({ vendorsCreditNoteTableState }: WithVendorsCreditNotesProps) => ({
     vendorCreditCurrentView: vendorsCreditNoteTableState.viewSlug,
   })),
 )(VendorsCreditNoteViewTabsInner);

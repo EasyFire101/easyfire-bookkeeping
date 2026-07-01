@@ -1,4 +1,4 @@
-// @ts-nocheck
+import React from 'react';
 import clsx from 'classnames';
 import { Checkbox, Text } from '@blueprintjs/core';
 import { useUncontrolled } from '@/hooks/useUncontrolled';
@@ -31,7 +31,9 @@ export function MatchTransactionCheckbox({
     handleChange(!_active);
   };
 
-  const handleCheckboxChange = (event) => {
+  const handleCheckboxChange = (
+    event: React.ChangeEvent<HTMLInputElement>,
+  ) => {
     handleChange(!event.target.checked);
   };
 
@@ -49,7 +51,7 @@ export function MatchTransactionCheckbox({
       </Stack>
 
       <Checkbox
-        checked={_active as boolean}
+        checked={_active}
         className={styles.checkbox}
         onChange={handleCheckboxChange}
       />

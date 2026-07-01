@@ -1,4 +1,3 @@
-// @ts-nocheck
 import React from 'react';
 import { useParams } from 'react-router-dom';
 
@@ -11,7 +10,7 @@ import { MakeJournalProvider } from './MakeJournalProvider';
  * Make journal entries page.
  */
 export function MakeJournalEntriesPage() {
-  const { id: journalId } = useParams();
+  const { id: journalId } = useParams<{ id?: string }>();
 
   return (
     <MakeJournalProvider journalId={journalId}>

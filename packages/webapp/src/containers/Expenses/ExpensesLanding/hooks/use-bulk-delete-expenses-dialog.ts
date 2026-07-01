@@ -1,4 +1,3 @@
-// @ts-nocheck
 import { DialogsName } from '@/constants/dialogs';
 import { useValidateBulkDeleteExpenses } from '@/hooks/query/expenses';
 import { useBulkDeleteDialog } from '@/hooks/dialogs/useBulkDeleteDialog';

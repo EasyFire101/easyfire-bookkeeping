@@ -1,10 +1,7 @@
-// @ts-nocheck
 import React from 'react';
-import styled from 'styled-components';
 import { Intent, Text } from '@blueprintjs/core';
 
 import {
-  DataTable,
   TableFastCell,
   TableSkeletonRows,
   TableSkeletonHeader,
@@ -16,20 +13,23 @@ import { TABLES } from '@/constants/tables';
 
 import { useMemorizedColumnsWidths } from '@/hooks';
 import { useUncategorizedTransactionsColumns } from './_utils';
+import type { RecognizedTransactionRow } from './_utils';
 import { useRecognizedTransactionsBoot } from './RecognizedTransactionsTableBoot';
 
 import { ActionsMenu } from './_components';
 import { compose } from '@/utils';
 import { useAccountTransactionsContext } from '../AccountTransactionsProvider';
 import { useExcludeUncategorizedTransaction } from '@/hooks/query/banking';
-import {
-  WithBankingActionsProps,
-  withBankingActions,
-} from '../../withBankingActions';
+import { withBankingActions } from '../../withBankingActions';
+import type { WithBankingActionsProps } from '../../withBankingActions';
 import styles from './RecognizedTransactionsTable.module.scss';
 import { BankAccountDataTable } from '../components/BankAccountDataTable';
 
-interface RecognizedTransactionsTableProps extends WithBankingActionsProps {}
+interface RecognizedTransactionsTableProps
+  extends Pick<
+    WithBankingActionsProps,
+    'setTransactionsToCategorizeSelected'
+  > {}
 
 /**
  * Renders the recognized account transactions datatable.
@@ -41,7 +41,7 @@ function RecognizedTransactionsTableRoot({
   const { mutateAsync: excludeBankTransaction } =
     useExcludeUncategorizedTransaction();
 
-  const { recognizedTransactions, isRecongizedTransactionsLoading } =
+  const { recognizedTransactions, isRecognizedTransactionsLoading } =
     useRecognizedTransactionsBoot();
 
   // Retrieve table columns.
@@ -54,14 +54,17 @@ function RecognizedTransactionsTableRoot({
   const { scrollableRef } = useAccountTransactionsContext();
 
   // Handle cell click.
-  const handleCellClick = (cell, event) => {
-    setTransactionsToCategorizeSelected(
-      cell.row.original.uncategorized_transaction_id,
-    );
+  const handleCellClick = (
+    cell: { row: { original: RecognizedTransactionRow } },
+    _event: React.MouseEvent,
+  ) => {
+    setTransactionsToCategorizeSelected([
+      cell.row.original.uncategorizedTransactionId,
+    ]);
   };
   // Handle exclude button click.
-  const handleExcludeClick = (transaction) => {
-    excludeBankTransaction(transaction.uncategorized_transaction_id)
+  const handleExcludeClick = (transaction: RecognizedTransactionRow) => {
+    excludeBankTransaction(transaction.uncategorizedTransactionId)
       .then(() => {
         AppToaster.show({
           intent: Intent.SUCCESS,
@@ -77,10 +80,10 @@ function RecognizedTransactionsTableRoot({
   };
 
   // Handles categorize button click.
-  const handleCategorizeClick = (transaction) => {
-    setTransactionsToCategorizeSelected(
-      transaction.uncategorized_transaction_id,
-    );
+  const handleCategorizeClick = (transaction: RecognizedTransactionRow) => {
+    setTransactionsToCategorizeSelected([
+      transaction.uncategorizedTransactionId,
+    ]);
   };
 
   return (
@@ -89,8 +92,8 @@ function RecognizedTransactionsTableRoot({
       columns={columns}
       data={recognizedTransactions}
       sticky={true}
-      loading={isRecongizedTransactionsLoading}
-      headerLoading={isRecongizedTransactionsLoading}
+      loading={isRecognizedTransactionsLoading}
+      headerLoading={isRecognizedTransactionsLoading}
       expandColumnSpace={1}
       expandToggleColumn={2}
       selectionColumnWidth={45}

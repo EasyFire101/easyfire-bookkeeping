@@ -7,9 +7,13 @@ import { AdvancedFilterDropdown } from './AdvancedFilterDropdown';
  * Advanced filter popover.
  */
 export function AdvancedFilterPopover({
-  popoverProps,
+  popoverProps = {},
   advancedFilterProps,
   children,
+}: {
+  popoverProps?: Record<string, any>;
+  advancedFilterProps: Record<string, any>;
+  children?: React.ReactNode;
 }) {
   return (
     <Popover

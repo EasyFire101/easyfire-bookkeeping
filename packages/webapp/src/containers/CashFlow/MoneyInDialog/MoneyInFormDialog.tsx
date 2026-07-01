@@ -1,19 +1,25 @@
-// @ts-nocheck
 import React from 'react';
 import { useFormikContext } from 'formik';
 
 import { index as TransactionNumberDialog } from '@/containers/Dialogs/TransactionNumberDialog';
+import type { MoneyInFormValues } from './types';
+
+interface TransactionNumberSettings {
+  transactionNumber: string;
+}
 
 /**
- * Moneny in / transaction number form dialog.
+ * Money in / transaction number form dialog.
  */
 export function MoneyInFormDialog() {
-  const { setFieldValue } = useFormikContext();
+  const { setFieldValue } = useFormikContext<MoneyInFormValues>();
 
   // Update the form once the transaction number form submit confirm.
-  const handleTransactionNumberFormConfirm = (settings) => {
-    setFieldValue('transaction_number', settings.transactionNumber);
-    setFieldValue('transaction_number_manually', settings.transactionNumber);
+  const handleTransactionNumberFormConfirm = (
+    settings: TransactionNumberSettings,
+  ) => {
+    setFieldValue('transactionNumber', settings.transactionNumber);
+    setFieldValue('transactionNumberManually', settings.transactionNumber);
   };
   return (
     <React.Fragment>

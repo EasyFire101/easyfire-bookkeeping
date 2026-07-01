@@ -1,4 +1,3 @@
-// @ts-nocheck
 import React from 'react';
 import {
   TableFastCell,
@@ -7,7 +6,6 @@ import {
   TableVirtualizedListRows,
 } from '@/components';
 import { withSettings } from '@/containers/Settings/withSettings';
-import { withBankingActions } from '../../withBankingActions';
 
 import { useAccountTransactionsContext } from '../AccountTransactionsProvider';
 import { usePendingTransactionsContext } from './PendingTransactionsTableBoot';
@@ -16,13 +14,19 @@ import { usePendingTransactionsTableColumns } from './_hooks';
 import { BankAccountDataTable } from '../components/BankAccountDataTable';
 import { compose } from '@/utils';
 
+interface WithSettingsProps {
+  cashflowTansactionsTableSize?: string | null;
+}
+
+interface PendingTransactionsDataTableRootProps extends WithSettingsProps {}
+
 /**
  * Account transactions data table.
  */
 function PendingTransactionsDataTableRoot({
   // #withSettings
   cashflowTansactionsTableSize,
-}) {
+}: PendingTransactionsDataTableRootProps) {
   // Retrieve table columns.
   const columns = usePendingTransactionsTableColumns();
   const { scrollableRef } = useAccountTransactionsContext();
@@ -60,5 +64,4 @@ export const PendingTransactionsDataTable = compose(
   withSettings(({ cashflowTransactionsSettings }) => ({
     cashflowTansactionsTableSize: cashflowTransactionsSettings?.tableSize,
   })),
-  withBankingActions,
 )(PendingTransactionsDataTableRoot);

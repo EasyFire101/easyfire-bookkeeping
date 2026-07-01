@@ -19,7 +19,15 @@ import Style from './style.module.scss';
 /**
  * Dashboard rows height button control.
  */
-export function DashboardRowsHeightButton({ initialValue, value, onChange }) {
+export function DashboardRowsHeightButton({
+  initialValue,
+  value,
+  onChange,
+}: {
+  initialValue?: any;
+  value?: any;
+  onChange?: (size: any, event?: any) => void;
+}) {
   const [localSize, setLocalSize] = React.useState(initialValue);
 
   // Handle menu item click.

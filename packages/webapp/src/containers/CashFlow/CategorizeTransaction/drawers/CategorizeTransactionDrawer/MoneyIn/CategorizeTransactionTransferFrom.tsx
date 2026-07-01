@@ -1,4 +1,4 @@
-// @ts-nocheck
+import React from 'react';
 import { Position } from '@blueprintjs/core';
 import {
   AccountsSelect,
@@ -20,8 +20,8 @@ export function CategorizeTransactionTransferFrom() {
         <FDateInput
           name={'date'}
           popoverProps={{ position: Position.BOTTOM, minimal: true }}
-          formatDate={(date) => date.toLocaleDateString()}
-          parseDate={(str) => new Date(str)}
+          formatDate={(date: Date) => date.toLocaleDateString()}
+          parseDate={(str: string) => new Date(str)}
           inputProps={{ fill: true, leftElement: <Icon icon={'date-range'} /> }}
         />
       </FFormGroup>
@@ -34,6 +34,8 @@ export function CategorizeTransactionTransferFrom() {
       >
         <AccountsSelect
           name={'debitAccountId'}
+          // @ts-expect-error AccountsSelect expects AccountSelectModel[]; boot
+          // provides raw Account[] — runtime tolerates.
           items={accounts}
           fastField
           fill
@@ -50,6 +52,8 @@ export function CategorizeTransactionTransferFrom() {
       >
         <AccountsSelect
           name={'creditAccountId'}
+          // @ts-expect-error AccountsSelect expects AccountSelectModel[]; boot
+          // provides raw Account[] — runtime tolerates.
           items={accounts}
           filterByRootTypes={['asset']}
           fastField
@@ -59,7 +63,7 @@ export function CategorizeTransactionTransferFrom() {
       </FFormGroup>
 
       <FFormGroup name={'referenceNo'} label={'Reference No.'} fastField inline>
-        <FInputGroup name={'reference_no'} fill />
+        <FInputGroup name={'referenceNo'} fill />
       </FFormGroup>
 
       <FFormGroup name={'description'} label={'Description'} fastField inline>

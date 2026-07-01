@@ -145,7 +145,7 @@ export function useBills(
   query?: GetBillsQuery,
   props?: Omit<UseQueryOptions<BillsListResponse>, 'queryKey' | 'queryFn'>,
 ) {
-  const fetcher = useApiFetcher();
+  const fetcher = useApiFetcher({ enableCamelCaseTransform: true });
   return useQuery({
     ...props,
     queryKey: billsKeys.list(query),

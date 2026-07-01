@@ -1,19 +1,27 @@
-// @ts-nocheck
-import { Formik, Form } from 'formik';
+import React from 'react';
+import { Formik, Form, FormikHelpers } from 'formik';
 import { Intent } from '@blueprintjs/core';
+import { useMutation } from '@tanstack/react-query';
 import styled from 'styled-components';
+import { categorizeTransactionsBulk } from '@bigcapital/sdk-ts';
+import type { CategorizeTransactionBody } from '@bigcapital/sdk-ts';
+import { useApiFetcher } from '@/hooks/useRequest';
 import { CreateCategorizeTransactionSchema } from './CategorizeTransactionForm.schema';
 import { CategorizeTransactionFormContent } from './CategorizeTransactionFormContent';
 import { CategorizeTransactionFormFooter } from './CategorizeTransactionFormFooter';
-import { useCategorizeTransaction } from '@/hooks/query';
 import {
   tranformToRequest,
   useCategorizeTransactionFormInitialValues,
 } from './_utils';
+import type { CategorizeTransactionFormValues } from './_utils';
 import { withBankingActions } from '@/containers/CashFlow/withBankingActions';
+import type { WithBankingActionsProps } from '@/containers/CashFlow/withBankingActions';
 import { AppToaster } from '@/components';
 import { useCategorizeTransactionTabsBoot } from '@/containers/CashFlow/CategorizeTransactionAside/CategorizeTransactionTabsBoot';
 import { compose } from '@/utils';
+
+interface CategorizeTransactionFormRootProps
+  extends Pick<WithBankingActionsProps, 'closeMatchingTransactionAside'> {}
 
 /**
  * Categorize cashflow transaction form dialog content.
@@ -21,19 +29,29 @@ import { compose } from '@/utils';
 function CategorizeTransactionFormRoot({
   // #withBankingActions
   closeMatchingTransactionAside,
-}) {
+}: CategorizeTransactionFormRootProps) {
   const { uncategorizedTransactionIds } = useCategorizeTransactionTabsBoot();
-  const { mutateAsync: categorizeTransaction } = useCategorizeTransaction();
+  const fetcher = useApiFetcher();
+  const { mutateAsync: categorizeBulk } = useMutation<
+    void,
+    Error,
+    CategorizeTransactionBody
+  >({
+    mutationFn: (body) => categorizeTransactionsBulk(fetcher, body),
+  });
 
   // Form initial values in create and edit mode.
   const initialValues = useCategorizeTransactionFormInitialValues();
 
   // Callbacks handles form submit.
-  const handleFormSubmit = (values, { setSubmitting, setErrors }) => {
+  const handleFormSubmit = (
+    values: CategorizeTransactionFormValues,
+    { setSubmitting, setErrors }: FormikHelpers<CategorizeTransactionFormValues>,
+  ) => {
     const _values = tranformToRequest(values, uncategorizedTransactionIds);
 
     setSubmitting(true);
-    categorizeTransaction(_values)
+    categorizeBulk(_values)
       .then(() => {
         setSubmitting(false);
 
@@ -43,14 +61,15 @@ function CategorizeTransactionFormRoot({
         });
         closeMatchingTransactionAside();
       })
-      .catch((err) => {
+      .catch((err: { response?: { data?: { errors?: Array<{ type: string }> } } }) => {
         setSubmitting(false);
         if (
-          err.response.data?.errors?.some(
+          err.response?.data?.errors?.some(
             (e) => e.type === 'BRANCH_ID_REQUIRED',
           )
         ) {
           setErrors({
+            ...({} as CategorizeTransactionFormValues),
             branchId: 'The branch is required.',
           });
         } else {

@@ -3,6 +3,7 @@ import { Type } from 'class-transformer';
 import { ItemEntryDto } from '@/modules/TransactionItemEntry/dto/ItemEntry.dto';
 import { AttachmentLinkDto } from '@/modules/Attachments/dtos/Attachment.dto';
 import { BranchResponseDto } from '@/modules/Branches/dtos/BranchResponse.dto';
+import { VendorResponseDto } from '@/modules/Vendors/dtos/VendorResponse.dto';
 import { DiscountType } from '@/common/types/Discount';
 
 export class BillResponseDto {
@@ -186,6 +187,12 @@ export class BillResponseDto {
   isOverdue: boolean;
 
   @ApiProperty({
+    description: 'Whether the bill is open',
+    example: true,
+  })
+  isOpen: boolean;
+
+  @ApiProperty({
     description: 'Whether the bill is partially paid',
     example: true,
   })
@@ -209,4 +216,25 @@ export class BillResponseDto {
     required: false,
   })
   updatedAt?: Date;
+
+  @ApiProperty({
+    description: 'The vendor of the bill',
+    type: () => VendorResponseDto,
+  })
+  @Type(() => VendorResponseDto)
+  vendor: VendorResponseDto;
+
+  @ApiProperty({
+    description: 'Number of days the bill is overdue',
+    example: 0,
+    nullable: true,
+  })
+  overdueDays: number;
+
+  @ApiProperty({
+    description: 'Number of days remaining until the bill is due',
+    example: 15,
+    nullable: true,
+  })
+  remainingDays: number;
 }

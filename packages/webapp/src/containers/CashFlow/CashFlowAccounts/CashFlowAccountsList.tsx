@@ -1,6 +1,4 @@
-// @ts-nocheck
 import React, { useEffect } from 'react';
-import { compose } from 'lodash/fp';
 import '@/style/pages/CashFlow/CashFlowAccounts/List.scss';
 import { DashboardPageContent } from '@/components';
 import { CashFlowAccountsProvider } from './CashFlowAccountsProvider';
@@ -9,8 +7,18 @@ import { CashFlowAccountsActionsBar } from './CashFlowAccountsActionsBar';
 import { CashflowAccountsPlaidLink } from './CashflowAccountsPlaidLink';
 import { CashflowAccountsLoadingBar } from './CashFlowAccountsLoadingBar';
 import { withCashflowAccounts } from '@/containers/CashFlow/AccountTransactions/withCashflowAccounts';
+import type { WithCashflowAccountsProps } from '@/containers/CashFlow/AccountTransactions/withCashflowAccounts';
 import { withCashflowAccountsTableActions } from '@/containers/CashFlow/AccountTransactions/withCashflowAccountsTableActions';
+import type { WithCashflowAccountsTableActionsProps } from '@/containers/CashFlow/AccountTransactions/withCashflowAccountsTableActions';
 import { CashFlowDrawers } from '@/containers/CashFlow/CashFlowDrawers';
+import { compose } from '@/utils';
+
+interface CashFlowAccountsListInnerProps
+  extends Pick<WithCashflowAccountsProps, 'cashflowAccountsTableState'>,
+    Pick<
+      WithCashflowAccountsTableActionsProps,
+      'resetCashflowAccountsTableState'
+    > {}
 
 /**
  * Cashflow accounts list.
@@ -21,7 +29,7 @@ function CashFlowAccountsListInner({
 
   // #withCashflowAccountsTableActions
   resetCashflowAccountsTableState,
-}) {
+}: CashFlowAccountsListInnerProps) {
   // Resets the cashflow accounts table state.
   useEffect(
     () => () => {

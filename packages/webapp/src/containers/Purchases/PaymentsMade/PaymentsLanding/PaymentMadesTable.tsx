@@ -1,4 +1,3 @@
-// @ts-nocheck
 import React, { useCallback } from 'react';
 import { useHistory } from 'react-router-dom';
 
@@ -14,39 +13,44 @@ import {
 import { PaymentMadesEmptyStatus } from './PaymentMadesEmptyStatus';
 
 import { withPaymentMade } from './withPaymentMade';
+import type { WithPaymentMadeProps } from './withPaymentMade';
 import { withPaymentMadeActions } from './withPaymentMadeActions';
 import { withAlertActions } from '@/containers/Alert/withAlertActions';
+import type { WithAlertActionsProps } from '@/containers/Alert/withAlertActions';
 import { withDrawerActions } from '@/containers/Drawer/withDrawerActions';
+import type { WithDrawerActionsProps } from '@/containers/Drawer/withDrawerActions';
 import { withSettings } from '@/containers/Settings/withSettings';
 
 import { usePaymentMadesTableColumns, ActionsMenu } from './components';
+import type { PaymentMadeTableRow } from './components';
 import { usePaymentMadesListContext } from './PaymentMadesListProvider';
 import { useMemorizedColumnsWidths } from '@/hooks';
 import { DRAWERS } from '@/constants/drawers';
 
-/**
- * Payment made datatable transactions.
- */
+interface WithPaymentMadeActionsProps {
+  setPaymentMadesTableState: (state: Record<string, any>) => void;
+}
+
+interface WithSettingsProps {
+  paymentMadesTableSize?: string | null;
+}
+
+interface PaymentMadesTableProps
+  extends Pick<WithPaymentMadeProps, 'paymentMadesTableState'>,
+    WithPaymentMadeActionsProps,
+    WithAlertActionsProps,
+    WithDrawerActionsProps,
+    WithSettingsProps {}
+
 function PaymentMadesTableInner({
-  // #withPaymentMadeActions
   setPaymentMadesTableState,
-
-  // #withPaymentMade
   paymentMadesTableState,
-
-  // #withAlerts
   openAlert,
-
-  // #withDrawerActions
   openDrawer,
-
-  // #withSettings
   paymentMadesTableSize,
-}) {
-  // Payment mades table columns.
+}: PaymentMadesTableProps) {
   const columns = usePaymentMadesTableColumns();
 
-  // Payment mades list context.
   const {
     paymentMades,
     pagination,
@@ -55,44 +59,44 @@ function PaymentMadesTableInner({
     isPaymentsFetching,
   } = usePaymentMadesListContext();
 
-  // History context.
   const history = useHistory();
 
-  // Handles the edit payment made action.
-  const handleEditPaymentMade = (paymentMade) => {
+  const handleEditPaymentMade = (paymentMade: PaymentMadeTableRow) => {
     history.push(`/payments-made/${paymentMade.id}/edit`);
   };
 
-  // Handles the delete payment made action.
-  const handleDeletePaymentMade = (paymentMade) => {
+  const handleDeletePaymentMade = (paymentMade: PaymentMadeTableRow) => {
     openAlert('payment-made-delete', { paymentMadeId: paymentMade.id });
   };
 
-  // Handle view detail  payment made.
-  const handleViewDetailPaymentMade = ({ id }) => {
+  const handleViewDetailPaymentMade = ({ id }: PaymentMadeTableRow) => {
     openDrawer(DRAWERS.PAYMENT_MADE_DETAILS, { paymentMadeId: id });
   };
 
-  // Handle cell click.
-  const handleCellClick = (cell, event) => {
+  const handleCellClick = (cell: any, _event: React.MouseEvent) => {
     openDrawer(DRAWERS.PAYMENT_MADE_DETAILS, {
       paymentMadeId: cell.row.original.id,
     });
   };
 
-  // Local storage memorizing columns widths.
   const [initialColumnsWidths, , handleColumnResizing] =
     useMemorizedColumnsWidths(TABLES.PAYMENT_MADES);
 
-  // Handle datatable fetch data once the table state change.
   const handleDataTableFetchData = useCallback(
-    ({ pageIndex, pageSize, sortBy }) => {
+    ({
+      pageIndex,
+      pageSize,
+      sortBy,
+    }: {
+      pageSize: number;
+      pageIndex: number;
+      sortBy: Array<{ id: string; desc: boolean }>;
+    }) => {
       setPaymentMadesTableState({ pageIndex, pageSize, sortBy });
     },
     [setPaymentMadesTableState],
   );
 
-  // Display empty status instead of the table.
   if (isEmptyStatus) {
     return <PaymentMadesEmptyStatus />;
   }
@@ -137,7 +141,7 @@ export const PaymentMadesTable = compose(
   withPaymentMade(({ paymentMadesTableState }) => ({ paymentMadesTableState })),
   withAlertActions,
   withDrawerActions,
-  withSettings(({ billPaymentSettings }) => ({
+  withSettings(({ billPaymentSettings }: any) => ({
     paymentMadesTableSize: billPaymentSettings?.tableSize,
   })),
 )(PaymentMadesTableInner);

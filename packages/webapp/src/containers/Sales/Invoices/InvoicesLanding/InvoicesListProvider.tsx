@@ -1,41 +1,61 @@
-// @ts-nocheck
 import React, { createContext } from 'react';
 import { isEmpty } from 'lodash';
 
 import { DashboardInsider } from '@/components/Dashboard';
 import { useResourceViews, useResourceMeta, useInvoices } from '@/hooks/query';
 import { getFieldsFromResourceMeta } from '@/utils';
+import type { InvoiceTableRow } from './components';
 
-const InvoicesListContext = createContext();
+interface InvoicesListProviderProps {
+  query?: any;
+  tableStateChanged?: boolean;
+  children?: React.ReactNode;
+}
+
+export interface InvoicesListContextValue {
+  invoices: InvoiceTableRow[] | undefined;
+  pagination: { total?: number; [key: string]: any } | undefined;
+  invoicesFields: Record<string, any>[];
+  invoicesViews: any;
+  isInvoicesLoading: boolean;
+  isInvoicesFetching: boolean;
+  isResourceFetching: boolean;
+  isResourceLoading: boolean;
+  isViewsLoading: boolean;
+  isEmptyStatus: boolean;
+}
+
+const InvoicesListContext = createContext<InvoicesListContextValue>(
+  {} as InvoicesListContextValue,
+);
 
 /**
- * Accounts chart data provider.
+ * Invoices list data provider.
  */
-function InvoicesListProvider({ query, tableStateChanged, ...props }) {
-  // Fetch accounts resource views and fields.
+function InvoicesListProvider({
+  query,
+  tableStateChanged,
+  ...props
+}: InvoicesListProviderProps) {
   const { data: invoicesViews, isLoading: isViewsLoading } =
     useResourceViews('sale_invoices');
 
-  // Fetch resource fields of the sale invoices.
   const {
     data: resourceMeta,
     isLoading: isResourceLoading,
     isFetching: isResourceFetching,
   } = useResourceMeta('sale_invoices');
 
-  // Fetch sale invoices of the given query.
   const {
     data: invoicesData,
     isFetching: isInvoicesFetching,
     isLoading: isInvoicesLoading,
-  } = useInvoices(query, { keepPreviousData: true });
+  } = useInvoices(query);
 
-  // Detarmines whether the table should show empty state.
   const isEmptyStatus =
     isEmpty(invoicesData?.data) && !tableStateChanged && !isInvoicesLoading;
 
-  // Provider payload.
-  const provider = {
+  const provider: InvoicesListContextValue = {
     invoices: invoicesData?.data,
     pagination: invoicesData?.pagination,
 

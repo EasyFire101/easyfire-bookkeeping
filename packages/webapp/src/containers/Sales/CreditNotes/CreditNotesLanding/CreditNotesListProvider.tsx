@@ -1,4 +1,3 @@
-// @ts-nocheck
 import React from 'react';
 import { isEmpty } from 'lodash';
 
@@ -11,42 +10,61 @@ import {
 } from '@/hooks/query';
 
 import { getFieldsFromResourceMeta } from '@/utils';
+import type { CreditNoteTableRow } from './components';
 
-const CreditNoteListContext = React.createContext();
+interface CreditNotesListProviderProps {
+  query?: any;
+  tableStateChanged?: boolean;
+  children?: React.ReactNode;
+}
 
-/**
- * Credit note data provider.
- */
-function CreditNotesListProvider({ query, tableStateChanged, ...props }) {
-  // Credit notes refresh action.
+export interface CreditNotesListContextValue {
+  creditNotes: CreditNoteTableRow[] | undefined;
+  pagination: { total?: number; [key: string]: any } | undefined;
+  CreditNotesView: any;
+  refresh: () => void;
+  resourceMeta: any;
+  fields: Record<string, any>[];
+  isResourceLoading: boolean;
+  isResourceFetching: boolean;
+  isCreditNotesFetching: boolean;
+  isCreditNotesLoading: boolean;
+  isViewsLoading: boolean;
+  isEmptyStatus: boolean;
+}
+
+const CreditNoteListContext = React.createContext<CreditNotesListContextValue>(
+  {} as CreditNotesListContextValue,
+);
+
+function CreditNotesListProvider({
+  query,
+  tableStateChanged,
+  ...props
+}: CreditNotesListProviderProps) {
   const { refresh } = useRefreshCreditNotes();
 
-  // Fetch create notes resource views and fields.
   const { data: CreditNotesView, isLoading: isViewsLoading } =
     useResourceViews('credit_notes');
 
-  // Fetch the accounts resource fields.
   const {
     data: resourceMeta,
     isLoading: isResourceLoading,
     isFetching: isResourceFetching,
   } = useResourceMeta('credit_notes');
 
-  // Fetch credit note list.
   const {
     data: creditNotesData,
     isFetching: isCreditNotesFetching,
     isLoading: isCreditNotesLoading,
-  } = useCreditNotes(query, { keepPreviousData: true });
+  } = useCreditNotes(query);
 
-  // Detarmines the datatable empty status.S
   const isEmptyStatus =
     isEmpty(creditNotesData?.data) &&
     !isCreditNotesLoading &&
     !tableStateChanged;
 
-  // Provider payload.
-  const provider = {
+  const provider: CreditNotesListContextValue = {
     creditNotes: creditNotesData?.data,
     pagination: creditNotesData?.pagination,
 

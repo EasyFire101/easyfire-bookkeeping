@@ -179,8 +179,7 @@ export function useJournals(
     'queryKey' | 'queryFn'
   >,
 ) {
-  const fetcher = useApiFetcher();
-
+  const fetcher = useApiFetcher({ enableCamelCaseTransform: true });
   return useQuery({
     ...props,
     queryKey: manualJournalsKeys.list(query ?? undefined),
@@ -193,7 +192,6 @@ export function useJournal(
   props?: Omit<UseQueryOptions<ManualJournal>, 'queryKey' | 'queryFn'>,
 ) {
   const fetcher = useApiFetcher();
-
   return useQuery({
     ...props,
     queryKey: manualJournalsKeys.detail(id),

@@ -1,6 +1,16 @@
-// @ts-nocheck
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import { useApiFetcher } from '../../useRequest';
+import {
+  useMutation,
+  useQuery,
+  useQueryClient,
+  UseMutationOptions,
+  UseQueryOptions,
+} from '@tanstack/react-query';
+import type {
+  CreateQuickInventoryAdjustmentBody,
+  GetInventoryAdjustmentsQuery,
+  InventoryAdjustment,
+  InventoryAdjustmentsListResponse,
+} from '@bigcapital/sdk-ts';
 import {
   createQuickInventoryAdjustment,
   deleteInventoryAdjustment,
@@ -8,55 +18,70 @@ import {
   fetchInventoryAdjustments,
   fetchInventoryAdjustment,
 } from '@bigcapital/sdk-ts';
+import { useApiFetcher } from '../../useRequest';
 import { inventoryAdjustmentsKeys } from './query-keys';
 
-const commonInvalidateQueries = (queryClient) => {
-  // Invalidate inventory adjustments.
+const commonInvalidateQueries = (
+  queryClient: ReturnType<typeof useQueryClient>,
+) => {
   queryClient.invalidateQueries({ queryKey: inventoryAdjustmentsKeys.all() });
 };
 
-export function useCreateInventoryAdjustment(props) {
+export function useCreateInventoryAdjustment(
+  props?: UseMutationOptions<void, Error, CreateQuickInventoryAdjustmentBody>,
+) {
   const queryClient = useQueryClient();
   const fetcher = useApiFetcher();
 
   return useMutation({
     ...props,
-    mutationFn: (values) => createQuickInventoryAdjustment(fetcher, values),
+    mutationFn: (values: CreateQuickInventoryAdjustmentBody) =>
+      createQuickInventoryAdjustment(fetcher, values),
     onSuccess: () => {
       commonInvalidateQueries(queryClient);
     },
   });
 }
 
-export function useDeleteInventoryAdjustment(props) {
+export function useDeleteInventoryAdjustment(
+  props?: UseMutationOptions<void, Error, number>,
+) {
   const queryClient = useQueryClient();
   const fetcher = useApiFetcher();
 
   return useMutation({
     ...props,
-    mutationFn: (id) => deleteInventoryAdjustment(fetcher, id),
-    onSuccess: (_res, id) => {
+    mutationFn: (id: number) => deleteInventoryAdjustment(fetcher, id),
+    onSuccess: (_res, _id) => {
       commonInvalidateQueries(queryClient);
     },
   });
 }
 
-export function useInventoryAdjustments(query, props) {
-  const fetcher = useApiFetcher();
+export function useInventoryAdjustments(
+  query?: GetInventoryAdjustmentsQuery | null,
+  props?: Omit<
+    UseQueryOptions<InventoryAdjustmentsListResponse>,
+    'queryKey' | 'queryFn'
+  >,
+) {
+  const fetcher = useApiFetcher({ enableCamelCaseTransform: true });
   return useQuery({
     ...props,
-    queryKey: inventoryAdjustmentsKeys.list(query),
-    queryFn: () => fetchInventoryAdjustments(fetcher, query),
+    queryKey: inventoryAdjustmentsKeys.list(query ?? undefined),
+    queryFn: () => fetchInventoryAdjustments(fetcher, query ?? {}),
   });
 }
 
-export function usePublishInventoryAdjustment(props) {
+export function usePublishInventoryAdjustment(
+  props?: UseMutationOptions<void, Error, number>,
+) {
   const queryClient = useQueryClient();
   const fetcher = useApiFetcher();
 
   return useMutation({
     ...props,
-    mutationFn: (id) => publishInventoryAdjustment(fetcher, id),
+    mutationFn: (id: number) => publishInventoryAdjustment(fetcher, id),
     onSuccess: (_res, id) => {
       queryClient.invalidateQueries({
         queryKey: inventoryAdjustmentsKeys.detail(id),
@@ -66,13 +91,16 @@ export function usePublishInventoryAdjustment(props) {
   });
 }
 
-export function useInventoryAdjustment(id, props) {
+export function useInventoryAdjustment(
+  id: number | null | undefined,
+  props?: Omit<UseQueryOptions<InventoryAdjustment>, 'queryKey' | 'queryFn'>,
+) {
   const fetcher = useApiFetcher();
 
   return useQuery({
     ...props,
     queryKey: inventoryAdjustmentsKeys.detail(id),
-    queryFn: () => fetchInventoryAdjustment(fetcher, id),
+    queryFn: () => fetchInventoryAdjustment(fetcher, id!),
     enabled: id != null,
   });
 }

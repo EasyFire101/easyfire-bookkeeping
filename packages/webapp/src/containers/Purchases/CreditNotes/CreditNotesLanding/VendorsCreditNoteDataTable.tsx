@@ -1,4 +1,3 @@
-// @ts-nocheck
 import React from 'react';
 import { useHistory } from 'react-router-dom';
 
@@ -14,44 +13,51 @@ import { useMemorizedColumnsWidths } from '@/hooks';
 
 import { withDashboardActions } from '@/containers/Dashboard/withDashboardActions';
 import { withAlertActions } from '@/containers/Alert/withAlertActions';
+import type { WithAlertActionsProps } from '@/containers/Alert/withAlertActions';
 import { withDrawerActions } from '@/containers/Drawer/withDrawerActions';
+import type { WithDrawerActionsProps } from '@/containers/Drawer/withDrawerActions';
 import { withDialogActions } from '@/containers/Dialog/withDialogActions';
+import type { WithDialogActionsProps } from '@/containers/Dialog/withDialogActions';
 import { withVendorsCreditNotesActions } from './withVendorsCreditNotesActions';
 import { withVendorsCreditNotes } from './withVendorsCreditNotes';
+import type { WithVendorsCreditNotesProps } from './withVendorsCreditNotes';
 import { withSettings } from '@/containers/Settings/withSettings';
 
 import { useVendorsCreditNoteTableColumns, ActionsMenu } from './components';
+import type { VendorCreditTableRow } from './components';
 import { useVendorsCreditNoteListContext } from './VendorsCreditNoteListProvider';
 
 import { compose } from '@/utils';
 import { DRAWERS } from '@/constants/drawers';
 
-/**
- * Vendors Credit note data table.
- */
+interface WithVendorsCreditNotesActionsProps {
+  setVendorsCreditNoteTableState: (state: Record<string, any>) => void;
+  setVendorsCreditNoteSelectedRows: (ids: number[]) => void;
+}
+
+interface WithSettingsProps {
+  creditNoteTableSize?: string | null;
+}
+
+interface VendorsCreditNoteDataTableProps
+  extends Pick<WithVendorsCreditNotesProps, 'vendorsCreditNoteTableState'>,
+    WithVendorsCreditNotesActionsProps,
+    WithAlertActionsProps,
+    WithDrawerActionsProps,
+    WithDialogActionsProps,
+    WithSettingsProps {}
+
 function VendorsCreditNoteDataTableInner({
-  // #withVendorsCreditNotesActions
   setVendorsCreditNoteTableState,
   setVendorsCreditNoteSelectedRows,
-
-  // #withVendorCredits
   vendorsCreditNoteTableState,
-
-  // #withAlertActions
   openAlert,
-
-  // #withDrawerActions
   openDrawer,
-
-  // #withDialogAction
   openDialog,
-
-  // #withSettings
   creditNoteTableSize,
-}) {
+}: VendorsCreditNoteDataTableProps) {
   const history = useHistory();
 
-  // Vendor credits context.
   const {
     vendorCredits,
     pagination,
@@ -60,16 +66,21 @@ function VendorsCreditNoteDataTableInner({
     isVendorCreditsLoading,
   } = useVendorsCreditNoteListContext();
 
-  // Credit note table columns.
   const columns = useVendorsCreditNoteTableColumns();
 
-  // Local storage memorizing columns widths.
   const [initialColumnsWidths, , handleColumnResizing] =
     useMemorizedColumnsWidths(TABLES.VENDOR_CREDITS);
 
-  // Handles fetch data once the table state change.
   const handleDataTableFetchData = React.useCallback(
-    ({ pageSize, pageIndex, sortBy }) => {
+    ({
+      pageSize,
+      pageIndex,
+      sortBy,
+    }: {
+      pageSize: number;
+      pageIndex: number;
+      sortBy: Array<{ id: string; desc: boolean }>;
+    }) => {
       setVendorsCreditNoteTableState({
         pageSize,
         pageIndex,
@@ -79,49 +90,45 @@ function VendorsCreditNoteDataTableInner({
     [setVendorsCreditNoteTableState],
   );
 
-  // Display create note empty status instead of the table.
   if (isEmptyStatus) {
     return <VendorsCreditNoteEmptyStatus />;
   }
 
-  // Handle view vendor credit details.
-  const handleViewDetailVendorCredit = ({ id }) => {
+  const handleViewDetailVendorCredit = ({ id }: VendorCreditTableRow) => {
     openDrawer(DRAWERS.VENDOR_CREDIT_DETAILS, { vendorCreditId: id });
   };
 
-  // Handle delete credit note.
-  const handleDeleteVendorCreditNote = ({ id }) => {
+  const handleDeleteVendorCreditNote = ({ id }: VendorCreditTableRow) => {
     openAlert('vendor-credit-delete', { vendorCreditId: id });
   };
 
-  // Handle edit credit note.
-  const hanldeEditVendorCreditNote = (vendorCredit) => {
+  const hanldeEditVendorCreditNote = (vendorCredit: VendorCreditTableRow) => {
     history.push(`/vendor-credits/${vendorCredit.id}/edit`);
   };
 
-  // Handle cell click.
-  const handleCellClick = (cell, event) => {
+  const handleCellClick = (cell: any, _event: React.MouseEvent) => {
     openDrawer(DRAWERS.VENDOR_CREDIT_DETAILS, {
       vendorCreditId: cell.row.original.id,
     });
   };
 
-  const handleRefundCreditVendor = ({ id }) => {
+  const handleRefundCreditVendor = ({ id }: VendorCreditTableRow) => {
     openDialog('refund-vendor-credit', { vendorCreditId: id });
   };
 
-  // Handle cancel/confirm vendor credit open.
-  const handleOpenCreditNote = ({ id }) => {
+  const handleOpenCreditNote = ({ id }: VendorCreditTableRow) => {
     openAlert('vendor-credit-open', { vendorCreditId: id });
   };
 
-  // Handle reconcile credit note.
-  const handleReconcileVendorCredit = ({ id }) => {
+  const handleReconcileVendorCredit = ({ id }: VendorCreditTableRow) => {
     openDialog('reconcile-vendor-credit', { vendorCreditId: id });
   };
 
-  const handleSelectedRowsChange = (selectedFlatRows) => {
-    const selectedIds = selectedFlatRows?.map((row) => row.original.id) || [];
+  const handleSelectedRowsChange = (
+    selectedFlatRows: Array<{ original: VendorCreditTableRow }>,
+  ) => {
+    const selectedIds =
+      selectedFlatRows?.map((row) => row.original.id) || [];
     setVendorsCreditNoteSelectedRows(selectedIds);
   };
 
@@ -168,7 +175,7 @@ export const VendorsCreditNoteDataTable = compose(
   withAlertActions,
   withDrawerActions,
   withDialogActions,
-  withSettings(({ vendorsCreditNoteSetting }) => ({
+  withSettings(({ vendorsCreditNoteSetting }: any) => ({
     creditNoteTableSize: vendorsCreditNoteSetting?.tableSize,
   })),
   withVendorsCreditNotes(({ vendorsCreditNoteTableState }) => ({

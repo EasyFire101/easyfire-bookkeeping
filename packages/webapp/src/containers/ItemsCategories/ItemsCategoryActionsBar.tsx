@@ -1,4 +1,3 @@
-// @ts-nocheck
 import {
   NavbarGroup,
   NavbarDivider,
@@ -16,14 +15,30 @@ import {
 } from '@/components';
 
 import { withItemCategories } from './withItemCategories';
+import type { WithItemCategoriesProps } from './withItemCategories';
 import { withItemCategoriesActions } from './withItemCategoriesActions';
+import type { WithItemCategoriesActionsProps } from './withItemCategoriesActions';
 import { withDialogActions } from '@/containers/Dialog/withDialogActions';
+import type { WithDialogActionsProps } from '@/containers/Dialog/withDialogActions';
 import { withAlertActions } from '@/containers/Alert/withAlertActions';
+import type { WithAlertActionsProps } from '@/containers/Alert/withAlertActions';
 
 import { compose } from '@/utils';
 import { useItemsCategoriesContext } from './ItemsCategoriesProvider';
 import { useHistory } from 'react-router-dom';
 import { DialogsName } from '@/constants/dialogs';
+
+interface ItemsCategoryActionsBarInnerProps
+  extends WithItemCategoriesActionsProps,
+    WithDialogActionsProps,
+    WithAlertActionsProps {
+  // NOTE: `itemCategoriesSelectedRows` was destructured from the mapper in the
+  // @ts-nocheck original even though `WithItemCategoriesProps` doesn't define
+  // it — preserved latent bug; the value is `undefined` at runtime, which means
+  // the bulk-delete button never renders.
+  itemCategoriesSelectedRows: unknown[];
+  categoriesFilterConditions: unknown[];
+}
 
 /**
  * Items categories actions bar.
@@ -31,6 +46,7 @@ import { DialogsName } from '@/constants/dialogs';
 function ItemsCategoryActionsBarInner({
   // #withItemCategories
   itemCategoriesSelectedRows = [],
+
   categoriesFilterConditions,
 
   //
@@ -41,7 +57,7 @@ function ItemsCategoryActionsBarInner({
 
   // #withAlertActions
   openAlert,
-}) {
+}: ItemsCategoryActionsBarInnerProps) {
   const { fields } = useItemsCategoriesContext();
   const history = useHistory();
 
@@ -80,7 +96,7 @@ function ItemsCategoryActionsBarInner({
             conditions: categoriesFilterConditions,
             defaultFieldKey: 'name',
             fields: fields,
-            onFilterChange: (filterConditions) => {
+            onFilterChange: (filterConditions: unknown[]) => {
               setItemsCategoriesTableState({ filterRoles: filterConditions });
             },
           }}
@@ -90,7 +106,7 @@ function ItemsCategoryActionsBarInner({
           />
         </AdvancedFilterPopover>
 
-        <If condition={itemCategoriesSelectedRows.length}>
+        <If condition={!!itemCategoriesSelectedRows?.length}>
           <Button
             className={Classes.MINIMAL}
             icon={<Icon icon="trash-16" iconSize={16} />}
@@ -120,8 +136,11 @@ function ItemsCategoryActionsBarInner({
 export const ItemsCategoryActionsBar = compose(
   withDialogActions,
   withItemCategories(
-    ({ itemCategoriesSelectedRows, itemsCategoriesTableState }) => ({
-      itemCategoriesSelectedRows,
+    // `itemCategoriesSelectedRows` is not on `WithItemCategoriesProps` — the
+    // @ts-nocheck original destructured it anyway, so the value is `undefined`.
+    // Preserved latent bug.
+    ({ itemsCategoriesTableState }) => ({
+      itemCategoriesSelectedRows: undefined,
       categoriesFilterConditions: itemsCategoriesTableState.filterRoles,
     }),
   ),

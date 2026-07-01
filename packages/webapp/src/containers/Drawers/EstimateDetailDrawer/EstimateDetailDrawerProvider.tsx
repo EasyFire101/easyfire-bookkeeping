@@ -25,14 +25,8 @@ export type EstimateDetailEntry = SaleEstimate['entries'][number] & {
  * the schema is updated.
  */
 export interface EstimateDetail extends Omit<SaleEstimate, 'entries'> {
-  isApproved?: boolean;
-  isRejected?: boolean;
-  isDelivered?: boolean;
-  isExpired?: boolean;
-  isConvertedToInvoice?: boolean;
   subtotal?: number;
   branch?: { name?: string };
-  customer?: { displayName?: string };
   entries: EstimateDetailEntry[];
 }
 

@@ -1,10 +1,8 @@
-// @ts-nocheck
 import React, { useMemo } from 'react';
-import { Formik, Form } from 'formik';
+import { Formik, Form, type FormikHelpers } from 'formik';
 import { Intent } from '@blueprintjs/core';
 import intl from 'react-intl-universal';
-import * as R from 'ramda';
-import { sumBy, round, isEmpty, omit } from 'lodash';
+import { sumBy, round, isEmpty } from 'lodash';
 import classNames from 'classnames';
 import { css } from '@emotion/css';
 import { useHistory } from 'react-router-dom';
@@ -27,24 +25,32 @@ import { useCurrentOrganizationBaseCurrency } from '@/hooks/query';
 
 import { AppToaster } from '@/components';
 import { PageForm } from '@/components/PageForm';
-import { compose, orderingLinesIndexes, transactionNumber } from '@/utils';
+import { compose, transactionNumber } from '@/utils';
 import {
   transformErrors,
   transformToEditForm,
+  transformFormValuesToRequest,
   defaultManualJournal,
+  type MakeJournalEntry,
+  type MakeJournalFormValues,
+  type MakeJournalErrorResponse,
 } from './utils';
 import { JournalSyncIncrementSettingsToForm } from './components';
-import { transformAttachmentsToRequest } from '@/containers/Attachments/utils';
+
+type MakeJournalEntriesFormRootProps = {
+  journalNextNumber?: number;
+  journalNumberPrefix?: string;
+  journalAutoIncrement?: boolean;
+};
 
 /**
  * Journal entries form.
  */
 function MakeJournalEntriesFormInner({
-  // #withSettings
   journalNextNumber,
   journalNumberPrefix,
   journalAutoIncrement,
-}) {
+}: MakeJournalEntriesFormRootProps) {
   const baseCurrency = useCurrentOrganizationBaseCurrency();
 
   // Journal form context.
@@ -64,7 +70,7 @@ function MakeJournalEntriesFormInner({
     journalNextNumber,
   );
   // Form initial values.
-  const initialValues = useMemo(
+  const initialValues = useMemo<MakeJournalFormValues>(
     () => ({
       ...(!isEmpty(manualJournal)
         ? {
@@ -75,24 +81,29 @@ function MakeJournalEntriesFormInner({
             // If the auto-increment mode is enabled, take the next journal
             // number from the settings.
             ...(journalAutoIncrement && {
-              journal_number: journalNumber,
+              journalNumber,
             }),
-            currency_code: baseCurrency,
+            currencyCode: baseCurrency ?? '',
           }),
     }),
     [manualJournal, baseCurrency, journalNumber, journalAutoIncrement],
   );
 
   // Handle the form submiting.
-  const handleSubmit = (values, { setErrors, setSubmitting, resetForm }) => {
+  const handleSubmit = (
+    values: MakeJournalFormValues,
+    { setErrors, setSubmitting, resetForm }: FormikHelpers<MakeJournalFormValues>,
+  ) => {
     setSubmitting(true);
     const entries = values.entries.filter(
       (entry) => entry.debit || entry.credit,
     );
     // Updated getTotal function using lodash
-    const getTotal = (type = 'credit') => {
+    const getTotal = (type: 'credit' | 'debit'): number => {
       return round(
-        sumBy(entries, (entry) => parseFloat(entry[type] || 0)),
+        sumBy(entries, (entry: MakeJournalEntry) =>
+          parseFloat(String(entry[type] || 0)),
+        ),
         2,
       );
     };
@@ -115,29 +126,24 @@ function MakeJournalEntriesFormInner({
       setSubmitting(false);
       return;
     }
-    const attachments = transformAttachmentsToRequest(values);
-    const form = {
-      ...omit(values, ['journal_number_manually']),
-      ...(values.journal_number_manually && {
-        journal_number: values.journal_number,
-      }),
-      entries: R.compose(orderingLinesIndexes)(entries),
-      publish: submitPayload.publish,
-      attachments,
-    };
+    const form = transformFormValuesToRequest(values, !!submitPayload.publish);
     // Handle the request error.
-    const handleError = ({ data: { errors } }) => {
+    const handleError = ({
+      data: { errors },
+    }: {
+      data: { errors: MakeJournalErrorResponse[] };
+    }) => {
       transformErrors(errors, { setErrors });
       setSubmitting(false);
     };
     // Handle the request success.
-    const handleSuccess = (errors) => {
+    const handleSuccess = () => {
       AppToaster.show({
         message: intl.get(
           isNewMode
             ? 'the_journal_has_been_created_successfully'
             : 'the_journal_has_been_edited_successfully',
-          { number: values.journal_number },
+          { number: values.journalNumber },
         ),
         intent: Intent.SUCCESS,
       });
@@ -150,7 +156,7 @@ function MakeJournalEntriesFormInner({
         resetForm();
       }
     };
-    if (isNewMode) {
+    if (isNewMode || !manualJournal) {
       createJournalMutate(form).then(handleSuccess).catch(handleError);
     } else {
       editJournalMutate([manualJournal.id, form])

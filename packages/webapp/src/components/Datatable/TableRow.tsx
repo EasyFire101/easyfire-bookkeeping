@@ -1,5 +1,5 @@
-// @ts-nocheck
 import React, { useCallback, useContext } from 'react';
+import type { Row } from 'react-table';
 import { ContextMenu } from '@/components';
 import classNames from 'classnames';
 import useContextMenu from 'react-use-context-menu';
@@ -7,15 +7,20 @@ import useContextMenu from 'react-use-context-menu';
 import TableContext from './TableContext';
 import { saveInvoke, ConditionalWrapper } from '@/utils';
 
-/**
- * Table row context wrapper.
- */
-function TableRowContextMenu({ children, row }) {
-  // Table context.
+interface TableRowContextMenuProps {
+  children?: React.ReactNode;
+  row: Row<any>;
+}
+
+function TableRowContextMenu({ children, row }: TableRowContextMenuProps) {
   const {
     props: { ContextMenu: ContextMenuContent },
     table,
   } = useContext(TableContext);
+
+  if (!ContextMenuContent) {
+    return <>{children}</>;
+  }
 
   const [
     bindMenu,
@@ -33,7 +38,7 @@ function TableRowContextMenu({ children, row }) {
   }, [setVisible]);
 
   return (
-    <div class="tr-context" {...bindTrigger}>
+    <div className="tr-context" {...bindTrigger}>
       {children}
 
       <ContextMenu
@@ -48,10 +53,18 @@ function TableRowContextMenu({ children, row }) {
   );
 }
 
-/**
- * Table row.
- */
-export default function TableRow({ row, className, style }) {
+interface TableRowProps {
+  row: Row<any>;
+  className?: string;
+  style?: React.CSSProperties;
+  TableCellRenderer?: React.ComponentType<any>;
+}
+
+export default function TableRow({
+  row,
+  className,
+  style,
+}: TableRowProps) {
   const {
     props: {
       TableCellRenderer,

@@ -1,6 +1,3 @@
-// @ts-nocheck
-import React from 'react';
-
 import '@/style/pages/ManualJournal/List.scss';
 
 import { DashboardPageContent } from '@/components';
@@ -12,6 +9,15 @@ import { ManualJournalActionsBar as ManualJournalsActionsBar } from './ManualJou
 import { ManualJournalsListDrawers } from './ManualJournalsListDrawers';
 import { ManualJournalsListDialogs } from './ManualJournalsListDialogs';
 import { withManualJournals } from './withManualJournals';
+import type { WithManualJournalsProps } from './withManualJournals';
+
+// The withManualJournals mapper below renames `manualJournalsTableState` →
+// `journalsTableState` and `manualJournalTableStateChanged` →
+// `journalsTableStateChanged`. Pick<...> can't rename, so re-typing is required.
+interface ManualJournalsTableProps {
+  journalsTableState: WithManualJournalsProps['manualJournalsTableState'];
+  journalsTableStateChanged: WithManualJournalsProps['manualJournalTableStateChanged'];
+}
 
 /**
  * Manual journals table.
@@ -20,7 +26,7 @@ function ManualJournalsTable({
   // #withManualJournals
   journalsTableState,
   journalsTableStateChanged,
-}) {
+}: ManualJournalsTableProps) {
   return (
     <ManualJournalsListProvider
       query={transformTableStateToQuery(journalsTableState)}

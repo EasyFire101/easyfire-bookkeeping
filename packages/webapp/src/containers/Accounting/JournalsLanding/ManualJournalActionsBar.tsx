@@ -1,4 +1,3 @@
-// @ts-nocheck
 import React from 'react';
 import {
   Button,
@@ -26,15 +25,32 @@ import { useManualJournalsContext } from './ManualJournalsListProvider';
 import { ManualJournalAction, AbilitySubject } from '@/constants/abilityOption';
 
 import { withManualJournals } from './withManualJournals';
+import type { WithManualJournalsProps } from './withManualJournals';
 import { withManualJournalsActions } from './withManualJournalsActions';
+import type { WithManualJournalsActionsProps } from './withManualJournalsActions';
 import { withSettings } from '@/containers/Settings/withSettings';
 import { withSettingsActions } from '@/containers/Settings/withSettingsActions';
+import type { WithSettingsActionsProps } from '@/containers/Settings/withSettingsActions';
 import { withDialogActions } from '@/containers/Dialog/withDialogActions';
+import type { WithDialogActionsProps } from '@/containers/Dialog/withDialogActions';
 
 import { useDownloadExportPdf } from '@/hooks/query/FinancialReports/use-export-pdf';
 import { compose } from '@/utils';
 import { DialogsName } from '@/constants/dialogs';
 import { useBulkDeleteManualJournalsDialog } from './hooks/use-bulk-delete-manual-journals-dialog';
+
+interface WithSettingsProps {
+  manualJournalsTableSize?: string | null;
+}
+
+interface ManualJournalActionsBarInnerProps
+  extends Pick<WithManualJournalsProps, 'manualJournalsSelectedRows'>,
+    WithManualJournalsActionsProps,
+    WithSettingsActionsProps,
+    WithDialogActionsProps,
+    WithSettingsProps {
+  manualJournalsFilterConditions: unknown[];
+}
 
 /**
  * Manual journal actions bar.
@@ -55,7 +71,7 @@ function ManualJournalActionsBarInner({
 
   // #withDialogActions
   openDialog,
-}) {
+}: ManualJournalActionsBarInnerProps) {
   // History context.
   const history = useHistory();
 
@@ -76,11 +92,11 @@ function ManualJournalActionsBarInner({
     useBulkDeleteManualJournalsDialog();
 
   const handleBulkDelete = () => {
-    openBulkDeleteDialog(manualJournalsSelectedRows);
+    openBulkDeleteDialog(manualJournalsSelectedRows as number[]);
   };
 
   // Handle tab change.
-  const handleTabChange = (view) => {
+  const handleTabChange = (view?: { slig?: string }) => {
     setManualJournalsTableState({ viewSlug: view ? view.slig : null });
   };
   // Handle click a refresh Journals
@@ -93,7 +109,7 @@ function ManualJournalActionsBarInner({
   };
 
   // Handle table row size change.
-  const handleTableRowSizeChange = (size) => {
+  const handleTableRowSizeChange = (size: string) => {
     addSetting('manualJournals', 'tableSize', size);
   };
 
@@ -147,8 +163,10 @@ function ManualJournalActionsBarInner({
             conditions: manualJournalsFilterConditions,
             defaultFieldKey: 'journal_number',
             fields,
-            onFilterChange: (filterConditions) => {
-              setManualJournalsTableState({ filterRoles: filterConditions });
+            onFilterChange: (filterConditions: unknown[]) => {
+              setManualJournalsTableState({
+                filterRoles: filterConditions,
+              });
             },
           }}
         >

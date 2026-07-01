@@ -175,7 +175,7 @@ export function useInvoices(
   query?: GetSaleInvoicesQuery,
   props?: UseQueryOptions<SaleInvoicesListResponse, Error>,
 ) {
-  const fetcher = useApiFetcher();
+  const fetcher = useApiFetcher({ enableCamelCaseTransform: true });
 
   return useQuery({
     ...props,

@@ -1,4 +1,3 @@
-// @ts-nocheck
 import React, { useMemo } from 'react';
 import { useFormikContext } from 'formik';
 
@@ -6,17 +5,17 @@ import { OwnerContributionFormFields } from './OwnerContribution/OwnerContributi
 import { OtherIncomeFormFields } from './OtherIncome/OtherIncomeFormFields';
 import { TransferFromAccountFormFields } from './TransferFromAccount/TransferFromAccountFormFields';
 import { MoneyInFieldsProvider } from './MoneyInFieldsProvider';
+import type { MoneyInFormValues } from './types';
 
 /**
  * Money-in dialog content.
  * Switches between fields based on the given transaction type.
- * @returns {JSX.Element}
  */
 export function MoneyInContentFields() {
-  const { values } = useFormikContext();
+  const { values } = useFormikContext<MoneyInFormValues>();
 
   const transactionFields = useMemo(() => {
-    switch (values.transaction_type) {
+    switch (values.transactionType) {
       case 'owner_contribution':
         return <OwnerContributionFormFields />;
 
@@ -28,10 +27,10 @@ export function MoneyInContentFields() {
       default:
         break;
     }
-  }, [values.transaction_type]);
+  }, [values.transactionType]);
 
   // Cannot continue if transaction type or account is not selected.
-  if (!values.transaction_type || !values.cashflow_account_id) return null;
+  if (!values.transactionType || !values.cashflowAccountId) return null;
 
   return <MoneyInFieldsProvider>{transactionFields}</MoneyInFieldsProvider>;
 }

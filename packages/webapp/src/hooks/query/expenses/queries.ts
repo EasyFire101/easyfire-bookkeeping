@@ -167,7 +167,7 @@ export function useExpenses(
   query?: GetExpensesQuery | null,
   props?: Omit<UseQueryOptions<ExpensesListResponse>, 'queryKey' | 'queryFn'>,
 ) {
-  const fetcher = useApiFetcher();
+  const fetcher = useApiFetcher({ enableCamelCaseTransform: true });
 
   return useQuery({
     ...props,

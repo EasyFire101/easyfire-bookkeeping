@@ -1,11 +1,22 @@
-// @ts-nocheck
-import * as R from 'ramda';
-import { transformToForm, transfromToSnakeCase } from '@/utils';
+import type { CategorizeTransactionBody } from '@bigcapital/sdk-ts';
+import { transformToForm } from '@/utils';
 import { useCategorizeTransactionBoot } from './CategorizeTransactionBoot';
-import { GetAutofillCategorizeTransaction } from '@/hooks/query/banking';
+import type { GetAutofillCategorizeTransaction } from '@/hooks/query/banking';
+
+export interface CategorizeTransactionFormValues {
+  amount: string;
+  date: string;
+  creditAccountId: string;
+  debitAccountId: string;
+  exchangeRate: string;
+  transactionType: string;
+  referenceNo: string;
+  description: string;
+  branchId: string | number | null;
+}
 
 // Default initial form values.
-export const defaultInitialValues = {
+export const defaultInitialValues: CategorizeTransactionFormValues = {
   amount: '',
   date: '',
   creditAccountId: '',
@@ -18,26 +29,38 @@ export const defaultInitialValues = {
 };
 
 export const transformToCategorizeForm = (
-  autofillCategorizeTransaction: GetAutofillCategorizeTransaction,
+  autofillCategorizeTransaction: GetAutofillCategorizeTransaction | null | undefined,
 ) => {
   return transformToForm(autofillCategorizeTransaction, defaultInitialValues);
 };
 
+const toNumber = (
+  value: string | number | null | undefined,
+): number | undefined => {
+  if (value == null || value === '') return undefined;
+  return typeof value === 'number' ? value : Number(value) || undefined;
+};
+
 export const tranformToRequest = (
-  formValues: Record<string, any>,
+  formValues: CategorizeTransactionFormValues,
   uncategorizedTransactionIds: Array<number>,
-) => {
+): CategorizeTransactionBody => {
   return {
-    uncategorized_transaction_ids: uncategorizedTransactionIds,
-    ...transfromToSnakeCase(formValues),
+    date: formValues.date,
+    creditAccountId: toNumber(formValues.creditAccountId) ?? 0,
+    referenceNo: formValues.referenceNo,
+    transactionType: formValues.transactionType,
+    exchangeRate: toNumber(formValues.exchangeRate) ?? 1,
+    description: formValues.description,
+    branchId: toNumber(formValues.branchId),
+    uncategorizedTransactionIds,
   };
 };
 
 /**
  * Categorize transaction form initial values.
- * @returns
  */
-export const useCategorizeTransactionFormInitialValues = () => {
+export const useCategorizeTransactionFormInitialValues = (): CategorizeTransactionFormValues => {
   const { primaryBranch, autofillCategorizeValues } =
     useCategorizeTransactionBoot();
 

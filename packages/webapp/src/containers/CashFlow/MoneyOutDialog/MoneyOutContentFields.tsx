@@ -1,4 +1,3 @@
-// @ts-nocheck
 import React, { useMemo } from 'react';
 import { useFormikContext } from 'formik';
 
@@ -6,17 +5,17 @@ import { OtherExpnseFormFields } from './OtherExpense/OtherExpnseFormFields';
 import { OwnerDrawingsFormFields } from './OwnerDrawings/OwnerDrawingsFormFields';
 import { TransferToAccountFormFields } from './TransferToAccount/TransferToAccountFormFields';
 import { MoneyOutFieldsProvider } from './MoneyOutFieldsProvider';
+import type { MoneyOutFormValues } from './types';
 
 /**
  * Money out content fields.
  * Switches between form fields based on the given transaction type.
- * @returns {JSX.Element}
  */
 export function MoneyOutContentFields() {
-  const { values } = useFormikContext();
+  const { values } = useFormikContext<MoneyOutFormValues>();
 
   const transactionType = useMemo(() => {
-    switch (values.transaction_type) {
+    switch (values.transactionType) {
       case 'owner_drawing':
         return <OwnerDrawingsFormFields />;
 
@@ -28,10 +27,10 @@ export function MoneyOutContentFields() {
       default:
         break;
     }
-  }, [values.transaction_type]);
+  }, [values.transactionType]);
 
   // Cannot continue if transaction type or account is not selected.
-  if (!values.transaction_type || !values.cashflow_account_id) return null;
+  if (!values.transactionType || !values.cashflowAccountId) return null;
 
   return <MoneyOutFieldsProvider>{transactionType}</MoneyOutFieldsProvider>;
 }

@@ -1,5 +1,4 @@
-// @ts-nocheck
-import React from 'react';
+import React, { useCallback } from 'react';
 import { useHistory } from 'react-router-dom';
 
 import {
@@ -13,12 +12,18 @@ import { TABLES } from '@/constants/tables';
 import { ManualJournalsEmptyStatus } from './ManualJournalsEmptyStatus';
 
 import { ActionsMenu } from './components';
+import type { ManualJournalTableRow } from './components';
 
 import { withManualJournals } from './withManualJournals';
 import { withManualJournalsActions } from './withManualJournalsActions';
+import type { WithManualJournalsProps } from './withManualJournals';
+import type { WithManualJournalsActionsProps } from './withManualJournalsActions';
 import { withAlertActions } from '@/containers/Alert/withAlertActions';
+import type { WithAlertActionsProps } from '@/containers/Alert/withAlertActions';
 import { withDrawerActions } from '@/containers/Drawer/withDrawerActions';
+import type { WithDrawerActionsProps } from '@/containers/Drawer/withDrawerActions';
 import { withSettings } from '@/containers/Settings/withSettings';
+import type { TableQuery } from '@/store/store.types';
 
 import { useManualJournalsContext } from './ManualJournalsListProvider';
 import { useMemorizedColumnsWidths } from '@/hooks';
@@ -26,6 +31,19 @@ import { useManualJournalsColumns } from './utils';
 
 import { compose } from '@/utils';
 import { DRAWERS } from '@/constants/drawers';
+
+interface WithSettingsProps {
+  manualJournalsTableSize?: string | null;
+}
+
+interface ManualJournalsDataTableProps
+  extends Pick<WithManualJournalsProps, 'manualJournalsTableState'>,
+    WithManualJournalsActionsProps,
+    WithAlertActionsProps,
+    WithDrawerActionsProps,
+    WithSettingsProps {
+  onSelectedRowsChange?: (selectedFlatRows: unknown) => void;
+}
 
 /**
  * Manual journals data-table.
@@ -49,7 +67,7 @@ function ManualJournalsDataTableInner({
 
   // #withSettings
   manualJournalsTableSize,
-}) {
+}: ManualJournalsDataTableProps) {
   // Manual journals context.
   const {
     manualJournals,
@@ -65,25 +83,25 @@ function ManualJournalsDataTableInner({
   const columns = useManualJournalsColumns();
 
   // Handles the journal publish action.
-  const handlePublishJournal = ({ id }) => {
+  const handlePublishJournal = ({ id }: ManualJournalTableRow) => {
     openAlert('journal-publish', { manualJournalId: id });
   };
   // Handle the journal edit action.
-  const handleEditJournal = ({ id }) => {
+  const handleEditJournal = ({ id }: ManualJournalTableRow) => {
     history.push(`/manual-journals/${id}/edit`);
   };
   // Handle the journal delete action.
-  const handleDeleteJournal = ({ id }) => {
+  const handleDeleteJournal = ({ id }: ManualJournalTableRow) => {
     openAlert('journal-delete', { manualJournalId: id });
   };
   // Handle view detail journal.
-  const handleViewDetailJournal = ({ id }) => {
+  const handleViewDetailJournal = ({ id }: ManualJournalTableRow) => {
     openDrawer(DRAWERS.JOURNAL_DETAILS, {
       manualJournalId: id,
     });
   };
   // Handle cell click.
-  const handleCellClick = (cell, event) => {
+  const handleCellClick = (cell: { row: { original: ManualJournalTableRow } }, _event: React.MouseEvent) => {
     openDrawer(DRAWERS.JOURNAL_DETAILS, {
       manualJournalId: cell.row.original.id,
     });
@@ -93,20 +111,34 @@ function ManualJournalsDataTableInner({
     useMemorizedColumnsWidths(TABLES.MANUAL_JOURNALS);
 
   // Handle fetch data once the page index, size or sort by of the table change.
-  const handleFetchData = React.useCallback(
-    ({ pageSize, pageIndex, sortBy }) => {
+  const handleFetchData = useCallback(
+    ({
+      pageSize,
+      pageIndex,
+      sortBy,
+    }: {
+      pageSize: number;
+      pageIndex: number;
+      sortBy: Array<{ id: string; desc: boolean }>;
+    }) => {
+      // `sortBy` is not on `TableQuery` but the reducer accepts it; preserved
+      // from the @ts-nocheck original.
       setManualJournalsTableState({
         pageIndex,
         pageSize,
         sortBy,
-      });
+      } as Partial<TableQuery>);
     },
     [setManualJournalsTableState],
   );
   // Handle selected rows change.
-  const handleSelectedRowsChange = (selectedFlatRows) => {
-    const selectedIds = selectedFlatRows?.map((row) => row.original.id) || [];
+  const handleSelectedRowsChange = (
+    selectedFlatRows: Array<{ original: ManualJournalTableRow }>,
+  ) => {
+    const selectedIds =
+      selectedFlatRows?.map((row) => row.original.id) || [];
     setManualJournalsSelectedRows(selectedIds);
+    onSelectedRowsChange?.(selectedFlatRows);
   };
 
   // Display manual journal empty status instead of the table.

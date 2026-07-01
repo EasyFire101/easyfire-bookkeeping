@@ -1,4 +1,3 @@
-// @ts-nocheck
 import { DialogsName } from '@/constants/dialogs';
 import { useValidateBulkDeleteManualJournals } from '@/hooks/query/manual-journals';
 import { useBulkDeleteDialog } from '@/hooks/dialogs/useBulkDeleteDialog';

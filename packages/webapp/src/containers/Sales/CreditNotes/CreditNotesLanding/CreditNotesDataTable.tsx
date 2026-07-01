@@ -1,4 +1,3 @@
-// @ts-nocheck
 import React from 'react';
 import { useHistory } from 'react-router-dom';
 
@@ -16,43 +15,50 @@ import { CreditNotesEmptyStatus as CreditNoteEmptyStatus } from './CreditNotesEm
 import { withDashboardActions } from '@/containers/Dashboard/withDashboardActions';
 import { withCreditNotesActions } from './withCreditNotesActions';
 import { withAlertActions } from '@/containers/Alert/withAlertActions';
+import type { WithAlertActionsProps } from '@/containers/Alert/withAlertActions';
 import { withDrawerActions } from '@/containers/Drawer/withDrawerActions';
+import type { WithDrawerActionsProps } from '@/containers/Drawer/withDrawerActions';
 import { withDialogActions } from '@/containers/Dialog/withDialogActions';
+import type { WithDialogActionsProps } from '@/containers/Dialog/withDialogActions';
 import { withSettings } from '@/containers/Settings/withSettings';
 import { withCreditNotes } from './withCreditNotes';
+import type { WithCreditNotesProps } from './withCreditNotes';
 
 import { useCreditNoteTableColumns, ActionsMenu } from './components';
+import type { CreditNoteTableRow } from './components';
 import { useCreditNoteListContext } from './CreditNotesListProvider';
 
 import { compose } from '@/utils';
 import { DRAWERS } from '@/constants/drawers';
 
-/**
- * Credit note data table.
- */
+interface WithCreditNotesActionsProps {
+  setCreditNotesTableState: (state: Record<string, any>) => void;
+  setCreditNotesSelectedRows: (ids: number[]) => void;
+}
+
+interface WithSettingsProps {
+  creditNoteTableSize?: string | null;
+}
+
+interface CreditNotesDataTableProps
+  extends Pick<WithCreditNotesProps, 'creditNoteTableState'>,
+    WithCreditNotesActionsProps,
+    WithAlertActionsProps,
+    WithDrawerActionsProps,
+    WithDialogActionsProps,
+    WithSettingsProps {}
+
 function CreditNotesDataTableInner({
-  // #withCreditNotesActions
   setCreditNotesTableState,
   setCreditNotesSelectedRows,
-
-  // #withAlertActions
   openAlert,
-
-  // #withDrawerActions
   openDrawer,
-
-  // #withDialogAction
   openDialog,
-
-  // #withSettings
   creditNoteTableSize,
-
-  // #withCreditNotes
   creditNoteTableState,
-}) {
+}: CreditNotesDataTableProps) {
   const history = useHistory();
 
-  // Credit note list context.
   const {
     creditNotes,
     pagination,
@@ -61,16 +67,21 @@ function CreditNotesDataTableInner({
     isCreditNotesLoading,
   } = useCreditNoteListContext();
 
-  // Credit note table columns.
   const columns = useCreditNoteTableColumns();
 
-  // Local storage memorizing columns widths.
   const [initialColumnsWidths, , handleColumnResizing] =
     useMemorizedColumnsWidths(TABLES.CREDIT_NOTES);
 
-  // Handles fetch data once the table state change.
   const handleDataTableFetchData = React.useCallback(
-    ({ pageSize, pageIndex, sortBy }) => {
+    ({
+      pageSize,
+      pageIndex,
+      sortBy,
+    }: {
+      pageSize: number;
+      pageIndex: number;
+      sortBy: Array<{ id: string; desc: boolean }>;
+    }) => {
       setCreditNotesTableState({
         pageSize,
         pageIndex,
@@ -80,52 +91,46 @@ function CreditNotesDataTableInner({
     [setCreditNotesTableState],
   );
 
-  // Handle selected rows change.
   const handleSelectedRowsChange = React.useCallback(
-    (selectedFlatRows) => {
-      const selectedIds = selectedFlatRows?.map((row) => row.original.id) || [];
+    (selectedFlatRows: Array<{ original: CreditNoteTableRow }>) => {
+      const selectedIds =
+        selectedFlatRows?.map((row) => row.original.id) || [];
       setCreditNotesSelectedRows(selectedIds);
     },
     [setCreditNotesSelectedRows],
   );
 
-  // Display create note empty status instead of the table.
   if (isEmptyStatus) {
     return <CreditNoteEmptyStatus />;
   }
 
-  const handleViewDetailCreditNote = ({ id }) => {
+  const handleViewDetailCreditNote = ({ id }: CreditNoteTableRow) => {
     openDrawer(DRAWERS.CREDIT_NOTE_DETAILS, { creditNoteId: id });
   };
 
-  // Handle delete credit note.
-  const handleDeleteCreditNote = ({ id }) => {
+  const handleDeleteCreditNote = ({ id }: CreditNoteTableRow) => {
     openAlert('credit-note-delete', { creditNoteId: id });
   };
 
-  // Handle edit credit note.
-  const hanldeEditCreditNote = (creditNote) => {
+  const hanldeEditCreditNote = (creditNote: CreditNoteTableRow) => {
     history.push(`/credit-notes/${creditNote.id}/edit`);
   };
 
-  // Handle cell click.
-  const handleCellClick = (cell, event) => {
+  const handleCellClick = (cell: any, _event: React.MouseEvent) => {
     openDrawer(DRAWERS.CREDIT_NOTE_DETAILS, {
       creditNoteId: cell.row.original.id,
     });
   };
 
-  const handleRefundCreditNote = ({ id }) => {
+  const handleRefundCreditNote = ({ id }: CreditNoteTableRow) => {
     openDialog('refund-credit-note', { creditNoteId: id });
   };
 
-  // Handle cancel/confirm crdit note open.
-  const handleOpenCreditNote = ({ id }) => {
+  const handleOpenCreditNote = ({ id }: CreditNoteTableRow) => {
     openAlert('credit-note-open', { creditNoteId: id });
   };
 
-  // Handle reconcile credit note.
-  const handleReconcileCreditNote = ({ id }) => {
+  const handleReconcileCreditNote = ({ id }: CreditNoteTableRow) => {
     openDialog('reconcile-credit-note', { creditNoteId: id });
   };
 
@@ -173,7 +178,7 @@ export const CreditNotesDataTable = compose(
   withDrawerActions,
   withAlertActions,
   withDialogActions,
-  withSettings(({ creditNoteSettings }) => ({
+  withSettings(({ creditNoteSettings }: any) => ({
     creditNoteTableSize: creditNoteSettings?.tableSize,
   })),
   withCreditNotes(({ creditNoteTableState }) => ({ creditNoteTableState })),

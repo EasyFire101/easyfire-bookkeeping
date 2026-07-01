@@ -1,4 +1,3 @@
-// @ts-nocheck
 import React, { createContext } from 'react';
 import { isEmpty } from 'lodash';
 
@@ -9,40 +8,68 @@ import {
   useResourceMeta,
 } from '@/hooks/query';
 import { getFieldsFromResourceMeta } from '@/utils';
+import type { PaymentMadeTableRow } from './components';
 
-const PaymentMadesListContext = createContext();
+interface PaymentMadesListProviderProps {
+  query?: any;
+  tableStateChanged?: boolean;
+  children?: React.ReactNode;
+}
 
-/**
- * Accounts chart data provider.
- */
-function PaymentMadesListProvider({ query, tableStateChanged, ...props }) {
-  // Fetch accounts resource views and fields.
+export interface PaymentMadesListContextValue {
+  paymentMades: PaymentMadeTableRow[] | undefined;
+  pagination: { total?: number; [key: string]: any } | undefined;
+  filterMeta: any;
+  paymentMadesViews: any;
+  fields: Record<string, any>[];
+  resourceMeta: any;
+  isResourceMetaLoading: boolean;
+  isResourceMetaFetching: boolean;
+  isPaymentsLoading: boolean;
+  isPaymentsFetching: boolean;
+  isViewsLoading: boolean;
+  isEmptyStatus: boolean;
+}
+
+const PaymentMadesListContext = createContext<PaymentMadesListContextValue>(
+  {} as PaymentMadesListContextValue,
+);
+
+function PaymentMadesListProvider({
+  query,
+  tableStateChanged,
+  ...props
+}: PaymentMadesListProviderProps) {
   const { data: paymentMadesViews, isLoading: isViewsLoading } =
     useResourceViews('bill_payments');
 
-  // Fetch the accounts resource fields.
   const {
     data: resourceMeta,
     isLoading: isResourceMetaLoading,
     isFetching: isResourceMetaFetching,
   } = useResourceMeta('bill_payments');
 
-  // Fetch accounts list according to the given custom view id.
   const {
     data: paymentMadesData,
     isLoading: isPaymentsLoading,
     isFetching: isPaymentsFetching,
-  } = usePaymentMades(query, { keepPreviousData: true });
+  } = usePaymentMades(query);
 
-  // Detarmines the datatable empty status.
+  const listData = paymentMadesData as
+    | {
+        data?: PaymentMadeTableRow[];
+        pagination?: { total?: number; [key: string]: any };
+        filter_meta?: any;
+      }
+    | undefined;
+
   const isEmptyStatus =
-    isEmpty(paymentMadesData?.data) && !isPaymentsLoading && !tableStateChanged;
+    isEmpty(listData?.data) && !isPaymentsLoading && !tableStateChanged;
 
-  // Provider payload.
-  const provider = {
-    paymentMades: paymentMadesData?.data,
-    pagination: paymentMadesData?.pagination,
-    filterMeta: paymentMadesData?.filter_meta,
+  const provider: PaymentMadesListContextValue = {
+    paymentMades: listData?.data,
+    pagination: listData?.pagination,
+    filterMeta: listData?.filter_meta,
     paymentMadesViews,
 
     fields: resourceMeta?.fields

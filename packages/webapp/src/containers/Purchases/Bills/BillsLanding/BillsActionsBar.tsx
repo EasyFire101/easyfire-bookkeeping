@@ -1,5 +1,4 @@
-// @ts-nocheck
-import React, { useState } from 'react';
+import React from 'react';
 import {
   Button,
   Classes,
@@ -25,10 +24,12 @@ import {
 import { BillAction, AbilitySubject } from '@/constants/abilityOption';
 
 import { withBills } from './withBills';
+import type { WithBillsProps } from './withBills';
 import { withBillsActions } from './withBillsActions';
 import { withSettings } from '@/containers/Settings/withSettings';
 import { withSettingsActions } from '@/containers/Settings/withSettingsActions';
 import { withDialogActions } from '@/containers/Dialog/withDialogActions';
+import type { WithDialogActionsProps } from '@/containers/Dialog/withDialogActions';
 
 import { useBillsListContext } from './BillsListProvider';
 import { useRefreshBills } from '@/hooks/query/bills';
@@ -39,73 +40,71 @@ import { compose } from '@/utils';
 import { DialogsName } from '@/constants/dialogs';
 import { isEmpty } from 'lodash';
 
-/**
- * Bills actions bar.
- */
-function BillActionsBar({
-  // #withBillsActions
-  setBillsTableState,
+interface WithBillsActionsProps {
+  setBillsTableState: (state: Record<string, any>) => void;
+}
 
-  // #withBills
+interface WithSettingsActionsProps {
+  addSetting: (group: string, key: string, value: any) => void;
+}
+
+interface WithSettingsProps {
+  billsTableSize?: string | null;
+}
+
+interface BillActionsBarProps
+  extends Pick<WithBillsProps, 'billsSelectedRows'>,
+    WithBillsActionsProps,
+    WithSettingsActionsProps,
+    WithDialogActionsProps,
+    WithSettingsProps {
+  billsConditionsRoles: any[];
+}
+
+function BillActionsBar({
+  setBillsTableState,
   billsConditionsRoles,
   billsSelectedRows,
-
-  // #withSettings
   billsTableSize,
-
-  // #withSettingsActions
   addSetting,
-
-  // #withDialogActions
   openDialog,
-}) {
+}: BillActionsBarProps) {
   const history = useHistory();
 
-  // Bills refresh action.
   const { refresh } = useRefreshBills();
 
-  // Bills list context.
   const { billsViews, fields } = useBillsListContext();
 
-  // Exports pdf document.
   const { downloadAsync: downloadExportPdf } = useDownloadExportPdf();
 
-  // Handle click a new bill.
   const handleClickNewBill = () => {
     history.push('/bills/new');
   };
-  // Handle tab change.
-  const handleTabChange = (view) => {
+  const handleTabChange = (view: { slug?: string } | null) => {
     setBillsTableState({
       viewSlug: view ? view.slug : null,
     });
   };
-  // Handle click a refresh bills
   const handleRefreshBtnClick = () => {
     refresh();
   };
-  // Handle table row size change.
-  const handleTableRowSizeChange = (size) => {
+  const handleTableRowSizeChange = (size: any) => {
     addSetting('bills', 'tableSize', size);
   };
-  // Handle the import button click.
   const handleImportBtnClick = () => {
     history.push('/bills/import');
   };
-  // Handle the export button click.
   const handleExportBtnClick = () => {
     openDialog(DialogsName.Export, { resource: 'bill' });
   };
-  // Handle the print button click.
   const handlePrintBtnClick = () => {
     downloadExportPdf({ resource: 'Bill' });
   };
   const { openBulkDeleteDialog, isValidatingBulkDeleteBills } =
     useBulkDeleteBillsDialog();
 
-  // Handle bulk delete.
   const handleBulkDelete = () => {
-    openBulkDeleteDialog(billsSelectedRows);
+    openBulkDeleteDialog(billsSelectedRows as number[]);
   };
 
   if (!isEmpty(billsSelectedRows)) {
@@ -149,7 +148,7 @@ function BillActionsBar({
             conditions: billsConditionsRoles,
             defaultFieldKey: 'bill_number',
             fields: fields,
-            onFilterChange: (filterConditions) => {
+            onFilterChange: (filterConditions: any) => {
               setBillsTableState({ filterRoles: filterConditions });
             },
           }}
@@ -170,7 +169,7 @@ function BillActionsBar({
         <NavbarDivider />
         <Button
           className={Classes.MINIMAL}
-          icon={<Icon icon={'print-16'} iconSize={'16'} />}
+          icon={<Icon icon={'print-16'} iconSize={16} />}
           text={<T id={'print'} />}
           onClick={handlePrintBtnClick}
         />
@@ -182,7 +181,7 @@ function BillActionsBar({
         />
         <Button
           className={Classes.MINIMAL}
-          icon={<Icon icon={'file-export-16'} iconSize={'16'} />}
+          icon={<Icon icon={'file-export-16'} iconSize={16} />}
           text={<T id={'export'} />}
           onClick={handleExportBtnClick}
         />
@@ -211,7 +210,7 @@ export const BillsActionsBar = compose(
     billsConditionsRoles: billsTableState.filterRoles,
     billsSelectedRows,
   })),
-  withSettings(({ billsettings }) => ({
+  withSettings(({ billsettings }: any) => ({
     billsTableSize: billsettings?.tableSize,
   })),
   withDialogActions,

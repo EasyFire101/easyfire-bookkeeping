@@ -6658,6 +6658,96 @@ export interface components {
              */
             enable: boolean;
         };
+        CustomerResponseDto: {
+            /**
+             * @description Customer id.
+             * @example 1
+             */
+            id: number;
+            /** @example 1500 */
+            balance: number;
+            /** @example USD */
+            currencyCode: string;
+            /** @example 1000 */
+            openingBalance: number;
+            /**
+             * Format: date-time
+             * @example 2024-01-01T00:00:00Z
+             */
+            openingBalanceAt: string;
+            /** @example 1 */
+            openingBalanceExchangeRate: number;
+            /** @example 1 */
+            openingBalanceBranchId?: number;
+            /** @example Mr. */
+            salutation?: string;
+            /** @example John */
+            firstName?: string;
+            /** @example Doe */
+            lastName?: string;
+            /** @example Acme Corporation */
+            companyName?: string;
+            /** @example John Doe - Acme Corporation */
+            displayName: string;
+            /** @example john.doe@acme.com */
+            email?: string;
+            /** @example +1 (555) 123-4567 */
+            workPhone?: string;
+            /** @example +1 (555) 987-6543 */
+            personalPhone?: string;
+            /** @example https://www.acme.com */
+            website?: string;
+            /** @example 123 Business Ave */
+            billingAddress1?: string;
+            /** @example Suite 100 */
+            billingAddress2?: string;
+            /** @example New York */
+            billingAddressCity?: string;
+            /** @example United States */
+            billingAddressCountry?: string;
+            /** @example billing@acme.com */
+            billingAddressEmail?: string;
+            /** @example 10001 */
+            billingAddressPostcode?: string;
+            /** @example +1 (555) 111-2222 */
+            billingAddressPhone?: string;
+            /** @example NY */
+            billingAddressState?: string;
+            /** @example 456 Shipping St */
+            shippingAddress1?: string;
+            /** @example Unit 200 */
+            shippingAddress2?: string;
+            /** @example Los Angeles */
+            shippingAddressCity?: string;
+            /** @example United States */
+            shippingAddressCountry?: string;
+            /** @example shipping@acme.com */
+            shippingAddressEmail?: string;
+            /** @example 90001 */
+            shippingAddressPostcode?: string;
+            /** @example +1 (555) 333-4444 */
+            shippingAddressPhone?: string;
+            /** @example CA */
+            shippingAddressState?: string;
+            /** @example Important client with regular monthly orders */
+            note: string;
+            /** @example true */
+            active: boolean;
+            /**
+             * Format: date-time
+             * @example 2024-01-01T00:00:00Z
+             */
+            createdAt: string;
+            /**
+             * Format: date-time
+             * @example 2024-01-01T00:00:00Z
+             */
+            updatedAt: string;
+            /** @example 1000 */
+            localOpeningBalance: number;
+            /** @example 1500 */
+            closingBalance: number;
+        };
         SaleInvoiceResponseDto: {
             /**
              * @description The unique identifier of the sale invoice
@@ -6831,6 +6921,23 @@ export interface components {
              * @example 2023-01-02T00:00:00Z
              */
             updatedAt?: string;
+            /** @description The customer of the invoice */
+            customer: components["schemas"]["CustomerResponseDto"];
+            /**
+             * @description Whether the invoice has been delivered
+             * @example false
+             */
+            isDelivered: boolean;
+            /**
+             * @description Number of days the invoice is overdue
+             * @example 0
+             */
+            overdueDays: number;
+            /**
+             * @description Number of days remaining until the invoice is due
+             * @example 15
+             */
+            remainingDays: number;
         };
         CreateSaleInvoiceDto: {
             /**
@@ -7469,6 +7576,8 @@ export interface components {
             depositAccountId: number;
             /** @description Deposit account details */
             depositAccount: components["schemas"]["AccountResponseDto"];
+            /** @description The customer of the payment received */
+            customer: components["schemas"]["CustomerResponseDto"];
             /**
              * @description The ID of the branch
              * @example 1
@@ -8692,96 +8801,6 @@ export interface components {
              */
             nonDeletableIds: number[];
         };
-        CustomerResponseDto: {
-            /**
-             * @description Customer id.
-             * @example 1
-             */
-            id: number;
-            /** @example 1500 */
-            balance: number;
-            /** @example USD */
-            currencyCode: string;
-            /** @example 1000 */
-            openingBalance: number;
-            /**
-             * Format: date-time
-             * @example 2024-01-01T00:00:00Z
-             */
-            openingBalanceAt: string;
-            /** @example 1 */
-            openingBalanceExchangeRate: number;
-            /** @example 1 */
-            openingBalanceBranchId?: number;
-            /** @example Mr. */
-            salutation?: string;
-            /** @example John */
-            firstName?: string;
-            /** @example Doe */
-            lastName?: string;
-            /** @example Acme Corporation */
-            companyName?: string;
-            /** @example John Doe - Acme Corporation */
-            displayName: string;
-            /** @example john.doe@acme.com */
-            email?: string;
-            /** @example +1 (555) 123-4567 */
-            workPhone?: string;
-            /** @example +1 (555) 987-6543 */
-            personalPhone?: string;
-            /** @example https://www.acme.com */
-            website?: string;
-            /** @example 123 Business Ave */
-            billingAddress1?: string;
-            /** @example Suite 100 */
-            billingAddress2?: string;
-            /** @example New York */
-            billingAddressCity?: string;
-            /** @example United States */
-            billingAddressCountry?: string;
-            /** @example billing@acme.com */
-            billingAddressEmail?: string;
-            /** @example 10001 */
-            billingAddressPostcode?: string;
-            /** @example +1 (555) 111-2222 */
-            billingAddressPhone?: string;
-            /** @example NY */
-            billingAddressState?: string;
-            /** @example 456 Shipping St */
-            shippingAddress1?: string;
-            /** @example Unit 200 */
-            shippingAddress2?: string;
-            /** @example Los Angeles */
-            shippingAddressCity?: string;
-            /** @example United States */
-            shippingAddressCountry?: string;
-            /** @example shipping@acme.com */
-            shippingAddressEmail?: string;
-            /** @example 90001 */
-            shippingAddressPostcode?: string;
-            /** @example +1 (555) 333-4444 */
-            shippingAddressPhone?: string;
-            /** @example CA */
-            shippingAddressState?: string;
-            /** @example Important client with regular monthly orders */
-            note: string;
-            /** @example true */
-            active: boolean;
-            /**
-             * Format: date-time
-             * @example 2024-01-01T00:00:00Z
-             */
-            createdAt: string;
-            /**
-             * Format: date-time
-             * @example 2024-01-01T00:00:00Z
-             */
-            updatedAt: string;
-            /** @example 1000 */
-            localOpeningBalance: number;
-            /** @example 1500 */
-            closingBalance: number;
-        };
         CustomersPaginationDto: {
             /** @example 1 */
             page: number;
@@ -9510,6 +9529,33 @@ export interface components {
             entries: components["schemas"]["ItemEntryDto"][];
             /** @description Attachments of the sale estimate */
             attachments: components["schemas"]["AttachmentLinkDto"][];
+            /** @description The customer of the estimate */
+            customer: components["schemas"]["CustomerResponseDto"];
+            /**
+             * @description Whether the estimate is approved
+             * @example false
+             */
+            isApproved: boolean;
+            /**
+             * @description Whether the estimate is rejected
+             * @example false
+             */
+            isRejected: boolean;
+            /**
+             * @description Whether the estimate is expired
+             * @example false
+             */
+            isExpired: boolean;
+            /**
+             * @description Whether the estimate is delivered
+             * @example false
+             */
+            isDelivered: boolean;
+            /**
+             * @description Whether the estimate is converted to invoice
+             * @example false
+             */
+            isConvertedToInvoice: boolean;
         };
         SaleEstiamteStateResponseDto: {
             /**
@@ -10360,6 +10406,11 @@ export interface components {
              */
             isOverdue: boolean;
             /**
+             * @description Whether the bill is open
+             * @example true
+             */
+            isOpen: boolean;
+            /**
              * @description Whether the bill is partially paid
              * @example true
              */
@@ -10381,6 +10432,18 @@ export interface components {
              * @example 2024-03-16T00:00:00Z
              */
             updatedAt?: string;
+            /** @description The vendor of the bill */
+            vendor: components["schemas"]["VendorResponseDto"];
+            /**
+             * @description Number of days the bill is overdue
+             * @example 0
+             */
+            overdueDays: number | null;
+            /**
+             * @description Number of days remaining until the bill is due
+             * @example 15
+             */
+            remainingDays: number | null;
         };
         BillEntryDto: {
             /**
@@ -11084,6 +11147,18 @@ export interface components {
              * @example $1,000.00
              */
             totalLocalFormatted: string;
+            /** @description The customer of the credit note */
+            customer: components["schemas"]["CustomerResponseDto"];
+            /**
+             * @description Whether the credit note is draft
+             * @example false
+             */
+            isDraft: boolean;
+            /**
+             * @description Whether the credit note is published
+             * @example true
+             */
+            isPublished: boolean;
         };
         CreateCreditNoteDto: {
             /**
@@ -11704,6 +11779,10 @@ export interface components {
             entries: components["schemas"]["BillPaymentEntryResponseDto"][];
             /** @description The attachments of the bill payment */
             attachments?: components["schemas"]["AttachmentLinkDto"][];
+            /** @description The vendor of the bill payment */
+            vendor: components["schemas"]["VendorResponseDto"];
+            /** @description The payment account of the bill payment */
+            paymentAccount: components["schemas"]["AccountResponseDto"];
         };
         BillPaymentPageEntryDto: {
             /**

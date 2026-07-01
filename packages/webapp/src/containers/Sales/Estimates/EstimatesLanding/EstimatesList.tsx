@@ -1,4 +1,3 @@
-// @ts-nocheck
 import React from 'react';
 import { DashboardPageContent } from '@/components';
 import '@/style/pages/SaleEstimate/List.scss';
@@ -10,19 +9,24 @@ import { EstimatesListProvider } from './EstimatesListProvider';
 import { EstimatesListDrawers } from './EstimatesListDrawers';
 import { EstimatesListDialogs } from './EstimatesListDialogs';
 import { compose, transformTableStateToQuery } from '@/utils';
+import type { WithEstimatesProps } from './withEstimates';
 
-/**
- * Sale estimates list page.
- */
+interface WithEstimatesActionsProps {
+  resetEstimatesTableState: () => void;
+}
+
+interface EstimatesListProps
+  extends Pick<
+    WithEstimatesProps,
+    'estimatesTableState' | 'estimatesTableStateChanged'
+  >,
+    WithEstimatesActionsProps {}
+
 function EstimatesListInner({
-  // #withEstimate
   estimatesTableState,
   estimatesTableStateChanged,
-
-  // #withEstimatesActions
   resetEstimatesTableState,
-}) {
-  // Resets the estimates table state once the page unmount.
+}: EstimatesListProps) {
   React.useEffect(
     () => () => {
       resetEstimatesTableState();

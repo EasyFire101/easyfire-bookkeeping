@@ -1,4 +1,4 @@
-// @ts-nocheck
+import React from 'react';
 import { Tab, Tabs } from '@blueprintjs/core';
 import { MatchingBankTransaction } from './MatchingTransaction';
 import { CategorizeTransactionContent } from '../CategorizeTransaction/drawers/CategorizeTransactionDrawer/CategorizeTransactionContent';

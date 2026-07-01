@@ -1,12 +1,13 @@
-// @ts-nocheck
 import React from 'react';
-import { FastField } from 'formik';
+import { FastField, type FieldProps } from 'formik';
 import classNames from 'classnames';
 import { CLASSES } from '@/constants/classes';
 import {
   entriesFieldShouldUpdate,
   defaultEntry,
   MIN_LINES_NUMBER,
+  type MakeJournalEntry,
+  type MakeJournalFormValues,
 } from './utils';
 import { useMakeJournalFormContext } from './MakeJournalProvider';
 import { MakeJournalEntriesTable } from './MakeJournalEntriesTable';
@@ -31,17 +32,17 @@ export function MakeJournalEntriesField() {
         {({
           form: { values, setFieldValue },
           field: { value },
-          meta: { error, touched },
-        }) => (
+          meta: { error },
+        }: FieldProps<MakeJournalEntry[], MakeJournalFormValues>) => (
           <MakeJournalEntriesTable
             onChange={(entries) => {
               setFieldValue('entries', entries);
             }}
-            entries={value}
+            entries={value ?? []}
             defaultEntry={defaultEntry}
             initialLinesNumber={MIN_LINES_NUMBER}
             error={error}
-            currencyCode={values.currency_code}
+            currencyCode={values.currencyCode}
           />
         )}
       </FastField>

@@ -1,4 +1,3 @@
-// @ts-nocheck
 import { DialogsName } from '@/constants/dialogs';
 import { useValidateBulkDeletePaymentReceives } from '@/hooks/query/payment-receives';
 import { useBulkDeleteDialog } from '@/hooks/dialogs/useBulkDeleteDialog';

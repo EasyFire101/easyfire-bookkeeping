@@ -63,12 +63,9 @@ function ItemsListProvider({
     data: itemsData,
     isFetching: isItemsFetching,
     isLoading: isItemsLoading,
-  } = useItems(
-    {
-      ...(transformTableQueryToParams(tableQuery) as Record<string, unknown>),
-    },
-    { keepPreviousData: true } as any,
-  );
+  } = useItems({
+    ...(transformTableQueryToParams(tableQuery) as Record<string, unknown>),
+  });
 
   // Detarmines the datatable empty status.
   const isEmptyStatus =

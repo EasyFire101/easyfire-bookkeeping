@@ -1,10 +1,8 @@
-// @ts-nocheck
-import React, { useEffect } from 'react';
+import React from 'react';
 import intl from 'react-intl-universal';
 import { Menu, MenuItem, Position, Button, Intent } from '@blueprintjs/core';
 import { Popover2 } from '@blueprintjs/popover2';
 import { useFormikContext } from 'formik';
-import * as R from 'ramda';
 
 import {
   ExchangeRateInputGroup,
@@ -25,10 +23,15 @@ import { CellType, Features, Align } from '@/constants';
 
 import { useFeatureCan } from '@/hooks/state';
 import { useCurrentOrganizationBaseCurrency } from '@/hooks/query';
-import { useJournalIsForeign } from './utils';
+import { useJournalIsForeign, type MakeJournalFormValues } from './utils';
 import { withSettings } from '@/containers/Settings/withSettings';
-import { transactionNumber } from '@/utils';
+import { compose, transactionNumber } from '@/utils';
 import { useUpdateEffect } from '@/hooks';
+
+type JournalExchangeRateInputFieldRootProps = Omit<
+  React.ComponentProps<typeof ExchangeRateInputGroup>,
+  'fromCurrency' | 'toCurrency' | 'onCancel' | 'onRecalcConfirm'
+>;
 
 /**
  * Contact header cell.
@@ -38,6 +41,7 @@ export function ContactHeaderCell() {
     <>
       <T id={'contact'} />
       <Hint
+        // @ts-expect-error Hint.content is typed as string but renders ReactNode via Tooltip
         content={<T id={'contact_column_hint'} />}
         position={Position.LEFT_BOTTOM}
       />
@@ -45,30 +49,43 @@ export function ContactHeaderCell() {
   );
 }
 
+type CurrencyHeaderCellProps = {
+  payload: { currencyCode: string };
+};
+
 /**
  * Credit header cell.
  */
-export function CreditHeaderCell({ payload: { currencyCode } }) {
+export function CreditHeaderCell({
+  payload: { currencyCode },
+}: CurrencyHeaderCellProps): string {
   return intl.get('credit_currency', { currency: currencyCode });
 }
 
 /**
  * debit header cell.
  */
-export function DebitHeaderCell({ payload: { currencyCode } }) {
+export function DebitHeaderCell({
+  payload: { currencyCode },
+}: CurrencyHeaderCellProps): string {
   return intl.get('debit_currency', { currency: currencyCode });
 }
+
+type ActionsCellRendererProps = {
+  row: { index: number };
+  column: { id: string };
+  cell: { value: unknown };
+  data: unknown[];
+  payload: { removeRow: (index: number) => void };
+};
 
 /**
  * Actions cell renderer.
  */
 export const ActionsCellRenderer = ({
   row: { index },
-  column: { id },
-  cell: { value: initialValue },
-  data,
   payload,
-}) => {
+}: ActionsCellRendererProps) => {
   const handleClickRemoveRole = () => {
     payload.removeRow(index);
   };
@@ -85,7 +102,6 @@ export const ActionsCellRenderer = ({
     <Popover2 content={exampleMenu} placement="left-start">
       <Button
         icon={<Icon icon={'more-13'} iconSize={13} />}
-        iconSize={14}
         className="m12"
         minimal={true}
       />
@@ -104,8 +120,8 @@ export const useJournalTableEntriesColumns = () => {
     () => [
       {
         Header: intl.get('account'),
-        id: 'account_id',
-        accessor: 'account_id',
+        id: 'accountId',
+        accessor: 'accountId',
         Cell: AccountsListFieldCell,
         disableSortBy: true,
         width: 160,
@@ -129,8 +145,8 @@ export const useJournalTableEntriesColumns = () => {
       },
       {
         Header: ContactHeaderCell,
-        id: 'contact_id',
-        accessor: 'contact_id',
+        id: 'contactId',
+        accessor: 'contactId',
         Cell: ContactsListFieldCell,
         disableSortBy: true,
         width: 120,
@@ -140,8 +156,8 @@ export const useJournalTableEntriesColumns = () => {
         ? [
             {
               Header: intl.get('project'),
-              id: 'project_id',
-              accessor: 'project_id',
+              id: 'projectId',
+              accessor: 'projectId',
               Cell: ProjectsListFieldCell,
               className: 'project_id',
               disableSortBy: true,
@@ -154,8 +170,8 @@ export const useJournalTableEntriesColumns = () => {
         ? [
             {
               Header: intl.get('branch'),
-              id: 'branch_id',
-              accessor: 'branch_id',
+              id: 'branchId',
+              accessor: 'branchId',
               Cell: BranchesListFieldCell,
               disableSortBy: true,
               width: 120,
@@ -185,46 +201,58 @@ export const useJournalTableEntriesColumns = () => {
 
 /**
  * Journal exchange rate input field.
- * @returns {JSX.Element}
  */
-export function JournalExchangeRateInputField({ ...props }) {
+export function JournalExchangeRateInputField({
+  ...props
+}: JournalExchangeRateInputFieldRootProps) {
   const baseCurrency = useCurrentOrganizationBaseCurrency();
-  const { values } = useFormikContext();
+  const { values } = useFormikContext<MakeJournalFormValues>();
 
-  const isForeignJouranl = useJournalIsForeign();
+  const isForeignJournal = useJournalIsForeign();
 
-  // Can't continue if the customer is not foreign.
-  if (!isForeignJouranl) {
+  // Can't continue if the journal is not foreign.
+  if (!isForeignJournal) {
     return null;
   }
   return (
     <ExchangeRateInputGroup
-      fromCurrency={values.currency_code}
-      toCurrency={baseCurrency}
       {...props}
+      fromCurrency={values.currencyCode}
+      toCurrency={baseCurrency ?? ''}
+      onCancel={() => {}}
+      onRecalcConfirm={() => {}}
     />
   );
 }
 
+type JournalSyncIncrementSettingsToFormProps = {
+  journalAutoIncrement?: boolean;
+  journalNextNumber?: number;
+  journalNumberPrefix?: string;
+};
+
 /**
  * Syncs journal auto-increment settings to form.
- * @return {React.ReactNode}
  */
-export const JournalSyncIncrementSettingsToForm = R.compose(
+export const JournalSyncIncrementSettingsToForm = compose(
   withSettings(({ manualJournalsSettings }) => ({
     journalAutoIncrement: manualJournalsSettings?.autoIncrement,
     journalNextNumber: manualJournalsSettings?.nextNumber,
     journalNumberPrefix: manualJournalsSettings?.numberPrefix,
   })),
-)(({ journalAutoIncrement, journalNextNumber, journalNumberPrefix }) => {
-  const { setFieldValue } = useFormikContext();
+)(({
+  journalAutoIncrement,
+  journalNextNumber,
+  journalNumberPrefix,
+}: JournalSyncIncrementSettingsToFormProps) => {
+  const { setFieldValue } = useFormikContext<MakeJournalFormValues>();
 
   useUpdateEffect(() => {
     // Do not update if the journal auto-increment mode is disabled.
-    if (!journalAutoIncrement) return null;
+    if (!journalAutoIncrement) return;
 
     setFieldValue(
-      'journal_number',
+      'journalNumber',
       transactionNumber(journalNumberPrefix, journalNextNumber),
     );
   }, [

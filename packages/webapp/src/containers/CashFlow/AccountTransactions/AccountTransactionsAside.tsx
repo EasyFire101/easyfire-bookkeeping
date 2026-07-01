@@ -1,4 +1,3 @@
-// @ts-nocheck
 import { Suspense, lazy } from 'react';
 import { Spinner } from '@blueprintjs/core';
 import { AppContentShell } from '@/components/AppShell';

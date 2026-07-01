@@ -83,7 +83,7 @@ export function usePaymentReceives(
     'queryKey' | 'queryFn'
   >,
 ) {
-  const fetcher = useApiFetcher();
+  const fetcher = useApiFetcher({ enableCamelCaseTransform: true });
   return useQuery({
     ...props,
     queryKey: paymentReceivesKeys.list(query),
