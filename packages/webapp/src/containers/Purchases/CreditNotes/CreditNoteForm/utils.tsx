@@ -163,12 +163,12 @@ export const filterNonZeroEntries = (entries: VendorCreditEntry[]) => {
 export function transformFormValuesToRequest(
   values: VendorCreditFormValues,
 ): CreateVendorCreditBody {
-  return ({
+  return {
     ...values,
     entries: transformEntriesToSubmit(filterNonZeroEntries(values.entries)),
     open: false,
     attachments: transformAttachmentsToRequest(values),
-  } as unknown) as CreateVendorCreditBody;
+  } as unknown as CreateVendorCreditBody;
 }
 
 type FastFieldShouldUpdateProps = {

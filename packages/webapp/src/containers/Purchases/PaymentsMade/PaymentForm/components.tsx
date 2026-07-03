@@ -5,7 +5,10 @@ import { Money, ExchangeRateInputGroup } from '@/components';
 import { MoneyFieldCell } from '@/components/DataTableCells';
 import { useFormikContext } from 'formik';
 import { useCurrentOrganizationBaseCurrency } from '@/hooks/query';
-import { usePaymentMadeIsForeignCustomer, type PaymentMadeFormValues } from './utils';
+import {
+  usePaymentMadeIsForeignCustomer,
+  type PaymentMadeFormValues,
+} from './utils';
 
 type Row = {
   billNo?: string;

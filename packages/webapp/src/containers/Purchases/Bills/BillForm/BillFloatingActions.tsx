@@ -45,7 +45,9 @@ export function BillFloatingActions() {
   };
 
   // Handle submit as open & continue editing button click.
-  const handleSubmitOpenContinueEditingBtnClick = (_event: React.MouseEvent) => {
+  const handleSubmitOpenContinueEditingBtnClick = (
+    _event: React.MouseEvent,
+  ) => {
     setSubmitPayload({ redirect: false, status: true });
     submitForm();
   };
@@ -63,7 +65,9 @@ export function BillFloatingActions() {
   };
 
   // Handle submit as draft & continue editing button click.
-  const handleSubmitDraftContinueEditingBtnClick = (_event: React.MouseEvent) => {
+  const handleSubmitDraftContinueEditingBtnClick = (
+    _event: React.MouseEvent,
+  ) => {
     setSubmitPayload({ redirect: false, status: false });
     submitForm();
   };

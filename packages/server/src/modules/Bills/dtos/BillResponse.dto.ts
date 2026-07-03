@@ -352,7 +352,7 @@ export class BillResponseDto {
     required: false,
   })
   adjustmentFormatted?: string;
-  
+
   @ApiProperty({
     description: 'The vendor of the bill',
     type: () => VendorResponseDto,

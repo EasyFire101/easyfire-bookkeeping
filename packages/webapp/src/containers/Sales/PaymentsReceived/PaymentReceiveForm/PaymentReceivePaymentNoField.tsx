@@ -42,9 +42,7 @@ export const PaymentReceivePaymentNoField = compose(
     openDialog('payment-receive-number-form');
   };
 
-  const handlePaymentNoBlur = (
-    event: React.FocusEvent<HTMLInputElement>,
-  ) => {
+  const handlePaymentNoBlur = (event: React.FocusEvent<HTMLInputElement>) => {
     const newValue = event.target.value;
 
     if (values.paymentReceiveNo !== newValue && paymentReceiveAutoIncrement) {

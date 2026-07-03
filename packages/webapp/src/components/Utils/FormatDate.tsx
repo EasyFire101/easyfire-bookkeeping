@@ -24,6 +24,9 @@ interface FormatDateCellProps {
 /**
  * Format date table cell.
  */
-export function FormatDateCell({ value, column: { formatDate } }: FormatDateCellProps) {
+export function FormatDateCell({
+  value,
+  column: { formatDate },
+}: FormatDateCellProps) {
   return <FormatDate value={value} {...formatDate} />;
 }

@@ -19,8 +19,9 @@ import { DialogsName } from '@/constants/dialogs';
 import type { ReceiptFormValues } from './utils';
 import type { WithDialogActionsProps } from '@/containers/Dialog/withDialogActions';
 
-type ReceiptExchangeRateInputFieldRootProps =
-  React.ComponentProps<typeof ExchangeRateInputGroup>;
+type ReceiptExchangeRateInputFieldRootProps = React.ComponentProps<
+  typeof ExchangeRateInputGroup
+>;
 
 /**
  * Receipt exchange rate input field.
@@ -112,24 +113,22 @@ type ReceiptSyncAutoExRateToFormProps = {
  * as an indication the entries rates have been changed.
  * @returns {React.ReactNode}
  */
-export const ReceiptSyncAutoExRateToForm = compose(withDialogActions)(
-  ({ openDialog }: ReceiptSyncAutoExRateToFormProps) => {
-    const total = useReceiptTotal();
-    const timeout = useRef<ReturnType<typeof setTimeout> | undefined>(
-      undefined,
-    );
+export const ReceiptSyncAutoExRateToForm = compose(withDialogActions)(({
+  openDialog,
+}: ReceiptSyncAutoExRateToFormProps) => {
+  const total = useReceiptTotal();
+  const timeout = useRef<ReturnType<typeof setTimeout> | undefined>(undefined);
 
-    useSyncExRateToForm({
-      onSynced: () => {
-        // If the total bigger then zero show alert to the user after adjusting entries.
-        if (total > 0) {
-          if (timeout.current) clearTimeout(timeout.current);
-          timeout.current = setTimeout(() => {
-            openDialog(DialogsName.InvoiceExchangeRateChangeNotice);
-          }, 500);
-        }
-      },
-    });
-    return null;
-  },
-);
+  useSyncExRateToForm({
+    onSynced: () => {
+      // If the total bigger then zero show alert to the user after adjusting entries.
+      if (total > 0) {
+        if (timeout.current) clearTimeout(timeout.current);
+        timeout.current = setTimeout(() => {
+          openDialog(DialogsName.InvoiceExchangeRateChangeNotice);
+        }, 500);
+      }
+    },
+  });
+  return null;
+});

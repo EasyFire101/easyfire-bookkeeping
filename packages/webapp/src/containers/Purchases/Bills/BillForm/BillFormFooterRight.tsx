@@ -50,14 +50,16 @@ export function BillFormFooterRight() {
         discountAmount={discountAmount}
       />
       <AdjustmentTotalLine adjustmentAmount={adjustmentAmount} />
-      {taxEntries.map((tax: { label: string; taxAmountFormatted: string }, index: number) => (
-        <TotalLine
-          key={index}
-          title={tax.label}
-          value={tax.taxAmountFormatted}
-          borderStyle={TotalLineBorderStyle.None}
-        />
-      ))}
+      {taxEntries.map(
+        (tax: { label: string; taxAmountFormatted: string }, index: number) => (
+          <TotalLine
+            key={index}
+            title={tax.label}
+            value={tax.taxAmountFormatted}
+            borderStyle={TotalLineBorderStyle.None}
+          />
+        ),
+      )}
       <TotalLine
         title={`TOTAL (${currencyCode})`}
         value={totalFormatted}

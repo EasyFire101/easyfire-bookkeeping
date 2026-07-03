@@ -5,10 +5,7 @@ import { useBill, useBillLocatedLandedCost } from '@/hooks/query';
 import { useFeatureCan } from '@/hooks/state';
 import { Features } from '@/constants';
 import { DRAWERS } from '@/constants/drawers';
-import type {
-  Bill,
-  BillLandedCostTransaction,
-} from '@bigcapital/sdk-ts';
+import type { Bill, BillLandedCostTransaction } from '@bigcapital/sdk-ts';
 
 export interface BillDrawerContextValue {
   billId: number | undefined;

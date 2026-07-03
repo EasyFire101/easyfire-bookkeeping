@@ -315,7 +315,10 @@ export function useReconcileVendorCredit(
 
 export function useReconcileVendorCredits(
   id: number | null | undefined,
-  props?: Omit<UseQueryOptions<VendorCreditAppliedBill[]>, 'queryKey' | 'queryFn'>,
+  props?: Omit<
+    UseQueryOptions<VendorCreditAppliedBill[]>,
+    'queryKey' | 'queryFn'
+  >,
   _requestProps?: unknown,
 ) {
   const fetcher = useApiFetcher();

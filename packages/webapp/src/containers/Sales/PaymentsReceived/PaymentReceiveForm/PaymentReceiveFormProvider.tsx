@@ -31,7 +31,8 @@ type PaymentReceiveSubmitPayload = {
 };
 
 type PaymentReceiveEditPageData =
-  PaymentReceiveEditPageResponse['data'] | undefined;
+  | PaymentReceiveEditPageResponse['data']
+  | undefined;
 type PaymentReceiveEditPageEntries =
   | PaymentReceiveEditPageResponse['entries']
   | undefined;

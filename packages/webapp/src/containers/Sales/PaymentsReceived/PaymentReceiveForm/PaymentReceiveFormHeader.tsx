@@ -19,9 +19,7 @@ export function PaymentReceiveFormHeader() {
     '--x-header-background': isDarkMode
       ? 'var(--color-dark-gray1)'
       : 'var(--color-white)',
-    '--x-header-border': isDarkMode
-      ? 'rgba(255, 255, 255, 0.1)'
-      : '#d2dce2',
+    '--x-header-border': isDarkMode ? 'rgba(255, 255, 255, 0.1)' : '#d2dce2',
   } as React.CSSProperties;
 
   return (

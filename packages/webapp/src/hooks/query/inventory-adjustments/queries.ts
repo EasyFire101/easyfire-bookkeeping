@@ -28,11 +28,7 @@ const commonInvalidateQueries = (
 };
 
 export function useCreateInventoryAdjustment(
-  props?: UseMutationOptions<
-    void,
-    Error,
-    CreateQuickInventoryAdjustmentBody
-  >,
+  props?: UseMutationOptions<void, Error, CreateQuickInventoryAdjustmentBody>,
 ) {
   const queryClient = useQueryClient();
   const fetcher = useApiFetcher();

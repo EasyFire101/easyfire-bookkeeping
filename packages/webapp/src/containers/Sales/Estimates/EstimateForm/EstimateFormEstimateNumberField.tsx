@@ -25,11 +25,17 @@ type EstimateNumberFieldProps = {
  */
 export const EstimateFormEstimateNumberField = compose(
   withDialogActions,
-  withSettings(({ estimatesSettings }: { estimatesSettings?: Record<string, unknown> }) => ({
-    estimateNextNumber: estimatesSettings?.nextNumber,
-    estimateNumberPrefix: estimatesSettings?.numberPrefix,
-    estimateAutoIncrement: estimatesSettings?.autoIncrement,
-  })),
+  withSettings(
+    ({
+      estimatesSettings,
+    }: {
+      estimatesSettings?: Record<string, unknown>;
+    }) => ({
+      estimateNextNumber: estimatesSettings?.nextNumber,
+      estimateNumberPrefix: estimatesSettings?.numberPrefix,
+      estimateAutoIncrement: estimatesSettings?.autoIncrement,
+    }),
+  ),
 )(({ openDialog, estimateAutoIncrement }: EstimateNumberFieldProps) => {
   const { values, setFieldValue } = useFormikContext<EstimateFormValues>();
 

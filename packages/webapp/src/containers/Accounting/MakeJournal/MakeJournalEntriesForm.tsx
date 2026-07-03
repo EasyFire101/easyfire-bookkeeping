@@ -89,7 +89,11 @@ function MakeJournalEntriesFormInner({
   // Handle the form submiting.
   const handleSubmit = (
     values: MakeJournalFormValues,
-    { setErrors, setSubmitting, resetForm }: FormikHelpers<MakeJournalFormValues>,
+    {
+      setErrors,
+      setSubmitting,
+      resetForm,
+    }: FormikHelpers<MakeJournalFormValues>,
   ) => {
     setSubmitting(true);
     const entries = values.entries.filter(

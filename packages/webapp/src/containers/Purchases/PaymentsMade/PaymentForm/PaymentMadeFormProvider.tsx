@@ -45,9 +45,7 @@ interface PaymentMadeFormContextValue {
   branches: UseBranchesResult['data'];
 
   paymentVendorId: number | null;
-  setPaymentVendorId: React.Dispatch<
-    React.SetStateAction<number | null>
-  >;
+  setPaymentVendorId: React.Dispatch<React.SetStateAction<number | null>>;
 
   isNewMode: boolean;
   isAccountsLoading: boolean;

@@ -109,7 +109,9 @@ export const useCreditNoteReadOnlyEntriesColumns = () => {
 /**
  * Credit note more actions menu.
  */
-export function CreditNoteMenuItem({ payload: { onReconcile } }: CreditNoteMenuItemProps) {
+export function CreditNoteMenuItem({
+  payload: { onReconcile },
+}: CreditNoteMenuItemProps) {
   return (
     <Popover
       minimal={true}
@@ -135,7 +137,9 @@ export function CreditNoteMenuItem({ payload: { onReconcile } }: CreditNoteMenuI
 /**
  * Credit note details status.
  */
-export function CreditNoteDetailsStatus({ creditNote }: CreditNoteDetailsStatusProps) {
+export function CreditNoteDetailsStatus({
+  creditNote,
+}: CreditNoteDetailsStatusProps) {
   return (
     <Choose>
       <Choose.When condition={!!creditNote.isOpen}>

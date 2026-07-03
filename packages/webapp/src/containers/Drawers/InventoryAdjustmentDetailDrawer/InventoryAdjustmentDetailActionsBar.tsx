@@ -1,7 +1,10 @@
 import React from 'react';
 import { Button, NavbarGroup, Classes, Intent } from '@blueprintjs/core';
 import { useInventoryAdjustmentDrawerContext } from './InventoryAdjustmentDrawerProvider';
-import { withAlertActions, WithAlertActionsProps } from '@/containers/Alert/withAlertActions';
+import {
+  withAlertActions,
+  WithAlertActionsProps,
+} from '@/containers/Alert/withAlertActions';
 import {
   Icon,
   DrawerActionsBar,

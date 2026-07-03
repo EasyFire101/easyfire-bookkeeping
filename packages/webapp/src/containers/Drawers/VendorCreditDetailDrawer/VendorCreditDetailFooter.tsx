@@ -1,9 +1,4 @@
-import {
-  CommercialDocFooter,
-  If,
-  DetailsMenu,
-  DetailItem,
-} from '@/components';
+import { CommercialDocFooter, If, DetailsMenu, DetailItem } from '@/components';
 import { useVendorCreditDetailDrawerContext } from './VendorCreditDetailDrawerProvider';
 import intl from 'react-intl-universal';
 

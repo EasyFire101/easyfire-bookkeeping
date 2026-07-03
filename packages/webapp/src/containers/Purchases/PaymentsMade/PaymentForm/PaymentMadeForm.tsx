@@ -162,9 +162,7 @@ function PaymentMadeFormInner({
         .then(onSaved)
         .catch(onError);
     } else {
-      return createPaymentMadeMutate(
-        form as unknown as CreateBillPaymentBody,
-      )
+      return createPaymentMadeMutate(form as unknown as CreateBillPaymentBody)
         .then(onSaved)
         .catch(onError);
     }

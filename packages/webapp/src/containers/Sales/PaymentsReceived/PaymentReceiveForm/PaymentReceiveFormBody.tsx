@@ -19,7 +19,10 @@ export function PaymentReceiveFormBody() {
   return (
     <Box p="18px 32px 0">
       <FastField name={'entries'}>
-        {({ form: { values, setFieldValue }, field: { value } }: FastFieldRenderProps) => (
+        {({
+          form: { values, setFieldValue },
+          field: { value },
+        }: FastFieldRenderProps) => (
           <PaymentReceiveItemsTable
             entries={value}
             onUpdateData={(newEntries: PaymentReceiveEntry[]) => {

@@ -94,15 +94,14 @@ function PaymentMadeDetailProvider({
   );
 }
 
-const usePaymentMadeDetailContext =
-  (): PaymentMadeDetailDrawerContextValue => {
-    const ctx = React.useContext(PaymentMadeDetailContext);
-    if (ctx === undefined) {
-      throw new Error(
-        'usePaymentMadeDetailContext must be used within a PaymentMadeDetailProvider',
-      );
-    }
-    return ctx;
-  };
+const usePaymentMadeDetailContext = (): PaymentMadeDetailDrawerContextValue => {
+  const ctx = React.useContext(PaymentMadeDetailContext);
+  if (ctx === undefined) {
+    throw new Error(
+      'usePaymentMadeDetailContext must be used within a PaymentMadeDetailProvider',
+    );
+  }
+  return ctx;
+};
 
 export { PaymentMadeDetailProvider, usePaymentMadeDetailContext };

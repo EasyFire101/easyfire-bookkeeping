@@ -114,14 +114,15 @@ function CreditNoteDetailDrawerProvider({
   );
 }
 
-const useCreditNoteDetailDrawerContext = (): CreditNoteDetailDrawerContextValue => {
-  const ctx = React.useContext(CreditNoteDetailDrawerContext);
-  if (ctx === undefined) {
-    throw new Error(
-      'useCreditNoteDetailDrawerContext must be used within a CreditNoteDetailDrawerProvider',
-    );
-  }
-  return ctx;
-};
+const useCreditNoteDetailDrawerContext =
+  (): CreditNoteDetailDrawerContextValue => {
+    const ctx = React.useContext(CreditNoteDetailDrawerContext);
+    if (ctx === undefined) {
+      throw new Error(
+        'useCreditNoteDetailDrawerContext must be used within a CreditNoteDetailDrawerProvider',
+      );
+    }
+    return ctx;
+  };
 
 export { CreditNoteDetailDrawerProvider, useCreditNoteDetailDrawerContext };

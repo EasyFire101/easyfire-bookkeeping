@@ -163,21 +163,21 @@ function EstimateFormCustomerSelect() {
       fastField={true}
     >
       <>
-      <CustomersSelect
-        name={'customerId'}
-        items={customers}
-        placeholder={<T id={'select_customer_account'} />}
-        onItemChange={handleItemChange}
-        allowCreate={true}
-        fastField={true}
-        shouldUpdate={customersFieldShouldUpdate}
-        shouldUpdateDeps={{ items: customers }}
-      />
-      {values.customerId && (
-        <CustomerButtonLink customerId={values.customerId}>
-          <T id={'view_customer_details'} />
-        </CustomerButtonLink>
-      )}
+        <CustomersSelect
+          name={'customerId'}
+          items={customers}
+          placeholder={<T id={'select_customer_account'} />}
+          onItemChange={handleItemChange}
+          allowCreate={true}
+          fastField={true}
+          shouldUpdate={customersFieldShouldUpdate}
+          shouldUpdateDeps={{ items: customers }}
+        />
+        {values.customerId && (
+          <CustomerButtonLink customerId={values.customerId}>
+            <T id={'view_customer_details'} />
+          </CustomerButtonLink>
+        )}
       </>
     </FFormGroup>
   );

@@ -19,7 +19,6 @@ export class ItemEntryTransformer extends Transformer<
       'rateFormatted',
       'discountFormatted',
       'totalFormatted',
-      'item',
     ];
   };
 
@@ -67,16 +66,4 @@ export class ItemEntryTransformer extends Transformer<
       money: false,
     });
   };
-
-  /**
-   * Project the nested item summary.
-   *
-   * Shadows the base Transformer's `item()` projection helper within this
-   * subclass scope. Safe because ItemEntryTransformer never delegates to the
-   * base helper — only CreditNoteTransformer does, on its own instance.
-   * @param {IItemEntry} entry
-   * @returns {{ name: string } | undefined}
-   */
-  public item = (entry: ItemEntry) =>
-    entry.item ? { name: entry.item.name } : undefined;
 }

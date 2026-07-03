@@ -24,7 +24,10 @@ export function InventoryAdjustmentDetail() {
  */
 function InventoryAdjustmentDetailTabs() {
   return (
-    <DrawerMainTabs renderActiveTabPanelOnly={true} defaultSelectedTabId="details">
+    <DrawerMainTabs
+      renderActiveTabPanelOnly={true}
+      defaultSelectedTabId="details"
+    >
       <Tab
         title={intl.get('details')}
         id={'details'}

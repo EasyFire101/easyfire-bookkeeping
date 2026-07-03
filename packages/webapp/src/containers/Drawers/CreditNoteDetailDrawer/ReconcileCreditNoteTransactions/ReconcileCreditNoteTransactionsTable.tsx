@@ -1,7 +1,10 @@
 import React from 'react';
 import { DataTable, Card } from '@/components';
 import { TableStyle } from '@/constants';
-import { withAlertActions, WithAlertActionsProps } from '@/containers/Alert/withAlertActions';
+import {
+  withAlertActions,
+  WithAlertActionsProps,
+} from '@/containers/Alert/withAlertActions';
 import { useCreditNoteDetailDrawerContext } from '../CreditNoteDetailDrawerProvider';
 import {
   useReconcileCreditTransactionsTableColumns,

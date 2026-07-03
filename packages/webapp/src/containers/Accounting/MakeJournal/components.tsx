@@ -235,7 +235,6 @@ export const JournalSyncIncrementSettingsToForm = compose(
     journalNextNumber: manualJournalsSettings?.nextNumber,
     journalNumberPrefix: manualJournalsSettings?.numberPrefix,
   })),
-
 )(({
   journalAutoIncrement,
   journalNextNumber,

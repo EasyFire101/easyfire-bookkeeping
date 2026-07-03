@@ -171,12 +171,7 @@ function adjustmentEntries(entries: MakeJournalEntry[]): {
  * Adjustment credit/debit entries.
  */
 export const updateAdjustEntries =
-  (
-    rowIndex: number,
-    columnId: string,
-    value: string | number,
-  ) =>
-
+  (rowIndex: number, columnId: string, value: string | number) =>
   (rows: MakeJournalEntry[]): MakeJournalEntry[] => {
     let newRows = [...rows];
 
@@ -222,11 +217,7 @@ export const transformErrors = (
     entries: [],
   };
 
-  const setEntriesErrors = (
-    indexes: number[],
-    prop: string,
-    message: string,
-  ) =>
+  const setEntriesErrors = (indexes: number[], prop: string, message: string) =>
     indexes.forEach((i) => {
       const index = Math.max(i - 1, 0);
       newErrors = setWith(newErrors, `entries.[${index}].${prop}`, message);

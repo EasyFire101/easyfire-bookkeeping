@@ -237,7 +237,8 @@ export class VendorCreditResponseDto {
   discountAmountLocal?: number | null;
 
   @ApiProperty({
-    description: 'The discount percentage (only when discountType is Percentage)',
+    description:
+      'The discount percentage (only when discountType is Percentage)',
     example: 10,
     required: false,
     nullable: true,

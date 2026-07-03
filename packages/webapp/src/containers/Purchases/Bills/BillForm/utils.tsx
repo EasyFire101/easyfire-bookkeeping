@@ -343,9 +343,9 @@ export const composeEntriesOnEditInclusiveTax = (
   inclusiveExclusiveTax: string,
   entries: BillFormEntry[],
 ): BillFormEntry[] => {
-  return assignEntriesTaxAmount(
-    inclusiveExclusiveTax === 'inclusive',
-  )(entries) as BillFormEntry[];
+  return assignEntriesTaxAmount(inclusiveExclusiveTax === 'inclusive')(
+    entries,
+  ) as BillFormEntry[];
 };
 
 /**

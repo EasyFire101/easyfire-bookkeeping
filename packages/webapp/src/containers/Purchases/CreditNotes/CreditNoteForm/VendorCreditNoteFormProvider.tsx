@@ -50,7 +50,9 @@ type VendorCreditFormContextValue = {
   isWarehousesSuccess: boolean;
 
   createVendorCreditMutate: (values: CreateVendorCreditBody) => Promise<void>;
-  editVendorCreditMutate: (args: [number, EditVendorCreditBody]) => Promise<void>;
+  editVendorCreditMutate: (
+    args: [number, EditVendorCreditBody],
+  ) => Promise<void>;
   setSubmitPayload: React.Dispatch<
     React.SetStateAction<VendorCreditFormSubmitPayload | undefined>
   >;

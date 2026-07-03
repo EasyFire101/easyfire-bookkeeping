@@ -43,12 +43,10 @@ function VendorCreditDetailDrawerProvider({
   const { featureCan } = useFeatureCan();
 
   // Handle fetch vendor credit details.
-  const {
-    data: vendorCredit,
-    isLoading: isVendorCreditLoading,
-  } = useVendorCredit(vendorCreditId, {
-    enabled: !!vendorCreditId,
-  });
+  const { data: vendorCredit, isLoading: isVendorCreditLoading } =
+    useVendorCredit(vendorCreditId, {
+      enabled: !!vendorCreditId,
+    });
 
   // Handle fetch refund credit note.
   const {
@@ -102,14 +100,15 @@ function VendorCreditDetailDrawerProvider({
   );
 }
 
-const useVendorCreditDetailDrawerContext = (): VendorCreditDetailDrawerContextValue => {
-  const ctx = React.useContext(VendorCreditDetailDrawerContext);
-  if (ctx === undefined) {
-    throw new Error(
-      'useVendorCreditDetailDrawerContext must be used within a VendorCreditDetailDrawerProvider',
-    );
-  }
-  return ctx;
-};
+const useVendorCreditDetailDrawerContext =
+  (): VendorCreditDetailDrawerContextValue => {
+    const ctx = React.useContext(VendorCreditDetailDrawerContext);
+    if (ctx === undefined) {
+      throw new Error(
+        'useVendorCreditDetailDrawerContext must be used within a VendorCreditDetailDrawerProvider',
+      );
+    }
+    return ctx;
+  };
 
 export { VendorCreditDetailDrawerProvider, useVendorCreditDetailDrawerContext };

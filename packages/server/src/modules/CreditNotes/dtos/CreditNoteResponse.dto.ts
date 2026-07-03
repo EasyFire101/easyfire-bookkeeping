@@ -112,7 +112,7 @@ export class CreditNoteResponseDto {
     required: false,
   })
   branch?: BranchLinkDto;
-  
+
   @ApiProperty({
     description: 'The attachments of the credit note',
     type: [AttachmentLinkDto],

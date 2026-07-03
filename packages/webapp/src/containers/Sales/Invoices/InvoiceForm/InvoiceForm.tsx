@@ -144,7 +144,11 @@ function InvoiceFormRoot({
       }
     };
     // Handle the request error.
-    const onError = ({ data: { errors } }: { data: { errors: Array<{ type: string }> } }) => {
+    const onError = ({
+      data: { errors },
+    }: {
+      data: { errors: Array<{ type: string }> };
+    }) => {
       if (errors) {
         transformErrors(errors, { setErrors });
       }

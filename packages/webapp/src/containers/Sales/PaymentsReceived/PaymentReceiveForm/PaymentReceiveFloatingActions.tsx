@@ -134,9 +134,7 @@ export function PaymentReceiveFormFloatingActions() {
           <FSelect
             name={'pdfTemplateId'}
             items={brandingTemplatesOpts}
-            input={({
-              text,
-            }: BrandingSelectInputRenderArgs) => (
+            input={({ text }: BrandingSelectInputRenderArgs) => (
               <BrandingThemeSelectButton text={text || 'Brand Theme'} minimal />
             )}
             filterable={false}

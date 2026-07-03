@@ -25,7 +25,9 @@ export function PaymentMadeFormHeader() {
         amount={
           // PageFormBigNumber declares `amount: string | number` but renders
           // it inside an <h1>; passing a <Money> element works at runtime.
-          <Money amount={totalAmount} currency={currencyCode} /> as unknown as number
+          (
+            <Money amount={totalAmount} currency={currencyCode} />
+          ) as unknown as number
         }
       />
     </PageForm.Header>

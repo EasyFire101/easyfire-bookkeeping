@@ -16,7 +16,10 @@ interface ActionsMenuProps {
 /**
  * Actions menu.
  */
-export function ActionsMenu({ payload: { onDelete }, row: { original } }: ActionsMenuProps) {
+export function ActionsMenu({
+  payload: { onDelete },
+  row: { original },
+}: ActionsMenuProps) {
   return (
     <Menu>
       <Can I={VendorCreditAction.Delete} a={AbilitySubject.VendorCredit}>

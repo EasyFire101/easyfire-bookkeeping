@@ -5,9 +5,7 @@ import { DATATYPES_LENGTH } from '@/constants/dataTypes';
 const Schema = Yup.object().shape({
   customerId: Yup.string().label(intl.get('customer_name_')).required(),
   paymentDate: Yup.date().required().label(intl.get('payment_date_')),
-  depositAccountId: Yup.number()
-    .required()
-    .label(intl.get('deposit_account_')),
+  depositAccountId: Yup.number().required().label(intl.get('deposit_account_')),
   amount: Yup.number().required().label('Amount'),
   paymentReceiveNo: Yup.string()
     .nullable()

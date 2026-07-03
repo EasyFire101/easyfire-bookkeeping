@@ -42,10 +42,7 @@ type MoneyTableCellProps = {
 /**
  * Mobey table cell.
  */
-function MoneyTableCell({
-  row: { original },
-  value,
-}: MoneyTableCellProps) {
+function MoneyTableCell({ row: { original }, value }: MoneyTableCellProps) {
   return <Money amount={value} currency={original.currencyCode} />;
 }
 

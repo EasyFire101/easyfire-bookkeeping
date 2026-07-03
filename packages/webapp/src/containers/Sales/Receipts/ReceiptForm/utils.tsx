@@ -113,7 +113,9 @@ type FastFieldShouldUpdateProps = {
 
 type ReceiptFormErrors = { type: string };
 
-type SetErrors = (errors: Partial<Record<keyof ReceiptFormValues, string>>) => void;
+type SetErrors = (
+  errors: Partial<Record<keyof ReceiptFormValues, string>>,
+) => void;
 
 /**
  * Transform to form in edit mode.
@@ -214,12 +216,10 @@ export const handleErrors = (
 export const transformFormValuesToRequest = (
   values: ReceiptFormValues,
 ): CreateSaleReceiptBody => {
-  const entries = values.entries.filter(
-    (item) => item.itemId && item.quantity,
-  );
+  const entries = values.entries.filter((item) => item.itemId && item.quantity);
   const attachments = transformAttachmentsToRequest(values);
 
-  return ({
+  return {
     ...omit(values, ['receiptNumberManually', 'receiptNumber']),
     ...(values.receiptNumberManually && {
       receiptNumber: values.receiptNumber,
@@ -229,7 +229,7 @@ export const transformFormValuesToRequest = (
     })),
     closed: false,
     attachments,
-  } as unknown) as CreateSaleReceiptBody;
+  } as unknown as CreateSaleReceiptBody;
 };
 
 export const useSetPrimaryWarehouseToForm = () => {

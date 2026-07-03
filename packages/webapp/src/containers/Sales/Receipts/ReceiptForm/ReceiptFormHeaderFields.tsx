@@ -147,14 +147,16 @@ export function ReceiptFormHeader() {
  * @returns {React.ReactNode}
  */
 function ReceiptFormCustomerSelect() {
-  const { setFieldValue, values } =
-    useFormikContext<ReceiptFormValues>();
+  const { setFieldValue, values } = useFormikContext<ReceiptFormValues>();
   const { customers } = useReceiptFormContext();
 
   const updateEntries = useCustomerUpdateExRate();
 
   // Handles the customer item change.
-  const handleItemChange = (customer: { id: number; currency_code: string }) => {
+  const handleItemChange = (customer: {
+    id: number;
+    currency_code: string;
+  }) => {
     setFieldValue('customerId', customer.id);
     setFieldValue('currencyCode', customer?.currency_code);
 

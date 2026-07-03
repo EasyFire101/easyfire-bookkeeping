@@ -146,16 +146,17 @@ export type PaymentReceiveEditEntry = {
 export const transformToEditForm = (
   paymentReceive: PaymentReceiveEditPage | Record<string, unknown>,
   paymentReceiveEntries: PaymentReceiveEditEntry[],
-): PaymentReceiveFormValues => ({
-  ...transformToForm(paymentReceive, defaultPaymentReceive),
-  entries: [
-    ...paymentReceiveEntries.map((paymentReceiveEntry) => ({
-      ...transformToForm(paymentReceiveEntry, defaultPaymentReceiveEntry),
-      paymentAmount: paymentReceiveEntry.paymentAmount || '',
-    })),
-  ],
-  attachments: transformAttachmentsToForm(paymentReceive),
-}) as PaymentReceiveFormValues;
+): PaymentReceiveFormValues =>
+  ({
+    ...transformToForm(paymentReceive, defaultPaymentReceive),
+    entries: [
+      ...paymentReceiveEntries.map((paymentReceiveEntry) => ({
+        ...transformToForm(paymentReceiveEntry, defaultPaymentReceiveEntry),
+        paymentAmount: paymentReceiveEntry.paymentAmount || '',
+      })),
+    ],
+    attachments: transformAttachmentsToForm(paymentReceive),
+  }) as PaymentReceiveFormValues;
 
 /**
  * Transformes the given invoices to the new page receivable entries.
@@ -181,13 +182,15 @@ export const transformInvoicesNewPageEntries = (
 
 export const transformEntriesToEditForm = (
   receivableEntries: InvoiceRow[],
-): PaymentReceiveEntry[] =>
-  [...transformInvoicesNewPageEntries([...(receivableEntries || [])])];
+): PaymentReceiveEntry[] => [
+  ...transformInvoicesNewPageEntries([...(receivableEntries || [])]),
+];
 
 export const clearAllPaymentEntries = (
   entries: PaymentReceiveEntry[],
-): PaymentReceiveEntry[] =>
-  [...entries.map((entry) => ({ ...entry, paymentAmount: 0 }))];
+): PaymentReceiveEntry[] => [
+  ...entries.map((entry) => ({ ...entry, paymentAmount: 0 })),
+];
 
 export const amountPaymentEntries = (
   amount: number,
@@ -308,10 +311,7 @@ export const transformErrors = (
     errors.find((e) => e.type === errorType);
 
   if (getError('PAYMENT_RECEIVE_NO_EXISTS')) {
-    setFieldError(
-      'paymentReceiveNo',
-      intl.get('payment_number_is_not_unique'),
-    );
+    setFieldError('paymentReceiveNo', intl.get('payment_number_is_not_unique'));
   }
   if (getError('PAYMENT_RECEIVE_NO_REQUIRED')) {
     setFieldError(

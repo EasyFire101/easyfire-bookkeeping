@@ -135,7 +135,11 @@ function EstimateFormInner({
       }
     };
     // Handle the request error.
-    const onError = ({ data: { errors } }: { data: { errors: Array<{ type: string }> } }) => {
+    const onError = ({
+      data: { errors },
+    }: {
+      data: { errors: Array<{ type: string }> };
+    }) => {
       if (errors) {
         handleErrors(errors, { setErrors });
       }
@@ -189,11 +193,17 @@ function EstimateFormInner({
 }
 
 export const EstimateForm = compose(
-  withSettings(({ estimatesSettings }: { estimatesSettings?: Record<string, unknown> }) => ({
-    estimateNextNumber: estimatesSettings?.nextNumber,
-    estimateNumberPrefix: estimatesSettings?.numberPrefix,
-    estimateAutoIncrementMode: estimatesSettings?.autoIncrement,
-    estimateCustomerNotes: estimatesSettings?.customerNotes,
-    estimateTermsConditions: estimatesSettings?.termsConditions,
-  })),
+  withSettings(
+    ({
+      estimatesSettings,
+    }: {
+      estimatesSettings?: Record<string, unknown>;
+    }) => ({
+      estimateNextNumber: estimatesSettings?.nextNumber,
+      estimateNumberPrefix: estimatesSettings?.numberPrefix,
+      estimateAutoIncrementMode: estimatesSettings?.autoIncrement,
+      estimateCustomerNotes: estimatesSettings?.customerNotes,
+      estimateTermsConditions: estimatesSettings?.termsConditions,
+    }),
+  ),
 )(EstimateFormInner);

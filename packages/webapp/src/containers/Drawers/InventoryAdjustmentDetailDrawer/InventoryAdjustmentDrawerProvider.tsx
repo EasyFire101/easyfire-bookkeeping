@@ -53,14 +53,18 @@ function InventoryAdjustmentDrawerProvider({
   );
 }
 
-const useInventoryAdjustmentDrawerContext = (): InventoryAdjustmentDrawerContextValue => {
-  const ctx = React.useContext(InventoryAdjustmentDrawerContext);
-  if (ctx === undefined) {
-    throw new Error(
-      'useInventoryAdjustmentDrawerContext must be used within an InventoryAdjustmentDrawerProvider',
-    );
-  }
-  return ctx;
-};
+const useInventoryAdjustmentDrawerContext =
+  (): InventoryAdjustmentDrawerContextValue => {
+    const ctx = React.useContext(InventoryAdjustmentDrawerContext);
+    if (ctx === undefined) {
+      throw new Error(
+        'useInventoryAdjustmentDrawerContext must be used within an InventoryAdjustmentDrawerProvider',
+      );
+    }
+    return ctx;
+  };
 
-export { InventoryAdjustmentDrawerProvider, useInventoryAdjustmentDrawerContext };
+export {
+  InventoryAdjustmentDrawerProvider,
+  useInventoryAdjustmentDrawerContext,
+};

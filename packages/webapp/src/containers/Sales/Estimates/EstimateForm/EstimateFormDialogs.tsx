@@ -17,7 +17,9 @@ export function EstimateFormDialogs() {
   const { setFieldValue } = useFormikContext<EstimateFormValues>();
 
   // Update the form once the estimate number form submit confirm.
-  const handleEstimateNumberFormConfirm = (settings: EstimateNumberSettings) => {
+  const handleEstimateNumberFormConfirm = (
+    settings: EstimateNumberSettings,
+  ) => {
     setFieldValue('estimateNumber', settings.transactionNumber);
     setFieldValue('estimateNumberManually', '');
 

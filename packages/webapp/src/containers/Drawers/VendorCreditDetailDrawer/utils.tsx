@@ -18,9 +18,7 @@ import {
   Choose,
 } from '@/components';
 import type { VendorCredit } from '@bigcapital/sdk-ts';
-import {
-  useVendorCreditDetailDrawerContext,
-} from './VendorCreditDetailDrawerProvider';
+import { useVendorCreditDetailDrawerContext } from './VendorCreditDetailDrawerProvider';
 
 /**
  * Retrieve vendor credit readonly details entries table columns.
@@ -107,7 +105,9 @@ interface VendorCreditMenuItemProps {
  * Vendor note more actions menu.
  * @returns {React.JSX}
  */
-export const VendorCreditMenuItem = ({ payload: { onReconcile } }: VendorCreditMenuItemProps) => {
+export const VendorCreditMenuItem = ({
+  payload: { onReconcile },
+}: VendorCreditMenuItemProps) => {
   return (
     <Popover
       minimal={true}

@@ -8,10 +8,7 @@ import { usePaymentReceiveInnerContext } from './PaymentReceiveInnerProvider';
 import { DataTableEditable } from '@/components';
 import { usePaymentReceiveEntriesColumns } from './components';
 import { compose, updateTableCell } from '@/utils';
-import type {
-  PaymentReceiveEntry,
-  PaymentReceiveFormValues,
-} from './utils';
+import type { PaymentReceiveEntry, PaymentReceiveFormValues } from './utils';
 
 type PaymentReceiveItemsTableProps = {
   entries: PaymentReceiveEntry[];
@@ -63,7 +60,8 @@ export function PaymentReceiveItemsTable({
         data={entries}
         spinnerProps={false}
         payload={{
-          errors: (errors as { entries?: unknown[] } | undefined)?.entries || [],
+          errors:
+            (errors as { entries?: unknown[] } | undefined)?.entries || [],
           updateData: handleUpdateData,
           currencyCode,
         }}

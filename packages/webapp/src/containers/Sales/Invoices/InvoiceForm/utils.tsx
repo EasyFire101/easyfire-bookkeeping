@@ -295,7 +295,7 @@ const filterNonZeroEntries = (entries: InvoiceEntry[]) => {
 export function transformValueToRequest(
   values: InvoiceFormValues,
 ): CreateSaleInvoiceBody {
-  return ({
+  return {
     ...omit(values, [
       'invoiceNo',
       'invoiceNoManually',
@@ -311,7 +311,7 @@ export function transformValueToRequest(
     delivered: false,
     attachments: transformAttachmentsToRequest(values),
     paymentMethods: transformPaymentMethodsToRequest(values?.paymentMethods),
-  } as unknown) as CreateSaleInvoiceBody;
+  } as unknown as CreateSaleInvoiceBody;
 }
 
 /**
@@ -334,7 +334,9 @@ const transformPaymentMethodsToRequest = (
  * @returns {Record<string, { enable: boolean }>}
  */
 const transformPaymentMethodsToForm = (
-  paymentMethods: Array<{ paymentIntegrationId: number; enable: boolean }> | undefined,
+  paymentMethods:
+    | Array<{ paymentIntegrationId: number; enable: boolean }>
+    | undefined,
 ): Record<string, { enable: boolean }> => {
   return (paymentMethods ?? []).reduce(
     (acc: Record<string, { enable: boolean }>, method) => {

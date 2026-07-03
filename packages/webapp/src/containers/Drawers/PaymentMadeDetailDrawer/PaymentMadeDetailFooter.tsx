@@ -1,11 +1,6 @@
 import React from 'react';
 
-import {
-  CommercialDocFooter,
-  DetailsMenu,
-  If,
-  DetailItem,
-} from '@/components';
+import { CommercialDocFooter, DetailsMenu, If, DetailItem } from '@/components';
 import { usePaymentMadeDetailContext } from './PaymentMadeDetailProvider';
 import intl from 'react-intl-universal';
 

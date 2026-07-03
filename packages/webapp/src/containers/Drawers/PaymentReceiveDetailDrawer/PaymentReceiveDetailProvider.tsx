@@ -25,8 +25,7 @@ export type PaymentReceiveDetailEntry = PaymentReceived['entries'][number] & {
  * Formatted/derived fields the OpenAPI `PaymentReceived` schema does not
  * surface but the backend returns and the detail drawer consumes.
  */
-export interface PaymentReceiveDetail
-  extends Omit<PaymentReceived, 'entries'> {
+export interface PaymentReceiveDetail extends Omit<PaymentReceived, 'entries'> {
   customer?: { displayName?: string };
   subtotalFormatted?: string;
   entries: PaymentReceiveDetailEntry[];

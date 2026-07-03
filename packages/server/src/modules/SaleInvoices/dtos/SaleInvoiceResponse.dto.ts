@@ -361,7 +361,7 @@ export class SaleInvoiceResponseDto {
     example: '$5.00',
   })
   adjustmentFormatted: string;
-  
+
   @ApiProperty({
     description: 'The customer of the invoice',
     type: () => CustomerResponseDto,

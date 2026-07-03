@@ -6,15 +6,10 @@ import { isBlank } from '@/utils';
 
 const Schema = Yup.object().shape({
   beneficiary: Yup.string().label(intl.get('beneficiary')),
-  paymentAccountId: Yup.number()
-    .required()
-    .label(intl.get('payment_account_')),
+  paymentAccountId: Yup.number().required().label(intl.get('payment_account_')),
   paymentDate: Yup.date().required().label(intl.get('payment_date_')),
   referenceNo: Yup.string().min(1).max(DATATYPES_LENGTH.STRING).nullable(),
-  currencyCode: Yup.string()
-    .nullable()
-    .max(3)
-    .label(intl.get('currency_code')),
+  currencyCode: Yup.string().nullable().max(3).label(intl.get('currency_code')),
   description: Yup.string()
     .trim()
     .min(1)

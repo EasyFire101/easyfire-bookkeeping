@@ -112,7 +112,9 @@ const ERRORS = {
 /**
  * Transform estimate to initial values in edit mode.
  */
-export function transformToEditForm(estimate: SaleEstimate): EstimateFormValues {
+export function transformToEditForm(
+  estimate: SaleEstimate,
+): EstimateFormValues {
   const initialEntries = [
     ...estimate.entries.map((entry) => ({
       ...transformToForm(entry, defaultEstimateEntry),
@@ -131,7 +133,10 @@ export function transformToEditForm(estimate: SaleEstimate): EstimateFormValues 
 
   return {
     ...defaultEstimate,
-    ...(transformToForm(estimate, defaultEstimate) as Partial<EstimateFormValues>),
+    ...(transformToForm(
+      estimate,
+      defaultEstimate,
+    ) as Partial<EstimateFormValues>),
     entries,
     attachments,
   };
@@ -202,9 +207,7 @@ export const handleErrors = (
     errors.some((error) => error.type === ERRORS.SALE_ESTIMATE_NO_IS_REQUIRED)
   ) {
     setErrors({
-      estimateNumber: intl.get(
-        'estimate.field.error.estimate_number_required',
-      ),
+      estimateNumber: intl.get('estimate.field.error.estimate_number_required'),
     });
   }
 };
@@ -222,12 +225,10 @@ export const handleErrors = (
 export function transformValueToRequest(
   values: EstimateFormValues,
 ): CreateSaleEstimateBody {
-  const entries = values.entries.filter(
-    (item) => item.itemId && item.quantity,
-  );
+  const entries = values.entries.filter((item) => item.itemId && item.quantity);
   const attachments = transformAttachmentsToRequest(values);
 
-  return ({
+  return {
     ...omit(values, ['estimateNumberManually', 'estimateNumber']),
     // The `estimateNumberManually` will be presented just if the auto-increment
     // is disable, always both attributes hold the same value in manual mode.
@@ -238,7 +239,7 @@ export function transformValueToRequest(
       ...transformToForm(entry, defaultEstimateEntryReq),
     })),
     attachments,
-  } as unknown) as CreateSaleEstimateBody;
+  } as unknown as CreateSaleEstimateBody;
 }
 
 export const useSetPrimaryWarehouseToForm = () => {

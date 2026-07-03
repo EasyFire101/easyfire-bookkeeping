@@ -10,9 +10,7 @@ interface ExpenseDrawerContentProps {
 /**
  * Expense drawer content.
  */
-export function ExpenseDrawerContent({
-  expenseId,
-}: ExpenseDrawerContentProps) {
+export function ExpenseDrawerContent({ expenseId }: ExpenseDrawerContentProps) {
   return (
     <ExpenseDrawerProvider expenseId={expenseId}>
       <DrawerBody>

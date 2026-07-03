@@ -29,9 +29,6 @@ export class SaleInvoiceTransformer extends Transformer {
       'discountAmountFormatted',
       'discountPercentageFormatted',
       'adjustmentFormatted',
-      'isWrittenoff',
-      'branch',
-      'customer',
       'taxes',
       'entries',
       'attachments',
@@ -254,18 +251,4 @@ export class SaleInvoiceTransformer extends Transformer {
   protected attachments = (invoice: SaleInvoice) => {
     return this.item(invoice.attachments, new AttachmentTransformer());
   };
-
-  /**
-   * Retrieve the nested branch summary.
-   * @param {SaleInvoice} invoice
-   */
-  protected branch = (invoice: SaleInvoice) =>
-    invoice.branch ? { name: invoice.branch.name } : undefined;
-
-  /**
-   * Retrieve the nested customer summary.
-   * @param {SaleInvoice} invoice
-   */
-  protected customer = (invoice: SaleInvoice) =>
-    invoice.customer ? { displayName: invoice.customer.displayName } : undefined;
 }

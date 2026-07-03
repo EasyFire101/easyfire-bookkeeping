@@ -116,7 +116,8 @@ function MakeJournalProvider({
   );
 
   // Submit form payload.
-  const [submitPayload, setSubmitPayload] = useState({});
+  const [submitPayload, setSubmitPayload] =
+    useState<MakeJournalFormSubmitPayload>({});
 
   // Determines whether the branches are loading.
   const isFeatureLoading = isBranchesLoading || isProjectsLoading;

@@ -1,12 +1,7 @@
 import * as Yup from 'yup';
 import * as R from 'ramda';
 import { Button, Classes, Intent } from '@blueprintjs/core';
-import {
-  Form,
-  Formik,
-  FormikHelpers,
-  useFormikContext,
-} from 'formik';
+import { Form, Formik, FormikHelpers, useFormikContext } from 'formik';
 import { FormatNumber } from '@/components';
 import { usePaymentReceiveFormContext } from '../../PaymentReceiveFormProvider';
 import { withDialogActions } from '@/containers/Dialog/withDialogActions';

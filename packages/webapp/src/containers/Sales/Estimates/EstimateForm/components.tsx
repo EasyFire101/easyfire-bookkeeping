@@ -5,10 +5,7 @@ import { useFormikContext } from 'formik';
 import { ExchangeRateInputGroup } from '@/components';
 import { compose } from '@/utils';
 import { useCurrentOrganizationBaseCurrency } from '@/hooks/query';
-import {
-  useEstimateIsForeignCustomer,
-  useEstimateSubtotal,
-} from './utils';
+import { useEstimateIsForeignCustomer, useEstimateSubtotal } from './utils';
 import type { EstimateFormValues } from './utils';
 import { transactionNumber } from '@/utils';
 import { useUpdateEffect } from '@/hooks';
@@ -87,11 +84,17 @@ type EstimateIncrementSyncSettingsToFormProps = {
  * @returns {React.ReactNode}
  */
 export const EstimateIncrementSyncSettingsToForm = compose(
-  withSettings(({ estimatesSettings }: { estimatesSettings?: Record<string, unknown> }) => ({
-    estimateNextNumber: estimatesSettings?.nextNumber,
-    estimateNumberPrefix: estimatesSettings?.numberPrefix,
-    estimateAutoIncrement: estimatesSettings?.autoIncrement,
-  })),
+  withSettings(
+    ({
+      estimatesSettings,
+    }: {
+      estimatesSettings?: Record<string, unknown>;
+    }) => ({
+      estimateNextNumber: estimatesSettings?.nextNumber,
+      estimateNumberPrefix: estimatesSettings?.numberPrefix,
+      estimateAutoIncrement: estimatesSettings?.autoIncrement,
+    }),
+  ),
 )(({
   estimateNextNumber,
   estimateNumberPrefix,

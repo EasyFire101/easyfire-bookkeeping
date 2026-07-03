@@ -71,7 +71,9 @@ const assignRateRevertAndCovertExchangeRate = R.curry(
  * @returns {(oldExchangeRate: number, newExchangeRate: number) => ItemEntry[]}
  */
 export const useUpdateEntriesOnExchangeRateChange = () => {
-  const { values: { entries }, } = useFormikContext<{ entries: ItemEntry[] }>();
+  const {
+    values: { entries },
+  } = useFormikContext<{ entries: ItemEntry[] }>();
 
   return React.useMemo(() => {
     return R.curry((oldExchangeRate: number, newExchangeRate: number) => {

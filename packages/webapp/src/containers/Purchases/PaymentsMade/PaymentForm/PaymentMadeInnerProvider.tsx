@@ -67,9 +67,7 @@ function PaymentMadeInnerProvider({
     isNewEntriesFetching,
   };
 
-  return (
-    <PaymentMadeInnerContext.Provider value={provider} {...props} />
-  );
+  return <PaymentMadeInnerContext.Provider value={provider} {...props} />;
 }
 
 const usePaymentMadeInnerContext = (): PaymentMadeInnerContextValue => {

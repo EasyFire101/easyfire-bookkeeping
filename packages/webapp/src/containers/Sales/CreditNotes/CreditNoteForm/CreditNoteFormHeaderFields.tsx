@@ -102,7 +102,10 @@ function CreditNoteCustomersSelect() {
   const updateEntries = useCustomerUpdateExRate();
 
   // Handles item change.
-  const handleItemChange = (customer: { id: number; currency_code: string }) => {
+  const handleItemChange = (customer: {
+    id: number;
+    currency_code: string;
+  }) => {
     setFieldValue('customerId', customer.id);
     setFieldValue('currencyCode', customer?.currency_code);
 
@@ -118,22 +121,22 @@ function CreditNoteCustomersSelect() {
       fastField={true}
     >
       <>
-      <CustomersSelect
-        name={'customerId'}
-        items={customers}
-        placeholder={<T id={'select_customer_account'} />}
-        onItemChange={handleItemChange}
-        popoverFill={true}
-        allowCreate={true}
-        fastField={true}
-        shouldUpdate={customerNameFieldShouldUpdate}
-        shouldUpdateDeps={{ items: customers }}
-      />
-      {values.customerId && (
-        <CustomerButtonLink customerId={values.customerId}>
-          <T id={'view_customer_details'} />
-        </CustomerButtonLink>
-      )}
+        <CustomersSelect
+          name={'customerId'}
+          items={customers}
+          placeholder={<T id={'select_customer_account'} />}
+          onItemChange={handleItemChange}
+          popoverFill={true}
+          allowCreate={true}
+          fastField={true}
+          shouldUpdate={customerNameFieldShouldUpdate}
+          shouldUpdateDeps={{ items: customers }}
+        />
+        {values.customerId && (
+          <CustomerButtonLink customerId={values.customerId}>
+            <T id={'view_customer_details'} />
+          </CustomerButtonLink>
+        )}
       </>
     </FFormGroup>
   );

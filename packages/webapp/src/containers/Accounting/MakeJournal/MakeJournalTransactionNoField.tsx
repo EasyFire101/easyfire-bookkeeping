@@ -33,7 +33,6 @@ export const MakeJournalTransactionNoField = compose(
   withSettings(({ manualJournalsSettings }) => ({
     journalAutoIncrement: manualJournalsSettings?.autoIncrement,
   })),
-
 )(({
   openDialog,
   journalAutoIncrement,

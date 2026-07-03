@@ -135,16 +135,17 @@ export const defaultPaymentMade: PaymentMadeFormValues = {
 export const transformToEditForm = (
   paymentMade: PaymentMadeEditPage | Record<string, unknown>,
   paymentMadeEntries: PaymentMadeEditEntry[],
-): PaymentMadeFormValues => ({
-  ...transformToForm(paymentMade, defaultPaymentMade),
-  entries: [
-    ...paymentMadeEntries.map((paymentMadeEntry) => ({
-      ...transformToForm(paymentMadeEntry, defaultPaymentMadeEntry),
-      paymentAmount: paymentMadeEntry.paymentAmount || '',
-    })),
-  ],
-  attachments: transformAttachmentsToForm(paymentMade),
-}) as PaymentMadeFormValues;
+): PaymentMadeFormValues =>
+  ({
+    ...transformToForm(paymentMade, defaultPaymentMade),
+    entries: [
+      ...paymentMadeEntries.map((paymentMadeEntry) => ({
+        ...transformToForm(paymentMadeEntry, defaultPaymentMadeEntry),
+        paymentAmount: paymentMadeEntry.paymentAmount || '',
+      })),
+    ],
+    attachments: transformAttachmentsToForm(paymentMade),
+  }) as PaymentMadeFormValues;
 
 /**
  * Transform the new page entries.
@@ -269,9 +270,10 @@ export const usePaymentMadeTotals = () => {
     values: { entries, currencyCode },
   } = useFormikContext<PaymentMadeFormValues>();
 
-  const total = React.useMemo(() => safeSumBy(entries, 'paymentAmount'), [
-    entries,
-  ]);
+  const total = React.useMemo(
+    () => safeSumBy(entries, 'paymentAmount'),
+    [entries],
+  );
 
   const formattedTotal = React.useMemo(
     () => formattedAmount(total, currencyCode),

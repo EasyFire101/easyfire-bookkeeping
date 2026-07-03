@@ -16,9 +16,10 @@ import { compose } from '@/utils';
 import type { WithDialogActionsProps } from '@/containers/Dialog/withDialogActions';
 import type { CreditNoteFormValues } from './utils';
 
-interface CreditNoteTransactionNoFieldProps extends Pick<WithDialogActionsProps, 'openDialog'> {
+interface CreditNoteTransactionNoFieldProps
+  extends Pick<WithDialogActionsProps, 'openDialog'> {
   creditAutoIncrement?: boolean;
-};
+}
 
 /**
  * Credit note transaction number field.
@@ -34,9 +35,7 @@ const CreditNoteTransactionNoFieldInner = ({
     openDialog('credit-number-form');
   };
   // Handle credit note no. field blur.
-  const handleCreditNoBlur = (
-    event: React.FocusEvent<HTMLInputElement>,
-  ) => {
+  const handleCreditNoBlur = (event: React.FocusEvent<HTMLInputElement>) => {
     const newValue = event.target.value;
 
     // Show the confirmation dialog if the value has changed and auto-increment

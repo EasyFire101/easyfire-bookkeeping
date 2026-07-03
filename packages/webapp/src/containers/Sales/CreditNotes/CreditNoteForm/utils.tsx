@@ -120,7 +120,10 @@ export function transformToEditForm(
 
   return {
     ...defaultCreditNote,
-    ...(transformToForm(creditNote, defaultCreditNote) as Partial<CreditNoteFormValues>),
+    ...(transformToForm(
+      creditNote,
+      defaultCreditNote,
+    ) as Partial<CreditNoteFormValues>),
     entries,
     attachments: transformAttachmentsToForm(creditNote),
   };
@@ -141,9 +144,7 @@ const defaultReqCreditNoteEntry = {
  */
 const transformEntriesToSubmit = (entries: CreditNoteEntry[]) => {
   return orderingLinesIndexes(
-    entries.map((entry) =>
-      transformToForm(entry, defaultReqCreditNoteEntry),
-    ),
+    entries.map((entry) => transformToForm(entry, defaultReqCreditNoteEntry)),
   );
 };
 
@@ -167,12 +168,12 @@ const filterNonZeroEntries = (entries: CreditNoteEntry[]) => {
 export function transformFormValuesToRequest(
   values: CreditNoteFormValues,
 ): CreateCreditNoteBody {
-  return ({
+  return {
     ...values,
     entries: transformEntriesToSubmit(filterNonZeroEntries(values.entries)),
     open: false,
     attachments: transformAttachmentsToRequest(values),
-  } as unknown) as CreateCreditNoteBody;
+  } as unknown as CreateCreditNoteBody;
 }
 
 type FastFieldShouldUpdateProps = {
