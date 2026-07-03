@@ -61,15 +61,11 @@ function InventoryAdjustmentDataTable({
   };
 
   // Handle the inventory adjustment publish action.
-  const handlePublishInventoryAdjustment = ({
-    id,
-  }: InventoryAdjustment) => {
+  const handlePublishInventoryAdjustment = ({ id }: InventoryAdjustment) => {
     openAlert('inventory-adjustment-publish', { inventoryId: id });
   };
   // Handle view detail inventory adjustment.
-  const handleViewDetailInventoryAdjustment = ({
-    id,
-  }: InventoryAdjustment) => {
+  const handleViewDetailInventoryAdjustment = ({ id }: InventoryAdjustment) => {
     openDrawer(DRAWERS.INVENTORY_ADJUSTMENT_DETAILS, { inventoryId: id });
   };
 

@@ -172,7 +172,7 @@ export function useAccountTransactionsInfinity(
     'queryKey' | 'queryFn' | 'initialPageParam' | 'getNextPageParam'
   >,
 ) {
-  const fetcher = useApiFetcher({ enableCamelCaseTransform: true});
+  const fetcher = useApiFetcher({ enableCamelCaseTransform: true });
 
   return useInfiniteQuery<
     AccountTransactionsInfinityPage,

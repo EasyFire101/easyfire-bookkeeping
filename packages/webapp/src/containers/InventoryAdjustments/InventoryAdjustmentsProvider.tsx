@@ -1,5 +1,8 @@
 import React, { createContext } from 'react';
-import type { GetInventoryAdjustmentsQuery, InventoryAdjustment } from '@bigcapital/sdk-ts';
+import type {
+  GetInventoryAdjustmentsQuery,
+  InventoryAdjustment,
+} from '@bigcapital/sdk-ts';
 import { DashboardInsider } from '@/components/Dashboard';
 import { useInventoryAdjustments } from '@/hooks/query';
 
