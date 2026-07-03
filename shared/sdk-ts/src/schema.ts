@@ -5776,6 +5776,11 @@ export interface components {
              */
             publishedAt?: string;
             /**
+             * @description Whether the inventory adjustment is published
+             * @example true
+             */
+            isPublished: boolean;
+            /**
              * @description The ID of the branch where the adjustment was made
              * @example 1
              */
