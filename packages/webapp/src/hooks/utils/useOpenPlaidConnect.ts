@@ -12,7 +12,7 @@ export const useOpenPlaidConnect = () => {
   const openPlaidAsync = useCallback(() => {
     return getPlaidLinkToken()
       .then((res) => {
-        setPlaidId((res as { data: { link_token: string } }).data.link_token);
+        setPlaidId((res as { link_token: string }).link_token);
       })
       .catch(() => {
         AppToaster.show({
