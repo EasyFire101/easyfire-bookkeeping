@@ -1,4 +1,11 @@
 import {
+  createQuickInventoryAdjustment,
+  deleteInventoryAdjustment,
+  publishInventoryAdjustment,
+  fetchInventoryAdjustments,
+  fetchInventoryAdjustment,
+} from '@bigcapital/sdk-ts';
+import {
   useMutation,
   useQuery,
   useQueryClient,
@@ -6,20 +13,13 @@ import {
   UseQueryOptions,
 } from '@tanstack/react-query';
 import { useApiFetcher } from '../../useRequest';
+import { inventoryAdjustmentsKeys } from './query-keys';
 import type {
   InventoryAdjustment,
   InventoryAdjustmentsListResponse,
   CreateQuickInventoryAdjustmentBody,
   GetInventoryAdjustmentsQuery,
 } from '@bigcapital/sdk-ts';
-import {
-  createQuickInventoryAdjustment,
-  deleteInventoryAdjustment,
-  publishInventoryAdjustment,
-  fetchInventoryAdjustments,
-  fetchInventoryAdjustment,
-} from '@bigcapital/sdk-ts';
-import { inventoryAdjustmentsKeys } from './query-keys';
 
 const commonInvalidateQueries = (
   queryClient: ReturnType<typeof useQueryClient>,

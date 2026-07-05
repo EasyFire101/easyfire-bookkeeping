@@ -1,7 +1,7 @@
 // @ts-nocheck
-import * as Yup from 'yup';
-import intl from 'react-intl-universal';
 import { Intent } from '@blueprintjs/core';
+import intl from 'react-intl-universal';
+import * as Yup from 'yup';
 
 export const LOGIN_ERRORS = {
   INVALID_DETAILS: 'INVALID_DETAILS',

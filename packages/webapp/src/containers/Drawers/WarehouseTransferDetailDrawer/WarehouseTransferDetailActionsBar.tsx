@@ -1,6 +1,4 @@
 // @ts-nocheck
-import React from 'react';
-import { useHistory } from 'react-router-dom';
 import {
   Button,
   NavbarGroup,
@@ -8,15 +6,14 @@ import {
   NavbarDivider,
   Intent,
 } from '@blueprintjs/core';
-
+import React from 'react';
+import { useHistory } from 'react-router-dom';
 import { useWarehouseDetailDrawerContext } from './WarehouseTransferDetailDrawerProvider';
 import { DrawerActionsBar, Icon, FormattedMessage as T } from '@/components';
-
-import { withDialogActions } from '@/containers/Dialog/withDialogActions';
-import { withAlertActions } from '@/containers/Alert/withAlertActions';
-import { withDrawerActions } from '@/containers/Drawer/withDrawerActions';
-
 import { DRAWERS } from '@/constants/drawers';
+import { withAlertActions } from '@/containers/Alert/withAlertActions';
+import { withDialogActions } from '@/containers/Dialog/withDialogActions';
+import { withDrawerActions } from '@/containers/Drawer/withDrawerActions';
 import { compose } from '@/utils';
 
 /**

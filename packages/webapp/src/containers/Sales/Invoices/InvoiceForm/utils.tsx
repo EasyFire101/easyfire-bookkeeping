@@ -1,11 +1,30 @@
-import React from 'react';
+import { Intent } from '@blueprintjs/core';
 import { useFormikContext } from 'formik';
-import intl from 'react-intl-universal';
+import { omit, first, sumBy } from 'lodash';
 import moment from 'moment';
 import * as R from 'ramda';
-import { Intent } from '@blueprintjs/core';
-import { omit, first, sumBy } from 'lodash';
+import React from 'react';
+import intl from 'react-intl-universal';
+import { useInvoiceFormContext } from './InvoiceFormProvider';
 import type { SaleInvoice, CreateSaleInvoiceBody } from '@bigcapital/sdk-ts';
+import { AppToaster } from '@/components';
+import { ERROR } from '@/constants/errors';
+import {
+  transformAttachmentsToForm,
+  transformAttachmentsToRequest,
+} from '@/containers/Attachments/utils';
+import { convertBrandingTemplatesToOptions } from '@/containers/BrandingTemplates/BrandingTemplatesSelectFields';
+import {
+  updateItemsEntriesTotal,
+  ensureEntriesHaveEmptyLine,
+} from '@/containers/Entries/utils';
+import {
+  aggregateItemEntriesTaxRates,
+  assignEntriesTaxAmount,
+  getEntriesTotal,
+} from '@/containers/Entries/utils';
+import { useCurrentOrganizationBaseCurrency } from '@/hooks/query';
+import { TaxType } from '@/interfaces/TaxRates';
 import {
   compose,
   transformToForm,
@@ -14,25 +33,6 @@ import {
   formattedAmount,
   toSafeNumber,
 } from '@/utils';
-import { ERROR } from '@/constants/errors';
-import { AppToaster } from '@/components';
-import { useCurrentOrganizationBaseCurrency } from '@/hooks/query';
-import {
-  aggregateItemEntriesTaxRates,
-  assignEntriesTaxAmount,
-  getEntriesTotal,
-} from '@/containers/Entries/utils';
-import { useInvoiceFormContext } from './InvoiceFormProvider';
-import {
-  updateItemsEntriesTotal,
-  ensureEntriesHaveEmptyLine,
-} from '@/containers/Entries/utils';
-import { TaxType } from '@/interfaces/TaxRates';
-import {
-  transformAttachmentsToForm,
-  transformAttachmentsToRequest,
-} from '@/containers/Attachments/utils';
-import { convertBrandingTemplatesToOptions } from '@/containers/BrandingTemplates/BrandingTemplatesSelectFields';
 
 export const MIN_LINES_NUMBER = 1;
 

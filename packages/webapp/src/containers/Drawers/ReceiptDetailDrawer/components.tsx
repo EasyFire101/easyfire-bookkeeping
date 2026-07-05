@@ -1,4 +1,3 @@
-import React from 'react';
 import {
   Button,
   Popover,
@@ -9,9 +8,9 @@ import {
   Intent,
   Tag,
 } from '@blueprintjs/core';
-
-import { Icon, Choose, T } from '@/components';
+import React from 'react';
 import type { ReceiptDetail } from './ReceiptDetailDrawerProvider';
+import { Icon, Choose, T } from '@/components';
 
 interface ReceiptDetailsStatusProps {
   receipt: ReceiptDetail;

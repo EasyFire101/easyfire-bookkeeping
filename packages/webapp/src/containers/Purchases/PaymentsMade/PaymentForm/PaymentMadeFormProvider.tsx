@@ -1,7 +1,7 @@
 import React, { createContext, useContext, useState } from 'react';
 import type { BillPaymentEditPageResponse } from '@bigcapital/sdk-ts';
+import { DashboardInsider } from '@/components';
 import { Features } from '@/constants';
-import { useFeatureCan } from '@/hooks/state';
 import {
   useAccounts,
   useVendors,
@@ -12,7 +12,8 @@ import {
   useCreatePaymentMade,
   useEditPaymentMade,
 } from '@/hooks/query';
-import { DashboardInsider } from '@/components';
+import { useFeatureCan } from '@/hooks/state';
+
 
 type UseAccountsResult = ReturnType<typeof useAccounts>;
 type UseVendorsResult = ReturnType<typeof useVendors>;

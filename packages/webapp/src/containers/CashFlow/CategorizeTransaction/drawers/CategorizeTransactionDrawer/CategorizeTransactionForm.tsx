@@ -1,23 +1,23 @@
-import React from 'react';
-import { Formik, Form, FormikHelpers } from 'formik';
+import { categorizeTransactionsBulk } from '@bigcapital/sdk-ts';
 import { Intent } from '@blueprintjs/core';
 import { useMutation } from '@tanstack/react-query';
+import { Formik, Form, FormikHelpers } from 'formik';
+import React from 'react';
 import styled from 'styled-components';
-import { categorizeTransactionsBulk } from '@bigcapital/sdk-ts';
-import type { CategorizeTransactionBody } from '@bigcapital/sdk-ts';
-import { useApiFetcher } from '@/hooks/useRequest';
-import { CreateCategorizeTransactionSchema } from './CategorizeTransactionForm.schema';
-import { CategorizeTransactionFormContent } from './CategorizeTransactionFormContent';
-import { CategorizeTransactionFormFooter } from './CategorizeTransactionFormFooter';
 import {
   tranformToRequest,
   useCategorizeTransactionFormInitialValues,
 } from './_utils';
+import { CreateCategorizeTransactionSchema } from './CategorizeTransactionForm.schema';
+import { CategorizeTransactionFormContent } from './CategorizeTransactionFormContent';
+import { CategorizeTransactionFormFooter } from './CategorizeTransactionFormFooter';
 import type { CategorizeTransactionFormValues } from './_utils';
-import { withBankingActions } from '@/containers/CashFlow/withBankingActions';
 import type { WithBankingActionsProps } from '@/containers/CashFlow/withBankingActions';
+import type { CategorizeTransactionBody } from '@bigcapital/sdk-ts';
 import { AppToaster } from '@/components';
 import { useCategorizeTransactionTabsBoot } from '@/containers/CashFlow/CategorizeTransactionAside/CategorizeTransactionTabsBoot';
+import { withBankingActions } from '@/containers/CashFlow/withBankingActions';
+import { useApiFetcher } from '@/hooks/useRequest';
 import { compose } from '@/utils';
 
 interface CategorizeTransactionFormRootProps

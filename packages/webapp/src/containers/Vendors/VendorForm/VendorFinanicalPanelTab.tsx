@@ -1,9 +1,15 @@
 // @ts-nocheck
-import React from 'react';
-import classNames from 'classnames';
 import { FormGroup, ControlGroup, Position, Classes } from '@blueprintjs/core';
+import classNames from 'classnames';
 import { FastField, ErrorMessage, useFormikContext } from 'formik';
-import { Features } from '@/constants';
+import React from 'react';
+import intl from 'react-intl-universal';
+import {
+  openingBalanceFieldShouldUpdate,
+  useIsVendorForeignCurrency,
+  useSetPrimaryBranchToForm,
+} from './utils';
+import { useVendorFormContext } from './VendorFormProvider';
 import {
   FFormGroup,
   InputPrependText,
@@ -16,14 +22,10 @@ import {
   ExchangeRateInputGroup,
   FDateInput,
 } from '@/components';
-import {
-  openingBalanceFieldShouldUpdate,
-  useIsVendorForeignCurrency,
-  useSetPrimaryBranchToForm,
-} from './utils';
-import { useVendorFormContext } from './VendorFormProvider';
+import { Features } from '@/constants';
 import { useCurrentOrganizationBaseCurrency } from '@/hooks/query';
-import intl from 'react-intl-universal';
+
+
 
 /**
  * Vendor Finaniceal Panel Tab.

@@ -1,7 +1,9 @@
-import React from 'react';
 import { Position, ControlGroup } from '@blueprintjs/core';
 import { useFormikContext } from 'formik';
-
+import React from 'react';
+import intl from 'react-intl-universal';
+import type { PaymentReceiveFormValues } from './utils';
+import type { WithDialogActionsProps } from '@/containers/Dialog/withDialogActions';
 import {
   FInputGroup,
   FormattedMessage as T,
@@ -10,13 +12,9 @@ import {
   Icon,
   InputPrependButton,
 } from '@/components';
-
-import type { WithDialogActionsProps } from '@/containers/Dialog/withDialogActions';
 import { withDialogActions } from '@/containers/Dialog/withDialogActions';
 import { withSettings } from '@/containers/Settings/withSettings';
 import { compose } from '@/utils';
-import intl from 'react-intl-universal';
-import type { PaymentReceiveFormValues } from './utils';
 
 interface PaymentReceivePaymentNoFieldProps
   extends Pick<WithDialogActionsProps, 'openDialog'> {

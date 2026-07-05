@@ -1,12 +1,11 @@
-import React from 'react';
-import styled from 'styled-components';
 import { useFormikContext } from 'formik';
 import { isEqual, isNull, first } from 'lodash';
-import type { Account } from '@bigcapital/sdk-ts';
-
+import React from 'react';
+import styled from 'styled-components';
 import { useMoneyOutDialogContext } from './MoneyOutDialogProvider';
 import { useMoneyOutFieldsContext } from './MoneyOutFieldsProvider';
 import type { MoneyOutFormValues } from './types';
+import type { Account } from '@bigcapital/sdk-ts';
 
 interface Branch {
   id: number;

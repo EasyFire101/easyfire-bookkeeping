@@ -1,8 +1,4 @@
 // @ts-nocheck
-import React from 'react';
-import intl from 'react-intl-universal';
-import clsx from 'classnames';
-import { useHistory } from 'react-router-dom';
 import {
   Button,
   NavbarGroup,
@@ -15,17 +11,18 @@ import {
   Menu,
   MenuItem,
 } from '@blueprintjs/core';
+import clsx from 'classnames';
+import React from 'react';
+import intl from 'react-intl-universal';
+import { useHistory } from 'react-router-dom';
 import { useCustomerDetailsDrawerContext } from './CustomerDetailsDrawerProvider';
-import { withAlertActions } from '@/containers/Alert/withAlertActions';
-import { withDialogActions } from '@/containers/Dialog/withDialogActions';
-import { withDrawerActions } from '@/containers/Drawer/withDrawerActions';
+import { CustomerMoreMenuItem } from './utils';
 import {
   Can,
   Icon,
   FormattedMessage as T,
   DrawerActionsBar,
 } from '@/components';
-import { CustomerMoreMenuItem } from './utils';
 import {
   AbilitySubject,
   SaleInvoiceAction,
@@ -34,8 +31,11 @@ import {
   PaymentReceiveAction,
   CustomerAction,
 } from '@/constants/abilityOption';
-import { compose } from '@/utils';
 import { DRAWERS } from '@/constants/drawers';
+import { withAlertActions } from '@/containers/Alert/withAlertActions';
+import { withDialogActions } from '@/containers/Dialog/withDialogActions';
+import { withDrawerActions } from '@/containers/Drawer/withDrawerActions';
+import { compose } from '@/utils';
 
 /**
  * Customer details actions bar.

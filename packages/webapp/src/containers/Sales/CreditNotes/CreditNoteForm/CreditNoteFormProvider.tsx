@@ -1,9 +1,7 @@
+import { isEmpty, pick } from 'lodash';
 import React from 'react';
 import { useLocation } from 'react-router-dom';
-import { isEmpty, pick } from 'lodash';
 import { transformToEditForm, type CreditNoteFormValues } from './utils';
-import { Features } from '@/constants';
-import { useFeatureCan } from '@/hooks/state';
 import type {
   CreditNote,
   CreateCreditNoteBody,
@@ -15,6 +13,7 @@ import type {
   Branch,
   PdfTemplateResponse,
 } from '@bigcapital/sdk-ts';
+import { Features } from '@/constants';
 import {
   useCreditNote,
   useCreateCreditNote,
@@ -28,6 +27,7 @@ import {
   useGetCreditNoteState,
 } from '@/hooks/query';
 import { useGetPdfTemplates } from '@/hooks/query/pdf-templates';
+import { useFeatureCan } from '@/hooks/state';
 
 type CreditNoteFormSubmitPayload = {
   redirect?: boolean;

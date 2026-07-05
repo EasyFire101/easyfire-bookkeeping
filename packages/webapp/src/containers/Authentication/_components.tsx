@@ -1,8 +1,8 @@
 // @ts-nocheck
-import React from 'react';
-import styled from 'styled-components';
 import { Spinner } from '@blueprintjs/core';
 import { Button } from '@blueprintjs/core';
+import React from 'react';
+import styled from 'styled-components';
 
 export function AuthenticationLoadingOverlay() {
   return (

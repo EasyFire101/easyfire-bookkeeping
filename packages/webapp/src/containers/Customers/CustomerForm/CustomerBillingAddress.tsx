@@ -1,5 +1,7 @@
 // @ts-nocheck
 import React from 'react';
+import intl from 'react-intl-universal';
+import { CustomerFormSectionTitle } from './CustomerFormSectionTitle';
 import { Box } from '@/components';
 import {
   FormattedMessage as T,
@@ -7,8 +9,6 @@ import {
   FInputGroup,
   FTextArea,
 } from '@/components';
-import { CustomerFormSectionTitle } from './CustomerFormSectionTitle';
-import intl from 'react-intl-universal';
 
 export function CustomerBillingAddress() {
   return (

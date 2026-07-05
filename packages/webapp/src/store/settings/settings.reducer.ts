@@ -1,10 +1,9 @@
-import { camelCase } from 'lodash';
 import { createReducer } from '@reduxjs/toolkit';
-import storage from 'redux-persist/lib/storage';
+import { camelCase } from 'lodash';
 import { persistReducer } from 'redux-persist';
-
-import { SETTING_ADD, SETTING_SET } from '@/store/types';
+import storage from 'redux-persist/lib/storage';
 import type { SettingAction } from './settings.type';
+import { SETTING_ADD, SETTING_SET } from '@/store/types';
 
 const initialState = {
   data: {

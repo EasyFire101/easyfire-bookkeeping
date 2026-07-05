@@ -1,9 +1,9 @@
 import React from 'react';
-import { CommercialDocBox } from '@/components';
+import { PaymentMadeDetailFooter } from './PaymentMadeDetailFooter';
 import { PaymentMadeDetailHeader } from './PaymentMadeDetailHeader';
 import { PaymentMadeDetailTable } from './PaymentMadeDetailTable';
 import { PaymentMadeDetailTableFooter } from './PaymentMadeDetailTableFooter';
-import { PaymentMadeDetailFooter } from './PaymentMadeDetailFooter';
+import { CommercialDocBox } from '@/components';
 
 /**
  * Payment made detail tab.

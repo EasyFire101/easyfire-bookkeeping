@@ -1,5 +1,4 @@
 // @ts-nocheck
-import React from 'react';
 import {
   NavbarGroup,
   NavbarDivider,
@@ -9,8 +8,13 @@ import {
   Switch,
   Alignment,
 } from '@blueprintjs/core';
+import { isEmpty } from 'lodash';
+import React from 'react';
 import { useHistory } from 'react-router-dom';
-
+import { useCustomersListContext } from './CustomersListProvider';
+import { useBulkDeleteCustomersDialog } from './hooks/use-bulk-delete-customers-dialog';
+import { withCustomers } from './withCustomers';
+import { withCustomersActions } from './withCustomersActions';
 import {
   Icon,
   Can,
@@ -21,22 +25,15 @@ import {
   DashboardRowsHeightButton,
   DashboardActionsBar,
 } from '@/components';
-
-import { useCustomersListContext } from './CustomersListProvider';
+import { CustomerAction, AbilitySubject } from '@/constants/abilityOption';
+import { DialogsName } from '@/constants/dialogs';
+import { withDialogActions } from '@/containers/Dialog/withDialogActions';
+import { withSettings } from '@/containers/Settings/withSettings';
+import { withSettingsActions } from '@/containers/Settings/withSettingsActions';
 import { useRefreshCustomers } from '@/hooks/query/customers';
 import { useDownloadExportPdf } from '@/hooks/query/FinancialReports/use-export-pdf';
-
-import { withCustomers } from './withCustomers';
-import { withCustomersActions } from './withCustomersActions';
-import { withSettingsActions } from '@/containers/Settings/withSettingsActions';
-import { withSettings } from '@/containers/Settings/withSettings';
-import { withDialogActions } from '@/containers/Dialog/withDialogActions';
-
-import { CustomerAction, AbilitySubject } from '@/constants/abilityOption';
 import { compose } from '@/utils';
-import { DialogsName } from '@/constants/dialogs';
-import { isEmpty } from 'lodash';
-import { useBulkDeleteCustomersDialog } from './hooks/use-bulk-delete-customers-dialog';
+
 
 /**
  * Customers actions bar.

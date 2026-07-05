@@ -1,13 +1,13 @@
 // @ts-nocheck
-import React from 'react';
 import { Classes, Position, FormGroup, ControlGroup } from '@blueprintjs/core';
 import { DateInput } from '@blueprintjs/datetime';
-import { isEqual } from 'lodash';
-import { FastField, useFormikContext } from 'formik';
-import { momentFormatter, tansformDateValue, handleDateChange } from '@/utils';
-import { Features } from '@/constants';
 import classNames from 'classnames';
-
+import { FastField, useFormikContext } from 'formik';
+import { isEqual } from 'lodash';
+import React from 'react';
+import intl from 'react-intl-universal';
+import { useCustomerOpeningBalanceContext } from './CustomerOpeningBalanceFormProvider';
+import { useSetPrimaryBranchToForm } from './utils';
 import {
   If,
   Icon,
@@ -17,12 +17,11 @@ import {
   InputPrependText,
 } from '@/components';
 import { FMoneyInputGroup, FFormGroup, FDateInput } from '@/components/Forms';
-
-import { useCustomerOpeningBalanceContext } from './CustomerOpeningBalanceFormProvider';
-import { useSetPrimaryBranchToForm } from './utils';
-
+import { Features } from '@/constants';
 import { useCurrentOrganizationBaseCurrency } from '@/hooks/query';
-import intl from 'react-intl-universal';
+import { momentFormatter, tansformDateValue, handleDateChange } from '@/utils';
+
+
 
 /**
  * Customer Opening balance fields.

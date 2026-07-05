@@ -1,11 +1,11 @@
-import React from 'react';
-import clsx from 'classnames';
 import { Classes } from '@blueprintjs/core';
+import clsx from 'classnames';
+import React from 'react';
+import { useRecognizedTransactionsBoot } from './RecognizedTransactionsTableBoot';
+import type { DataTableColumn } from '@/components/Datatable/types';
 import type { BankTransactionsListPage } from '@bigcapital/sdk-ts';
 import { Icon } from '@/components';
 import { getColumnWidth } from '@/utils';
-import { useRecognizedTransactionsBoot } from './RecognizedTransactionsTableBoot';
-import type { DataTableColumn } from '@/components/Datatable/types';
 
 export type RecognizedTransactionRow = NonNullable<
   BankTransactionsListPage['data']

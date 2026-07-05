@@ -1,8 +1,15 @@
 // @ts-nocheck
-import React from 'react';
 import { Position, ControlGroup } from '@blueprintjs/core';
 import { ErrorMessage, useFormikContext } from 'formik';
-import { Features } from '@/constants';
+import React from 'react';
+import intl from 'react-intl-universal';
+import { useCustomerFormContext } from './CustomerFormProvider';
+import { CustomerFormSectionTitle } from './CustomerFormSectionTitle';
+import {
+  openingBalanceFieldShouldUpdate,
+  useIsCustomerForeignCurrency,
+  useSetPrimaryBranchToForm,
+} from './utils';
 import {
   FFormGroup,
   FormattedMessage as T,
@@ -16,15 +23,8 @@ import {
   Icon,
   Box,
 } from '@/components';
-import { useCustomerFormContext } from './CustomerFormProvider';
-import {
-  openingBalanceFieldShouldUpdate,
-  useIsCustomerForeignCurrency,
-  useSetPrimaryBranchToForm,
-} from './utils';
+import { Features } from '@/constants';
 import { useCurrentOrganizationBaseCurrency } from '@/hooks/query';
-import { CustomerFormSectionTitle } from './CustomerFormSectionTitle';
-import intl from 'react-intl-universal';
 
 export function CustomerFormFinancialSection() {
   const { currencies, customerId, branches } = useCustomerFormContext();

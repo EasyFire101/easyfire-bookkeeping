@@ -1,8 +1,8 @@
 // @ts-nocheck
-import React from 'react';
-import intl from 'react-intl-universal';
 import { Button, ButtonGroup } from '@blueprintjs/core';
 import { FastField } from 'formik';
+import React from 'react';
+import intl from 'react-intl-universal';
 import { FFormGroup } from '@/components';
 
 /**

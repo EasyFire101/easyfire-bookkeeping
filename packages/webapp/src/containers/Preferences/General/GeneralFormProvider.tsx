@@ -1,8 +1,8 @@
 // @ts-nocheck
-import React, { createContext } from 'react';
 import classNames from 'classnames';
+import React, { createContext } from 'react';
 import styled from 'styled-components';
-
+import { PreferencesPageLoader } from '../PreferencesPageLoader';
 import { Card } from '@/components';
 import { CLASSES } from '@/constants/classes';
 import {
@@ -11,7 +11,6 @@ import {
   useDateFormats,
   useOrgBaseCurrencyMutateAbilities,
 } from '@/hooks/query';
-import { PreferencesPageLoader } from '../PreferencesPageLoader';
 
 const GeneralFormContext = createContext();
 

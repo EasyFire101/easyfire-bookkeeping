@@ -1,15 +1,14 @@
 // @ts-nocheck
+import { Intent, Classes, ProgressBar } from '@blueprintjs/core';
+import clsx from 'classnames';
+import { debounce } from 'lodash';
+import * as R from 'ramda';
 import React, { Suspense } from 'react';
 import styled from 'styled-components';
-import clsx from 'classnames';
-import * as R from 'ramda';
-import { Intent, Classes, ProgressBar } from '@blueprintjs/core';
-import { debounce } from 'lodash';
-
-import { withAlertStoreConnect } from '@/containers/Alert/withAlertStoreConnect';
-import { withAlertActions } from '@/containers/Alert/withAlertActions';
-
 import { AppToaster } from '@/components';
+import { withAlertActions } from '@/containers/Alert/withAlertActions';
+import { withAlertStoreConnect } from '@/containers/Alert/withAlertStoreConnect';
+
 
 function AlertLazyFallbackMessage({ amount }) {
   return (

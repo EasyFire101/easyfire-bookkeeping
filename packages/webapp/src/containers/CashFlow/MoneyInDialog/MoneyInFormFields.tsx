@@ -1,9 +1,8 @@
-import React from 'react';
 import { Classes } from '@blueprintjs/core';
-
+import React from 'react';
 import { MoneyInContentFields } from './MoneyInContentFields';
-import { TransactionTypeFields } from './TransactionTypeFields';
 import { useMoneyInDailogContext } from './MoneyInDialogProvider';
+import { TransactionTypeFields } from './TransactionTypeFields';
 
 /**
  * Money in form fields.

@@ -1,12 +1,10 @@
 // @ts-nocheck
-import React from 'react';
-import { AppToaster, FormattedMessage as T } from '@/components';
-import intl from 'react-intl-universal';
 import { Intent, Alert } from '@blueprintjs/core';
-
-import { withAlertStoreConnect } from '@/containers/Alert/withAlertStoreConnect';
+import React from 'react';
+import intl from 'react-intl-universal';
+import { AppToaster, FormattedMessage as T } from '@/components';
 import { withAlertActions } from '@/containers/Alert/withAlertActions';
-
+import { withAlertStoreConnect } from '@/containers/Alert/withAlertStoreConnect';
 import { useOpenBill } from '@/hooks/query';
 import { compose } from '@/utils';
 

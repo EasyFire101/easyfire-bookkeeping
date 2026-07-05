@@ -2,7 +2,6 @@
 import React, { useState, createContext } from 'react';
 import { DialogContent } from '@/components';
 import { Features } from '@/constants';
-import { useFeatureCan } from '@/hooks/state';
 import {
   useItem,
   useAccounts,
@@ -10,6 +9,7 @@ import {
   useWarehouses,
   useCreateInventoryAdjustment,
 } from '@/hooks/query';
+import { useFeatureCan } from '@/hooks/state';
 
 const InventoryAdjustmentContext = createContext();
 

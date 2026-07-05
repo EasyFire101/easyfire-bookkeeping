@@ -1,23 +1,20 @@
 // @ts-nocheck
+import { Intent, Alert } from '@blueprintjs/core';
 import React from 'react';
 import intl from 'react-intl-universal';
-import { Intent, Alert } from '@blueprintjs/core';
 import {
   AppToaster,
   FormattedMessage as T,
   FormattedHTMLMessage,
 } from '@/components';
-
-import { handleDeleteErrors } from '@/containers/Items/utils';
-import { useDeleteItem } from '@/hooks/query';
-
-import { withAlertStoreConnect } from '@/containers/Alert/withAlertStoreConnect';
-import { withAlertActions } from '@/containers/Alert/withAlertActions';
-import { withItemsActions } from '@/containers/Items/withItemsActions';
-import { withDrawerActions } from '@/containers/Drawer/withDrawerActions';
-
-import { compose } from '@/utils';
 import { DRAWERS } from '@/constants/drawers';
+import { withAlertActions } from '@/containers/Alert/withAlertActions';
+import { withAlertStoreConnect } from '@/containers/Alert/withAlertStoreConnect';
+import { withDrawerActions } from '@/containers/Drawer/withDrawerActions';
+import { handleDeleteErrors } from '@/containers/Items/utils';
+import { withItemsActions } from '@/containers/Items/withItemsActions';
+import { useDeleteItem } from '@/hooks/query';
+import { compose } from '@/utils';
 
 /**
  * Item delete alerts.

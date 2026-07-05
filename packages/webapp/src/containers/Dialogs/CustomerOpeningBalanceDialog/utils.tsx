@@ -1,8 +1,7 @@
 // @ts-nocheck
-import React from 'react';
 import { useFormikContext } from 'formik';
 import { first, pick } from 'lodash';
-
+import React from 'react';
 import { useCustomerOpeningBalanceContext } from './CustomerOpeningBalanceFormProvider';
 
 export const useSetPrimaryBranchToForm = () => {

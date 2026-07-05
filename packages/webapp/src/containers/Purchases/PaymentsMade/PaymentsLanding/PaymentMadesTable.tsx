@@ -1,31 +1,30 @@
 import React, { useCallback } from 'react';
 import { useHistory } from 'react-router-dom';
-
-import { compose } from '@/utils';
-import { TABLES } from '@/constants/tables';
+import { usePaymentMadesTableColumns, ActionsMenu } from './components';
+import { PaymentMadesEmptyStatus } from './PaymentMadesEmptyStatus';
+import { usePaymentMadesListContext } from './PaymentMadesListProvider';
+import { withPaymentMade } from './withPaymentMade';
+import { withPaymentMadeActions } from './withPaymentMadeActions';
+import type { PaymentMadeTableRow } from './components';
+import type { WithPaymentMadeProps } from './withPaymentMade';
+import type { WithAlertActionsProps } from '@/containers/Alert/withAlertActions';
+import type { WithDrawerActionsProps } from '@/containers/Drawer/withDrawerActions';
 import {
   DataTable,
   DashboardContentTable,
   TableSkeletonRows,
   TableSkeletonHeader,
 } from '@/components';
-
-import { PaymentMadesEmptyStatus } from './PaymentMadesEmptyStatus';
-
-import { withPaymentMade } from './withPaymentMade';
-import type { WithPaymentMadeProps } from './withPaymentMade';
-import { withPaymentMadeActions } from './withPaymentMadeActions';
-import { withAlertActions } from '@/containers/Alert/withAlertActions';
-import type { WithAlertActionsProps } from '@/containers/Alert/withAlertActions';
-import { withDrawerActions } from '@/containers/Drawer/withDrawerActions';
-import type { WithDrawerActionsProps } from '@/containers/Drawer/withDrawerActions';
-import { withSettings } from '@/containers/Settings/withSettings';
-
-import { usePaymentMadesTableColumns, ActionsMenu } from './components';
-import type { PaymentMadeTableRow } from './components';
-import { usePaymentMadesListContext } from './PaymentMadesListProvider';
-import { useMemorizedColumnsWidths } from '@/hooks';
 import { DRAWERS } from '@/constants/drawers';
+import { TABLES } from '@/constants/tables';
+import { withAlertActions } from '@/containers/Alert/withAlertActions';
+import { withDrawerActions } from '@/containers/Drawer/withDrawerActions';
+import { withSettings } from '@/containers/Settings/withSettings';
+import { useMemorizedColumnsWidths } from '@/hooks';
+import { compose } from '@/utils';
+
+
+
 
 interface WithPaymentMadeActionsProps {
   setPaymentMadesTableState: (state: Record<string, any>) => void;

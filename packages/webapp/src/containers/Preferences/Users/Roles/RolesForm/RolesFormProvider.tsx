@@ -1,15 +1,14 @@
 // @ts-nocheck
-import React from 'react';
 import classNames from 'classnames';
+import React from 'react';
 import { CLASSES } from '@/constants/classes';
-
+import { PreferencesPageLoader } from '@/containers/Preferences/PreferencesPageLoader';
 import {
   useCreateRolePermissionSchema,
   useEditRolePermissionSchema,
   usePermissionsSchema,
   useRolePermission,
 } from '@/hooks/query';
-import { PreferencesPageLoader } from '@/containers/Preferences/PreferencesPageLoader';
 
 const RolesFormContext = React.createContext();
 

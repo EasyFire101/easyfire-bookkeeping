@@ -1,7 +1,6 @@
 import React, { createContext, useContext, useState } from 'react';
 import type { PaymentReceiveEditPageResponse } from '@bigcapital/sdk-ts';
 import { Features } from '@/constants';
-import { useFeatureCan } from '@/hooks/state';
 import { useProjects } from '@/containers/Projects/hooks';
 import {
   useSettingsPaymentReceives,
@@ -14,6 +13,7 @@ import {
   usePaymentReceivedState,
 } from '@/hooks/query';
 import { useGetPdfTemplates } from '@/hooks/query/pdf-templates';
+import { useFeatureCan } from '@/hooks/state';
 
 type UseAccountsResult = ReturnType<typeof useAccounts>;
 type UseBranchesResult = ReturnType<typeof useBranches>;

@@ -1,14 +1,14 @@
 // @ts-nocheck
 import React from 'react';
+import { transfromCustomertoForm } from './utils';
 import { DialogContent } from '@/components';
+import { Features } from '@/constants';
 import {
   useBranches,
   useCustomer,
   useEditCustomerOpeningBalance,
 } from '@/hooks/query';
 import { useFeatureCan } from '@/hooks/state';
-import { Features } from '@/constants';
-import { transfromCustomertoForm } from './utils';
 
 const CustomerOpeningBalanceContext = React.createContext();
 

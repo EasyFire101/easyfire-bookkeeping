@@ -1,6 +1,6 @@
 import { connect, MapStateToProps } from 'react-redux';
-import { getCurrencyByCode } from '@/store/currencies/currencies.selector';
 import type { ApplicationState } from '@/store/reducers';
+import { getCurrencyByCode } from '@/store/currencies/currencies.selector';
 
 interface OwnProps {
   currencyId: string;

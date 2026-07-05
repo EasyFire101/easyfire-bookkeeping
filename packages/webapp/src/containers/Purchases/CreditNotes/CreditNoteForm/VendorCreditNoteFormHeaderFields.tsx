@@ -1,10 +1,18 @@
-import React from 'react';
-import styled from 'styled-components';
 import { Position, ControlGroup } from '@blueprintjs/core';
-import { useFormikContext } from 'formik';
-import { Theme, useTheme } from '@emotion/react';
 import { css } from '@emotion/css';
-
+import { Theme, useTheme } from '@emotion/react';
+import { useFormikContext } from 'formik';
+import React from 'react';
+import intl from 'react-intl-universal';
+import styled from 'styled-components';
+import { VendorCreditNoteExchangeRateInputField } from './components';
+import {
+  vendorsFieldShouldUpdate,
+  useObserveVendorCreditNoSettings,
+  type VendorCreditFormValues,
+} from './utils';
+import { useVendorCreditNoteFormContext } from './VendorCreditNoteFormProvider';
+import type { WithDialogActionsProps } from '@/containers/Dialog/withDialogActions';
 import {
   FFormGroup,
   FieldRequiredHint,
@@ -17,20 +25,11 @@ import {
   FDateInput,
   FInputGroup,
 } from '@/components';
-import {
-  vendorsFieldShouldUpdate,
-  useObserveVendorCreditNoSettings,
-  type VendorCreditFormValues,
-} from './utils';
-
-import { useVendorCreditNoteFormContext } from './VendorCreditNoteFormProvider';
-import { VendorCreditNoteExchangeRateInputField } from './components';
+import { withDialogActions } from '@/containers/Dialog/withDialogActions';
+import { withSettings } from '@/containers/Settings/withSettings';
 import { momentFormatter, compose } from '@/utils';
 
-import { withSettings } from '@/containers/Settings/withSettings';
-import { withDialogActions } from '@/containers/Dialog/withDialogActions';
-import type { WithDialogActionsProps } from '@/containers/Dialog/withDialogActions';
-import intl from 'react-intl-universal';
+
 
 const getFieldsStyle = (theme: Theme & { bpPrefix?: string }) => css`
   .${theme.bpPrefix}-form-group {

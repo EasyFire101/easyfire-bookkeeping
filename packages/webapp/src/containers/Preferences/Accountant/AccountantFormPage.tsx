@@ -1,9 +1,13 @@
-import { useEffect } from 'react';
-import * as R from 'ramda';
-import intl from 'react-intl-universal';
-import { Formik, FormikHelpers } from 'formik';
 import { Intent } from '@blueprintjs/core';
 import { flatten, unflatten } from 'flat';
+import { Formik, FormikHelpers } from 'formik';
+import * as R from 'ramda';
+import { useEffect } from 'react';
+import intl from 'react-intl-universal';
+import { AccountantSchema } from './Accountant.schema';
+import { AccountantForm } from './AccountantForm';
+import { useAccountantFormContext } from './AccountantFormProvider';
+import { transferObjectOptionsToArray } from './utils';
 import { AppToaster } from '@/components';
 import {
   withDashboardActions,
@@ -13,11 +17,8 @@ import {
   withSettings,
   type WithSettingsProps,
 } from '@/containers/Settings/withSettings';
-import { AccountantForm } from './AccountantForm';
-import { AccountantSchema } from './Accountant.schema';
-import { useAccountantFormContext } from './AccountantFormProvider';
-import { transferObjectOptionsToArray } from './utils';
 import { compose, transformToForm, transfromToSnakeCase } from '@/utils';
+
 
 import '@/style/pages/Preferences/Accounting.scss';
 

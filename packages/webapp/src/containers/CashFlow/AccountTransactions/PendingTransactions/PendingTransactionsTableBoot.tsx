@@ -1,7 +1,7 @@
 import React from 'react';
+import { useAccountTransactionsContext } from '../AccountTransactionsProvider';
 import type { PendingBankTransactionsListPage } from '@bigcapital/sdk-ts';
 import { IntersectionObserver } from '@/components';
-import { useAccountTransactionsContext } from '../AccountTransactionsProvider';
 import { usePendingBankTransactionsInfinity } from '@/hooks/query/banking';
 import { useFlattenInfinityPages } from '@/hooks/utils';
 

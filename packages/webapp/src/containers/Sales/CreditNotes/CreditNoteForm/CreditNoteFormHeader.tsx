@@ -1,9 +1,10 @@
 import React from 'react';
 import intl from 'react-intl-universal';
 import { CreditNoteFormHeaderFields } from './CreditNoteFormHeaderFields';
-import { Group, PageFormBigNumber } from '@/components';
 import { useCreditNoteTotalFormatted } from './utils';
+import { Group, PageFormBigNumber } from '@/components';
 import { useIsDarkMode } from '@/hooks/useDarkMode';
+
 
 /**
  * Credit note header.

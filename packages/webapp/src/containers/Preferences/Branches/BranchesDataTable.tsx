@@ -1,19 +1,17 @@
 // @ts-nocheck
+import { Intent } from '@blueprintjs/core';
 import React from 'react';
 import intl from 'react-intl-universal';
 import styled from 'styled-components';
-import { Intent } from '@blueprintjs/core';
 
 import '@/style/pages/Preferences/branchesList.scss';
 
-import { DataTable, Card, AppToaster, TableSkeletonRows } from '@/components';
-import { useBranchesTableColumns, ActionsMenu } from './components';
 import { useBranchesContext } from './BranchesProvider';
-import { useMarkBranchAsPrimary } from '@/hooks/query';
-
-import { withDialogActions } from '@/containers/Dialog/withDialogActions';
+import { useBranchesTableColumns, ActionsMenu } from './components';
+import { DataTable, Card, AppToaster, TableSkeletonRows } from '@/components';
 import { withAlertActions } from '@/containers/Alert/withAlertActions';
-
+import { withDialogActions } from '@/containers/Dialog/withDialogActions';
+import { useMarkBranchAsPrimary } from '@/hooks/query';
 import { compose } from '@/utils';
 
 /**

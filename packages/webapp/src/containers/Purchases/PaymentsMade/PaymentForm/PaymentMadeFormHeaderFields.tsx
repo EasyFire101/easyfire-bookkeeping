@@ -1,20 +1,21 @@
-import React, { useMemo } from 'react';
-import styled from 'styled-components';
 import { Button, ControlGroup, Position } from '@blueprintjs/core';
-import { isEmpty, toSafeInteger } from 'lodash';
-import { useFormikContext } from 'formik';
 import { css } from '@emotion/css';
 import { useTheme } from '@emotion/react';
-import type { Theme } from '@xstyled/emotion';
-
+import { useFormikContext } from 'formik';
+import { isEmpty, toSafeInteger } from 'lodash';
+import React, { useMemo } from 'react';
+import intl from 'react-intl-universal';
+import styled from 'styled-components';
+import { PaymentMadeExchangeRateInputField } from './components';
+import { usePaymentMadeFormContext } from './PaymentMadeFormProvider';
 import {
-  FDateInput,
-  FInputGroup,
-  FMoneyInputGroup,
-  Stack,
-  FormattedMessage as T,
-  VendorsSelect,
-} from '@/components';
+  accountsFieldShouldUpdate,
+  vendorsFieldShouldUpdate,
+  amountPaymentEntries,
+  fullAmountPaymentEntries,
+  type PaymentMadeFormValues,
+} from './utils';
+import type { Theme } from '@xstyled/emotion';
 import {
   FFormGroup,
   AccountsSelect,
@@ -25,19 +26,17 @@ import {
   Icon,
   VendorDrawerLink,
 } from '@/components';
-import { useCurrentOrganizationBaseCurrency } from '@/hooks/query';
-import { usePaymentMadeFormContext } from './PaymentMadeFormProvider';
-import { ACCOUNT_TYPE } from '@/constants/accountTypes';
-import { PaymentMadeExchangeRateInputField } from './components';
-import { momentFormatter, safeSumBy } from '@/utils';
 import {
-  accountsFieldShouldUpdate,
-  vendorsFieldShouldUpdate,
-  amountPaymentEntries,
-  fullAmountPaymentEntries,
-  type PaymentMadeFormValues,
-} from './utils';
-import intl from 'react-intl-universal';
+  FDateInput,
+  FInputGroup,
+  FMoneyInputGroup,
+  Stack,
+  FormattedMessage as T,
+  VendorsSelect,
+} from '@/components';
+import { ACCOUNT_TYPE } from '@/constants/accountTypes';
+import { useCurrentOrganizationBaseCurrency } from '@/hooks/query';
+import { momentFormatter, safeSumBy } from '@/utils';
 
 type VendorContact = {
   id: string | number;

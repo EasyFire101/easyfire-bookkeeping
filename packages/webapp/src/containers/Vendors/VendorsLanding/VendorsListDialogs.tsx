@@ -1,5 +1,5 @@
-import { VendorBulkDeleteDialog } from '@/containers/Dialogs/Vendors/VendorBulkDeleteDialog';
 import { DialogsName } from '@/constants/dialogs';
+import { VendorBulkDeleteDialog } from '@/containers/Dialogs/Vendors/VendorBulkDeleteDialog';
 
 export function VendorsListDialogs() {
   return (

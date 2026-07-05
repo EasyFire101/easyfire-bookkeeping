@@ -1,18 +1,4 @@
 import {
-  useMutation,
-  useQuery,
-  useQueryClient,
-  UseMutationOptions,
-  UseQueryOptions,
-} from '@tanstack/react-query';
-import type {
-  Customer,
-  CreateCustomerBody,
-  EditCustomerBody,
-  ValidateBulkDeleteCustomersResponse,
-} from '@bigcapital/sdk-ts';
-import type { CustomersListResponse } from '@bigcapital/sdk-ts';
-import {
   fetchCustomers,
   fetchCustomer,
   createCustomer,
@@ -22,8 +8,23 @@ import {
   bulkDeleteCustomers,
   editCustomerOpeningBalance,
 } from '@bigcapital/sdk-ts';
+import {
+  useMutation,
+  useQuery,
+  useQueryClient,
+  UseMutationOptions,
+  UseQueryOptions,
+} from '@tanstack/react-query';
 import { useApiFetcher } from '../../useRequest';
 import { customersKeys } from './query-keys';
+import type {
+  Customer,
+  CreateCustomerBody,
+  EditCustomerBody,
+  ValidateBulkDeleteCustomersResponse,
+} from '@bigcapital/sdk-ts';
+import type { CustomersListResponse } from '@bigcapital/sdk-ts';
+
 
 const commonInvalidateQueries = (
   queryClient: ReturnType<typeof useQueryClient>,

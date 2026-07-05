@@ -1,5 +1,7 @@
-import React from 'react';
 import { Position } from '@blueprintjs/core';
+import React from 'react';
+import { useCategorizeTransactionBoot } from '../CategorizeTransactionBoot';
+import { CategorizeTransactionBranchField } from '../CategorizeTransactionBranchField';
 import {
   AccountsSelect,
   FDateInput,
@@ -8,8 +10,6 @@ import {
   FTextArea,
   Icon,
 } from '@/components';
-import { useCategorizeTransactionBoot } from '../CategorizeTransactionBoot';
-import { CategorizeTransactionBranchField } from '../CategorizeTransactionBranchField';
 
 export function CategorizeTransactionOwnerDrawings() {
   const { accounts } = useCategorizeTransactionBoot();

@@ -1,4 +1,8 @@
 import React from 'react';
+import { useAccountTransactionsContext } from '../AccountTransactionsProvider';
+import { BankAccountDataTable } from '../components/BankAccountDataTable';
+import { usePendingTransactionsTableColumns } from './_hooks';
+import { usePendingTransactionsContext } from './PendingTransactionsTableBoot';
 import {
   TableFastCell,
   TableSkeletonRows,
@@ -6,10 +10,6 @@ import {
   TableVirtualizedListRows,
 } from '@/components';
 import { withSettings } from '@/containers/Settings/withSettings';
-import { useAccountTransactionsContext } from '../AccountTransactionsProvider';
-import { usePendingTransactionsContext } from './PendingTransactionsTableBoot';
-import { usePendingTransactionsTableColumns } from './_hooks';
-import { BankAccountDataTable } from '../components/BankAccountDataTable';
 import { compose } from '@/utils';
 
 interface WithSettingsProps {

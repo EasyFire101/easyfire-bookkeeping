@@ -1,7 +1,7 @@
 import React from 'react';
+import type { DialogBaseProps } from '@/components/DialogReduxConnect';
 import { Dialog, DialogSuspense } from '@/components';
 import withDialogRedux from '@/components/DialogReduxConnect';
-import type { DialogBaseProps } from '@/components/DialogReduxConnect';
 import { compose } from '@/utils';
 
 const DisconnectBankAccountDialogContent = React.lazy(() =>

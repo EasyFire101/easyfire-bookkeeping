@@ -1,11 +1,11 @@
 // @ts-nocheck
-import React from 'react';
-import { FastField, ErrorMessage } from 'formik';
 import { Classes, FormGroup, TextArea } from '@blueprintjs/core';
+import { FastField, ErrorMessage } from 'formik';
+import React from 'react';
+import intl from 'react-intl-universal';
 import { FieldRequiredHint } from '@/components';
 import { useAutofocus } from '@/hooks';
 import { inputIntent } from '@/utils';
-import intl from 'react-intl-universal';
 
 /**
  * Unlocking transactions form fields.

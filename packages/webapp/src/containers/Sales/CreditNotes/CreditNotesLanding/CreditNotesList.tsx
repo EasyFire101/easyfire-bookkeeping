@@ -1,15 +1,16 @@
 import React from 'react';
+
 import '@/style/pages/CreditNote/List.scss';
-import { DashboardPageContent } from '@/components';
 import { CreditNotesActionsBar } from './CreditNotesActionsBar';
 import { CreditNotesDataTable } from './CreditNotesDataTable';
+import { CreditNotesListDialogs } from './CreditNotesListDialogs';
+import { CreditNotesListDrawers } from './CreditNotesListDrawers';
+import { CreditNotesListProvider } from './CreditNotesListProvider';
 import { withCreditNotes } from './withCreditNotes';
 import { withCreditNotesActions } from './withCreditNotesActions';
-import { CreditNotesListProvider } from './CreditNotesListProvider';
-import { CreditNotesListDrawers } from './CreditNotesListDrawers';
-import { CreditNotesListDialogs } from './CreditNotesListDialogs';
-import { transformTableStateToQuery, compose } from '@/utils';
 import type { WithCreditNotesProps } from './withCreditNotes';
+import { DashboardPageContent } from '@/components';
+import { transformTableStateToQuery, compose } from '@/utils';
 
 interface WithCreditNotesActionsProps {
   resetCreditNotesTableState: () => void;

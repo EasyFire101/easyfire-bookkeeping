@@ -1,15 +1,15 @@
-import styled from 'styled-components';
 import { useFormikContext } from 'formik';
-import { T, TotalLines, TotalLine, TotalLineTextStyle } from '@/components';
+import styled from 'styled-components';
+import { AdjustmentTotalLine } from '../../Invoices/InvoiceForm/AdjustmentTotalLine';
+import { DiscountTotalLine } from '../../Invoices/InvoiceForm/DiscountTotalLine';
 import {
   useEstimateAdjustmentFormatted,
   useEstimateDiscountFormatted,
   useEstimateSubtotalFormatted,
   useEstimateTotalFormatted,
 } from './utils';
-import { AdjustmentTotalLine } from '../../Invoices/InvoiceForm/AdjustmentTotalLine';
-import { DiscountTotalLine } from '../../Invoices/InvoiceForm/DiscountTotalLine';
 import type { EstimateFormValues } from './utils';
+import { T, TotalLines, TotalLine, TotalLineTextStyle } from '@/components';
 
 export function EstimateFormFooterRight() {
   const {

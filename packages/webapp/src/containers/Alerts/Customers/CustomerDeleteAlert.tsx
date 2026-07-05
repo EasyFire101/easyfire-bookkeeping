@@ -1,21 +1,19 @@
 // @ts-nocheck
+import { Intent, Alert } from '@blueprintjs/core';
 import React, { useCallback } from 'react';
 import intl from 'react-intl-universal';
-import { Intent, Alert } from '@blueprintjs/core';
 import {
   AppToaster,
   FormattedMessage as T,
   FormattedHTMLMessage,
 } from '@/components';
-import { transformErrors } from '@/containers/Customers/utils';
-
-import { withAlertStoreConnect } from '@/containers/Alert/withAlertStoreConnect';
+import { DRAWERS } from '@/constants/drawers';
 import { withAlertActions } from '@/containers/Alert/withAlertActions';
+import { withAlertStoreConnect } from '@/containers/Alert/withAlertStoreConnect';
+import { transformErrors } from '@/containers/Customers/utils';
 import { withDrawerActions } from '@/containers/Drawer/withDrawerActions';
-
 import { useDeleteCustomer } from '@/hooks/query';
 import { compose } from '@/utils';
-import { DRAWERS } from '@/constants/drawers';
 
 /**
  * Customer delete alert.

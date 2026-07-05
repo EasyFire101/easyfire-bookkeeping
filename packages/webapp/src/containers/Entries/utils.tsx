@@ -1,7 +1,8 @@
 // @ts-nocheck
-import React, { useCallback, useMemo } from 'react';
-import * as R from 'ramda';
 import { sumBy, isEmpty, last, keyBy, groupBy } from 'lodash';
+import * as R from 'ramda';
+import React, { useCallback, useMemo } from 'react';
+import { useItemEntriesTableContext } from './ItemEntriesTableProvider';
 import { useItem } from '@/hooks/query';
 import {
   toSafeNumber,
@@ -15,7 +16,6 @@ import {
   formattedAmount,
   updateRemoveLineByIndex,
 } from '@/utils';
-import { useItemEntriesTableContext } from './ItemEntriesTableProvider';
 
 export const ITEM_TYPE = {
   SELLABLE: 'SELLABLE',

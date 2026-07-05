@@ -1,8 +1,7 @@
 import React from 'react';
-
-import { CommercialDocFooter, DetailsMenu, If, DetailItem } from '@/components';
-import { usePaymentMadeDetailContext } from './PaymentMadeDetailProvider';
 import intl from 'react-intl-universal';
+import { usePaymentMadeDetailContext } from './PaymentMadeDetailProvider';
+import { CommercialDocFooter, DetailsMenu, If, DetailItem } from '@/components';
 
 /**
  * Payment made - Details panel - Footer.

@@ -1,10 +1,10 @@
 // @ts-nocheck
 import React from 'react';
-import styled from 'styled-components';
 import { useParams, useHistory } from 'react-router-dom';
-import { Box, DashboardCard, DashboardInsider } from '@/components';
-import { VendorFormProvider, useVendorFormContext } from './VendorFormProvider';
+import styled from 'styled-components';
 import { VendorFormFormik } from './VendorFormFormik';
+import { VendorFormProvider, useVendorFormContext } from './VendorFormProvider';
+import { Box, DashboardCard, DashboardInsider } from '@/components';
 
 /**
  * Vendor form page loading wrapper.

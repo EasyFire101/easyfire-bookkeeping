@@ -1,7 +1,8 @@
-import { FFormGroup, FeatureCan } from '@/components';
 import { useCategorizeTransactionBoot } from './CategorizeTransactionBoot';
-import { Features } from '@/constants';
+import { FFormGroup, FeatureCan } from '@/components';
 import { BranchSuggestField } from '@/components/Branches/BranchSuggestField_';
+import { Features } from '@/constants';
+
 
 export function CategorizeTransactionBranchField() {
   const { branches } = useCategorizeTransactionBoot();

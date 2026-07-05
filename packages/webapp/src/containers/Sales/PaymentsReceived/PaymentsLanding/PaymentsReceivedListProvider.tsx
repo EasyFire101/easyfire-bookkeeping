@@ -1,5 +1,6 @@
-import React, { createContext, useContext } from 'react';
 import { isEmpty } from 'lodash';
+import React, { createContext, useContext } from 'react';
+import type { PaymentReceiveTableRow } from './components';
 import { DashboardInsider } from '@/components/Dashboard';
 import {
   useResourceViews,
@@ -7,7 +8,6 @@ import {
   usePaymentReceives,
 } from '@/hooks/query';
 import { getFieldsFromResourceMeta } from '@/utils';
-import type { PaymentReceiveTableRow } from './components';
 
 interface PaymentsReceivedListProviderProps {
   query?: any;

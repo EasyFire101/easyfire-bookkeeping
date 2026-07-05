@@ -1,12 +1,13 @@
 // @ts-nocheck
+import { Classes, Position, ControlGroup } from '@blueprintjs/core';
+import classNames from 'classnames';
+import { useFormikContext } from 'formik';
+import { isEqual } from 'lodash';
 import React from 'react';
 import intl from 'react-intl-universal';
 import styled from 'styled-components';
-import { useFormikContext } from 'formik';
-import { Classes, Position, ControlGroup } from '@blueprintjs/core';
-import classNames from 'classnames';
-import { CLASSES } from '@/constants/classes';
-import { isEqual } from 'lodash';
+import { useRefundVendorCreditContext } from './RefundVendorCreditFormProvider';
+import { useSetPrimaryBranchToForm } from './utils';
 import {
   Icon,
   Col,
@@ -24,12 +25,11 @@ import {
   FInputGroup,
   FTextArea,
 } from '@/components';
-import { momentFormatter } from '@/utils';
+import { Features, ACCOUNT_TYPE } from '@/constants';
+import { CLASSES } from '@/constants/classes';
 import { useAutofocus } from '@/hooks';
 import { useCurrentOrganizationBaseCurrency } from '@/hooks/query';
-import { Features, ACCOUNT_TYPE } from '@/constants';
-import { useSetPrimaryBranchToForm } from './utils';
-import { useRefundVendorCreditContext } from './RefundVendorCreditFormProvider';
+import { momentFormatter } from '@/utils';
 
 /**
  * Refund Vendor credit form fields.

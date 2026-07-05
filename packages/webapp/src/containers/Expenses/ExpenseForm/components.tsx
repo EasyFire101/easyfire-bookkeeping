@@ -1,10 +1,10 @@
 // @ts-nocheck
-import React from 'react';
-import intl from 'react-intl-universal';
 import { Button, Intent, Menu, MenuItem } from '@blueprintjs/core';
 import { Popover2 } from '@blueprintjs/popover2';
 import { useFormikContext } from 'formik';
-
+import React from 'react';
+import intl from 'react-intl-universal';
+import { useExpensesIsForeign } from './utils';
 import {
   Icon,
   Hint,
@@ -19,10 +19,8 @@ import {
   CheckBoxFieldCell,
 } from '@/components/DataTableCells';
 import { CellType, Features, Align } from '@/constants';
-
-import { useFeatureCan } from '@/hooks/state';
 import { useCurrentOrganizationBaseCurrency } from '@/hooks/query';
-import { useExpensesIsForeign } from './utils';
+import { useFeatureCan } from '@/hooks/state';
 
 /**
  * Expense category header cell.

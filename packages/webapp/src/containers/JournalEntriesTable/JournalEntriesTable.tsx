@@ -1,13 +1,11 @@
 // @ts-nocheck
 import React from 'react';
-import styled from 'styled-components';
 import intl from 'react-intl-universal';
-
+import styled from 'styled-components';
+import { useGLEntriesTableColumns } from './utils';
 import { DataTable, CurrencyTag, TableSkeletonRows } from '@/components';
 import { TableStyle } from '@/constants';
-
 import { useCurrentOrganizationBaseCurrency } from '@/hooks/query';
-import { useGLEntriesTableColumns } from './utils';
 
 /**
  * Journal entries table.

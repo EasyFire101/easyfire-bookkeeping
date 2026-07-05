@@ -1,7 +1,4 @@
 // @ts-nocheck
-import React, { useMemo } from 'react';
-import intl from 'react-intl-universal';
-import styled from 'styled-components';
 import {
   Menu,
   Popover,
@@ -12,6 +9,9 @@ import {
   Intent,
   Tag,
 } from '@blueprintjs/core';
+import React, { useMemo } from 'react';
+import intl from 'react-intl-universal';
+import styled from 'styled-components';
 import { Icon } from '@/components';
 import { safeCallback } from '@/utils';
 

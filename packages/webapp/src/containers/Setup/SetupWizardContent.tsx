@@ -1,13 +1,13 @@
 // @ts-nocheck
-import React from 'react';
-import { x } from '@xstyled/emotion';
 import { css } from '@emotion/css';
-
-import { SetupSubscription } from './SetupSubscription/SetupSubscription';
-import { SetupOrganizationPage } from './SetupOrganizationPage';
-import { SetupInitializingForm } from './SetupInitializingForm';
+import { x } from '@xstyled/emotion';
+import React from 'react';
 import { SetupCongratsPage } from './SetupCongratsPage';
+import { SetupInitializingForm } from './SetupInitializingForm';
+import { SetupOrganizationPage } from './SetupOrganizationPage';
+import { SetupSubscription } from './SetupSubscription/SetupSubscription';
 import { Stepper } from '@/components/Stepper';
+
 
 interface SetupWizardContentProps {
   stepIndex: number;

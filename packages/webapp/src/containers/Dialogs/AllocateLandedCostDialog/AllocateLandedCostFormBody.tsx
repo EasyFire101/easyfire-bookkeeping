@@ -1,9 +1,9 @@
 // @ts-nocheck
-import React from 'react';
-import { FastField } from 'formik';
-import { CLASSES } from '@/constants/classes';
 import classNames from 'classnames';
+import { FastField } from 'formik';
+import React from 'react';
 import { AllocateLandedCostEntriesTable } from './AllocateLandedCostEntriesTable';
+import { CLASSES } from '@/constants/classes';
 
 export function AllocateLandedCostFormBody() {
   return (

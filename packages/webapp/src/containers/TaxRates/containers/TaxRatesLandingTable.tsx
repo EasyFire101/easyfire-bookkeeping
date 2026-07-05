@@ -1,6 +1,10 @@
 // @ts-nocheck
-import React from 'react';
 import { Intent } from '@blueprintjs/core';
+import React from 'react';
+import { TaxRatesTableActionsMenu } from './_components';
+import { useTaxRatesTableColumns } from './_utils';
+import { TaxRatesLandingEmptyState } from './TaxRatesLandingEmptyState';
+import { useTaxRatesLandingContext } from './TaxRatesLandingProvider';
 import {
   DataTable,
   DashboardContentTable,
@@ -8,22 +12,18 @@ import {
   TableSkeletonRows,
   AppToaster,
 } from '@/components';
-import { withAlertActions } from '@/containers/Alert/withAlertActions';
-import { withDrawerActions } from '@/containers/Drawer/withDrawerActions';
-import { withDialogActions } from '@/containers/Dialog/withDialogActions';
-import { withDashboardActions } from '@/containers/Dashboard/withDashboardActions';
-import { withSettings } from '@/containers/Settings/withSettings';
-import { useTaxRatesTableColumns } from './_utils';
-import { useTaxRatesLandingContext } from './TaxRatesLandingProvider';
-import { TaxRatesLandingEmptyState } from './TaxRatesLandingEmptyState';
-import { TaxRatesTableActionsMenu } from './_components';
-import { compose } from '@/utils';
-import { DRAWERS } from '@/constants/drawers';
 import { DialogsName } from '@/constants/dialogs';
+import { DRAWERS } from '@/constants/drawers';
+import { withAlertActions } from '@/containers/Alert/withAlertActions';
+import { withDashboardActions } from '@/containers/Dashboard/withDashboardActions';
+import { withDialogActions } from '@/containers/Dialog/withDialogActions';
+import { withDrawerActions } from '@/containers/Drawer/withDrawerActions';
+import { withSettings } from '@/containers/Settings/withSettings';
 import {
   useActivateTaxRate,
   useInactivateTaxRate,
 } from '@/hooks/query/tax-rates';
+import { compose } from '@/utils';
 
 /**
  * Invoices datatable.

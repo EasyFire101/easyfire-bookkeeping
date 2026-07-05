@@ -1,9 +1,9 @@
 // @ts-nocheck
-import React from 'react';
 import { x } from '@xstyled/emotion';
-import { Row, Col, Paper } from '@/components';
+import React from 'react';
 import { ExpenseFormFooterLeft } from './ExpenseFormFooterLeft';
 import { ExpenseFormFooterRight } from './ExpenseFormFooterRight';
+import { Row, Col, Paper } from '@/components';
 import { UploadAttachmentButton } from '@/containers/Attachments/UploadAttachmentButton';
 
 export function ExpenseFormFooter() {

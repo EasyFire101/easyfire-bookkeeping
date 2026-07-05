@@ -1,7 +1,7 @@
 // @ts-nocheck
+import { ControlGroup } from '@blueprintjs/core';
 import React from 'react';
 import intl from 'react-intl-universal';
-import { ControlGroup } from '@blueprintjs/core';
 import { FFormGroup, FInputGroup, Box } from '@/components';
 
 /**

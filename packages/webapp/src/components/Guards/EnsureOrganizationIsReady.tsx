@@ -1,7 +1,6 @@
 // @ts-nocheck
 import React from 'react';
 import { Redirect } from 'react-router-dom';
-
 import { useCurrentOrganization } from '@/hooks/query';
 
 function EnsureOrganizationIsReady({

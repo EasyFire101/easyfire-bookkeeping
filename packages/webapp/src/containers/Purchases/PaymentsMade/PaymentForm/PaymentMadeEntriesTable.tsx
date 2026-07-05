@@ -1,17 +1,16 @@
-import React, { useCallback } from 'react';
 import classNames from 'classnames';
+import { useFormikContext } from 'formik';
+import React, { useCallback } from 'react';
+import { usePaymentMadeEntriesTableColumns } from './components';
+import { usePaymentMadeInnerContext } from './PaymentMadeInnerProvider';
+import type { PaymentMadeEntry, PaymentMadeFormValues } from './utils';
 import {
   DataTableEditable,
   CloudLoadingIndicator,
   FormattedMessage as T,
 } from '@/components';
-
 import { CLASSES } from '@/constants/classes';
-import { usePaymentMadeEntriesTableColumns } from './components';
-import { usePaymentMadeInnerContext } from './PaymentMadeInnerProvider';
 import { compose, updateTableCell } from '@/utils';
-import { useFormikContext } from 'formik';
-import type { PaymentMadeEntry, PaymentMadeFormValues } from './utils';
 
 type PaymentMadeEntriesTableProps = {
   onUpdateData: (entries: PaymentMadeEntry[]) => void;

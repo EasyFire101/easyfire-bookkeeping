@@ -1,9 +1,9 @@
-import React from 'react';
-import clsx from 'classnames';
 import { Checkbox, Text } from '@blueprintjs/core';
-import { useUncontrolled } from '@/hooks/useUncontrolled';
-import { Group, Stack } from '@/components';
+import clsx from 'classnames';
+import React from 'react';
 import styles from './MatchTransactionCheckbox.module.scss';
+import { Group, Stack } from '@/components';
+import { useUncontrolled } from '@/hooks/useUncontrolled';
 
 export interface MatchTransactionCheckboxProps {
   active?: boolean;

@@ -1,5 +1,3 @@
-import React from 'react';
-import { useHistory } from 'react-router-dom';
 import {
   Button,
   NavbarGroup,
@@ -7,19 +5,9 @@ import {
   NavbarDivider,
   Intent,
 } from '@blueprintjs/core';
+import React from 'react';
+import { useHistory } from 'react-router-dom';
 import { usePaymentReceiveDetailContext } from './PaymentReceiveDetailProvider';
-import {
-  withDialogActions,
-  WithDialogActionsProps,
-} from '@/containers/Dialog/withDialogActions';
-import {
-  withAlertActions,
-  WithAlertActionsProps,
-} from '@/containers/Alert/withAlertActions';
-import {
-  withDrawerActions,
-  WithDrawerActionsProps,
-} from '@/containers/Drawer/withDrawerActions';
 import { PaymentReceiveMoreMenuItems } from './utils';
 import {
   Can,
@@ -31,8 +19,20 @@ import {
   PaymentReceiveAction,
   AbilitySubject,
 } from '@/constants/abilityOption';
-import { compose } from '@/utils';
 import { DRAWERS } from '@/constants/drawers';
+import {
+  withAlertActions,
+  WithAlertActionsProps,
+} from '@/containers/Alert/withAlertActions';
+import {
+  withDialogActions,
+  WithDialogActionsProps,
+} from '@/containers/Dialog/withDialogActions';
+import {
+  withDrawerActions,
+  WithDrawerActionsProps,
+} from '@/containers/Drawer/withDrawerActions';
+import { compose } from '@/utils';
 
 interface PaymentReceiveActionsBarInnerProps
   extends WithDialogActionsProps,

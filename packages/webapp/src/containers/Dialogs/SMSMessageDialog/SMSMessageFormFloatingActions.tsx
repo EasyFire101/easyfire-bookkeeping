@@ -1,16 +1,14 @@
 // @ts-nocheck
-import React from 'react';
 import { Intent, Button } from '@blueprintjs/core';
 import { useFormikContext } from 'formik';
-
+import React from 'react';
+import { useSMSMessageDialogContext } from './SMSMessageDialogProvider';
 import {
   DialogFooter,
   DialogFooterActions,
   FormattedMessage as T,
 } from '@/components';
-import { useSMSMessageDialogContext } from './SMSMessageDialogProvider';
 import { withDialogActions } from '@/containers/Dialog/withDialogActions';
-
 import { compose } from '@/utils';
 
 /**

@@ -1,8 +1,8 @@
 // @ts-nocheck
-import React from 'react';
 import { Form } from 'formik';
-import { QuickPaymentMadeFormFields } from './QuickPaymentMadeFormFields';
+import React from 'react';
 import { QuickPaymentMadeFloatingActions } from './QuickPaymentMadeFloatingActions';
+import { QuickPaymentMadeFormFields } from './QuickPaymentMadeFormFields';
 /**
  * Quick payment made form content.
  */

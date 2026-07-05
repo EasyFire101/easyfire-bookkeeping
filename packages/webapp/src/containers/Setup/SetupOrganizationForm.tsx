@@ -1,11 +1,12 @@
 // @ts-nocheck
-import React from 'react';
-import { FastField, Form, ErrorMessage } from 'formik';
-import { Button, Intent, FormGroup, Classes } from '@blueprintjs/core';
-import classNames from 'classnames';
-import { TimezonePicker } from '@blueprintjs/timezone';
 import { getAllCountries } from '@bigcapital/utils';
+import { Button, Intent, FormGroup, Classes } from '@blueprintjs/core';
+import { TimezonePicker } from '@blueprintjs/timezone';
 import { x } from '@xstyled/emotion';
+import classNames from 'classnames';
+import { FastField, Form, ErrorMessage } from 'formik';
+import React from 'react';
+import intl from 'react-intl-universal';
 import {
   FFormGroup,
   FInputGroup,
@@ -13,15 +14,13 @@ import {
   FTimezoneSelect,
   FormattedMessage as T,
 } from '@/components';
-
 import { Col, Row } from '@/components';
-import { inputIntent } from '@/utils';
-import { useIsDarkMode } from '@/hooks/useDarkMode';
-
+import { getAllCurrenciesOptions } from '@/constants/currencies';
 import { getFiscalYear } from '@/constants/fiscalYearOptions';
 import { getLanguages } from '@/constants/languagesOptions';
-import { getAllCurrenciesOptions } from '@/constants/currencies';
-import intl from 'react-intl-universal';
+import { useIsDarkMode } from '@/hooks/useDarkMode';
+import { inputIntent } from '@/utils';
+
 
 const countries = getAllCountries();
 

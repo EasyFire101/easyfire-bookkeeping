@@ -1,10 +1,10 @@
 import React, { forwardRef } from 'react';
+import { Box, BoxProps } from '../../Layout';
+import styles from './AppContentShell.module.scss';
 import {
   AppShellProvider,
   useAppShellContext,
 } from './AppContentShellProvider';
-import { Box, BoxProps } from '../../Layout';
-import styles from './AppContentShell.module.scss';
 
 interface AppContentShellProps {
   topbarOffset?: number;

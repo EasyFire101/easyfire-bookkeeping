@@ -1,4 +1,6 @@
 import React from 'react';
+import intl from 'react-intl-universal';
+import { useBillDrawerContext } from './BillDrawerProvider';
 import {
   CommercialDocFooter,
   T,
@@ -6,9 +8,6 @@ import {
   DetailsMenu,
   DetailItem,
 } from '@/components';
-
-import { useBillDrawerContext } from './BillDrawerProvider';
-import intl from 'react-intl-universal';
 
 /**
  * Bill detail footer.

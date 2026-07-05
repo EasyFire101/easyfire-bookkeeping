@@ -1,8 +1,8 @@
 // @ts-nocheck
-import React, { createContext } from 'react';
-import { useAuthMetadata } from '@/hooks/query';
 import { Spinner } from '@blueprintjs/core';
+import React, { createContext } from 'react';
 import styled from 'styled-components';
+import { useAuthMetadata } from '@/hooks/query';
 
 const AuthMetaBootContext = createContext();
 

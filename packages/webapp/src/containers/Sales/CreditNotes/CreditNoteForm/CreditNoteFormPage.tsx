@@ -1,13 +1,14 @@
+import { css } from '@emotion/css';
 import React from 'react';
 import { useParams } from 'react-router-dom';
-import { css } from '@emotion/css';
 import { CreditNoteForm } from './CreditNoteForm';
 import {
   CreditNoteFormProvider,
   useCreditNoteFormContext,
 } from './CreditNoteFormProvider';
-import { AutoExchangeRateProvider } from '@/containers/Entries/AutoExchangeProvider';
 import { DashboardInsider } from '@/components';
+import { AutoExchangeRateProvider } from '@/containers/Entries/AutoExchangeProvider';
+
 
 /**
  * Credit note form page.

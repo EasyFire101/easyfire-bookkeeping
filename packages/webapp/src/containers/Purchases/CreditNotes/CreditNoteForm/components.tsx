@@ -1,11 +1,11 @@
-import React from 'react';
 import { useFormikContext } from 'formik';
-import { ExchangeRateInputGroup } from '@/components';
-import { useCurrentOrganizationBaseCurrency } from '@/hooks/query';
+import React from 'react';
 import {
   useVendorNoteIsForeignCustomer,
   type VendorCreditFormValues,
 } from './utils';
+import { ExchangeRateInputGroup } from '@/components';
+import { useCurrentOrganizationBaseCurrency } from '@/hooks/query';
 
 type VendorCreditNoteExchangeRateInputFieldProps = Omit<
   React.ComponentProps<typeof ExchangeRateInputGroup>,

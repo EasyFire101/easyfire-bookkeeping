@@ -1,9 +1,10 @@
 import React from 'react';
-import type { ExcludedBankTransactionsListPage } from '@bigcapital/sdk-ts';
-import { getColumnWidth } from '@/utils';
 import { useExcludedTransactionsBoot } from './ExcludedTransactionsTableBoot';
-import { CLASSES } from '@/constants';
 import type { DataTableColumn } from '@/components/Datatable/types';
+import type { ExcludedBankTransactionsListPage } from '@bigcapital/sdk-ts';
+import { CLASSES } from '@/constants';
+import { getColumnWidth } from '@/utils';
+
 
 export type ExcludedTransactionRow = NonNullable<
   ExcludedBankTransactionsListPage['data']

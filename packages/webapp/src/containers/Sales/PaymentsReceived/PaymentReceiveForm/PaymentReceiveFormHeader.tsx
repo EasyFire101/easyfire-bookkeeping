@@ -1,13 +1,12 @@
-import React from 'react';
 import classNames from 'classnames';
 import { useFormikContext } from 'formik';
+import React from 'react';
+import { PaymentReceiveHeaderFields } from './PaymentReceiveHeaderFields';
+import type { PaymentReceiveFormValues } from './utils';
 import { Group, Money } from '@/components';
 import { FormattedMessage as T } from '@/components';
-
 import { CLASSES } from '@/constants/classes';
-import { PaymentReceiveHeaderFields } from './PaymentReceiveHeaderFields';
 import { useIsDarkMode } from '@/hooks/useDarkMode';
-import type { PaymentReceiveFormValues } from './utils';
 
 /**
  * Payment receive form header.

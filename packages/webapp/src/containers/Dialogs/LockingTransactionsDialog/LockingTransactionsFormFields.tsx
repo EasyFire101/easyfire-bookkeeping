@@ -1,17 +1,18 @@
 // @ts-nocheck
-import React from 'react';
 import { Classes, Position } from '@blueprintjs/core';
 import classNames from 'classnames';
-import { CLASSES } from '@/constants/classes';
+import React from 'react';
+import intl from 'react-intl-universal';
 import {
   FieldRequiredHint,
   FFormGroup,
   FTextArea,
   FDateInput,
 } from '@/components';
+import { CLASSES } from '@/constants/classes';
 import { useAutofocus } from '@/hooks';
 import { momentFormatter } from '@/utils';
-import intl from 'react-intl-universal';
+
 
 /**
  *  locking Transactions form fields.

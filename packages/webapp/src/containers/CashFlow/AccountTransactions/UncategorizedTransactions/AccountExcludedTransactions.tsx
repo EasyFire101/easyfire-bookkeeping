@@ -3,8 +3,8 @@ import { withBankingActions } from '../../withBankingActions';
 import { ExcludedTransactionsTable } from '../ExcludedTransactions/ExcludedTransactionsTable';
 import { ExcludedBankTransactionsTableBoot } from '../ExcludedTransactions/ExcludedTransactionsTableBoot';
 import { AccountTransactionsCard } from './AccountTransactionsCard';
-import { compose } from '@/utils';
 import type { WithBankingActionsProps } from '../../withBankingActions';
+import { compose } from '@/utils';
 
 interface AccountExcludedTransactionsProps
   extends Pick<WithBankingActionsProps, 'resetExcludedTransactionsSelected'> {}

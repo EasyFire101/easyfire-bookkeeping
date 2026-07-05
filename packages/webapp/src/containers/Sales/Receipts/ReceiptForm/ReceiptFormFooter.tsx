@@ -1,8 +1,8 @@
-import React from 'react';
 import { x } from '@xstyled/emotion';
-import { Paper, Row, Col } from '@/components';
+import React from 'react';
 import { ReceiptFormFooterLeft } from './ReceiptFormFooterLeft';
 import { ReceiptFormFooterRight } from './ReceiptFormFooterRight';
+import { Paper, Row, Col } from '@/components';
 import { UploadAttachmentButton } from '@/containers/Attachments/UploadAttachmentButton';
 
 export function ReceiptFormFooter() {

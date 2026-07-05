@@ -1,8 +1,8 @@
 import React from 'react';
 import intl from 'react-intl-universal';
-import { getColumnWidth } from '@/utils';
-import { TextOverviewTooltipCell } from '@/components';
 import { useEstimateDetailDrawerContext } from './EstimateDetailDrawerProvider';
+import { TextOverviewTooltipCell } from '@/components';
+import { getColumnWidth } from '@/utils';
 
 /**
  * Retrieve table columns of estimate readonly entries details.

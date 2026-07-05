@@ -1,4 +1,3 @@
-import React from 'react';
 import {
   Button,
   NavbarGroup,
@@ -7,6 +6,10 @@ import {
   Alignment,
   Switch,
 } from '@blueprintjs/core';
+import React from 'react';
+import { withCashflowAccountsTableActions } from '../AccountTransactions/withCashflowAccountsTableActions';
+import type { WithCashflowAccountsTableActionsProps } from '../AccountTransactions/withCashflowAccountsTableActions';
+import type { WithDialogActionsProps } from '@/containers/Dialog/withDialogActions';
 import {
   DashboardActionsBar,
   Can,
@@ -14,18 +17,15 @@ import {
   FormattedMessage as T,
   FeatureCan,
 } from '@/components';
+import { ACCOUNT_TYPE, Features } from '@/constants';
+import { CashflowAction, AbilitySubject } from '@/constants/abilityOption';
+import { DialogsName } from '@/constants/dialogs';
+import { withDialogActions } from '@/containers/Dialog/withDialogActions';
+import { AccountDialogAction } from '@/containers/Dialogs/AccountDialog/utils';
 import { useRefreshCashflowAccounts } from '@/hooks/query';
 import { useOpenPlaidConnect } from '@/hooks/utils/useOpenPlaidConnect';
-import { CashflowAction, AbilitySubject } from '@/constants/abilityOption';
-import { withDialogActions } from '@/containers/Dialog/withDialogActions';
-import { withCashflowAccountsTableActions } from '../AccountTransactions/withCashflowAccountsTableActions';
-import { AccountDialogAction } from '@/containers/Dialogs/AccountDialog/utils';
-import { ACCOUNT_TYPE, Features } from '@/constants';
-import { DialogsName } from '@/constants/dialogs';
 import { CreditCard2Icon } from '@/icons/CreditCard2';
 import { compose } from '@/utils';
-import type { WithDialogActionsProps } from '@/containers/Dialog/withDialogActions';
-import type { WithCashflowAccountsTableActionsProps } from '../AccountTransactions/withCashflowAccountsTableActions';
 
 interface CashFlowAccountsActionsBarInnerProps
   extends Pick<WithDialogActionsProps, 'openDialog'>,

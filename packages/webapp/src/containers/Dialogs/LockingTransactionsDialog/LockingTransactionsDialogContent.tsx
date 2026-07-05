@@ -1,7 +1,7 @@
 // @ts-nocheck
 import React from 'react';
-import { LockingTransactionsFormProvider } from './LockingTransactionsFormProvider';
 import { LockingTransactionsForm } from './LockingTransactionsForm';
+import { LockingTransactionsFormProvider } from './LockingTransactionsFormProvider';
 
 /**
  * Locking transactions dialog content.

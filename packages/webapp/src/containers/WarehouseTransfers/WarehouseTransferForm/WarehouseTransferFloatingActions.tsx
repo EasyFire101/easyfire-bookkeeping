@@ -1,6 +1,4 @@
 // @ts-nocheck
-import React from 'react';
-import { useHistory } from 'react-router-dom';
 import {
   Intent,
   Button,
@@ -11,10 +9,12 @@ import {
   Menu,
   MenuItem,
 } from '@blueprintjs/core';
-import { If, Icon, FormattedMessage as T, Group } from '@/components';
 import classNames from 'classnames';
 import { useFormikContext } from 'formik';
+import React from 'react';
+import { useHistory } from 'react-router-dom';
 import { useWarehouseTransferFormContext } from './WarehouseTransferFormProvider';
+import { If, Icon, FormattedMessage as T, Group } from '@/components';
 import { CLASSES } from '@/constants/classes';
 
 /**

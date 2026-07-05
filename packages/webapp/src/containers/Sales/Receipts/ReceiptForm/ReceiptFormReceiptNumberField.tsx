@@ -1,6 +1,9 @@
-import React from 'react';
 import { Position, ControlGroup } from '@blueprintjs/core';
 import { useFormikContext } from 'formik';
+import React from 'react';
+import intl from 'react-intl-universal';
+import type { ReceiptFormValues } from './utils';
+import type { WithDialogActionsProps } from '@/containers/Dialog/withDialogActions';
 import {
   FFormGroup,
   FieldRequiredHint,
@@ -9,13 +12,9 @@ import {
   FormattedMessage as T,
   FInputGroup,
 } from '@/components';
-
-import { withSettings } from '@/containers/Settings/withSettings';
 import { withDialogActions } from '@/containers/Dialog/withDialogActions';
-import type { WithDialogActionsProps } from '@/containers/Dialog/withDialogActions';
+import { withSettings } from '@/containers/Settings/withSettings';
 import { compose } from '@/utils';
-import intl from 'react-intl-universal';
-import type { ReceiptFormValues } from './utils';
 
 type ReceiptFormReceiptNumberFieldProps = {
   openDialog: WithDialogActionsProps['openDialog'];

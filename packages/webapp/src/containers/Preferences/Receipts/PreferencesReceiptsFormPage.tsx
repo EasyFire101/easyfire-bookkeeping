@@ -1,19 +1,17 @@
 // @ts-nocheck
+import { Intent } from '@blueprintjs/core';
+import { Formik } from 'formik';
+import * as R from 'ramda';
 import React, { useEffect } from 'react';
 import intl from 'react-intl-universal';
-import { Formik } from 'formik';
-import { Intent } from '@blueprintjs/core';
-import * as R from 'ramda';
-
-import { AppToaster } from '@/components';
-import { PreferencesReceiptsFormSchema } from './PreferencesReceiptsForm.schema';
+import { transferObjectOptionsToArray } from '../Accountant/utils';
 import { PreferencesReceiptsForm } from './PreferencesReceiptsForm';
+import { PreferencesReceiptsFormSchema } from './PreferencesReceiptsForm.schema';
+import { AppToaster } from '@/components';
 import { withDashboardActions } from '@/containers/Dashboard/withDashboardActions';
-
-import { compose, transformToForm, transfromToSnakeCase } from '@/utils';
 import { withSettings } from '@/containers/Settings/withSettings';
 import { useSaveSettings } from '@/hooks/query';
-import { transferObjectOptionsToArray } from '../Accountant/utils';
+import { compose, transformToForm, transfromToSnakeCase } from '@/utils';
 
 const defaultValues = {
   termsConditions: '',

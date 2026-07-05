@@ -1,4 +1,3 @@
-import React from 'react';
 import {
   Button,
   Classes,
@@ -13,7 +12,15 @@ import {
   Position,
 } from '@blueprintjs/core';
 import { isEmpty } from 'lodash';
+import React from 'react';
 import { useHistory } from 'react-router-dom';
+import { useBulkDeletePaymentReceivesDialog } from './hooks/use-bulk-delete-payment-receives-dialog';
+import { usePaymentsReceivedListContext } from './PaymentsReceivedListProvider';
+import { withPaymentsReceived } from './withPaymentsReceived';
+import { withPaymentsReceivedActions } from './withPaymentsReceivedActions';
+import type { WithPaymentsReceivedProps } from './withPaymentsReceived';
+import type { WithDialogActionsProps } from '@/containers/Dialog/withDialogActions';
+import type { WithDrawerActionsProps } from '@/containers/Drawer/withDrawerActions';
 import {
   Icon,
   Can,
@@ -24,26 +31,19 @@ import {
   DashboardActionViewsList,
   DashboardActionsBar,
 } from '@/components';
-import { withPaymentsReceived } from './withPaymentsReceived';
-import { withPaymentsReceivedActions } from './withPaymentsReceivedActions';
-import { withSettings } from '@/containers/Settings/withSettings';
-import { withSettingsActions } from '@/containers/Settings/withSettingsActions';
-import { withDialogActions } from '@/containers/Dialog/withDialogActions';
 import {
   PaymentReceiveAction,
   AbilitySubject,
 } from '@/constants/abilityOption';
-import { usePaymentsReceivedListContext } from './PaymentsReceivedListProvider';
-import { useRefreshPaymentReceive } from '@/hooks/query/payment-receives';
-import { useDownloadExportPdf } from '@/hooks/query/FinancialReports/use-export-pdf';
-import { compose } from '@/utils';
 import { DialogsName } from '@/constants/dialogs';
-import { withDrawerActions } from '@/containers/Drawer/withDrawerActions';
 import { DRAWERS } from '@/constants/drawers';
-import { useBulkDeletePaymentReceivesDialog } from './hooks/use-bulk-delete-payment-receives-dialog';
-import type { WithDialogActionsProps } from '@/containers/Dialog/withDialogActions';
-import type { WithPaymentsReceivedProps } from './withPaymentsReceived';
-import type { WithDrawerActionsProps } from '@/containers/Drawer/withDrawerActions';
+import { withDialogActions } from '@/containers/Dialog/withDialogActions';
+import { withDrawerActions } from '@/containers/Drawer/withDrawerActions';
+import { withSettings } from '@/containers/Settings/withSettings';
+import { withSettingsActions } from '@/containers/Settings/withSettingsActions';
+import { useDownloadExportPdf } from '@/hooks/query/FinancialReports/use-export-pdf';
+import { useRefreshPaymentReceive } from '@/hooks/query/payment-receives';
+import { compose } from '@/utils';
 
 interface WithPaymentsReceivedActionsProps {
   setPaymentReceivesTableState: (state: Record<string, any>) => void;

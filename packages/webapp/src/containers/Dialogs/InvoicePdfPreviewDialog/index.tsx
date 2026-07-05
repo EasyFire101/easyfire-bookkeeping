@@ -1,11 +1,8 @@
 // @ts-nocheck
-import React, { lazy } from 'react';
 import classNames from 'classnames';
-
+import React, { lazy } from 'react';
 import { T, Dialog, DialogSuspense } from '@/components';
-
 import withDialogRedux from '@/components/DialogReduxConnect';
-
 import { CLASSES } from '@/constants/classes';
 import { compose } from '@/utils';
 

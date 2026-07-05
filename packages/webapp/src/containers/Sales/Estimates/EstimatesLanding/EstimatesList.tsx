@@ -1,15 +1,16 @@
 import React from 'react';
 import { DashboardPageContent } from '@/components';
+
 import '@/style/pages/SaleEstimate/List.scss';
 import { EstimatesActionsBar } from './EstimatesActionsBar';
 import { EstimatesDataTable } from './EstimatesDataTable';
+import { EstimatesListDialogs } from './EstimatesListDialogs';
+import { EstimatesListDrawers } from './EstimatesListDrawers';
+import { EstimatesListProvider } from './EstimatesListProvider';
 import { withEstimates } from './withEstimates';
 import { withEstimatesActions } from './withEstimatesActions';
-import { EstimatesListProvider } from './EstimatesListProvider';
-import { EstimatesListDrawers } from './EstimatesListDrawers';
-import { EstimatesListDialogs } from './EstimatesListDialogs';
-import { compose, transformTableStateToQuery } from '@/utils';
 import type { WithEstimatesProps } from './withEstimates';
+import { compose, transformTableStateToQuery } from '@/utils';
 
 interface WithEstimatesActionsProps {
   resetEstimatesTableState: () => void;

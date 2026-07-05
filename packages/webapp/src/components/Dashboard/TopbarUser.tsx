@@ -1,6 +1,4 @@
 // @ts-nocheck
-import React from 'react';
-import { useHistory } from 'react-router-dom';
 import {
   Menu,
   MenuItem,
@@ -9,13 +7,12 @@ import {
   Popover,
   Position,
 } from '@blueprintjs/core';
+import React from 'react';
+import { useHistory } from 'react-router-dom';
 import { FormattedMessage as T } from '@/components';
-
-import { useAuthActions, useAuthOrganizationId } from '@/hooks/state';
-
 import { withDialogActions } from '@/containers/Dialog/withDialogActions';
-
 import { useAuthenticatedAccount } from '@/hooks/query';
+import { useAuthActions, useAuthOrganizationId } from '@/hooks/state';
 import { firstLettersArgs, compose } from '@/utils';
 
 /**

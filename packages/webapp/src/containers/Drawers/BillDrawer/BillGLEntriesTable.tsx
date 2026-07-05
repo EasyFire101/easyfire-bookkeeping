@@ -1,15 +1,13 @@
 import React from 'react';
 import styled from 'styled-components';
-
-import { Card } from '@/components';
-
-import { useTransactionsByReference } from '@/hooks/query';
-import { useBillDrawerContext } from './BillDrawerProvider';
-
 import {
   AmountDisplayedBaseCurrencyMessage,
   JournalEntriesTable,
 } from '../../JournalEntriesTable/JournalEntriesTable';
+import { useBillDrawerContext } from './BillDrawerProvider';
+import { Card } from '@/components';
+import { useTransactionsByReference } from '@/hooks/query';
+
 
 /**
  * Bill GL entries table.

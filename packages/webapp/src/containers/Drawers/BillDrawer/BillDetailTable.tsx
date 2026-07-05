@@ -1,11 +1,9 @@
 import React from 'react';
-
-import { CommercialDocEntriesTable } from '@/components';
-
 import { useBillDrawerContext } from './BillDrawerProvider';
 import { useBillReadonlyEntriesTableColumns } from './utils';
-
+import { CommercialDocEntriesTable } from '@/components';
 import { TableStyle } from '@/constants';
+
 
 export function BillDetailTable() {
   const { bill } = useBillDrawerContext();

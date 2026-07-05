@@ -1,10 +1,11 @@
 import React from 'react';
 import styled from 'styled-components';
-import { TableStyle } from '@/constants';
-import { DataTable, TableSkeletonRows, Card } from '@/components';
 import { useItemDetailDrawerContext } from '../ItemDetailDrawerProvider';
 import { useWarehouseLocationsColumns } from './components';
+import { DataTable, TableSkeletonRows, Card } from '@/components';
+import { TableStyle } from '@/constants';
 import { useItemWarehouseLocation } from '@/hooks/query';
+
 
 /**
  * Warehouses locations table columns.

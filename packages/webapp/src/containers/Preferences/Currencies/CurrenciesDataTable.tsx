@@ -1,16 +1,15 @@
 // @ts-nocheck
 import React, { useCallback } from 'react';
+import styled from 'styled-components';
+import { ActionMenuList, useCurrenciesTableColumns } from './components';
+import { useCurrenciesContext } from './CurrenciesProvider';
+import { DataTable, TableSkeletonRows } from '@/components';
+import { withAlertActions } from '@/containers/Alert/withAlertActions';
+import { withDialogActions } from '@/containers/Dialog/withDialogActions';
 import { compose } from '@/utils';
 
-import { DataTable, TableSkeletonRows } from '@/components';
 
-import { useCurrenciesContext } from './CurrenciesProvider';
 
-import { ActionMenuList, useCurrenciesTableColumns } from './components';
-
-import { withDialogActions } from '@/containers/Dialog/withDialogActions';
-import { withAlertActions } from '@/containers/Alert/withAlertActions';
-import styled from 'styled-components';
 
 /**
  * Currencies table.

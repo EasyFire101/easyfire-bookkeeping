@@ -2,12 +2,12 @@
 import React from 'react';
 import { useParams, useHistory } from 'react-router-dom';
 import styled from 'styled-components';
-import { Box, DashboardCard, DashboardInsider } from '@/components';
 import { CustomerFormFormik, ustomerFormFormik } from './CustomerFormFormik';
 import {
   CustomerFormProvider,
   useCustomerFormContext,
 } from './CustomerFormProvider';
+import { Box, DashboardCard, DashboardInsider } from '@/components';
 
 /**
  * Customer form page.

@@ -1,11 +1,11 @@
 import React from 'react';
 import intl from 'react-intl-universal';
+import type { SaleInvoice } from '@bigcapital/sdk-ts';
 import { DrawerHeaderContent, DrawerLoading } from '@/components';
 import { Features } from '@/constants';
+import { DRAWERS } from '@/constants/drawers';
 import { useInvoice } from '@/hooks/query';
 import { useFeatureCan } from '@/hooks/state';
-import { DRAWERS } from '@/constants/drawers';
-import type { SaleInvoice } from '@bigcapital/sdk-ts';
 
 export interface InvoiceDetailDrawerContextValue {
   invoiceId: number | undefined;

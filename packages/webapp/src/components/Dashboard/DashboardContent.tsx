@@ -1,9 +1,9 @@
 // @ts-nocheck
 import React from 'react';
 import { ErrorBoundary } from 'react-error-boundary';
-import DashboardTopbar from '@/components/Dashboard/DashboardTopbar';
-import DashboardContentRoutes from '@/components/Dashboard/DashboardContentRoute';
 import DashboardErrorBoundary from './DashboardErrorBoundary';
+import DashboardContentRoutes from '@/components/Dashboard/DashboardContentRoute';
+import DashboardTopbar from '@/components/Dashboard/DashboardTopbar';
 
 export default React.forwardRef(({}, ref) => {
   return (

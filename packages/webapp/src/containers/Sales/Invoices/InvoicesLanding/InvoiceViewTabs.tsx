@@ -1,14 +1,13 @@
+import { Alignment, Navbar, NavbarGroup } from '@blueprintjs/core';
 import React from 'react';
 import { useHistory } from 'react-router-dom';
-import { Alignment, Navbar, NavbarGroup } from '@blueprintjs/core';
-
-import { DashboardViewsTabs } from '@/components';
-import { compose, transfromViewsToTabs } from '@/utils';
 import { useInvoicesListContext } from './InvoicesListProvider';
-
+import { withInvoiceActions } from './withInvoiceActions';
 import { withInvoices } from './withInvoices';
 import type { WithInvoicesProps } from './withInvoices';
-import { withInvoiceActions } from './withInvoiceActions';
+import { DashboardViewsTabs } from '@/components';
+import { compose, transfromViewsToTabs } from '@/utils';
+
 
 interface WithInvoiceActionsProps {
   setInvoicesTableState: (state: Record<string, any>) => void;

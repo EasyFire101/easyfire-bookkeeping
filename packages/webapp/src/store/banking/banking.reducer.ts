@@ -1,5 +1,5 @@
-import { castArray, uniq } from 'lodash';
 import { PayloadAction, createSlice } from '@reduxjs/toolkit';
+import { castArray, uniq } from 'lodash';
 
 interface StorePlaidState {
   plaidToken: string;

@@ -1,11 +1,11 @@
 import React from 'react';
+import { withBanking } from '../withBanking';
+import { useAccountTransactionsContext } from './AccountTransactionsProvider';
+import type { WithBankingProps } from '../withBanking';
 import type { UncategorizedTransactionResponse } from '@bigcapital/sdk-ts';
 import { IntersectionObserver } from '@/components';
 import { useAccountUncategorizedTransactionsInfinity } from '@/hooks/query';
 import { useFlattenInfinityPages } from '@/hooks/utils';
-import { useAccountTransactionsContext } from './AccountTransactionsProvider';
-import { withBanking } from '../withBanking';
-import type { WithBankingProps } from '../withBanking';
 import { compose } from '@/utils';
 
 export interface AccountUncategorizedTransactionsContextValue {

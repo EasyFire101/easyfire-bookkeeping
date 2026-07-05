@@ -1,11 +1,9 @@
 import React from 'react';
-
-import { CommercialDocEntriesTable } from '@/components';
-
-import { usePaymentReceiveEntriesColumns } from './utils';
 import { usePaymentReceiveDetailContext } from './PaymentReceiveDetailProvider';
-
+import { usePaymentReceiveEntriesColumns } from './utils';
+import { CommercialDocEntriesTable } from '@/components';
 import { TableStyle } from '@/constants';
+
 
 /**
  * Payment receive readonly details table.

@@ -1,8 +1,8 @@
+import { connect } from 'react-redux';
 import { AnyAction } from 'redux';
 import { ThunkDispatch } from 'redux-thunk';
-import { connect } from 'react-redux';
-import { submitBilling } from '@/store/billing/billing.action';
 import type { RootState } from '@/store/reducers';
+import { submitBilling } from '@/store/billing/billing.action';
 
 export interface WithBillingActionsProps {
   requestSubmitBilling: (form: Record<string, unknown>) => Promise<unknown>;

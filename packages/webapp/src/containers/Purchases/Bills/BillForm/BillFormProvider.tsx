@@ -10,9 +10,8 @@ import type {
   BranchesListResponse,
   TaxRatesListResponse,
 } from '@bigcapital/sdk-ts';
-import { Features } from '@/constants';
-import { useFeatureCan } from '@/hooks/state';
 import { DashboardInsider } from '@/components/Dashboard';
+import { Features } from '@/constants';
 import { useProjects } from '@/containers/Projects/hooks';
 import {
   useAccounts,
@@ -26,6 +25,7 @@ import {
   useEditBill,
 } from '@/hooks/query';
 import { useTaxRates } from '@/hooks/query/tax-rates';
+import { useFeatureCan } from '@/hooks/state';
 
 type BillFormSubmitPayload = {
   redirect?: boolean;

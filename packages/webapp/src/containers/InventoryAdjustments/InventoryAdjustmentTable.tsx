@@ -1,24 +1,21 @@
 import React, { useCallback } from 'react';
 import intl from 'react-intl-universal';
-
-import { DataTable } from '@/components';
-import { TABLES } from '@/constants/tables';
-import { useMemorizedColumnsWidths } from '@/hooks';
 import { useInventoryAdjustmentsColumns, ActionsMenu } from './components';
-import type { InventoryAdjustment } from '@bigcapital/sdk-ts';
 import { useInventoryAdjustmentsContext } from './InventoryAdjustmentsProvider';
-
-import { withInventoryAdjustments } from './withInventoryAdjustments';
-import type { WithInventoryAdjustmentsProps } from './withInventoryAdjustments';
 import { withInventoryAdjustmentActions } from './withInventoryAdjustmentActions';
+import { withInventoryAdjustments } from './withInventoryAdjustments';
 import type { WithInventoryAdjustmentActionsProps } from './withInventoryAdjustmentActions';
-import { withAlertActions } from '@/containers/Alert/withAlertActions';
+import type { WithInventoryAdjustmentsProps } from './withInventoryAdjustments';
 import type { WithAlertActionsProps } from '@/containers/Alert/withAlertActions';
-import { withDrawerActions } from '@/containers/Drawer/withDrawerActions';
 import type { WithDrawerActionsProps } from '@/containers/Drawer/withDrawerActions';
-
-import { compose } from '@/utils';
+import type { InventoryAdjustment } from '@bigcapital/sdk-ts';
+import { DataTable } from '@/components';
 import { DRAWERS } from '@/constants/drawers';
+import { TABLES } from '@/constants/tables';
+import { withAlertActions } from '@/containers/Alert/withAlertActions';
+import { withDrawerActions } from '@/containers/Drawer/withDrawerActions';
+import { useMemorizedColumnsWidths } from '@/hooks';
+import { compose } from '@/utils';
 
 interface InventoryAdjustmentDataTableProps
   extends Pick<WithInventoryAdjustmentsProps, 'inventoryAdjustmentTableState'>,

@@ -1,7 +1,9 @@
-import React from 'react';
 import { defaultTo } from 'lodash';
+import React from 'react';
+import intl from 'react-intl-universal';
 import styled from 'styled-components';
-
+import { useManualJournalDrawerContext } from './ManualJournalDrawerProvider';
+import { ManualJournalDetailsStatus } from './utils';
 import {
   Row,
   Col,
@@ -10,9 +12,6 @@ import {
   CommercialDocHeader,
   CommercialDocTopHeader,
 } from '@/components';
-import { ManualJournalDetailsStatus } from './utils';
-import { useManualJournalDrawerContext } from './ManualJournalDrawerProvider';
-import intl from 'react-intl-universal';
 
 /**
  * Manual journal details header.

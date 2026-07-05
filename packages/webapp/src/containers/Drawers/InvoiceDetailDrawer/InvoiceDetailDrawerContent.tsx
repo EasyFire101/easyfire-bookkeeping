@@ -1,7 +1,7 @@
 import React from 'react';
-import { DrawerBody } from '@/components';
 import { InvoiceDetail } from './InvoiceDetail';
 import { InvoiceDetailDrawerProvider } from './InvoiceDetailDrawerProvider';
+import { DrawerBody } from '@/components';
 
 interface InvoiceDetailDrawerContentProps {
   invoiceId: number | undefined;

@@ -1,9 +1,9 @@
 // @ts-nocheck
-import React, { useCallback } from 'react';
 import { Button, Intent } from '@blueprintjs/core';
-import { compose } from '@/utils';
+import React, { useCallback } from 'react';
 import { Icon, FormattedMessage as T } from '@/components';
 import { withDialogActions } from '@/containers/Dialog/withDialogActions';
+import { compose } from '@/utils';
 
 function CurrenciesActionsInner({ openDialog }) {
   const handleClickNewCurrency = useCallback(() => {

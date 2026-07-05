@@ -1,5 +1,5 @@
-import { index as ExpenseDrawer } from '@/containers/Drawers/ExpenseDrawer';
 import { DRAWERS } from '@/constants/drawers';
+import { index as ExpenseDrawer } from '@/containers/Drawers/ExpenseDrawer';
 
 export function ExpensesListDrawers() {
   return (

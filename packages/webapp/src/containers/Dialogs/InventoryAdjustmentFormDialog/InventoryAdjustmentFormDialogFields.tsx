@@ -1,10 +1,18 @@
 // @ts-nocheck
+import { Classes, FormGroup, Position } from '@blueprintjs/core';
+import classNames from 'classnames';
+import { useFormikContext } from 'formik';
 import React from 'react';
 import intl from 'react-intl-universal';
 import styled from 'styled-components';
-import classNames from 'classnames';
-import { useFormikContext } from 'formik';
-import { Classes, FormGroup, Position } from '@blueprintjs/core';
+import { useInventoryAdjContext } from './InventoryAdjustmentFormProvider';
+import { InventoryAdjustmentQuantityFields } from './InventoryAdjustmentQuantityFields';
+import {
+  diffQuantity,
+  useSetPrimaryBranchToForm,
+  useSetPrimaryWarehouseToForm,
+  useGetAdjustmentTypeOptions,
+} from './utils';
 import {
   FFormGroup,
   FDateInput,
@@ -12,7 +20,6 @@ import {
   FTextArea,
   FSelect,
 } from '@/components';
-import { useAutofocus } from '@/hooks';
 import {
   FieldRequiredHint,
   Col,
@@ -22,19 +29,10 @@ import {
   WarehouseSelect,
   FAccountsSuggestField,
 } from '@/components';
-import { momentFormatter, toSafeNumber } from '@/utils';
 import { Features, CLASSES } from '@/constants';
-
-import { useInventoryAdjContext } from './InventoryAdjustmentFormProvider';
+import { useAutofocus } from '@/hooks';
 import { useFeatureCan } from '@/hooks/state';
-
-import { InventoryAdjustmentQuantityFields } from './InventoryAdjustmentQuantityFields';
-import {
-  diffQuantity,
-  useSetPrimaryBranchToForm,
-  useSetPrimaryWarehouseToForm,
-  useGetAdjustmentTypeOptions,
-} from './utils';
+import { momentFormatter, toSafeNumber } from '@/utils';
 
 /**
  * Inventory adjustment form dialogs fields.

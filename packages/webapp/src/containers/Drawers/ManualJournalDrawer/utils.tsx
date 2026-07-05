@@ -1,7 +1,10 @@
-import intl from 'react-intl-universal';
-import React from 'react';
 import { Tag, Intent } from '@blueprintjs/core';
-
+import React from 'react';
+import intl from 'react-intl-universal';
+import {
+  useManualJournalDrawerContext,
+  ManualJournalDetail,
+} from './ManualJournalDrawerProvider';
 import {
   T,
   Choose,
@@ -9,12 +12,8 @@ import {
   TextOverviewTooltipCell,
 } from '@/components';
 import { Features } from '@/constants';
-import { getColumnWidth } from '@/utils';
 import { useFeatureCan } from '@/hooks/state';
-import {
-  useManualJournalDrawerContext,
-  ManualJournalDetail,
-} from './ManualJournalDrawerProvider';
+import { getColumnWidth } from '@/utils';
 
 interface ManualJournalDetailsStatusProps {
   manualJournal: ManualJournalDetail;

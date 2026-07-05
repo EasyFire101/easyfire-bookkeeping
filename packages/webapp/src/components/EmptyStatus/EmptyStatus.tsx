@@ -1,6 +1,5 @@
-import React from 'react';
 import clsx from 'classnames';
-
+import React from 'react';
 import Style from '@/style/components/DataTable/DataTableEmptyStatus.module.scss';
 
 interface EmptyStatusProps {

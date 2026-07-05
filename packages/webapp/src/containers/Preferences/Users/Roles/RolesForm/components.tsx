@@ -1,14 +1,8 @@
 // @ts-nocheck
+import { Checkbox, Popover } from '@blueprintjs/core';
+import { Field } from 'formik';
 import React from 'react';
 import styled from 'styled-components';
-import { Field } from 'formik';
-import { Checkbox, Popover } from '@blueprintjs/core';
-
-import {
-  getPermissionsSchema,
-  ModulePermissionsStyle,
-} from '@/constants/permissionsSchema';
-import { Card, If, ButtonLink, Choose, T } from '@/components';
 import {
   getSerivceColumnPermission,
   getServiceExtraPermissions,
@@ -16,6 +10,11 @@ import {
   handleCheckboxFullAccessChange,
   handleCheckboxPermissionChange,
 } from './utils';
+import { Card, If, ButtonLink, Choose, T } from '@/components';
+import {
+  getPermissionsSchema,
+  ModulePermissionsStyle,
+} from '@/constants/permissionsSchema';
 
 // Module permissions context.
 const ModulePermissionsContext = React.createContext();

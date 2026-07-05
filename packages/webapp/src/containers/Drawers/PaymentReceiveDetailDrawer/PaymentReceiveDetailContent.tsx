@@ -1,7 +1,7 @@
 import React from 'react';
-import { DrawerBody } from '@/components';
 import { PaymentReceiveDetail } from './PaymentReceiveDetail';
 import { PaymentReceiveDetailProvider } from './PaymentReceiveDetailProvider';
+import { DrawerBody } from '@/components';
 
 interface PaymentReceiveDetailContentProps {
   paymentReceiveId: number | undefined;

@@ -1,14 +1,13 @@
 // @ts-nocheck
-import React, { useMemo } from 'react';
 import { Position, Checkbox, InputGroup } from '@blueprintjs/core';
 import { DateInput } from '@blueprintjs/datetime';
-import moment from 'moment';
-import intl from 'react-intl-universal';
 import { isUndefined } from 'lodash';
-
-import { useAutofocus } from '@/hooks';
+import moment from 'moment';
+import React, { useMemo } from 'react';
+import intl from 'react-intl-universal';
 import { T, Choose } from '@/components';
 import { Select } from '@/components/Forms';
+import { useAutofocus } from '@/hooks';
 import { momentFormatter } from '@/utils';
 
 function AdvancedFilterEnumerationField({ options, value, ...rest }) {

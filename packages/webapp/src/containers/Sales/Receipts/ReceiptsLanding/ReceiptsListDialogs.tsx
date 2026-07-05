@@ -1,5 +1,5 @@
-import { ReceiptBulkDeleteDialog } from '@/containers/Dialogs/Receipts/ReceiptBulkDeleteDialog';
 import { DialogsName } from '@/constants/dialogs';
+import { ReceiptBulkDeleteDialog } from '@/containers/Dialogs/Receipts/ReceiptBulkDeleteDialog';
 
 export function ReceiptsListDialogs() {
   return (

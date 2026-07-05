@@ -1,21 +1,17 @@
 // @ts-nocheck
 import React, { useCallback } from 'react';
 import intl from 'react-intl-universal';
-
 import { DialogContent } from '@/components';
-import { useSaveSettings, useSettingsPaymentReceives } from '@/hooks/query';
-
-import { ReferenceNumberForm } from '@/containers/JournalNumber/ReferenceNumberForm';
-
 import { withDialogActions } from '@/containers/Dialog/withDialogActions';
-import { withSettingsActions } from '@/containers/Settings/withSettingsActions';
-import { withSettings } from '@/containers/Settings/withSettings';
-
-import { saveInvoke, compose } from '@/utils';
+import { ReferenceNumberForm } from '@/containers/JournalNumber/ReferenceNumberForm';
 import {
   transformFormToSettings,
   transformSettingsToForm,
 } from '@/containers/JournalNumber/utils';
+import { withSettings } from '@/containers/Settings/withSettings';
+import { withSettingsActions } from '@/containers/Settings/withSettingsActions';
+import { useSaveSettings, useSettingsPaymentReceives } from '@/hooks/query';
+import { saveInvoke, compose } from '@/utils';
 
 /**
  * Payment receive number dialog's content.

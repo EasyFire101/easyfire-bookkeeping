@@ -1,14 +1,15 @@
+import { Button, Intent } from '@blueprintjs/core';
+import { isEmpty } from 'lodash';
 import React from 'react';
 import intl from 'react-intl-universal';
-import styled from 'styled-components';
-import { isEmpty } from 'lodash';
-import { Button, Intent } from '@blueprintjs/core';
 import { useHistory } from 'react-router-dom';
-import { FFormGroup, FEditableText, Box, Group, Stack } from '@/components';
-import { VisaIcon } from '@/icons/Visa';
-import { MastercardIcon } from '@/icons/Mastercard';
+import styled from 'styled-components';
 import { useInvoiceFormContext } from './InvoiceFormProvider';
+import { FFormGroup, FEditableText, Box, Group, Stack } from '@/components';
 import { PaymentOptionsButtonPopver } from '@/containers/PaymentMethods/SelectPaymentMethodPopover';
+import { MastercardIcon } from '@/icons/Mastercard';
+import { VisaIcon } from '@/icons/Visa';
+
 
 export function InvoiceFormFooterLeft() {
   const { paymentServices } = useInvoiceFormContext();

@@ -1,9 +1,9 @@
 // @ts-nocheck
-import React from 'react';
 import { isEmpty } from 'lodash';
-import { useResourceViews, useResourceMeta } from '@/hooks/query';
-import { DashboardInsider } from '@/components';
+import React from 'react';
 import { useProjects } from '../../hooks';
+import { DashboardInsider } from '@/components';
+import { useResourceViews, useResourceMeta } from '@/hooks/query';
 
 const ProjectsListContext = React.createContext();
 

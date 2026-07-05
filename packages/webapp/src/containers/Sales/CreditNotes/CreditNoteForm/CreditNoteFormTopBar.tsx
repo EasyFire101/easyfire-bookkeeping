@@ -1,4 +1,3 @@
-import React from 'react';
 
 import {
   Alignment,
@@ -6,12 +5,12 @@ import {
   NavbarDivider,
   Classes,
 } from '@blueprintjs/core';
+import React from 'react';
+import { useCreditNoteFormContext } from './CreditNoteFormProvider';
 import {
   useSetPrimaryBranchToForm,
   useSetPrimaryWarehouseToForm,
 } from './utils';
-import { Features } from '@/constants';
-import { useFeatureCan } from '@/hooks/state';
 import {
   BranchSelect,
   FeatureCan,
@@ -21,7 +20,8 @@ import {
   FormWarehouseSelectButton,
   FormBranchSelectButton,
 } from '@/components';
-import { useCreditNoteFormContext } from './CreditNoteFormProvider';
+import { Features } from '@/constants';
+import { useFeatureCan } from '@/hooks/state';
 
 /**
  * Credit note form topbar .

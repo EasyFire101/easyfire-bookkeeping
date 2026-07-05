@@ -1,8 +1,9 @@
 // @ts-nocheck
-import React from 'react';
-import { Field, ErrorMessage, FastField, useFormikContext } from 'formik';
 import { FormGroup, InputGroup } from '@blueprintjs/core';
-import { inputIntent, toSafeNumber } from '@/utils';
+import { Field, ErrorMessage, FastField, useFormikContext } from 'formik';
+import React from 'react';
+import intl from 'react-intl-universal';
+import { decrementQuantity } from './utils';
 import {
   Row,
   Col,
@@ -12,8 +13,8 @@ import {
   FInputGroup,
 } from '@/components';
 import { useAutofocus } from '@/hooks';
-import { decrementQuantity } from './utils';
-import intl from 'react-intl-universal';
+import { inputIntent, toSafeNumber } from '@/utils';
+
 
 /**
  * Decrement adjustment fields.

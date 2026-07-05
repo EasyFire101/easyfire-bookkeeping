@@ -1,16 +1,16 @@
-import React from 'react';
 import { Intent, Alert } from '@blueprintjs/core';
+import React from 'react';
 import intl from 'react-intl-universal';
-import { AppToaster } from '@/components';
-import { withAlertStoreConnect } from '@/containers/Alert/withAlertStoreConnect';
-import type { WithAlertStoreConnectProps } from '@/containers/Alert/withAlertStoreConnect';
-import { withAlertActions } from '@/containers/Alert/withAlertActions';
 import type { WithAlertActionsProps } from '@/containers/Alert/withAlertActions';
-import { withDrawerActions } from '@/containers/Drawer/withDrawerActions';
+import type { WithAlertStoreConnectProps } from '@/containers/Alert/withAlertStoreConnect';
 import type { WithDrawerActionsProps } from '@/containers/Drawer/withDrawerActions';
+import { AppToaster } from '@/components';
+import { DRAWERS } from '@/constants/drawers';
+import { withAlertActions } from '@/containers/Alert/withAlertActions';
+import { withAlertStoreConnect } from '@/containers/Alert/withAlertStoreConnect';
+import { withDrawerActions } from '@/containers/Drawer/withDrawerActions';
 import { useUncategorizeTransaction } from '@/hooks/query';
 import { compose } from '@/utils';
-import { DRAWERS } from '@/constants/drawers';
 
 interface UncategorizeTransactionAlertProps
   extends Pick<WithAlertActionsProps, 'closeAlert'>,

@@ -1,4 +1,3 @@
-import React from 'react';
 import {
   Intent,
   Button,
@@ -9,15 +8,16 @@ import {
   Menu,
   MenuItem,
 } from '@blueprintjs/core';
-import { Group, FormattedMessage as T } from '@/components';
-import { PageForm } from '@/components/PageForm';
-import { useHistory } from 'react-router-dom';
-import { CLASSES } from '@/constants/classes';
 import classNames from 'classnames';
 import { useFormikContext } from 'formik';
-import { If, Icon } from '@/components';
+import React from 'react';
+import { useHistory } from 'react-router-dom';
 import { useBillFormContext } from './BillFormProvider';
 import type { BillFormValues } from './utils';
+import { Group, FormattedMessage as T } from '@/components';
+import { If, Icon } from '@/components';
+import { PageForm } from '@/components/PageForm';
+import { CLASSES } from '@/constants/classes';
 
 /**
  * Bill floating actions bar.

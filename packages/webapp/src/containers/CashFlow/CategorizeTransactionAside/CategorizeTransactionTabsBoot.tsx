@@ -1,5 +1,5 @@
-import React, { useMemo } from 'react';
 import { castArray, uniq } from 'lodash';
+import React, { useMemo } from 'react';
 
 interface CategorizeTransactionTabsValue {
   uncategorizedTransactionIds: Array<number>;

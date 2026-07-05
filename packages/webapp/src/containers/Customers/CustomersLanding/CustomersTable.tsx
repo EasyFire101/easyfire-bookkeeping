@@ -1,30 +1,25 @@
 // @ts-nocheck
 import React from 'react';
 import { useHistory } from 'react-router-dom';
-
+import { ActionsMenu, useCustomersTableColumns } from './components';
 import { CustomersEmptyStatus } from './CustomersEmptyStatus';
-
-import { TABLES } from '@/constants/tables';
+import { useCustomersListContext } from './CustomersListProvider';
+import { withCustomers } from './withCustomers';
+import { withCustomersActions } from './withCustomersActions';
 import {
   DataTable,
   DashboardContentTable,
   TableSkeletonRows,
   TableSkeletonHeader,
 } from '@/components';
-import { ActionsMenu, useCustomersTableColumns } from './components';
-
-import { withCustomers } from './withCustomers';
-import { withCustomersActions } from './withCustomersActions';
+import { DRAWERS } from '@/constants/drawers';
+import { TABLES } from '@/constants/tables';
 import { withAlertActions } from '@/containers/Alert/withAlertActions';
 import { withDialogActions } from '@/containers/Dialog/withDialogActions';
 import { withDrawerActions } from '@/containers/Drawer/withDrawerActions';
 import { withSettings } from '@/containers/Settings/withSettings';
-
-import { useCustomersListContext } from './CustomersListProvider';
 import { useMemorizedColumnsWidths } from '@/hooks';
-
 import { compose } from '@/utils';
-import { DRAWERS } from '@/constants/drawers';
 
 /**
  * Customers table.

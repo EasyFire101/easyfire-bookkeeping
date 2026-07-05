@@ -1,6 +1,6 @@
-import { EstimateBulkDeleteDialog } from '@/containers/Dialogs/Estimates/EstimateBulkDeleteDialog';
-import { index as EstimatePdfPreviewDialog } from '@/containers/Dialogs/EstimatePdfPreviewDialog';
 import { DialogsName } from '@/constants/dialogs';
+import { index as EstimatePdfPreviewDialog } from '@/containers/Dialogs/EstimatePdfPreviewDialog';
+import { EstimateBulkDeleteDialog } from '@/containers/Dialogs/Estimates/EstimateBulkDeleteDialog';
 
 export function EstimatesListDialogs() {
   return (

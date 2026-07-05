@@ -1,13 +1,14 @@
-import React from 'react';
-import intl from 'react-intl-universal';
 import { Intent, Tag, Classes } from '@blueprintjs/core';
 import clsx from 'classnames';
-import { If, AppToaster } from '@/components';
+import React from 'react';
+import intl from 'react-intl-universal';
 import { NormalCell, BalanceCell, BankBalanceCell } from './components';
-import { transformTableStateToQuery, isBlank } from '@/utils';
-import type { Row } from 'react-table';
 import type { AccountTableRow } from './components';
 import type { DataTableColumn } from '@/components/Datatable/types';
+import type { Row } from 'react-table';
+import { If, AppToaster } from '@/components';
+import { transformTableStateToQuery, isBlank } from '@/utils';
+
 
 export const DeleteAccountTypeError = {
   AccountPredefined: 'account_predefined',

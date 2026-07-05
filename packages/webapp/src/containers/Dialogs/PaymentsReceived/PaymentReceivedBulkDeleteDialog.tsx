@@ -1,14 +1,13 @@
 // @ts-nocheck
-import React from 'react';
 import { Button, Classes, Dialog, Intent } from '@blueprintjs/core';
-import { FormattedMessage as T, AppToaster } from '@/components';
+import React from 'react';
 import intl from 'react-intl-universal';
-
-import { BulkDeleteDialogContent } from '@/containers/Dialogs/components/BulkDeleteDialogContent';
-import { useBulkDeletePaymentReceives } from '@/hooks/query/payment-receives';
+import { FormattedMessage as T, AppToaster } from '@/components';
 import withDialogRedux from '@/components/DialogReduxConnect';
 import { withDialogActions } from '@/containers/Dialog/withDialogActions';
+import { BulkDeleteDialogContent } from '@/containers/Dialogs/components/BulkDeleteDialogContent';
 import { withPaymentsReceivedActions } from '@/containers/Sales/PaymentsReceived/PaymentsLanding/withPaymentsReceivedActions';
+import { useBulkDeletePaymentReceives } from '@/hooks/query/payment-receives';
 import { compose } from '@/utils';
 
 function PaymentReceivedBulkDeleteDialogInner({

@@ -1,17 +1,16 @@
 // @ts-nocheck
+import { Classes } from '@blueprintjs/core';
+import { Form, useFormikContext } from 'formik';
+import { castArray } from 'lodash';
 import React from 'react';
 import intl from 'react-intl-universal';
 import styled from 'styled-components';
-import { Form, useFormikContext } from 'formik';
-import { Classes } from '@blueprintjs/core';
-import { castArray } from 'lodash';
-
+import { useSMSMessageDialogContext } from './SMSMessageDialogProvider';
 import { SMSMessageFormFields } from './SMSMessageFormFields';
 import { SMSMessageFormFloatingActions } from './SMSMessageFormFloatingActions';
-
-import { useSMSMessageDialogContext } from './SMSMessageDialogProvider';
 import { SMSMessagePreview } from '@/components';
 import { getSMSUnits } from '@/containers/NotifyViaSMS/utils';
+
 
 /**
  * SMS message form content.

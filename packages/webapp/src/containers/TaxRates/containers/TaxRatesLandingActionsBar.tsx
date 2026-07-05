@@ -1,6 +1,7 @@
 // @ts-nocheck
-import React from 'react';
 import { NavbarGroup, NavbarDivider, Button, Classes } from '@blueprintjs/core';
+import React from 'react';
+import { useHistory } from 'react-router-dom';
 import {
   DashboardActionsBar,
   FormattedMessage as T,
@@ -8,12 +9,10 @@ import {
   Icon,
 } from '@/components';
 import { AbilitySubject, TaxRateAction } from '@/constants/abilityOption';
-
-import { withDialogActions } from '@/containers/Dialog/withDialogActions';
-
 import { DialogsName } from '@/constants/dialogs';
+import { withDialogActions } from '@/containers/Dialog/withDialogActions';
 import { compose } from '@/utils';
-import { useHistory } from 'react-router-dom';
+
 
 /**
  * Tax rates actions bar.

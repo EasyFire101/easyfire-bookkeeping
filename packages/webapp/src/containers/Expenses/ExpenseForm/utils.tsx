@@ -1,14 +1,18 @@
 // @ts-nocheck
-import React from 'react';
-import * as R from 'ramda';
-import intl from 'react-intl-universal';
-import moment from 'moment';
-import { AppToaster } from '@/components';
 import { Intent } from '@blueprintjs/core';
 import { useFormikContext } from 'formik';
 import { first, sumBy } from 'lodash';
+import moment from 'moment';
+import * as R from 'ramda';
+import React from 'react';
+import intl from 'react-intl-universal';
 import { useExpenseFormContext } from './ExpenseFormPageProvider';
-
+import { AppToaster } from '@/components';
+import {
+  transformAttachmentsToForm,
+  transformAttachmentsToRequest,
+} from '@/containers/Attachments/utils';
+import { useCurrentOrganizationBaseCurrency } from '@/hooks/query';
 import {
   defaultFastFieldShouldUpdate,
   transformToForm,
@@ -17,11 +21,7 @@ import {
   orderingLinesIndexes,
   formattedAmount,
 } from '@/utils';
-import { useCurrentOrganizationBaseCurrency } from '@/hooks/query';
-import {
-  transformAttachmentsToForm,
-  transformAttachmentsToRequest,
-} from '@/containers/Attachments/utils';
+
 
 const ERROR = {
   EXPENSE_ALREADY_PUBLISHED: 'EXPENSE.ALREADY.PUBLISHED',

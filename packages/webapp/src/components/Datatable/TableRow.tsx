@@ -1,10 +1,9 @@
+import classNames from 'classnames';
 import React, { useCallback, useContext } from 'react';
+import useContextMenu from 'react-use-context-menu';
+import TableContext from './TableContext';
 import type { Row } from 'react-table';
 import { ContextMenu } from '@/components';
-import classNames from 'classnames';
-import useContextMenu from 'react-use-context-menu';
-
-import TableContext from './TableContext';
 import { saveInvoke, ConditionalWrapper } from '@/utils';
 
 interface TableRowContextMenuProps {

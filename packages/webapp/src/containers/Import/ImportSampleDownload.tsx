@@ -1,5 +1,4 @@
 // @ts-nocheck
-import { AppToaster, Box, Group } from '@/components';
 import {
   Button,
   Intent,
@@ -8,9 +7,10 @@ import {
   Popover,
   PopoverInteractionKind,
 } from '@blueprintjs/core';
-import styles from './ImportSampleDownload.module.scss';
-import { useSampleSheetImport } from '@/hooks/query/import';
 import { useImportFileContext } from './ImportFileProvider';
+import styles from './ImportSampleDownload.module.scss';
+import { AppToaster, Box, Group } from '@/components';
+import { useSampleSheetImport } from '@/hooks/query/import';
 
 export function ImportSampleDownload() {
   const { resource, sampleFileName, exampleTitle, exampleDescription } =

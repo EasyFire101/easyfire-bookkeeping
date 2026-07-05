@@ -1,13 +1,12 @@
 // @ts-nocheck
-import React from 'react';
 import { Classes, Button, Intent } from '@blueprintjs/core';
-import { FormattedMessage as T } from '@/components';
 import { useFormikContext } from 'formik';
-
-import { withDialogActions } from '@/containers/Dialog/withDialogActions';
+import React from 'react';
 import { useItemCategoryContext } from './ItemCategoryProvider';
-
+import { FormattedMessage as T } from '@/components';
+import { withDialogActions } from '@/containers/Dialog/withDialogActions';
 import { compose } from '@/utils';
+
 
 /**
  * Item category form footer.

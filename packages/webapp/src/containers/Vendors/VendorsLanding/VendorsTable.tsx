@@ -1,29 +1,26 @@
 // @ts-nocheck
 import React from 'react';
 import { useHistory } from 'react-router';
-
-import { TABLES } from '@/constants/tables';
+import { ActionsMenu, useVendorsTableColumns } from './components';
+import { VendorsEmptyStatus } from './VendorsEmptyStatus';
+import { useVendorsListContext } from './VendorsListProvider';
+import { withVendors } from './withVendors';
+import { withVendorsActions } from './withVendorsActions';
 import {
   DataTable,
   TableSkeletonRows,
   TableSkeletonHeader,
   DashboardContentTable,
 } from '@/components';
-
-import { VendorsEmptyStatus } from './VendorsEmptyStatus';
-import { useVendorsListContext } from './VendorsListProvider';
-import { useMemorizedColumnsWidths } from '@/hooks';
-import { ActionsMenu, useVendorsTableColumns } from './components';
-
-import { withVendors } from './withVendors';
-import { withVendorsActions } from './withVendorsActions';
+import { DRAWERS } from '@/constants/drawers';
+import { TABLES } from '@/constants/tables';
 import { withAlertActions } from '@/containers/Alert/withAlertActions';
 import { withDialogActions } from '@/containers/Dialog/withDialogActions';
 import { withDrawerActions } from '@/containers/Drawer/withDrawerActions';
 import { withSettings } from '@/containers/Settings/withSettings';
-
+import { useMemorizedColumnsWidths } from '@/hooks';
 import { compose } from '@/utils';
-import { DRAWERS } from '@/constants/drawers';
+
 
 /**
  * Vendors table.

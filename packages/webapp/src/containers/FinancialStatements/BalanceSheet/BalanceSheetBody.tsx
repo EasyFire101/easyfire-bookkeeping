@@ -1,7 +1,7 @@
 import React from 'react';
-import { BalanceSheetTable } from './BalanceSheetTable';
 import { FinancialReportBody } from '../FinancialReportPage';
 import { useBalanceSheetContext } from './BalanceSheetProvider';
+import { BalanceSheetTable } from './BalanceSheetTable';
 import { FinancialSheetSkeleton } from '@/components';
 import { useCurrentOrganizationName } from '@/hooks/query';
 

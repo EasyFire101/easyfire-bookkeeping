@@ -1,19 +1,18 @@
 // @ts-nocheck
-import React from 'react';
-import intl from 'react-intl-universal';
 import { Intent } from '@blueprintjs/core';
 import { Formik } from 'formik';
+import React from 'react';
+import intl from 'react-intl-universal';
 
 import '@/style/pages/TransactionsLocking/TransactionsLockingDialog.scss';
 
-import { AppToaster } from '@/components';
 import { CreateUnlockingTransactionsFormSchema } from './UnlockingTransactionsForm.schema';
-
-import { useUnlockingTransactionsContext } from './UnlockingTransactionsFormProvider';
 import { UnlockingTransactionsFormContent } from './UnlockingTransactionsFormContent';
-
+import { useUnlockingTransactionsContext } from './UnlockingTransactionsFormProvider';
+import { AppToaster } from '@/components';
 import { withDialogActions } from '@/containers/Dialog/withDialogActions';
 import { compose } from '@/utils';
+
 
 const defaultInitialValues = {
   module: '',

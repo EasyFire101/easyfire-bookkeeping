@@ -1,28 +1,24 @@
-import intl from 'react-intl-universal';
+import { Intent } from '@blueprintjs/core';
 import { css } from '@emotion/css';
 import { Formik, Form, FormikHelpers } from 'formik';
-import { Intent } from '@blueprintjs/core';
 import { sumBy, isEmpty, defaultTo } from 'lodash';
+import intl from 'react-intl-universal';
 import { useHistory } from 'react-router-dom';
-import {
-  CreateEstimateFormSchema,
-  EditEstimateFormSchema,
-} from './EstimateForm.schema';
-import { EstimateFormHeader } from './EstimateFormHeader';
-import { EstimateFormItemsEntriesField as EstimateItemsEntriesField } from './EstimateItemsEntriesField';
-import { EstimateFloatingActions } from './EstimateFloatingActions';
-import { EstiamteFormFooter as EstimateFormFooter } from './EstimateFormFooter';
-import { EstimateFormDialogs } from './EstimateFormDialogs';
-import { EstimtaeFormTopBar } from './EstimtaeFormTopBar';
 import {
   EstimateIncrementSyncSettingsToForm,
   EstimateSyncAutoExRateToForm,
 } from './components';
-import { withSettings } from '@/containers/Settings/withSettings';
-import { AppToaster } from '@/components';
-import { compose, transactionNumber, orderingLinesIndexes } from '@/utils';
-import { useCurrentOrganizationBaseCurrency } from '@/hooks/query';
+import { EstimateFloatingActions } from './EstimateFloatingActions';
+import {
+  CreateEstimateFormSchema,
+  EditEstimateFormSchema,
+} from './EstimateForm.schema';
+import { EstimateFormDialogs } from './EstimateFormDialogs';
+import { EstiamteFormFooter as EstimateFormFooter } from './EstimateFormFooter';
+import { EstimateFormHeader } from './EstimateFormHeader';
 import { useEstimateFormContext } from './EstimateFormProvider';
+import { EstimateFormItemsEntriesField as EstimateItemsEntriesField } from './EstimateItemsEntriesField';
+import { EstimtaeFormTopBar } from './EstimtaeFormTopBar';
 import {
   transformToEditForm,
   defaultEstimate,
@@ -30,8 +26,12 @@ import {
   handleErrors,
   resetFormState,
 } from './utils';
-import { PageForm } from '@/components/PageForm';
 import type { EstimateFormValues } from './utils';
+import { AppToaster } from '@/components';
+import { PageForm } from '@/components/PageForm';
+import { withSettings } from '@/containers/Settings/withSettings';
+import { useCurrentOrganizationBaseCurrency } from '@/hooks/query';
+import { compose, transactionNumber, orderingLinesIndexes } from '@/utils';
 
 type EstimateFormRootProps = {
   estimateNextNumber?: number;

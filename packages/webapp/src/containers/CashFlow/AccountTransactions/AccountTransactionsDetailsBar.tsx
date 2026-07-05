@@ -1,7 +1,3 @@
-import React from 'react';
-import intl from 'react-intl-universal';
-import styled from 'styled-components';
-import { useHistory } from 'react-router-dom';
 import {
   Popover,
   Menu,
@@ -10,9 +6,12 @@ import {
   MenuItem,
   Classes,
 } from '@blueprintjs/core';
-import { Icon } from '@/components';
-
+import React from 'react';
+import intl from 'react-intl-universal';
+import { useHistory } from 'react-router-dom';
+import styled from 'styled-components';
 import { useAccountTransactionsContext } from './AccountTransactionsProvider';
+import { Icon } from '@/components';
 import { useAppShellContext } from '@/components/AppShell/AppContentShell/AppContentShellProvider';
 
 function AccountSwitchButton() {

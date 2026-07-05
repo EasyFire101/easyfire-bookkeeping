@@ -2,14 +2,14 @@ import React from 'react';
 
 import '@/style/pages/ItemsCategories/List.scss';
 
-import { DashboardContentTable, DashboardPageContent } from '@/components';
-import { ItemsCategoriesProvider } from './ItemsCategoriesProvider';
-
 import { ItemCategoriesTable } from './ItemCategoriesTable';
+import { ItemsCategoriesProvider } from './ItemsCategoriesProvider';
 import { ItemsCategoryActionsBar } from './ItemsCategoryActionsBar';
 import { withItemCategories } from './withItemCategories';
 import type { WithItemCategoriesProps } from './withItemCategories';
+import { DashboardContentTable, DashboardPageContent } from '@/components';
 import { compose } from '@/utils';
+
 
 interface ItemCategoryListProps
   extends Pick<WithItemCategoriesProps, 'itemsCategoriesTableState'> {}

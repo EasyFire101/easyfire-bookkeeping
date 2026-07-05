@@ -1,15 +1,15 @@
 // @ts-nocheck
-import React from 'react';
 import { Classes } from '@blueprintjs/core';
+import React from 'react';
+import intl from 'react-intl-universal';
 import {
   FieldRequiredHint,
   FFormGroup,
   FInputGroup,
   FTextArea,
 } from '@/components';
-
 import { useAutofocus } from '@/hooks';
-import intl from 'react-intl-universal';
+
 
 /**
  * Item category form fields.

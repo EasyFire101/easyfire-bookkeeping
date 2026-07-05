@@ -1,5 +1,5 @@
-import React from 'react';
 import { x } from '@xstyled/emotion';
+import React from 'react';
 import { SetupWizardContent } from './SetupWizardContent';
 import { useCurrentOrganization, useSubscription } from '@/hooks/query';
 import { useIsOrganizationSetupCompleted } from '@/hooks/state';

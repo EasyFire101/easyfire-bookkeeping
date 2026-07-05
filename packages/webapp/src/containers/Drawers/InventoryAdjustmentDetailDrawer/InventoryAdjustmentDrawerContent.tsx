@@ -1,8 +1,7 @@
 import React from 'react';
-
-import { DrawerBody } from '@/components';
-import { InventoryAdjustmentDrawerProvider } from './InventoryAdjustmentDrawerProvider';
 import { InventoryAdjustmentDetail } from './InventoryAdjustmentDetail';
+import { InventoryAdjustmentDrawerProvider } from './InventoryAdjustmentDrawerProvider';
+import { DrawerBody } from '@/components';
 
 interface InventoryAdjustmentDrawerContentProps {
   inventoryId: number | undefined;

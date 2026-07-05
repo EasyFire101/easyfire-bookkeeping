@@ -1,17 +1,14 @@
 // @ts-nocheck
+import { Intent } from '@blueprintjs/core';
+import { Formik } from 'formik';
 import React from 'react';
 import intl from 'react-intl-universal';
-
-import { Formik } from 'formik';
-import { Intent } from '@blueprintjs/core';
-
-import { AppToaster } from '@/components';
-import { useBranchActivateContext } from './BranchActivateFormProvider';
 import { BranchActivateFormContent } from './BranchActivateFormContent';
-
+import { useBranchActivateContext } from './BranchActivateFormProvider';
+import { AppToaster } from '@/components';
 import { withDialogActions } from '@/containers/Dialog/withDialogActions';
-
 import { compose } from '@/utils';
+
 
 /**
  * Branch activate form.

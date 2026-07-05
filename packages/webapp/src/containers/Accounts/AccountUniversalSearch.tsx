@@ -1,10 +1,10 @@
 import intl from 'react-intl-universal';
-import type { Account } from '@bigcapital/sdk-ts';
-import { withDrawerActions } from '@/containers/Drawer/withDrawerActions';
-import { AbilitySubject, AccountAction } from '@/constants/abilityOption';
-import { RESOURCES_TYPES } from '@/constants/resourcesTypes';
-import { DRAWERS } from '@/constants/drawers';
 import type { WithDrawerActionsProps } from '@/containers/Drawer/withDrawerActions';
+import type { Account } from '@bigcapital/sdk-ts';
+import { AbilitySubject, AccountAction } from '@/constants/abilityOption';
+import { DRAWERS } from '@/constants/drawers';
+import { RESOURCES_TYPES } from '@/constants/resourcesTypes';
+import { withDrawerActions } from '@/containers/Drawer/withDrawerActions';
 
 interface AccountUniversalSearchItemSelectProps extends WithDrawerActionsProps {
   resourceType: string;

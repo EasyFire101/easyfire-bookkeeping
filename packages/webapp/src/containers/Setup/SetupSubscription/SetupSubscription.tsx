@@ -1,11 +1,10 @@
 // @ts-nocheck
-import { useEffect } from 'react';
 import * as R from 'ramda';
-
-import { Box } from '@/components';
-import { SubscriptionPlansSection } from './SubscriptionPlansSection';
+import { useEffect } from 'react';
 import { withSubscriptionPlansActions } from '../../Subscriptions/withSubscriptionPlansActions';
 import styles from './SetupSubscription.module.scss';
+import { SubscriptionPlansSection } from './SubscriptionPlansSection';
+import { Box } from '@/components';
 
 /**
  * Subscription step of wizard setup.

@@ -1,9 +1,8 @@
 import React from 'react';
 import intl from 'react-intl-universal';
-import { PageForm, PageFormBigNumber } from '@/components';
-
 import { BillFormHeaderFields } from './BillFormHeaderFields';
 import { useBillTotalFormatted } from './utils';
+import { PageForm, PageFormBigNumber } from '@/components';
 
 /**
  * Fill form header.

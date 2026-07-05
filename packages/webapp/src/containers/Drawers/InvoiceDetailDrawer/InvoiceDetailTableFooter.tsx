@@ -1,5 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
+import { useInvoiceDetailDrawerContext } from './InvoiceDetailDrawerProvider';
 import {
   T,
   TotalLines,
@@ -7,7 +8,6 @@ import {
   TotalLineBorderStyle,
   TotalLineTextStyle,
 } from '@/components';
-import { useInvoiceDetailDrawerContext } from './InvoiceDetailDrawerProvider';
 
 /**
  * Invoice details footer.

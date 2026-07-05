@@ -1,9 +1,9 @@
 // @ts-nocheck
-import React from 'react';
-import { Card, DetailItem, DetailsMenu } from '@/components';
-import { useTaxRateDetailsContext } from './TaxRateDetailsContentBoot';
 import { Intent, Tag } from '@blueprintjs/core';
+import React from 'react';
 import styled from 'styled-components';
+import { useTaxRateDetailsContext } from './TaxRateDetailsContentBoot';
+import { Card, DetailItem, DetailsMenu } from '@/components';
 
 export function TaxRateDetailsContentDetails() {
   const { taxRate } = useTaxRateDetailsContext();

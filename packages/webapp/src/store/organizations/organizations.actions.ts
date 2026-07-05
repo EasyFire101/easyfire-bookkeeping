@@ -1,5 +1,5 @@
-import { SET_ORGANIZATION_CONGRATS } from '@/store/types';
 import type { RootState } from '@/store/reducers';
+import { SET_ORGANIZATION_CONGRATS } from '@/store/types';
 
 export const setOrganizationSetupCompleted =
   (congrats: boolean) => (dispatch: any, getState: () => RootState) => {

@@ -1,8 +1,8 @@
 import React from 'react';
-import { index as InvoicePaymentTransactions } from './InvoicePaymentTransactions';
-import { index as EstimatePaymentTransactions } from './EstimatePaymentTransactions';
-import { index as ReceiptPaymentTransactions } from './ReceiptPaymentTransactions';
 import { index as BillPaymentTransactions } from './BillPaymentTransactions';
+import { index as EstimatePaymentTransactions } from './EstimatePaymentTransactions';
+import { index as InvoicePaymentTransactions } from './InvoicePaymentTransactions';
+import { index as ReceiptPaymentTransactions } from './ReceiptPaymentTransactions';
 
 interface ItemPaymentTransactionsContentProps {
   transactionType: string;

@@ -1,6 +1,8 @@
 // @ts-nocheck
 import React from 'react';
 import intl from 'react-intl-universal';
+import { useItemFormContext } from './ItemFormProvider';
+import { accountsFieldShouldUpdate } from './utils';
 import {
   AccountsSelect,
   FFormGroup,
@@ -8,9 +10,7 @@ import {
   Col,
   Row,
 } from '@/components';
-import { accountsFieldShouldUpdate } from './utils';
 import { ACCOUNT_TYPE } from '@/constants/accountTypes';
-import { useItemFormContext } from './ItemFormProvider';
 import { useCurrentOrganizationBaseCurrency } from '@/hooks/query';
 
 /**

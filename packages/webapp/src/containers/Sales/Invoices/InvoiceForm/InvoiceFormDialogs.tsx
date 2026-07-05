@@ -1,8 +1,8 @@
 import { useFormikContext } from 'formik';
+import type { InvoiceFormValues } from './utils';
+import { DialogsName } from '@/constants/dialogs';
 import { index as InvoiceNumberDialog } from '@/containers/Dialogs/InvoiceNumberDialog';
 import { InvoiceExchangeRateChangeDialog } from '@/containers/Sales/Invoices/InvoiceForm/Dialogs/InvoiceExchangeRateChangeDialog';
-import { DialogsName } from '@/constants/dialogs';
-import type { InvoiceFormValues } from './utils';
 
 type InvoiceNumberSettings = {
   transactionNumber: string;

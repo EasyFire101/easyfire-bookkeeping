@@ -1,7 +1,7 @@
 import React from 'react';
-import { CommercialDocEntriesTable } from '@/components';
-import { useInvoiceReadonlyEntriesColumns } from './utils';
 import { useInvoiceDetailDrawerContext } from './InvoiceDetailDrawerProvider';
+import { useInvoiceReadonlyEntriesColumns } from './utils';
+import { CommercialDocEntriesTable } from '@/components';
 import { TableStyle } from '@/constants';
 
 /**

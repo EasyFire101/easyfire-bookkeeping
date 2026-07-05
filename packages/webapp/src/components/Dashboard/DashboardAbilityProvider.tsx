@@ -1,7 +1,6 @@
-import React from 'react';
 import { Ability, AnyAbility } from '@casl/ability';
 import { createContextualCan } from '@casl/react';
-
+import React from 'react';
 import { useDashboardMetaBoot } from './DashboardBoot';
 
 export const AbilityContext = React.createContext<AnyAbility | undefined>(

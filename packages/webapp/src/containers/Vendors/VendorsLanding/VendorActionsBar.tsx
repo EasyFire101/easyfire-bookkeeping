@@ -1,5 +1,4 @@
 // @ts-nocheck
-import React from 'react';
 import {
   NavbarGroup,
   NavbarDivider,
@@ -9,7 +8,13 @@ import {
   Switch,
   Alignment,
 } from '@blueprintjs/core';
-
+import { isEmpty } from 'lodash';
+import React from 'react';
+import { useHistory } from 'react-router-dom';
+import { useBulkDeleteVendorsDialog } from './hooks/use-bulk-delete-vendors-dialog';
+import { useVendorsListContext } from './VendorsListProvider';
+import { withVendors } from './withVendors';
+import { withVendorsActions } from './withVendorsActions';
 import {
   Can,
   Icon,
@@ -20,24 +25,15 @@ import {
   DashboardRowsHeightButton,
   AdvancedFilterPopover,
 } from '@/components';
-
 import { VendorAction, AbilitySubject } from '@/constants/abilityOption';
-
-import { useRefreshVendors } from '@/hooks/query/vendors';
-import { useVendorsListContext } from './VendorsListProvider';
-import { useHistory } from 'react-router-dom';
-import { useDownloadExportPdf } from '@/hooks/query/FinancialReports/use-export-pdf';
-import { useBulkDeleteVendorsDialog } from './hooks/use-bulk-delete-vendors-dialog';
-import { isEmpty } from 'lodash';
-
-import { withVendors } from './withVendors';
-import { withVendorsActions } from './withVendorsActions';
+import { DialogsName } from '@/constants/dialogs';
+import { withDialogActions } from '@/containers/Dialog/withDialogActions';
 import { withSettings } from '@/containers/Settings/withSettings';
 import { withSettingsActions } from '@/containers/Settings/withSettingsActions';
-import { withDialogActions } from '@/containers/Dialog/withDialogActions';
-
+import { useDownloadExportPdf } from '@/hooks/query/FinancialReports/use-export-pdf';
+import { useRefreshVendors } from '@/hooks/query/vendors';
 import { compose } from '@/utils';
-import { DialogsName } from '@/constants/dialogs';
+
 
 /**
  * Vendors actions bar.

@@ -1,6 +1,6 @@
 // @ts-nocheck
-import React from 'react';
 import { Position, Tooltip } from '@blueprintjs/core';
+import React from 'react';
 import { Icon } from '../Icon';
 
 import '@/style/components/Hint.scss';

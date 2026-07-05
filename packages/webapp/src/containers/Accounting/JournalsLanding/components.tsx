@@ -1,4 +1,3 @@
-import React from 'react';
 import {
   Intent,
   Classes,
@@ -11,9 +10,9 @@ import {
   MenuDivider,
   Popover,
 } from '@blueprintjs/core';
+import React from 'react';
 import intl from 'react-intl-universal';
 import type { ManualJournal } from '@bigcapital/sdk-ts';
-
 import {
   Can,
   FormattedMessage as T,

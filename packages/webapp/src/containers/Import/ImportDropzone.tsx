@@ -1,9 +1,9 @@
 // @ts-nocheck
 import { Field } from 'formik';
-import { Box, Group, Stack } from '@/components';
+import { useAlertsManager } from './AlertsManager';
 import styles from './ImportDropzone.module.css';
 import { ImportDropzoneField } from './ImportDropzoneFile';
-import { useAlertsManager } from './AlertsManager';
+import { Box, Group, Stack } from '@/components';
 
 export function ImportDropzone() {
   const { hideAlerts } = useAlertsManager();

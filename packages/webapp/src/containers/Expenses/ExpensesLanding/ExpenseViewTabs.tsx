@@ -1,15 +1,13 @@
-import React from 'react';
 import { Alignment, Navbar, NavbarGroup } from '@blueprintjs/core';
-
-import { DashboardViewsTabs } from '@/components';
-
+import React from 'react';
 import { useExpensesListContext } from './ExpensesListProvider';
 import { withExpenses } from './withExpenses';
-import type { WithExpensesProps } from './withExpenses';
 import { withExpensesActions } from './withExpensesActions';
+import type { WithExpensesProps } from './withExpenses';
 import type { WithExpensesActionsProps } from './withExpensesActions';
-
+import { DashboardViewsTabs } from '@/components';
 import { compose, transfromViewsToTabs } from '@/utils';
+
 
 interface ExpenseViewTabsInnerProps extends WithExpensesActionsProps {
   expensesCurrentView: WithExpensesProps['expensesTableState']['viewSlug'];

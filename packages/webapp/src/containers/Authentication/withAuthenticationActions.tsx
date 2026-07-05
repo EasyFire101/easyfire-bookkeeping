@@ -1,6 +1,6 @@
 import { ComponentType } from 'react';
-import { Dispatch } from 'redux';
 import { connect } from 'react-redux';
+import { Dispatch } from 'redux';
 
 export interface WithAuthenticationActionsProps {
   // Reserved for future authentication actions (login/logout/register/etc.).

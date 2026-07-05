@@ -1,15 +1,16 @@
 import React, { useEffect } from 'react';
+
 import '@/style/pages/CashFlow/CashFlowAccounts/List.scss';
-import { DashboardPageContent } from '@/components';
-import { CashFlowAccountsProvider } from './CashFlowAccountsProvider';
-import { CashflowAccountsGrid } from './CashflowAccountsGrid';
 import { CashFlowAccountsActionsBar } from './CashFlowAccountsActionsBar';
-import { CashflowAccountsPlaidLink } from './CashflowAccountsPlaidLink';
+import { CashflowAccountsGrid } from './CashflowAccountsGrid';
 import { CashflowAccountsLoadingBar } from './CashFlowAccountsLoadingBar';
-import { withCashflowAccounts } from '@/containers/CashFlow/AccountTransactions/withCashflowAccounts';
+import { CashflowAccountsPlaidLink } from './CashflowAccountsPlaidLink';
+import { CashFlowAccountsProvider } from './CashFlowAccountsProvider';
 import type { WithCashflowAccountsProps } from '@/containers/CashFlow/AccountTransactions/withCashflowAccounts';
-import { withCashflowAccountsTableActions } from '@/containers/CashFlow/AccountTransactions/withCashflowAccountsTableActions';
 import type { WithCashflowAccountsTableActionsProps } from '@/containers/CashFlow/AccountTransactions/withCashflowAccountsTableActions';
+import { DashboardPageContent } from '@/components';
+import { withCashflowAccounts } from '@/containers/CashFlow/AccountTransactions/withCashflowAccounts';
+import { withCashflowAccountsTableActions } from '@/containers/CashFlow/AccountTransactions/withCashflowAccountsTableActions';
 import { CashFlowDrawers } from '@/containers/CashFlow/CashFlowDrawers';
 import { compose } from '@/utils';
 

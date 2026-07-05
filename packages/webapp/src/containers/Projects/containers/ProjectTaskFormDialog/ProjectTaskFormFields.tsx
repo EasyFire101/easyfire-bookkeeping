@@ -1,7 +1,9 @@
 // @ts-nocheck
-import React from 'react';
-import { useFormikContext } from 'formik';
 import { Classes, ControlGroup } from '@blueprintjs/core';
+import { useFormikContext } from 'formik';
+import React from 'react';
+import intl from 'react-intl-universal';
+import { EstimateAmount } from './utils';
 import {
   FFormGroup,
   FInputGroup,
@@ -9,9 +11,7 @@ import {
   Row,
   InputPrependText,
 } from '@/components';
-import { EstimateAmount } from './utils';
 import { useCurrentOrganizationBaseCurrency } from '@/hooks/query';
-import intl from 'react-intl-universal';
 
 /**
  * Project task form fields.

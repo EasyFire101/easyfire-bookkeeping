@@ -1,6 +1,6 @@
-import * as Yup from 'yup';
-import intl from 'react-intl-universal';
 import moment from 'moment';
+import intl from 'react-intl-universal';
+import * as Yup from 'yup';
 import { DATATYPES_LENGTH } from '@/constants/dataTypes';
 import { isBlank } from '@/utils';
 

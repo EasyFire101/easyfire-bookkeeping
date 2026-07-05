@@ -1,6 +1,6 @@
 // @ts-nocheck
-import React from 'react';
 import { isEmpty } from 'lodash';
+import React from 'react';
 import { DashboardInsider } from '@/components/Dashboard';
 import {
   useResourceViews,
@@ -8,7 +8,6 @@ import {
   useWarehousesTransfers,
   useRefreshWarehouseTransfers,
 } from '@/hooks/query';
-
 import { getFieldsFromResourceMeta } from '@/utils';
 
 const WarehouseTransfersListContext = React.createContext();

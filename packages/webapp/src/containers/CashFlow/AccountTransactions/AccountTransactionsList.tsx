@@ -1,21 +1,22 @@
-import React, { Suspense, lazy } from 'react';
 import { Spinner } from '@blueprintjs/core';
+import React, { Suspense, lazy } from 'react';
+
 import '@/style/pages/CashFlow/AccountTransactions/List.scss';
-import { DashboardPageContent } from '@/components';
+import { withBanking } from '../withBanking';
 import { AccountTransactionsActionsBar } from './AccountTransactionsActionsBar';
+import { AccountTransactionsAside } from './AccountTransactionsAside';
+import { AccountTransactionsDetailsBar } from './AccountTransactionsDetailsBar';
+import { AccountTransactionsFilterTabs } from './AccountTransactionsFilterTabs';
 import {
   AccountTransactionsProvider,
   useAccountTransactionsContext,
 } from './AccountTransactionsProvider';
-import { AccountTransactionsDetailsBar } from './AccountTransactionsDetailsBar';
-import { AccountTransactionsFilterTabs } from './AccountTransactionsFilterTabs';
-import { AppContentShell } from '@/components/AppShell';
-import { AccountTransactionsAside } from './AccountTransactionsAside';
 import { AccountTransactionsLoadingBar } from './components';
-import { withBanking } from '../withBanking';
+import type { WithBankingProps } from '../withBanking';
+import { DashboardPageContent } from '@/components';
+import { AppContentShell } from '@/components/AppShell';
 import { CashFlowDrawers } from '@/containers/CashFlow/CashFlowDrawers';
 import { compose } from '@/utils';
-import type { WithBankingProps } from '../withBanking';
 
 interface AccountTransactionsListRootProps
   extends Pick<WithBankingProps, 'openMatchingTransactionAside'> {}

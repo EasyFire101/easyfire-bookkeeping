@@ -1,19 +1,3 @@
-import { useEffect } from 'react';
-import {
-  useMutation,
-  useQuery,
-  useQueryClient,
-  UseMutationOptions,
-  UseQueryOptions,
-} from '@tanstack/react-query';
-import type {
-  UsersListResponse,
-  User,
-  EditUserBody,
-  InviteUserBody,
-  AuthedAccount,
-  GetDashboardBootMetaResponse,
-} from '@bigcapital/sdk-ts';
 import {
   fetchUsers,
   fetchUser,
@@ -25,10 +9,26 @@ import {
   fetchAuthedAccount,
   fetchDashboardBootMeta,
 } from '@bigcapital/sdk-ts';
-import { useApiFetcher } from '../../useRequest';
-import { useSetFeatureDashboardMeta } from '../../state/feature';
-import { usersKeys } from './query-keys';
+import {
+  useMutation,
+  useQuery,
+  useQueryClient,
+  UseMutationOptions,
+  UseQueryOptions,
+} from '@tanstack/react-query';
+import { useEffect } from 'react';
 import { useSetAuthEmailConfirmed } from '../../state';
+import { useSetFeatureDashboardMeta } from '../../state/feature';
+import { useApiFetcher } from '../../useRequest';
+import { usersKeys } from './query-keys';
+import type {
+  UsersListResponse,
+  User,
+  EditUserBody,
+  InviteUserBody,
+  AuthedAccount,
+  GetDashboardBootMetaResponse,
+} from '@bigcapital/sdk-ts';
 
 const commonInvalidateQueries = (
   queryClient: ReturnType<typeof useQueryClient>,

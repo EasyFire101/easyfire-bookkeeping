@@ -1,5 +1,4 @@
 // @ts-nocheck
-import React from 'react';
 import {
   Button,
   NavbarGroup,
@@ -7,6 +6,9 @@ import {
   NavbarDivider,
   Alignment,
 } from '@blueprintjs/core';
+import React from 'react';
+import { withProjects } from './withProjects';
+import { withProjectsActions } from './withProjectsActions';
 import {
   Icon,
   Can,
@@ -16,15 +18,11 @@ import {
   DashboardActionsBar,
 } from '@/components';
 import { ProjectAction, AbilitySubject } from '@/constants/abilityOption';
-
-import { withProjects } from './withProjects';
-import { withProjectsActions } from './withProjectsActions';
+import { DialogsName } from '@/constants/dialogs';
+import { withDialogActions } from '@/containers/Dialog/withDialogActions';
 import { withSettings } from '@/containers/Settings/withSettings';
 import { withSettingsActions } from '@/containers/Settings/withSettingsActions';
-import { withDialogActions } from '@/containers/Dialog/withDialogActions';
-
 import { compose } from '@/utils';
-import { DialogsName } from '@/constants/dialogs';
 
 /**
  * Projects actions bar.

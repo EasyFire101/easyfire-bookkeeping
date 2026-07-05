@@ -1,8 +1,8 @@
-import { CommercialDocBox } from '@/components';
+import { EstimateDetailFooter } from './EstimateDetailFooter';
 import { EstimateDetailHeader } from './EstimateDetailHeader';
 import { EstimateDetailTable } from './EstimateDetailTable';
 import { EstimateDetailTableFooter } from './EstimateDetailTableFooter';
-import { EstimateDetailFooter } from './EstimateDetailFooter';
+import { CommercialDocBox } from '@/components';
 
 export function EstimateDetailTab() {
   return (

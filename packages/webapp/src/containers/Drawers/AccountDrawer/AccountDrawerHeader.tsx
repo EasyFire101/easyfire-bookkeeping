@@ -1,9 +1,8 @@
-import React from 'react';
 import { isEmpty } from 'lodash';
-
-import { Icon, DetailsMenu, DetailItem } from '@/components';
-import { useAccountDrawerContext } from './AccountDrawerProvider';
+import React from 'react';
 import intl from 'react-intl-universal';
+import { useAccountDrawerContext } from './AccountDrawerProvider';
+import { Icon, DetailsMenu, DetailItem } from '@/components';
 
 /**
  *  Account drawer header.

@@ -1,9 +1,10 @@
 // @ts-nocheck
+import { useFormikContext } from 'formik';
+import { first } from 'lodash';
 import React, { useMemo } from 'react';
 import intl from 'react-intl-universal';
-import { useFormikContext } from 'formik';
 import { useInventoryAdjContext } from './InventoryAdjustmentFormProvider';
-import { first } from 'lodash';
+
 
 export const decrementQuantity = (newQuantity, quantityOnHand) => {
   return quantityOnHand - newQuantity;

@@ -1,5 +1,3 @@
-import React from 'react';
-import { useHistory } from 'react-router-dom';
 import {
   NavbarGroup,
   NavbarDivider,
@@ -9,6 +7,17 @@ import {
   Switch,
   Alignment,
 } from '@blueprintjs/core';
+import { isEmpty } from 'lodash';
+import React from 'react';
+import { useHistory } from 'react-router-dom';
+import { useBulkDeleteItemsDialog } from './hooks/use-bulk-delete-items-dialog';
+import { useItemsListContext } from './ItemsListProvider';
+import { withItems } from './withItems';
+import { withItemsActions } from './withItemsActions';
+import type { WithItemsProps } from './withItems';
+import type { WithItemsActionsProps } from './withItemsActions';
+import type { WithDialogActionsProps } from '@/containers/Dialog/withDialogActions';
+import type { WithSettingsActionsProps } from '@/containers/Settings/withSettingsActions';
 import {
   DashboardActionsBar,
   DashboardRowsHeightButton,
@@ -22,26 +31,17 @@ import {
   AdvancedFilterPopover,
   DashboardFilterButton,
 } from '@/components';
-
 import { ItemAction, AbilitySubject } from '@/constants/abilityOption';
-import { useItemsListContext } from './ItemsListProvider';
-import { useRefreshItems } from '@/hooks/query/items';
-import { useDownloadExportPdf } from '@/hooks/query/FinancialReports/use-export-pdf';
-
-import { withItems } from './withItems';
-import type { WithItemsProps } from './withItems';
-import { withItemsActions } from './withItemsActions';
-import type { WithItemsActionsProps } from './withItemsActions';
+import { DialogsName } from '@/constants/dialogs';
+import { withDialogActions } from '@/containers/Dialog/withDialogActions';
 import { withSettings } from '@/containers/Settings/withSettings';
 import { withSettingsActions } from '@/containers/Settings/withSettingsActions';
-import type { WithSettingsActionsProps } from '@/containers/Settings/withSettingsActions';
-import { withDialogActions } from '@/containers/Dialog/withDialogActions';
-import type { WithDialogActionsProps } from '@/containers/Dialog/withDialogActions';
-
-import { DialogsName } from '@/constants/dialogs';
+import { useDownloadExportPdf } from '@/hooks/query/FinancialReports/use-export-pdf';
+import { useRefreshItems } from '@/hooks/query/items';
 import { compose } from '@/utils';
-import { isEmpty } from 'lodash';
-import { useBulkDeleteItemsDialog } from './hooks/use-bulk-delete-items-dialog';
+
+
+
 
 interface WithSettingsProps {
   itemsTableSize?: string | null;

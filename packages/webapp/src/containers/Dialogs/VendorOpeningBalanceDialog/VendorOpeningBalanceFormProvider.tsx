@@ -1,14 +1,14 @@
 // @ts-nocheck
 import React from 'react';
+import { transfromVendorToForm } from './utils';
 import { DialogContent } from '@/components';
+import { Features } from '@/constants';
 import {
   useBranches,
   useVendor,
   useEditVendorOpeningBalance,
 } from '@/hooks/query';
 import { useFeatureCan } from '@/hooks/state';
-import { Features } from '@/constants';
-import { transfromVendorToForm } from './utils';
 
 const VendorOpeningBalanceContext = React.createContext();
 

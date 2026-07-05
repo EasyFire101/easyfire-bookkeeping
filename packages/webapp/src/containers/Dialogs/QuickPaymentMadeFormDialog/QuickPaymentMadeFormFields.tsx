@@ -1,14 +1,13 @@
 // @ts-nocheck
+import { Classes, Position, ControlGroup } from '@blueprintjs/core';
+import classNames from 'classnames';
+import { FastField, useFormikContext } from 'formik';
+import { isEqual } from 'lodash';
 import React from 'react';
 import intl from 'react-intl-universal';
 import styled from 'styled-components';
-import { FastField, useFormikContext } from 'formik';
-import { isEqual } from 'lodash';
-import { Classes, Position, ControlGroup } from '@blueprintjs/core';
-import { useAutofocus } from '@/hooks';
-import classNames from 'classnames';
-import { CLASSES, ACCOUNT_TYPE, Features } from '@/constants';
-
+import { useQuickPaymentMadeContext } from './QuickPaymentMadeFormProvider';
+import { useSetPrimaryBranchToForm } from './utils';
 import {
   FieldRequiredHint,
   Col,
@@ -27,11 +26,11 @@ import {
   FTextArea,
   FMoneyInputGroup,
 } from '@/components';
-import { inputIntent, momentFormatter } from '@/utils';
-import { useSetPrimaryBranchToForm } from './utils';
-import { useQuickPaymentMadeContext } from './QuickPaymentMadeFormProvider';
-
+import { CLASSES, ACCOUNT_TYPE, Features } from '@/constants';
+import { useAutofocus } from '@/hooks';
 import { useCurrentOrganizationBaseCurrency } from '@/hooks/query';
+import { inputIntent, momentFormatter } from '@/utils';
+
 
 /**
  * Quick payment made form fields.

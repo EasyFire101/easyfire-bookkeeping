@@ -1,22 +1,21 @@
 // @ts-nocheck
-import React from 'react';
 import { Intent, Classes, Button } from '@blueprintjs/core';
-import { Form, useFormikContext } from 'formik';
 import classNames from 'classnames';
-
+import { Form, useFormikContext } from 'formik';
+import React from 'react';
+import intl from 'react-intl-universal';
+import { UserFormCalloutAlerts } from './components';
+import { useUserFormContext } from './UserFormProvider';
 import {
   FFormGroup,
   FInputGroup,
   FSelect,
   FormattedMessage as T,
 } from '@/components';
-import { CLASSES } from '@/constants/classes';
 import { FieldRequiredHint } from '@/components';
-import { useUserFormContext } from './UserFormProvider';
+import { CLASSES } from '@/constants/classes';
 import { withDialogActions } from '@/containers/Dialog/withDialogActions';
 import { compose } from '@/utils';
-import { UserFormCalloutAlerts } from './components';
-import intl from 'react-intl-universal';
 
 /**
  * User form content.

@@ -1,4 +1,3 @@
-import React from 'react';
 import {
   Intent,
   Button,
@@ -9,21 +8,22 @@ import {
   Menu,
   MenuItem,
 } from '@blueprintjs/core';
-import { FSelect, Group, FormattedMessage as T } from '@/components';
 import { useFormikContext } from 'formik';
+import React from 'react';
 import { useHistory } from 'react-router-dom';
-import { If, Icon } from '@/components';
 import { useReceiptFormContext } from './ReceiptFormProvider';
 import { useReceiptFormBrandingTemplatesOptions } from './utils';
 import type { ReceiptFormValues } from './utils';
-import { useDrawerActions } from '@/hooks/state';
+import { FSelect, Group, FormattedMessage as T } from '@/components';
+import { If, Icon } from '@/components';
+import { PageForm } from '@/components/PageForm';
+import { DRAWERS } from '@/constants/drawers';
 import {
   BrandingThemeFormGroup,
   BrandingThemeSelectButton,
 } from '@/containers/BrandingTemplates/BrandingTemplatesSelectFields';
-import { PageForm } from '@/components/PageForm';
+import { useDrawerActions } from '@/hooks/state';
 import { MoreIcon } from '@/icons/More';
-import { DRAWERS } from '@/constants/drawers';
 
 type ReactClickHandler = React.MouseEventHandler<HTMLElement>;
 

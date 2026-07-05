@@ -1,13 +1,19 @@
-import React from 'react';
-import styled from 'styled-components';
-import classNames from 'classnames';
-import { useFormikContext } from 'formik';
 import { Position, Classes } from '@blueprintjs/core';
 import { css } from '@emotion/css';
 import { Theme, useTheme } from '@emotion/react';
-
-import { ACCOUNT_TYPE } from '@/constants/accountTypes';
-import { Features } from '@/constants';
+import classNames from 'classnames';
+import { useFormikContext } from 'formik';
+import React from 'react';
+import intl from 'react-intl-universal';
+import styled from 'styled-components';
+import {
+  ReceiptExchangeRateInputField,
+  ReceiptProjectSelectButton,
+} from './components';
+import { useReceiptFormContext } from './ReceiptFormProvider';
+import { ReceiptFormReceiptNumberField } from './ReceiptFormReceiptNumberField';
+import { accountsFieldShouldUpdate, customersFieldShouldUpdate } from './utils';
+import type { ReceiptFormValues } from './utils';
 import {
   FFormGroup,
   AccountsSelect,
@@ -21,17 +27,11 @@ import {
   Stack,
   FDateInput,
 } from '@/components';
-import { ProjectsSelect } from '@/containers/Projects/components';
-import { useReceiptFormContext } from './ReceiptFormProvider';
-import { accountsFieldShouldUpdate, customersFieldShouldUpdate } from './utils';
-import type { ReceiptFormValues } from './utils';
-import {
-  ReceiptExchangeRateInputField,
-  ReceiptProjectSelectButton,
-} from './components';
-import { ReceiptFormReceiptNumberField } from './ReceiptFormReceiptNumberField';
+import { Features } from '@/constants';
+import { ACCOUNT_TYPE } from '@/constants/accountTypes';
 import { useCustomerUpdateExRate } from '@/containers/Entries/withExRateItemEntriesPriceRecalc';
-import intl from 'react-intl-universal';
+import { ProjectsSelect } from '@/containers/Projects/components';
+
 
 const getEstimateFieldsStyle = (theme: Theme & { bpPrefix?: string }) => css`
   .${theme.bpPrefix}-form-group {

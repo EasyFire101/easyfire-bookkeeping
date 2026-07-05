@@ -1,11 +1,17 @@
-import React from 'react';
-import moment from 'moment';
-import intl from 'react-intl-universal';
-import { omit, pick, first, sumBy } from 'lodash';
-import { useFormikContext } from 'formik';
 import { Intent } from '@blueprintjs/core';
-import { AppToaster } from '@/components';
+import { useFormikContext } from 'formik';
+import { omit, pick, first, sumBy } from 'lodash';
+import moment from 'moment';
+import React from 'react';
+import intl from 'react-intl-universal';
 import { usePaymentReceiveFormContext } from './PaymentReceiveFormProvider';
+import { AppToaster } from '@/components';
+import {
+  transformAttachmentsToForm,
+  transformAttachmentsToRequest,
+} from '@/containers/Attachments/utils';
+import { convertBrandingTemplatesToOptions } from '@/containers/BrandingTemplates/BrandingTemplatesSelectFields';
+import { useCurrentOrganizationBaseCurrency } from '@/hooks/query';
 import {
   defaultFastFieldShouldUpdate,
   transformToForm,
@@ -13,12 +19,7 @@ import {
   orderingLinesIndexes,
   formattedAmount,
 } from '@/utils';
-import { useCurrentOrganizationBaseCurrency } from '@/hooks/query';
-import {
-  transformAttachmentsToForm,
-  transformAttachmentsToRequest,
-} from '@/containers/Attachments/utils';
-import { convertBrandingTemplatesToOptions } from '@/containers/BrandingTemplates/BrandingTemplatesSelectFields';
+
 
 export type PaymentReceiveEntry = {
   index: string | number;

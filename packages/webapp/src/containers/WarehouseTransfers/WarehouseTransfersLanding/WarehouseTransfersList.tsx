@@ -1,12 +1,12 @@
 // @ts-nocheck
 import React from 'react';
-import { DashboardPageContent } from '@/components';
 import { WarehouseTransfersActionsBar } from './WarehouseTransfersActionsBar';
 import { WarehouseTransfersDataTable } from './WarehouseTransfersDataTable';
+import { WarehouseTransfersListDrawers } from './WarehouseTransfersListDrawers';
+import { WarehouseTransfersListProvider } from './WarehouseTransfersListProvider';
 import { withWarehouseTransfers } from './withWarehouseTransfers';
 import { withWarehouseTransfersActions } from './withWarehouseTransfersActions';
-import { WarehouseTransfersListProvider } from './WarehouseTransfersListProvider';
-import { WarehouseTransfersListDrawers } from './WarehouseTransfersListDrawers';
+import { DashboardPageContent } from '@/components';
 import { transformTableStateToQuery, compose } from '@/utils';
 
 function WarehouseTransfersListInner({

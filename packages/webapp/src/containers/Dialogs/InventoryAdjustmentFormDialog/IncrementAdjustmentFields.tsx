@@ -1,7 +1,8 @@
 // @ts-nocheck
-import React from 'react';
 import { useFormikContext } from 'formik';
-import { useAutofocus } from '@/hooks';
+import React from 'react';
+import intl from 'react-intl-universal';
+import { decrementQuantity, incrementQuantity } from './utils';
 import {
   Row,
   Col,
@@ -9,9 +10,9 @@ import {
   FFormGroup,
   FInputGroup,
 } from '@/components';
+import { useAutofocus } from '@/hooks';
 import { toSafeNumber } from '@/utils';
-import { decrementQuantity, incrementQuantity } from './utils';
-import intl from 'react-intl-universal';
+
 
 export function IncrementAdjustmentFields() {
   const incrementFieldRef = useAutofocus();

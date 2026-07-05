@@ -1,25 +1,27 @@
 // @ts-nocheck
+import { Intent } from '@blueprintjs/core';
+import { Formik } from 'formik';
+import { isEmpty } from 'lodash';
 import React from 'react';
 import intl from 'react-intl-universal';
 import { useHistory } from 'react-router-dom';
-import { Formik } from 'formik';
-import { isEmpty } from 'lodash';
-import { Intent } from '@blueprintjs/core';
 
 import '@/style/pages/Preferences/Roles/Form.scss';
 
-import { AppToaster, FormattedMessage as T } from '@/components';
+import { handleDeleteErrors } from '../utils';
 import { CreateRolesFormSchema, EditRolesFormSchema } from './RolesForm.schema';
-import { useRolesFormContext } from './RolesFormProvider';
-import { withDashboardActions } from '@/containers/Dashboard/withDashboardActions';
 import { RolesFormContent } from './RolesFormContent';
+import { useRolesFormContext } from './RolesFormProvider';
 import {
   getNewRoleInitialValues,
   transformToArray,
   transformToObject,
 } from './utils';
-import { handleDeleteErrors } from '../utils';
+import { AppToaster, FormattedMessage as T } from '@/components';
+import { withDashboardActions } from '@/containers/Dashboard/withDashboardActions';
 import { compose, transformToForm } from '@/utils';
+
+
 
 const defaultValues = {
   role_name: '',

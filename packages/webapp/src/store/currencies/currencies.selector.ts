@@ -1,6 +1,6 @@
 import { createSelector } from 'reselect';
-import { getItemById } from '@/store/selectors';
 import type { RootState } from '@/store/reducers';
+import { getItemById } from '@/store/selectors';
 
 const currenciesItemsSelector = (state: RootState) => state.currencies.data;
 const currenciesCodePropSelector = (

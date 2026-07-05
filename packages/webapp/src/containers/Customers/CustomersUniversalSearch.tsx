@@ -1,11 +1,9 @@
 // @ts-nocheck
 import intl from 'react-intl-universal';
 import { AbilitySubject, CustomerAction } from '@/constants/abilityOption';
-
-import { withDrawerActions } from '@/containers/Drawer/withDrawerActions';
-
-import { RESOURCES_TYPES } from '@/constants/resourcesTypes';
 import { DRAWERS } from '@/constants/drawers';
+import { RESOURCES_TYPES } from '@/constants/resourcesTypes';
+import { withDrawerActions } from '@/containers/Drawer/withDrawerActions';
 
 function CustomerUniversalSearchSelectComponent({
   resourceType,

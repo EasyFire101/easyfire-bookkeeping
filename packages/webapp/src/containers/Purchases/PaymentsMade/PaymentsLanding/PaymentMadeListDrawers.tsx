@@ -1,5 +1,5 @@
-import { index as PaymentMadeDetailDrawer } from '@/containers/Drawers/PaymentMadeDetailDrawer';
 import { DRAWERS } from '@/constants/drawers';
+import { index as PaymentMadeDetailDrawer } from '@/containers/Drawers/PaymentMadeDetailDrawer';
 
 export function PaymentMadeListDrawers() {
   return (

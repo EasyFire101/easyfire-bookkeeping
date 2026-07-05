@@ -1,11 +1,11 @@
 // @ts-nocheck
-import styled from 'styled-components';
-import { Form } from 'formik';
 import { Button, Intent } from '@blueprintjs/core';
-import { useHistory } from 'react-router-dom';
-
-import { FormattedMessage as T, FFormGroup, FTextArea } from '@/components';
+import { Form } from 'formik';
 import intl from 'react-intl-universal';
+import { useHistory } from 'react-router-dom';
+import styled from 'styled-components';
+import { FormattedMessage as T, FFormGroup, FTextArea } from '@/components';
+
 
 /**
  * Preferences estimates form.

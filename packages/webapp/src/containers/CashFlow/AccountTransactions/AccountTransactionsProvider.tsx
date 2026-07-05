@@ -1,14 +1,14 @@
+import { keepPreviousData } from '@tanstack/react-query';
 import React, { Dispatch, SetStateAction, useState } from 'react';
 import { useParams } from 'react-router-dom';
-import { keepPreviousData } from '@tanstack/react-query';
-import { DashboardInsider } from '@/components';
 import type {
   Account,
   BankingAccountSummaryResponse,
   BankingAccountsListResponse,
 } from '@bigcapital/sdk-ts';
-import { useCashflowAccounts, useAccount } from '@/hooks/query';
+import { DashboardInsider } from '@/components';
 import { useAppQueryString } from '@/hooks';
+import { useCashflowAccounts, useAccount } from '@/hooks/query';
 import { useGetBankAccountSummaryMeta } from '@/hooks/query/banking';
 
 /**

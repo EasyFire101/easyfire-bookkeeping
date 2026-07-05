@@ -1,14 +1,13 @@
 // @ts-nocheck
 import React from 'react';
 import intl from 'react-intl-universal';
-import styled from 'styled-components';
 import { useHistory } from 'react-router-dom';
-
+import styled from 'styled-components';
 import { ItemFormFormik } from './ItemFormFormik';
-
-import { useDashboardPageTitle } from '@/hooks/state';
 import { useItemFormContext, ItemFormProvider } from './ItemFormProvider';
 import { DashboardInsider, DashboardCard } from '@/components';
+import { useDashboardPageTitle } from '@/hooks/state';
+
 
 /**
  * Item form dashboard title.

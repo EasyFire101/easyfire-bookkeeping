@@ -1,19 +1,19 @@
-import React, { CSSProperties } from 'react';
-import { Formik, Form, FormikHelpers } from 'formik';
-import * as Yup from 'yup';
-import { omit } from 'lodash';
-import { PreferencesBrandingFormValues } from './_types';
-import { useUploadAttachments } from '@/hooks/query/attachments';
-import { AppToaster } from '@/components';
 import { Intent } from '@blueprintjs/core';
+import { Formik, Form, FormikHelpers } from 'formik';
+import { omit } from 'lodash';
+import React, { CSSProperties } from 'react';
+import * as Yup from 'yup';
+import { PreferencesBrandingFormValues } from './_types';
+import { usePreferencesBrandingBoot } from './PreferencesBrandingBoot';
+import { AppToaster } from '@/components';
+import { useUpdateOrganization } from '@/hooks/query';
+import { useUploadAttachments } from '@/hooks/query/attachments';
 import {
   excludePrivateProps,
   transformToCamelCase,
   transformToForm,
   transfromToSnakeCase,
 } from '@/utils';
-import { useUpdateOrganization } from '@/hooks/query';
-import { usePreferencesBrandingBoot } from './PreferencesBrandingBoot';
 
 const initialValues = {
   logoKey: '',

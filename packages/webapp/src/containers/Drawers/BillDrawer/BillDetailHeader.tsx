@@ -1,8 +1,9 @@
+import { defaultTo } from 'lodash';
 import React from 'react';
 import intl from 'react-intl-universal';
 import styled from 'styled-components';
-import { defaultTo } from 'lodash';
-
+import { useBillDrawerContext } from './BillDrawerProvider';
+import { BillDetailsStatus } from './utils';
 import {
   FormatDate,
   DetailsMenu,
@@ -14,9 +15,6 @@ import {
   VendorDrawerLink,
   ExchangeRateDetailItem,
 } from '@/components';
-
-import { useBillDrawerContext } from './BillDrawerProvider';
-import { BillDetailsStatus } from './utils';
 
 /**
  * Bill detail header.

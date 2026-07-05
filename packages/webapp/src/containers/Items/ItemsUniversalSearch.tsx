@@ -1,13 +1,10 @@
 import intl from 'react-intl-universal';
-
-import { withDrawerActions } from '@/containers/Drawer/withDrawerActions';
-import type { WithDrawerActionsProps } from '@/containers/Drawer/withDrawerActions';
-
-import { RESOURCES_TYPES } from '@/constants/resourcesTypes';
-import { DRAWERS } from '@/constants/drawers';
-
-import { AbilitySubject, ItemAction } from '@/constants/abilityOption';
 import type { ItemTableRow } from './components';
+import type { WithDrawerActionsProps } from '@/containers/Drawer/withDrawerActions';
+import { AbilitySubject, ItemAction } from '@/constants/abilityOption';
+import { DRAWERS } from '@/constants/drawers';
+import { RESOURCES_TYPES } from '@/constants/resourcesTypes';
+import { withDrawerActions } from '@/containers/Drawer/withDrawerActions';
 
 interface ItemUniversalSearchSelectComponentProps
   extends WithDrawerActionsProps {

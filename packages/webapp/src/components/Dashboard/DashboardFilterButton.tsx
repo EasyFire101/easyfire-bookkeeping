@@ -1,8 +1,8 @@
 // @ts-nocheck
-import React from 'react';
-import classNames from 'classnames';
-import intl from 'react-intl-universal';
 import { Classes, Button } from '@blueprintjs/core';
+import classNames from 'classnames';
+import React from 'react';
+import intl from 'react-intl-universal';
 import { T, Icon } from '@/components';
 
 /**

@@ -1,8 +1,7 @@
 // @ts-nocheck
 import React from 'react';
-
-import { UnlockingPartialTransactionsFormProvider } from './UnlockingPartialTransactionsFormProvider';
 import { UnlockingPartialTransactionsForm } from './UnlockingPartialTransactionsForm';
+import { UnlockingPartialTransactionsFormProvider } from './UnlockingPartialTransactionsFormProvider';
 
 /**
  * Unlocking partail transactions dialog content.

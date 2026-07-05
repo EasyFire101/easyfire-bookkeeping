@@ -1,9 +1,9 @@
 // @ts-nocheck
 import React from 'react';
 import intl from 'react-intl-universal';
-import { useWarehouseTransfer } from '@/hooks/query';
 import { DrawerHeaderContent, DrawerLoading } from '@/components';
 import { DRAWERS } from '@/constants/drawers';
+import { useWarehouseTransfer } from '@/hooks/query';
 
 const WarehouseTransferDetailDrawerContext = React.createContext();
 

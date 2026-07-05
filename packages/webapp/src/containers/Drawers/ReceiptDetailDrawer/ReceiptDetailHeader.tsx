@@ -1,8 +1,9 @@
+import { defaultTo } from 'lodash';
 import React from 'react';
 import intl from 'react-intl-universal';
 import styled from 'styled-components';
-import { defaultTo } from 'lodash';
-
+import { ReceiptDetailsStatus } from './components';
+import { useReceiptDetailDrawerContext } from './ReceiptDetailDrawerProvider';
 import {
   CustomerDrawerLink,
   CommercialDocHeader,
@@ -13,9 +14,6 @@ import {
   DetailsMenu,
   DetailItem,
 } from '@/components';
-
-import { useReceiptDetailDrawerContext } from './ReceiptDetailDrawerProvider';
-import { ReceiptDetailsStatus } from './components';
 
 /**
  * Receipt details header.

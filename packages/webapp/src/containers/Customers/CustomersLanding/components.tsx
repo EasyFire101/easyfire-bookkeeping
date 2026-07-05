@@ -1,7 +1,4 @@
 // @ts-nocheck
-import React, { useMemo } from 'react';
-import intl from 'react-intl-universal';
-import clsx from 'classnames';
 import {
   Menu,
   MenuItem,
@@ -11,11 +8,13 @@ import {
   Position,
   Classes,
 } from '@blueprintjs/core';
-
+import clsx from 'classnames';
+import React, { useMemo } from 'react';
+import intl from 'react-intl-universal';
 import { Can, Icon, Money, If, AvatarCell } from '@/components';
+import { CLASSES } from '@/constants';
 import { CustomerAction, AbilitySubject } from '@/constants/abilityOption';
 import { safeCallback } from '@/utils';
-import { CLASSES } from '@/constants';
 
 /**
  * Actions menu.

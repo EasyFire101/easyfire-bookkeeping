@@ -1,6 +1,6 @@
 // @ts-nocheck
-import { getUniversalSearchBind } from '@/containers/UniversalSearch/utils';
 import { useResourceData } from '../GenericResource';
+import { getUniversalSearchBind } from '@/containers/UniversalSearch/utils';
 
 /**
  * Transformes the resource data to search entries based on

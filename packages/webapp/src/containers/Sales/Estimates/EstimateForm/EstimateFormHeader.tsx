@@ -1,10 +1,10 @@
 import React from 'react';
 import intl from 'react-intl-universal';
-
 import { EstimateFormHeader as EstimateFormHeaderFields } from './EstimateFormHeaderFields';
-import { Group, PageFormBigNumber } from '@/components';
 import { useEstimateTotalFormatted } from './utils';
+import { Group, PageFormBigNumber } from '@/components';
 import { useIsDarkMode } from '@/hooks/useDarkMode';
+
 
 // Estimate form top header.
 export function EstimateFormHeader() {

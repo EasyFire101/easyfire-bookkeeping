@@ -1,6 +1,9 @@
-import React from 'react';
 import { Position, ControlGroup } from '@blueprintjs/core';
 import { useFormikContext } from 'formik';
+import React from 'react';
+import intl from 'react-intl-universal';
+import type { InvoiceFormValues } from './utils';
+import type { WithDialogActionsProps } from '@/containers/Dialog/withDialogActions';
 import {
   FFormGroup,
   FormattedMessage as T,
@@ -10,12 +13,9 @@ import {
   FInputGroup,
 } from '@/components';
 import { DialogsName } from '@/constants/dialogs';
-import { withSettings } from '@/containers/Settings/withSettings';
 import { withDialogActions } from '@/containers/Dialog/withDialogActions';
-import type { WithDialogActionsProps } from '@/containers/Dialog/withDialogActions';
-import intl from 'react-intl-universal';
+import { withSettings } from '@/containers/Settings/withSettings';
 import { compose } from '@/utils';
-import type { InvoiceFormValues } from './utils';
 
 type InvoiceFormInvoiceNumberFieldProps = {
   openDialog: WithDialogActionsProps['openDialog'];

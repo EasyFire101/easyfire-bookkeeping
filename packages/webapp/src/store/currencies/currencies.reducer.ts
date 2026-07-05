@@ -1,10 +1,10 @@
 import { createReducer } from '@reduxjs/toolkit';
+import type { CurrenciesState, CurrencyAction } from './currencies.types';
 import {
   CURRENCIES_REGISTERED_SET,
   CURRENCIES_TABLE_LOADING,
   CURRENCY_CODE_DELETE,
 } from '@/store/types';
-import type { CurrenciesState, CurrencyAction } from './currencies.types';
 
 const initialState: CurrenciesState = {
   data: {},

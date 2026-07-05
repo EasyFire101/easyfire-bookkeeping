@@ -1,17 +1,17 @@
 // @ts-nocheck
 import React from 'react';
+import { ActionMenu } from './components';
+import { useProjectSalesColumns } from './hooks';
 import {
   DataTable,
   TableSkeletonRows,
   TableSkeletonHeader,
 } from '@/components';
 import { TABLES } from '@/constants/tables';
-import { useMemorizedColumnsWidths } from '@/hooks';
-import { ActionMenu } from './components';
-import { useProjectSalesColumns } from './hooks';
 import { withSettings } from '@/containers/Settings/withSettings';
-
+import { useMemorizedColumnsWidths } from '@/hooks';
 import { compose } from '@/utils';
+
 
 /**
  * Porject sales datatable.

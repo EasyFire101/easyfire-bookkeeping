@@ -1,10 +1,10 @@
-import React from 'react';
 import { useFormikContext } from 'formik';
-import { Money, PageForm, PageFormBigNumber } from '@/components';
-
+import React from 'react';
+import intl from 'react-intl-universal';
 import { PaymentMadeFormHeaderFields } from './PaymentMadeFormHeaderFields';
 import { usePaymentmadeTotalAmount, type PaymentMadeFormValues } from './utils';
-import intl from 'react-intl-universal';
+import { Money, PageForm, PageFormBigNumber } from '@/components';
+
 
 /**
  * Payment made header form.

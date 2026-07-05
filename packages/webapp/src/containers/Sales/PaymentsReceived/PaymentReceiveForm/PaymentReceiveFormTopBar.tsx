@@ -1,7 +1,7 @@
-import React from 'react';
 import { Alignment, NavbarGroup, Classes } from '@blueprintjs/core';
+import React from 'react';
+import { usePaymentReceiveFormContext } from './PaymentReceiveFormProvider';
 import { useSetPrimaryBranchToForm } from './utils';
-import { useFeatureCan } from '@/hooks/state';
 import {
   BranchSelect,
   FeatureCan,
@@ -9,8 +9,8 @@ import {
   DetailsBarSkeletonBase,
   FormBranchSelectButton,
 } from '@/components';
-import { usePaymentReceiveFormContext } from './PaymentReceiveFormProvider';
 import { Features } from '@/constants';
+import { useFeatureCan } from '@/hooks/state';
 
 /**
  * Payment receive from top bar.

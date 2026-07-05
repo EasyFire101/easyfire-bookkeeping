@@ -1,6 +1,10 @@
 import React from 'react';
 import styled from 'styled-components';
 import {
+  usePaymentReceiveTotals,
+  usePaymentReceivedTotalExceededAmount,
+} from './utils';
+import {
   T,
   TotalLines,
   TotalLine,
@@ -8,10 +12,6 @@ import {
   TotalLineTextStyle,
   FormatNumber,
 } from '@/components';
-import {
-  usePaymentReceiveTotals,
-  usePaymentReceivedTotalExceededAmount,
-} from './utils';
 
 export function PaymentReceiveFormFootetRight() {
   const { formattedSubtotal, formattedTotal } = usePaymentReceiveTotals();

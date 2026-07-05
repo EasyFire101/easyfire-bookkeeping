@@ -1,4 +1,10 @@
-import type { QueryClient } from '@tanstack/react-query';
+import {
+  createBankRule,
+  deleteBankRule,
+  editBankRule,
+  fetchBankRule,
+  fetchBankRules,
+} from '@bigcapital/sdk-ts';
 import {
   UseMutationOptions,
   UseMutationResult,
@@ -8,6 +14,8 @@ import {
   useQuery,
   useQueryClient,
 } from '@tanstack/react-query';
+import { useApiFetcher } from '../../../useRequest';
+import { bankingKeys } from '../query-keys';
 import type {
   BankRuleResponse,
   BankRulesListResponse,
@@ -15,15 +23,7 @@ import type {
   CreateBankRuleResponse,
   EditBankRuleBody,
 } from '@bigcapital/sdk-ts';
-import {
-  createBankRule,
-  deleteBankRule,
-  editBankRule,
-  fetchBankRule,
-  fetchBankRules,
-} from '@bigcapital/sdk-ts';
-import { useApiFetcher } from '../../../useRequest';
-import { bankingKeys } from '../query-keys';
+import type { QueryClient } from '@tanstack/react-query';
 
 const commonInvalidateQueries = (queryClient: QueryClient) => {
   queryClient.invalidateQueries({ queryKey: bankingKeys.rules() });

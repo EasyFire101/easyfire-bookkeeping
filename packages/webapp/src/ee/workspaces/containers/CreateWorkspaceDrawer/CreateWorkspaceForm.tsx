@@ -1,9 +1,10 @@
-import React from 'react';
-import { Formik, Form, FormikHelpers } from 'formik';
-import { Button, Intent, Classes } from '@blueprintjs/core';
 import { getAllCountries } from '@bigcapital/utils';
-import { ApiError } from 'openapi-typescript-fetch';
+import { Button, Intent, Classes } from '@blueprintjs/core';
 import { x } from '@xstyled/emotion';
+import { Formik, Form, FormikHelpers } from 'formik';
+import { ApiError } from 'openapi-typescript-fetch';
+import React from 'react';
+import intl from 'react-intl-universal';
 import {
   Col,
   Row,
@@ -15,6 +16,15 @@ import {
   DrawerBody,
   DrawerActionsBar,
 } from '@/components';
+import { getAllCurrenciesOptions } from '@/constants/currencies';
+import { getFiscalYear } from '@/constants/fiscalYearOptions';
+import { getLanguages } from '@/constants/languagesOptions';
+import {
+  getSetupOrganizationValidation,
+  type SetupOrganizationFormValues,
+} from '@/containers/Setup/SetupOrganization.schema';
+import { useCreateWorkspace } from '@/ee/workspaces/hooks/query';
+import { useIsDarkMode } from '@/hooks/useDarkMode';
 
 /** Blueprint FormGroup supports `fastField`; package typings omit it. */
 type FFormGroupWithFastField = typeof FFormGroup & {
@@ -23,16 +33,6 @@ type FFormGroupWithFastField = typeof FFormGroup & {
   ): JSX.Element;
 };
 const FFormGroupField = FFormGroup as FFormGroupWithFastField;
-import { useIsDarkMode } from '@/hooks/useDarkMode';
-import { useCreateWorkspace } from '@/ee/workspaces/hooks/query';
-import { getFiscalYear } from '@/constants/fiscalYearOptions';
-import { getLanguages } from '@/constants/languagesOptions';
-import { getAllCurrenciesOptions } from '@/constants/currencies';
-import {
-  getSetupOrganizationValidation,
-  type SetupOrganizationFormValues,
-} from '@/containers/Setup/SetupOrganization.schema';
-import intl from 'react-intl-universal';
 
 const countries = getAllCountries();
 

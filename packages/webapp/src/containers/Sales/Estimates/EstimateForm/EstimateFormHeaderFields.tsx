@@ -1,11 +1,19 @@
-import styled from 'styled-components';
-import classNames from 'classnames';
 import { Position, Classes } from '@blueprintjs/core';
-import { useFormikContext } from 'formik';
 import { css } from '@emotion/css';
 import { useTheme } from '@emotion/react';
 import { Theme } from '@xstyled/emotion';
+import classNames from 'classnames';
+import { useFormikContext } from 'formik';
 import intl from 'react-intl-universal';
+import styled from 'styled-components';
+import {
+  EstimateExchangeRateInputField,
+  EstimateProjectSelectButton,
+} from './components';
+import { EstimateFormEstimateNumberField } from './EstimateFormEstimateNumberField';
+import { useEstimateFormContext } from './EstimateFormProvider';
+import { customersFieldShouldUpdate } from './utils';
+import type { EstimateFormValues } from './utils';
 import {
   FeatureCan,
   FFormGroup,
@@ -18,17 +26,9 @@ import {
   Stack,
   FDateInput,
 } from '@/components';
-import { customersFieldShouldUpdate } from './utils';
 import { Features } from '@/constants';
-import { ProjectsSelect } from '@/containers/Projects/components';
-import {
-  EstimateExchangeRateInputField,
-  EstimateProjectSelectButton,
-} from './components';
-import { EstimateFormEstimateNumberField } from './EstimateFormEstimateNumberField';
-import { useEstimateFormContext } from './EstimateFormProvider';
 import { useCustomerUpdateExRate } from '@/containers/Entries/withExRateItemEntriesPriceRecalc';
-import type { EstimateFormValues } from './utils';
+import { ProjectsSelect } from '@/containers/Projects/components';
 
 const getEstimateFieldsStyle = (theme: Theme) => css`
   .${theme.bpPrefix}-form-group {

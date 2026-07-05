@@ -3,17 +3,15 @@ import React, { useEffect } from 'react';
 
 import '@/style/pages/Customers/List.scss';
 
-import { DashboardPageContent } from '@/components';
-
 import { CustomersActionsBar } from './CustomersActionsBar';
-import { CustomersTable } from './CustomersTable';
-import { CustomersListProvider } from './CustomersListProvider';
 import { CustomersListDialogs } from './CustomersListDialogs';
-
+import { CustomersListProvider } from './CustomersListProvider';
+import { CustomersTable } from './CustomersTable';
 import { withCustomers } from './withCustomers';
 import { withCustomersActions } from './withCustomersActions';
-
+import { DashboardPageContent } from '@/components';
 import { compose } from '@/utils';
+
 
 /**
  * Customers list.

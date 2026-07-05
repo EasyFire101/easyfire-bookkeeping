@@ -1,7 +1,7 @@
 // @ts-nocheck
 import React from 'react';
-import styled from 'styled-components';
 import intl from 'react-intl-universal';
+import styled from 'styled-components';
 import { FFormGroup, FEditableText } from '@/components';
 
 export function WarehouseTransferFormFooterLeft() {

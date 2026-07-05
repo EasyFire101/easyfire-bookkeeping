@@ -1,6 +1,15 @@
 import React from 'react';
 import { useHistory } from 'react-router-dom';
-import { TABLES } from '@/constants/tables';
+import { useItemsTableColumns, ItemsActionMenuList } from './components';
+import { ItemsEmptyStatus } from './ItemsEmptyStatus';
+import { useItemsListContext } from './ItemsListProvider';
+import { withItems } from './withItems';
+import { withItemsActions } from './withItemsActions';
+import type { ItemTableRow } from './components';
+import type { WithItemsProps } from './withItems';
+import type { WithItemsActionsProps } from './withItemsActions';
+import type { WithAlertActionsProps } from '@/containers/Alert/withAlertActions';
+import type { WithDialogActionsProps } from '@/containers/Dialog/withDialogActions';
 import { FormattedMessage as T } from '@/components';
 import {
   DashboardContentTable,
@@ -8,28 +17,16 @@ import {
   TableSkeletonRows,
   TableSkeletonHeader,
 } from '@/components';
-import type { Row } from 'react-table';
-
-import { ItemsEmptyStatus } from './ItemsEmptyStatus';
-
-import { withItemsActions } from './withItemsActions';
-import type { WithItemsActionsProps } from './withItemsActions';
+import { DRAWERS } from '@/constants/drawers';
+import { TABLES } from '@/constants/tables';
 import { withAlertActions } from '@/containers/Alert/withAlertActions';
-import type { WithAlertActionsProps } from '@/containers/Alert/withAlertActions';
 import { withDialogActions } from '@/containers/Dialog/withDialogActions';
-import type { WithDialogActionsProps } from '@/containers/Dialog/withDialogActions';
 import { withDrawerActions } from '@/containers/Drawer/withDrawerActions';
 import type { WithDrawerActionsProps } from '@/containers/Drawer/withDrawerActions';
 import { withSettings } from '@/containers/Settings/withSettings';
-import { withItems } from './withItems';
-import type { WithItemsProps } from './withItems';
-
-import { useItemsListContext } from './ItemsListProvider';
-import { useItemsTableColumns, ItemsActionMenuList } from './components';
-import type { ItemTableRow } from './components';
 import { useMemorizedColumnsWidths } from '@/hooks';
 import { compose } from '@/utils';
-import { DRAWERS } from '@/constants/drawers';
+import type { Row } from 'react-table';
 
 interface WithSettingsProps {
   itemsTableSize?: string | null;

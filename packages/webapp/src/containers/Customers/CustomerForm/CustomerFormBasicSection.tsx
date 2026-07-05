@@ -1,11 +1,13 @@
 // @ts-nocheck
-import React from 'react';
-import intl from 'react-intl-universal';
 import {
   ControlGroup,
   Divider,
   Icon as BlueprintIcon,
 } from '@blueprintjs/core';
+import React from 'react';
+import intl from 'react-intl-universal';
+import { CustomerFormSectionTitle } from './CustomerFormSectionTitle';
+import { CustomerTypeRadioField } from './CustomerTypeRadioField';
 import {
   Hint,
   FieldRequiredHint,
@@ -17,8 +19,6 @@ import {
   Icon,
   Stack,
 } from '@/components';
-import { CustomerTypeRadioField } from './CustomerTypeRadioField';
-import { CustomerFormSectionTitle } from './CustomerFormSectionTitle';
 import { useAutofocus } from '@/hooks';
 
 export function CustomerFormBasicSection({}) {

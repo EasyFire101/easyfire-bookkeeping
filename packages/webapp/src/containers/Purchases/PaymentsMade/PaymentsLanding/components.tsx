@@ -1,6 +1,3 @@
-import React from 'react';
-import intl from 'react-intl-universal';
-import type { BillPaymentsListResponse } from '@bigcapital/sdk-ts';
 import {
   Intent,
   Button,
@@ -10,12 +7,13 @@ import {
   MenuDivider,
   Position,
 } from '@blueprintjs/core';
-
+import React from 'react';
+import intl from 'react-intl-universal';
+import type { DataTableColumn } from '@/components/Datatable/types';
+import type { BillPaymentsListResponse } from '@bigcapital/sdk-ts';
 import { Icon, Money, Can } from '@/components';
 import { PaymentMadeAction, AbilitySubject } from '@/constants/abilityOption';
-
 import { safeCallback } from '@/utils';
-import type { DataTableColumn } from '@/components/Datatable/types';
 
 export type PaymentMadeTableRow = NonNullable<
   BillPaymentsListResponse['data']

@@ -1,5 +1,4 @@
 // @ts-nocheck
-import React, { useEffect, useRef } from 'react';
 import {
   FormGroup,
   RadioGroup,
@@ -8,8 +7,11 @@ import {
   Position,
   MenuItem,
 } from '@blueprintjs/core';
+import classNames from 'classnames';
 import { ErrorMessage, FastField } from 'formik';
-import { CLASSES } from '@/constants/classes';
+import React, { useEffect, useRef } from 'react';
+import intl from 'react-intl-universal';
+import { useItemFormContext } from './ItemFormProvider';
 import {
   Hint,
   Col,
@@ -21,10 +23,8 @@ import {
   FSelect,
   FInputGroup,
 } from '@/components';
-import classNames from 'classnames';
-import { useItemFormContext } from './ItemFormProvider';
+import { CLASSES } from '@/constants/classes';
 import { handleStringChange, inputIntent } from '@/utils';
-import intl from 'react-intl-universal';
 
 /**
  * Item form primary section.

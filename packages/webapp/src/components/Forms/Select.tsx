@@ -1,9 +1,9 @@
 // @ts-nocheck
-import React from 'react';
 import { Button } from '@blueprintjs/core';
 import { FormikSelect } from '@blueprintjs-formik/select';
-import styled from 'styled-components';
 import clsx from 'classnames';
+import React from 'react';
+import styled from 'styled-components';
 
 export function FSelect<T extends SelectOptionProps = SelectOptionProps>({
   ...props

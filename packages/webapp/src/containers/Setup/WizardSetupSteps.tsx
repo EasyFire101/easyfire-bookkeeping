@@ -1,6 +1,6 @@
 // @ts-nocheck
-import React from 'react';
 import classNames from 'classnames';
+import React from 'react';
 import { getSetupWizardSteps } from '@/constants/registerWizard';
 
 function WizardSetupStep({ label, isActive = false }) {

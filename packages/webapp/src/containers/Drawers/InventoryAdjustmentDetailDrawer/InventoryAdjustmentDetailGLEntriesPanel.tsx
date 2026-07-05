@@ -1,12 +1,12 @@
 import React from 'react';
 import styled from 'styled-components';
-import { Card } from '@/components';
-import { useTransactionsByReference } from '@/hooks/query';
-import { useInventoryAdjustmentDrawerContext } from './InventoryAdjustmentDrawerProvider';
 import {
   AmountDisplayedBaseCurrencyMessage,
   JournalEntriesTable,
 } from '../../JournalEntriesTable/JournalEntriesTable';
+import { useInventoryAdjustmentDrawerContext } from './InventoryAdjustmentDrawerProvider';
+import { Card } from '@/components';
+import { useTransactionsByReference } from '@/hooks/query';
 
 /**
  * Inventory adjustment detail GL entries panel.

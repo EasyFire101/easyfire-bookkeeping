@@ -12,7 +12,7 @@ import type {
   PdfTemplateResponse,
 } from '@bigcapital/sdk-ts';
 import { Features } from '@/constants';
-import { useFeatureCan } from '@/hooks/state';
+import { useProjects } from '@/containers/Projects/hooks';
 import {
   useReceipt,
   useAccounts,
@@ -25,8 +25,8 @@ import {
   useEditReceipt,
   useGetReceiptState,
 } from '@/hooks/query';
-import { useProjects } from '@/containers/Projects/hooks';
 import { useGetPdfTemplates } from '@/hooks/query/pdf-templates';
+import { useFeatureCan } from '@/hooks/state';
 
 type ReceiptFormSubmitPayload = {
   redirect?: boolean;

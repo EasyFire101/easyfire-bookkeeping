@@ -1,5 +1,3 @@
-import React from 'react';
-import intl from 'react-intl-universal';
 import {
   Button,
   Popover,
@@ -10,15 +8,17 @@ import {
   Tag,
   Intent,
 } from '@blueprintjs/core';
-import { getColumnWidth } from '@/utils';
+import React from 'react';
+import intl from 'react-intl-universal';
+import { useVendorCreditDetailDrawerContext } from './VendorCreditDetailDrawerProvider';
+import type { VendorCredit } from '@bigcapital/sdk-ts';
 import {
   Icon,
   FormattedMessage as T,
   TextOverviewTooltipCell,
   Choose,
 } from '@/components';
-import type { VendorCredit } from '@bigcapital/sdk-ts';
-import { useVendorCreditDetailDrawerContext } from './VendorCreditDetailDrawerProvider';
+import { getColumnWidth } from '@/utils';
 
 /**
  * Retrieve vendor credit readonly details entries table columns.

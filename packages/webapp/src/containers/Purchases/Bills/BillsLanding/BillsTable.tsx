@@ -1,34 +1,29 @@
 import React, { useCallback } from 'react';
 import { useHistory } from 'react-router-dom';
-
-import { TABLES } from '@/constants/tables';
+import { BillsEmptyStatus } from './BillsEmptyStatus';
+import { useBillsListContext } from './BillsListProvider';
+import { useBillsTableColumns, ActionsMenu } from './components';
+import { withBills } from './withBills';
+import { withBillsActions } from './withBillsActions';
+import type { BillTableRow } from './components';
+import type { WithBillsProps } from './withBills';
+import type { WithAlertActionsProps } from '@/containers/Alert/withAlertActions';
+import type { WithDialogActionsProps } from '@/containers/Dialog/withDialogActions';
+import type { WithDrawerActionsProps } from '@/containers/Drawer/withDrawerActions';
 import {
   DataTable,
   DashboardContentTable,
   TableSkeletonRows,
   TableSkeletonHeader,
 } from '@/components';
-
-import { BillsEmptyStatus } from './BillsEmptyStatus';
-
-import { withBills } from './withBills';
-import type { WithBillsProps } from './withBills';
-import { withBillsActions } from './withBillsActions';
-import { withAlertActions } from '@/containers/Alert/withAlertActions';
-import type { WithAlertActionsProps } from '@/containers/Alert/withAlertActions';
-import { withDialogActions } from '@/containers/Dialog/withDialogActions';
-import type { WithDialogActionsProps } from '@/containers/Dialog/withDialogActions';
-import { withDrawerActions } from '@/containers/Drawer/withDrawerActions';
-import type { WithDrawerActionsProps } from '@/containers/Drawer/withDrawerActions';
-import { withSettings } from '@/containers/Settings/withSettings';
-
-import { useBillsTableColumns, ActionsMenu } from './components';
-import type { BillTableRow } from './components';
-import { useBillsListContext } from './BillsListProvider';
-import { useMemorizedColumnsWidths } from '@/hooks';
-
-import { compose } from '@/utils';
 import { DRAWERS } from '@/constants/drawers';
+import { TABLES } from '@/constants/tables';
+import { withAlertActions } from '@/containers/Alert/withAlertActions';
+import { withDialogActions } from '@/containers/Dialog/withDialogActions';
+import { withDrawerActions } from '@/containers/Drawer/withDrawerActions';
+import { withSettings } from '@/containers/Settings/withSettings';
+import { useMemorizedColumnsWidths } from '@/hooks';
+import { compose } from '@/utils';
 
 interface WithBillsActionsProps {
   setBillsTableState: (state: Record<string, any>) => void;

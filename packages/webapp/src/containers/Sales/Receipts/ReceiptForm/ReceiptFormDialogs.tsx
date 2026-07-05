@@ -1,9 +1,9 @@
-import React from 'react';
 import { useFormikContext } from 'formik';
+import React from 'react';
+import type { ReceiptFormValues } from './utils';
+import { DialogsName } from '@/constants/dialogs';
 import { index as ReceiptNumberDialog } from '@/containers/Dialogs/ReceiptNumberDialog';
 import { InvoiceExchangeRateChangeDialog } from '@/containers/Sales/Invoices/InvoiceForm/Dialogs/InvoiceExchangeRateChangeDialog';
-import { DialogsName } from '@/constants/dialogs';
-import type { ReceiptFormValues } from './utils';
 
 type ReceiptNumberFormSettings = {
   transactionNumber: string;

@@ -1,13 +1,14 @@
 // @ts-nocheck
-import React, { useCallback } from 'react';
-import { compose } from '@/utils';
-import { DataTable, TableSkeletonRows, AppToaster } from '@/components';
-import { useApiKeys, useRevokeApiKey } from '@/hooks/query';
-import { withDialogActions } from '@/containers/Dialog/withDialogActions';
-import { withAlertActions } from '@/containers/Alert/withAlertActions';
-import { ActionsMenu, useApiKeysTableColumns } from './components';
 import { Intent } from '@blueprintjs/core';
+import React, { useCallback } from 'react';
 import intl from 'react-intl-universal';
+import { ActionsMenu, useApiKeysTableColumns } from './components';
+import { DataTable, TableSkeletonRows, AppToaster } from '@/components';
+import { withAlertActions } from '@/containers/Alert/withAlertActions';
+import { withDialogActions } from '@/containers/Dialog/withDialogActions';
+import { useApiKeys, useRevokeApiKey } from '@/hooks/query';
+import { compose } from '@/utils';
+
 
 /**
  * API Keys datatable.

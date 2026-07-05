@@ -1,29 +1,29 @@
 import React, { useCallback } from 'react';
 import { useHistory } from 'react-router-dom';
-import { withEstimatesActions } from './withEstimatesActions';
-import { withAlertActions } from '@/containers/Alert/withAlertActions';
-import { withDrawerActions } from '@/containers/Drawer/withDrawerActions';
-import { withDialogActions } from '@/containers/Dialog/withDialogActions';
-import { withSettings } from '@/containers/Settings/withSettings';
+import { ActionsMenu, useEstiamtesTableColumns } from './components';
+import { EstimatesEmptyStatus } from './EstimatesEmptyStatus';
+import { useEstimatesListContext } from './EstimatesListProvider';
 import { withEstimates } from './withEstimates';
-import { TABLES } from '@/constants/tables';
+import { withEstimatesActions } from './withEstimatesActions';
+import type { EstimateTableRow } from './components';
+import type { WithEstimatesProps } from './withEstimates';
+import type { WithAlertActionsProps } from '@/containers/Alert/withAlertActions';
+import type { WithDialogActionsProps } from '@/containers/Dialog/withDialogActions';
+import type { WithDrawerActionsProps } from '@/containers/Drawer/withDrawerActions';
 import {
   DataTable,
   DashboardContentTable,
   TableSkeletonRows,
   TableSkeletonHeader,
 } from '@/components';
-import { ActionsMenu, useEstiamtesTableColumns } from './components';
-import { EstimatesEmptyStatus } from './EstimatesEmptyStatus';
-import { useEstimatesListContext } from './EstimatesListProvider';
+import { DRAWERS } from '@/constants/drawers';
+import { TABLES } from '@/constants/tables';
+import { withAlertActions } from '@/containers/Alert/withAlertActions';
+import { withDialogActions } from '@/containers/Dialog/withDialogActions';
+import { withDrawerActions } from '@/containers/Drawer/withDrawerActions';
+import { withSettings } from '@/containers/Settings/withSettings';
 import { useMemorizedColumnsWidths } from '@/hooks';
 import { compose } from '@/utils';
-import { DRAWERS } from '@/constants/drawers';
-import type { EstimateTableRow } from './components';
-import type { WithAlertActionsProps } from '@/containers/Alert/withAlertActions';
-import type { WithDrawerActionsProps } from '@/containers/Drawer/withDrawerActions';
-import type { WithDialogActionsProps } from '@/containers/Dialog/withDialogActions';
-import type { WithEstimatesProps } from './withEstimates';
 
 interface WithEstimatesActionsProps {
   setEstimatesTableState: (state: Record<string, any>) => void;

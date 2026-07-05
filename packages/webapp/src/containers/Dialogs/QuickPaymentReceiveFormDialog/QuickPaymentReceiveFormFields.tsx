@@ -1,14 +1,13 @@
 // @ts-nocheck
-import React from 'react';
-import styled from 'styled-components';
-import intl from 'react-intl-universal';
-import { FastField, ErrorMessage, useFormikContext } from 'formik';
-import { useAutofocus } from '@/hooks';
-import { useCurrentOrganizationBaseCurrency } from '@/hooks/query';
-import { isEqual } from 'lodash';
 import { Classes, Position, ControlGroup } from '@blueprintjs/core';
 import classNames from 'classnames';
-import { CLASSES, Features, ACCOUNT_TYPE } from '@/constants';
+import { FastField, ErrorMessage, useFormikContext } from 'formik';
+import { isEqual } from 'lodash';
+import React from 'react';
+import intl from 'react-intl-universal';
+import styled from 'styled-components';
+import { useQuickPaymentReceiveContext } from './QuickPaymentReceiveFormProvider';
+import { useSetPrimaryBranchToForm } from './utils';
 import {
   Row,
   Col,
@@ -27,10 +26,12 @@ import {
   FDateInput,
   FMoneyInputGroup,
 } from '@/components';
-import { momentFormatter, compose } from '@/utils';
-import { useSetPrimaryBranchToForm } from './utils';
-import { useQuickPaymentReceiveContext } from './QuickPaymentReceiveFormProvider';
+import { CLASSES, Features, ACCOUNT_TYPE } from '@/constants';
 import { withSettings } from '@/containers/Settings/withSettings';
+import { useAutofocus } from '@/hooks';
+import { useCurrentOrganizationBaseCurrency } from '@/hooks/query';
+import { momentFormatter, compose } from '@/utils';
+
 
 /**
  * Quick payment receive form fields.

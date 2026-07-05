@@ -1,11 +1,11 @@
 import React from 'react';
 import intl from 'react-intl-universal';
+import type { SaleReceipt } from '@bigcapital/sdk-ts';
 import { DrawerHeaderContent, DrawerLoading } from '@/components';
 import { Features } from '@/constants';
-import { useFeatureCan } from '@/hooks/state';
-import { useReceipt } from '@/hooks/query';
 import { DRAWERS } from '@/constants/drawers';
-import type { SaleReceipt } from '@bigcapital/sdk-ts';
+import { useReceipt } from '@/hooks/query';
+import { useFeatureCan } from '@/hooks/state';
 
 export type ReceiptDetailEntry = SaleReceipt['entries'][number];
 export type ReceiptDetail = SaleReceipt;

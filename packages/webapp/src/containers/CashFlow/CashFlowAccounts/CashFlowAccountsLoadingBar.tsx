@@ -1,5 +1,5 @@
-import { FinancialLoadingBar } from '@/containers/FinancialStatements/FinancialLoadingBar';
 import { useCashFlowAccountsContext } from './CashFlowAccountsProvider';
+import { FinancialLoadingBar } from '@/containers/FinancialStatements/FinancialLoadingBar';
 
 export function CashflowAccountsLoadingBar() {
   const { isCashFlowAccountsFetching } = useCashFlowAccountsContext();

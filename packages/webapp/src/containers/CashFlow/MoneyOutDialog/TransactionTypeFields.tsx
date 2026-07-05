@@ -1,4 +1,6 @@
 import React, { useMemo } from 'react';
+import intl from 'react-intl-universal';
+import { useMoneyOutDialogContext } from './MoneyOutDialogProvider';
 import {
   FAccountsSuggestField,
   FieldRequiredHint,
@@ -8,8 +10,6 @@ import {
   FFormGroup,
 } from '@/components';
 import { getAddMoneyOutOptions } from '@/constants/cashflowOptions';
-import { useMoneyOutDialogContext } from './MoneyOutDialogProvider';
-import intl from 'react-intl-universal';
 
 /**
  * Transaction type fields.

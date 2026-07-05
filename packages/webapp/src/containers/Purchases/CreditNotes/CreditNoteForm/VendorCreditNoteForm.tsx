@@ -1,24 +1,10 @@
+import { Intent } from '@blueprintjs/core';
+import { css } from '@emotion/css';
+import { Formik, Form, FormikHelpers } from 'formik';
+import { isEmpty } from 'lodash';
 import React from 'react';
 import intl from 'react-intl-universal';
 import { useHistory } from 'react-router-dom';
-import { Formik, Form, FormikHelpers } from 'formik';
-import { Intent } from '@blueprintjs/core';
-import { isEmpty } from 'lodash';
-import { css } from '@emotion/css';
-import { PageForm } from '@/components/PageForm';
-import {
-  CreateCreditNoteFormSchema,
-  EditCreditNoteFormSchema,
-} from './VendorCreditNoteForm.schema';
-import { VendorCreditNoteFormHeader } from './VendorCreditNoteFormHeader';
-import { VendorCreditNoteItemsEntriesEditor } from './VendorCreditNoteItemsEntriesEditor';
-import { VendorCreditNoteFormFooter } from './VendorCreditNoteFormFooter';
-import { VendorCreditNoteFloatingActions } from './VendorCreditNoteFloatingActions';
-import { VendorCreditNoteFormDialogs } from './VendorCreditNoteFormDialogs';
-import { VendorCreditNoteFormTopBar } from './VendorCreditNoteFormTopBar';
-import { useVendorCreditNoteFormContext } from './VendorCreditNoteFormProvider';
-import { AppToaster, Box } from '@/components';
-import { compose, safeSumBy, transactionNumber } from '@/utils';
 import {
   defaultVendorCredit,
   filterNonZeroEntries,
@@ -26,8 +12,25 @@ import {
   transformFormValuesToRequest,
   type VendorCreditFormValues,
 } from './utils';
+import { VendorCreditNoteFloatingActions } from './VendorCreditNoteFloatingActions';
+import {
+  CreateCreditNoteFormSchema,
+  EditCreditNoteFormSchema,
+} from './VendorCreditNoteForm.schema';
+import { VendorCreditNoteFormDialogs } from './VendorCreditNoteFormDialogs';
+import { VendorCreditNoteFormFooter } from './VendorCreditNoteFormFooter';
+import { VendorCreditNoteFormHeader } from './VendorCreditNoteFormHeader';
+import { useVendorCreditNoteFormContext } from './VendorCreditNoteFormProvider';
+import { VendorCreditNoteFormTopBar } from './VendorCreditNoteFormTopBar';
+import { VendorCreditNoteItemsEntriesEditor } from './VendorCreditNoteItemsEntriesEditor';
+import { AppToaster, Box } from '@/components';
+import { PageForm } from '@/components/PageForm';
 import { withSettings } from '@/containers/Settings/withSettings';
 import { useCurrentOrganizationBaseCurrency } from '@/hooks/query';
+import { compose, safeSumBy, transactionNumber } from '@/utils';
+
+
+
 
 interface VendorCreditNoteFormInnerProps {
   vendorcreditAutoIncrement?: boolean;

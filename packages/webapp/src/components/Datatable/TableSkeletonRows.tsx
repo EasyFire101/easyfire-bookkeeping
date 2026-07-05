@@ -1,8 +1,10 @@
-import React, { useContext } from 'react';
 import clsx from 'classnames';
-import type { ColumnInstance } from 'react-table';
-import TableContext from './TableContext';
+import React, { useContext } from 'react';
 import { Skeleton } from '../Skeleton';
+import TableContext from './TableContext';
+import type { ColumnInstance } from 'react-table';
+
+
 
 interface TableHeaderCellProps {
   column: ColumnInstance<any>;

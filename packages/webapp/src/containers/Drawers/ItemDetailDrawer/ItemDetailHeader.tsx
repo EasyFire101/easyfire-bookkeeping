@@ -1,10 +1,9 @@
-import React from 'react';
-import intl from 'react-intl-universal';
 import classNames from 'classnames';
 import { defaultTo } from 'lodash';
-
-import { If, DetailsMenu, DetailItem, Card } from '@/components';
+import React from 'react';
+import intl from 'react-intl-universal';
 import { useItemDetailDrawerContext } from './ItemDetailDrawerProvider';
+import { If, DetailsMenu, DetailItem, Card } from '@/components';
 
 /**
  * Item header drawer of readonly details.

@@ -1,5 +1,5 @@
-import { ManualJournalBulkDeleteDialog } from '@/containers/Dialogs/ManualJournals/ManualJournalBulkDeleteDialog';
 import { DialogsName } from '@/constants/dialogs';
+import { ManualJournalBulkDeleteDialog } from '@/containers/Dialogs/ManualJournals/ManualJournalBulkDeleteDialog';
 
 export function ManualJournalsListDialogs() {
   return (

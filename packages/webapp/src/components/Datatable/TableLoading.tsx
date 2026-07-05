@@ -1,5 +1,5 @@
-import React from 'react';
 import { Spinner } from '@blueprintjs/core';
+import React from 'react';
 
 interface TableLoadingProps {
   spinnerProps?: Record<string, any>;

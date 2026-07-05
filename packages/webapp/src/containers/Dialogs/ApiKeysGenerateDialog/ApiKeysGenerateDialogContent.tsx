@@ -1,15 +1,16 @@
 // @ts-nocheck
-import React, { useState, useEffect } from 'react';
-import { Formik } from 'formik';
-import intl from 'react-intl-universal';
 import { Intent } from '@blueprintjs/core';
-import { AppToaster } from '@/components';
-import { useGenerateApiKey } from '@/hooks/query';
-import { ApiKeysGenerateFormContent } from './ApiKeysGenerateFormContent';
-import { CreateApiKeyFormSchema as ApiKeysGenerateFormSchema } from './ApiKeysGenerateForm.schema';
+import { Formik } from 'formik';
+import React, { useState, useEffect } from 'react';
+import intl from 'react-intl-universal';
 import { ApiKeyDisplayView } from './ApiKeyDisplayView';
+import { CreateApiKeyFormSchema as ApiKeysGenerateFormSchema } from './ApiKeysGenerateForm.schema';
+import { ApiKeysGenerateFormContent } from './ApiKeysGenerateFormContent';
+import { AppToaster } from '@/components';
 import { withDialogActions } from '@/containers/Dialog/withDialogActions';
+import { useGenerateApiKey } from '@/hooks/query';
 import { compose } from '@/utils';
+
 
 const defaultInitialValues = {
   name: '',

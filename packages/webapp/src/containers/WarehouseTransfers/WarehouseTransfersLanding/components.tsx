@@ -1,8 +1,7 @@
 // @ts-nocheck
+import { Intent, Tag, Menu, MenuItem, MenuDivider } from '@blueprintjs/core';
 import React from 'react';
 import intl from 'react-intl-universal';
-import { Intent, Tag, Menu, MenuItem, MenuDivider } from '@blueprintjs/core';
-import { safeCallback } from '@/utils';
 import {
   FormatDateCell,
   FormattedMessage as T,
@@ -10,6 +9,7 @@ import {
   If,
   Icon,
 } from '@/components';
+import { safeCallback } from '@/utils';
 
 export function ActionsMenu({
   payload: { onEdit, onDelete, onViewDetails, onInitate, onTransfer },

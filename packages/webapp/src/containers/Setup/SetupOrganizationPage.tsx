@@ -1,16 +1,16 @@
 // @ts-nocheck
-import React from 'react';
-import { Formik } from 'formik';
-import { FormattedMessage as T } from '@/components';
 import { x } from '@xstyled/emotion';
-
-import { SetupOrganizationForm } from './SetupOrganizationForm';
-
-import { useOrganizationSetup } from '@/hooks/query';
-import { withSettingsActions } from '@/containers/Settings/withSettingsActions';
-
+import { Formik } from 'formik';
+import React from 'react';
 import { getSetupOrganizationValidation } from './SetupOrganization.schema';
+import { SetupOrganizationForm } from './SetupOrganizationForm';
+import { FormattedMessage as T } from '@/components';
+import { withSettingsActions } from '@/containers/Settings/withSettingsActions';
+import { useOrganizationSetup } from '@/hooks/query';
 import { setCookie, compose, transfromToSnakeCase } from '@/utils';
+
+
+
 
 // Initial values.
 const defaultValues = {

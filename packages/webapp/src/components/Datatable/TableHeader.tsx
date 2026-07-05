@@ -1,9 +1,9 @@
-import React, { useContext } from 'react';
 import classNames from 'classnames';
-import type { ColumnInstance, HeaderGroup } from 'react-table';
+import React, { useContext } from 'react';
 import { ScrollSyncPane } from 'react-scroll-sync';
-import { If, MaterialProgressBar } from '@/components';
 import TableContext from './TableContext';
+import type { ColumnInstance, HeaderGroup } from 'react-table';
+import { If, MaterialProgressBar } from '@/components';
 
 interface TableHeaderCellProps {
   column: ColumnInstance<any>;

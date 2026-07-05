@@ -1,26 +1,26 @@
 // @ts-nocheck
-import React from 'react';
-import { Formik, Form } from 'formik';
 import { Intent } from '@blueprintjs/core';
-import intl from 'react-intl-universal';
 import classNames from 'classnames';
+import { Formik, Form } from 'formik';
+import React from 'react';
+import intl from 'react-intl-universal';
 
 import '@/style/pages/Items/Form.scss';
 
-import { CLASSES } from '@/constants/classes';
-import { AppToaster } from '@/components';
+import { EditItemFormSchema, CreateItemFormSchema } from './ItemForm.schema';
 import { ItemFormBody } from './ItemFormBody';
-import { ItemFormPrimarySection } from './ItemFormPrimarySection';
 import { ItemFormFloatingActions } from './ItemFormFloatingActions';
 import { ItemFormInventorySection } from './ItemFormInventorySection';
-
+import { ItemFormPrimarySection } from './ItemFormPrimarySection';
+import { useItemFormContext } from './ItemFormProvider';
 import {
   transformSubmitRequestErrors,
   useItemFormInitialValues,
 } from './utils';
-import { useItemFormContext } from './ItemFormProvider';
-import { EditItemFormSchema, CreateItemFormSchema } from './ItemForm.schema';
+import { AppToaster } from '@/components';
+import { CLASSES } from '@/constants/classes';
 import { safeInvoke } from '@/utils';
+
 
 /**
  * Item form.

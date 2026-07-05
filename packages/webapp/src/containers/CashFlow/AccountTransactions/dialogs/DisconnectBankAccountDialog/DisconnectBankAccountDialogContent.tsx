@@ -1,11 +1,11 @@
-import * as Yup from 'yup';
 import { Button, Intent, Classes } from '@blueprintjs/core';
 import { Form, Formik, FormikHelpers } from 'formik';
-import { AppToaster, FFormGroup, FInputGroup } from '@/components';
-import { useDisconnectBankAccount } from '@/hooks/query/banking';
-import { withDialogActions } from '@/containers/Dialog/withDialogActions';
+import * as Yup from 'yup';
 import type { WithDialogActionsProps } from '@/containers/Dialog/withDialogActions';
+import { AppToaster, FFormGroup, FInputGroup } from '@/components';
 import { DialogsName } from '@/constants/dialogs';
+import { withDialogActions } from '@/containers/Dialog/withDialogActions';
+import { useDisconnectBankAccount } from '@/hooks/query/banking';
 import { compose } from '@/utils';
 
 interface DisconnectFormValues {

@@ -2,17 +2,16 @@ import React from 'react';
 
 import '@/style/pages/PaymentMade/List.scss';
 
-import { DashboardPageContent } from '@/components';
-import { PaymentMadesListProvider } from './PaymentMadesListProvider';
 import { PaymentMadeActionsBar } from './PaymentMadeActionsBar';
-import { PaymentMadesTable } from './PaymentMadesTable';
 import { PaymentMadeListDrawers } from './PaymentMadeListDrawers';
-
+import { PaymentMadesListProvider } from './PaymentMadesListProvider';
+import { PaymentMadesTable } from './PaymentMadesTable';
 import { withPaymentMade } from './withPaymentMade';
-import type { WithPaymentMadeProps } from './withPaymentMade';
 import { withPaymentMadeActions } from './withPaymentMadeActions';
-
+import type { WithPaymentMadeProps } from './withPaymentMade';
+import { DashboardPageContent } from '@/components';
 import { compose, transformTableStateToQuery } from '@/utils';
+
 
 interface WithPaymentMadeActionsProps {
   resetPaymentMadesTableState: () => void;

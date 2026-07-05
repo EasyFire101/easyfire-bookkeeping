@@ -1,17 +1,4 @@
 import {
-  useMutation,
-  useQuery,
-  useQueryClient,
-  UseMutationOptions,
-  UseQueryOptions,
-} from '@tanstack/react-query';
-import type {
-  Branch,
-  BranchesListResponse,
-  CreateBranchBody,
-  EditBranchBody,
-} from '@bigcapital/sdk-ts';
-import {
   fetchBranches,
   fetchBranch,
   createBranch,
@@ -20,9 +7,22 @@ import {
   activateBranches,
   markBranchAsPrimary,
 } from '@bigcapital/sdk-ts';
+import {
+  useMutation,
+  useQuery,
+  useQueryClient,
+  UseMutationOptions,
+  UseQueryOptions,
+} from '@tanstack/react-query';
 import { useApiFetcher } from '../../useRequest';
-import { branchesKeys } from './query-keys';
 import { usersKeys } from '../users/query-keys';
+import { branchesKeys } from './query-keys';
+import type {
+  Branch,
+  BranchesListResponse,
+  CreateBranchBody,
+  EditBranchBody,
+} from '@bigcapital/sdk-ts';
 
 const commonInvalidateQueries = (
   queryClient: ReturnType<typeof useQueryClient>,

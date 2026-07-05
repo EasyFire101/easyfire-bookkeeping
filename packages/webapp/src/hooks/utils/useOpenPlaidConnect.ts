@@ -1,8 +1,8 @@
+import { Intent } from '@blueprintjs/core';
 import { useCallback } from 'react';
+import { useGetPlaidLinkToken } from '../query';
 import { useSetBankingPlaidToken } from '../state/banking';
 import { AppToaster } from '@/components';
-import { useGetPlaidLinkToken } from '../query';
-import { Intent } from '@blueprintjs/core';
 
 export const useOpenPlaidConnect = () => {
   const { mutateAsync: getPlaidLinkToken, isPending: isLoading } =

@@ -1,13 +1,13 @@
 // @ts-nocheck
-import React from 'react';
-import { Form, useFormikContext } from 'formik';
 import { Classes, Button, Intent } from '@blueprintjs/core';
-import { FastField, ErrorMessage } from 'formik';
 import { FormGroup, InputGroup } from '@blueprintjs/core';
+import { Form, useFormikContext } from 'formik';
+import { FastField, ErrorMessage } from 'formik';
+import React from 'react';
 import intl from 'react-intl-universal';
-import { inputIntent } from '@/utils';
 import { FFormGroup, FInputGroup, FormattedMessage as T } from '@/components';
 import { withDialogActions } from '@/containers/Dialog/withDialogActions';
+import { inputIntent } from '@/utils';
 import { compose } from '@/utils';
 
 /**

@@ -1,6 +1,6 @@
 import { DialogsName } from '@/constants/dialogs';
-import { useValidateBulkDeleteItems } from '@/hooks/query/items';
 import { useBulkDeleteDialog } from '@/hooks/dialogs/useBulkDeleteDialog';
+import { useValidateBulkDeleteItems } from '@/hooks/query/items';
 
 export const useBulkDeleteItemsDialog = () => {
   const validateBulkDeleteMutation = useValidateBulkDeleteItems();

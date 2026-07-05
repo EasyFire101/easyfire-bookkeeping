@@ -1,5 +1,6 @@
 // @ts-nocheck
 import React, { createContext, useContext } from 'react';
+import { DialogContent } from '@/components';
 import {
   useEditUser,
   useUser,
@@ -7,7 +8,6 @@ import {
   useAuthenticatedAccount,
 } from '@/hooks/query';
 
-import { DialogContent } from '@/components';
 
 const UserFormContext = createContext();
 

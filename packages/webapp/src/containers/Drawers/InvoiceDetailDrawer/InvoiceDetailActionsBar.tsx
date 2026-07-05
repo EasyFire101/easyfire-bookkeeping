@@ -1,5 +1,3 @@
-import React from 'react';
-import { useHistory } from 'react-router-dom';
 import {
   Button,
   NavbarGroup,
@@ -9,19 +7,10 @@ import {
   Tooltip,
   Position,
 } from '@blueprintjs/core';
+import React from 'react';
+import { useHistory } from 'react-router-dom';
 import { useInvoiceDetailDrawerContext } from './InvoiceDetailDrawerProvider';
-import {
-  withDialogActions,
-  WithDialogActionsProps,
-} from '@/containers/Dialog/withDialogActions';
-import {
-  withAlertActions,
-  WithAlertActionsProps,
-} from '@/containers/Alert/withAlertActions';
-import {
-  withDrawerActions,
-  WithDrawerActionsProps,
-} from '@/containers/Drawer/withDrawerActions';
+import { BadDebtMenuItem } from './utils';
 import {
   If,
   Can,
@@ -34,11 +23,22 @@ import {
   PaymentReceiveAction,
   AbilitySubject,
 } from '@/constants/abilityOption';
-import { compose } from '@/utils';
-import { BadDebtMenuItem } from './utils';
-import { DRAWERS } from '@/constants/drawers';
 import { DialogsName } from '@/constants/dialogs';
+import { DRAWERS } from '@/constants/drawers';
+import {
+  withAlertActions,
+  WithAlertActionsProps,
+} from '@/containers/Alert/withAlertActions';
+import {
+  withDialogActions,
+  WithDialogActionsProps,
+} from '@/containers/Dialog/withDialogActions';
+import {
+  withDrawerActions,
+  WithDrawerActionsProps,
+} from '@/containers/Drawer/withDrawerActions';
 import { ArrowBottomLeft } from '@/icons/ArrowBottomLeft';
+import { compose } from '@/utils';
 
 interface InvoiceDetailActionsBarInnerProps
   extends WithDialogActionsProps,

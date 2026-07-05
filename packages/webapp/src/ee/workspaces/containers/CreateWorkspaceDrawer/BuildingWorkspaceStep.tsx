@@ -1,8 +1,8 @@
 // @ts-nocheck
-import React, { useEffect } from 'react';
 import { ProgressBar, Intent } from '@blueprintjs/core';
 import { css } from '@emotion/css';
 import { x } from '@xstyled/emotion';
+import React, { useEffect } from 'react';
 import { FormattedMessage as T } from '@/components';
 import { useJob } from '@/hooks/query';
 import { useIsDarkMode } from '@/hooks/useDarkMode';

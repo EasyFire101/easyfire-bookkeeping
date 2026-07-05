@@ -1,7 +1,7 @@
 // @ts-nocheck
-import { useDispatch, useSelector } from 'react-redux';
+import { useQueryClient } from '@tanstack/react-query';
 import { useCallback } from 'react';
-import { isAuthenticated } from '@/store/authentication/authentication.reducer';
+import { useDispatch, useSelector } from 'react-redux';
 import {
   setAuthToken,
   setAuthUserId,
@@ -10,7 +10,7 @@ import {
   setOrganizationId,
   setLocale,
 } from '@/store/authentication/authentication.actions';
-import { useQueryClient } from '@tanstack/react-query';
+import { isAuthenticated } from '@/store/authentication/authentication.reducer';
 import { removeCookie } from '@/utils';
 
 /**

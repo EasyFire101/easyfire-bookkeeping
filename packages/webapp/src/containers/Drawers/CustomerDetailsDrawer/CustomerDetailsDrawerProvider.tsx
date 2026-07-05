@@ -1,8 +1,8 @@
 // @ts-nocheck
 import React from 'react';
-import { useCustomer } from '@/hooks/query';
 import { DrawerHeaderContent, DrawerLoading } from '@/components';
 import { DRAWERS } from '@/constants/drawers';
+import { useCustomer } from '@/hooks/query';
 
 const ContactDetailDrawerContext = React.createContext();
 

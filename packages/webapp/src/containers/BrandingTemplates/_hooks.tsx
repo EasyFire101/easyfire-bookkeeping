@@ -1,5 +1,5 @@
-import clsx from 'classnames';
 import { Classes, Tag } from '@blueprintjs/core';
+import clsx from 'classnames';
 import { Group } from '@/components';
 
 export const useBrandingTemplatesColumns = () => {

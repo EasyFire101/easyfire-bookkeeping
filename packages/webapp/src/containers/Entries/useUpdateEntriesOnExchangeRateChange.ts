@@ -1,9 +1,10 @@
-import React from 'react';
 import { useFormikContext } from 'formik';
 import { round } from 'lodash';
 import * as R from 'ramda';
+import React from 'react';
 import { updateItemsEntriesTotal } from './utils';
 import type { ItemEntry } from '@/interfaces/ItemEntries';
+
 
 /**
  * Convert the given rate to the local currency.

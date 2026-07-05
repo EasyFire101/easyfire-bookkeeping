@@ -1,35 +1,29 @@
 import React, { useCallback } from 'react';
 import { useHistory } from 'react-router-dom';
-
+import { ActionsMenu } from './components';
+import { ManualJournalsEmptyStatus } from './ManualJournalsEmptyStatus';
+import { useManualJournalsContext } from './ManualJournalsListProvider';
+import { useManualJournalsColumns } from './utils';
+import { withManualJournals } from './withManualJournals';
+import { withManualJournalsActions } from './withManualJournalsActions';
+import type { ManualJournalTableRow } from './components';
+import type { WithManualJournalsProps } from './withManualJournals';
+import type { WithManualJournalsActionsProps } from './withManualJournalsActions';
+import type { WithAlertActionsProps } from '@/containers/Alert/withAlertActions';
+import type { WithDrawerActionsProps } from '@/containers/Drawer/withDrawerActions';
 import {
   DataTable,
   DashboardContentTable,
   TableSkeletonRows,
   TableSkeletonHeader,
 } from '@/components';
-import { TABLES } from '@/constants/tables';
-
-import { ManualJournalsEmptyStatus } from './ManualJournalsEmptyStatus';
-
-import { ActionsMenu } from './components';
-import type { ManualJournalTableRow } from './components';
-
-import { withManualJournals } from './withManualJournals';
-import { withManualJournalsActions } from './withManualJournalsActions';
-import type { WithManualJournalsProps } from './withManualJournals';
-import type { WithManualJournalsActionsProps } from './withManualJournalsActions';
-import { withAlertActions } from '@/containers/Alert/withAlertActions';
-import type { WithAlertActionsProps } from '@/containers/Alert/withAlertActions';
-import { withDrawerActions } from '@/containers/Drawer/withDrawerActions';
-import type { WithDrawerActionsProps } from '@/containers/Drawer/withDrawerActions';
-import { withSettings } from '@/containers/Settings/withSettings';
-
-import { useManualJournalsContext } from './ManualJournalsListProvider';
-import { useMemorizedColumnsWidths } from '@/hooks';
-import { useManualJournalsColumns } from './utils';
-
-import { compose } from '@/utils';
 import { DRAWERS } from '@/constants/drawers';
+import { TABLES } from '@/constants/tables';
+import { withAlertActions } from '@/containers/Alert/withAlertActions';
+import { withDrawerActions } from '@/containers/Drawer/withDrawerActions';
+import { withSettings } from '@/containers/Settings/withSettings';
+import { useMemorizedColumnsWidths } from '@/hooks';
+import { compose } from '@/utils';
 
 interface WithSettingsProps {
   manualJournalsTableSize?: string | null;

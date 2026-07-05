@@ -1,9 +1,9 @@
 // @ts-nocheck
+import { Intent, Menu, MenuDivider, MenuItem } from '@blueprintjs/core';
 import React from 'react';
 import { Can, Icon } from '@/components';
 import { AbilitySubject, TaxRateAction } from '@/constants/abilityOption';
 import { safeCallback } from '@/utils';
-import { Intent, Menu, MenuDivider, MenuItem } from '@blueprintjs/core';
 
 /**
  * Tax rates table actions menu.

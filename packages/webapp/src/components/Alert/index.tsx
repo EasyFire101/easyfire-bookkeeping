@@ -1,6 +1,6 @@
 // @ts-nocheck
-import React from 'react';
 import clsx from 'classnames';
+import React from 'react';
 import styled from 'styled-components';
 
 export function Alert({ title, description, children, intent, className }) {

@@ -1,11 +1,11 @@
 import React from 'react';
 import intl from 'react-intl-universal';
+import type { SaleEstimate } from '@bigcapital/sdk-ts';
+import { DrawerHeaderContent, DrawerLoading } from '@/components';
 import { Features } from '@/constants';
+import { DRAWERS } from '@/constants/drawers';
 import { useEstimateDetail } from '@/hooks/query';
 import { useFeatureCan } from '@/hooks/state';
-import { DrawerHeaderContent, DrawerLoading } from '@/components';
-import { DRAWERS } from '@/constants/drawers';
-import type { SaleEstimate } from '@bigcapital/sdk-ts';
 
 /**
  * The SDK's ItemEntryDto shape, plus the formatted fields the backend actually

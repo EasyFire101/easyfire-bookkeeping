@@ -1,11 +1,12 @@
-import React from 'react';
 import { keepPreviousData } from '@tanstack/react-query';
-import { DashboardInsider } from '@/components/Dashboard';
-import type { BankingAccountsListResponse } from '@bigcapital/sdk-ts';
-
-import { useCashflowAccounts } from '@/hooks/query';
+import React from 'react';
 import { transformAccountsStateToQuery } from './utils';
 import type { WithCashflowAccountsProps } from '@/containers/CashFlow/AccountTransactions/withCashflowAccounts';
+import type { BankingAccountsListResponse } from '@bigcapital/sdk-ts';
+import { DashboardInsider } from '@/components/Dashboard';
+import { useCashflowAccounts } from '@/hooks/query';
+
+
 
 export interface CashFlowAccountsContextValue {
   cashflowAccounts?: BankingAccountsListResponse;

@@ -1,10 +1,22 @@
-import React, { useMemo } from 'react';
-import * as R from 'ramda';
-import intl from 'react-intl-universal';
-import moment from 'moment';
 import { useFormikContext } from 'formik';
 import { omit, first } from 'lodash';
+import moment from 'moment';
+import * as R from 'ramda';
+import React, { useMemo } from 'react';
+import intl from 'react-intl-universal';
+import { useEstimateFormContext } from './EstimateFormProvider';
 import type { SaleEstimate, CreateSaleEstimateBody } from '@bigcapital/sdk-ts';
+import {
+  transformAttachmentsToForm,
+  transformAttachmentsToRequest,
+} from '@/containers/Attachments/utils';
+import { convertBrandingTemplatesToOptions } from '@/containers/BrandingTemplates/BrandingTemplatesSelectFields';
+import {
+  updateItemsEntriesTotal,
+  ensureEntriesHaveEmptyLine,
+  getEntriesTotal,
+} from '@/containers/Entries/utils';
+import { useCurrentOrganizationBaseCurrency } from '@/hooks/query';
 import {
   compose,
   defaultFastFieldShouldUpdate,
@@ -13,18 +25,6 @@ import {
   formattedAmount,
   toSafeNumber,
 } from '@/utils';
-import { useEstimateFormContext } from './EstimateFormProvider';
-import {
-  updateItemsEntriesTotal,
-  ensureEntriesHaveEmptyLine,
-  getEntriesTotal,
-} from '@/containers/Entries/utils';
-import { useCurrentOrganizationBaseCurrency } from '@/hooks/query';
-import {
-  transformAttachmentsToForm,
-  transformAttachmentsToRequest,
-} from '@/containers/Attachments/utils';
-import { convertBrandingTemplatesToOptions } from '@/containers/BrandingTemplates/BrandingTemplatesSelectFields';
 
 export const MIN_LINES_NUMBER = 1;
 

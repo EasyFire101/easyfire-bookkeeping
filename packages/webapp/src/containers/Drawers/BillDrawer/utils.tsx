@@ -1,6 +1,3 @@
-import React from 'react';
-import intl from 'react-intl-universal';
-import styled from 'styled-components';
 import {
   Button,
   Popover,
@@ -11,6 +8,11 @@ import {
   Intent,
   Tag,
 } from '@blueprintjs/core';
+import React from 'react';
+import intl from 'react-intl-universal';
+import styled from 'styled-components';
+import { useBillDrawerContext } from './BillDrawerProvider';
+import type { Bill } from '@bigcapital/sdk-ts';
 import {
   TextOverviewTooltipCell,
   FormattedMessage as T,
@@ -18,8 +20,6 @@ import {
   Icon,
 } from '@/components';
 import { getColumnWidth } from '@/utils';
-import { useBillDrawerContext } from './BillDrawerProvider';
-import type { Bill } from '@bigcapital/sdk-ts';
 
 interface BillDetailsStatusProps {
   bill: Bill;

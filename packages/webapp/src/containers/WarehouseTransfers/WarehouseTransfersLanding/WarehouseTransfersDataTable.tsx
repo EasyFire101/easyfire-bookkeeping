@@ -1,27 +1,25 @@
 // @ts-nocheck
 import React from 'react';
 import { useHistory } from 'react-router-dom';
+import { useWarehouseTransfersTableColumns, ActionsMenu } from './components';
+import { WarehouseTransfersEmptyStatus } from './WarehouseTransfersEmptyStatus';
+import { useWarehouseTranfersListContext } from './WarehouseTransfersListProvider';
+import { withWarehouseTransfersActions } from './withWarehouseTransfersActions';
 import {
   DataTable,
   TableSkeletonRows,
   TableSkeletonHeader,
   DashboardContentTable,
 } from '@/components';
-import { TABLES } from '@/constants/tables';
-import { useMemorizedColumnsWidths } from '@/hooks';
-import { useWarehouseTransfersTableColumns, ActionsMenu } from './components';
-import { useWarehouseTranfersListContext } from './WarehouseTransfersListProvider';
-
-import { WarehouseTransfersEmptyStatus } from './WarehouseTransfersEmptyStatus';
-import { withWarehouseTransfersActions } from './withWarehouseTransfersActions';
-import { withDrawerActions } from '@/containers/Drawer/withDrawerActions';
-import { withDialogActions } from '@/containers/Dialog/withDialogActions';
-import { withDashboardActions } from '@/containers/Dashboard/withDashboardActions';
-import { withAlertActions } from '@/containers/Alert/withAlertActions';
-import { withSettings } from '@/containers/Settings/withSettings';
-
-import { compose } from '@/utils';
 import { DRAWERS } from '@/constants/drawers';
+import { TABLES } from '@/constants/tables';
+import { withAlertActions } from '@/containers/Alert/withAlertActions';
+import { withDashboardActions } from '@/containers/Dashboard/withDashboardActions';
+import { withDialogActions } from '@/containers/Dialog/withDialogActions';
+import { withDrawerActions } from '@/containers/Drawer/withDrawerActions';
+import { withSettings } from '@/containers/Settings/withSettings';
+import { useMemorizedColumnsWidths } from '@/hooks';
+import { compose } from '@/utils';
 
 /**
  * Warehouse transfers datatable.

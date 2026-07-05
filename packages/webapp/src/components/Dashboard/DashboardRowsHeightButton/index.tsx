@@ -1,5 +1,4 @@
 // @ts-nocheck
-import React from 'react';
 import {
   Button,
   PopoverInteractionKind,
@@ -12,9 +11,9 @@ import {
   Position,
 } from '@blueprintjs/core';
 import clsx from 'classnames';
-import { Icon, T } from '@/components';
-
+import React from 'react';
 import Style from './style.module.scss';
+import { Icon, T } from '@/components';
 
 /**
  * Dashboard rows height button control.

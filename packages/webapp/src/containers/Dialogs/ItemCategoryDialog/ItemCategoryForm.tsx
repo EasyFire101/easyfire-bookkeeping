@@ -1,19 +1,17 @@
 // @ts-nocheck
-import React, { useMemo } from 'react';
-import intl from 'react-intl-universal';
 import { Intent } from '@blueprintjs/core';
 import { Formik } from 'formik';
-
-import { AppToaster } from '@/components';
-import { useItemCategoryContext } from './ItemCategoryProvider';
-import { compose, transformToForm } from '@/utils';
+import React, { useMemo } from 'react';
+import intl from 'react-intl-universal';
 import {
   CreateItemCategoryFormSchema,
   EditItemCategoryFormSchema,
 } from './itemCategoryForm.schema';
-
-import { withDialogActions } from '@/containers/Dialog/withDialogActions';
 import { ItemCategoryForm as ItemCategoryFormContent } from './ItemCategoryFormContent';
+import { useItemCategoryContext } from './ItemCategoryProvider';
+import { AppToaster } from '@/components';
+import { withDialogActions } from '@/containers/Dialog/withDialogActions';
+import { compose, transformToForm } from '@/utils';
 
 const defaultInitialValues = {
   name: '',

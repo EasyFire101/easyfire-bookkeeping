@@ -1,6 +1,5 @@
-import React from 'react';
 import { get } from 'lodash';
-
+import React from 'react';
 import { getForceWidth } from '@/utils';
 
 interface CellForceWidthProps {

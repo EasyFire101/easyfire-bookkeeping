@@ -1,7 +1,7 @@
 import React from 'react';
+import { FinancialReportBody } from '../FinancialReportPage';
 import { useInventoryItemDetailsContext } from './InventoryItemDetailsProvider';
 import { InventoryItemDetailsTable } from './InventoryItemDetailsTable';
-import { FinancialReportBody } from '../FinancialReportPage';
 import { FinancialSheetSkeleton } from '@/components';
 import { useCurrentOrganizationName } from '@/hooks/query';
 

@@ -1,7 +1,7 @@
+import { defaultTo } from 'lodash';
 import React from 'react';
 import intl from 'react-intl-universal';
-import { defaultTo } from 'lodash';
-
+import { usePaymentMadeDetailContext } from './PaymentMadeDetailProvider';
 import {
   Row,
   Col,
@@ -12,7 +12,6 @@ import {
   ExchangeRateDetailItem,
   VendorDrawerLink,
 } from '@/components';
-import { usePaymentMadeDetailContext } from './PaymentMadeDetailProvider';
 
 /**
  * Payment made - detail panel - header.

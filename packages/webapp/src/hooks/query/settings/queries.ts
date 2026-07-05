@@ -1,12 +1,4 @@
 import {
-  useMutation,
-  useQuery,
-  useQueryClient,
-  UseMutationOptions,
-  UseQueryOptions,
-} from '@tanstack/react-query';
-import type { SaveSettingsBody, SettingsResponse } from '@bigcapital/sdk-ts';
-import {
   fetchSettings,
   fetchSettingsInvoices,
   fetchSettingsEstimates,
@@ -23,8 +15,16 @@ import {
   editSettingSMSNotification,
   editSettings,
 } from '@bigcapital/sdk-ts';
+import {
+  useMutation,
+  useQuery,
+  useQueryClient,
+  UseMutationOptions,
+  UseQueryOptions,
+} from '@tanstack/react-query';
 import { useApiFetcher } from '../../useRequest';
 import { settingsKeys } from './query-keys';
+import type { SaveSettingsBody, SettingsResponse } from '@bigcapital/sdk-ts';
 
 export function useSaveSettings(
   props?: UseMutationOptions<void, Error, SaveSettingsBody>,

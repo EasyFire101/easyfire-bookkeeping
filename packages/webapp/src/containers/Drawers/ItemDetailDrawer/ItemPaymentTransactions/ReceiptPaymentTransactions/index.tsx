@@ -1,20 +1,20 @@
 import React from 'react';
 import { useHistory } from 'react-router-dom';
-import { TableStyle } from '@/constants';
-import { DataTable, TableSkeletonRows } from '@/components';
 import { useItemDetailDrawerContext } from '../../ItemDetailDrawerProvider';
-import { useItemAssociatedReceiptTransactions } from '@/hooks/query';
 import {
   useReceiptTransactionsColumns,
   ActionsMenu,
   type ItemReceiptTransaction,
 } from './components';
-import { withAlertActions } from '@/containers/Alert/withAlertActions';
-import { withDrawerActions } from '@/containers/Drawer/withDrawerActions';
-import { compose } from '@/utils';
-import { DRAWERS } from '@/constants/drawers';
 import type { WithAlertActionsProps } from '@/containers/Alert/withAlertActions';
 import type { WithDrawerActionsProps } from '@/containers/Drawer/withDrawerActions';
+import { DataTable, TableSkeletonRows } from '@/components';
+import { TableStyle } from '@/constants';
+import { DRAWERS } from '@/constants/drawers';
+import { withAlertActions } from '@/containers/Alert/withAlertActions';
+import { withDrawerActions } from '@/containers/Drawer/withDrawerActions';
+import { useItemAssociatedReceiptTransactions } from '@/hooks/query';
+import { compose } from '@/utils';
 
 interface ReceiptPaymentTransactionsInnerProps
   extends Pick<WithAlertActionsProps, 'openAlert'>,

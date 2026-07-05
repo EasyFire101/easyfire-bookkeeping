@@ -1,6 +1,4 @@
 // @ts-nocheck
-import React from 'react';
-import intl from 'react-intl-universal';
 import {
   Button,
   Popover,
@@ -13,7 +11,8 @@ import {
   Classes,
 } from '@blueprintjs/core';
 import clsx from 'classnames';
-
+import React from 'react';
+import intl from 'react-intl-universal';
 import { Can, Icon, Money, If, AvatarCell } from '@/components';
 import { VendorAction, AbilitySubject } from '@/constants/abilityOption';
 import { safeCallback, firstLettersArgs } from '@/utils';

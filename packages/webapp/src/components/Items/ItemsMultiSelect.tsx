@@ -1,6 +1,6 @@
 // @ts-nocheck
-import React from 'react';
 import * as R from 'ramda';
+import React from 'react';
 import { FMultiSelect } from '@/components/Forms';
 import { withDialogActions } from '@/containers/Dialog/withDialogActions';
 

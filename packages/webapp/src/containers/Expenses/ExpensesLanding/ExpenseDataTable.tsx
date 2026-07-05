@@ -1,33 +1,31 @@
 import React, { useCallback } from 'react';
 import { useHistory } from 'react-router-dom';
-
-import { compose } from '@/utils';
+import { ActionsMenu, useExpensesTableColumns } from './components';
+import { InvoicesEmptyStatus as ExpensesEmptyStatus } from './ExpensesEmptyStatus';
 import { useExpensesListContext } from './ExpensesListProvider';
-import { useMemorizedColumnsWidths } from '@/hooks';
+import { withExpenses } from './withExpenses';
+import { withExpensesActions } from './withExpensesActions';
+import type { ExpenseTableRow } from './components';
+import type { WithExpensesProps } from './withExpenses';
+import type { WithExpensesActionsProps } from './withExpensesActions';
+import type { WithAlertActionsProps } from '@/containers/Alert/withAlertActions';
+import type { WithDrawerActionsProps } from '@/containers/Drawer/withDrawerActions';
 import {
   DashboardContentTable,
   DataTable,
   TableSkeletonRows,
   TableSkeletonHeader,
 } from '@/components';
-import { TABLES } from '@/constants/tables';
-
-import { InvoicesEmptyStatus as ExpensesEmptyStatus } from './ExpensesEmptyStatus';
-
-import { withDashboardActions } from '@/containers/Dashboard/withDashboardActions';
-import { withExpensesActions } from './withExpensesActions';
-import type { WithExpensesActionsProps } from './withExpensesActions';
-import { withAlertActions } from '@/containers/Alert/withAlertActions';
-import type { WithAlertActionsProps } from '@/containers/Alert/withAlertActions';
-import { withDrawerActions } from '@/containers/Drawer/withDrawerActions';
-import type { WithDrawerActionsProps } from '@/containers/Drawer/withDrawerActions';
-import { withSettings } from '@/containers/Settings/withSettings';
-import { withExpenses } from './withExpenses';
-import type { WithExpensesProps } from './withExpenses';
-
-import { ActionsMenu, useExpensesTableColumns } from './components';
-import type { ExpenseTableRow } from './components';
 import { DRAWERS } from '@/constants/drawers';
+import { TABLES } from '@/constants/tables';
+import { withAlertActions } from '@/containers/Alert/withAlertActions';
+import { withDashboardActions } from '@/containers/Dashboard/withDashboardActions';
+import { withDrawerActions } from '@/containers/Drawer/withDrawerActions';
+import { withSettings } from '@/containers/Settings/withSettings';
+import { useMemorizedColumnsWidths } from '@/hooks';
+import { compose } from '@/utils';
+
+
 
 interface WithSettingsProps {
   expensesTableSize?: string | null;

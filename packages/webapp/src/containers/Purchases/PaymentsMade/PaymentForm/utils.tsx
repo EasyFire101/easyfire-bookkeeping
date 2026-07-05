@@ -1,11 +1,17 @@
-import React from 'react';
-import moment from 'moment';
-import intl from 'react-intl-universal';
-import { pick, first, sumBy } from 'lodash';
-import { useFormikContext } from 'formik';
 import { Intent } from '@blueprintjs/core';
-import { AppToaster } from '@/components';
+import { useFormikContext } from 'formik';
+import { pick, first, sumBy } from 'lodash';
+import moment from 'moment';
+import React from 'react';
+import intl from 'react-intl-universal';
+import { PAYMENT_MADE_ERRORS } from '../constants';
 import { usePaymentMadeFormContext } from './PaymentMadeFormProvider';
+import { AppToaster } from '@/components';
+import {
+  transformAttachmentsToForm,
+  transformAttachmentsToRequest,
+} from '@/containers/Attachments/utils';
+import { useCurrentOrganizationBaseCurrency } from '@/hooks/query';
 import {
   defaultFastFieldShouldUpdate,
   safeSumBy,
@@ -13,12 +19,8 @@ import {
   orderingLinesIndexes,
   formattedAmount,
 } from '@/utils';
-import { useCurrentOrganizationBaseCurrency } from '@/hooks/query';
-import { PAYMENT_MADE_ERRORS } from '../constants';
-import {
-  transformAttachmentsToForm,
-  transformAttachmentsToRequest,
-} from '@/containers/Attachments/utils';
+
+
 
 export type PaymentMadeEntry = {
   index?: string | number;

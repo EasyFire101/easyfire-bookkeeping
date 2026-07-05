@@ -1,15 +1,16 @@
 import React from 'react';
+
 import '@/style/pages/PaymentReceive/List.scss';
-import { DashboardPageContent } from '@/components';
+import { PaymentsReceivedActionsBar } from './PaymentsReceivedActionsBar';
+import { PaymentsReceivedListDialogs } from './PaymentsReceivedListDialogs';
+import { PaymentsReceivedListDrawers } from './PaymentsReceivedListDrawers';
 import { PaymentsReceivedListProvider } from './PaymentsReceivedListProvider';
 import { PaymentsReceivedTable as PaymentReceivesTable } from './PaymentsReceivedTable';
-import { PaymentsReceivedActionsBar } from './PaymentsReceivedActionsBar';
-import { PaymentsReceivedListDrawers } from './PaymentsReceivedListDrawers';
-import { PaymentsReceivedListDialogs } from './PaymentsReceivedListDialogs';
 import { withPaymentsReceived } from './withPaymentsReceived';
 import { withPaymentsReceivedActions } from './withPaymentsReceivedActions';
-import { compose, transformTableStateToQuery } from '@/utils';
 import type { WithPaymentsReceivedProps } from './withPaymentsReceived';
+import { DashboardPageContent } from '@/components';
+import { compose, transformTableStateToQuery } from '@/utils';
 
 interface WithPaymentsReceivedActionsProps {
   resetPaymentReceivesTableState: () => void;

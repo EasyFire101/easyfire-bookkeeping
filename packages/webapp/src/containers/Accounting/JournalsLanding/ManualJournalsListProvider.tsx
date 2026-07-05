@@ -1,10 +1,10 @@
-import React, { createContext } from 'react';
 import { isEmpty } from 'lodash';
+import React, { createContext } from 'react';
+import type { ManualJournalTableRow } from './components';
+import type { ManualJournalsListQuery } from '@bigcapital/sdk-ts';
 import { DashboardInsider } from '@/components';
 import { useResourceViews, useResourceMeta, useJournals } from '@/hooks/query';
 import { getFieldsFromResourceMeta } from '@/utils';
-import type { ManualJournalsListQuery } from '@bigcapital/sdk-ts';
-import type { ManualJournalTableRow } from './components';
 
 // FIXME: SDK schema declares the manual-journals list endpoint as returning
 // `ManualJournalResponseDto[]`, but the server actually returns a paginated

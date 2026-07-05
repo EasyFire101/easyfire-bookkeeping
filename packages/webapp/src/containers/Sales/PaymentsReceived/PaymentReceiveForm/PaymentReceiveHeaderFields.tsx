@@ -1,13 +1,26 @@
-import React, { useMemo } from 'react';
-import classNames from 'classnames';
-import styled from 'styled-components';
 import { Position, Classes, ControlGroup, Button } from '@blueprintjs/core';
-import { isEmpty, toSafeInteger } from 'lodash';
-import { useFormikContext } from 'formik';
 import { css } from '@emotion/css';
 import { useTheme } from '@emotion/react';
 import { Theme } from '@xstyled/emotion';
-
+import classNames from 'classnames';
+import { useFormikContext } from 'formik';
+import { isEmpty, toSafeInteger } from 'lodash';
+import React, { useMemo } from 'react';
+import intl from 'react-intl-universal';
+import styled from 'styled-components';
+import {
+  PaymentReceiveExchangeRateInputField,
+  PaymentReceiveProjectSelectButton,
+} from './components';
+import { usePaymentReceiveFormContext } from './PaymentReceiveFormProvider';
+import { PaymentReceivePaymentNoField } from './PaymentReceivePaymentNoField';
+import {
+  amountPaymentEntries,
+  fullAmountPaymentEntries,
+  customersFieldShouldUpdate,
+  accountsFieldShouldUpdate,
+  type PaymentReceiveFormValues,
+} from './utils';
 import {
   FeatureCan,
   CustomersSelect,
@@ -16,7 +29,6 @@ import {
   Stack,
   FDateInput,
 } from '@/components';
-import { safeSumBy } from '@/utils';
 import {
   FFormGroup,
   AccountsSelect,
@@ -28,24 +40,13 @@ import {
   Money,
   FInputGroup,
 } from '@/components';
-import { usePaymentReceiveFormContext } from './PaymentReceiveFormProvider';
+import { Features } from '@/constants';
 import { ACCOUNT_TYPE } from '@/constants/accountTypes';
 import { ProjectsSelect } from '@/containers/Projects/components';
-import {
-  PaymentReceiveExchangeRateInputField,
-  PaymentReceiveProjectSelectButton,
-} from './components';
+import { safeSumBy } from '@/utils';
 
-import {
-  amountPaymentEntries,
-  fullAmountPaymentEntries,
-  customersFieldShouldUpdate,
-  accountsFieldShouldUpdate,
-  type PaymentReceiveFormValues,
-} from './utils';
-import { Features } from '@/constants';
-import { PaymentReceivePaymentNoField } from './PaymentReceivePaymentNoField';
-import intl from 'react-intl-universal';
+
+
 
 const getHeaderFieldsStyle = (theme: Theme) => css`
   .${theme.bpPrefix}-form-group {

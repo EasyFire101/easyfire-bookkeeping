@@ -1,4 +1,3 @@
-import React from 'react';
 import {
   Intent,
   Button,
@@ -9,19 +8,21 @@ import {
   Menu,
   MenuItem,
 } from '@blueprintjs/core';
-import { useHistory } from 'react-router-dom';
 import { useFormikContext } from 'formik';
-import { FSelect, Group, Icon, FormattedMessage as T } from '@/components';
-import { useDrawerActions } from '@/hooks/state';
+import React from 'react';
+import { useHistory } from 'react-router-dom';
 import { usePaymentReceiveFormContext } from './PaymentReceiveFormProvider';
+import { usePaymentReceivedFormBrandingTemplatesOptions } from './utils';
+import { FSelect, Group, Icon, FormattedMessage as T } from '@/components';
+import { PageForm } from '@/components/PageForm';
+import { DRAWERS } from '@/constants/drawers';
 import {
   BrandingThemeFormGroup,
   BrandingThemeSelectButton,
 } from '@/containers/BrandingTemplates/BrandingTemplatesSelectFields';
-import { usePaymentReceivedFormBrandingTemplatesOptions } from './utils';
-import { PageForm } from '@/components/PageForm';
+import { useDrawerActions } from '@/hooks/state';
 import { MoreIcon } from '@/icons/More';
-import { DRAWERS } from '@/constants/drawers';
+
 
 type BrandingSelectInputRenderArgs = {
   activeItem?: { value: string | number; label: string };

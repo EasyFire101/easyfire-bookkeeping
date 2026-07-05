@@ -1,4 +1,11 @@
 import { Position } from '@blueprintjs/core';
+import intl from 'react-intl-universal';
+import { filterInventoryValuationOptions } from '../constants';
+import { FinancialStatementsFilter } from '../FinancialStatementsFilter';
+import {
+  InventoryValuationGeneralPanelProvider,
+  useInventoryValuationGeneralPanelContext,
+} from './InventoryValuationHeaderGeneralPanelProvider';
 import {
   ItemsMultiSelect,
   Row,
@@ -7,14 +14,8 @@ import {
   FFormGroup,
   FDateInput,
 } from '@/components';
-import { filterInventoryValuationOptions } from '../constants';
 import { momentFormatter } from '@/utils';
-import {
-  InventoryValuationGeneralPanelProvider,
-  useInventoryValuationGeneralPanelContext,
-} from './InventoryValuationHeaderGeneralPanelProvider';
-import { FinancialStatementsFilter } from '../FinancialStatementsFilter';
-import intl from 'react-intl-universal';
+
 
 /**
  * Inventory valuation - Drawer Header - General panel.

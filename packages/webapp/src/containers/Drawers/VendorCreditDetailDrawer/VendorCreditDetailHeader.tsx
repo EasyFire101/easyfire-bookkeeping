@@ -1,7 +1,9 @@
+import { defaultTo } from 'lodash';
 import React from 'react';
 import intl from 'react-intl-universal';
 import styled from 'styled-components';
-import { defaultTo } from 'lodash';
+import { VendorCreditDetailsStatus } from './utils';
+import { useVendorCreditDetailDrawerContext } from './VendorCreditDetailDrawerProvider';
 import {
   T,
   Row,
@@ -13,8 +15,6 @@ import {
   VendorDrawerLink,
   ExchangeRateDetailItem,
 } from '@/components';
-import { useVendorCreditDetailDrawerContext } from './VendorCreditDetailDrawerProvider';
-import { VendorCreditDetailsStatus } from './utils';
 
 /**
  * Vendor credit detail drawer header.

@@ -1,5 +1,5 @@
-import { index as ManualJournalDrawer } from '@/containers/Drawers/ManualJournalDrawer';
 import { DRAWERS } from '@/constants/drawers';
+import { index as ManualJournalDrawer } from '@/containers/Drawers/ManualJournalDrawer';
 
 export function ManualJournalsListDrawers() {
   return (

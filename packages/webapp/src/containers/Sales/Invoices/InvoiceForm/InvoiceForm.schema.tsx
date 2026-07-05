@@ -1,9 +1,9 @@
-import * as Yup from 'yup';
 import moment from 'moment';
 import intl from 'react-intl-universal';
+import * as Yup from 'yup';
 import { DATATYPES_LENGTH } from '@/constants/dataTypes';
-import { isBlank } from '@/utils';
 import { TaxType } from '@/interfaces/TaxRates';
+import { isBlank } from '@/utils';
 
 const getSchema = () =>
   Yup.object().shape({

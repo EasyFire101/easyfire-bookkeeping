@@ -1,17 +1,15 @@
 // @ts-nocheck
+import { Intent } from '@blueprintjs/core';
 import React from 'react';
 import intl from 'react-intl-universal';
 import styled from 'styled-components';
-import { Intent } from '@blueprintjs/core';
-
-import { DataTable, AppToaster, TableSkeletonRows } from '@/components';
-
 import { useSMSIntegrationTableColumns, ActionsMenu } from './components';
 import { useSMSIntegrationContext } from './SMSIntegrationProvider';
-import { useSettingEditSMSNotification } from '@/hooks/query';
-
+import { DataTable, AppToaster, TableSkeletonRows } from '@/components';
 import { withDialogActions } from '@/containers/Dialog/withDialogActions';
+import { useSettingEditSMSNotification } from '@/hooks/query';
 import { compose } from '@/utils';
+
 
 /**
  * SMS Message data table.

@@ -1,17 +1,18 @@
-import { useState } from 'react';
-import moment from 'moment';
-import { Box, Icon } from '@/components';
 import { Classes, Popover, Position } from '@blueprintjs/core';
-import type { FormikConfig, FormikHelpers } from 'formik';
-import { withBankingActions } from '../../withBankingActions';
-import type { WithBankingActionsProps } from '../../withBankingActions';
+import moment from 'moment';
+import { useState } from 'react';
 import { withBanking } from '../../withBanking';
-import type { WithBankingProps } from '../../withBanking';
-import type { UncategorizedTransactionsFilter } from '../../withBankingActions';
+import { withBankingActions } from '../../withBankingActions';
 import { AccountTransactionsDateFilterForm } from '../AccountTransactionsDateFilter';
-import type { AccountTransactionsDateFilterFormValues } from '../AccountTransactionsDateFilter';
 import { TagButton } from './TagButton';
+import type { WithBankingProps } from '../../withBanking';
+import type { WithBankingActionsProps } from '../../withBankingActions';
+import type { UncategorizedTransactionsFilter } from '../../withBankingActions';
+import type { AccountTransactionsDateFilterFormValues } from '../AccountTransactionsDateFilter';
+import type { FormikConfig, FormikHelpers } from 'formik';
+import { Box, Icon } from '@/components';
 import { compose } from '@/utils';
+
 
 interface AccountUncategorizedDateFilterRootProps
   extends Pick<WithBankingProps, 'uncategorizedTransactionsFilter'> {}

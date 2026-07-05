@@ -1,7 +1,7 @@
 // @ts-nocheck
 import { useCallback } from 'react';
-import type { ApiError } from 'openapi-typescript-fetch';
 import { useAuthActions, useSetGlobalErrors } from './state';
+import type { ApiError } from 'openapi-typescript-fetch';
 
 /**
  * Returns a stable callback that translates SDK fetcher rejections into

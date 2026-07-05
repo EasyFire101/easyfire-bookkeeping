@@ -1,5 +1,3 @@
-import React from 'react';
-import intl from 'react-intl-universal';
 import {
   Position,
   Classes,
@@ -9,10 +7,12 @@ import {
   MenuDivider,
   Intent,
 } from '@blueprintjs/core';
+import React from 'react';
+import intl from 'react-intl-universal';
 import type { Account } from '@bigcapital/sdk-ts';
 import { Can, Icon, If } from '@/components';
-import { safeCallback } from '@/utils';
 import { AbilitySubject, AccountAction } from '@/constants/abilityOption';
+import { safeCallback } from '@/utils';
 
 export type AccountTableRow = Account & {
   // `description` is returned by the server but not declared on the SDK type.

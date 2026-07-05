@@ -1,21 +1,18 @@
 // @ts-nocheck
-import React from 'react';
 import * as R from 'ramda';
+import React from 'react';
 import styled from 'styled-components';
-
 import { Card, DrawerLoading } from '@/components';
+import { useDrawerContext } from '@/components/Drawer/DrawerProvider';
+import { DRAWERS } from '@/constants/drawers';
+import { withDashboardActions } from '@/containers/Dashboard/withDashboardActions';
+import { withDrawerActions } from '@/containers/Drawer/withDrawerActions';
+import { VendorFormFormik } from '@/containers/Vendors/VendorForm/VendorFormFormik';
 import {
   VendorFormProvider,
   useVendorFormContext,
 } from '@/containers/Vendors/VendorForm/VendorFormProvider';
-import { VendorFormFormik } from '@/containers/Vendors/VendorForm/VendorFormFormik';
-
-import { withDrawerActions } from '@/containers/Drawer/withDrawerActions';
-import { withDashboardActions } from '@/containers/Dashboard/withDashboardActions';
-
-import { useDrawerContext } from '@/components/Drawer/DrawerProvider';
 import { useAddAutofillRef } from '@/hooks/state/autofill';
-import { DRAWERS } from '@/constants/drawers';
 
 /**
  * Drawer vendor form loading wrapper.

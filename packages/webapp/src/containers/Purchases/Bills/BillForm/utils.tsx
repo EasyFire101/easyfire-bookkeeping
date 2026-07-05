@@ -1,12 +1,29 @@
-import React from 'react';
-import moment from 'moment';
-import intl from 'react-intl-universal';
-import * as R from 'ramda';
-import { first, chain } from 'lodash';
 import { Intent } from '@blueprintjs/core';
 import { useFormikContext, type FormikErrors } from 'formik';
+import { first, chain } from 'lodash';
+import moment from 'moment';
+import * as R from 'ramda';
+import React from 'react';
+import intl from 'react-intl-universal';
+import { useBillFormContext } from './BillFormProvider';
 import type { Bill, CreateBillBody } from '@bigcapital/sdk-ts';
 import { AppToaster } from '@/components';
+import {
+  transformAttachmentsToForm,
+  transformAttachmentsToRequest,
+} from '@/containers/Attachments/utils';
+import {
+  isLandedCostDisabled,
+  getEntriesTotal,
+} from '@/containers/Entries/utils';
+import {
+  updateItemsEntriesTotal,
+  ensureEntriesHaveEmptyLine,
+  assignEntriesTaxAmount,
+  aggregateItemEntriesTaxRates,
+} from '@/containers/Entries/utils';
+import { useCurrentOrganizationBaseCurrency } from '@/hooks/query';
+import { TaxType } from '@/interfaces/TaxRates';
 import {
   compose,
   defaultFastFieldShouldUpdate,
@@ -16,23 +33,6 @@ import {
   formattedAmount,
   toSafeNumber,
 } from '@/utils';
-import {
-  updateItemsEntriesTotal,
-  ensureEntriesHaveEmptyLine,
-  assignEntriesTaxAmount,
-  aggregateItemEntriesTaxRates,
-} from '@/containers/Entries/utils';
-import { useCurrentOrganizationBaseCurrency } from '@/hooks/query';
-import {
-  isLandedCostDisabled,
-  getEntriesTotal,
-} from '@/containers/Entries/utils';
-import { useBillFormContext } from './BillFormProvider';
-import { TaxType } from '@/interfaces/TaxRates';
-import {
-  transformAttachmentsToForm,
-  transformAttachmentsToRequest,
-} from '@/containers/Attachments/utils';
 
 export const MIN_LINES_NUMBER = 1;
 

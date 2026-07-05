@@ -1,9 +1,8 @@
 // @ts-nocheck
 import React from 'react';
-import { DrawerBody } from '@/components';
-
 import { WarehouseTransferDetail } from './WarehouseTransferDetail';
 import { WarehouseTransferDetailDrawerProvider } from './WarehouseTransferDetailDrawerProvider';
+import { DrawerBody } from '@/components';
 
 /**
  * Warehouse transfer detail drawer content.

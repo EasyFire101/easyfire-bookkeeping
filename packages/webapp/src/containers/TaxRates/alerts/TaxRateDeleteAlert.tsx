@@ -1,16 +1,13 @@
 // @ts-nocheck
-import React from 'react';
 import { Intent, Alert } from '@blueprintjs/core';
+import React from 'react';
 import { AppToaster, FormattedMessage as T } from '@/components';
-
-import { useDeleteTaxRate } from '@/hooks/query/tax-rates';
-
-import { withAlertStoreConnect } from '@/containers/Alert/withAlertStoreConnect';
-import { withAlertActions } from '@/containers/Alert/withAlertActions';
-import { withDrawerActions } from '@/containers/Drawer/withDrawerActions';
-
-import { compose } from '@/utils';
 import { DRAWERS } from '@/constants/drawers';
+import { withAlertActions } from '@/containers/Alert/withAlertActions';
+import { withAlertStoreConnect } from '@/containers/Alert/withAlertStoreConnect';
+import { withDrawerActions } from '@/containers/Drawer/withDrawerActions';
+import { useDeleteTaxRate } from '@/hooks/query/tax-rates';
+import { compose } from '@/utils';
 
 /**
  * Item delete alerts.

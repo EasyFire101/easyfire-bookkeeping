@@ -1,10 +1,10 @@
+import { useFormikContext } from 'formik';
 import React from 'react';
-import { BaseCurrency, BaseCurrencyRoot } from '@/components';
 import {
   useEstimateIsForeignCustomer,
   type PaymentReceiveFormValues,
 } from './utils';
-import { useFormikContext } from 'formik';
+import { BaseCurrency, BaseCurrencyRoot } from '@/components';
 
 /**
  * Payment receive form currency tag — renders the customer's currency badge

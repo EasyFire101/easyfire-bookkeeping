@@ -1,4 +1,13 @@
 import React from 'react';
+import { useAccountsChartContext } from './AccountsChartProvider';
+import { ActionsMenu } from './components';
+import { useAccountsTableColumns, rowClassNames } from './utils';
+import { withAccountsTableActions } from './withAccountsTableActions';
+import type { AccountTableRow } from './components';
+import type { WithAccountsTableActionsProps } from './withAccountsTableActions';
+import type { WithAlertActionsProps } from '@/containers/Alert/withAlertActions';
+import type { WithDialogActionsProps } from '@/containers/Dialog/withDialogActions';
+import type { WithDrawerActionsProps } from '@/containers/Drawer/withDrawerActions';
 import {
   TableFastCell,
   DataTable,
@@ -6,25 +15,16 @@ import {
   TableSkeletonHeader,
   TableVirtualizedListRows,
 } from '@/components';
-import { useAccountsTableColumns, rowClassNames } from './utils';
-import { ActionsMenu } from './components';
-import { AccountDialogAction } from '@/containers/Dialogs/AccountDialog/utils';
-import { useAccountsChartContext } from './AccountsChartProvider';
-import { useMemorizedColumnsWidths } from '@/hooks';
-import { TABLES } from '@/constants/tables';
 import { DialogsName } from '@/constants/dialogs';
-import { withSettings } from '@/containers/Settings/withSettings';
+import { DRAWERS } from '@/constants/drawers';
+import { TABLES } from '@/constants/tables';
 import { withAlertActions } from '@/containers/Alert/withAlertActions';
 import { withDialogActions } from '@/containers/Dialog/withDialogActions';
+import { AccountDialogAction } from '@/containers/Dialogs/AccountDialog/utils';
 import { withDrawerActions } from '@/containers/Drawer/withDrawerActions';
-import { withAccountsTableActions } from './withAccountsTableActions';
+import { withSettings } from '@/containers/Settings/withSettings';
+import { useMemorizedColumnsWidths } from '@/hooks';
 import { compose } from '@/utils';
-import { DRAWERS } from '@/constants/drawers';
-import type { AccountTableRow } from './components';
-import type { WithAlertActionsProps } from '@/containers/Alert/withAlertActions';
-import type { WithDialogActionsProps } from '@/containers/Dialog/withDialogActions';
-import type { WithDrawerActionsProps } from '@/containers/Drawer/withDrawerActions';
-import type { WithAccountsTableActionsProps } from './withAccountsTableActions';
 
 interface WithSettingsProps {
   accountsTableSize?: string | null;

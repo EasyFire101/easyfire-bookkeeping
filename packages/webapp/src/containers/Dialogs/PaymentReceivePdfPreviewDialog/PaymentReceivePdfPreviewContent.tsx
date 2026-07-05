@@ -1,11 +1,9 @@
 // @ts-nocheck
-import React from 'react';
 import { AnchorButton } from '@blueprintjs/core';
-
+import React from 'react';
 import { DialogContent, PdfDocumentPreview, T } from '@/components';
-import { usePdfPaymentReceive } from '@/hooks/query';
-
 import { withDialogActions } from '@/containers/Dialog/withDialogActions';
+import { usePdfPaymentReceive } from '@/hooks/query';
 import { compose } from '@/utils';
 
 function PaymentReceivePdfPreviewDialogContent({

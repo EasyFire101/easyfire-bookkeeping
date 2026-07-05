@@ -1,13 +1,16 @@
 // @ts-nocheck
-import React from 'react';
-import styled from 'styled-components';
-import classNames from 'classnames';
-import { Form, useFormikContext } from 'formik';
+import { getAllCountries } from '@bigcapital/utils';
 import { Button, FormGroup, Intent } from '@blueprintjs/core';
 import { TimezonePicker, getTimezoneMetadata } from '@blueprintjs/timezone';
+import classNames from 'classnames';
+import { Form, useFormikContext } from 'formik';
 import { ErrorMessage } from 'formik';
+import React from 'react';
+import intl from 'react-intl-universal';
 import { useHistory } from 'react-router-dom';
-import { getAllCountries } from '@bigcapital/utils';
+import styled from 'styled-components';
+import { useGeneralFormContext } from './GeneralFormProvider';
+import { shouldBaseCurrencyUpdate } from './utils';
 import {
   FieldRequiredHint,
   FormattedMessage as T,
@@ -17,15 +20,14 @@ import {
   Stack,
   Group,
 } from '@/components';
-import { inputIntent } from '@/utils';
+import { SelectButton } from '@/components/Forms/Select';
 import { CLASSES } from '@/constants/classes';
 import { getAllCurrenciesOptions } from '@/constants/currencies';
 import { getFiscalYear } from '@/constants/fiscalYearOptions';
 import { getLanguages } from '@/constants/languagesOptions';
-import { useGeneralFormContext } from './GeneralFormProvider';
-import { shouldBaseCurrencyUpdate } from './utils';
-import { SelectButton } from '@/components/Forms/Select';
-import intl from 'react-intl-universal';
+import { inputIntent } from '@/utils';
+
+
 
 const Countries = getAllCountries();
 /**

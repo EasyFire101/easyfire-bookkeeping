@@ -1,22 +1,20 @@
 // @ts-nocheck
+import { Intent, Alert } from '@blueprintjs/core';
 import React from 'react';
 import intl from 'react-intl-universal';
+import { handleDeleteErrors } from './_utils';
 import {
   AppToaster,
   FormattedMessage as T,
   FormattedHTMLMessage,
 } from '@/components';
-import { Intent, Alert } from '@blueprintjs/core';
-
-import { useDeletePaymentReceive } from '@/hooks/query';
-
-import { withAlertStoreConnect } from '@/containers/Alert/withAlertStoreConnect';
-import { withAlertActions } from '@/containers/Alert/withAlertActions';
-import { withDrawerActions } from '@/containers/Drawer/withDrawerActions';
-
-import { handleDeleteErrors } from './_utils';
-import { compose } from '@/utils';
 import { DRAWERS } from '@/constants/drawers';
+import { withAlertActions } from '@/containers/Alert/withAlertActions';
+import { withAlertStoreConnect } from '@/containers/Alert/withAlertStoreConnect';
+import { withDrawerActions } from '@/containers/Drawer/withDrawerActions';
+import { useDeletePaymentReceive } from '@/hooks/query';
+import { compose } from '@/utils';
+
 
 /**
  * Payment receive delete alert.

@@ -1,13 +1,13 @@
-import React from 'react';
-import { FastField } from 'formik';
-import type { FieldProps } from 'formik';
 import { x } from '@xstyled/emotion';
-import { ItemsEntriesTable } from '@/containers/Entries/ItemsEntriesTable';
+import { FastField } from 'formik';
+import React from 'react';
 import { useInvoiceFormContext } from './InvoiceFormProvider';
 import { entriesFieldShouldUpdate } from './utils';
 import type { InvoiceFormValues } from './utils';
-import { TaxType } from '@/interfaces/TaxRates';
+import type { FieldProps } from 'formik';
+import { ItemsEntriesTable } from '@/containers/Entries/ItemsEntriesTable';
 import { ITEM_TYPE } from '@/containers/Entries/utils';
+import { TaxType } from '@/interfaces/TaxRates';
 
 /**
  * Invoice items entries editor field.

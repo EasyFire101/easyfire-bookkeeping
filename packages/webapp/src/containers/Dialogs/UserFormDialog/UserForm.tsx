@@ -1,19 +1,17 @@
 // @ts-nocheck
+import { Intent } from '@blueprintjs/core';
+import { Formik } from 'formik';
+import { pick, snakeCase } from 'lodash';
 import React from 'react';
 import intl from 'react-intl-universal';
-import { Formik } from 'formik';
-import { Intent } from '@blueprintjs/core';
-import { pick, snakeCase } from 'lodash';
-import { AppToaster } from '@/components';
-
-import { withDialogActions } from '@/containers/Dialog/withDialogActions';
-
 import { UserFormSchema } from './UserForm.schema';
 import { UserFormContent } from './UserFormContent';
 import { useUserFormContext } from './UserFormProvider';
 import { transformErrors } from './utils';
-
+import { AppToaster } from '@/components';
+import { withDialogActions } from '@/containers/Dialog/withDialogActions';
 import { compose, objectKeysTransform, transformToForm } from '@/utils';
+
 
 const initialValues = {
   first_name: '',

@@ -1,8 +1,8 @@
 // @ts-nocheck
+import { Callout, Intent } from '@blueprintjs/core';
+import { includes } from 'lodash';
 import React from 'react';
 import intl from 'react-intl-universal';
-import { includes } from 'lodash';
-import { Callout, Intent } from '@blueprintjs/core';
 
 export const UserFormCalloutAlerts = ({ calloutCodes }) => {
   return [

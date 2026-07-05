@@ -1,12 +1,10 @@
 // @ts-nocheck
-import React from 'react';
-import intl from 'react-intl-universal';
 import { MenuItem, Menu, Button, Position, Intent } from '@blueprintjs/core';
 import { Popover2 } from '@blueprintjs/popover2';
-
-import { Align, CellType, Features } from '@/constants';
+import React from 'react';
+import intl from 'react-intl-universal';
+import { useItemEntriesTableContext } from './ItemEntriesTableProvider';
 import { Hint, Icon, FormattedMessage as T } from '@/components';
-import { formattedAmount } from '@/utils';
 import {
   InputGroupCell,
   MoneyFieldCell,
@@ -16,9 +14,10 @@ import {
   CheckBoxFieldCell,
   ProjectBillableEntriesCell,
 } from '@/components/DataTableCells';
-import { useFeatureCan } from '@/hooks/state';
 import { TaxRatesSuggestInputCell } from '@/components/TaxRates/TaxRatesSuggestInputCell';
-import { useItemEntriesTableContext } from './ItemEntriesTableProvider';
+import { Align, CellType, Features } from '@/constants';
+import { useFeatureCan } from '@/hooks/state';
+import { formattedAmount } from '@/utils';
 
 /**
  * Item header cell.

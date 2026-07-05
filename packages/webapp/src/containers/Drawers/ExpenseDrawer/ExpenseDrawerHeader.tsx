@@ -1,7 +1,9 @@
-import React from 'react';
-import styled from 'styled-components';
 import { defaultTo } from 'lodash';
-
+import React from 'react';
+import intl from 'react-intl-universal';
+import styled from 'styled-components';
+import { ExpenseDetailsStatus } from './components';
+import { useExpenseDrawerContext } from './ExpenseDrawerProvider';
 import {
   CommercialDocHeader,
   CommercialDocTopHeader,
@@ -11,9 +13,6 @@ import {
   DetailsMenu,
   ExchangeRateDetailItem,
 } from '@/components';
-import { useExpenseDrawerContext } from './ExpenseDrawerProvider';
-import { ExpenseDetailsStatus } from './components';
-import intl from 'react-intl-universal';
 
 /**
  * Expense drawer content.

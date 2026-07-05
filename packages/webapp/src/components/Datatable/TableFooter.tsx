@@ -1,5 +1,5 @@
-import React, { useContext } from 'react';
 import classNames from 'classnames';
+import React, { useContext } from 'react';
 import TableContext from './TableContext';
 
 export default function TableFooter() {

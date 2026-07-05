@@ -1,16 +1,14 @@
 // @ts-nocheck
+import { Intent, Alert } from '@blueprintjs/core';
 import React from 'react';
 import intl from 'react-intl-universal';
-import { Intent, Alert } from '@blueprintjs/core';
 import { FormattedMessage as T, AppToaster } from '@/components';
-import { useDeleteRefundVendorCredit } from '@/hooks/query';
-
+import { DRAWERS } from '@/constants/drawers';
 import { withAlertActions } from '@/containers/Alert/withAlertActions';
 import { withAlertStoreConnect } from '@/containers/Alert/withAlertStoreConnect';
 import { withDrawerActions } from '@/containers/Drawer/withDrawerActions';
-
+import { useDeleteRefundVendorCredit } from '@/hooks/query';
 import { compose } from '@/utils';
-import { DRAWERS } from '@/constants/drawers';
 
 /**
  * Refund Vendor transactions delete alert.

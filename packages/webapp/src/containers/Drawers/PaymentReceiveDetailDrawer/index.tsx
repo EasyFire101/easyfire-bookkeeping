@@ -1,7 +1,6 @@
 import React from 'react';
 import { Drawer, DrawerSuspense } from '@/components';
 import { withDrawers, WithDrawersProps } from '@/containers/Drawer/withDrawers';
-
 import { compose } from '@/utils';
 
 const PaymentReceiveDetailContent = React.lazy(() =>

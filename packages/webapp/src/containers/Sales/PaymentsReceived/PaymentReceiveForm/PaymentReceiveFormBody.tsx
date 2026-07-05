@@ -1,8 +1,8 @@
-import React from 'react';
 import { FastField } from 'formik';
+import React from 'react';
 import { PaymentReceiveItemsTable } from './PaymentReceiveItemsTable';
-import { Box } from '@/components';
 import type { PaymentReceiveEntry, PaymentReceiveFormValues } from './utils';
+import { Box } from '@/components';
 
 type FastFieldRenderProps = {
   form: {

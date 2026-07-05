@@ -1,20 +1,19 @@
 // @ts-nocheck
 import React from 'react';
 import intl from 'react-intl-universal';
-import { useSaveSettings } from '@/hooks/query';
-
 import { InvoiceNumberDialogProvider } from './InvoiceNumberDialogProvider';
-import { ReferenceNumberForm } from '@/containers/JournalNumber/ReferenceNumberForm';
-
+import { DialogsName } from '@/constants/dialogs';
 import { withDialogActions } from '@/containers/Dialog/withDialogActions';
-import { withSettings } from '@/containers/Settings/withSettings';
-import { withSettingsActions } from '@/containers/Settings/withSettingsActions';
-import { compose } from '@/utils';
+import { ReferenceNumberForm } from '@/containers/JournalNumber/ReferenceNumberForm';
 import {
   transformFormToSettings,
   transformSettingsToForm,
 } from '@/containers/JournalNumber/utils';
-import { DialogsName } from '@/constants/dialogs';
+import { withSettings } from '@/containers/Settings/withSettings';
+import { withSettingsActions } from '@/containers/Settings/withSettingsActions';
+import { useSaveSettings } from '@/hooks/query';
+import { compose } from '@/utils';
+
 
 /**
  * invoice number dialog's content.

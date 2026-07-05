@@ -1,6 +1,6 @@
+import { useHistory, useParams } from 'react-router-dom';
 import { DashboardInsider } from '@/components';
 import { ImportView } from '@/containers/Import/ImportView';
-import { useHistory, useParams } from 'react-router-dom';
 
 export function ImportUncategorizedTransactions() {
   const history = useHistory();

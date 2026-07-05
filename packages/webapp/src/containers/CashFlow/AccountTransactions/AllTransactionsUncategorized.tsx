@@ -1,12 +1,13 @@
 import { useEffect, lazy } from 'react';
 import styled from 'styled-components';
+
 import '@/style/pages/CashFlow/AccountTransactions/List.scss';
-import { AccountTransactionsUncategorizeFilter } from './AccountTransactionsUncategorizeFilter';
 import { withBankingActions } from '../withBankingActions';
+import { AccountTransactionsUncategorizeFilter } from './AccountTransactionsUncategorizeFilter';
+import type { WithBankingActionsProps } from '../withBankingActions';
+import type { ComponentType } from 'react';
 import { useAppQueryString } from '@/hooks';
 import { compose } from '@/utils';
-import type { ComponentType } from 'react';
-import type { WithBankingActionsProps } from '../withBankingActions';
 
 const Box = styled.div`
   margin: 30px 15px;

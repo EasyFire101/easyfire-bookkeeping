@@ -1,12 +1,12 @@
+import { useFormikContext } from 'formik';
 import React from 'react';
 import styled from 'styled-components';
-import { useFormikContext } from 'formik';
 import { InclusiveButtonOptions } from './constants';
+import { composeEntriesOnEditInclusiveTax } from './utils';
+import type { InvoiceFormValues } from './utils';
 import { FFormGroup, FSelect } from '@/components';
 import { EntriesActionsBar } from '@/containers/Entries/EntriesActionBar';
-import { composeEntriesOnEditInclusiveTax } from './utils';
 import { TaxType } from '@/interfaces/TaxRates';
-import type { InvoiceFormValues } from './utils';
 
 /**
  * Invoice form actions.

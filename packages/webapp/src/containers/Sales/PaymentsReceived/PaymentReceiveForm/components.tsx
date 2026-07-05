@@ -1,20 +1,18 @@
-import React, { useLayoutEffect } from 'react';
-import moment from 'moment';
-import intl from 'react-intl-universal';
 import { Button } from '@blueprintjs/core';
 import { useFormikContext } from 'formik';
+import moment from 'moment';
 import * as R from 'ramda';
-
-import { Money, ExchangeRateInputGroup, MoneyFieldCell } from '@/components';
-
-import { useCurrentOrganizationBaseCurrency } from '@/hooks/query';
+import React, { useLayoutEffect } from 'react';
+import intl from 'react-intl-universal';
 import {
   useEstimateIsForeignCustomer,
   type PaymentReceiveEntry,
   type PaymentReceiveFormValues,
 } from './utils';
-import { transactionNumber } from '@/utils';
+import { Money, ExchangeRateInputGroup, MoneyFieldCell } from '@/components';
 import { withSettings } from '@/containers/Settings/withSettings';
+import { useCurrentOrganizationBaseCurrency } from '@/hooks/query';
+import { transactionNumber } from '@/utils';
 
 type InvoiceDateCellProps = {
   value?: string | number | Date | null;

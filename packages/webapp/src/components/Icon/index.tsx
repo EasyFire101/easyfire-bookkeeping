@@ -15,11 +15,12 @@
  * limitations under the License.
  */
 
-import classNames from 'classnames';
-import * as React from 'react';
 import { Classes, Props } from '@blueprintjs/core';
-import IconSvgPaths from '@/static/json/icons';
+import classNames from 'classnames';
 import PropTypes from 'prop-types';
+import * as React from 'react';
+import IconSvgPaths from '@/static/json/icons';
+
 export interface IconProps extends Props {
   color?: string;
   htmlTitle?: string;

@@ -2,11 +2,10 @@
 import React from 'react';
 import { useHotkeys } from 'react-hotkeys-hook';
 import { useHistory } from 'react-router-dom';
-import { getDashboardRoutes } from '@/routes/dashboard';
 import { withDashboardActions } from '@/containers/Dashboard/withDashboardActions';
 import { withDialogActions } from '@/containers/Dialog/withDialogActions';
 import { withUniversalSearchActions } from '@/containers/UniversalSearch/withUniversalSearchActions';
-
+import { getDashboardRoutes } from '@/routes/dashboard';
 import { compose } from '@/utils';
 
 // Toggle dark/light mode by toggling 'bp4-dark' class on body

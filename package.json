@@ -26,7 +26,9 @@
     "tenants:seed:latest": "lerna run cli:tenants:seed:latest --scope \"@bigcapital/server\"",
     "generate:sdk-types": "lerna run openapi:export --scope \"@bigcapital/server\" && lerna run generate --scope \"@bigcapital/sdk-ts\" && lerna run build --scope \"@bigcapital/sdk-ts\"",
     "format": "lerna run format",
-    "format:check": "lerna run format:check"
+    "format:check": "lerna run format:check",
+    "lint": "lerna run lint",
+    "lint:check": "lerna run lint:check"
   },
   "devDependencies": {
     "@commitlint/cli": "^17.4.2",

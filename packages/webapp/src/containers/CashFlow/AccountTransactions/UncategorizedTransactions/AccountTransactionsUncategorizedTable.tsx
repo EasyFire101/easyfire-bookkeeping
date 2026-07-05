@@ -1,6 +1,17 @@
-import React from 'react';
-import clsx from 'classnames';
 import { Intent } from '@blueprintjs/core';
+import clsx from 'classnames';
+import React from 'react';
+import { withBanking } from '../../withBanking';
+import { withBankingActions } from '../../withBankingActions';
+import { useAccountTransactionsContext } from '../AccountTransactionsProvider';
+import { useAccountUncategorizedTransactionsContext } from '../AllTransactionsUncategorizedBoot';
+import { BankAccountDataTable } from '../components/BankAccountDataTable';
+import styles from './AccountTransactionsUncategorizedTable.module.scss';
+import { ActionsMenu } from './components';
+import { useAccountUncategorizedTransactionsColumns } from './hooks';
+import type { UncategorizedTransactionRow } from './hooks';
+import type { WithBankingProps } from '../../withBanking';
+import type { WithBankingActionsProps } from '../../withBankingActions';
 import {
   TableFastCell,
   TableSkeletonRows,
@@ -9,24 +20,10 @@ import {
   AppToaster,
 } from '@/components';
 import { TABLES } from '@/constants/tables';
-import { ActionsMenu } from './components';
-import { BankAccountDataTable } from '../components/BankAccountDataTable';
-
 import { withSettings } from '@/containers/Settings/withSettings';
-import { withBankingActions } from '../../withBankingActions';
-import type { WithBankingActionsProps } from '../../withBankingActions';
-import { withBanking } from '../../withBanking';
-import type { WithBankingProps } from '../../withBanking';
-
 import { useMemorizedColumnsWidths } from '@/hooks';
-import { useAccountUncategorizedTransactionsContext } from '../AllTransactionsUncategorizedBoot';
 import { useExcludeUncategorizedTransaction } from '@/hooks/query/banking';
-import { useAccountUncategorizedTransactionsColumns } from './hooks';
-import type { UncategorizedTransactionRow } from './hooks';
-import { useAccountTransactionsContext } from '../AccountTransactionsProvider';
-
 import { compose } from '@/utils';
-import styles from './AccountTransactionsUncategorizedTable.module.scss';
 
 interface WithSettingsProps {
   cashflowTansactionsTableSize?: string | null;

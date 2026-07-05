@@ -1,4 +1,5 @@
 import styled from 'styled-components';
+import { useCreditNoteDetailDrawerContext } from './CreditNoteDetailDrawerProvider';
 import {
   T,
   TotalLines,
@@ -6,7 +7,6 @@ import {
   TotalLineBorderStyle,
   TotalLineTextStyle,
 } from '@/components';
-import { useCreditNoteDetailDrawerContext } from './CreditNoteDetailDrawerProvider';
 
 /**
  * Credit note details panel footer.

@@ -1,6 +1,5 @@
 // @ts-nocheck
 import React from 'react';
-import { FormattedMessage as T } from '@/components';
 import {
   SaleInvoiceAction,
   SaleEstimateAction,
@@ -17,6 +16,7 @@ import {
   ItemAction,
   ReportsAction,
 } from './abilityOption';
+import { FormattedMessage as T } from '@/components';
 
 export const accountsReceivable = [
   {
