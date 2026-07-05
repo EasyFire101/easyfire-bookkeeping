@@ -1,7 +1,6 @@
 // @ts-nocheck
 import React from 'react';
 import intl from 'react-intl-universal';
-
 import { FSelect } from '../Forms';
 
 /**

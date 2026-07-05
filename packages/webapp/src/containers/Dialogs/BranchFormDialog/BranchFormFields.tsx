@@ -1,8 +1,8 @@
 // @ts-nocheck
+import { Classes, ControlGroup } from '@blueprintjs/core';
 import React from 'react';
 import intl from 'react-intl-universal';
 import styled from 'styled-components';
-import { Classes, ControlGroup } from '@blueprintjs/core';
 import { FieldRequiredHint, FFormGroup, FInputGroup } from '@/components';
 
 /**

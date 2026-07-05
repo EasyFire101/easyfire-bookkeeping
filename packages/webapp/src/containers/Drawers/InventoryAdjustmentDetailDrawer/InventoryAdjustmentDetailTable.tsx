@@ -1,7 +1,7 @@
 import React from 'react';
-import { CommercialDocEntriesTable } from '@/components';
-import { useInventoryAdjustmentEntriesColumns } from './utils';
 import { useInventoryAdjustmentDrawerContext } from './InventoryAdjustmentDrawerProvider';
+import { useInventoryAdjustmentEntriesColumns } from './utils';
+import { CommercialDocEntriesTable } from '@/components';
 
 /**
  * Inventory adjustment detail entries table.

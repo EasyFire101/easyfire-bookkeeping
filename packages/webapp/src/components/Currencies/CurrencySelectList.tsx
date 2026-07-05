@@ -1,7 +1,7 @@
 // @ts-nocheck
 import React from 'react';
-import { FormattedMessage as T } from '@/components';
 import { FSelect } from '../Forms';
+import { FormattedMessage as T } from '@/components';
 
 /**
  * Currency select field.

@@ -1,4 +1,6 @@
 // @ts-nocheck
+import intl from 'react-intl-universal';
+import { VendorFormSectionTitle } from './VendorFormSectionTitle';
 import { Box } from '@/components';
 import {
   FormattedMessage as T,
@@ -6,8 +8,6 @@ import {
   FInputGroup,
   FTextArea,
 } from '@/components';
-import { VendorFormSectionTitle } from './VendorFormSectionTitle';
-import intl from 'react-intl-universal';
 
 export function VendorBillingAddress() {
   return (

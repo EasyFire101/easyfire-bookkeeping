@@ -1,5 +1,5 @@
-import type { ReactNode } from 'react';
 import { useState, createContext, useContext } from 'react';
+import type { ReactNode } from 'react';
 
 interface AlertsManagerContextValue {
   alerts: (string | number)[];

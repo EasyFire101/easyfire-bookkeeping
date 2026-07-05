@@ -1,7 +1,7 @@
 // @ts-nocheck
+import { Intent } from '@blueprintjs/core';
 import React from 'react';
 import intl from 'react-intl-universal';
-import { Intent } from '@blueprintjs/core';
 import { AppToaster } from '@/components';
 
 export const transformErrors = (errors) => {

@@ -1,11 +1,11 @@
 import React from 'react';
 import styled from 'styled-components';
-import { TableStyle } from '@/constants';
-import { ReportDataTable, FinancialSheet } from '@/components';
-import { defaultExpanderReducer, tableRowTypesToClassnames } from '@/utils';
 import { useSalesTaxLiabilitySummaryContext } from './SalesTaxLiabilitySummaryBoot';
-import { useCurrentOrganizationName } from '@/hooks/query';
 import { useSalesTaxLiabilitySummaryColumns } from './utils';
+import { ReportDataTable, FinancialSheet } from '@/components';
+import { TableStyle } from '@/constants';
+import { useCurrentOrganizationName } from '@/hooks/query';
+import { defaultExpanderReducer, tableRowTypesToClassnames } from '@/utils';
 
 function SalesTaxLiabilitySummaryTableRoot() {
   const organizationName = useCurrentOrganizationName();

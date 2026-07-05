@@ -1,5 +1,7 @@
 import { createReducer } from '@reduxjs/toolkit';
 import { isUndefined, isNumber, omit } from 'lodash';
+import { persistReducer, purgeStoredState } from 'redux-persist';
+import storage from 'redux-persist/lib/storage';
 import {
   ADD_AUTOFILL_REF,
   ALTER_DASHBOARD_PAGE_SUBTITLE,
@@ -25,8 +27,6 @@ import {
   SPLASH_START_LOADING,
   SPLASH_STOP_LOADING,
 } from '@/store/types';
-import { persistReducer, purgeStoredState } from 'redux-persist';
-import storage from 'redux-persist/lib/storage';
 
 interface OverlayEntry {
   isOpen: boolean;

@@ -1,6 +1,3 @@
-import React from 'react';
-import intl from 'react-intl-universal';
-import styled from 'styled-components';
 import {
   Button,
   Popover,
@@ -11,7 +8,11 @@ import {
   Intent,
   Tag,
 } from '@blueprintjs/core';
-import { getColumnWidth } from '@/utils';
+import React from 'react';
+import intl from 'react-intl-universal';
+import styled from 'styled-components';
+import { useInvoiceDetailDrawerContext } from './InvoiceDetailDrawerProvider';
+import type { SaleInvoice } from '@bigcapital/sdk-ts';
 import {
   Icon,
   FormattedMessage as T,
@@ -21,8 +22,7 @@ import {
   TextOverviewTooltipCell,
 } from '@/components';
 import { SaleInvoiceAction, AbilitySubject } from '@/constants/abilityOption';
-import type { SaleInvoice } from '@bigcapital/sdk-ts';
-import { useInvoiceDetailDrawerContext } from './InvoiceDetailDrawerProvider';
+import { getColumnWidth } from '@/utils';
 
 interface InvoiceDetailsStatusProps {
   invoice: SaleInvoice;

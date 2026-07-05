@@ -1,7 +1,9 @@
+import { defaultTo } from 'lodash';
 import React from 'react';
 import intl from 'react-intl-universal';
 import styled from 'styled-components';
-import { defaultTo } from 'lodash';
+import { useInvoiceDetailDrawerContext } from './InvoiceDetailDrawerProvider';
+import { InvoiceDetailsStatus } from './utils';
 import {
   Row,
   Col,
@@ -12,8 +14,6 @@ import {
   CustomerDrawerLink,
   ExchangeRateDetailItem,
 } from '@/components';
-import { useInvoiceDetailDrawerContext } from './InvoiceDetailDrawerProvider';
-import { InvoiceDetailsStatus } from './utils';
 
 export function InvoiceDetailHeader() {
   const { invoice } = useInvoiceDetailDrawerContext();

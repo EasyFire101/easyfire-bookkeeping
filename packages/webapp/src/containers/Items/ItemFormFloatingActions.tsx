@@ -1,14 +1,15 @@
 // @ts-nocheck
-import React from 'react';
-import styled from 'styled-components';
-import classNames from 'classnames';
 import { Button, Intent, FormGroup, Checkbox } from '@blueprintjs/core';
+import classNames from 'classnames';
 import { FastField, useFormikContext } from 'formik';
-import { CLASSES } from '@/constants/classes';
+import React from 'react';
+import intl from 'react-intl-universal';
+import styled from 'styled-components';
 import { useItemFormContext } from './ItemFormProvider';
 import { Group, FormattedMessage as T } from '@/components';
+import { CLASSES } from '@/constants/classes';
 import { saveInvoke } from '@/utils';
-import intl from 'react-intl-universal';
+
 
 /**
  * Item form floating actions.

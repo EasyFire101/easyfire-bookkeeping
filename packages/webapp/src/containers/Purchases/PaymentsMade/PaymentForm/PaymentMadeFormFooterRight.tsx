@@ -1,6 +1,11 @@
+import { useFormikContext } from 'formik';
 import React from 'react';
 import styled from 'styled-components';
-import { useFormikContext } from 'formik';
+import {
+  usePaymentMadeExcessAmount,
+  usePaymentMadeTotals,
+  type PaymentMadeFormValues,
+} from './utils';
 import {
   T,
   TotalLines,
@@ -9,11 +14,6 @@ import {
   TotalLineTextStyle,
   FormatNumber,
 } from '@/components';
-import {
-  usePaymentMadeExcessAmount,
-  usePaymentMadeTotals,
-  type PaymentMadeFormValues,
-} from './utils';
 
 export function PaymentMadeFormFooterRight() {
   const { formattedSubtotal, formattedTotal } = usePaymentMadeTotals();

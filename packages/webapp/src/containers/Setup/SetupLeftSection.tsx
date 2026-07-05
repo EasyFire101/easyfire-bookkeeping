@@ -1,12 +1,12 @@
 // @ts-nocheck
+import { Text } from '@blueprintjs/core';
 import React from 'react';
 import { useHistory } from 'react-router-dom';
-import { Text } from '@blueprintjs/core';
+import style from './SetupLeftSection.module.scss';
 import { Icon, For, FormattedMessage as T, Stack } from '@/components';
 import { getFooterLinks } from '@/constants/footerLinks';
-import { useAuthActions } from '@/hooks/state';
-import style from './SetupLeftSection.module.scss';
 import { useAuthMetadata } from '@/hooks/query';
+import { useAuthActions } from '@/hooks/state';
 
 /**
  * Footer item link.
@@ -14,7 +14,7 @@ import { useAuthMetadata } from '@/hooks/query';
 function FooterLinkItem({ title, link }) {
   return (
     <div class="content__links-item">
-      <a href={link} target="_blank">
+      <a href={link} target="_blank" rel="noreferrer">
         {title}
       </a>
     </div>

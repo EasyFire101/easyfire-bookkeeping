@@ -1,5 +1,5 @@
-import { BillBulkDeleteDialog } from '@/containers/Dialogs/Bills/BillBulkDeleteDialog';
 import { DialogsName } from '@/constants/dialogs';
+import { BillBulkDeleteDialog } from '@/containers/Dialogs/Bills/BillBulkDeleteDialog';
 
 export function BillsListDialogs() {
   return (

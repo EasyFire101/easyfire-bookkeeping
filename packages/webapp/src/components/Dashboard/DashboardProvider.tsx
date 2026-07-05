@@ -1,9 +1,10 @@
 // @ts-nocheck
-import React, { useEffect } from 'react';
 import { Intent } from '@blueprintjs/core';
+import React, { useEffect } from 'react';
+import intl from 'react-intl-universal';
 import { DashboardAbilityProvider, AppToaster } from '../../components';
 import { useDashboardMetaBoot } from './DashboardBoot';
-import intl from 'react-intl-universal';
+
 
 /**
  * Dashboard provider.

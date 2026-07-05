@@ -1,5 +1,5 @@
-import { ExpenseBulkDeleteDialog } from '@/containers/Dialogs/Expenses/ExpenseBulkDeleteDialog';
 import { DialogsName } from '@/constants/dialogs';
+import { ExpenseBulkDeleteDialog } from '@/containers/Dialogs/Expenses/ExpenseBulkDeleteDialog';
 
 export function ExpensesListDialogs() {
   return (

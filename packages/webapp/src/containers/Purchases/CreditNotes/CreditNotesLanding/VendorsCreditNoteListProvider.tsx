@@ -1,6 +1,6 @@
-import React from 'react';
 import { isEmpty } from 'lodash';
-
+import React from 'react';
+import type { VendorCreditTableRow } from './components';
 import { DashboardInsider } from '@/components/Dashboard';
 import {
   useResourceViews,
@@ -8,9 +8,7 @@ import {
   useVendorCredits,
   useRefreshVendorCredits,
 } from '@/hooks/query';
-
 import { getFieldsFromResourceMeta } from '@/utils';
-import type { VendorCreditTableRow } from './components';
 
 interface VendorsCreditNoteListProviderProps {
   query?: any;

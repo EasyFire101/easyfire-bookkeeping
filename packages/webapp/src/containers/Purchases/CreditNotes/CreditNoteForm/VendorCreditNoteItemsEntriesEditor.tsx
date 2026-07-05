@@ -1,11 +1,11 @@
-import React from 'react';
 import classNames from 'classnames';
 import { FastField } from 'formik';
+import React from 'react';
+import { entriesFieldShouldUpdate, type VendorCreditFormValues } from './utils';
+import { useVendorCreditNoteFormContext } from './VendorCreditNoteFormProvider';
 import type { FieldProps } from 'formik';
 import { CLASSES } from '@/constants/classes';
 import { ItemsEntriesTable } from '@/containers/Entries/ItemsEntriesTable';
-import { entriesFieldShouldUpdate, type VendorCreditFormValues } from './utils';
-import { useVendorCreditNoteFormContext } from './VendorCreditNoteFormProvider';
 
 export function VendorCreditNoteItemsEntriesEditor() {
   const { items } = useVendorCreditNoteFormContext();

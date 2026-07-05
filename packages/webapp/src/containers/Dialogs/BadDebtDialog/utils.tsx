@@ -1,7 +1,6 @@
 // @ts-nocheck
-import React from 'react';
 import { Intent } from '@blueprintjs/core';
-
+import React from 'react';
 import { AppToaster } from '@/components';
 
 /**

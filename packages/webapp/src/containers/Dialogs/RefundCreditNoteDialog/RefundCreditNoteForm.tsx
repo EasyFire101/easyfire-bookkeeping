@@ -1,16 +1,14 @@
 // @ts-nocheck
-import React from 'react';
-import moment from 'moment';
-import intl from 'react-intl-universal';
-import { Formik } from 'formik';
 import { Intent } from '@blueprintjs/core';
+import { Formik } from 'formik';
 import { omit } from 'lodash';
-
-import { AppToaster } from '@/components';
-import { useRefundCreditNoteContext } from './RefundCreditNoteFormProvider';
+import moment from 'moment';
+import React from 'react';
+import intl from 'react-intl-universal';
 import { CreateRefundCreditNoteFormSchema } from './RefundCreditNoteForm.schema';
 import { RefundCreditNoteFormContent } from './RefundCreditNoteFormContent';
-
+import { useRefundCreditNoteContext } from './RefundCreditNoteFormProvider';
+import { AppToaster } from '@/components';
 import { withDialogActions } from '@/containers/Dialog/withDialogActions';
 import { compose } from '@/utils';
 

@@ -1,15 +1,13 @@
 // @ts-nocheck
+import { Intent, Alert } from '@blueprintjs/core';
+import { size } from 'lodash';
 import React, { useState } from 'react';
 import intl from 'react-intl-universal';
 import { FormattedMessage as T, FormattedHTMLMessage } from '@/components';
-import { Intent, Alert } from '@blueprintjs/core';
-import { size } from 'lodash';
 import { AppToaster } from '@/components';
-
-import { withItemCategoriesActions } from '@/containers/ItemsCategories/withItemCategoriesActions';
-import { withAlertStoreConnect } from '@/containers/Alert/withAlertStoreConnect';
 import { withAlertActions } from '@/containers/Alert/withAlertActions';
-
+import { withAlertStoreConnect } from '@/containers/Alert/withAlertStoreConnect';
+import { withItemCategoriesActions } from '@/containers/ItemsCategories/withItemCategoriesActions';
 import { compose } from '@/utils';
 
 /**

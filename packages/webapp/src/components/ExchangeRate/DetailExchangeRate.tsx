@@ -1,9 +1,8 @@
 // @ts-nocheck
+import { isEqual } from 'lodash';
 import React from 'react';
 import intl from 'react-intl-universal';
 import { DetailItem } from '@/components';
-import { isEqual } from 'lodash';
-
 import { useCurrentOrganizationBaseCurrency } from '@/hooks/query';
 
 /**

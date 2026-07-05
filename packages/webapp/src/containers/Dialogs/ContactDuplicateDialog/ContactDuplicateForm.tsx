@@ -1,18 +1,18 @@
 // @ts-nocheck
+import { Button, Intent, Classes } from '@blueprintjs/core';
+import { Formik, Form } from 'formik';
 import React from 'react';
 import intl from 'react-intl-universal';
-import * as Yup from 'yup';
-import { Formik, Form } from 'formik';
-import { FFormGroup, FSelect, FieldRequiredHint } from '@/components';
-import { Button, Intent, Classes } from '@blueprintjs/core';
-import { FormattedMessage as T } from '@/components';
 import { useHistory } from 'react-router-dom';
+import * as Yup from 'yup';
 import { useContactDuplicateFromContext } from './ContactDuplicateProvider';
-
+import { FFormGroup, FSelect, FieldRequiredHint } from '@/components';
+import { FormattedMessage as T } from '@/components';
 import { ContactsOptions } from '@/constants/contactsOptions';
-
 import { withDialogActions } from '@/containers/Dialog/withDialogActions';
 import { compose } from '@/utils';
+
+
 
 function ContactDuplicateFormInner({
   // #withDialogActions

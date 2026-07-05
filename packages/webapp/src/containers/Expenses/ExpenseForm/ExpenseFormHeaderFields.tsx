@@ -1,17 +1,28 @@
 // @ts-nocheck
-import React from 'react';
 import { FormGroup, Position, Classes } from '@blueprintjs/core';
 import { DateInput } from '@blueprintjs/datetime';
-import { FastField, ErrorMessage } from 'formik';
 import { css } from '@emotion/css';
-import classNames from 'classnames';
 import { useTheme } from '@emotion/react';
-
+import classNames from 'classnames';
+import { FastField, ErrorMessage } from 'formik';
+import React from 'react';
+import intl from 'react-intl-universal';
+import { ExpensesExchangeRateInputField } from './components';
+import { SUPPORTED_EXPENSE_PAYMENT_ACCOUNT_TYPES } from './constants';
+import { useExpenseFormContext } from './ExpenseFormPageProvider';
+import { customersFieldShouldUpdate, accountsFieldShouldUpdate } from './utils';
 import {
   CustomersSelect,
   FInputGroup,
   Stack,
   FormattedMessage as T,
+} from '@/components';
+import {
+  FFormGroup,
+  FSelect,
+  AccountsSelect,
+  FieldRequiredHint,
+  Hint,
 } from '@/components';
 import { CLASSES } from '@/constants/classes';
 import {
@@ -20,18 +31,6 @@ import {
   inputIntent,
   handleDateChange,
 } from '@/utils';
-import { customersFieldShouldUpdate, accountsFieldShouldUpdate } from './utils';
-import {
-  FFormGroup,
-  FSelect,
-  AccountsSelect,
-  FieldRequiredHint,
-  Hint,
-} from '@/components';
-import { ExpensesExchangeRateInputField } from './components';
-import { useExpenseFormContext } from './ExpenseFormPageProvider';
-import { SUPPORTED_EXPENSE_PAYMENT_ACCOUNT_TYPES } from './constants';
-import intl from 'react-intl-universal';
 
 const getFieldsStyle = (theme: Theme) => css`
   .${theme.bpPrefix}-form-group {

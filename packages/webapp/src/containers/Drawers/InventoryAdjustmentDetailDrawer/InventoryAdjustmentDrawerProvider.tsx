@@ -1,9 +1,9 @@
 import React from 'react';
 import intl from 'react-intl-universal';
-import { DrawerHeaderContent, DrawerLoading } from '@/components';
-import { useInventoryAdjustment } from '@/hooks/query';
-import { DRAWERS } from '@/constants/drawers';
 import type { InventoryAdjustment } from '@bigcapital/sdk-ts';
+import { DrawerHeaderContent, DrawerLoading } from '@/components';
+import { DRAWERS } from '@/constants/drawers';
+import { useInventoryAdjustment } from '@/hooks/query';
 
 export interface InventoryAdjustmentDrawerContextValue {
   inventoryId: number | undefined;

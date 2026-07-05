@@ -1,7 +1,8 @@
 // @ts-nocheck
-import React, { useState, createContext } from 'react';
 import { omit } from 'lodash';
+import React, { useState, createContext } from 'react';
 import { useLocation } from 'react-router-dom';
+import { Features } from '@/constants';
 import {
   useVendor,
   useContact,
@@ -10,7 +11,6 @@ import {
   useEditVendor,
   useBranches,
 } from '@/hooks/query';
-import { Features } from '@/constants';
 import { useFeatureCan } from '@/hooks/state';
 
 const VendorFormContext = createContext();

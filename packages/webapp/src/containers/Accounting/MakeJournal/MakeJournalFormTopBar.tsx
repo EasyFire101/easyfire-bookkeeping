@@ -1,15 +1,15 @@
-import React from 'react';
 import { Alignment, NavbarGroup, Classes } from '@blueprintjs/core';
+import React from 'react';
+import { useMakeJournalFormContext } from './MakeJournalProvider';
 import { useSetPrimaryBranchToForm } from './utils';
-import { Features } from '@/constants';
-import { useFeatureCan } from '@/hooks/state';
 import {
   BranchSelect,
   FormTopbar,
   DetailsBarSkeletonBase,
   FormBranchSelectButton,
 } from '@/components';
-import { useMakeJournalFormContext } from './MakeJournalProvider';
+import { Features } from '@/constants';
+import { useFeatureCan } from '@/hooks/state';
 
 /**
  * Make journal form topbar.

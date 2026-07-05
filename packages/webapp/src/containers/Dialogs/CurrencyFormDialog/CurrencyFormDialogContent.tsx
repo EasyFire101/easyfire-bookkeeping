@@ -1,10 +1,8 @@
 // @ts-nocheck
 import React from 'react';
-import { CurrencyFormProvider } from './CurrencyFormProvider';
-
 import { CurrencyForm } from './CurrencyForm';
+import { CurrencyFormProvider } from './CurrencyFormProvider';
 import { withCurrencyDetail } from '@/containers/Currencies/withCurrencyDetail';
-
 import { compose } from '@/utils';
 import '@/style/pages/Currency/CurrencyFormDialog.scss';
 

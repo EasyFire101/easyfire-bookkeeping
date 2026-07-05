@@ -1,8 +1,8 @@
 import React from 'react';
 import intl from 'react-intl-universal';
-import { getColumnWidth } from '@/utils';
-import { FormatNumberCell } from '@/components';
 import { usePaymentMadeDetailContext } from './PaymentMadeDetailProvider';
+import { FormatNumberCell } from '@/components';
+import { getColumnWidth } from '@/utils';
 
 /**
  * Retrieve payment made entries table columns.

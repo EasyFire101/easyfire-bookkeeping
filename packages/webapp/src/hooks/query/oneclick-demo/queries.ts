@@ -5,7 +5,7 @@ import {
   UseMutationResult,
   useQueryClient,
 } from '@tanstack/react-query';
-import useApiRequest from '../../useRequest';
+import { batch } from 'react-redux';
 import {
   useSetAuthToken,
   useSetAuthUserId,
@@ -13,8 +13,9 @@ import {
   useSetOrganizationId,
   useSetTenantId,
 } from '../../state';
+import useApiRequest from '../../useRequest';
 import { setAuthLoginCookies } from '../authentication';
-import { batch } from 'react-redux';
+
 
 interface CreateOneClickDemoValues {}
 interface CreateOneClickDemoRes {

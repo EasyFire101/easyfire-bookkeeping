@@ -1,11 +1,9 @@
-import React, { createContext } from 'react';
 import { isEmpty } from 'lodash';
-
+import React, { createContext } from 'react';
+import type { BillTableRow } from './components';
 import { DashboardInsider } from '@/components/Dashboard';
 import { useResourceViews, useResourceMeta, useBills } from '@/hooks/query';
-
 import { getFieldsFromResourceMeta } from '@/utils';
-import type { BillTableRow } from './components';
 
 interface BillsListProviderProps {
   query?: any;

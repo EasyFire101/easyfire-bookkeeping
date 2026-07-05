@@ -1,12 +1,11 @@
 // @ts-nocheck
+import classNames from 'classnames';
+import { isEmpty } from 'lodash';
 import React from 'react';
 import styled from 'styled-components';
-import classNames from 'classnames';
+import { Features } from '@/constants';
 import { CLASSES } from '@/constants/classes';
 import { useWarehouses } from '@/hooks/query';
-import { isEmpty } from 'lodash';
-
-import { Features } from '@/constants';
 import { useFeatureCan } from '@/hooks/state';
 
 const WarehousesContext = React.createContext();

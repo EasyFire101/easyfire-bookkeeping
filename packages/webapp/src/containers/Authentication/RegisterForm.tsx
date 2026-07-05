@@ -1,12 +1,12 @@
 // @ts-nocheck
-import React from 'react';
-import { Form } from 'formik';
-import intl from 'react-intl-universal';
 import { Intent, Button } from '@blueprintjs/core';
-import { Link } from 'react-router-dom';
 import { Tooltip2 } from '@blueprintjs/popover2';
+import { Form } from 'formik';
+import React from 'react';
+import intl from 'react-intl-universal';
+import { Link } from 'react-router-dom';
 import styled from 'styled-components';
-
+import { AuthSubmitButton, AuthenticationLoadingOverlay } from './_components';
 import {
   FFormGroup,
   FInputGroup,
@@ -14,7 +14,6 @@ import {
   Col,
   FormattedMessage as T,
 } from '@/components';
-import { AuthSubmitButton, AuthenticationLoadingOverlay } from './_components';
 
 /**
  * Register form.

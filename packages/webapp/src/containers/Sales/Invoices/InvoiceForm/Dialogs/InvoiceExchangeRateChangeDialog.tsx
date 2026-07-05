@@ -1,8 +1,8 @@
+import { Button, Classes, Intent } from '@blueprintjs/core';
 import { Dialog, DialogSuspense } from '@/components';
 import withDialogRedux from '@/components/DialogReduxConnect';
 import { withDialogActions } from '@/containers/Dialog/withDialogActions';
 import { compose } from '@/utils';
-import { Button, Classes, Intent } from '@blueprintjs/core';
 
 type InvoiceExchangeRateChangeDialogInnerProps = {
   dialogName: string;

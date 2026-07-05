@@ -1,12 +1,11 @@
+import clsx from 'classnames';
 import React from 'react';
 import intl from 'react-intl-universal';
-import clsx from 'classnames';
-
-import { CLASSES } from '@/constants/classes';
-import { FormatDateCell } from '@/components';
-import type { DataTableColumn } from '@/components/Datatable/types';
 import { NoteAccessor, StatusAccessor } from './components';
 import type { ManualJournalTableRow } from './components';
+import type { DataTableColumn } from '@/components/Datatable/types';
+import { FormatDateCell } from '@/components';
+import { CLASSES } from '@/constants/classes';
 
 /**
  * Retrieve the manual journals columns.

@@ -1,14 +1,13 @@
 import React from 'react';
-import { Card } from '@/components';
-
 import { useCreditNoteDetailDrawerContext } from '../CreditNoteDetailDrawerProvider';
-import { useTransactionsByReference } from '@/hooks/query';
 import { useJournalEntriesTransactionsColumns } from './components';
-
+import { Card } from '@/components';
 import {
   AmountDisplayedBaseCurrencyMessage,
   JournalEntriesTable,
 } from '@/containers/JournalEntriesTable/JournalEntriesTable';
+import { useTransactionsByReference } from '@/hooks/query';
+
 
 /**
  * Journal entries table.

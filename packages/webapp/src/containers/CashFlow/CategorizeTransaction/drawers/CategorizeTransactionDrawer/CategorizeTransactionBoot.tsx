@@ -1,12 +1,13 @@
-import React, { useMemo } from 'react';
 import { first } from 'lodash';
-import { DrawerLoading } from '@/components';
-import { useAccounts, useBranches } from '@/hooks/query';
-import { useFeatureCan } from '@/hooks/state';
-import { Features } from '@/constants';
-import type { AccountsList, BranchesListResponse } from '@bigcapital/sdk-ts';
+import React, { useMemo } from 'react';
 import type { GetAutofillCategorizeTransaction } from '@/hooks/query/banking';
+import type { AccountsList, BranchesListResponse } from '@bigcapital/sdk-ts';
+import { DrawerLoading } from '@/components';
+import { Features } from '@/constants';
+import { useAccounts, useBranches } from '@/hooks/query';
 import { useGetAutofillCategorizeTransaction } from '@/hooks/query/banking';
+import { useFeatureCan } from '@/hooks/state';
+
 
 interface CategorizeTransactionBootProps {
   uncategorizedTransactionsIds: Array<number>;

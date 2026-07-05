@@ -1,29 +1,11 @@
 // @ts-nocheck
-import React from 'react';
-import intl from 'react-intl-universal';
+import { Intent } from '@blueprintjs/core';
+import classNames from 'classnames';
 import { Formik, Form } from 'formik';
 import { isEmpty } from 'lodash';
-import { Intent } from '@blueprintjs/core';
+import React from 'react';
+import intl from 'react-intl-universal';
 import { useHistory } from 'react-router-dom';
-import { CLASSES } from '@/constants/classes';
-import classNames from 'classnames';
-
-import {
-  CreateWarehouseFormSchema,
-  EditWarehouseFormSchema,
-} from './WarehouseTransferForm.schema';
-
-import { WarehouseTransferFormHeader } from './WarehouseTransferFormHeader';
-import { WarehouseTransferEditorField } from './WarehouseTransferEditorField';
-import { WarehouseTransferFormFooter } from './WarehouseTransferFormFooter';
-import { WarehouseTransferFloatingActions } from './WarehouseTransferFloatingActions';
-import { WarehouseTransferFormDialog } from './WarehouseTransferFormDialog';
-import { withDashboardActions } from '@/containers/Dashboard/withDashboardActions';
-import { withSettings } from '@/containers/Settings/withSettings';
-
-import { AppToaster } from '@/components';
-import { useWarehouseTransferFormContext } from './WarehouseTransferFormProvider';
-import { compose, orderingLinesIndexes, transactionNumber } from '@/utils';
 import { WarehouseTransferObserveItemsCost } from './components';
 import {
   defaultWarehouseTransfer,
@@ -31,6 +13,23 @@ import {
   transformErrors,
   transformToEditForm,
 } from './utils';
+import { WarehouseTransferEditorField } from './WarehouseTransferEditorField';
+import { WarehouseTransferFloatingActions } from './WarehouseTransferFloatingActions';
+import {
+  CreateWarehouseFormSchema,
+  EditWarehouseFormSchema,
+} from './WarehouseTransferForm.schema';
+import { WarehouseTransferFormDialog } from './WarehouseTransferFormDialog';
+import { WarehouseTransferFormFooter } from './WarehouseTransferFormFooter';
+import { WarehouseTransferFormHeader } from './WarehouseTransferFormHeader';
+import { useWarehouseTransferFormContext } from './WarehouseTransferFormProvider';
+import { AppToaster } from '@/components';
+import { CLASSES } from '@/constants/classes';
+import { withDashboardActions } from '@/containers/Dashboard/withDashboardActions';
+import { withSettings } from '@/containers/Settings/withSettings';
+import { compose, orderingLinesIndexes, transactionNumber } from '@/utils';
+
+
 
 function WarehouseTransferFormInner({
   // #withSettings

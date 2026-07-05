@@ -1,5 +1,6 @@
 // @ts-nocheck
 import React from 'react';
+import intl from 'react-intl-universal';
 import {
   FormattedMessage as T,
   FieldRequiredHint,
@@ -9,7 +10,6 @@ import {
   FTextArea,
 } from '@/components';
 import { useAutofocus } from '@/hooks';
-import intl from 'react-intl-universal';
 
 /**
  * Role form header.

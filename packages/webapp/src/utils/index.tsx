@@ -1,15 +1,15 @@
 // @ts-nocheck
-import moment from 'moment';
-import _ from 'lodash';
-import * as R from 'ramda';
-import Currencies from 'js-money/lib/currency';
-import clsx from 'classnames';
 import { Intent } from '@blueprintjs/core';
-import Currency from 'js-money/lib/currency';
 import accounting from 'accounting';
-import { createSelectorCreator, defaultMemoize } from 'reselect';
-import { isEqual, castArray, isEmpty, includes, pickBy } from 'lodash';
+import clsx from 'classnames';
 import jsCookie from 'js-cookie';
+import Currencies from 'js-money/lib/currency';
+import Currency from 'js-money/lib/currency';
+import _ from 'lodash';
+import { isEqual, castArray, isEmpty, includes, pickBy } from 'lodash';
+import moment from 'moment';
+import * as R from 'ramda';
+import { createSelectorCreator, defaultMemoize } from 'reselect';
 import { deepMapKeys } from './map-key-deep';
 export * from './deep';
 export * from './flatten-infinity-pages';

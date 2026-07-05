@@ -1,12 +1,11 @@
 // @ts-nocheck
 import React from 'react';
+import { QuickVendorFormDrawer } from './QuickVendorFormDrawer';
 import {
   DrawerHeaderContent,
   DrawerBody,
   FormattedMessage as T,
 } from '@/components';
-
-import { QuickVendorFormDrawer } from './QuickVendorFormDrawer';
 import { DRAWERS } from '@/constants/drawers';
 
 /**

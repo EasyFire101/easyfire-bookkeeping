@@ -1,9 +1,8 @@
-import styled from 'styled-components';
 import { useFormikContext } from 'formik';
+import styled from 'styled-components';
+import { composeEntriesOnEditInclusiveTax, type BillFormValues } from './utils';
 import { FFormGroup, FSelect } from '@/components';
 import { InclusiveTaxOptions } from '@/constants/InclusiveTaxOptions';
-
-import { composeEntriesOnEditInclusiveTax, type BillFormValues } from './utils';
 import { EntriesActionsBar } from '@/containers/Entries/EntriesActionBar';
 
 export function BillFormEntriesActions() {

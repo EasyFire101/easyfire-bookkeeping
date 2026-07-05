@@ -1,14 +1,12 @@
 import React from 'react';
 import styled from 'styled-components';
-
-import { Card } from '@/components';
 import {
   AmountDisplayedBaseCurrencyMessage,
   JournalEntriesTable,
 } from '../../JournalEntriesTable/JournalEntriesTable';
-
-import { useTransactionsByReference } from '@/hooks/query';
 import { usePaymentMadeDetailContext } from './PaymentMadeDetailProvider';
+import { Card } from '@/components';
+import { useTransactionsByReference } from '@/hooks/query';
 
 /**
  * Payment made GL entries table panel.

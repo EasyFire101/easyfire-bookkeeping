@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-
+import { useVendorCreditDetailDrawerContext } from './VendorCreditDetailDrawerProvider';
 import {
   T,
   TotalLines,
@@ -7,7 +7,6 @@ import {
   TotalLineBorderStyle,
   TotalLineTextStyle,
 } from '@/components';
-import { useVendorCreditDetailDrawerContext } from './VendorCreditDetailDrawerProvider';
 
 /**
  * Vendor Credit detail panel footer.

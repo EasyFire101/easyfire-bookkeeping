@@ -1,17 +1,15 @@
 // @ts-nocheck
-import React from 'react';
 import * as R from 'ramda';
+import React from 'react';
 import styled from 'styled-components';
-
 import { Card, DrawerLoading } from '@/components';
+import { DRAWERS } from '@/constants/drawers';
+import { CustomerFormFormik } from '@/containers/Customers/CustomerForm/CustomerFormFormik';
 import {
   CustomerFormProvider,
   useCustomerFormContext,
 } from '@/containers/Customers/CustomerForm/CustomerFormProvider';
-import { CustomerFormFormik } from '@/containers/Customers/CustomerForm/CustomerFormFormik';
-
 import { withDrawerActions } from '@/containers/Drawer/withDrawerActions';
-import { DRAWERS } from '@/constants/drawers';
 import { useAddAutofillRef } from '@/hooks/state/autofill';
 
 /**

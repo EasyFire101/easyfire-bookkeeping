@@ -1,9 +1,10 @@
 import { useHistory } from 'react-router-dom';
+import { useBillDrawerContext } from '../BillDrawerProvider';
+import { useBillPaymentTransactionsColumns, ActionsMenu } from './components';
+import type { BillPaymentTransactionsResponse } from '@bigcapital/sdk-ts';
 import { DataTable, Card, TableSkeletonRows } from '@/components';
 import { TableStyle } from '@/constants';
-import { useBillPaymentTransactionsColumns, ActionsMenu } from './components';
-import { useBillDrawerContext } from '../BillDrawerProvider';
-import { useBillPaymentTransactions } from '@/hooks/query';
+import { DRAWERS } from '@/constants/drawers';
 import {
   withAlertActions,
   WithAlertActionsProps,
@@ -12,9 +13,8 @@ import {
   withDrawerActions,
   WithDrawerActionsProps,
 } from '@/containers/Drawer/withDrawerActions';
+import { useBillPaymentTransactions } from '@/hooks/query';
 import { compose } from '@/utils';
-import { DRAWERS } from '@/constants/drawers';
-import type { BillPaymentTransactionsResponse } from '@bigcapital/sdk-ts';
 
 type BillPaymentTransaction = BillPaymentTransactionsResponse[number];
 

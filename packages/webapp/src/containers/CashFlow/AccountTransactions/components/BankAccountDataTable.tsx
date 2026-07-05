@@ -1,6 +1,6 @@
 import clsx from 'classnames';
-import { DataTable } from '@/components';
 import styles from './BankAccountDataTable.module.scss';
+import { DataTable } from '@/components';
 
 interface BankAccountDataTableProps {
   className?: string;

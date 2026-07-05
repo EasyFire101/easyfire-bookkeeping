@@ -1,15 +1,14 @@
-import React from 'react';
 import { Alignment, Navbar, NavbarGroup } from '@blueprintjs/core';
 import { pick } from 'lodash';
-
-import { DashboardViewsTabs } from '@/components';
+import React from 'react';
 import { useManualJournalsContext } from './ManualJournalsListProvider';
 import { withManualJournals } from './withManualJournals';
-import type { WithManualJournalsProps } from './withManualJournals';
 import { withManualJournalsActions } from './withManualJournalsActions';
+import type { WithManualJournalsProps } from './withManualJournals';
+import { DashboardViewsTabs } from '@/components';
 import { withDashboardActions } from '@/containers/Dashboard/withDashboardActions';
-
 import { compose } from '@/utils';
+
 
 // Local loose type mirrors the InvoicesViewTabs pattern — `customViewId` is not
 // on `TableQuery` but the reducer accepts it; preserved from @ts-nocheck original.

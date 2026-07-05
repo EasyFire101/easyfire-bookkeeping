@@ -1,5 +1,5 @@
-import { index as WarehouseTransferDetailDrawer } from '@/containers/Drawers/WarehouseTransferDetailDrawer';
 import { DRAWERS } from '@/constants/drawers';
+import { index as WarehouseTransferDetailDrawer } from '@/containers/Drawers/WarehouseTransferDetailDrawer';
 
 export function WarehouseTransfersListDrawers() {
   return (

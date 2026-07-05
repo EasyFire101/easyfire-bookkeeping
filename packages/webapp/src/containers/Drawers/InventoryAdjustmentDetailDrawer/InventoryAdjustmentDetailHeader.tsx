@@ -1,9 +1,9 @@
-import React from 'react';
-import intl from 'react-intl-universal';
 import clsx from 'classnames';
 import { defaultTo } from 'lodash';
-import { DetailsMenu, DetailItem, FormatDate } from '@/components';
+import React from 'react';
+import intl from 'react-intl-universal';
 import { useInventoryAdjustmentDrawerContext } from './InventoryAdjustmentDrawerProvider';
+import { DetailsMenu, DetailItem, FormatDate } from '@/components';
 import InventoryAdjustmentDrawerCls from '@/style/components/Drawers/InventoryAdjustmentDrawer.module.scss';
 
 /**

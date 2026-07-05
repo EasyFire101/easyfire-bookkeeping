@@ -1,5 +1,3 @@
-import React from 'react';
-import { useHistory } from 'react-router-dom';
 import {
   Button,
   NavbarGroup,
@@ -7,19 +5,10 @@ import {
   NavbarDivider,
   Intent,
 } from '@blueprintjs/core';
+import React from 'react';
+import { useHistory } from 'react-router-dom';
 import { useCreditNoteDetailDrawerContext } from './CreditNoteDetailDrawerProvider';
-import {
-  withDialogActions,
-  WithDialogActionsProps,
-} from '@/containers/Dialog/withDialogActions';
-import {
-  withAlertActions,
-  WithAlertActionsProps,
-} from '@/containers/Alert/withAlertActions';
-import {
-  withDrawerActions,
-  WithDrawerActionsProps,
-} from '@/containers/Drawer/withDrawerActions';
+import { CreditNoteMenuItem } from './utils';
 import {
   DrawerActionsBar,
   Can,
@@ -28,9 +17,21 @@ import {
   If,
 } from '@/components';
 import { CreditNoteAction, AbilitySubject } from '@/constants/abilityOption';
-import { compose } from '@/utils';
-import { CreditNoteMenuItem } from './utils';
 import { DRAWERS } from '@/constants/drawers';
+import {
+  withAlertActions,
+  WithAlertActionsProps,
+} from '@/containers/Alert/withAlertActions';
+import {
+  withDialogActions,
+  WithDialogActionsProps,
+} from '@/containers/Dialog/withDialogActions';
+import {
+  withDrawerActions,
+  WithDrawerActionsProps,
+} from '@/containers/Drawer/withDrawerActions';
+import { compose } from '@/utils';
+
 
 interface CreditNoteDetailActionsBarInnerProps
   extends WithDialogActionsProps,

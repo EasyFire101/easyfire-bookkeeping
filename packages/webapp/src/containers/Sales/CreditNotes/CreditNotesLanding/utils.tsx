@@ -1,5 +1,5 @@
-import intl from 'react-intl-universal';
 import { Intent } from '@blueprintjs/core';
+import intl from 'react-intl-universal';
 import { AppToaster } from '@/components';
 
 interface DeleteError {

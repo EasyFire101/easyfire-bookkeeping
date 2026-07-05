@@ -1,8 +1,8 @@
-import React from 'react';
 import { Menu, MenuItem, MenuDivider } from '@blueprintjs/core';
+import React from 'react';
+import type { UncategorizedTransactionRow } from './hooks';
 import { Icon } from '@/components';
 import { safeCallback } from '@/utils';
-import type { UncategorizedTransactionRow } from './hooks';
 
 interface ActionsMenuProps {
   row: { original: UncategorizedTransactionRow };

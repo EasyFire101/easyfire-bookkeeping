@@ -1,7 +1,7 @@
 import React from 'react';
-import { Row, Col, Paper, Box } from '@/components';
 import { PaymentReceiveFormFootetLeft } from './PaymentReceiveFormFootetLeft';
 import { PaymentReceiveFormFootetRight } from './PaymentReceiveFormFootetRight';
+import { Row, Col, Paper, Box } from '@/components';
 import { UploadAttachmentButton } from '@/containers/Attachments/UploadAttachmentButton';
 
 /**

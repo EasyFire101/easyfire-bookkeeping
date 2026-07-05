@@ -1,11 +1,5 @@
-import styled from 'styled-components';
 import { useFormikContext } from 'formik';
-import {
-  TotalLines,
-  TotalLine,
-  TotalLineBorderStyle,
-  TotalLineTextStyle,
-} from '@/components';
+import styled from 'styled-components';
 import {
   useBillAdjustmentAmountFormatted,
   useBillAggregatedTaxRates,
@@ -16,9 +10,15 @@ import {
   useBillTotalFormatted,
   type BillFormValues,
 } from './utils';
-import { TaxType } from '@/interfaces/TaxRates';
+import {
+  TotalLines,
+  TotalLine,
+  TotalLineBorderStyle,
+  TotalLineTextStyle,
+} from '@/components';
 import { AdjustmentTotalLine } from '@/containers/Sales/Invoices/InvoiceForm/AdjustmentTotalLine';
 import { DiscountTotalLine } from '@/containers/Sales/Invoices/InvoiceForm/DiscountTotalLine';
+import { TaxType } from '@/interfaces/TaxRates';
 
 export function BillFormFooterRight() {
   const {

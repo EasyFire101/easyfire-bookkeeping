@@ -1,6 +1,6 @@
 // @ts-nocheck
-import React from 'react';
 import { Intent, Button } from '@blueprintjs/core';
+import React from 'react';
 import { FormattedMessage as T } from '@/components';
 
 export function ItemFloatingFooter({

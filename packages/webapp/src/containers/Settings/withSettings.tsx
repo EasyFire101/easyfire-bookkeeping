@@ -1,6 +1,6 @@
 import { MapStateToProps, connect } from 'react-redux';
-import type { ApplicationState } from '@/store/reducers';
 import type { MapState } from '@/containers/hoc.types';
+import type { ApplicationState } from '@/store/reducers';
 
 type SettingsData = ApplicationState['settings']['data'];
 type SettingsGroup = Record<string, unknown> | undefined;

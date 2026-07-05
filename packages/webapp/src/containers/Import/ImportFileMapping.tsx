@@ -1,16 +1,16 @@
-import { useCallback, useMemo } from 'react';
-import clsx from 'classnames';
 import { Button, Intent, Position } from '@blueprintjs/core';
+import clsx from 'classnames';
 import { useFormikContext } from 'formik';
-import { Box, FSelect, Group, Hint } from '@/components';
+import { useCallback, useMemo } from 'react';
+import { ImportStepperStep } from './_types';
+import { getFieldKey } from './_utils';
+import { ImportFileContainer } from './ImportFileContainer';
+import styles from './ImportFileMapping.module.scss';
+import { ImportFileMapBootProvider } from './ImportFileMappingBoot';
 import { ImportFileMappingForm } from './ImportFileMappingForm';
 import { EntityColumnField, useImportFileContext } from './ImportFileProvider';
+import { Box, FSelect, Group, Hint } from '@/components';
 import { CLASSES } from '@/constants';
-import { ImportFileContainer } from './ImportFileContainer';
-import { ImportStepperStep } from './_types';
-import { ImportFileMapBootProvider } from './ImportFileMappingBoot';
-import styles from './ImportFileMapping.module.scss';
-import { getFieldKey } from './_utils';
 
 export function ImportFileMapping() {
   const { importId, entityColumns } = useImportFileContext();

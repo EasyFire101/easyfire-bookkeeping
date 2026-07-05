@@ -1,14 +1,13 @@
 // @ts-nocheck
-import React from 'react';
 import { Button, Classes, Dialog, Intent } from '@blueprintjs/core';
-import { FormattedMessage as T, AppToaster } from '@/components';
+import React from 'react';
 import intl from 'react-intl-universal';
-
+import { FormattedMessage as T, AppToaster } from '@/components';
+import withDialogRedux from '@/components/DialogReduxConnect';
+import { withCustomersActions } from '@/containers/Customers/CustomersLanding/withCustomersActions';
+import { withDialogActions } from '@/containers/Dialog/withDialogActions';
 import { BulkDeleteDialogContent } from '@/containers/Dialogs/components/BulkDeleteDialogContent';
 import { useBulkDeleteCustomers } from '@/hooks/query/customers';
-import withDialogRedux from '@/components/DialogReduxConnect';
-import { withDialogActions } from '@/containers/Dialog/withDialogActions';
-import { withCustomersActions } from '@/containers/Customers/CustomersLanding/withCustomersActions';
 import { compose } from '@/utils';
 
 function CustomerBulkDeleteDialogInner({

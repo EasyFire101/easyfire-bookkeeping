@@ -1,17 +1,15 @@
+import { useFormikContext } from 'formik';
+import { omit, first } from 'lodash';
+import moment from 'moment';
 import React from 'react';
 import intl from 'react-intl-universal';
-import moment from 'moment';
-import { omit, first } from 'lodash';
-import { useFormikContext } from 'formik';
+import { useReceiptFormContext } from './ReceiptFormProvider';
 import type { SaleReceipt, CreateSaleReceiptBody } from '@bigcapital/sdk-ts';
 import {
-  defaultFastFieldShouldUpdate,
-  repeatValue,
-  transformToForm,
-  formattedAmount,
-  toSafeNumber,
-} from '@/utils';
-import { useReceiptFormContext } from './ReceiptFormProvider';
+  transformAttachmentsToForm,
+  transformAttachmentsToRequest,
+} from '@/containers/Attachments/utils';
+import { convertBrandingTemplatesToOptions } from '@/containers/BrandingTemplates/BrandingTemplatesSelectFields';
 import {
   updateItemsEntriesTotal,
   ensureEntriesHaveEmptyLine,
@@ -19,10 +17,13 @@ import {
 } from '@/containers/Entries/utils';
 import { useCurrentOrganizationBaseCurrency } from '@/hooks/query';
 import {
-  transformAttachmentsToForm,
-  transformAttachmentsToRequest,
-} from '@/containers/Attachments/utils';
-import { convertBrandingTemplatesToOptions } from '@/containers/BrandingTemplates/BrandingTemplatesSelectFields';
+  defaultFastFieldShouldUpdate,
+  repeatValue,
+  transformToForm,
+  formattedAmount,
+  toSafeNumber,
+} from '@/utils';
+
 
 export const MIN_LINES_NUMBER = 1;
 

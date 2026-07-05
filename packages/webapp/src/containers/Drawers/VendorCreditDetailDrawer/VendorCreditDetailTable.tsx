@@ -1,9 +1,8 @@
-import { CommercialDocEntriesTable } from '@/components';
-
-import { useVendorCreditDetailDrawerContext } from './VendorCreditDetailDrawerProvider';
 import { useVendorCreditReadonlyEntriesTableColumns } from './utils';
-
+import { useVendorCreditDetailDrawerContext } from './VendorCreditDetailDrawerProvider';
+import { CommercialDocEntriesTable } from '@/components';
 import { TableStyle } from '@/constants';
+
 
 /**
  * Vendor Credit detail table.

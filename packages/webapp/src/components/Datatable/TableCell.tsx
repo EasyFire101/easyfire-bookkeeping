@@ -1,14 +1,13 @@
-import React, { useContext } from 'react';
 import classNames from 'classnames';
 import { camelCase } from 'lodash';
+import React, { useContext } from 'react';
+import { MoneyDisplay } from '../Money/MoneyDisplay';
+import TableContext from './TableContext';
+import { isCellLoading } from './utils';
 import type { Cell, Row } from 'react-table';
-
 import { If, Skeleton } from '@/components';
 import { useAppIntlContext } from '@/components/AppIntlProvider';
-import TableContext from './TableContext';
 import { saveInvoke, ignoreEventFromSelectors } from '@/utils';
-import { isCellLoading } from './utils';
-import { MoneyDisplay } from '../Money/MoneyDisplay';
 
 const ROW_CLICK_SELECTORS_INGORED = ['.expand-toggle', '.selection-checkbox'];
 

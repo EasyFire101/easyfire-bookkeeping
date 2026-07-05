@@ -1,15 +1,14 @@
-import React from 'react';
 import { Alignment, Navbar, NavbarGroup } from '@blueprintjs/core';
-import { DashboardViewsTabs } from '@/components';
+import React from 'react';
 import { withRouter } from 'react-router-dom';
-
-import { withItems } from './withItems';
-import type { WithItemsProps } from './withItems';
-import { withItemsActions } from './withItemsActions';
-import type { WithItemsActionsProps } from './withItemsActions';
-
 import { useItemsListContext } from './ItemsListProvider';
+import { withItems } from './withItems';
+import { withItemsActions } from './withItemsActions';
+import type { WithItemsProps } from './withItems';
+import type { WithItemsActionsProps } from './withItemsActions';
+import { DashboardViewsTabs } from '@/components';
 import { compose, transfromViewsToTabs } from '@/utils';
+
 
 interface ItemsViewsTabsInnerProps extends WithItemsActionsProps {
   itemsCurrentView: WithItemsProps['itemsTableState']['viewSlug'];

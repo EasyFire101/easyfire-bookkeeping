@@ -1,8 +1,8 @@
 import React from 'react';
-import { VendorsBalanceSummaryTable } from './VendorsBalanceSummaryTable';
-import { FinancialSheetSkeleton } from '@/components/FinancialSheet';
 import { FinancialReportBody } from '../FinancialReportPage';
 import { useVendorsBalanceSummaryContext } from './VendorsBalanceSummaryProvider';
+import { VendorsBalanceSummaryTable } from './VendorsBalanceSummaryTable';
+import { FinancialSheetSkeleton } from '@/components/FinancialSheet';
 import { useCurrentOrganizationName } from '@/hooks/query';
 
 /**

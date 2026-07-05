@@ -1,8 +1,8 @@
-import React from 'react';
 import { Menu, MenuItem } from '@blueprintjs/core';
-import { safeCallback } from '@/utils';
-import { Icon } from '@/components';
+import React from 'react';
 import type { ExcludedTransactionRow } from './_utils';
+import { Icon } from '@/components';
+import { safeCallback } from '@/utils';
 
 interface ActionsMenuProps {
   row: { original: ExcludedTransactionRow };

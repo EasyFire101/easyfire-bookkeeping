@@ -1,30 +1,24 @@
-import intl from 'react-intl-universal';
-import { Formik, Form, FormikHelpers } from 'formik';
 import { Intent } from '@blueprintjs/core';
-import { sumBy, isEmpty } from 'lodash';
-import { useHistory } from 'react-router-dom';
 import { css } from '@emotion/css';
-
+import { Formik, Form, FormikHelpers } from 'formik';
+import { sumBy, isEmpty } from 'lodash';
+import intl from 'react-intl-universal';
+import { useHistory } from 'react-router-dom';
+import {
+  ReceiptSyncAutoExRateToForm,
+  ReceiptSyncIncrementSettingsToForm,
+} from './components';
 import {
   EditReceiptFormSchema,
   CreateReceiptFormSchema,
 } from './ReceiptForm.schema';
-
-import { useReceiptFormContext } from './ReceiptFormProvider';
-
-import { ReceiptFormHeader as ReceiptFromHeader } from './ReceiptFormHeader';
-import { ReceiptItemsEntriesEditor } from './ReceiptItemsEntriesEditor';
+import { ReceiptFormDialogs } from './ReceiptFormDialogs';
 import { ReceiptFormFloatingActions } from './ReceiptFormFloatingActions';
 import { ReceiptFormFooter } from './ReceiptFormFooter';
-import { ReceiptFormDialogs } from './ReceiptFormDialogs';
+import { ReceiptFormHeader as ReceiptFromHeader } from './ReceiptFormHeader';
+import { useReceiptFormContext } from './ReceiptFormProvider';
 import { ReceiptFormTopBar } from './ReceiptFormTopbar';
-
-import { withDashboardActions } from '@/containers/Dashboard/withDashboardActions';
-import { withSettings } from '@/containers/Settings/withSettings';
-
-import { AppToaster } from '@/components';
-import { compose, orderingLinesIndexes, transactionNumber } from '@/utils';
-import { useCurrentOrganizationBaseCurrency } from '@/hooks/query';
+import { ReceiptItemsEntriesEditor } from './ReceiptItemsEntriesEditor';
 import {
   transformToEditForm,
   defaultReceipt,
@@ -33,11 +27,14 @@ import {
   resetFormState,
 } from './utils';
 import type { ReceiptFormValues } from './utils';
-import {
-  ReceiptSyncAutoExRateToForm,
-  ReceiptSyncIncrementSettingsToForm,
-} from './components';
+import { AppToaster } from '@/components';
 import { PageForm } from '@/components/PageForm';
+import { withDashboardActions } from '@/containers/Dashboard/withDashboardActions';
+import { withSettings } from '@/containers/Settings/withSettings';
+import { useCurrentOrganizationBaseCurrency } from '@/hooks/query';
+import { compose, orderingLinesIndexes, transactionNumber } from '@/utils';
+
+
 
 type ReceiptFormRootProps = {
   receiptNextNumber?: number;

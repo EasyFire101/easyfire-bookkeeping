@@ -1,7 +1,4 @@
 // @ts-nocheck
-import React from 'react';
-import styled from 'styled-components';
-import intl from 'react-intl-universal';
 import {
   Button,
   Popover,
@@ -10,6 +7,9 @@ import {
   Position,
   Classes,
 } from '@blueprintjs/core';
+import React from 'react';
+import intl from 'react-intl-universal';
+import styled from 'styled-components';
 import { ExchangeRateInputGroup, Icon } from '@/components';
 
 interface ExchangeRateMutedFieldProps {

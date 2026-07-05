@@ -1,8 +1,8 @@
 // @ts-nocheck
 import React from 'react';
 import styled from 'styled-components';
-import { AuthCopyright } from './AuthCopyright';
 import { AuthInsiderContent, AuthInsiderCopyright } from './_components';
+import { AuthCopyright } from './AuthCopyright';
 
 /**
  * Authentication insider page.

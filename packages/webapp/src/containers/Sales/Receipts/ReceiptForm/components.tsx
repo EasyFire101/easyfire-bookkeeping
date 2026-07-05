@@ -1,23 +1,24 @@
-import React, { useRef } from 'react';
-import intl from 'react-intl-universal';
 import { Button } from '@blueprintjs/core';
 import { useFormikContext } from 'formik';
-import { ExchangeRateInputGroup } from '@/components';
-import { useCurrentOrganizationBaseCurrency } from '@/hooks/query';
+import React, { useRef } from 'react';
+import intl from 'react-intl-universal';
 import { useReceiptIsForeignCustomer, useReceiptTotal } from './utils';
-import { useUpdateEffect } from '@/hooks';
-import { transactionNumber } from '@/utils';
-import { withSettings } from '@/containers/Settings/withSettings';
+import type { ReceiptFormValues } from './utils';
+import type { WithDialogActionsProps } from '@/containers/Dialog/withDialogActions';
+import { ExchangeRateInputGroup } from '@/components';
+import { DialogsName } from '@/constants/dialogs';
 import { withDialogActions } from '@/containers/Dialog/withDialogActions';
 import {
   useSyncExRateToForm,
   withExchangeRateFetchingLoading,
   withExchangeRateItemEntriesPriceRecalc,
 } from '@/containers/Entries/withExRateItemEntriesPriceRecalc';
+import { withSettings } from '@/containers/Settings/withSettings';
+import { useUpdateEffect } from '@/hooks';
+import { useCurrentOrganizationBaseCurrency } from '@/hooks/query';
+import { transactionNumber } from '@/utils';
 import { compose } from '@/utils';
-import { DialogsName } from '@/constants/dialogs';
-import type { ReceiptFormValues } from './utils';
-import type { WithDialogActionsProps } from '@/containers/Dialog/withDialogActions';
+
 
 type ReceiptExchangeRateInputFieldRootProps = React.ComponentProps<
   typeof ExchangeRateInputGroup

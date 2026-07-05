@@ -1,6 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
-
+import { usePaymentMadeDetailContext } from './PaymentMadeDetailProvider';
 import {
   T,
   TotalLines,
@@ -8,7 +8,6 @@ import {
   TotalLineBorderStyle,
   TotalLineTextStyle,
 } from '@/components';
-import { usePaymentMadeDetailContext } from './PaymentMadeDetailProvider';
 
 /**
  * Payment made - Details panel - Footer.

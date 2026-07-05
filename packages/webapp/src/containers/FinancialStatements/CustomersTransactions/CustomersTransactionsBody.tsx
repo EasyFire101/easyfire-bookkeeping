@@ -1,7 +1,7 @@
-import { CustomersTransactionsTable } from './CustomersTransactionsTable';
 import { FinancialReportBody } from '../FinancialReportPage';
-import { FinancialSheetSkeleton } from '@/components/FinancialSheet';
 import { useCustomersTransactionsContext } from './CustomersTransactionsProvider';
+import { CustomersTransactionsTable } from './CustomersTransactionsTable';
+import { FinancialSheetSkeleton } from '@/components/FinancialSheet';
 import { useCurrentOrganizationName } from '@/hooks/query';
 
 /**

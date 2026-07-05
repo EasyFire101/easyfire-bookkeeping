@@ -1,14 +1,12 @@
 // @ts-nocheck
-import React from 'react';
 import { ProgressBar, Intent } from '@blueprintjs/core';
-import { x } from '@xstyled/emotion';
 import { css } from '@emotion/css';
-import { useIsDarkMode } from '@/hooks/useDarkMode';
-
-import { useJob, useCurrentOrganization } from '@/hooks/query';
+import { x } from '@xstyled/emotion';
+import React from 'react';
 import { FormattedMessage as T } from '@/components';
-
 import { withOrganizationActions } from '@/containers/Organization/withOrganizationActions';
+import { useJob, useCurrentOrganization } from '@/hooks/query';
+import { useIsDarkMode } from '@/hooks/useDarkMode';
 
 /**
  * Setup initializing step form.

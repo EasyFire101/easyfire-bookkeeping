@@ -1,6 +1,6 @@
-import { PaymentReceivedBulkDeleteDialog } from '@/containers/Dialogs/PaymentsReceived/PaymentReceivedBulkDeleteDialog';
-import { index as PaymentReceivePdfPreviewDialog } from '@/containers/Dialogs/PaymentReceivePdfPreviewDialog';
 import { DialogsName } from '@/constants/dialogs';
+import { index as PaymentReceivePdfPreviewDialog } from '@/containers/Dialogs/PaymentReceivePdfPreviewDialog';
+import { PaymentReceivedBulkDeleteDialog } from '@/containers/Dialogs/PaymentsReceived/PaymentReceivedBulkDeleteDialog';
 
 export function PaymentsReceivedListDialogs() {
   return (

@@ -1,5 +1,3 @@
-import React from 'react';
-import classNames from 'classnames';
 import {
   Intent,
   Button,
@@ -10,13 +8,15 @@ import {
   Menu,
   MenuItem,
 } from '@blueprintjs/core';
+import classNames from 'classnames';
+import { useFormikContext } from 'formik';
+import React from 'react';
+import { useHistory } from 'react-router-dom';
+import { usePaymentMadeFormContext } from './PaymentMadeFormProvider';
+import type { PaymentMadeFormValues } from './utils';
 import { Group, Icon, FormattedMessage as T } from '@/components';
 import { PageForm } from '@/components/PageForm';
-import { useHistory } from 'react-router-dom';
-import { useFormikContext } from 'formik';
-import { usePaymentMadeFormContext } from './PaymentMadeFormProvider';
 import { CLASSES } from '@/constants/classes';
-import type { PaymentMadeFormValues } from './utils';
 
 /**
  * Payment made floating actions bar.

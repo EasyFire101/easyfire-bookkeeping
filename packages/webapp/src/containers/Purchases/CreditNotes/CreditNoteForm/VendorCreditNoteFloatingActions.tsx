@@ -1,6 +1,3 @@
-import React from 'react';
-import { useHistory } from 'react-router-dom';
-import { useFormikContext } from 'formik';
 import {
   Intent,
   Button,
@@ -11,10 +8,13 @@ import {
   Menu,
   MenuItem,
 } from '@blueprintjs/core';
-import { If, Icon, FormattedMessage as T } from '@/components';
-import { PageForm } from '@/components/PageForm';
+import { useFormikContext } from 'formik';
+import React from 'react';
+import { useHistory } from 'react-router-dom';
 import { useVendorCreditNoteFormContext } from './VendorCreditNoteFormProvider';
 import type { VendorCreditFormValues } from './utils';
+import { If, Icon, FormattedMessage as T } from '@/components';
+import { PageForm } from '@/components/PageForm';
 
 /**
  * Purchases Credit note floating actions.

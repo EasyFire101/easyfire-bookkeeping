@@ -1,13 +1,11 @@
 // @ts-nocheck
+import { Alert, Intent } from '@blueprintjs/core';
 import React from 'react';
 import intl from 'react-intl-universal';
 import { AppToaster, FormattedMessage as T } from '@/components';
-import { Alert, Intent } from '@blueprintjs/core';
-import { useInactivateUser } from '@/hooks/query';
-
-import { withAlertStoreConnect } from '@/containers/Alert/withAlertStoreConnect';
 import { withAlertActions } from '@/containers/Alert/withAlertActions';
-
+import { withAlertStoreConnect } from '@/containers/Alert/withAlertStoreConnect';
+import { useInactivateUser } from '@/hooks/query';
 import { compose } from '@/utils';
 
 /**

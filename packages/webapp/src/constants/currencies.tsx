@@ -1,7 +1,7 @@
 // @ts-nocheck
-import intl from 'react-intl-universal';
 import currencies from 'js-money/lib/currency';
 import { sortBy } from 'lodash';
+import intl from 'react-intl-universal';
 
 export const getCurrencies = () => [
   { name: intl.get('us_dollar'), code: 'USD' },

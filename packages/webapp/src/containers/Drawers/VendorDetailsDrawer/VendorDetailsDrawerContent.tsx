@@ -1,9 +1,8 @@
 // @ts-nocheck
 import React from 'react';
-
+import { CustomerDetails as VendorDetails } from './VendorDetails';
 import { VendorDetailsDrawerProvider } from './VendorDetailsDrawerProvider';
 import { DrawerBody } from '@/components';
-import { CustomerDetails as VendorDetails } from './VendorDetails';
 
 /**
  * Contact detail drawer content.

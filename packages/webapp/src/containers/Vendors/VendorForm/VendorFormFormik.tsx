@@ -1,24 +1,24 @@
 // @ts-nocheck
-import { useMemo } from 'react';
-import intl from 'react-intl-universal';
-import { Formik, Form } from 'formik';
 import { Intent } from '@blueprintjs/core';
 import classNames from 'classnames';
+import { Formik, Form } from 'formik';
+import { useMemo } from 'react';
+import intl from 'react-intl-universal';
 import styled from 'styled-components';
-
-import { CLASSES } from '@/constants/classes';
-import { AppToaster, Box } from '@/components';
+import { defaultInitialValues } from './utils';
 import {
   CreateVendorFormSchema,
   EditVendorFormSchema,
 } from './VendorForm.schema';
-
 import { VendorFormContent } from './VendorFormContent';
-
 import { useVendorFormContext } from './VendorFormProvider';
-import { transformToForm, safeInvoke, parseBoolean } from '@/utils';
-import { defaultInitialValues } from './utils';
+import { AppToaster, Box } from '@/components';
+import { CLASSES } from '@/constants/classes';
 import { useCurrentOrganizationBaseCurrency } from '@/hooks/query';
+import { transformToForm, safeInvoke, parseBoolean } from '@/utils';
+
+
+
 
 /**
  * Vendor form.

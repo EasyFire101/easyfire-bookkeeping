@@ -1,12 +1,13 @@
 import { css } from '@emotion/css';
 import { ComponentType } from 'react';
+import { PaymentReceivedMailPreviewHeader } from './PaymentReceivedMailPreviewHeader';
 import {
   PaymentReceivedMailReceipt,
   PaymentReceivedMailReceiptProps,
 } from './PaymentReceivedMailReceipt';
-import { PaymentReceivedMailPreviewHeader } from './PaymentReceivedMailPreviewHeader';
 import { withPaymentReceivedMailReceiptPreviewProps } from './withPaymentReceivedMailReceiptPreviewProps';
 import { Stack } from '@/components';
+
 
 const mailReceiptCss = css`
   margin: 0 auto;

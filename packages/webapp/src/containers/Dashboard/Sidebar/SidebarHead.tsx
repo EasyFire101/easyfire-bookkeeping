@@ -8,18 +8,16 @@ import {
   Position,
 } from '@blueprintjs/core';
 import styled, { x } from '@xstyled/emotion';
-
 import { Icon, FormattedMessage as T } from '@/components';
-
+import { DRAWERS } from '@/constants/drawers';
+import { withDrawerActions } from '@/containers/Drawer/withDrawerActions';
+import { useWorkspaces } from '@/ee/workspaces/hooks/query';
+import { useSwitchOrganization } from '@/ee/workspaces/hooks/useSwitchOrganization';
 import {
   useAuthenticatedAccount,
   useCurrentOrganizationMetadata,
 } from '@/hooks/query';
-import { useWorkspaces } from '@/ee/workspaces/hooks/query';
 import { useAuthOrganizationId, useAuthActions } from '@/hooks/state';
-import { useSwitchOrganization } from '@/ee/workspaces/hooks/useSwitchOrganization';
-import { DRAWERS } from '@/constants/drawers';
-import { withDrawerActions } from '@/containers/Drawer/withDrawerActions';
 import { compose, firstLettersArgs } from '@/utils';
 
 // Popover modifiers.

@@ -1,6 +1,5 @@
 // @ts-nocheck
 import React from 'react';
-
 import { InviteUserForm } from './InviteUserForm';
 import { InviteUserFormProvider } from './InviteUserFormProvider';
 

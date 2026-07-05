@@ -1,10 +1,9 @@
 // @ts-nocheck
-import React from 'react';
-import { useFormikContext } from 'formik';
 import { Radio } from '@blueprintjs/core';
-
-import { Row, Col, FFormGroup, FInputGroup, FRadioGroup } from '@/components';
+import { useFormikContext } from 'formik';
+import React from 'react';
 import intl from 'react-intl-universal';
+import { Row, Col, FFormGroup, FInputGroup, FRadioGroup } from '@/components';
 
 /**
  * Reference number form content.

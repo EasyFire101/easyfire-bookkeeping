@@ -1,8 +1,7 @@
 import React from 'react';
-import { DrawerBody } from '@/components';
-
 import { ReceiptDetail } from './ReceiptDetail';
 import { ReceiptDetailDrawerProvider } from './ReceiptDetailDrawerProvider';
+import { DrawerBody } from '@/components';
 
 interface ReceiptDetailDrawerContentProps {
   receiptId: number | undefined;

@@ -1,36 +1,22 @@
+import { Intent } from '@blueprintjs/core';
+import { css } from '@emotion/css';
+import { Formik, Form, type FormikHelpers } from 'formik';
+import { defaultTo } from 'lodash';
 import React, { useMemo } from 'react';
 import intl from 'react-intl-universal';
-import { Formik, Form, type FormikHelpers } from 'formik';
-import { Intent } from '@blueprintjs/core';
-import { defaultTo } from 'lodash';
 import { useHistory } from 'react-router-dom';
-import { css } from '@emotion/css';
-import type {
-  CreateBillPaymentBody,
-  EditBillPaymentBody,
-} from '@bigcapital/sdk-ts';
-
-import { AppToaster, Box } from '@/components';
-import { PaymentMadeFormHeader as PaymentMadeHeader } from './PaymentMadeFormHeader';
+import { PaymentMadeDialogs } from './PaymentMadeDialogs';
 import { PaymentMadeFloatingActions } from './PaymentMadeFloatingActions';
 import { PaymentMadeFooter } from './PaymentMadeFooter';
-import { PaymentMadeFormBody } from './PaymentMadeFormBody';
-import { PaymentMadeFormTopBar } from './PaymentMadeFormTopBar';
-import { PaymentMadeDialogs } from './PaymentMadeDialogs';
-
-import { PaymentMadeInnerProvider } from './PaymentMadeInnerProvider';
-import { usePaymentMadeFormContext } from './PaymentMadeFormProvider';
-import { compose, orderingLinesIndexes } from '@/utils';
-
-import { withSettings } from '@/containers/Settings/withSettings';
-import { useCurrentOrganizationBaseCurrency } from '@/hooks/query';
-import { withDialogActions } from '@/containers/Dialog/withDialogActions';
-import { PageForm } from '@/components/PageForm';
-
 import {
   EditPaymentMadeFormSchema,
   CreatePaymentMadeFormSchema,
 } from './PaymentMadeForm.schema';
+import { PaymentMadeFormBody } from './PaymentMadeFormBody';
+import { PaymentMadeFormHeader as PaymentMadeHeader } from './PaymentMadeFormHeader';
+import { usePaymentMadeFormContext } from './PaymentMadeFormProvider';
+import { PaymentMadeFormTopBar } from './PaymentMadeFormTopBar';
+import { PaymentMadeInnerProvider } from './PaymentMadeInnerProvider';
 import {
   defaultPaymentMade,
   transformToEditForm,
@@ -41,6 +27,16 @@ import {
   type PaymentMadeErrorResponse,
   type PaymentMadeEditEntry,
 } from './utils';
+import type {
+  CreateBillPaymentBody,
+  EditBillPaymentBody,
+} from '@bigcapital/sdk-ts';
+import { AppToaster, Box } from '@/components';
+import { PageForm } from '@/components/PageForm';
+import { withDialogActions } from '@/containers/Dialog/withDialogActions';
+import { withSettings } from '@/containers/Settings/withSettings';
+import { useCurrentOrganizationBaseCurrency } from '@/hooks/query';
+import { compose, orderingLinesIndexes } from '@/utils';
 
 type WithDialogActionsProps = {
   openDialog: (name: string, payload?: Record<string, unknown>) => void;

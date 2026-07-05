@@ -1,4 +1,3 @@
-import React from 'react';
 import {
   Intent,
   Button,
@@ -9,21 +8,23 @@ import {
   Menu,
   MenuItem,
 } from '@blueprintjs/core';
-import { useHistory } from 'react-router-dom';
 import { useFormikContext } from 'formik';
-import { If, Icon, FormattedMessage as T, Group, FSelect } from '@/components';
+import React from 'react';
+import { useHistory } from 'react-router-dom';
 import { useInvoiceFormContext } from './InvoiceFormProvider';
 import { useInvoiceFormBrandingTemplatesOptions } from './utils';
 import type { InvoiceFormValues } from './utils';
-import { useDrawerActions } from '@/hooks/state';
+import { If, Icon, FormattedMessage as T, Group, FSelect } from '@/components';
+import { PageForm } from '@/components/PageForm';
+import { DRAWERS } from '@/constants/drawers';
 import {
   BrandingThemeFormGroup,
   BrandingThemeSelectButton,
 } from '@/containers/BrandingTemplates/BrandingTemplatesSelectFields';
-import { PageForm } from '@/components/PageForm';
-import { MoreIcon } from '@/icons/More';
-import { DRAWERS } from '@/constants/drawers';
+import { useDrawerActions } from '@/hooks/state';
 import { useIsDarkMode } from '@/hooks/useDarkMode';
+import { MoreIcon } from '@/icons/More';
+
 
 /**
  * Invoice floating actions bar.

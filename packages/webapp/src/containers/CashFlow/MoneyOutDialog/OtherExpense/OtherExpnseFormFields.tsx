@@ -1,5 +1,12 @@
-import React from 'react';
 import { Position, ControlGroup } from '@blueprintjs/core';
+import React from 'react';
+import intl from 'react-intl-universal';
+import { MoneyInOutTransactionNoField } from '../../_components';
+import { useMoneyOutDialogContext } from '../MoneyOutDialogProvider';
+import { MoneyOutExchangeRateField } from '../MoneyOutExchangeRateField';
+import { useMoneyOutFieldsContext } from '../MoneyOutFieldsProvider';
+import { useSetPrimaryBranchToForm, BranchRowDivider } from '../utils';
+import type { Account } from '@bigcapital/sdk-ts';
 import {
   FAccountsSuggestField,
   InputPrependText,
@@ -15,14 +22,8 @@ import {
   FDateInput,
 } from '@/components';
 import { Features, ACCOUNT_TYPE } from '@/constants';
-import type { Account } from '@bigcapital/sdk-ts';
 import { momentFormatter } from '@/utils';
-import { useMoneyOutDialogContext } from '../MoneyOutDialogProvider';
-import { useSetPrimaryBranchToForm, BranchRowDivider } from '../utils';
-import { MoneyInOutTransactionNoField } from '../../_components';
-import { MoneyOutExchangeRateField } from '../MoneyOutExchangeRateField';
-import { useMoneyOutFieldsContext } from '../MoneyOutFieldsProvider';
-import intl from 'react-intl-universal';
+
 
 /**
  * Other expense form fields.

@@ -1,14 +1,12 @@
 // @ts-nocheck
-import React from 'react';
 import { Button, Intent } from '@blueprintjs/core';
-import { x } from '@xstyled/emotion';
 import { css } from '@emotion/css';
-import { useIsDarkMode } from '@/hooks/useDarkMode';
-
+import { x } from '@xstyled/emotion';
+import React from 'react';
 import { WorkflowIcon } from './WorkflowIcon';
 import { FormattedMessage as T } from '@/components';
-
 import { withOrganizationActions } from '@/containers/Organization/withOrganizationActions';
+import { useIsDarkMode } from '@/hooks/useDarkMode';
 import { compose } from '@/utils';
 
 /**

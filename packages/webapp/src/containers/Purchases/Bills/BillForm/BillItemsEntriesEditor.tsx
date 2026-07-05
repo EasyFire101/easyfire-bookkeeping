@@ -1,9 +1,10 @@
-import { ItemsEntriesTable } from '@/containers/Entries/ItemsEntriesTable';
-import type { ItemEntry } from '@/interfaces/ItemEntries';
 import { FastField } from 'formik';
 import { useBillFormContext } from './BillFormProvider';
 import { entriesFieldShouldUpdate } from './utils';
+import type { ItemEntry } from '@/interfaces/ItemEntries';
+import { ItemsEntriesTable } from '@/containers/Entries/ItemsEntriesTable';
 import { ITEM_TYPE } from '@/containers/Entries/utils';
+
 
 type EntriesFieldRenderProps = {
   form: {

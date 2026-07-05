@@ -1,5 +1,5 @@
-import type { ComponentType, LazyExoticComponent } from 'react';
 import { lazy } from 'react';
+import type { ComponentType, LazyExoticComponent } from 'react';
 
 const UncategorizeTransactionAlert: LazyExoticComponent<ComponentType> = lazy(
   () =>

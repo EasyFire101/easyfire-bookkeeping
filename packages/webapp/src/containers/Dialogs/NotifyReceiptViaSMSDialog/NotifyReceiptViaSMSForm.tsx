@@ -1,16 +1,14 @@
 // @ts-nocheck
+import { Intent } from '@blueprintjs/core';
 import React from 'react';
 import intl from 'react-intl-universal';
-
-import { Intent } from '@blueprintjs/core';
-import { AppToaster } from '@/components';
-
-import { NotifyViaSMSForm } from '@/containers/NotifyViaSMS/NotifyViaSMSForm';
 import { useNotifyReceiptViaSMSContext } from './NotifyReceiptViaSMSFormProvider';
-import { transformErrors } from '@/containers/NotifyViaSMS/utils';
-
+import { AppToaster } from '@/components';
 import { withDialogActions } from '@/containers/Dialog/withDialogActions';
+import { NotifyViaSMSForm } from '@/containers/NotifyViaSMS/NotifyViaSMSForm';
+import { transformErrors } from '@/containers/NotifyViaSMS/utils';
 import { compose } from '@/utils';
+
 
 const notificationType = {
   key: 'sale-receipt-details',

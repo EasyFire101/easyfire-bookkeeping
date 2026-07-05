@@ -1,8 +1,8 @@
 // @ts-nocheck
 import React from 'react';
 import { DialogContent } from '@/components';
-import { useTaxRate } from '@/hooks/query/tax-rates';
 import { DialogsName } from '@/constants/dialogs';
+import { useTaxRate } from '@/hooks/query/tax-rates';
 
 const TaxRateFormDialogContext = React.createContext();
 

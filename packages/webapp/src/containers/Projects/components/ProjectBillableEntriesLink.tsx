@@ -1,7 +1,6 @@
 // @ts-nocheck
 import React from 'react';
 import styled from 'styled-components';
-
 import { ButtonLink } from '@/components';
 import { withDialogActions } from '@/containers/Dialog/withDialogActions';
 import { compose } from '@/utils';

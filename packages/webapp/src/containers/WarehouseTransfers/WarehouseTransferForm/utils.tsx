@@ -1,15 +1,18 @@
 // @ts-nocheck
-import React from 'react';
-import moment from 'moment';
-import intl from 'react-intl-universal';
-import * as R from 'ramda';
 import { Intent } from '@blueprintjs/core';
-import { keyBy, omit } from 'lodash';
 import { useFormikContext } from 'formik';
-
-import { useWatch } from '@/hooks/utils';
-import { AppToaster } from '@/components';
+import { keyBy, omit } from 'lodash';
+import moment from 'moment';
+import * as R from 'ramda';
+import React from 'react';
+import intl from 'react-intl-universal';
 import { useWarehouseTransferFormContext } from './WarehouseTransferFormProvider';
+import { AppToaster } from '@/components';
+import {
+  updateItemsEntriesTotal,
+  ensureEntriesHaveEmptyLine,
+} from '@/containers/Entries/utils';
+import { useWatch } from '@/hooks/utils';
 import {
   compose,
   transformToForm,
@@ -23,10 +26,7 @@ import {
   updateAutoAddNewLine,
   updateTableCell,
 } from '@/utils';
-import {
-  updateItemsEntriesTotal,
-  ensureEntriesHaveEmptyLine,
-} from '@/containers/Entries/utils';
+
 
 export const MIN_LINES_NUMBER = 1;
 

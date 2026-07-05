@@ -1,14 +1,12 @@
 // @ts-nocheck
-import React from 'react';
-import intl from 'react-intl-universal';
 import clsx from 'classnames';
 import { defaultTo } from 'lodash';
-
+import React from 'react';
+import intl from 'react-intl-universal';
+import Style from './VendorDetailsDrawer.module.scss';
+import { useVendorDetailsDrawerContext } from './VendorDetailsDrawerProvider';
 import { T, DetailsMenu, DetailItem } from '@/components';
 
-import { useVendorDetailsDrawerContext } from './VendorDetailsDrawerProvider';
-
-import Style from './VendorDetailsDrawer.module.scss';
 
 /**
  * Vendor details header.

@@ -1,4 +1,6 @@
 import React from 'react';
+import intl from 'react-intl-universal';
+import { useInvoiceDetailDrawerContext } from './InvoiceDetailDrawerProvider';
 import {
   CommercialDocFooter,
   T,
@@ -6,8 +8,6 @@ import {
   DetailsMenu,
   DetailItem,
 } from '@/components';
-import { useInvoiceDetailDrawerContext } from './InvoiceDetailDrawerProvider';
-import intl from 'react-intl-universal';
 
 /**
  * Invoice details footer.

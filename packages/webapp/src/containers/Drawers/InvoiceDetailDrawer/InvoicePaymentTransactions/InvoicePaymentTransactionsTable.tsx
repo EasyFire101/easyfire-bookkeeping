@@ -1,12 +1,13 @@
 import { useHistory } from 'react-router-dom';
-import { DataTable, Card, TableSkeletonRows } from '@/components';
+import { useInvoiceDetailDrawerContext } from '../InvoiceDetailDrawerProvider';
 import {
   useInvoicePaymentTransactionsColumns,
   ActionsMenu,
 } from './components';
-import { useInvoiceDetailDrawerContext } from '../InvoiceDetailDrawerProvider';
-import { useInvoicePaymentTransactions } from '@/hooks/query';
+import type { InvoicePaymentTransactionsResponse } from '@bigcapital/sdk-ts';
+import { DataTable, Card, TableSkeletonRows } from '@/components';
 import { TableStyle } from '@/constants';
+import { DRAWERS } from '@/constants/drawers';
 import {
   withAlertActions,
   WithAlertActionsProps,
@@ -15,9 +16,8 @@ import {
   withDrawerActions,
   WithDrawerActionsProps,
 } from '@/containers/Drawer/withDrawerActions';
+import { useInvoicePaymentTransactions } from '@/hooks/query';
 import { compose } from '@/utils';
-import { DRAWERS } from '@/constants/drawers';
-import type { InvoicePaymentTransactionsResponse } from '@bigcapital/sdk-ts';
 
 type InvoicePaymentTransaction = InvoicePaymentTransactionsResponse[number];
 

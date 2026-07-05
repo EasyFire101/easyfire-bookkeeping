@@ -1,12 +1,11 @@
-import React from 'react';
 import {
   Button,
   PopoverInteractionKind,
   MenuItem,
   Position,
 } from '@blueprintjs/core';
-
 import { Select } from '@blueprintjs/select';
+import React from 'react';
 import type { ItemRenderer } from '@blueprintjs/select';
 import { Icon } from '@/components';
 import { DRAWERS } from '@/constants/drawers';

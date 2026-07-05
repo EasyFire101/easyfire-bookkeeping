@@ -1,9 +1,8 @@
 // @ts-nocheck
-import React from 'react';
 import { Alignment, NavbarGroup, Classes } from '@blueprintjs/core';
+import React from 'react';
+import { useExpenseFormContext } from './ExpenseFormPageProvider';
 import { useSetPrimaryBranchToForm } from './utils';
-import { useFeatureCan } from '@/hooks/state';
-import { Features } from '@/constants';
 import {
   BranchSelect,
   FeatureCan,
@@ -11,7 +10,8 @@ import {
   DetailsBarSkeletonBase,
   FormBranchSelectButton,
 } from '@/components';
-import { useExpenseFormContext } from './ExpenseFormPageProvider';
+import { Features } from '@/constants';
+import { useFeatureCan } from '@/hooks/state';
 
 /**
  * Expenses form topbar.

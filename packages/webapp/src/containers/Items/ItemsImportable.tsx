@@ -1,5 +1,5 @@
-import { DashboardInsider } from '@/components';
 import { ImportView } from '../Import/ImportView';
+import { DashboardInsider } from '@/components';
 
 export function ItemsImport() {
   return (

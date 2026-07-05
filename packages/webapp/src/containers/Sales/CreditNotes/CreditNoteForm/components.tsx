@@ -1,22 +1,22 @@
-import React, { useEffect, useRef } from 'react';
 import { useFormikContext } from 'formik';
-import { ExchangeRateInputGroup } from '@/components';
-import { useCurrentOrganizationBaseCurrency } from '@/hooks/query';
+import React, { useEffect, useRef } from 'react';
 import {
   useCreditNoteIsForeignCustomer,
   useCreditNoteSubtotal,
   type CreditNoteFormValues,
 } from './utils';
-import { withSettings } from '@/containers/Settings/withSettings';
-import { withDialogActions } from '@/containers/Dialog/withDialogActions';
 import type { WithDialogActionsProps } from '@/containers/Dialog/withDialogActions';
-import { transactionNumber, compose } from '@/utils';
+import { ExchangeRateInputGroup } from '@/components';
+import { DialogsName } from '@/constants/dialogs';
+import { withDialogActions } from '@/containers/Dialog/withDialogActions';
 import {
   useSyncExRateToForm,
   withExchangeRateFetchingLoading,
   withExchangeRateItemEntriesPriceRecalc,
 } from '@/containers/Entries/withExRateItemEntriesPriceRecalc';
-import { DialogsName } from '@/constants/dialogs';
+import { withSettings } from '@/containers/Settings/withSettings';
+import { useCurrentOrganizationBaseCurrency } from '@/hooks/query';
+import { transactionNumber, compose } from '@/utils';
 
 type CreditNoteExchangeRateInputFieldRootProps = React.ComponentProps<
   typeof ExchangeRateInputGroup

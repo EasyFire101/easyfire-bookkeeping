@@ -1,11 +1,11 @@
 // @ts-nocheck
+import { Spinner } from '@blueprintjs/core';
 import React, { useEffect, Suspense } from 'react';
 import { CLASSES } from '@/constants/classes';
 import { withDashboardActions } from '@/containers/Dashboard/withDashboardActions';
-import { compose } from '@/utils';
-import { Spinner } from '@blueprintjs/core';
-
 import { withUniversalSearchActions } from '@/containers/UniversalSearch/withUniversalSearchActions';
+import { compose } from '@/utils';
+
 
 /**
  * Dashboard pages wrapper.

@@ -1,11 +1,11 @@
 // @ts-nocheck
 import { Button, Classes, Intent, Text } from '@blueprintjs/core';
 import { useFormikContext } from 'formik';
+import { PreferencesBrandingFormValues } from './_types';
+import styles from './PreferencesBranding.module.scss';
 import { FFormGroup, Group, Stack } from '@/components';
 import { FColorInput } from '@/components/Forms/FColorInput';
 import { CompanyLogoUpload } from '@/containers/ElementCustomize/components/CompanyLogoUpload';
-import { PreferencesBrandingFormValues } from './_types';
-import styles from './PreferencesBranding.module.scss';
 import { useIsDarkMode } from '@/hooks/useDarkMode';
 
 export function PreferencesBrandingFormContent() {

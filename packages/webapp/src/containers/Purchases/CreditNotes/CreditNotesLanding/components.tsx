@@ -1,14 +1,13 @@
+import { Intent, Tag, Menu, MenuItem, MenuDivider } from '@blueprintjs/core';
+import clsx from 'classnames';
 import React from 'react';
 import intl from 'react-intl-universal';
-import clsx from 'classnames';
-import type { VendorCreditsListResponse } from '@bigcapital/sdk-ts';
-import { Intent, Tag, Menu, MenuItem, MenuDivider } from '@blueprintjs/core';
-
-import { CLASSES } from '@/constants/classes';
-import { FormattedMessage as T, Choose, If, Icon, Can } from '@/components';
-import { safeCallback } from '@/utils';
-import { VendorCreditAction, AbilitySubject } from '@/constants/abilityOption';
 import type { DataTableColumn } from '@/components/Datatable/types';
+import type { VendorCreditsListResponse } from '@bigcapital/sdk-ts';
+import { FormattedMessage as T, Choose, If, Icon, Can } from '@/components';
+import { VendorCreditAction, AbilitySubject } from '@/constants/abilityOption';
+import { CLASSES } from '@/constants/classes';
+import { safeCallback } from '@/utils';
 
 // Backend Vendor Credits list response DTO is not yet declared in the OpenAPI
 // schema, so the SDK envelope resolves to `unknown`. This intersection keeps

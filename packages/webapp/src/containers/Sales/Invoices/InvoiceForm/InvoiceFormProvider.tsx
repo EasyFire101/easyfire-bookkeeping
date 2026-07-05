@@ -1,4 +1,7 @@
+import { isEmpty, pick } from 'lodash';
 import React, { createContext, useState } from 'react';
+import { useLocation } from 'react-router-dom';
+import { transformToEditForm, ITEMS_FILTER_ROLES_QUERY } from './utils';
 import type {
   SaleInvoice,
   CreateSaleInvoiceBody,
@@ -12,11 +15,8 @@ import type {
   PdfTemplateResponse,
   GetPaymentServicesResponse,
 } from '@bigcapital/sdk-ts';
-import { isEmpty, pick } from 'lodash';
-import { useLocation } from 'react-router-dom';
 import { Features } from '@/constants';
-import { useFeatureCan } from '@/hooks/state';
-import { transformToEditForm, ITEMS_FILTER_ROLES_QUERY } from './utils';
+import { useProjects } from '@/containers/Projects/hooks';
 import {
   useInvoice,
   useItems,
@@ -29,10 +29,10 @@ import {
   useEstimateDetail as useEstimate,
   useGetSaleInvoiceState,
 } from '@/hooks/query';
-import { useProjects } from '@/containers/Projects/hooks';
-import { useTaxRates } from '@/hooks/query/tax-rates';
-import { useGetPdfTemplates } from '@/hooks/query/pdf-templates';
 import { useGetPaymentServices } from '@/hooks/query/payment-services';
+import { useGetPdfTemplates } from '@/hooks/query/pdf-templates';
+import { useTaxRates } from '@/hooks/query/tax-rates';
+import { useFeatureCan } from '@/hooks/state';
 
 type InvoiceFormSubmitPayload = {
   redirect?: boolean;

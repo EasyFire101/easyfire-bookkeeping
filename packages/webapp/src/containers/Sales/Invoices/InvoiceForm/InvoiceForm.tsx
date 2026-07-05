@@ -1,27 +1,26 @@
+import { Intent } from '@blueprintjs/core';
+import { css } from '@emotion/css';
+import { Formik, Form, FormikHelpers } from 'formik';
+import { sumBy, isEmpty, defaultTo } from 'lodash';
 import React from 'react';
 import intl from 'react-intl-universal';
-import { Formik, Form, FormikHelpers } from 'formik';
-import { Intent } from '@blueprintjs/core';
-import { sumBy, isEmpty, defaultTo } from 'lodash';
 import { useHistory } from 'react-router-dom';
-import { css } from '@emotion/css';
+import {
+  InvoiceExchangeRateSync,
+  InvoiceNoSyncSettingsToForm,
+} from './components';
+import { InvoiceFloatingActions } from './InvoiceFloatingActions';
 import {
   getCreateInvoiceFormSchema,
   getEditInvoiceFormSchema,
 } from './InvoiceForm.schema';
-import { InvoiceFormHeader } from './InvoiceFormHeader';
-import { InvoiceItemsEntriesEditorField } from './InvoiceItemsEntriesEditorField';
-import { InvoiceFloatingActions } from './InvoiceFloatingActions';
-import { InvoiceFormFooter } from './InvoiceFormFooter';
-import { InvoiceFormDialogs } from './InvoiceFormDialogs';
-import { InvoiceFormTopBar } from './InvoiceFormTopBar';
-import { withDashboardActions } from '@/containers/Dashboard/withDashboardActions';
-import { withSettings } from '@/containers/Settings/withSettings';
-import { AppToaster, Box } from '@/components';
-import { useCurrentOrganizationBaseCurrency } from '@/hooks/query';
-import { compose, orderingLinesIndexes, transactionNumber } from '@/utils';
-import { useInvoiceFormContext } from './InvoiceFormProvider';
 import { InvoiceFormActions } from './InvoiceFormActions';
+import { InvoiceFormDialogs } from './InvoiceFormDialogs';
+import { InvoiceFormFooter } from './InvoiceFormFooter';
+import { InvoiceFormHeader } from './InvoiceFormHeader';
+import { useInvoiceFormContext } from './InvoiceFormProvider';
+import { InvoiceFormTopBar } from './InvoiceFormTopBar';
+import { InvoiceItemsEntriesEditorField } from './InvoiceItemsEntriesEditorField';
 import {
   transformToEditForm,
   defaultInvoice,
@@ -30,11 +29,14 @@ import {
   resetFormState,
 } from './utils';
 import type { InvoiceFormValues } from './utils';
-import {
-  InvoiceExchangeRateSync,
-  InvoiceNoSyncSettingsToForm,
-} from './components';
+import { AppToaster, Box } from '@/components';
 import { PageForm } from '@/components/PageForm';
+import { withDashboardActions } from '@/containers/Dashboard/withDashboardActions';
+import { withSettings } from '@/containers/Settings/withSettings';
+import { useCurrentOrganizationBaseCurrency } from '@/hooks/query';
+import { compose, orderingLinesIndexes, transactionNumber } from '@/utils';
+
+
 
 type InvoiceFormRootProps = {
   invoiceNextNumber?: number;

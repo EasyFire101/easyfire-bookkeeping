@@ -1,8 +1,7 @@
-import React from 'react';
 import { Tag, Intent } from '@blueprintjs/core';
-
-import { T } from '@/components';
+import React from 'react';
 import type { Expense } from '@bigcapital/sdk-ts';
+import { T } from '@/components';
 
 interface ExpenseDetailsStatusProps {
   expense: Expense | undefined;

@@ -1,12 +1,12 @@
 // @ts-nocheck
-import { useRef } from 'react';
 import { Button, Intent } from '@blueprintjs/core';
 import clsx from 'classnames';
+import { useRef } from 'react';
+import styles from './ImportDropzone.module.css';
 import { Box, Icon, Stack } from '@/components';
 import { Dropzone, DropzoneProps } from '@/components/Dropzone';
 import { MIME_TYPES } from '@/components/Dropzone/mine-types';
 import { useUncontrolled } from '@/hooks/useUncontrolled';
-import styles from './ImportDropzone.module.css';
 
 export interface ImportDropzoneFieldProps {
   initialValue?: File;

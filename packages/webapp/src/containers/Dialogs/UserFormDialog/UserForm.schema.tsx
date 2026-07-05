@@ -1,6 +1,6 @@
 // @ts-nocheck
-import * as Yup from 'yup';
 import intl from 'react-intl-universal';
+import * as Yup from 'yup';
 
 const Schema = Yup.object().shape({
   email: Yup.string().email().required().label(intl.get('email')),

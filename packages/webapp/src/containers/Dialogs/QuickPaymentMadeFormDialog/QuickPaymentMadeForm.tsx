@@ -1,21 +1,21 @@
 // @ts-nocheck
+import { Intent } from '@blueprintjs/core';
+import { Formik } from 'formik';
+import { omit } from 'lodash';
 import React from 'react';
 import intl from 'react-intl-universal';
-import { Formik } from 'formik';
-import { Intent } from '@blueprintjs/core';
-import { omit } from 'lodash';
-import { AppToaster } from '@/components';
 import { CreateQuickPaymentMadeFormSchema } from './QuickPaymentMade.schema';
-import { useQuickPaymentMadeContext } from './QuickPaymentMadeFormProvider';
 import { QuickPaymentMadeFormContent } from './QuickPaymentMadeFormContent';
-
-import { withDialogActions } from '@/containers/Dialog/withDialogActions';
+import { useQuickPaymentMadeContext } from './QuickPaymentMadeFormProvider';
 import {
   defaultPaymentMade,
   transformBillToForm,
   transformErrors,
 } from './utils';
+import { AppToaster } from '@/components';
+import { withDialogActions } from '@/containers/Dialog/withDialogActions';
 import { compose } from '@/utils';
+
 
 /**
  * Quick payment made form.

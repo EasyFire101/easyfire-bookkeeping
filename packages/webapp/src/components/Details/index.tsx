@@ -1,5 +1,5 @@
-import React from 'react';
 import clsx from 'classnames';
+import React from 'react';
 
 import '@/style/components/Details.scss';
 

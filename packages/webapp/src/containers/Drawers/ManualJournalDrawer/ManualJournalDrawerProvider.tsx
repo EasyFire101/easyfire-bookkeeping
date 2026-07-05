@@ -1,9 +1,9 @@
 import React from 'react';
 import intl from 'react-intl-universal';
 import type { ManualJournal } from '@bigcapital/sdk-ts';
-import { useJournal } from '@/hooks/query';
 import { DrawerLoading, DrawerHeaderContent } from '@/components';
 import { DRAWERS } from '@/constants/drawers';
+import { useJournal } from '@/hooks/query';
 
 /**
  * The SDK's entry shape types `account`, `contact`, and `branch` as

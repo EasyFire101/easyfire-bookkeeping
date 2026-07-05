@@ -1,13 +1,11 @@
+import { Tab } from '@blueprintjs/core';
 import React from 'react';
 import intl from 'react-intl-universal';
 import styled from 'styled-components';
-import { Tab } from '@blueprintjs/core';
-
-import { DrawerMainTabs } from '@/components';
-
 import { PaymentMadeDetailActionsBar } from './PaymentMadeDetailActionsBar';
 import { PaymentMadeDetailTab } from './PaymentMadeDetailTab';
 import { PaymentMadeGLEntriesPanel } from './PaymentMadeGLEntriesPanel';
+import { DrawerMainTabs } from '@/components';
 
 /**
  * Payment made details tabs.

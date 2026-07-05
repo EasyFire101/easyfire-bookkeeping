@@ -1,10 +1,10 @@
+import { Spinner } from '@blueprintjs/core';
 import { Suspense } from 'react';
 import styled from 'styled-components';
-import { Spinner } from '@blueprintjs/core';
 import { CategorizeTransactionBoot } from './CategorizeTransactionBoot';
 import { CategorizeTransactionForm } from './CategorizeTransactionForm';
-import { withBanking } from '@/containers/CashFlow/withBanking';
 import type { WithBankingProps } from '@/containers/CashFlow/withBanking';
+import { withBanking } from '@/containers/CashFlow/withBanking';
 import { compose } from '@/utils';
 
 interface CategorizeTransactionContentRootProps

@@ -1,5 +1,3 @@
-import React from 'react';
-import intl from 'react-intl-universal';
 import {
   Menu,
   Popover,
@@ -9,10 +7,12 @@ import {
   MenuDivider,
   Intent,
 } from '@blueprintjs/core';
+import React from 'react';
+import intl from 'react-intl-universal';
+import type { DataTableColumn } from '@/components/Datatable/types';
 import type { ItemCategory } from '@bigcapital/sdk-ts';
 import { Icon } from '@/components';
 import { safeCallback } from '@/utils';
-import type { DataTableColumn } from '@/components/Datatable/types';
 
 // `count` is returned by the server at runtime but not declared on the SDK type.
 export type ItemCategoryTableRow = ItemCategory & { count?: number };

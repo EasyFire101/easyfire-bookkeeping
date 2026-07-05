@@ -1,6 +1,6 @@
+import type { SettingOption } from './settings.type';
 import ApiService from '@/services/ApiService';
 import { SETTING_ADD, SETTING_SET } from '@/store/types';
-import type { SettingOption } from './settings.type';
 
 export const submitOptions = ({
   form,

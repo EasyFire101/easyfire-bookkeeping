@@ -1,12 +1,12 @@
 // @ts-nocheck
+import intl from 'react-intl-universal';
+import { VendorFormSectionTitle } from './VendorFormSectionTitle';
 import {
   Box,
   FFormGroup,
   FormattedMessage as T,
   FTextArea,
 } from '@/components';
-import { VendorFormSectionTitle } from './VendorFormSectionTitle';
-import intl from 'react-intl-universal';
 
 export function VendorFormNotesSection() {
   return (

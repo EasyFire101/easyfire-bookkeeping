@@ -1,7 +1,7 @@
 // @ts-nocheck
+import { x } from '@xstyled/emotion';
 import React from 'react';
 import styled from 'styled-components';
-import { x } from '@xstyled/emotion';
 export const TotalLineBorderStyle = {
   None: 'None',
   SingleDark: 'SingleDark',

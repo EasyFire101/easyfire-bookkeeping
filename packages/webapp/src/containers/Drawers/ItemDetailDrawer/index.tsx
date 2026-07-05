@@ -4,7 +4,6 @@ import {
   withDrawers,
   type WithDrawersProps,
 } from '@/containers/Drawer/withDrawers';
-
 import { compose } from '@/utils';
 
 const ItemDetailDrawerContent = React.lazy(() =>

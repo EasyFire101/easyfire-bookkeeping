@@ -1,12 +1,11 @@
 // @ts-nocheck
+import { Tab } from '@blueprintjs/core';
 import React from 'react';
 import intl from 'react-intl-universal';
 import styled from 'styled-components';
-import { Tab } from '@blueprintjs/core';
-import { DrawerMainTabs } from '@/components';
-
-import { WarehouseTransferDetailPanel } from './WarehouseTransferDetailPanel';
 import { WarehouseTransferDetailActionsBar } from './WarehouseTransferDetailActionsBar';
+import { WarehouseTransferDetailPanel } from './WarehouseTransferDetailPanel';
+import { DrawerMainTabs } from '@/components';
 
 /**
  * Warehouse transfer view detail.

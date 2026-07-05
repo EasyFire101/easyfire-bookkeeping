@@ -1,6 +1,7 @@
+import { defaultTo } from 'lodash';
 import React from 'react';
 import intl from 'react-intl-universal';
-import { defaultTo } from 'lodash';
+import { usePaymentReceiveDetailContext } from './PaymentReceiveDetailProvider';
 import {
   Row,
   Col,
@@ -11,7 +12,6 @@ import {
   CustomerDrawerLink,
   ExchangeRateDetailItem,
 } from '@/components';
-import { usePaymentReceiveDetailContext } from './PaymentReceiveDetailProvider';
 
 /**
  * Payment receive detail header.

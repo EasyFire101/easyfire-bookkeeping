@@ -1,7 +1,14 @@
 // @ts-nocheck
 import { FormGroup, Position, ControlGroup } from '@blueprintjs/core';
 import { ErrorMessage, useFormikContext } from 'formik';
-import { Features } from '@/constants';
+import intl from 'react-intl-universal';
+import {
+  openingBalanceFieldShouldUpdate,
+  useIsVendorForeignCurrency,
+  useSetPrimaryBranchToForm,
+} from './utils';
+import { useVendorFormContext } from './VendorFormProvider';
+import { VendorFormSectionTitle } from './VendorFormSectionTitle';
 import {
   FFormGroup,
   FormattedMessage as T,
@@ -15,15 +22,9 @@ import {
   Icon,
   Box,
 } from '@/components';
-import { useVendorFormContext } from './VendorFormProvider';
-import {
-  openingBalanceFieldShouldUpdate,
-  useIsVendorForeignCurrency,
-  useSetPrimaryBranchToForm,
-} from './utils';
+import { Features } from '@/constants';
 import { useCurrentOrganizationBaseCurrency } from '@/hooks/query';
-import { VendorFormSectionTitle } from './VendorFormSectionTitle';
-import intl from 'react-intl-universal';
+
 
 export function VendorFormFinancialSection() {
   const { currencies, vendorId, branches } = useVendorFormContext();

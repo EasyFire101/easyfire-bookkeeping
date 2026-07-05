@@ -1,5 +1,5 @@
-import { ChangeSubscriptionPlanDrawer } from '@/containers/Subscriptions/drawers/ChangeSubscriptionPlanDrawer/ChangeSubscriptionPlanDrawer';
 import { DRAWERS } from '@/constants/drawers';
+import { ChangeSubscriptionPlanDrawer } from '@/containers/Subscriptions/drawers/ChangeSubscriptionPlanDrawer/ChangeSubscriptionPlanDrawer';
 
 export function SubscriptionsDrawers() {
   return (

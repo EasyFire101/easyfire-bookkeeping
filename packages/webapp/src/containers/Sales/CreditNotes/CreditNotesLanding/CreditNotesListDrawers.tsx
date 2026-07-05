@@ -1,5 +1,5 @@
-import { index as CreditNoteDetailDrawer } from '@/containers/Drawers/CreditNoteDetailDrawer';
 import { DRAWERS } from '@/constants/drawers';
+import { index as CreditNoteDetailDrawer } from '@/containers/Drawers/CreditNoteDetailDrawer';
 
 export function CreditNotesListDrawers() {
   return (

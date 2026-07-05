@@ -1,22 +1,25 @@
+import { Intent } from '@blueprintjs/core';
+import { css } from '@emotion/css';
+import { Formik, Form, FormikHelpers } from 'formik';
+import { defaultTo, isEmpty } from 'lodash';
 import React from 'react';
 import intl from 'react-intl-universal';
 import { useHistory } from 'react-router-dom';
-import { Formik, Form, FormikHelpers } from 'formik';
-import { Intent } from '@blueprintjs/core';
-import { defaultTo, isEmpty } from 'lodash';
-import { css } from '@emotion/css';
+import {
+  CreditNoteExchangeRateSync,
+  CreditNoteSyncIncrementSettingsToForm,
+} from './components';
+import { CreditNoteFloatingActions } from './CreditNoteFloatingActions';
 import {
   CreateCreditNoteFormSchema,
   EditCreditNoteFormSchema,
 } from './CreditNoteForm.schema';
-import { CreditNoteFormHeader } from './CreditNoteFormHeader';
-import { CreditNoteItemsEntriesEditorField } from './CreditNoteItemsEntriesEditorField';
-import { CreditNoteFormFooter } from './CreditNoteFormFooter';
-import { CreditNoteFloatingActions } from './CreditNoteFloatingActions';
 import { CreditNoteFormDialogs } from './CreditNoteFormDialogs';
-import { CreditNoteFormTopbar as CreditNoteFormTopBar } from './CreditNoteFormTopBar';
-import { AppToaster } from '@/components';
+import { CreditNoteFormFooter } from './CreditNoteFormFooter';
+import { CreditNoteFormHeader } from './CreditNoteFormHeader';
 import { useCreditNoteFormContext } from './CreditNoteFormProvider';
+import { CreditNoteFormTopbar as CreditNoteFormTopBar } from './CreditNoteFormTopBar';
+import { CreditNoteItemsEntriesEditorField } from './CreditNoteItemsEntriesEditorField';
 import {
   transformToEditForm,
   transformFormValuesToRequest,
@@ -24,19 +27,19 @@ import {
   type CreditNoteFormValues,
   type CreditNoteEntry,
 } from './utils';
+import { AppToaster } from '@/components';
+import { PageForm } from '@/components/PageForm';
+import { withSettings } from '@/containers/Settings/withSettings';
+import { useCurrentOrganizationBaseCurrency } from '@/hooks/query';
 import {
   compose,
   orderingLinesIndexes,
   transactionNumber,
   safeSumBy,
 } from '@/utils';
-import { withSettings } from '@/containers/Settings/withSettings';
-import {
-  CreditNoteExchangeRateSync,
-  CreditNoteSyncIncrementSettingsToForm,
-} from './components';
-import { PageForm } from '@/components/PageForm';
-import { useCurrentOrganizationBaseCurrency } from '@/hooks/query';
+
+
+
 
 type CreditNoteFormInnerProps = {
   creditAutoIncrement?: boolean;

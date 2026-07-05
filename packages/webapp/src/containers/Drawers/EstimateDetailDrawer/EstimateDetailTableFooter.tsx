@@ -1,5 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
+import { useEstimateDetailDrawerContext } from './EstimateDetailDrawerProvider';
 import {
   T,
   TotalLines,
@@ -7,7 +8,6 @@ import {
   TotalLineBorderStyle,
   TotalLineTextStyle,
 } from '@/components';
-import { useEstimateDetailDrawerContext } from './EstimateDetailDrawerProvider';
 
 /**
  * Estimate details panel footer content.

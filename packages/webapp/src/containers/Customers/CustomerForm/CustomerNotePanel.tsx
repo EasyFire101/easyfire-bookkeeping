@@ -1,7 +1,7 @@
 // @ts-nocheck
 import React from 'react';
-import { FFormGroup, FTextArea } from '@/components';
 import intl from 'react-intl-universal';
+import { FFormGroup, FTextArea } from '@/components';
 
 export function CustomerNotePanel({ errors, touched, getFieldProps }) {
   return (

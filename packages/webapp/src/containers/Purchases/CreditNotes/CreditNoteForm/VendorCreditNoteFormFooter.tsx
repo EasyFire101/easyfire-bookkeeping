@@ -1,7 +1,7 @@
 import { x } from '@xstyled/emotion';
-import { Row, Col, Paper } from '@/components';
 import { VendorCreditNoteFormFooterLeft } from './VendorCreditNoteFormFooterLeft';
 import { VendorCreditNoteFormFooterRight } from './VendorCreditNoteFormFooterRight';
+import { Row, Col, Paper } from '@/components';
 import { UploadAttachmentButton } from '@/containers/Attachments/UploadAttachmentButton';
 
 export function VendorCreditNoteFormFooter() {

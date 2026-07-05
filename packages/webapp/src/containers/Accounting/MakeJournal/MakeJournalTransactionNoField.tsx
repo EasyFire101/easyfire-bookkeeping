@@ -1,7 +1,9 @@
-import React from 'react';
 import { Position, ControlGroup } from '@blueprintjs/core';
 import { useFormikContext } from 'formik';
+import React from 'react';
 import intl from 'react-intl-universal';
+import type { MakeJournalFormValues } from './utils';
+import type { WithDialogActionsProps } from '@/containers/Dialog/withDialogActions';
 import {
   FieldHint,
   FieldRequiredHint,
@@ -11,11 +13,9 @@ import {
   FInputGroup,
   FFormGroup,
 } from '@/components';
-import type { WithDialogActionsProps } from '@/containers/Dialog/withDialogActions';
-import { withSettings } from '@/containers/Settings/withSettings';
 import { withDialogActions } from '@/containers/Dialog/withDialogActions';
+import { withSettings } from '@/containers/Settings/withSettings';
 import { compose } from '@/utils';
-import type { MakeJournalFormValues } from './utils';
 
 interface MakeJournalTransactionNoFieldOwnProps {
   journalAutoIncrement?: boolean;

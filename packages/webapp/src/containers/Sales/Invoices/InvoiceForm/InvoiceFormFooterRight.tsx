@@ -1,13 +1,8 @@
+import { useFormikContext } from 'formik';
 import React from 'react';
 import styled from 'styled-components';
-import { useFormikContext } from 'formik';
-import {
-  T,
-  TotalLines,
-  TotalLine,
-  TotalLineBorderStyle,
-  TotalLineTextStyle,
-} from '@/components';
+import { AdjustmentTotalLine } from './AdjustmentTotalLine';
+import { DiscountTotalLine } from './DiscountTotalLine';
 import {
   useInvoiceAdjustmentAmountFormatted,
   useInvoiceAggregatedTaxRates,
@@ -17,10 +12,15 @@ import {
   useInvoiceSubtotalFormatted,
   useInvoiceTotalFormatted,
 } from './utils';
-import { TaxType } from '@/interfaces/TaxRates';
-import { AdjustmentTotalLine } from './AdjustmentTotalLine';
-import { DiscountTotalLine } from './DiscountTotalLine';
 import type { InvoiceFormValues } from './utils';
+import {
+  T,
+  TotalLines,
+  TotalLine,
+  TotalLineBorderStyle,
+  TotalLineTextStyle,
+} from '@/components';
+import { TaxType } from '@/interfaces/TaxRates';
 
 export function InvoiceFormFooterRight() {
   const {

@@ -1,4 +1,5 @@
 import styled from 'styled-components';
+import { useBillDrawerContext } from './BillDrawerProvider';
 import {
   TotalLineBorderStyle,
   TotalLineTextStyle,
@@ -6,7 +7,6 @@ import {
   TotalLines,
   TotalLine,
 } from '@/components';
-import { useBillDrawerContext } from './BillDrawerProvider';
 
 /**
  * Bill read-only details table footer.

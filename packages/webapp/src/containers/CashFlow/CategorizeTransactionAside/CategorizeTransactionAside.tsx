@@ -1,12 +1,13 @@
 import { useEffect } from 'react';
-import { Aside } from '@/components/Aside/Aside';
-import { CategorizeTransactionTabs } from './CategorizeTransactionTabs';
-import { withBankingActions } from '../withBankingActions';
-import type { WithBankingActionsProps } from '../withBankingActions';
-import { CategorizeTransactionTabsBoot } from './CategorizeTransactionTabsBoot';
 import { withBanking } from '../withBanking';
+import { withBankingActions } from '../withBankingActions';
+import { CategorizeTransactionTabs } from './CategorizeTransactionTabs';
+import { CategorizeTransactionTabsBoot } from './CategorizeTransactionTabsBoot';
 import type { WithBankingProps } from '../withBanking';
+import type { WithBankingActionsProps } from '../withBankingActions';
+import { Aside } from '@/components/Aside/Aside';
 import { compose } from '@/utils';
+
 
 interface CategorizeTransactionAsideProps
   extends Pick<

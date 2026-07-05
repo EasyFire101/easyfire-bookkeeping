@@ -1,7 +1,6 @@
 // @ts-nocheck
-import React from 'react';
 import classNames from 'classnames';
-
+import React from 'react';
 import { CLASSES } from '@/constants/classes';
 
 // Dashboard card.

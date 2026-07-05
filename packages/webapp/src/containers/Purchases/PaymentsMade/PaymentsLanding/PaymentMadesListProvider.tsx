@@ -1,6 +1,6 @@
-import React, { createContext } from 'react';
 import { isEmpty } from 'lodash';
-
+import React, { createContext } from 'react';
+import type { PaymentMadeTableRow } from './components';
 import { DashboardInsider } from '@/components/Dashboard';
 import {
   useResourceViews,
@@ -8,7 +8,6 @@ import {
   useResourceMeta,
 } from '@/hooks/query';
 import { getFieldsFromResourceMeta } from '@/utils';
-import type { PaymentMadeTableRow } from './components';
 
 interface PaymentMadesListProviderProps {
   query?: any;

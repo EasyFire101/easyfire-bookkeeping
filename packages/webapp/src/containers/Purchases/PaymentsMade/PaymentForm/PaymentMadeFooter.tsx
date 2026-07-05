@@ -1,9 +1,8 @@
-import React from 'react';
 import { x } from '@xstyled/emotion';
-
-import { Row, Col, Paper } from '@/components';
+import React from 'react';
 import { PaymentMadeFormFooterLeft } from './PaymentMadeFormFooterLeft';
 import { PaymentMadeFormFooterRight } from './PaymentMadeFormFooterRight';
+import { Row, Col, Paper } from '@/components';
 import { UploadAttachmentButton } from '@/containers/Attachments/UploadAttachmentButton';
 
 /**

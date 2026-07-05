@@ -1,6 +1,6 @@
 import { DialogsName } from '@/constants/dialogs';
-import { useValidateBulkDeleteVendorCredits } from '@/hooks/query/vendor-credit';
 import { useBulkDeleteDialog } from '@/hooks/dialogs/useBulkDeleteDialog';
+import { useValidateBulkDeleteVendorCredits } from '@/hooks/query/vendor-credit';
 
 export const useBulkDeleteVendorCreditsDialog = () => {
   const validateBulkDeleteMutation = useValidateBulkDeleteVendorCredits();

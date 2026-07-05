@@ -1,4 +1,3 @@
-import React from 'react';
 import {
   Intent,
   Button,
@@ -9,19 +8,20 @@ import {
   Menu,
   MenuItem,
 } from '@blueprintjs/core';
-import { If, Icon, FormattedMessage as T, Group, FSelect } from '@/components';
-import { useHistory } from 'react-router-dom';
 import { useFormikContext } from 'formik';
+import React from 'react';
+import { useHistory } from 'react-router-dom';
 import { useEstimateFormContext } from './EstimateFormProvider';
 import { useEstimateFormBrandingTemplatesOptions } from './utils';
-import { useDrawerActions } from '@/hooks/state';
+import { If, Icon, FormattedMessage as T, Group, FSelect } from '@/components';
+import { PageForm } from '@/components/PageForm';
+import { DRAWERS } from '@/constants/drawers';
 import {
   BrandingThemeFormGroup,
   BrandingThemeSelectButton,
 } from '@/containers/BrandingTemplates/BrandingTemplatesSelectFields';
-import { PageForm } from '@/components/PageForm';
+import { useDrawerActions } from '@/hooks/state';
 import { MoreIcon } from '@/icons/More';
-import { DRAWERS } from '@/constants/drawers';
 
 /**
  * Estimate floating actions bar.

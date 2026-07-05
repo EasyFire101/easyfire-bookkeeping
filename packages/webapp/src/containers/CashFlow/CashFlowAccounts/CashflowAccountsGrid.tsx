@@ -1,36 +1,32 @@
+import { Menu, MenuItem, MenuDivider, Intent } from '@blueprintjs/core';
+import { ContextMenu2 } from '@blueprintjs/popover2';
+import { isEmpty } from 'lodash';
 import React, { useMemo } from 'react';
 import intl from 'react-intl-universal';
-import styled from 'styled-components';
-import { isEmpty } from 'lodash';
 import { Link } from 'react-router-dom';
-import { ContextMenu2 } from '@blueprintjs/popover2';
-import { Menu, MenuItem, MenuDivider, Intent } from '@blueprintjs/core';
-
+import styled from 'styled-components';
+import { useCashFlowAccountsContext } from './CashFlowAccountsProvider';
+import type { CashflowAccountRow } from './components';
+import type { WithAlertActionsProps } from '@/containers/Alert/withAlertActions';
+import type { WithDialogActionsProps } from '@/containers/Dialog/withDialogActions';
+import type { WithDrawerActionsProps } from '@/containers/Drawer/withDrawerActions';
+import { BankAccountsList, BankAccount, If, Icon, T, Can } from '@/components';
 import {
   AccountAction,
   CashflowAction,
   AbilitySubject,
 } from '@/constants/abilityOption';
-import { DialogsName } from '@/constants/dialogs';
 import {
   getAddMoneyInOptions,
   getAddMoneyOutOptions,
 } from '@/constants/cashflowOptions';
-
-import { BankAccountsList, BankAccount, If, Icon, T, Can } from '@/components';
-import { useCashFlowAccountsContext } from './CashFlowAccountsProvider';
-import type { CashflowAccountRow } from './components';
-
-import { withDrawerActions } from '@/containers/Drawer/withDrawerActions';
-import type { WithDrawerActionsProps } from '@/containers/Drawer/withDrawerActions';
-import { withAlertActions } from '@/containers/Alert/withAlertActions';
-import type { WithAlertActionsProps } from '@/containers/Alert/withAlertActions';
-import { withDialogActions } from '@/containers/Dialog/withDialogActions';
-import type { WithDialogActionsProps } from '@/containers/Dialog/withDialogActions';
-
-import { AccountDialogAction } from '@/containers/Dialogs/AccountDialog/utils';
-import { safeCallback } from '@/utils';
+import { DialogsName } from '@/constants/dialogs';
 import { DRAWERS } from '@/constants/drawers';
+import { withAlertActions } from '@/containers/Alert/withAlertActions';
+import { withDialogActions } from '@/containers/Dialog/withDialogActions';
+import { AccountDialogAction } from '@/containers/Dialogs/AccountDialog/utils';
+import { withDrawerActions } from '@/containers/Drawer/withDrawerActions';
+import { safeCallback } from '@/utils';
 import { compose } from '@/utils';
 
 const CASHFLOW_SKELETON_N = 4;

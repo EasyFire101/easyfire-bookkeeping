@@ -1,10 +1,10 @@
 // @ts-nocheck
 import { useQuery } from '@tanstack/react-query';
 import { castArray, defaultTo } from 'lodash';
+import { useRef } from 'react';
+import { normalizeApiPath } from '../utils';
 import { useAuthOrganizationId } from './state';
 import useApiRequest from './useRequest';
-import { normalizeApiPath } from '../utils';
-import { useRef } from 'react';
 
 /**
  * Query for tenant requests.

@@ -1,7 +1,9 @@
 // @ts-nocheck
-import React from 'react';
 import { Intent, Button } from '@blueprintjs/core';
 import { Form, useFormikContext } from 'formik';
+import React from 'react';
+import intl from 'react-intl-universal';
+import { useInviteUserFormContext } from './InviteUserFormProvider';
 import {
   FSelect,
   FieldRequiredHint,
@@ -10,11 +12,9 @@ import {
   FInputGroup,
 } from '@/components';
 import { CLASSES } from '@/constants/classes';
-import { compose } from '@/utils';
-import { useInviteUserFormContext } from './InviteUserFormProvider';
-
 import { withDialogActions } from '@/containers/Dialog/withDialogActions';
-import intl from 'react-intl-universal';
+import { compose } from '@/utils';
+
 
 function InviteUserFormContentInner({
   // #withDialogActions

@@ -1,9 +1,10 @@
 // @ts-nocheck
+import { defaultTo } from 'lodash';
 import React from 'react';
 import intl from 'react-intl-universal';
 import styled from 'styled-components';
-import { defaultTo } from 'lodash';
-
+import { WarehouseTransferDetailsStatus } from './utils';
+import { useWarehouseDetailDrawerContext } from './WarehouseTransferDetailDrawerProvider';
 import {
   FormatDate,
   Row,
@@ -13,8 +14,6 @@ import {
   CommercialDocHeader,
   CommercialDocTopHeader,
 } from '@/components';
-import { WarehouseTransferDetailsStatus } from './utils';
-import { useWarehouseDetailDrawerContext } from './WarehouseTransferDetailDrawerProvider';
 
 /**
  * Warehouse transfer details drawer header.

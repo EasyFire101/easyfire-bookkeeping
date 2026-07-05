@@ -1,8 +1,8 @@
 // @ts-nocheck
-import React from 'react';
 import { Form } from 'formik';
-import { InventoryAdjustmentFormDialogFields } from './InventoryAdjustmentFormDialogFields';
+import React from 'react';
 import { InventoryAdjustmentFloatingActions } from './InventoryAdjustmentFloatingActions';
+import { InventoryAdjustmentFormDialogFields } from './InventoryAdjustmentFormDialogFields';
 
 /**
  * Inventory adjustment form content.

@@ -1,17 +1,17 @@
+import { DRAWERS } from '@/constants/drawers';
+import { BrandingTemplatesDrawer } from '@/containers/BrandingTemplates/BrandingTemplatesDrawer';
 import { index as CustomerDetailsDrawer } from '@/containers/Drawers/CustomerDetailsDrawer';
-import { index as VendorDetailsDrawer } from '@/containers/Drawers/VendorDetailsDrawer';
 import { index as QuickCreateCustomerDrawer } from '@/containers/Drawers/QuickCreateCustomerDrawer';
 import { index as QuickCreateItemDrawer } from '@/containers/Drawers/QuickCreateItemDrawer';
 import { index as QuickWriteVendorDrawer } from '@/containers/Drawers/QuickWriteVendorDrawer';
-import { InvoiceCustomizeDrawer } from '@/containers/Sales/Invoices/InvoiceCustomize/InvoiceCustomizeDrawer';
-import { EstimateCustomizeDrawer } from '@/containers/Sales/Estimates/EstimateCustomize/EstimateCustomizeDrawer';
-import { ReceiptCustomizeDrawer } from '@/containers/Sales/Receipts/ReceiptCustomize/ReceiptCustomizeDrawer';
+import { index as VendorDetailsDrawer } from '@/containers/Drawers/VendorDetailsDrawer';
 import { CreditNoteCustomizeDrawer } from '@/containers/Sales/CreditNotes/CreditNoteCustomize/CreditNoteCustomizeDrawer';
+import { EstimateCustomizeDrawer } from '@/containers/Sales/Estimates/EstimateCustomize/EstimateCustomizeDrawer';
+import { InvoiceCustomizeDrawer } from '@/containers/Sales/Invoices/InvoiceCustomize/InvoiceCustomizeDrawer';
 import { PaymentReceivedCustomizeDrawer } from '@/containers/Sales/PaymentsReceived/PaymentReceivedCustomize/PaymentReceivedCustomizeDrawer';
-import { BrandingTemplatesDrawer } from '@/containers/BrandingTemplates/BrandingTemplatesDrawer';
+import { ReceiptCustomizeDrawer } from '@/containers/Sales/Receipts/ReceiptCustomize/ReceiptCustomizeDrawer';
 import { CreateWorkspaceDrawer } from '@/ee/workspaces/containers/CreateWorkspaceDrawer/CreateWorkspaceDrawer';
 import { OrganizationsListDrawer } from '@/ee/workspaces/containers/OrganizationsListDrawer';
-import { DRAWERS } from '@/constants/drawers';
 
 /**
  * Global drawers container.

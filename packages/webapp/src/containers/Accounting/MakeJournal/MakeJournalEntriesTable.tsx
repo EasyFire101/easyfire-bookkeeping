@@ -1,4 +1,7 @@
 import React from 'react';
+import { useJournalTableEntriesColumns } from './components';
+import { useMakeJournalFormContext } from './MakeJournalProvider';
+import { updateAdjustEntries, type MakeJournalEntry } from './utils';
 import { DataTableEditable } from '@/components';
 import {
   compose,
@@ -8,9 +11,6 @@ import {
   updateAutoAddNewLine,
   updateTableCell,
 } from '@/utils';
-import { useMakeJournalFormContext } from './MakeJournalProvider';
-import { useJournalTableEntriesColumns } from './components';
-import { updateAdjustEntries, type MakeJournalEntry } from './utils';
 
 type MakeJournalEntriesTableProps = {
   onChange?: (entries: MakeJournalEntry[]) => void;

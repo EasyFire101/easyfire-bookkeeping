@@ -1,8 +1,8 @@
 // @ts-nocheck
-import React from 'react';
 import { Classes, Position } from '@blueprintjs/core';
 import classNames from 'classnames';
-import { CLASSES } from '@/constants/classes';
+import React from 'react';
+import intl from 'react-intl-universal';
 import {
   FieldRequiredHint,
   Col,
@@ -11,9 +11,10 @@ import {
   FDateInput,
   FTextArea,
 } from '@/components';
-import { momentFormatter } from '@/utils';
+import { CLASSES } from '@/constants/classes';
 import { useAutofocus } from '@/hooks';
-import intl from 'react-intl-universal';
+import { momentFormatter } from '@/utils';
+
 
 /**
  * Parial Unlocking transactions form fields.

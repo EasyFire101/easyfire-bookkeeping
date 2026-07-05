@@ -1,14 +1,14 @@
 import { ComponentType } from 'react';
+import { connect } from 'react-redux';
 import { AnyAction } from 'redux';
 import { ThunkDispatch } from 'redux-thunk';
-import { connect } from 'react-redux';
+import type { RootState } from '@/store/reducers';
 import {
   fetchCurrencies,
   submitCurrencies,
   deleteCurrency,
   editCurrency,
 } from '@/store/currencies/currencies.actions';
-import type { RootState } from '@/store/reducers';
 
 export interface WithCurrenciesActionsProps {
   requestFetchCurrencies: () => unknown;

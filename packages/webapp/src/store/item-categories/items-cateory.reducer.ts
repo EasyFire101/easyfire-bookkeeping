@@ -1,6 +1,6 @@
 // @ts-nocheck
-import { CATEGORY_DELETE, ITEMS_CATEGORY_LIST_SET } from '@/store/types';
 import { createReducer } from '@reduxjs/toolkit';
+import { CATEGORY_DELETE, ITEMS_CATEGORY_LIST_SET } from '@/store/types';
 
 const initialState = {
   tableState: {

@@ -1,5 +1,4 @@
 // @ts-nocheck
-import { useMemo } from 'react';
 import {
   chain,
   isEmpty,
@@ -10,14 +9,15 @@ import {
   get,
   assign,
 } from 'lodash';
+import { useMemo } from 'react';
+import { ImportFileMappingFormValues } from './_types';
+import { useImportFileMapBootContext } from './ImportFileMappingBoot';
 import {
   EntityColumn,
   SheetColumn,
   useImportFileContext,
 } from './ImportFileProvider';
-import { useImportFileMapBootContext } from './ImportFileMappingBoot';
 import { deepdash, transformToForm } from '@/utils';
-import { ImportFileMappingFormValues } from './_types';
 
 export const getFieldKey = (key: string, group = '') => {
   return group ? `${group}.${key}` : key;

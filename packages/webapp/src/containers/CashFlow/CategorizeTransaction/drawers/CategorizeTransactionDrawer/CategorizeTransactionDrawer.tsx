@@ -1,8 +1,7 @@
 import React, { lazy } from 'react';
+import type { WithDrawersProps } from '@/containers/Drawer/withDrawers';
 import { Drawer, DrawerSuspense } from '@/components';
 import { withDrawers } from '@/containers/Drawer/withDrawers';
-import type { WithDrawersProps } from '@/containers/Drawer/withDrawers';
-
 import { compose } from '@/utils';
 
 const CategorizeTransactionContent = lazy(() =>

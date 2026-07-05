@@ -1,7 +1,7 @@
 // @ts-nocheck
+import { DepGraph } from 'dependency-graph';
 import { chain, isEmpty, castArray, memoize } from 'lodash';
 import * as R from 'ramda';
-import { DepGraph } from 'dependency-graph';
 import {
   getPermissionsSchema,
   getPermissionsSchemaService,

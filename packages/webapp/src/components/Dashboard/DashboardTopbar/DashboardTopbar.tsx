@@ -1,6 +1,4 @@
 // @ts-nocheck
-import React from 'react';
-import { useHistory } from 'react-router';
 import {
   Navbar,
   NavbarGroup,
@@ -14,30 +12,26 @@ import {
   MenuDivider,
 } from '@blueprintjs/core';
 import { Popover2 } from '@blueprintjs/popover2';
-
-import { FormattedMessage as T, Icon, Hint, If } from '@/components';
-
-import DashboardTopbarUser from '@/components/Dashboard/TopbarUser';
-import DashboardBreadcrumbs from '@/components/Dashboard/DashboardBreadcrumbs';
-import DashboardBackLink from '@/components/Dashboard/DashboardBackLink';
-
-import { withUniversalSearchActions } from '@/containers/UniversalSearch/withUniversalSearchActions';
-import { withDashboardActions } from '@/containers/Dashboard/withDashboardActions';
-import { withDashboard } from '@/containers/Dashboard/withDashboard';
-import { withDialogActions } from '@/containers/Dialog/withDialogActions';
-
-import { QuickNewDropdown } from '@/containers/QuickNewDropdown/QuickNewDropdown';
+import React from 'react';
+import { useHistory } from 'react-router';
 import {
   DashboardHamburgerButton,
   DashboardQuickSearchButton,
 } from './_components';
-
+import { FormattedMessage as T, Icon, Hint, If } from '@/components';
+import DashboardBackLink from '@/components/Dashboard/DashboardBackLink';
+import DashboardBreadcrumbs from '@/components/Dashboard/DashboardBreadcrumbs';
+import DashboardTopbarUser from '@/components/Dashboard/TopbarUser';
 import { DialogsName } from '@/constants/dialogs';
 import {
   COMMUNITY_BIGCAPITAL_LINK,
   DOCS_BIGCAPITAL_LINK,
 } from '@/constants/routes';
-
+import { withDashboard } from '@/containers/Dashboard/withDashboard';
+import { withDashboardActions } from '@/containers/Dashboard/withDashboardActions';
+import { withDialogActions } from '@/containers/Dialog/withDialogActions';
+import { QuickNewDropdown } from '@/containers/QuickNewDropdown/QuickNewDropdown';
+import { withUniversalSearchActions } from '@/containers/UniversalSearch/withUniversalSearchActions';
 import { compose } from '@/utils';
 
 /**

@@ -1,29 +1,30 @@
 import React, { useCallback } from 'react';
 import { useHistory } from 'react-router-dom';
-import { compose } from '@/utils';
-import { TABLES } from '@/constants/tables';
+import { usePaymentReceivesColumns, ActionsMenu } from './components';
+import { PaymentsReceivedEmptyStatus as PaymentReceivesEmptyStatus } from './PaymentsReceivedEmptyStatus';
+import { usePaymentsReceivedListContext } from './PaymentsReceivedListProvider';
+import { withPaymentsReceived } from './withPaymentsReceived';
+import { withPaymentsReceivedActions } from './withPaymentsReceivedActions';
+import type { PaymentReceiveTableRow } from './components';
+import type { WithPaymentsReceivedProps } from './withPaymentsReceived';
+import type { WithAlertActionsProps } from '@/containers/Alert/withAlertActions';
+import type { WithDialogActionsProps } from '@/containers/Dialog/withDialogActions';
+import type { WithDrawerActionsProps } from '@/containers/Drawer/withDrawerActions';
 import {
   DataTable,
   DashboardContentTable,
   TableSkeletonRows,
   TableSkeletonHeader,
 } from '@/components';
-import { PaymentsReceivedEmptyStatus as PaymentReceivesEmptyStatus } from './PaymentsReceivedEmptyStatus';
-import { withPaymentsReceived } from './withPaymentsReceived';
-import { withPaymentsReceivedActions } from './withPaymentsReceivedActions';
-import { withAlertActions } from '@/containers/Alert/withAlertActions';
-import { withDrawerActions } from '@/containers/Drawer/withDrawerActions';
-import { withDialogActions } from '@/containers/Dialog/withDialogActions';
-import { withSettings } from '@/containers/Settings/withSettings';
-import { usePaymentReceivesColumns, ActionsMenu } from './components';
-import { usePaymentsReceivedListContext } from './PaymentsReceivedListProvider';
-import { useMemorizedColumnsWidths } from '@/hooks';
 import { DRAWERS } from '@/constants/drawers';
-import type { WithPaymentsReceivedProps } from './withPaymentsReceived';
-import type { WithAlertActionsProps } from '@/containers/Alert/withAlertActions';
-import type { WithDrawerActionsProps } from '@/containers/Drawer/withDrawerActions';
-import type { WithDialogActionsProps } from '@/containers/Dialog/withDialogActions';
-import type { PaymentReceiveTableRow } from './components';
+import { TABLES } from '@/constants/tables';
+import { withAlertActions } from '@/containers/Alert/withAlertActions';
+import { withDialogActions } from '@/containers/Dialog/withDialogActions';
+import { withDrawerActions } from '@/containers/Drawer/withDrawerActions';
+import { withSettings } from '@/containers/Settings/withSettings';
+import { useMemorizedColumnsWidths } from '@/hooks';
+import { compose } from '@/utils';
+
 
 interface WithPaymentsReceivedActionsProps {
   setPaymentReceivesTableState: (state: Record<string, any>) => void;

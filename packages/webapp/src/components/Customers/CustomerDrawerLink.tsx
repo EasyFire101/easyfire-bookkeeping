@@ -1,12 +1,11 @@
 // @ts-nocheck
 import React from 'react';
-
 import { ButtonLink } from '../Button';
+import { DRAWERS } from '@/constants/drawers';
 import {
   withDrawerActions,
   WithDrawerActionsProps,
 } from '@/containers/Drawer/withDrawerActions';
-import { DRAWERS } from '@/constants/drawers';
 import { compose } from '@/utils';
 
 interface CustomerDrawerLinkComponentProps extends WithDrawerActionsProps {

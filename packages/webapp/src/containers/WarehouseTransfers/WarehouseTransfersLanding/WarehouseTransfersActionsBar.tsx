@@ -1,6 +1,4 @@
 // @ts-nocheck
-import React from 'react';
-import { useHistory } from 'react-router-dom';
 import {
   Button,
   Classes,
@@ -8,6 +6,11 @@ import {
   NavbarGroup,
   Alignment,
 } from '@blueprintjs/core';
+import React from 'react';
+import { useHistory } from 'react-router-dom';
+import { useWarehouseTranfersListContext } from './WarehouseTransfersListProvider';
+import { withWarehouseTransfers } from './withWarehouseTransfers';
+import { withWarehouseTransfersActions } from './withWarehouseTransfersActions';
 import {
   Icon,
   FormattedMessage as T,
@@ -17,14 +20,10 @@ import {
   DashboardActionViewsList,
   DashboardActionsBar,
 } from '@/components';
-
-import { useWarehouseTranfersListContext } from './WarehouseTransfersListProvider';
 import { withSettings } from '@/containers/Settings/withSettings';
 import { withSettingsActions } from '@/containers/Settings/withSettingsActions';
-import { withWarehouseTransfers } from './withWarehouseTransfers';
-import { withWarehouseTransfersActions } from './withWarehouseTransfersActions';
-
 import { compose } from '@/utils';
+
 
 /**
  * Warehouse Transfers actions bar.

@@ -1,7 +1,7 @@
 // @ts-nocheck
+import { Navbar } from '@blueprintjs/core';
 import React from 'react';
 import styled from 'styled-components';
-import { Navbar } from '@blueprintjs/core';
 
 /**
  * Form the topbar.

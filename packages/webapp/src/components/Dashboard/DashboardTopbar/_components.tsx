@@ -1,8 +1,8 @@
 // @ts-nocheck
-import React from 'react';
 import { Button, Classes } from '@blueprintjs/core';
-import { useGetUniversalSearchTypeOptions } from '@/containers/UniversalSearch/utils';
+import React from 'react';
 import { Icon, FormattedMessage as T } from '@/components';
+import { useGetUniversalSearchTypeOptions } from '@/containers/UniversalSearch/utils';
 
 export function DashboardTopbarSubscriptionMessage() {
   return (

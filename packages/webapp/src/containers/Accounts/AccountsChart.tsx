@@ -1,17 +1,18 @@
 import { useEffect } from 'react';
+
 import '@/style/pages/Accounts/List.scss';
-import { DashboardPageContent, DashboardContentTable } from '@/components';
-import { AccountsChartProvider } from './AccountsChartProvider';
 import { AccountsActionsBar } from './AccountsActionsBar';
-import { AccountsDataTable } from './AccountsDataTable';
-import { AccountsChartDrawers } from './AccountsChartDrawers';
 import { AccountsChartDialogs } from './AccountsChartDialogs';
-import { withAccounts } from '@/containers/Accounts/withAccounts';
-import { withAccountsTableActions } from './withAccountsTableActions';
+import { AccountsChartDrawers } from './AccountsChartDrawers';
+import { AccountsChartProvider } from './AccountsChartProvider';
+import { AccountsDataTable } from './AccountsDataTable';
 import { transformAccountsStateToQuery } from './utils';
-import { compose } from '@/utils';
-import type { WithAccountsProps } from '@/containers/Accounts/withAccounts';
+import { withAccountsTableActions } from './withAccountsTableActions';
 import type { WithAccountsTableActionsProps } from './withAccountsTableActions';
+import type { WithAccountsProps } from '@/containers/Accounts/withAccounts';
+import { DashboardPageContent, DashboardContentTable } from '@/components';
+import { withAccounts } from '@/containers/Accounts/withAccounts';
+import { compose } from '@/utils';
 
 interface AccountsChartInnerProps {
   accountsTableState: WithAccountsProps['accountsTableState'];

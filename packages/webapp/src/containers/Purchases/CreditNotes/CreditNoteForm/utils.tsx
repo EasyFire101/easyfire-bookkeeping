@@ -1,9 +1,20 @@
-import React from 'react';
+import { useFormikContext } from 'formik';
+import { first } from 'lodash';
 import moment from 'moment';
 import * as R from 'ramda';
-import { first } from 'lodash';
+import React from 'react';
+import { useVendorCreditNoteFormContext } from './VendorCreditNoteFormProvider';
 import type { CreateVendorCreditBody, VendorCredit } from '@bigcapital/sdk-ts';
-
+import {
+  transformAttachmentsToForm,
+  transformAttachmentsToRequest,
+} from '@/containers/Attachments/utils';
+import {
+  updateItemsEntriesTotal,
+  ensureEntriesHaveEmptyLine,
+  getEntriesTotal,
+} from '@/containers/Entries/utils';
+import { useCurrentOrganizationBaseCurrency } from '@/hooks/query';
 import {
   defaultFastFieldShouldUpdate,
   transformToForm,
@@ -14,18 +25,9 @@ import {
   toSafeNumber,
   compose,
 } from '@/utils';
-import { useFormikContext } from 'formik';
-import { useVendorCreditNoteFormContext } from './VendorCreditNoteFormProvider';
-import { useCurrentOrganizationBaseCurrency } from '@/hooks/query';
-import {
-  updateItemsEntriesTotal,
-  ensureEntriesHaveEmptyLine,
-  getEntriesTotal,
-} from '@/containers/Entries/utils';
-import {
-  transformAttachmentsToForm,
-  transformAttachmentsToRequest,
-} from '@/containers/Attachments/utils';
+
+
+
 
 export const MIN_LINES_NUMBER = 1;
 

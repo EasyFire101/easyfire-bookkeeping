@@ -1,6 +1,14 @@
-import React from 'react';
 import { Intent, Text } from '@blueprintjs/core';
-
+import React from 'react';
+import { withBankingActions } from '../../withBankingActions';
+import { useAccountTransactionsContext } from '../AccountTransactionsProvider';
+import { BankAccountDataTable } from '../components/BankAccountDataTable';
+import { ActionsMenu } from './_components';
+import { useUncategorizedTransactionsColumns } from './_utils';
+import styles from './RecognizedTransactionsTable.module.scss';
+import { useRecognizedTransactionsBoot } from './RecognizedTransactionsTableBoot';
+import type { RecognizedTransactionRow } from './_utils';
+import type { WithBankingActionsProps } from '../../withBankingActions';
 import {
   TableFastCell,
   TableSkeletonRows,
@@ -10,20 +18,11 @@ import {
   Stack,
 } from '@/components';
 import { TABLES } from '@/constants/tables';
-
 import { useMemorizedColumnsWidths } from '@/hooks';
-import { useUncategorizedTransactionsColumns } from './_utils';
-import type { RecognizedTransactionRow } from './_utils';
-import { useRecognizedTransactionsBoot } from './RecognizedTransactionsTableBoot';
-
-import { ActionsMenu } from './_components';
-import { compose } from '@/utils';
-import { useAccountTransactionsContext } from '../AccountTransactionsProvider';
 import { useExcludeUncategorizedTransaction } from '@/hooks/query/banking';
-import { withBankingActions } from '../../withBankingActions';
-import type { WithBankingActionsProps } from '../../withBankingActions';
-import styles from './RecognizedTransactionsTable.module.scss';
-import { BankAccountDataTable } from '../components/BankAccountDataTable';
+import { compose } from '@/utils';
+
+
 
 interface RecognizedTransactionsTableProps
   extends Pick<

@@ -1,16 +1,16 @@
 // @ts-nocheck
+import { Intent, Tag } from '@blueprintjs/core';
 import React from 'react';
 import intl from 'react-intl-universal';
-import { Intent, Tag } from '@blueprintjs/core';
-import { getColumnWidth } from '@/utils';
 import { useWarehouseDetailDrawerContext } from './WarehouseTransferDetailDrawerProvider';
-
 import {
   FormattedMessage as T,
   FormatNumberCell,
   TextOverviewTooltipCell,
   Choose,
 } from '@/components';
+import { getColumnWidth } from '@/utils';
+
 
 /**
  * Retrieves the readonly warehouse transfer entries columns.

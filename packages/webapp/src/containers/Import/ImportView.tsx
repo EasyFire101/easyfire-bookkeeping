@@ -1,8 +1,8 @@
 // @ts-nocheck
-import { ImportStepper } from './ImportStepper';
-import { Box } from '@/components';
 import { ImportFileProvider } from './ImportFileProvider';
+import { ImportStepper } from './ImportStepper';
 import styles from './ImportView.module.scss';
+import { Box } from '@/components';
 
 interface ImportViewProps {
   resource: string;

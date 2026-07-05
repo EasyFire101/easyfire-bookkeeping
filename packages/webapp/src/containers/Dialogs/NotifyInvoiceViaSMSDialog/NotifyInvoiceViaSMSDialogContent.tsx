@@ -1,8 +1,7 @@
 // @ts-nocheck
 import React from 'react';
-
-import { NotifyInvoiceViaSMSFormProvider } from './NotifyInvoiceViaSMSFormProvider';
 import { NotifyInvoiceViaSMSForm } from './NotifyInvoiceViaSMSForm';
+import { NotifyInvoiceViaSMSFormProvider } from './NotifyInvoiceViaSMSFormProvider';
 
 export function NotifyInvoiceViaSMSDialogContent({
   // #ownProps

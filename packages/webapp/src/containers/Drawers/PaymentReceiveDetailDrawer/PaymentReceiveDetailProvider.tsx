@@ -1,11 +1,11 @@
 import React from 'react';
 import intl from 'react-intl-universal';
-import { DrawerHeaderContent, DrawerLoading } from '@/components';
-import { usePaymentReceive } from '@/hooks/query';
-import { Features } from '@/constants';
-import { useFeatureCan } from '@/hooks/state';
-import { DRAWERS } from '@/constants/drawers';
 import type { PaymentReceived } from '@bigcapital/sdk-ts';
+import { DrawerHeaderContent, DrawerLoading } from '@/components';
+import { Features } from '@/constants';
+import { DRAWERS } from '@/constants/drawers';
+import { usePaymentReceive } from '@/hooks/query';
+import { useFeatureCan } from '@/hooks/state';
 
 /**
  * Each entry's `invoice` is typed `any` in the SDK DTO; declare the slice the

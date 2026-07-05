@@ -3,8 +3,8 @@ import React from 'react';
 
 import '@/style/pages/PaymentReceive/QuickPaymentReceiveDialog.scss';
 
-import { QuickPaymentReceiveFormProvider } from './QuickPaymentReceiveFormProvider';
 import { QuickPaymentReceiveForm } from './QuickPaymentReceiveForm';
+import { QuickPaymentReceiveFormProvider } from './QuickPaymentReceiveFormProvider';
 
 /**
  * Quick payment receive form dialog content.

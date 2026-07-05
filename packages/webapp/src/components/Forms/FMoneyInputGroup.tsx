@@ -1,6 +1,6 @@
-import React from 'react';
 import { Intent } from '@blueprintjs/core';
 import { Field, FastField, getIn } from 'formik';
+import React from 'react';
 import { CurrencyInput } from './MoneyInputGroup';
 
 interface FieldProps {

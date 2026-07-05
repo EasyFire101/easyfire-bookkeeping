@@ -1,11 +1,19 @@
-import React from 'react';
-import styled from 'styled-components';
-import classNames from 'classnames';
 import { Position, Classes } from '@blueprintjs/core';
-import { useFormikContext } from 'formik';
 import { css } from '@emotion/css';
 import { Theme, useTheme } from '@emotion/react';
-
+import classNames from 'classnames';
+import { useFormikContext } from 'formik';
+import React from 'react';
+import intl from 'react-intl-universal';
+import styled from 'styled-components';
+import {
+  InvoiceExchangeRateInputField,
+  InvoiceProjectSelectButton,
+} from './components';
+import { InvoiceFormInvoiceNumberField } from './InvoiceFormInvoiceNumberField';
+import { useInvoiceFormContext } from './InvoiceFormProvider';
+import { customerNameFieldShouldUpdate } from './utils';
+import type { InvoiceFormValues } from './utils';
 import {
   FFormGroup,
   FormattedMessage as T,
@@ -18,22 +26,16 @@ import {
   Icon,
   FDateInput,
 } from '@/components';
-import { customerNameFieldShouldUpdate } from './utils';
-import type { InvoiceFormValues } from './utils';
-
-import { useInvoiceFormContext } from './InvoiceFormProvider';
+import { Features } from '@/constants';
 import { useCustomerUpdateExRate } from '@/containers/Entries/withExRateItemEntriesPriceRecalc';
-import {
-  InvoiceExchangeRateInputField,
-  InvoiceProjectSelectButton,
-} from './components';
-import { InvoiceFormInvoiceNumberField } from './InvoiceFormInvoiceNumberField';
 import {
   ProjectsSelect,
   ProjectBillableEntriesLink,
 } from '@/containers/Projects/components';
-import { Features } from '@/constants';
-import intl from 'react-intl-universal';
+
+
+
+
 
 const getInvoiceFieldsStyle = (theme: Theme & { bpPrefix?: string }) => css`
   .${theme.bpPrefix}-form-group {

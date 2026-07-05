@@ -1,10 +1,9 @@
 // @ts-nocheck
-import React from 'react';
-import styled from 'styled-components';
-import { useFormikContext } from 'formik';
 import { Intent, Button } from '@blueprintjs/core';
+import { useFormikContext } from 'formik';
+import React from 'react';
 import { useHistory } from 'react-router-dom';
-
+import styled from 'styled-components';
 import { FormattedMessage as T } from '@/components';
 
 /**

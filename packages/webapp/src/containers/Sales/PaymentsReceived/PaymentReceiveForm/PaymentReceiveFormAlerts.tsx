@@ -1,7 +1,7 @@
-import React from 'react';
 import { useFormikContext } from 'formik';
-import { ClearingAllLinesAlert } from '@/containers/Alerts/PaymentReceived/ClearingAllLinesAlert';
+import React from 'react';
 import { clearAllPaymentEntries, type PaymentReceiveFormValues } from './utils';
+import { ClearingAllLinesAlert } from '@/containers/Alerts/PaymentReceived/ClearingAllLinesAlert';
 
 /**
  * Payment receive form alerts.

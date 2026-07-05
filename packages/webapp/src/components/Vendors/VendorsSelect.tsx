@@ -1,12 +1,12 @@
 // @ts-nocheck
-import React from 'react';
-import * as R from 'ramda';
 import { useFormikContext } from 'formik';
-import { withDrawerActions } from '@/containers/Drawer/withDrawerActions';
-import { createNewItemFromQuery, createNewItemRenderer } from './utils';
+import * as R from 'ramda';
+import React from 'react';
 import { FSelect } from '../Forms';
-import { useCreateAutofillListener } from '@/hooks/state/autofill';
+import { createNewItemFromQuery, createNewItemRenderer } from './utils';
 import { DRAWERS } from '@/constants/drawers';
+import { withDrawerActions } from '@/containers/Drawer/withDrawerActions';
+import { useCreateAutofillListener } from '@/hooks/state/autofill';
 
 /**
  * Vendor select.

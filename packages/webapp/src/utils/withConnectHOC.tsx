@@ -1,6 +1,6 @@
 import { ComponentType } from 'react';
-import { Dispatch } from 'redux';
 import { connect, MapStateToProps } from 'react-redux';
+import { Dispatch } from 'redux';
 
 /**
  * Creates a simple dispatch HOC that injects action props into a component.

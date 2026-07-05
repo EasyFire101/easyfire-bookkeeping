@@ -1,15 +1,12 @@
 // @ts-nocheck
+import { useQuery, useQueryClient } from '@tanstack/react-query';
 import React from 'react';
 import { DialogContent } from '@/components';
-import { useQuery, useQueryClient } from '@tanstack/react-query';
-
-import { ReferenceNumberForm } from '@/containers/JournalNumber/ReferenceNumberForm';
-
 import { withDialogActions } from '@/containers/Dialog/withDialogActions';
-import { withSettingsActions } from '@/containers/Settings/withSettingsActions';
-import { withSettings } from '@/containers/Settings/withSettings';
+import { ReferenceNumberForm } from '@/containers/JournalNumber/ReferenceNumberForm';
 import { withBillsActions } from '@/containers/Purchases/Bills/BillsLanding/withBillsActions';
-
+import { withSettings } from '@/containers/Settings/withSettings';
+import { withSettingsActions } from '@/containers/Settings/withSettingsActions';
 import { compose, optionsMapToArray } from '@/utils';
 
 /**

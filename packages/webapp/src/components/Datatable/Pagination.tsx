@@ -1,9 +1,9 @@
-import { useReducer, useEffect } from 'react';
 import { Button, ButtonGroup, Intent, HTMLSelect } from '@blueprintjs/core';
-import intl from 'react-intl-universal';
-import { range } from 'lodash';
-import styled from 'styled-components';
 import { x } from '@xstyled/emotion';
+import { range } from 'lodash';
+import { useReducer, useEffect } from 'react';
+import intl from 'react-intl-universal';
+import styled from 'styled-components';
 import { Icon, FormattedMessage as T } from '@/components';
 import { useIsDarkMode } from '@/hooks/useDarkMode';
 

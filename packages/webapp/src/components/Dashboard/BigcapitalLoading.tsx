@@ -1,6 +1,6 @@
 // @ts-nocheck
-import React from 'react';
 import classNames from 'classnames';
+import React from 'react';
 import { Icon } from '@/components';
 
 import '@/style/components/BigcapitalLoading.scss';

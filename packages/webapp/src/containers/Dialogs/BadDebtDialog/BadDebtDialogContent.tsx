@@ -2,8 +2,8 @@
 import React from 'react';
 
 import '@/style/pages/BadDebt/BadDebtDialog.scss';
-import { BadDebtFormProvider } from './BadDebtFormProvider';
 import { BadDebtForm } from './BadDebtForm';
+import { BadDebtFormProvider } from './BadDebtFormProvider';
 
 /**
  * Bad debt  dialog content.

@@ -1,18 +1,16 @@
 // @ts-nocheck
-import React, { useMemo } from 'react';
-import intl from 'react-intl-universal';
 import { Intent } from '@blueprintjs/core';
 import { Formik } from 'formik';
-import { AppToaster } from '@/components';
-import { CurrencyFormContent } from './CurrencyFormContent';
-
-import { useCurrencyFormContext } from './CurrencyFormProvider';
+import React, { useMemo } from 'react';
+import intl from 'react-intl-universal';
 import {
   CreateCurrencyFormSchema,
   EditCurrencyFormSchema,
 } from './CurrencyForm.schema';
+import { CurrencyFormContent } from './CurrencyFormContent';
+import { useCurrencyFormContext } from './CurrencyFormProvider';
+import { AppToaster } from '@/components';
 import { withDialogActions } from '@/containers/Dialog/withDialogActions';
-
 import { compose, transformToForm } from '@/utils';
 
 const defaultInitialValues = {

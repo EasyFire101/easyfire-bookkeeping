@@ -1,13 +1,11 @@
-import React from 'react';
 import { Alignment, Navbar, NavbarGroup } from '@blueprintjs/core';
-
+import React from 'react';
+import { useCreditNoteListContext } from './CreditNotesListProvider';
+import { withCreditNotes } from './withCreditNotes';
+import { withCreditNotesActions } from './withCreditNotesActions';
+import type { WithCreditNotesProps } from './withCreditNotes';
 import { DashboardViewsTabs } from '@/components';
 import { compose, transfromViewsToTabs } from '@/utils';
-import { useCreditNoteListContext } from './CreditNotesListProvider';
-
-import { withCreditNotes } from './withCreditNotes';
-import type { WithCreditNotesProps } from './withCreditNotes';
-import { withCreditNotesActions } from './withCreditNotesActions';
 
 interface WithCreditNotesActionsProps {
   setCreditNotesTableState: (state: Record<string, any>) => void;

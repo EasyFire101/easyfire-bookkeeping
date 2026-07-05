@@ -1,7 +1,4 @@
 // @ts-nocheck
-import React from 'react';
-import intl from 'react-intl-universal';
-import { FormattedMessage as T, Icon, If } from '@/components';
 import {
   Intent,
   Button,
@@ -12,6 +9,9 @@ import {
   MenuItem,
   Position,
 } from '@blueprintjs/core';
+import React from 'react';
+import intl from 'react-intl-universal';
+import { FormattedMessage as T, Icon, If } from '@/components';
 import { safeCallback, firstLettersArgs } from '@/utils';
 
 /**

@@ -1,28 +1,23 @@
-import { useMemo } from 'react';
-import { Formik, Form, type FormikHelpers } from 'formik';
 import { Intent } from '@blueprintjs/core';
-import intl from 'react-intl-universal';
-import { sumBy, round, isEmpty } from 'lodash';
-import classNames from 'classnames';
 import { css } from '@emotion/css';
+import classNames from 'classnames';
+import { Formik, Form, type FormikHelpers } from 'formik';
+import { sumBy, round, isEmpty } from 'lodash';
+import { useMemo } from 'react';
+import intl from 'react-intl-universal';
 import { useHistory } from 'react-router-dom';
-import { CLASSES } from '@/constants/classes';
+import { JournalSyncIncrementSettingsToForm } from './components';
 import {
   CreateJournalSchema,
   EditJournalSchema,
 } from './MakeJournalEntries.schema';
-import { useMakeJournalFormContext } from './MakeJournalProvider';
-import { MakeJournalEntriesHeader } from './MakeJournalEntriesHeader';
-import { MakeJournalFloatingAction as MakeJournalFormFloatingActions } from './MakeJournalFormFloatingActions';
 import { MakeJournalEntriesField } from './MakeJournalEntriesField';
-import { MakeJournalFormFooter } from './MakeJournalFormFooter';
+import { MakeJournalEntriesHeader } from './MakeJournalEntriesHeader';
 import { MakeJournalFormDialogs } from './MakeJournalFormDialogs';
+import { MakeJournalFloatingAction as MakeJournalFormFloatingActions } from './MakeJournalFormFloatingActions';
+import { MakeJournalFormFooter } from './MakeJournalFormFooter';
 import { MakeJournalFormTopBar } from './MakeJournalFormTopBar';
-import { withSettings } from '@/containers/Settings/withSettings';
-import { useCurrentOrganizationBaseCurrency } from '@/hooks/query';
-import { AppToaster } from '@/components';
-import { PageForm } from '@/components/PageForm';
-import { compose, transactionNumber } from '@/utils';
+import { useMakeJournalFormContext } from './MakeJournalProvider';
 import {
   transformErrors,
   transformToEditForm,
@@ -32,7 +27,12 @@ import {
   type MakeJournalFormValues,
   type MakeJournalErrorResponse,
 } from './utils';
-import { JournalSyncIncrementSettingsToForm } from './components';
+import { AppToaster } from '@/components';
+import { PageForm } from '@/components/PageForm';
+import { CLASSES } from '@/constants/classes';
+import { withSettings } from '@/containers/Settings/withSettings';
+import { useCurrentOrganizationBaseCurrency } from '@/hooks/query';
+import { compose, transactionNumber } from '@/utils';
 
 type MakeJournalEntriesFormRootProps = {
   journalNextNumber?: number;

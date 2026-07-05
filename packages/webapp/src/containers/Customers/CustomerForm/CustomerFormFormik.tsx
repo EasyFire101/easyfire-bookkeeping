@@ -1,15 +1,17 @@
+import { Intent } from '@blueprintjs/core';
+import { Formik, Form, FormikHelpers } from 'formik';
 import { useMemo } from 'react';
 import intl from 'react-intl-universal';
-import { Formik, Form, FormikHelpers } from 'formik';
-import { Intent } from '@blueprintjs/core';
 import styled from 'styled-components';
 import { CreateCustomerForm, EditCustomerForm } from './CustomerForm.schema';
-import { transformToForm, saveInvoke, parseBoolean } from '@/utils';
+import { CustomerFormContent } from './CustomerFormContent';
 import { useCustomerFormContext } from './CustomerFormProvider';
 import { defaultInitialValues } from './utils';
 import { AppToaster } from '@/components';
 import { useCurrentOrganizationBaseCurrency } from '@/hooks/query';
-import { CustomerFormContent } from './CustomerFormContent';
+import { transformToForm, saveInvoke, parseBoolean } from '@/utils';
+
+
 
 type CustomerFormValues = {
   customer_type: string;

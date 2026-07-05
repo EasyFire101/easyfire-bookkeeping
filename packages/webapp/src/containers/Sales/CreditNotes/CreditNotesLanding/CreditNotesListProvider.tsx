@@ -1,6 +1,6 @@
-import React from 'react';
 import { isEmpty } from 'lodash';
-
+import React from 'react';
+import type { CreditNoteTableRow } from './components';
 import { DashboardInsider } from '@/components/Dashboard';
 import {
   useResourceViews,
@@ -8,9 +8,7 @@ import {
   useCreditNotes,
   useRefreshCreditNotes,
 } from '@/hooks/query';
-
 import { getFieldsFromResourceMeta } from '@/utils';
-import type { CreditNoteTableRow } from './components';
 
 interface CreditNotesListProviderProps {
   query?: any;

@@ -1,9 +1,9 @@
 import React from 'react';
+import { inactiveStatus } from './utils';
 import type { Item } from '@bigcapital/sdk-ts';
 import { DrawerHeaderContent, DrawerLoading } from '@/components';
-import { useItem } from '@/hooks/query';
-import { inactiveStatus } from './utils';
 import { DRAWERS } from '@/constants/drawers';
+import { useItem } from '@/hooks/query';
 
 export interface ItemDetailDrawerContextValue {
   item: Item | undefined;

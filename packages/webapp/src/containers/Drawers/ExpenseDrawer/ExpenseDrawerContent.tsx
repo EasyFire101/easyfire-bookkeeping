@@ -1,7 +1,7 @@
 import React from 'react';
-import { DrawerBody } from '@/components';
-import { ExpenseDrawerProvider } from './ExpenseDrawerProvider';
 import { ExpenseDrawerDetails } from './ExpenseDrawerDetails';
+import { ExpenseDrawerProvider } from './ExpenseDrawerProvider';
+import { DrawerBody } from '@/components';
 
 interface ExpenseDrawerContentProps {
   expenseId: number | undefined;

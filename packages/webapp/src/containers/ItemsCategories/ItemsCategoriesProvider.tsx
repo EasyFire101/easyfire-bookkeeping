@@ -1,8 +1,8 @@
 import React, { createContext } from 'react';
+import type { ItemCategoryTableRow } from './components';
 import { DashboardInsider } from '@/components';
 import { useItemsCategories, useResourceMeta } from '@/hooks/query';
 import { transformTableStateToQuery, getFieldsFromResourceMeta } from '@/utils';
-import type { ItemCategoryTableRow } from './components';
 
 interface ItemsCategoriesProviderProps {
   // The store-injected `itemsCategoriesTableState` is a complex selector return;

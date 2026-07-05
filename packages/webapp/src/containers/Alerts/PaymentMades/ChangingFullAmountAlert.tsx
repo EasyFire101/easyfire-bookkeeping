@@ -1,10 +1,8 @@
 // @ts-nocheck
-import React from 'react';
 import { Intent, Alert } from '@blueprintjs/core';
-
+import React from 'react';
 import { withAlertActions } from '@/containers/Alert/withAlertActions';
 import { withAlertStoreConnect } from '@/containers/Alert/withAlertStoreConnect';
-
 import { compose, saveInvoke } from '@/utils';
 
 /**

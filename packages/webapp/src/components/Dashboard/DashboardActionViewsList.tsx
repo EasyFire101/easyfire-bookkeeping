@@ -1,6 +1,4 @@
 // @ts-nocheck
-import React, { useMemo, useState } from 'react';
-import classNames from 'classnames';
 import {
   Button,
   Classes,
@@ -11,6 +9,8 @@ import {
   Position,
   Divider,
 } from '@blueprintjs/core';
+import classNames from 'classnames';
+import React, { useMemo, useState } from 'react';
 import { FormattedMessage as T } from '@/components';
 import { Icon } from '@/components';
 

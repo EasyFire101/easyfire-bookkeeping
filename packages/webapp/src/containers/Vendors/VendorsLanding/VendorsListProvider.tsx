@@ -1,11 +1,10 @@
 // @ts-nocheck
-import React, { createContext } from 'react';
 import { isEmpty } from 'lodash';
-
+import React, { createContext } from 'react';
+import { transformVendorsStateToQuery } from './utils';
 import { DashboardInsider } from '@/components';
 import { useResourceMeta, useResourceViews, useVendors } from '@/hooks/query';
 import { getFieldsFromResourceMeta } from '@/utils';
-import { transformVendorsStateToQuery } from './utils';
 
 const VendorsListContext = createContext();
 

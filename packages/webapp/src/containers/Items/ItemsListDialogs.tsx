@@ -1,5 +1,5 @@
-import { ItemBulkDeleteDialog } from '@/containers/Dialogs/Items/ItemBulkDeleteDialog';
 import { DialogsName } from '@/constants/dialogs';
+import { ItemBulkDeleteDialog } from '@/containers/Dialogs/Items/ItemBulkDeleteDialog';
 
 export function ItemsListDialogs() {
   return (

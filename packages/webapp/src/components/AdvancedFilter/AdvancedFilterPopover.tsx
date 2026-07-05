@@ -1,6 +1,6 @@
 // @ts-nocheck
-import React from 'react';
 import { Popover, PopoverInteractionKind, Position } from '@blueprintjs/core';
+import React from 'react';
 import { AdvancedFilterDropdown } from './AdvancedFilterDropdown';
 
 /**

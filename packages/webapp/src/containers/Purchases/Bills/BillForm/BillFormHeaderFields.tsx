@@ -1,14 +1,19 @@
-import React from 'react';
-import styled from 'styled-components';
-import classNames from 'classnames';
-import { useFormikContext } from 'formik';
-import intl from 'react-intl-universal';
 import { Classes, Position } from '@blueprintjs/core';
 import { css } from '@emotion/css';
 import { useTheme } from '@emotion/react';
 import { Theme } from '@xstyled/emotion';
+import classNames from 'classnames';
+import { useFormikContext } from 'formik';
+import React from 'react';
+import intl from 'react-intl-universal';
+import styled from 'styled-components';
+import { useBillFormContext } from './BillFormProvider';
+import {
+  BillExchangeRateInputField,
+  BillProjectSelectButton,
+} from './components';
+import { vendorsFieldShouldUpdate, type BillFormValues } from './utils';
 import { FeatureCan, Stack, FormattedMessage as T } from '@/components';
-import { CLASSES } from '@/constants/classes';
 import {
   FFormGroup,
   FieldRequiredHint,
@@ -18,16 +23,11 @@ import {
   FDateInput,
   FInputGroup,
 } from '@/components';
-import { useBillFormContext } from './BillFormProvider';
-import { vendorsFieldShouldUpdate, type BillFormValues } from './utils';
-import {
-  BillExchangeRateInputField,
-  BillProjectSelectButton,
-} from './components';
-import { ProjectsSelect } from '@/containers/Projects/components';
-import { withDialogActions } from '@/containers/Dialog/withDialogActions';
-import { momentFormatter, compose } from '@/utils';
 import { Features } from '@/constants';
+import { CLASSES } from '@/constants/classes';
+import { withDialogActions } from '@/containers/Dialog/withDialogActions';
+import { ProjectsSelect } from '@/containers/Projects/components';
+import { momentFormatter, compose } from '@/utils';
 
 const getBillFieldsStyle = (theme: Theme) => css`
   .${theme.bpPrefix}-form-group {

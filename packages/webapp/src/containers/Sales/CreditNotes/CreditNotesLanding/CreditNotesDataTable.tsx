@@ -1,35 +1,30 @@
 import React from 'react';
 import { useHistory } from 'react-router-dom';
-
-import { TABLES } from '@/constants/tables';
+import { useCreditNoteTableColumns, ActionsMenu } from './components';
+import { CreditNotesEmptyStatus as CreditNoteEmptyStatus } from './CreditNotesEmptyStatus';
+import { useCreditNoteListContext } from './CreditNotesListProvider';
+import { withCreditNotes } from './withCreditNotes';
+import { withCreditNotesActions } from './withCreditNotesActions';
+import type { CreditNoteTableRow } from './components';
+import type { WithCreditNotesProps } from './withCreditNotes';
+import type { WithAlertActionsProps } from '@/containers/Alert/withAlertActions';
+import type { WithDialogActionsProps } from '@/containers/Dialog/withDialogActions';
+import type { WithDrawerActionsProps } from '@/containers/Drawer/withDrawerActions';
 import {
   DataTable,
   DashboardContentTable,
   TableSkeletonRows,
   TableSkeletonHeader,
 } from '@/components';
-import { useMemorizedColumnsWidths } from '@/hooks';
-
-import { CreditNotesEmptyStatus as CreditNoteEmptyStatus } from './CreditNotesEmptyStatus';
-
-import { withDashboardActions } from '@/containers/Dashboard/withDashboardActions';
-import { withCreditNotesActions } from './withCreditNotesActions';
-import { withAlertActions } from '@/containers/Alert/withAlertActions';
-import type { WithAlertActionsProps } from '@/containers/Alert/withAlertActions';
-import { withDrawerActions } from '@/containers/Drawer/withDrawerActions';
-import type { WithDrawerActionsProps } from '@/containers/Drawer/withDrawerActions';
-import { withDialogActions } from '@/containers/Dialog/withDialogActions';
-import type { WithDialogActionsProps } from '@/containers/Dialog/withDialogActions';
-import { withSettings } from '@/containers/Settings/withSettings';
-import { withCreditNotes } from './withCreditNotes';
-import type { WithCreditNotesProps } from './withCreditNotes';
-
-import { useCreditNoteTableColumns, ActionsMenu } from './components';
-import type { CreditNoteTableRow } from './components';
-import { useCreditNoteListContext } from './CreditNotesListProvider';
-
-import { compose } from '@/utils';
 import { DRAWERS } from '@/constants/drawers';
+import { TABLES } from '@/constants/tables';
+import { withAlertActions } from '@/containers/Alert/withAlertActions';
+import { withDashboardActions } from '@/containers/Dashboard/withDashboardActions';
+import { withDialogActions } from '@/containers/Dialog/withDialogActions';
+import { withDrawerActions } from '@/containers/Drawer/withDrawerActions';
+import { withSettings } from '@/containers/Settings/withSettings';
+import { useMemorizedColumnsWidths } from '@/hooks';
+import { compose } from '@/utils';
 
 interface WithCreditNotesActionsProps {
   setCreditNotesTableState: (state: Record<string, any>) => void;

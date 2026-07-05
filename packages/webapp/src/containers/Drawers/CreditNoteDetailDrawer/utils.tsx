@@ -1,5 +1,3 @@
-import React from 'react';
-import intl from 'react-intl-universal';
 import {
   Button,
   Popover,
@@ -10,15 +8,17 @@ import {
   Tag,
   Intent,
 } from '@blueprintjs/core';
-import { getColumnWidth } from '@/utils';
+import React from 'react';
+import intl from 'react-intl-universal';
+import { useCreditNoteDetailDrawerContext } from './CreditNoteDetailDrawerProvider';
+import type { CreditNote } from '@bigcapital/sdk-ts';
 import {
   Icon,
   FormattedMessage as T,
   TextOverviewTooltipCell,
   Choose,
 } from '@/components';
-import { useCreditNoteDetailDrawerContext } from './CreditNoteDetailDrawerProvider';
-import type { CreditNote } from '@bigcapital/sdk-ts';
+import { getColumnWidth } from '@/utils';
 
 interface CreditNoteMenuItemPayload {
   onReconcile: () => void;

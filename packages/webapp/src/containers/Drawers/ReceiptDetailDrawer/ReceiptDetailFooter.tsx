@@ -1,4 +1,6 @@
 import React from 'react';
+import intl from 'react-intl-universal';
+import { useReceiptDetailDrawerContext } from './ReceiptDetailDrawerProvider';
 import {
   CommercialDocFooter,
   T,
@@ -6,9 +8,6 @@ import {
   DetailsMenu,
   DetailItem,
 } from '@/components';
-
-import { useReceiptDetailDrawerContext } from './ReceiptDetailDrawerProvider';
-import intl from 'react-intl-universal';
 
 /**
  * Receipt details footer

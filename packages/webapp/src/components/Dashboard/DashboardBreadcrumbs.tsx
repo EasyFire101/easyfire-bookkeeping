@@ -1,13 +1,13 @@
 // @ts-nocheck
-import React from 'react';
-import { useHistory } from 'react-router-dom';
 import {
   CollapsibleList,
   MenuItem,
   Classes,
   Boundary,
 } from '@blueprintjs/core';
+import React from 'react';
 import withBreadcrumbs from 'react-router-breadcrumbs-hoc';
+import { useHistory } from 'react-router-dom';
 
 function DashboardBreadcrumbs({ breadcrumbs }) {
   const history = useHistory();

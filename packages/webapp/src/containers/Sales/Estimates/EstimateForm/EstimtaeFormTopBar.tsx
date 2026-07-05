@@ -1,16 +1,15 @@
-import React from 'react';
 import {
   Alignment,
   NavbarGroup,
   NavbarDivider,
   Classes,
 } from '@blueprintjs/core';
+import React from 'react';
+import { useEstimateFormContext } from './EstimateFormProvider';
 import {
   useSetPrimaryBranchToForm,
   useSetPrimaryWarehouseToForm,
 } from './utils';
-import { Features } from '@/constants';
-import { useFeatureCan } from '@/hooks/state';
 import {
   BranchSelect,
   FeatureCan,
@@ -20,7 +19,8 @@ import {
   FormWarehouseSelectButton,
   FormBranchSelectButton,
 } from '@/components';
-import { useEstimateFormContext } from './EstimateFormProvider';
+import { Features } from '@/constants';
+import { useFeatureCan } from '@/hooks/state';
 
 /**
  * Estimate form topbar .

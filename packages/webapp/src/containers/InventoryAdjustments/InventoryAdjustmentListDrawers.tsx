@@ -1,5 +1,5 @@
-import { index as InventoryAdjustmentDetailDrawer } from '@/containers/Drawers/InventoryAdjustmentDetailDrawer';
 import { DRAWERS } from '@/constants/drawers';
+import { index as InventoryAdjustmentDetailDrawer } from '@/containers/Drawers/InventoryAdjustmentDetailDrawer';
 
 export function InventoryAdjustmentListDrawers() {
   return (

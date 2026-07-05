@@ -1,8 +1,8 @@
 import React from 'react';
 import intl from 'react-intl-universal';
-import { getColumnWidth } from '@/utils';
-import { TextOverviewTooltipCell } from '@/components';
 import { useInventoryAdjustmentDrawerContext } from './InventoryAdjustmentDrawerProvider';
+import { TextOverviewTooltipCell } from '@/components';
+import { getColumnWidth } from '@/utils';
 
 export const useInventoryAdjustmentEntriesColumns = () => {
   const { inventoryAdjustment } = useInventoryAdjustmentDrawerContext();

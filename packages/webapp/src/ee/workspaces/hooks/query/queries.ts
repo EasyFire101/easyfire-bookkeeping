@@ -1,18 +1,4 @@
 import {
-  useMutation,
-  useQuery,
-  useQueryClient,
-  type UseMutationOptions,
-  type UseQueryOptions,
-} from '@tanstack/react-query';
-import type {
-  Workspace,
-  WorkspacesListResponse,
-  CreateWorkspaceBody,
-  CreateWorkspaceResponse,
-  SetDefaultWorkspaceBody,
-} from '@bigcapital/sdk-ts';
-import {
   fetchWorkspaces,
   createWorkspace,
   deleteWorkspace,
@@ -20,9 +6,23 @@ import {
   inactivateWorkspace,
   activateWorkspace,
 } from '@bigcapital/sdk-ts';
-import { useApiFetcher } from '@/hooks/useRequest';
-import { useAuthOrganizationId } from '@/hooks/state';
+import {
+  useMutation,
+  useQuery,
+  useQueryClient,
+  type UseMutationOptions,
+  type UseQueryOptions,
+} from '@tanstack/react-query';
 import { workspacesKeys } from './query-keys';
+import type {
+  Workspace,
+  WorkspacesListResponse,
+  CreateWorkspaceBody,
+  CreateWorkspaceResponse,
+  SetDefaultWorkspaceBody,
+} from '@bigcapital/sdk-ts';
+import { useAuthOrganizationId } from '@/hooks/state';
+import { useApiFetcher } from '@/hooks/useRequest';
 
 const commonInvalidateQueries = (
   queryClient: ReturnType<typeof useQueryClient>,

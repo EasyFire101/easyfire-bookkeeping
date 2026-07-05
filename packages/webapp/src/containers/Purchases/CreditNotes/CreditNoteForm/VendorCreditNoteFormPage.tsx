@@ -1,6 +1,5 @@
 import React from 'react';
 import { useParams } from 'react-router-dom';
-
 import { VendorCreditNoteForm } from './VendorCreditNoteForm';
 import { VendorCreditNoteFormProvider } from './VendorCreditNoteFormProvider';
 

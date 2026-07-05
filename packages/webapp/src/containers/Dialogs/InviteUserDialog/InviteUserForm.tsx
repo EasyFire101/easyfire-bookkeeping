@@ -1,20 +1,17 @@
 // @ts-nocheck
+import { Intent } from '@blueprintjs/core';
+import { Formik } from 'formik';
+import { pick, snakeCase } from 'lodash';
 import React from 'react';
 import intl from 'react-intl-universal';
-import { Formik } from 'formik';
-import { Intent } from '@blueprintjs/core';
-import { pick, snakeCase } from 'lodash';
-import { AppToaster } from '@/components';
-
-import { withDialogActions } from '@/containers/Dialog/withDialogActions';
-
 import { InviteUserFormSchema } from './InviteUserDialog.schema';
 import { InviteUserFormContent } from './InviteUserFormContent';
 import { useInviteUserFormContext } from './InviteUserFormProvider';
-
 import { transformApiErrors } from './utils';
-
+import { AppToaster } from '@/components';
+import { withDialogActions } from '@/containers/Dialog/withDialogActions';
 import { compose, objectKeysTransform } from '@/utils';
+
 
 const initialValues = {
   email: '',

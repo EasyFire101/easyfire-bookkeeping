@@ -1,10 +1,9 @@
-import React, { createContext } from 'react';
 import { isEmpty } from 'lodash';
-
+import React, { createContext } from 'react';
+import type { InvoiceTableRow } from './components';
 import { DashboardInsider } from '@/components/Dashboard';
 import { useResourceViews, useResourceMeta, useInvoices } from '@/hooks/query';
 import { getFieldsFromResourceMeta } from '@/utils';
-import type { InvoiceTableRow } from './components';
 
 interface InvoicesListProviderProps {
   query?: any;

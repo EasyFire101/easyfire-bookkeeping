@@ -1,7 +1,10 @@
 // @ts-nocheck
-import React from 'react';
-import { Form, useFormikContext } from 'formik';
 import { Button, Classes, FormGroup, Intent } from '@blueprintjs/core';
+import { Form, useFormikContext } from 'formik';
+import React from 'react';
+import intl from 'react-intl-universal';
+import { useAccountDialogContext } from './AccountDialogProvider';
+import { parentAccountShouldUpdate } from './utils';
 import {
   If,
   FieldRequiredHint,
@@ -15,16 +18,10 @@ import {
   FCheckbox,
   FTextArea,
 } from '@/components';
-import { withAccounts } from '@/containers/Accounts/withAccounts';
-
 import { FOREIGN_CURRENCY_ACCOUNTS } from '@/constants/accountTypes';
-
+import { withAccounts } from '@/containers/Accounts/withAccounts';
 import { useAutofocus } from '@/hooks';
-import { useAccountDialogContext } from './AccountDialogProvider';
-
-import { parentAccountShouldUpdate } from './utils';
 import { compose } from '@/utils';
-import intl from 'react-intl-universal';
 
 /**
  * Account form dialogs fields.

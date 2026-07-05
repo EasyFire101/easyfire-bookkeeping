@@ -1,8 +1,8 @@
 // @ts-nocheck
 import React from 'react';
 import { useParams } from 'react-router-dom';
-import { RolesFormProvider } from './RolesFormProvider';
 import { RolesForm } from './RolesForm';
+import { RolesFormProvider } from './RolesFormProvider';
 
 /**
  * Roles Form page.

@@ -1,6 +1,7 @@
-import { FastField, type FieldProps } from 'formik';
 import classNames from 'classnames';
-import { CLASSES } from '@/constants/classes';
+import { FastField, type FieldProps } from 'formik';
+import { MakeJournalEntriesTable } from './MakeJournalEntriesTable';
+import { useMakeJournalFormContext } from './MakeJournalProvider';
 import {
   entriesFieldShouldUpdate,
   defaultEntry,
@@ -8,8 +9,7 @@ import {
   type MakeJournalEntry,
   type MakeJournalFormValues,
 } from './utils';
-import { useMakeJournalFormContext } from './MakeJournalProvider';
-import { MakeJournalEntriesTable } from './MakeJournalEntriesTable';
+import { CLASSES } from '@/constants/classes';
 
 export function MakeJournalEntriesField() {
   const { accounts, contacts, branches, projects } =

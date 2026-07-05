@@ -1,6 +1,6 @@
 // @ts-nocheck
-import React from 'react';
 import PropTypes from 'prop-types';
+import React from 'react';
 import { If } from './If';
 
 export const Choose = (props) => {

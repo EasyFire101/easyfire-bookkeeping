@@ -1,7 +1,9 @@
+import { defaultTo } from 'lodash';
 import React from 'react';
 import intl from 'react-intl-universal';
 import styled from 'styled-components';
-import { defaultTo } from 'lodash';
+import { EstimateDetailsStatus } from './components';
+import { useEstimateDetailDrawerContext } from './EstimateDetailDrawerProvider';
 import {
   CommercialDocHeader,
   CommercialDocTopHeader,
@@ -12,8 +14,6 @@ import {
   CustomerDrawerLink,
   ExchangeRateDetailItem,
 } from '@/components';
-import { useEstimateDetailDrawerContext } from './EstimateDetailDrawerProvider';
-import { EstimateDetailsStatus } from './components';
 
 /**
  * Estimate read-only details drawer header.

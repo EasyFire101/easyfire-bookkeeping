@@ -1,10 +1,11 @@
 // @ts-nocheck
-import intl from 'react-intl-universal';
 import {
   ControlGroup,
   Divider,
   Icon as BlueprintIcon,
 } from '@blueprintjs/core';
+import intl from 'react-intl-universal';
+import { VendorFormSectionTitle } from './VendorFormSectionTitle';
 import {
   Hint,
   FieldRequiredHint,
@@ -16,7 +17,6 @@ import {
   Icon,
   Stack,
 } from '@/components';
-import { VendorFormSectionTitle } from './VendorFormSectionTitle';
 import { useAutofocus } from '@/hooks';
 
 export function VendorFormBasicSection({}) {

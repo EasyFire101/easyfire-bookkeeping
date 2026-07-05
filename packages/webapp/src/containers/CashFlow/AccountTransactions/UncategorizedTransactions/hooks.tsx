@@ -1,6 +1,3 @@
-import React from 'react';
-import intl from 'react-intl-universal';
-import clsx from 'classnames';
 import {
   Checkbox,
   Classes,
@@ -10,15 +7,18 @@ import {
   Tag,
   Tooltip,
 } from '@blueprintjs/core';
+import clsx from 'classnames';
+import React from 'react';
+import intl from 'react-intl-universal';
+import styles from './AccountTransactionsUncategorizedTable.module.scss';
+import type { DataTableColumn } from '@/components/Datatable/types';
 import type { UncategorizedTransactionResponse } from '@bigcapital/sdk-ts';
+import { Box, Icon } from '@/components';
 import {
   useAddTransactionsToCategorizeSelected,
   useIsTransactionToCategorizeSelected,
   useRemoveTransactionsToCategorizeSelected,
 } from '@/hooks/state/banking';
-import { Box, Icon } from '@/components';
-import type { DataTableColumn } from '@/components/Datatable/types';
-import styles from './AccountTransactionsUncategorizedTable.module.scss';
 
 /**
  * `UncategorizedTransactionResponse` SDK type is loosely defined (OpenAPI

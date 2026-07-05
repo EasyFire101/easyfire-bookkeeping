@@ -1,6 +1,3 @@
-import React from 'react';
-import { useHistory } from 'react-router-dom';
-import { useFormikContext } from 'formik';
 import {
   Intent,
   Button,
@@ -11,6 +8,12 @@ import {
   Menu,
   MenuItem,
 } from '@blueprintjs/core';
+import { useFormikContext } from 'formik';
+import React from 'react';
+import { useHistory } from 'react-router-dom';
+import { useCreditNoteFormContext } from './CreditNoteFormProvider';
+import { useCreditNoteFormBrandingTemplatesOptions } from './utils';
+import type { CreditNoteFormValues } from './utils';
 import {
   If,
   Icon,
@@ -19,16 +22,14 @@ import {
   FSelect,
   PageForm,
 } from '@/components';
-import { useCreditNoteFormContext } from './CreditNoteFormProvider';
+import { DRAWERS } from '@/constants/drawers';
 import {
   BrandingThemeFormGroup,
   BrandingThemeSelectButton,
 } from '@/containers/BrandingTemplates/BrandingTemplatesSelectFields';
-import { useCreditNoteFormBrandingTemplatesOptions } from './utils';
-import type { CreditNoteFormValues } from './utils';
-import { MoreIcon } from '@/icons/More';
 import { useDrawerActions } from '@/hooks/state';
-import { DRAWERS } from '@/constants/drawers';
+import { MoreIcon } from '@/icons/More';
+
 
 /**
  * Credit note floating actions.

@@ -1,4 +1,3 @@
-import React from 'react';
 import {
   Button,
   Classes,
@@ -7,9 +6,13 @@ import {
   Intent,
   Alignment,
 } from '@blueprintjs/core';
-
+import React from 'react';
 import { useHistory } from 'react-router-dom';
-
+import { usePaymentMadesListContext } from './PaymentMadesListProvider';
+import { withPaymentMade } from './withPaymentMade';
+import { withPaymentMadeActions } from './withPaymentMadeActions';
+import type { WithPaymentMadeProps } from './withPaymentMade';
+import type { WithDialogActionsProps } from '@/containers/Dialog/withDialogActions';
 import {
   If,
   Can,
@@ -22,21 +25,15 @@ import {
   DashboardActionsBar,
 } from '@/components';
 import { PaymentMadeAction, AbilitySubject } from '@/constants/abilityOption';
-
-import { withPaymentMade } from './withPaymentMade';
-import type { WithPaymentMadeProps } from './withPaymentMade';
-import { withPaymentMadeActions } from './withPaymentMadeActions';
+import { DialogsName } from '@/constants/dialogs';
+import { withDialogActions } from '@/containers/Dialog/withDialogActions';
 import { withSettings } from '@/containers/Settings/withSettings';
 import { withSettingsActions } from '@/containers/Settings/withSettingsActions';
-import { withDialogActions } from '@/containers/Dialog/withDialogActions';
-import type { WithDialogActionsProps } from '@/containers/Dialog/withDialogActions';
-
-import { usePaymentMadesListContext } from './PaymentMadesListProvider';
-import { useRefreshPaymentMades } from '@/hooks/query/payment-mades';
 import { useDownloadExportPdf } from '@/hooks/query/FinancialReports/use-export-pdf';
-
-import { DialogsName } from '@/constants/dialogs';
+import { useRefreshPaymentMades } from '@/hooks/query/payment-mades';
 import { compose } from '@/utils';
+
+
 
 interface WithPaymentMadeActionsProps {
   setPaymentMadesTableState: (state: Record<string, any>) => void;

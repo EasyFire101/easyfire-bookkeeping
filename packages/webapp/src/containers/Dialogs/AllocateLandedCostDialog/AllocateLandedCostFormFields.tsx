@@ -1,7 +1,4 @@
 // @ts-nocheck
-import React from 'react';
-import intl from 'react-intl-universal';
-import { ErrorMessage, useFormikContext } from 'formik';
 import {
   Classes,
   FormGroup,
@@ -10,8 +7,14 @@ import {
   InputGroup,
   Spinner,
 } from '@blueprintjs/core';
-import classNames from 'classnames';
 import { x } from '@xstyled/emotion';
+import classNames from 'classnames';
+import { ErrorMessage, useFormikContext } from 'formik';
+import React from 'react';
+import intl from 'react-intl-universal';
+import { useAllocateLandedConstDialogContext } from './AllocateLandedCostDialogProvider';
+import { AllocateLandedCostFormBody } from './AllocateLandedCostFormBody';
+import { allocateCostToEntries, resetAllocatedCostEntries } from './utils';
 import {
   If,
   FFormGroup,
@@ -19,14 +22,10 @@ import {
   FRadioGroup,
   FInputGroup,
 } from '@/components';
-import { handleStringChange } from '@/utils';
 import { FieldRequiredHint } from '@/components';
-import { CLASSES } from '@/constants/classes';
 import { AllocateLandedCostType } from '@/constants/allocateLandedCostType';
-
-import { AllocateLandedCostFormBody } from './AllocateLandedCostFormBody';
-import { allocateCostToEntries, resetAllocatedCostEntries } from './utils';
-import { useAllocateLandedConstDialogContext } from './AllocateLandedCostDialogProvider';
+import { CLASSES } from '@/constants/classes';
+import { handleStringChange } from '@/utils';
 
 /**
  * Allocate landed cost form fields.

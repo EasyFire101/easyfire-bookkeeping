@@ -1,11 +1,10 @@
 // @ts-nocheck
-import React from 'react';
-import intl from 'react-intl-universal';
 import { sumBy, round } from 'lodash';
 import * as R from 'ramda';
-
-import { defaultFastFieldShouldUpdate } from '@/utils';
+import React from 'react';
+import intl from 'react-intl-universal';
 import { MoneyFieldCell } from '@/components';
+import { defaultFastFieldShouldUpdate } from '@/utils';
 
 export const defaultInitialItem = {
   entry_id: '',

@@ -1,7 +1,7 @@
-import React from 'react';
 import { useFormikContext } from 'formik';
-import { index as JournalNumberDialog } from '@/containers/Dialogs/JournalNumberDialog';
+import React from 'react';
 import type { MakeJournalFormValues } from './utils';
+import { index as JournalNumberDialog } from '@/containers/Dialogs/JournalNumberDialog';
 
 type JournalNumberDialogSettings = {
   transactionNumber?: string;

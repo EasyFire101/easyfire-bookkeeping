@@ -1,4 +1,6 @@
 import React from 'react';
+import intl from 'react-intl-universal';
+import { useCreditNoteDetailDrawerContext } from './CreditNoteDetailDrawerProvider';
 import {
   CommercialDocFooter,
   T,
@@ -6,8 +8,6 @@ import {
   DetailsMenu,
   DetailItem,
 } from '@/components';
-import { useCreditNoteDetailDrawerContext } from './CreditNoteDetailDrawerProvider';
-import intl from 'react-intl-universal';
 
 /**
  * Credit note detail footer

@@ -1,10 +1,10 @@
 // @ts-nocheck
 import intl from 'react-intl-universal';
-
-import { RESOURCES_TYPES } from '@/constants/resourcesTypes';
-import { AbilitySubject, VendorAction } from '@/constants/abilityOption';
 import { withDrawerActions } from '../Drawer/withDrawerActions';
+import { AbilitySubject, VendorAction } from '@/constants/abilityOption';
 import { DRAWERS } from '@/constants/drawers';
+import { RESOURCES_TYPES } from '@/constants/resourcesTypes';
+
 
 /**
  * Vendor univesal search item select action.

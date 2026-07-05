@@ -1,8 +1,7 @@
-import React from 'react';
 import { useFormikContext } from 'formik';
-
-import { index as TransactionNumberDialog } from '@/containers/Dialogs/TransactionNumberDialog';
+import React from 'react';
 import type { MoneyOutFormValues } from './types';
+import { index as TransactionNumberDialog } from '@/containers/Dialogs/TransactionNumberDialog';
 
 interface TransactionNumberFormConfirmPayload {
   incrementNumber?: string;

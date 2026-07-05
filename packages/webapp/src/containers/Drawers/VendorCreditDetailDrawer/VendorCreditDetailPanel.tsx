@@ -1,9 +1,8 @@
-import { CommercialDocBox } from '@/components';
-
-import { VendorCreditDetailHeader } from './VendorCreditDetailHeader';
-import { VendorCreditDetailTable } from './VendorCreditDetailTable';
 import { VendorCreditDetailDrawerFooter } from './VendorCreditDetailDrawerFooter';
 import { VendorCreditDetailFooter } from './VendorCreditDetailFooter';
+import { VendorCreditDetailHeader } from './VendorCreditDetailHeader';
+import { VendorCreditDetailTable } from './VendorCreditDetailTable';
+import { CommercialDocBox } from '@/components';
 
 /**
  * Vendor credit details panel.

@@ -1,13 +1,13 @@
-import React, { useCallback } from 'react';
 import { Alignment, Navbar, NavbarGroup } from '@blueprintjs/core';
+import React, { useCallback } from 'react';
 import intl from 'react-intl-universal';
-import { DashboardViewsTabs } from '@/components';
 import { useAccountsChartContext } from './AccountsChartProvider';
 import { withAccounts } from './withAccounts';
-import type { WithAccountsProps } from './withAccounts';
 import { withAccountsTableActions } from './withAccountsTableActions';
-import { compose, transfromViewsToTabs } from '@/utils';
+import type { WithAccountsProps } from './withAccounts';
 import type { WithAccountsTableActionsProps } from './withAccountsTableActions';
+import { DashboardViewsTabs } from '@/components';
+import { compose, transfromViewsToTabs } from '@/utils';
 
 interface AccountsViewsTabsInnerProps extends WithAccountsTableActionsProps {
   accountsCurrentView: WithAccountsProps['accountsTableState']['viewSlug'];

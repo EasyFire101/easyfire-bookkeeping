@@ -9,11 +9,10 @@ import {
   Menu,
   MenuItem,
 } from '@blueprintjs/core';
-import styled from 'styled-components';
 import { useFormikContext } from 'formik';
-
-import { Group, Icon, FormattedMessage as T } from '@/components';
+import styled from 'styled-components';
 import { useVendorFormContext } from './VendorFormProvider';
+import { Group, Icon, FormattedMessage as T } from '@/components';
 
 /**
  * Vendor floating actions bar.

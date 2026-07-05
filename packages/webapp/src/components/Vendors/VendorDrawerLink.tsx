@@ -1,12 +1,11 @@
-import React from 'react';
 import * as R from 'ramda';
-
+import React from 'react';
 import { ButtonLink } from '../Button';
+import { DRAWERS } from '@/constants/drawers';
 import {
   withDrawerActions,
   WithDrawerActionsProps,
 } from '@/containers/Drawer/withDrawerActions';
-import { DRAWERS } from '@/constants/drawers';
 
 interface VendorDrawerLinkComponentProps extends WithDrawerActionsProps {
   children?: React.ReactNode;

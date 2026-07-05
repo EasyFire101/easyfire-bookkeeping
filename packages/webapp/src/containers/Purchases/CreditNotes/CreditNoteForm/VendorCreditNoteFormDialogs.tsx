@@ -1,7 +1,7 @@
-import React from 'react';
 import { useFormikContext } from 'formik';
-import { index as VendorCreditNumberDialog } from '@/containers/Dialogs/VendorCreditNumberDialog';
+import React from 'react';
 import type { VendorCreditFormValues } from './utils';
+import { index as VendorCreditNumberDialog } from '@/containers/Dialogs/VendorCreditNumberDialog';
 
 type VendorCreditNumberFormSettings = {
   incrementNumber?: string;

@@ -1,14 +1,13 @@
-import React from 'react';
 import { Alignment, Navbar, NavbarGroup } from '@blueprintjs/core';
-
-import { DashboardViewsTabs } from '@/components';
-
-import { withEstimatesActions } from './withEstimatesActions';
-import { withEstimates } from './withEstimates';
-import type { WithEstimatesProps } from './withEstimates';
-
+import React from 'react';
 import { useEstimatesListContext } from './EstimatesListProvider';
+import { withEstimates } from './withEstimates';
+import { withEstimatesActions } from './withEstimatesActions';
+import type { WithEstimatesProps } from './withEstimates';
+import { DashboardViewsTabs } from '@/components';
 import { compose, transfromViewsToTabs } from '@/utils';
+
+
 
 interface WithEstimatesActionsProps {
   setEstimatesTableState: (state: Record<string, any>) => void;

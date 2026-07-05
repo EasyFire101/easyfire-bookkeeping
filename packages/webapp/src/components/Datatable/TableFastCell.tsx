@@ -1,6 +1,6 @@
 import React, { memo } from 'react';
-import type { Cell, Row } from 'react-table';
 import TableCell from './TableCell';
+import type { Cell, Row } from 'react-table';
 
 interface TableFastCellProps {
   cell: Cell<any>;

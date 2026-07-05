@@ -1,9 +1,8 @@
 // @ts-nocheck
-import React, { useContext, createContext, useMemo } from 'react';
 import { pick } from 'lodash';
+import React, { useContext, createContext, useMemo } from 'react';
 import { DialogContent } from '@/components';
 import { Features } from '@/constants';
-import { useFeatureCan } from '@/hooks/state';
 import {
   useAccounts,
   useInvoice,
@@ -11,6 +10,7 @@ import {
   useSettingsPaymentReceives,
   useCreatePaymentReceive,
 } from '@/hooks/query';
+import { useFeatureCan } from '@/hooks/state';
 
 const QuickPaymentReceiveContext = createContext();
 

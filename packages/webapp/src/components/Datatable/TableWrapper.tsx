@@ -1,5 +1,5 @@
-import React, { useContext } from 'react';
 import clsx from 'classnames';
+import React, { useContext } from 'react';
 import { ScrollSync } from 'react-scroll-sync';
 import TableContext from './TableContext';
 

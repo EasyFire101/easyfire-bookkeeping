@@ -1,12 +1,16 @@
-import React from 'react';
-import styled from 'styled-components';
 import { Position } from '@blueprintjs/core';
 import { DateInput } from '@blueprintjs/datetime';
-import { FastField, ErrorMessage, useFormikContext } from 'formik';
 import { css } from '@emotion/css';
 import { Theme, useTheme } from '@emotion/react';
-
-import { CLASSES } from '@/constants/classes';
+import { FastField, ErrorMessage, useFormikContext } from 'formik';
+import React from 'react';
+import intl from 'react-intl-universal';
+import styled from 'styled-components';
+import { CreditNoteExchangeRateInputField } from './components';
+import { useCreditNoteFormContext } from './CreditNoteFormProvider';
+import { CreditNoteTransactionNoField } from './CreditNoteTransactionNoField';
+import { customerNameFieldShouldUpdate } from './utils';
+import type { CreditNoteFormValues } from './utils';
 import {
   FieldRequiredHint,
   Icon,
@@ -18,14 +22,11 @@ import {
   Stack,
   FDateInput,
 } from '@/components';
-import { customerNameFieldShouldUpdate } from './utils';
-import type { CreditNoteFormValues } from './utils';
-
-import { useCreditNoteFormContext } from './CreditNoteFormProvider';
-import { CreditNoteExchangeRateInputField } from './components';
-import { CreditNoteTransactionNoField } from './CreditNoteTransactionNoField';
+import { CLASSES } from '@/constants/classes';
 import { useCustomerUpdateExRate } from '@/containers/Entries/withExRateItemEntriesPriceRecalc';
-import intl from 'react-intl-universal';
+
+
+
 
 const getCreditNoteFieldsStyle = (theme: Theme & { bpPrefix?: string }) => css`
   .${theme.bpPrefix}-form-group {

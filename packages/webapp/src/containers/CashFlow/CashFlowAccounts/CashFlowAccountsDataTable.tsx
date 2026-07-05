@@ -1,18 +1,15 @@
 import React from 'react';
-
-import { TABLES } from '@/constants/tables';
+import { useCashFlowAccountsContext } from './CashFlowAccountsProvider';
+import { useCashFlowAccountsTableColumns } from './components';
 import {
   DataTable,
   TableFastCell,
   TableSkeletonRows,
   TableSkeletonHeader,
 } from '@/components';
-
+import { TABLES } from '@/constants/tables';
 import { withSettings } from '@/containers/Settings/withSettings';
-
 import { useMemorizedColumnsWidths } from '@/hooks';
-import { useCashFlowAccountsContext } from './CashFlowAccountsProvider';
-import { useCashFlowAccountsTableColumns } from './components';
 import { compose } from '@/utils';
 
 interface WithSettingsProps {

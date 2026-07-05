@@ -1,13 +1,20 @@
-import React from 'react';
-import moment from 'moment';
-import intl from 'react-intl-universal';
 import { Intent } from '@blueprintjs/core';
-import { sumBy, setWith, get, first, toNumber, omit } from 'lodash';
 import { useFormikContext, type FormikErrors } from 'formik';
+import { sumBy, setWith, get, first, toNumber, omit } from 'lodash';
+import moment from 'moment';
+import React from 'react';
+import intl from 'react-intl-universal';
+import { useMakeJournalFormContext } from './MakeJournalProvider';
 import type {
   ManualJournal,
   CreateManualJournalBody,
 } from '@bigcapital/sdk-ts';
+import { AppToaster } from '@/components';
+import {
+  transformAttachmentsToForm,
+  transformAttachmentsToRequest,
+} from '@/containers/Attachments/utils';
+import { useCurrentOrganizationBaseCurrency } from '@/hooks/query';
 import {
   updateTableCell,
   repeatValue,
@@ -18,13 +25,6 @@ import {
   safeSumBy,
   orderingLinesIndexes,
 } from '@/utils';
-import { AppToaster } from '@/components';
-import { useMakeJournalFormContext } from './MakeJournalProvider';
-import { useCurrentOrganizationBaseCurrency } from '@/hooks/query';
-import {
-  transformAttachmentsToForm,
-  transformAttachmentsToRequest,
-} from '@/containers/Attachments/utils';
 
 const ERROR = {
   JOURNAL_NUMBER_ALREADY_EXISTS: 'JOURNAL.NUMBER.ALREADY.EXISTS',

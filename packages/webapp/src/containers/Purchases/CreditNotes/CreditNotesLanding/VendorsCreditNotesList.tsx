@@ -1,14 +1,15 @@
 import React from 'react';
+
 import '@/style/pages/VendorsCreditNote/List.scss';
-import { DashboardPageContent } from '@/components';
 import { VendorsCreditNoteActionsBar } from './VendorsCreditNoteActionsBar';
 import { VendorsCreditNoteDataTable } from './VendorsCreditNoteDataTable';
-import { withVendorsCreditNotes } from './withVendorsCreditNotes';
-import type { WithVendorsCreditNotesProps } from './withVendorsCreditNotes';
-import { withVendorsCreditNotesActions } from './withVendorsCreditNotesActions';
 import { VendorsCreditNoteListProvider } from './VendorsCreditNoteListProvider';
-import { VendorsCreditNotesListDrawers } from './VendorsCreditNotesListDrawers';
 import { VendorsCreditNotesListDialogs } from './VendorsCreditNotesListDialogs';
+import { VendorsCreditNotesListDrawers } from './VendorsCreditNotesListDrawers';
+import { withVendorsCreditNotes } from './withVendorsCreditNotes';
+import { withVendorsCreditNotesActions } from './withVendorsCreditNotesActions';
+import type { WithVendorsCreditNotesProps } from './withVendorsCreditNotes';
+import { DashboardPageContent } from '@/components';
 import { transformTableStateToQuery, compose } from '@/utils';
 
 interface WithVendorsCreditNotesActionsProps {

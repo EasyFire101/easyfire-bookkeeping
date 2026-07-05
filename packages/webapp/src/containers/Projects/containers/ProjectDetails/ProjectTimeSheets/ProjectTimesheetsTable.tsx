@@ -1,22 +1,22 @@
 // @ts-nocheck
 import React from 'react';
 import styled from 'styled-components';
+import { ActionsMenu } from './components';
+import { useProjectTimesheetColumns } from './hooks';
+import { useProjectTimesheetContext } from './ProjectTimesheetsProvider';
 import {
   DataTable,
   TableSkeletonRows,
   TableSkeletonHeader,
 } from '@/components';
-import { ActionsMenu } from './components';
+import { DialogsName } from '@/constants/dialogs';
 import { TABLES } from '@/constants/tables';
-import { useProjectTimesheetColumns } from './hooks';
-import { useMemorizedColumnsWidths } from '@/hooks';
-import { useProjectTimesheetContext } from './ProjectTimesheetsProvider';
-import { withSettings } from '@/containers/Settings/withSettings';
 import { withAlertActions } from '@/containers/Alert/withAlertActions';
 import { withDialogActions } from '@/containers/Dialog/withDialogActions';
-
+import { withSettings } from '@/containers/Settings/withSettings';
+import { useMemorizedColumnsWidths } from '@/hooks';
 import { compose } from '@/utils';
-import { DialogsName } from '@/constants/dialogs';
+
 
 /**
  * Timesheet DataTable.

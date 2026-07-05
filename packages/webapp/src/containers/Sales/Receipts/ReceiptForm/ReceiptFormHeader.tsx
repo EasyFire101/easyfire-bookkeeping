@@ -1,9 +1,9 @@
 import React from 'react';
-import type { CSSProperties } from 'react';
 import intl from 'react-intl-universal';
-import { Group, PageFormBigNumber } from '@/components';
 import { ReceiptFormHeader as ReceiptFormHeaderFields } from './ReceiptFormHeaderFields';
 import { useReceiptTotalFormatted } from './utils';
+import type { CSSProperties } from 'react';
+import { Group, PageFormBigNumber } from '@/components';
 import { useIsDarkMode } from '@/hooks/useDarkMode';
 
 const headerStyle = (isDarkMode: boolean): CSSProperties =>

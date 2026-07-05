@@ -1,15 +1,16 @@
 import React, { useEffect } from 'react';
 import { DashboardPageContent } from '@/components';
+
 import '@/style/pages/Bills/List.scss';
-import { BillsListProvider } from './BillsListProvider';
 import { BillsActionsBar } from './BillsActionsBar';
-import { BillsTable } from './BillsTable';
-import { BillsListDrawers } from './BillsListDrawers';
 import { BillsListDialogs } from './BillsListDialogs';
+import { BillsListDrawers } from './BillsListDrawers';
+import { BillsListProvider } from './BillsListProvider';
+import { BillsTable } from './BillsTable';
 import { withBills } from './withBills';
 import { withBillsActions } from './withBillsActions';
-import { transformTableStateToQuery, compose } from '@/utils';
 import type { WithBillsProps } from './withBills';
+import { transformTableStateToQuery, compose } from '@/utils';
 
 interface WithBillsActionsProps {
   resetBillsTableState: () => void;

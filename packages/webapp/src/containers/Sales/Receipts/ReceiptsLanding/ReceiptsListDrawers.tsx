@@ -1,6 +1,6 @@
+import { DRAWERS } from '@/constants/drawers';
 import { index as ReceiptDetailDrawer } from '@/containers/Drawers/ReceiptDetailDrawer';
 import { ReceiptSendMailDrawer } from '@/containers/Sales/Receipts/ReceiptSendMailDrawer';
-import { DRAWERS } from '@/constants/drawers';
 
 export function ReceiptsListDrawers() {
   return (

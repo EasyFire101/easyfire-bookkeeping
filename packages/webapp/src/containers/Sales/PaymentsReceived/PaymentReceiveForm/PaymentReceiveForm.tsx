@@ -1,32 +1,24 @@
-import React from 'react';
-import { isEmpty, defaultTo } from 'lodash';
-import intl from 'react-intl-universal';
-import { Formik, Form, type FormikHelpers } from 'formik';
-import { useHistory } from 'react-router-dom';
 import { Intent } from '@blueprintjs/core';
 import { css } from '@emotion/css';
-import type {
-  CreatePaymentReceivedBody,
-  EditPaymentReceivedBody,
-} from '@bigcapital/sdk-ts';
-import { PaymentReceiveFormHeader as PaymentReceiveHeader } from './PaymentReceiveFormHeader';
-import { PaymentReceiveFormBody } from './PaymentReceiveFormBody';
+import { Formik, Form, type FormikHelpers } from 'formik';
+import { isEmpty, defaultTo } from 'lodash';
+import React from 'react';
+import intl from 'react-intl-universal';
+import { useHistory } from 'react-router-dom';
+import { PaymentReceiveSyncIncrementSettingsToForm } from './components';
 import { PaymentReceiveFormFloatingActions as PaymentReceiveFloatingActions } from './PaymentReceiveFloatingActions';
-import { PaymentReceiveFormFooter } from './PaymentReceiveFormFooter';
-import { PaymentReceiveFormAlerts } from './PaymentReceiveFormAlerts';
-import { PaymentReceiveFormDialogs } from './PaymentReceiveFormDialogs';
-import { PaymentReceiveFormTopBar } from './PaymentReceiveFormTopBar';
-import { PaymentReceiveInnerProvider } from './PaymentReceiveInnerProvider';
-import { withSettings } from '@/containers/Settings/withSettings';
-import { withDialogActions } from '@/containers/Dialog/withDialogActions';
 import {
   EditPaymentReceiveFormSchema,
   CreatePaymentReceiveFormSchema,
 } from './PaymentReceiveForm.schema';
-import { AppToaster } from '@/components';
-import { transactionNumber, compose } from '@/utils';
-import { useCurrentOrganizationBaseCurrency } from '@/hooks/query';
+import { PaymentReceiveFormAlerts } from './PaymentReceiveFormAlerts';
+import { PaymentReceiveFormBody } from './PaymentReceiveFormBody';
+import { PaymentReceiveFormDialogs } from './PaymentReceiveFormDialogs';
+import { PaymentReceiveFormFooter } from './PaymentReceiveFormFooter';
+import { PaymentReceiveFormHeader as PaymentReceiveHeader } from './PaymentReceiveFormHeader';
 import { usePaymentReceiveFormContext } from './PaymentReceiveFormProvider';
+import { PaymentReceiveFormTopBar } from './PaymentReceiveFormTopBar';
+import { PaymentReceiveInnerProvider } from './PaymentReceiveInnerProvider';
 import {
   defaultPaymentReceive,
   transformToEditForm,
@@ -38,8 +30,17 @@ import {
   type PaymentReceiveErrorResponse,
   type PaymentReceiveEditEntry,
 } from './utils';
-import { PaymentReceiveSyncIncrementSettingsToForm } from './components';
+import type {
+  CreatePaymentReceivedBody,
+  EditPaymentReceivedBody,
+} from '@bigcapital/sdk-ts';
+import { AppToaster } from '@/components';
 import { PageForm } from '@/components/PageForm';
+import { withDialogActions } from '@/containers/Dialog/withDialogActions';
+import { withSettings } from '@/containers/Settings/withSettings';
+import { useCurrentOrganizationBaseCurrency } from '@/hooks/query';
+import { transactionNumber, compose } from '@/utils';
+
 
 type WithDialogActionsProps = {
   openDialog: (name: string, payload?: Record<string, unknown>) => void;

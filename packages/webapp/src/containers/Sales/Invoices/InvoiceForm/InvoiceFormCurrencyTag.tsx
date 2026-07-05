@@ -1,7 +1,7 @@
 import { useFormikContext } from 'formik';
-import { BaseCurrency, BaseCurrencyRoot } from '@/components';
 import { useInvoiceIsForeignCustomer } from './utils';
 import type { InvoiceFormValues } from './utils';
+import { BaseCurrency, BaseCurrencyRoot } from '@/components';
 
 /**
  * Invoice form currency tag.

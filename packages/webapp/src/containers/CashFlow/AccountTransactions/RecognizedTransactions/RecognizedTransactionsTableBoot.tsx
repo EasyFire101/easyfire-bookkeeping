@@ -1,13 +1,13 @@
 import React from 'react';
+import { withBanking } from '../../withBanking';
+import { useAccountTransactionsContext } from '../AccountTransactionsProvider';
+import type { RecognizedTransactionRow } from './_utils';
+import type { WithBankingProps } from '../../withBanking';
 import type { BankTransactionsListPage } from '@bigcapital/sdk-ts';
 import { IntersectionObserver } from '@/components';
-import { useAccountTransactionsContext } from '../AccountTransactionsProvider';
 import { useRecognizedBankTransactionsInfinity } from '@/hooks/query/banking';
 import { useFlattenInfinityPages } from '@/hooks/utils';
-import { withBanking } from '../../withBanking';
-import type { WithBankingProps } from '../../withBanking';
 import { compose } from '@/utils';
-import type { RecognizedTransactionRow } from './_utils';
 
 export interface RecognizedTransactionsContextValue {
   recognizedTransactions: RecognizedTransactionRow[];

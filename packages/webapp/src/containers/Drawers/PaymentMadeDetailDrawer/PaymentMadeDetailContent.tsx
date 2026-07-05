@@ -1,8 +1,7 @@
 import React from 'react';
-
-import { DrawerBody } from '@/components';
-import { PaymentMadeDetail as PaymentMadeDetails } from './PaymentMadeDetails';
 import { PaymentMadeDetailProvider } from './PaymentMadeDetailProvider';
+import { PaymentMadeDetail as PaymentMadeDetails } from './PaymentMadeDetails';
+import { DrawerBody } from '@/components';
 
 interface PaymentMadeDetailContentProps {
   paymentMadeId: number | undefined;

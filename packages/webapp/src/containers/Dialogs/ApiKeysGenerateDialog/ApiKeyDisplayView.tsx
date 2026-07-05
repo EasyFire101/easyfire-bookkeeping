@@ -1,5 +1,4 @@
 // @ts-nocheck
-import React from 'react';
 import {
   Classes,
   Button,
@@ -9,10 +8,11 @@ import {
   Position,
   Tooltip,
 } from '@blueprintjs/core';
+import React from 'react';
 import intl from 'react-intl-universal';
 import { FormattedMessage as T, Icon, Alert } from '@/components';
-import { useClipboard } from '@/hooks/utils/useClipboard';
 import { AppToaster } from '@/components';
+import { useClipboard } from '@/hooks/utils/useClipboard';
 
 /**
  * API Key Display view component (used within the generate dialog).

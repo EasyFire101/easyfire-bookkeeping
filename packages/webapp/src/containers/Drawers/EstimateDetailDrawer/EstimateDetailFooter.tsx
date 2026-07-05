@@ -1,8 +1,7 @@
 import React from 'react';
-
-import { CommercialDocFooter, If, DetailsMenu, DetailItem } from '@/components';
-import { useEstimateDetailDrawerContext } from './EstimateDetailDrawerProvider';
 import intl from 'react-intl-universal';
+import { useEstimateDetailDrawerContext } from './EstimateDetailDrawerProvider';
+import { CommercialDocFooter, If, DetailsMenu, DetailItem } from '@/components';
 
 /**
  * Estimate details footer.

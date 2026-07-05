@@ -1,9 +1,9 @@
+import { useFormikContext } from 'formik';
 import React from 'react';
-import { BaseCurrency, BaseCurrencyRoot } from '@/components';
 import { useCreditNoteFormContext } from './CreditNoteFormProvider';
 import { useCreditNoteIsForeignCustomer } from './utils';
-import { useFormikContext } from 'formik';
 import type { CreditNoteFormValues } from './utils';
+import { BaseCurrency, BaseCurrencyRoot } from '@/components';
 
 /**
  * Credit note from currency tag.

@@ -5,6 +5,14 @@ import {
   Classes,
   Intent,
 } from '@blueprintjs/core';
+import { useHistory } from 'react-router-dom';
+import { useItemsCategoriesContext } from './ItemsCategoriesProvider';
+import { withItemCategories } from './withItemCategories';
+import { withItemCategoriesActions } from './withItemCategoriesActions';
+import type { WithItemCategoriesProps } from './withItemCategories';
+import type { WithItemCategoriesActionsProps } from './withItemCategoriesActions';
+import type { WithAlertActionsProps } from '@/containers/Alert/withAlertActions';
+import type { WithDialogActionsProps } from '@/containers/Dialog/withDialogActions';
 import {
   If,
   Icon,
@@ -13,20 +21,12 @@ import {
   DashboardFilterButton,
   DashboardActionsBar,
 } from '@/components';
-
-import { withItemCategories } from './withItemCategories';
-import type { WithItemCategoriesProps } from './withItemCategories';
-import { withItemCategoriesActions } from './withItemCategoriesActions';
-import type { WithItemCategoriesActionsProps } from './withItemCategoriesActions';
-import { withDialogActions } from '@/containers/Dialog/withDialogActions';
-import type { WithDialogActionsProps } from '@/containers/Dialog/withDialogActions';
-import { withAlertActions } from '@/containers/Alert/withAlertActions';
-import type { WithAlertActionsProps } from '@/containers/Alert/withAlertActions';
-
-import { compose } from '@/utils';
-import { useItemsCategoriesContext } from './ItemsCategoriesProvider';
-import { useHistory } from 'react-router-dom';
 import { DialogsName } from '@/constants/dialogs';
+import { withAlertActions } from '@/containers/Alert/withAlertActions';
+import { withDialogActions } from '@/containers/Dialog/withDialogActions';
+import { compose } from '@/utils';
+
+
 
 interface ItemsCategoryActionsBarInnerProps
   extends WithItemCategoriesActionsProps,

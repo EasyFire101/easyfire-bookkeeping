@@ -3,12 +3,12 @@ import {
   applyMiddleware,
   compose,
 } from 'redux';
-import thunkMiddleware from 'redux-thunk';
 import { persistStore } from 'redux-persist';
+import thunkMiddleware from 'redux-thunk';
+import ResetMiddleware from './reset-middleware';
 import monitorReducerEnhancer from '@/store/enhancers/monitor-reducer';
 import loggerMiddleware from '@/store/logger.middleware';
 import rootReducer from '@/store/reducers';
-import ResetMiddleware from './reset-middleware';
 
 declare global {
   interface Window {

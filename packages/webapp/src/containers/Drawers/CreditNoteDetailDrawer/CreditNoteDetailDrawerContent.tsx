@@ -1,7 +1,7 @@
 import React from 'react';
-import { DrawerBody } from '@/components';
 import { CreditNoteDetail } from './CreditNoteDetail';
 import { CreditNoteDetailDrawerProvider } from './CreditNoteDetailDrawerProvider';
+import { DrawerBody } from '@/components';
 
 interface CreditNoteDetailDrawerContentProps {
   creditNoteId: number | undefined;

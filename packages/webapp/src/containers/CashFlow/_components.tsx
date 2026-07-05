@@ -1,15 +1,14 @@
-import React from 'react';
-import { useFormikContext } from 'formik';
 import { InputGroup, Position, ControlGroup } from '@blueprintjs/core';
-
-import { FFormGroup, Icon, InputPrependButton } from '@/components';
-import { useUpdateEffect } from '@/hooks';
-import { FormattedMessage as T } from '@/components';
-import { withSettings } from '@/containers/Settings/withSettings';
-import { withDialogActions } from '@/containers/Dialog/withDialogActions';
-import type { WithDialogActionsProps } from '@/containers/Dialog/withDialogActions';
-import { transactionNumber } from '@/utils';
+import { useFormikContext } from 'formik';
+import React from 'react';
 import intl from 'react-intl-universal';
+import type { WithDialogActionsProps } from '@/containers/Dialog/withDialogActions';
+import { FFormGroup, Icon, InputPrependButton } from '@/components';
+import { FormattedMessage as T } from '@/components';
+import { withDialogActions } from '@/containers/Dialog/withDialogActions';
+import { withSettings } from '@/containers/Settings/withSettings';
+import { useUpdateEffect } from '@/hooks';
+import { transactionNumber } from '@/utils';
 import { compose } from '@/utils';
 
 interface WithSettingsProps {

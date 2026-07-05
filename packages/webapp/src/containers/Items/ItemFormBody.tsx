@@ -1,7 +1,18 @@
 // @ts-nocheck
-import React from 'react';
-import { useFormikContext, FastField, ErrorMessage } from 'formik';
 import { FormGroup, Classes, Checkbox, ControlGroup } from '@blueprintjs/core';
+import { useFormikContext, FastField, ErrorMessage } from 'formik';
+import React from 'react';
+import intl from 'react-intl-universal';
+import { useItemFormContext } from './ItemFormProvider';
+import {
+  sellDescriptionFieldShouldUpdate,
+  sellAccountFieldShouldUpdate,
+  sellPriceFieldShouldUpdate,
+  costPriceFieldShouldUpdate,
+  costAccountFieldShouldUpdate,
+  purchaseDescFieldShouldUpdate,
+  taxRateFieldShouldUpdate,
+} from './utils';
 import {
   AccountsSelect,
   MoneyInputGroup,
@@ -14,22 +25,11 @@ import {
   FTextArea,
 } from '@/components';
 import { FormattedMessage as T } from '@/components';
-
-import { useItemFormContext } from './ItemFormProvider';
-import { useCurrentOrganizationBaseCurrency } from '@/hooks/query';
-import { ACCOUNT_PARENT_TYPE } from '@/constants/accountTypes';
-import {
-  sellDescriptionFieldShouldUpdate,
-  sellAccountFieldShouldUpdate,
-  sellPriceFieldShouldUpdate,
-  costPriceFieldShouldUpdate,
-  costAccountFieldShouldUpdate,
-  purchaseDescFieldShouldUpdate,
-  taxRateFieldShouldUpdate,
-} from './utils';
-import { inputIntent } from '@/utils';
 import { TaxRatesSelect } from '@/components/TaxRates/TaxRatesSelect';
-import intl from 'react-intl-universal';
+import { ACCOUNT_PARENT_TYPE } from '@/constants/accountTypes';
+import { useCurrentOrganizationBaseCurrency } from '@/hooks/query';
+import { inputIntent } from '@/utils';
+
 
 /**
  * Item form body.

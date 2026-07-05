@@ -1,6 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
-
+import { useReceiptDetailDrawerContext } from './ReceiptDetailDrawerProvider';
 import {
   T,
   TotalLines,
@@ -8,7 +8,6 @@ import {
   TotalLineBorderStyle,
   TotalLineTextStyle,
 } from '@/components';
-import { useReceiptDetailDrawerContext } from './ReceiptDetailDrawerProvider';
 
 /**
  * Receipts read-only details table footer.

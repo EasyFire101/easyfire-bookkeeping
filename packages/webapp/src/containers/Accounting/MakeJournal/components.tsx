@@ -1,8 +1,9 @@
-import React from 'react';
-import intl from 'react-intl-universal';
 import { Menu, MenuItem, Position, Button, Intent } from '@blueprintjs/core';
 import { Popover2 } from '@blueprintjs/popover2';
 import { useFormikContext } from 'formik';
+import React from 'react';
+import intl from 'react-intl-universal';
+import { useJournalIsForeign, type MakeJournalFormValues } from './utils';
 import {
   ExchangeRateInputGroup,
   Icon,
@@ -18,12 +19,11 @@ import {
   ProjectsListFieldCell,
 } from '@/components/DataTableCells';
 import { CellType, Features, Align } from '@/constants';
-import { useFeatureCan } from '@/hooks/state';
-import { useCurrentOrganizationBaseCurrency } from '@/hooks/query';
-import { useJournalIsForeign, type MakeJournalFormValues } from './utils';
 import { withSettings } from '@/containers/Settings/withSettings';
-import { compose, transactionNumber } from '@/utils';
 import { useUpdateEffect } from '@/hooks';
+import { useCurrentOrganizationBaseCurrency } from '@/hooks/query';
+import { useFeatureCan } from '@/hooks/state';
+import { compose, transactionNumber } from '@/utils';
 
 type JournalExchangeRateInputFieldRootProps = Omit<
   React.ComponentProps<typeof ExchangeRateInputGroup>,

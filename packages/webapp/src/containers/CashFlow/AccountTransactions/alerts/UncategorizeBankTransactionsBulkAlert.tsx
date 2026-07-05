@@ -1,13 +1,11 @@
-import React from 'react';
 import { Intent, Alert } from '@blueprintjs/core';
+import React from 'react';
 import intl from 'react-intl-universal';
-
-import { AppToaster } from '@/components';
-import { withAlertStoreConnect } from '@/containers/Alert/withAlertStoreConnect';
-import type { WithAlertStoreConnectProps } from '@/containers/Alert/withAlertStoreConnect';
-import { withAlertActions } from '@/containers/Alert/withAlertActions';
 import type { WithAlertActionsProps } from '@/containers/Alert/withAlertActions';
-
+import type { WithAlertStoreConnectProps } from '@/containers/Alert/withAlertStoreConnect';
+import { AppToaster } from '@/components';
+import { withAlertActions } from '@/containers/Alert/withAlertActions';
+import { withAlertStoreConnect } from '@/containers/Alert/withAlertStoreConnect';
 import { useUncategorizeTransactionsBulkAction } from '@/hooks/query/banking';
 import { compose } from '@/utils';
 

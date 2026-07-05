@@ -1,11 +1,11 @@
 // @ts-nocheck
+import { omit } from 'lodash';
 import {
   transformToForm,
   optionsMapToArray,
   transfromToSnakeCase,
   transactionNumber,
 } from '@/utils';
-import { omit } from 'lodash';
 
 export const defaultInvoiceNoSettings = {
   nextNumber: '',

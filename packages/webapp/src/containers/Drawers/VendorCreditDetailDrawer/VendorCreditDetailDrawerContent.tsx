@@ -1,7 +1,7 @@
 import React from 'react';
-import { DrawerBody } from '@/components';
 import { VendorCreditDetail } from './VendorCreditDetail';
 import { VendorCreditDetailDrawerProvider } from './VendorCreditDetailDrawerProvider';
+import { DrawerBody } from '@/components';
 
 interface VendorCreditDetailDrawerContentProps {
   vendorCreditId: number | undefined;

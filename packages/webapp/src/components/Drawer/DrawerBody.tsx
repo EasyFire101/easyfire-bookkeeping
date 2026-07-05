@@ -1,6 +1,6 @@
-import React from 'react';
-import clsx from 'classnames';
 import { Classes } from '@blueprintjs/core';
+import clsx from 'classnames';
+import React from 'react';
 import { LoadingIndicator } from '../Indicator';
 
 interface DrawerLoadingProps {

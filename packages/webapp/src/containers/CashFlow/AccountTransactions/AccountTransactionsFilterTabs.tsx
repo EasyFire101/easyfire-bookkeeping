@@ -1,7 +1,7 @@
 import { useMemo } from 'react';
 import styled from 'styled-components';
-import { ContentTabs } from '@/components/ContentTabs/ContentTabs';
 import { useAccountTransactionsContext } from './AccountTransactionsProvider';
+import { ContentTabs } from '@/components/ContentTabs/ContentTabs';
 
 const AccountContentTabs = styled(ContentTabs)`
   margin: 15px 15px 0 15px;

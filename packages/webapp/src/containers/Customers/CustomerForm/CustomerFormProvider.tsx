@@ -1,10 +1,11 @@
-import React, { createContext, useState } from 'react';
-import { useLocation } from 'react-router-dom';
 import {
   CurrenciesListResponse,
   BranchesListResponse,
   Customer,
 } from '@bigcapital/sdk-ts';
+import React, { createContext, useState } from 'react';
+import { useLocation } from 'react-router-dom';
+import { Features } from '@/constants';
 import {
   useCustomer,
   useCurrencies,
@@ -13,7 +14,6 @@ import {
   useContact,
   useBranches,
 } from '@/hooks/query';
-import { Features } from '@/constants';
 import { useFeatureCan } from '@/hooks/state';
 
 type CustomerFormSubmitPayload = {

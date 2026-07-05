@@ -1,7 +1,9 @@
+import { defaultTo } from 'lodash';
 import React from 'react';
 import intl from 'react-intl-universal';
 import styled from 'styled-components';
-import { defaultTo } from 'lodash';
+import { useCreditNoteDetailDrawerContext } from './CreditNoteDetailDrawerProvider';
+import { CreditNoteDetailsStatus } from './utils';
 import {
   T,
   Row,
@@ -13,8 +15,6 @@ import {
   CustomerDrawerLink,
   ExchangeRateDetailItem,
 } from '@/components';
-import { useCreditNoteDetailDrawerContext } from './CreditNoteDetailDrawerProvider';
-import { CreditNoteDetailsStatus } from './utils';
 
 /**
  * Credit note details drawer header.

@@ -1,11 +1,9 @@
 // @ts-nocheck
 import React from 'react';
 import styled from 'styled-components';
-
-import { DataTableEditable } from '@/components';
-
-import { compose, updateTableCell } from '@/utils';
 import { useAllocateLandedCostEntriesTableColumns } from './utils';
+import { DataTableEditable } from '@/components';
+import { compose, updateTableCell } from '@/utils';
 
 /**
  * Allocate landed cost entries table.

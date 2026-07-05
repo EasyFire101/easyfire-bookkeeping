@@ -1,11 +1,11 @@
-import React from 'react';
 import { useFormikContext } from 'formik';
-import { BaseCurrency, BaseCurrencyRoot } from '@/components';
+import React from 'react';
 import { usePaymentMadeFormContext } from './PaymentMadeFormProvider';
 import {
   usePaymentMadeIsForeignCustomer,
   type PaymentMadeFormValues,
 } from './utils';
+import { BaseCurrency, BaseCurrencyRoot } from '@/components';
 
 /**
  * Payment made form currency tag.

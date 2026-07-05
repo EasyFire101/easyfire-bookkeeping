@@ -1,6 +1,4 @@
 // @ts-nocheck
-import React from 'react';
-import { useHistory } from 'react-router-dom';
 import {
   Button,
   Classes,
@@ -8,19 +6,22 @@ import {
   NavbarGroup,
   Alignment,
 } from '@blueprintjs/core';
+import React from 'react';
+import { useHistory } from 'react-router-dom';
+import { projectTranslations } from './common';
+import { ProjectTransactionsSelect } from './components';
+import { useProjectDetailContext } from './ProjectDetailProvider';
 import {
   Icon,
   FormattedMessage as T,
   DashboardRowsHeightButton,
   DashboardActionsBar,
 } from '@/components';
-import { ProjectTransactionsSelect } from './components';
+import { withDialogActions } from '@/containers/Dialog/withDialogActions';
 import { withSettings } from '@/containers/Settings/withSettings';
 import { withSettingsActions } from '@/containers/Settings/withSettingsActions';
-import { withDialogActions } from '@/containers/Dialog/withDialogActions';
-import { projectTranslations } from './common';
-import { useProjectDetailContext } from './ProjectDetailProvider';
 import { compose } from '@/utils';
+
 
 /**
  * Project detail actions bar.

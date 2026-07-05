@@ -1,4 +1,3 @@
-import React, { useMemo } from 'react';
 import {
   Button,
   NavbarGroup,
@@ -15,8 +14,19 @@ import {
   Tooltip,
   MenuDivider,
 } from '@blueprintjs/core';
-import { useHistory } from 'react-router-dom';
 import { isEmpty } from 'lodash';
+import React, { useMemo } from 'react';
+import { useHistory } from 'react-router-dom';
+import { withBanking } from '../withBanking';
+import { withBankingActions } from '../withBankingActions';
+import { useAccountTransactionsContext } from './AccountTransactionsProvider';
+import { CashFlowMenuItems } from './utils';
+import type { CashFlowMenuItem } from './utils';
+import type { WithBankingProps } from '../withBanking';
+import type { WithBankingActionsProps } from '../withBankingActions';
+import type { WithAlertActionsProps } from '@/containers/Alert/withAlertActions';
+import type { WithDialogActionsProps } from '@/containers/Dialog/withDialogActions';
+import type { WithSettingsActionsProps } from '@/containers/Settings/withSettingsActions';
 import {
   Icon,
   DashboardActionsBar,
@@ -25,34 +35,24 @@ import {
   AppToaster,
   If,
 } from '@/components';
-import { CashFlowMenuItems } from './utils';
+import { useAppShellContext } from '@/components/AppShell/AppContentShell/AppContentShellProvider';
 import {
   getAddMoneyOutOptions,
   getAddMoneyInOptions,
 } from '@/constants/cashflowOptions';
-import { useRefreshCashflowTransactions } from '@/hooks/query';
-import { useAccountTransactionsContext } from './AccountTransactionsProvider';
-import { useMediaQuery } from '@/hooks/useMediaQuery';
-import { useAppShellContext } from '@/components/AppShell/AppContentShell/AppContentShellProvider';
+import { DialogsName } from '@/constants/dialogs';
+import { withAlertActions } from '@/containers/Alert/withAlertActions';
 import { withDialogActions } from '@/containers/Dialog/withDialogActions';
 import { withSettings } from '@/containers/Settings/withSettings';
 import { withSettingsActions } from '@/containers/Settings/withSettingsActions';
-import { withBankingActions } from '../withBankingActions';
-import { withBanking } from '../withBanking';
-import { withAlertActions } from '@/containers/Alert/withAlertActions';
+import { useRefreshCashflowTransactions } from '@/hooks/query';
 import {
   useUpdateBankAccount,
   useExcludeUncategorizedTransactions,
   useUnexcludeUncategorizedTransactions,
 } from '@/hooks/query/banking';
-import { DialogsName } from '@/constants/dialogs';
+import { useMediaQuery } from '@/hooks/useMediaQuery';
 import { compose } from '@/utils';
-import type { WithDialogActionsProps } from '@/containers/Dialog/withDialogActions';
-import type { WithSettingsActionsProps } from '@/containers/Settings/withSettingsActions';
-import type { WithBankingActionsProps } from '../withBankingActions';
-import type { CashFlowMenuItem } from './utils';
-import type { WithBankingProps } from '../withBanking';
-import type { WithAlertActionsProps } from '@/containers/Alert/withAlertActions';
 
 interface WithSettingsProps {
   cashflowTansactionsTableSize?: string | null;

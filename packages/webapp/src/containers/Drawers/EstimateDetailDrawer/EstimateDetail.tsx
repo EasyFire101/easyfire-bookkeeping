@@ -1,11 +1,9 @@
-import styled from 'styled-components';
-import intl from 'react-intl-universal';
 import { Tab } from '@blueprintjs/core';
-
-import { DrawerMainTabs } from '@/components';
-
+import intl from 'react-intl-universal';
+import styled from 'styled-components';
 import { EstimateDetailActionsBar } from './EstimateDetailActionsBar';
 import { EstimateDetailTab as EstimateDetailPanel } from './EstimateDetailPanel';
+import { DrawerMainTabs } from '@/components';
 
 /**
  * Estimate details tabs.

@@ -1,5 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
+import { usePaymentReceiveDetailContext } from './PaymentReceiveDetailProvider';
 import {
   T,
   TotalLineTextStyle,
@@ -7,7 +8,6 @@ import {
   TotalLine,
   TotalLines,
 } from '@/components';
-import { usePaymentReceiveDetailContext } from './PaymentReceiveDetailProvider';
 
 /**
  * Payment receive detail table footer.

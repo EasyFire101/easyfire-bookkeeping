@@ -1,22 +1,21 @@
 // @ts-nocheck
-import React from 'react';
 import { Classes } from '@blueprintjs/core';
-import { useFormikContext } from 'formik';
-import { FormattedMessage as T } from '@/components';
 import classNames from 'classnames';
-
-import { CLASSES } from '@/constants/classes';
+import { useFormikContext } from 'formik';
+import React from 'react';
+import intl from 'react-intl-universal';
 import { useCurrencyFormContext } from './CurrencyFormProvider';
+import { FormattedMessage as T } from '@/components';
 import {
   FieldRequiredHint,
   FFormGroup,
   FInputGroup,
   FSelect,
 } from '@/components';
-
+import { CLASSES } from '@/constants/classes';
 import { useAutofocus } from '@/hooks';
 import { currenciesOptions } from '@/utils';
-import intl from 'react-intl-universal';
+
 
 /**
  * Currency form fields.

@@ -1,8 +1,7 @@
 // @ts-nocheck
-import React from 'react';
 import { useFormikContext } from 'formik';
 import { first } from 'lodash';
-
+import React from 'react';
 import { useRefundVendorCreditContext } from './RefundVendorCreditFormProvider';
 
 export const useSetPrimaryBranchToForm = () => {

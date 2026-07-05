@@ -1,6 +1,5 @@
 import React from 'react';
 import styled from 'styled-components';
-
 import { DataTable } from './DataTable';
 import type { DataTableProps } from './types';
 

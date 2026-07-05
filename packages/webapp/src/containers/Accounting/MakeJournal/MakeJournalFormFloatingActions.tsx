@@ -1,4 +1,3 @@
-import React from 'react';
 import {
   Intent,
   Button,
@@ -9,14 +8,15 @@ import {
   Menu,
   MenuItem,
 } from '@blueprintjs/core';
-import { useHistory } from 'react-router-dom';
-import { useFormikContext } from 'formik';
 import classNames from 'classnames';
+import { useFormikContext } from 'formik';
+import React from 'react';
+import { useHistory } from 'react-router-dom';
+import { useMakeJournalFormContext } from './MakeJournalProvider';
+import type { MakeJournalFormValues } from './utils';
 import { Icon, If, FormattedMessage as T } from '@/components';
 import { PageForm } from '@/components/PageForm';
 import { CLASSES } from '@/constants/classes';
-import { useMakeJournalFormContext } from './MakeJournalProvider';
-import type { MakeJournalFormValues } from './utils';
 
 /**
  * Make Journal floating actions bar.

@@ -1,7 +1,7 @@
 // @ts-nocheck
+import { useMutation } from '@tanstack/react-query';
 import axios, { AxiosError, AxiosRequestConfig } from 'axios';
 import { useState } from 'react';
-import { useMutation } from '@tanstack/react-query';
 import useApiRequest from './useRequest';
 
 interface IArgs {

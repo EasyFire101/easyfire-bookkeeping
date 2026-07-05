@@ -1,7 +1,6 @@
 // @ts-nocheck
-import React from 'react';
 import { Form } from 'formik';
-
+import React from 'react';
 import { CustomerOpeningBalanceFields } from './CustomerOpeningBalanceFields';
 import { CustomerOpeningBalanceFormFloatingActions } from './CustomerOpeningBalanceFormFloatingActions';
 

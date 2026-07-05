@@ -1,13 +1,8 @@
+import { useFormikContext } from 'formik';
 import React from 'react';
 import styled from 'styled-components';
-import { useFormikContext } from 'formik';
-import {
-  T,
-  TotalLines,
-  TotalLine,
-  TotalLineBorderStyle,
-  TotalLineTextStyle,
-} from '@/components';
+import { AdjustmentTotalLine } from '../../Invoices/InvoiceForm/AdjustmentTotalLine';
+import { DiscountTotalLine } from '../../Invoices/InvoiceForm/DiscountTotalLine';
 import {
   useCreditNoteAdjustmentFormatted,
   useCreditNoteDiscountAmountFormatted,
@@ -15,8 +10,13 @@ import {
   useCreditNoteTotalFormatted,
 } from './utils';
 import type { CreditNoteFormValues } from './utils';
-import { DiscountTotalLine } from '../../Invoices/InvoiceForm/DiscountTotalLine';
-import { AdjustmentTotalLine } from '../../Invoices/InvoiceForm/AdjustmentTotalLine';
+import {
+  T,
+  TotalLines,
+  TotalLine,
+  TotalLineBorderStyle,
+  TotalLineTextStyle,
+} from '@/components';
 
 export function CreditNoteFormFooterRight() {
   const {

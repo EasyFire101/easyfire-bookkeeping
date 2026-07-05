@@ -1,11 +1,9 @@
-import React, { createContext } from 'react';
 import { isEmpty } from 'lodash';
-
+import React, { createContext } from 'react';
+import type { EstimateTableRow } from './components';
 import { DashboardInsider } from '@/components/Dashboard';
-
 import { useResourceViews, useResourceMeta, useEstimates } from '@/hooks/query';
 import { getFieldsFromResourceMeta } from '@/utils';
-import type { EstimateTableRow } from './components';
 
 interface EstimatesListProviderProps {
   query?: any;

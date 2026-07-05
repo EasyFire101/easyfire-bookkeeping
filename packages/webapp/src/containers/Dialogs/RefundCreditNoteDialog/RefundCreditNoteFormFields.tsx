@@ -1,9 +1,4 @@
 // @ts-nocheck
-import React from 'react';
-import styled from 'styled-components';
-import intl from 'react-intl-universal';
-import { isEqual } from 'lodash';
-import { FastField, ErrorMessage, useFormikContext } from 'formik';
 import {
   Classes,
   FormGroup,
@@ -12,9 +7,15 @@ import {
   Position,
   ControlGroup,
 } from '@blueprintjs/core';
-import classNames from 'classnames';
-import { CLASSES, Features } from '@/constants';
 import { DateInput } from '@blueprintjs/datetime';
+import classNames from 'classnames';
+import { FastField, ErrorMessage, useFormikContext } from 'formik';
+import { isEqual } from 'lodash';
+import React from 'react';
+import intl from 'react-intl-universal';
+import styled from 'styled-components';
+import { useRefundCreditNoteContext } from './RefundCreditNoteFormProvider';
+import { useSetPrimaryBranchToForm } from './utils';
 import {
   Icon,
   Col,
@@ -33,17 +34,16 @@ import {
   FFormGroup,
   FTextArea,
 } from '@/components';
+import { CLASSES, Features } from '@/constants';
+import { ACCOUNT_TYPE } from '@/constants/accountTypes';
+import { useAutofocus } from '@/hooks';
+import { useCurrentOrganizationBaseCurrency } from '@/hooks/query';
 import {
   inputIntent,
   momentFormatter,
   tansformDateValue,
   handleDateChange,
 } from '@/utils';
-import { useAutofocus } from '@/hooks';
-import { useCurrentOrganizationBaseCurrency } from '@/hooks/query';
-import { ACCOUNT_TYPE } from '@/constants/accountTypes';
-import { useSetPrimaryBranchToForm } from './utils';
-import { useRefundCreditNoteContext } from './RefundCreditNoteFormProvider';
 
 /**
  * Refund credit note form fields.

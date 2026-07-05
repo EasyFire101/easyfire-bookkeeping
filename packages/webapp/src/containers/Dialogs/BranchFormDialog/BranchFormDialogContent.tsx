@@ -3,8 +3,8 @@ import React from 'react';
 
 import '@/style/pages/Branches/BranchFormDialog.scss';
 
-import { BranchFormProvider } from './BranchFormProvider';
 import { BranchForm } from './BranchForm';
+import { BranchFormProvider } from './BranchFormProvider';
 
 /**
  * Branch form dialog content.

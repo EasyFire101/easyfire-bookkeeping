@@ -1,14 +1,14 @@
 import { ComponentType } from 'react';
+import { connect } from 'react-redux';
 import { AnyAction } from 'redux';
 import { ThunkDispatch } from 'redux-thunk';
-import { connect } from 'react-redux';
+import type { RootState } from '@/store/reducers';
+import type { SettingOption } from '@/store/settings/settings.type';
 import {
   FetchOptions,
   submitOptions,
   addSettings,
 } from '@/store/settings/settings.actions';
-import type { RootState } from '@/store/reducers';
-import type { SettingOption } from '@/store/settings/settings.type';
 
 export interface WithSettingsActionsProps {
   requestSubmitOptions: (form: {

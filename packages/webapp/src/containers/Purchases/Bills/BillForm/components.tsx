@@ -1,10 +1,10 @@
-import React from 'react';
-import intl from 'react-intl-universal';
 import { Button } from '@blueprintjs/core';
 import { useFormikContext } from 'formik';
+import React from 'react';
+import intl from 'react-intl-universal';
+import { useBillIsForeignCustomer, type BillFormValues } from './utils';
 import { ExchangeRateInputGroup } from '@/components';
 import { useCurrentOrganizationBaseCurrency } from '@/hooks/query';
-import { useBillIsForeignCustomer, type BillFormValues } from './utils';
 
 type BillExchangeRateInputFieldProps = Omit<
   React.ComponentProps<typeof ExchangeRateInputGroup>,

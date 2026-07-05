@@ -1,4 +1,6 @@
 import React, { useMemo } from 'react';
+import intl from 'react-intl-universal';
+import { useMoneyInDailogContext } from './MoneyInDialogProvider';
 import {
   FAccountsSuggestField,
   FieldRequiredHint,
@@ -8,9 +10,6 @@ import {
   FSelect,
 } from '@/components';
 import { getAddMoneyInOptions } from '@/constants';
-
-import { useMoneyInDailogContext } from './MoneyInDialogProvider';
-import intl from 'react-intl-universal';
 
 /**
  * Transaction type fields.

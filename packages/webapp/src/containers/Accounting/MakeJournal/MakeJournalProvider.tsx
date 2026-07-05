@@ -8,9 +8,9 @@ import type {
   CurrenciesListResponse,
   ContactsAutoCompleteResponse,
 } from '@bigcapital/sdk-ts';
-import { Features } from '@/constants';
-import { useFeatureCan } from '@/hooks/state';
 import { DashboardInsider } from '@/components';
+import { Features } from '@/constants';
+import { useProjects } from '@/containers/Projects/hooks';
 import {
   useAccounts,
   useAutoCompleteContacts,
@@ -21,7 +21,7 @@ import {
   useBranches,
   useSettingsManualJournals,
 } from '@/hooks/query';
-import { useProjects } from '@/containers/Projects/hooks';
+import { useFeatureCan } from '@/hooks/state';
 
 type MakeJournalFormSubmitPayload = {
   redirect?: boolean;

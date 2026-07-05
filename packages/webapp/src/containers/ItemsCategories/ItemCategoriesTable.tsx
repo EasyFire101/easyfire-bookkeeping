@@ -1,17 +1,13 @@
 import React from 'react';
 import intl from 'react-intl-universal';
-
-import { DataTable, TableSkeletonRows } from '@/components';
-
-import { useItemsCategoriesContext } from './ItemsCategoriesProvider';
 import { useItemsCategoriesTableColumns, ActionMenuList } from './components';
+import { useItemsCategoriesContext } from './ItemsCategoriesProvider';
 import type { ItemCategoryTableRow } from './components';
-
-import { withAlertActions } from '@/containers/Alert/withAlertActions';
 import type { WithAlertActionsProps } from '@/containers/Alert/withAlertActions';
-import { withDialogActions } from '@/containers/Dialog/withDialogActions';
 import type { WithDialogActionsProps } from '@/containers/Dialog/withDialogActions';
-
+import { DataTable, TableSkeletonRows } from '@/components';
+import { withAlertActions } from '@/containers/Alert/withAlertActions';
+import { withDialogActions } from '@/containers/Dialog/withDialogActions';
 import { compose } from '@/utils';
 
 interface ItemsCategoryTableProps

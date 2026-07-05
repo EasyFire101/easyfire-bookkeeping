@@ -1,6 +1,9 @@
-import React from 'react';
 import { Position, ControlGroup } from '@blueprintjs/core';
 import { useFormikContext } from 'formik';
+import React from 'react';
+import intl from 'react-intl-universal';
+import type { EstimateFormValues } from './utils';
+import type { WithDialogActionsProps } from '@/containers/Dialog/withDialogActions';
 import {
   FFormGroup,
   FInputGroup,
@@ -8,12 +11,9 @@ import {
   Icon,
   InputPrependButton,
 } from '@/components';
-import { compose } from '@/utils';
 import { withDialogActions } from '@/containers/Dialog/withDialogActions';
-import type { WithDialogActionsProps } from '@/containers/Dialog/withDialogActions';
 import { withSettings } from '@/containers/Settings/withSettings';
-import intl from 'react-intl-universal';
-import type { EstimateFormValues } from './utils';
+import { compose } from '@/utils';
 
 type EstimateNumberFieldProps = {
   openDialog: WithDialogActionsProps['openDialog'];

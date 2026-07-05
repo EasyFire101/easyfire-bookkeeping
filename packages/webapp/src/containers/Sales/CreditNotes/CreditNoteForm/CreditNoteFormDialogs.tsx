@@ -1,9 +1,9 @@
-import React from 'react';
 import { useFormikContext } from 'formik';
+import React from 'react';
+import type { CreditNoteFormValues } from './utils';
+import { DialogsName } from '@/constants/dialogs';
 import { index as CreditNoteNumberDialog } from '@/containers/Dialogs/CreditNoteNumberDialog';
 import { InvoiceExchangeRateChangeDialog } from '@/containers/Sales/Invoices/InvoiceForm/Dialogs/InvoiceExchangeRateChangeDialog';
-import { DialogsName } from '@/constants/dialogs';
-import type { CreditNoteFormValues } from './utils';
 
 type CreditNoteNumberSettings = {
   transactionNumber: string;

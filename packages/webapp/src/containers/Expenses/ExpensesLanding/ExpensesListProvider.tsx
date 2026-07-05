@@ -1,5 +1,5 @@
-import React, { createContext } from 'react';
 import { isEmpty } from 'lodash';
+import React, { createContext } from 'react';
 import type {
   ExpensesListResponse,
   GetExpensesQuery,

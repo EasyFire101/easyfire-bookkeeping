@@ -1,10 +1,10 @@
 // @ts-nocheck
-import React from 'react';
 import { Alignment, Navbar, NavbarGroup } from '@blueprintjs/core';
-import { DashboardViewsTabs } from '@/components';
+import React from 'react';
+import { useWarehouseTranfersListContext } from './WarehouseTransfersListProvider';
 import { withWarehouseTransfers } from './withWarehouseTransfers';
 import { withWarehouseTransfersActions } from './withWarehouseTransfersActions';
-import { useWarehouseTranfersListContext } from './WarehouseTransfersListProvider';
+import { DashboardViewsTabs } from '@/components';
 import { compose, transfromViewsToTabs } from '@/utils';
 
 /**

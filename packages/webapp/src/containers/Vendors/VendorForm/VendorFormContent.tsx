@@ -1,11 +1,11 @@
 // @ts-nocheck
 import { Tab } from '@blueprintjs/core';
-import { Card, Group } from '@/components';
 import { Tabs } from '@blueprintjs/core';
-import { useState } from 'react';
 import { css } from '@emotion/css';
+import { useState } from 'react';
 import { VendorFloatingActions } from './VendorFloatingActions';
 import { VendorFormSections } from './VendorFormFields';
+import { Card, Group } from '@/components';
 
 export function VendorFormContent() {
   const [selectedTabId, setSelectedTabId] = useState('primary');

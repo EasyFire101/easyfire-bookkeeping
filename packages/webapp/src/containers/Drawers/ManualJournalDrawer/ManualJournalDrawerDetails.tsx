@@ -1,12 +1,10 @@
 import React from 'react';
 import styled from 'styled-components';
-
-import { CommercialDocBox } from '@/components';
-
 import { ManualJournalDrawerActionBar } from './ManualJournalDrawerActionBar';
+import { ManualJournalDrawerFooter } from './ManualJournalDrawerFooter';
 import { ManualJournalDrawerHeader } from './ManualJournalDrawerHeader';
 import { ManualJournalDrawerTable } from './ManualJournalDrawerTable';
-import { ManualJournalDrawerFooter } from './ManualJournalDrawerFooter';
+import { CommercialDocBox } from '@/components';
 
 /**
  * Manual journal view details.

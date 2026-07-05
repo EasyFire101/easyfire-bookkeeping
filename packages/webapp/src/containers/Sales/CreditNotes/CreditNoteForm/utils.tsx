@@ -1,9 +1,22 @@
-import React from 'react';
+
+import { useFormikContext } from 'formik';
+import { first } from 'lodash';
 import moment from 'moment';
 import * as R from 'ramda';
-import { first } from 'lodash';
+import React from 'react';
+import { useCreditNoteFormContext } from './CreditNoteFormProvider';
 import type { CreateCreditNoteBody, CreditNote } from '@bigcapital/sdk-ts';
-
+import {
+  transformAttachmentsToForm,
+  transformAttachmentsToRequest,
+} from '@/containers/Attachments/utils';
+import { convertBrandingTemplatesToOptions } from '@/containers/BrandingTemplates/BrandingTemplatesSelectFields';
+import { getEntriesTotal } from '@/containers/Entries/utils';
+import {
+  updateItemsEntriesTotal,
+  ensureEntriesHaveEmptyLine,
+} from '@/containers/Entries/utils';
+import { useCurrentOrganizationBaseCurrency } from '@/hooks/query';
 import {
   defaultFastFieldShouldUpdate,
   transformToForm,
@@ -13,20 +26,6 @@ import {
   toSafeNumber,
   compose,
 } from '@/utils';
-import { useFormikContext } from 'formik';
-import { useCreditNoteFormContext } from './CreditNoteFormProvider';
-
-import {
-  updateItemsEntriesTotal,
-  ensureEntriesHaveEmptyLine,
-} from '@/containers/Entries/utils';
-import { useCurrentOrganizationBaseCurrency } from '@/hooks/query';
-import { getEntriesTotal } from '@/containers/Entries/utils';
-import {
-  transformAttachmentsToForm,
-  transformAttachmentsToRequest,
-} from '@/containers/Attachments/utils';
-import { convertBrandingTemplatesToOptions } from '@/containers/BrandingTemplates/BrandingTemplatesSelectFields';
 
 export const MIN_LINES_NUMBER = 1;
 

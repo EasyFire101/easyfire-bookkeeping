@@ -1,5 +1,3 @@
-import React from 'react';
-import intl from 'react-intl-universal';
 import {
   Button,
   Popover,
@@ -8,9 +6,11 @@ import {
   MenuItem,
   Menu,
 } from '@blueprintjs/core';
+import React from 'react';
+import intl from 'react-intl-universal';
+import { usePaymentReceiveDetailContext } from './PaymentReceiveDetailProvider';
 import { Icon } from '@/components';
 import { getColumnWidth } from '@/utils';
-import { usePaymentReceiveDetailContext } from './PaymentReceiveDetailProvider';
 
 /**
  * Retrieve payment entries table columns.

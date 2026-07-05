@@ -1,22 +1,17 @@
 // @ts-nocheck
+
+import { Intent } from '@blueprintjs/core';
+import { Formik } from 'formik';
+import { omit } from 'lodash';
 import React from 'react';
 import intl from 'react-intl-universal';
-
-import { Formik } from 'formik';
-import { Intent } from '@blueprintjs/core';
-import { omit } from 'lodash';
-
-import { AppToaster } from '@/components';
 import { CreateBadDebtFormSchema } from './BadDebtForm.schema';
-import { transformErrors } from './utils';
-
 import { BadDebtFormContent } from './BadDebtFormContent';
-
+import { useBadDebtContext } from './BadDebtFormProvider';
+import { transformErrors } from './utils';
+import { AppToaster } from '@/components';
 import { withDialogActions } from '@/containers/Dialog/withDialogActions';
 import { useCurrentOrganizationBaseCurrency } from '@/hooks/query';
-
-import { useBadDebtContext } from './BadDebtFormProvider';
-
 import { compose } from '@/utils';
 
 const defaultInitialValues = {

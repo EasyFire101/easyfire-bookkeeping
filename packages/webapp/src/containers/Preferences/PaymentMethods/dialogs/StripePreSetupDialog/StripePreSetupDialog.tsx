@@ -1,9 +1,9 @@
 // @ts-nocheck
 import React from 'react';
-import { Dialog, DialogSuspense } from '@/components';
-import { compose } from '@/utils';
-import withDialogRedux from '@/components/DialogReduxConnect';
 import { StripePreSetupDialogContent } from './StripePreSetupDialogContent';
+import { Dialog, DialogSuspense } from '@/components';
+import withDialogRedux from '@/components/DialogReduxConnect';
+import { compose } from '@/utils';
 
 /**
  * Select payment methods dialogs.

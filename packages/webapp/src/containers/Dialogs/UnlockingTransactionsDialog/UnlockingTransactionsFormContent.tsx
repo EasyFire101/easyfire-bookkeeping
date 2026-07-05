@@ -1,7 +1,6 @@
 // @ts-nocheck
-import React from 'react';
 import { Form } from 'formik';
-
+import React from 'react';
 import { UnlockingTransactionsFormFields } from './UnlockingTransactionsFormFields';
 import { UnlockingTransactionsFormFloatingActions } from './UnlockingTransactionsFormFloatingActions';
 

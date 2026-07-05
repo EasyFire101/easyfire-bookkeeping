@@ -1,6 +1,6 @@
-import { CommercialDocFooter, If, DetailsMenu, DetailItem } from '@/components';
-import { useVendorCreditDetailDrawerContext } from './VendorCreditDetailDrawerProvider';
 import intl from 'react-intl-universal';
+import { useVendorCreditDetailDrawerContext } from './VendorCreditDetailDrawerProvider';
+import { CommercialDocFooter, If, DetailsMenu, DetailItem } from '@/components';
 
 export function VendorCreditDetailFooter() {
   const { vendorCredit } = useVendorCreditDetailDrawerContext();

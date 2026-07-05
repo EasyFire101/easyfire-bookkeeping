@@ -1,7 +1,7 @@
 // @ts-nocheck
+import { Intent } from '@blueprintjs/core';
 import { useCallback } from 'react';
 import intl from 'react-intl-universal';
-import { Intent } from '@blueprintjs/core';
 import { AppToaster } from '@/components';
 import { transformTableStateToQuery } from '@/utils';
 

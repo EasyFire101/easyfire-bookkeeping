@@ -1,7 +1,11 @@
 // @ts-nocheck
-import React from 'react';
 import { Position, ControlGroup } from '@blueprintjs/core';
+import classNames from 'classnames';
 import { useFormikContext } from 'formik';
+import React from 'react';
+import intl from 'react-intl-universal';
+import { useObserveTransferNoSettings } from './utils';
+import { useWarehouseTransferFormContext } from './WarehouseTransferFormProvider';
 import {
   FFormGroup,
   FormattedMessage as T,
@@ -9,16 +13,12 @@ import {
   FDateInput,
   FInputGroup,
 } from '@/components';
-import { momentFormatter, compose } from '@/utils';
-import classNames from 'classnames';
-
-import { CLASSES } from '@/constants/classes';
 import { FieldRequiredHint, Icon, InputPrependButton } from '@/components';
-import { useWarehouseTransferFormContext } from './WarehouseTransferFormProvider';
-import { useObserveTransferNoSettings } from './utils';
-import { withSettings } from '@/containers/Settings/withSettings';
+import { CLASSES } from '@/constants/classes';
 import { withDialogActions } from '@/containers/Dialog/withDialogActions';
-import intl from 'react-intl-universal';
+import { withSettings } from '@/containers/Settings/withSettings';
+import { momentFormatter, compose } from '@/utils';
+
 
 /**
  * Warehouse transfer form header fields.
