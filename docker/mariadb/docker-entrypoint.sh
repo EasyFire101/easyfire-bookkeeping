@@ -15,4 +15,4 @@ if [ -n "$MYSQL_DATABASE" ]; then
 fi
 
 # Execute SQL file
-mysql -u root -p$MYSQL_ROOT_PASSWORD < /scripts/init.sql
+mariadb -u root -p$MYSQL_ROOT_PASSWORD < /scripts/init.sql

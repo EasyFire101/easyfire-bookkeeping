@@ -1,0 +1,31 @@
+{
+  "comment": "Cloudflare Access application template for EasyFire Bookkeeping. Apply manually in Cloudflare Zero Trust dashboard or via API.",
+  "type": "self_hosted",
+  "name": "EasyFire Bookkeeping",
+  "session_duration": "24h",
+  "domain": "bookkeeping.easyfire.fyi",
+  "allowed_idps": ["PLACEHOLDER_ONE_TIME_PIN_IDP_ID"],
+  "auto_redirect_to_identity": true,
+  "skip_interstitial": true,
+  "app_launcher_visible": false,
+  "service_auth_401_redirect": false,
+  "policies": [
+    {
+      "name": "Admin Only",
+      "decision": "allow",
+      "include": {
+        "emails": ["REPLACE_WITH_OWNER_EMAIL"],
+        "comment": "Restrict to a single admin user. Use email-based OTP authentication."
+      }
+    }
+  ],
+  "cors_config": {
+    "allow_all_methods": true,
+    "allow_all_origins": false,
+    "allow_all_headers": true,
+    "allow_credentials": true,
+    "allowed_origins": ["bookkeeping.easyfire.fyi"],
+    "max_age": 3600
+  },
+  "note": "Restrict Access to ONE user. Expose only via Cloudflare Tunnel (no public ports). Envoy binds 127.0.0.1 only."
+}

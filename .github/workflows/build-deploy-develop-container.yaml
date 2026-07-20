@@ -1,9 +1,7 @@
 # This workflow will build a docker container, publish it to Github Registry.
 name: Build and Deploy Develop Docker Container
 on:
-  push:
-    branches:
-      - develop
+  workflow_dispatch:
 
 env:
   WEBAPP_IMAGE_NAME: bigcapitalhq/webapp

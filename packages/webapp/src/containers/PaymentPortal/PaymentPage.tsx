@@ -4,6 +4,7 @@ import clsx from 'classnames';
 import { lighten } from 'polished';
 import styles from './PaymentPortal.module.scss';
 import { Box, Group, Stack } from '@/components';
+import { EASYFIRE_SOURCE_URL } from '@/constants/legal';
 
 export interface PaymentPageProps {
   // # Company name
@@ -253,6 +254,9 @@ export function InvoicePaymentPage({
             dangerouslySetInnerHTML={{ __html: copyrightText }}
           ></Stack>
         )}
+        <a href={EASYFIRE_SOURCE_URL} target="_blank" rel="noopener noreferrer">
+          Source code (AGPL-3.0)
+        </a>
       </Stack>
     </Box>
   );

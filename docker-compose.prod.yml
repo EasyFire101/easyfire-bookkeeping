@@ -1,46 +1,65 @@
-# This is a production version of the Bigcapital docker-compose.yml file.
-
-version: '3.3'
-
 services:
-  proxy:
-    image: envoyproxy/envoy:v1.30-latest
-    depends_on:
-      - server
-      - webapp
+  envoy:
+    image: envoyproxy/envoy:v1.30.11@sha256:b5cc70f5fe5503858817e897ae1da5d873dc32cbc493790b4e330b8a42c4af9d
+    container_name: easyfire-proxy
     ports:
-      - '${PUBLIC_PROXY_PORT:-80}:80'
-      - '${PUBLIC_PROXY_SSL_PORT:-443}:443'
-    tty: true
+      - "127.0.0.1:${PUBLIC_PROXY_PORT:-80}:80"
+    depends_on:
+      server:
+        condition: service_healthy
+      webapp:
+        condition: service_started
     volumes:
-      - ./docker/envoy/envoy.yaml:/etc/envoy/envoy.yaml
-    restart: on-failure
+      - ./docker/envoy/envoy.yaml:/etc/envoy/envoy.yaml:ro
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD-SHELL", "bash -c ': >/dev/tcp/127.0.0.1/80'"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 15s
     networks:
       - bigcapital_network
 
   webapp:
-    container_name: bigcapital-webapp
-    image: bigcapitalhq/webapp:latest
-    restart: on-failure
+    container_name: easyfire-webapp
+    build:
+      context: .
+      dockerfile: packages/webapp/Dockerfile
+    image: easyfire-bookkeeping/webapp:${IMAGE_TAG:?IMAGE_TAG must be an immutable release tag}
+    restart: unless-stopped
+    healthcheck:
+      test:
+        [
+          "CMD",
+          "wget",
+          "--no-verbose",
+          "--tries=1",
+          "--spider",
+          "http://127.0.0.1:80/",
+        ]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 10s
     networks:
       - bigcapital_network
 
   server:
-    container_name: bigcapital-server
-    image: bigcapitalhq/server:latest
+    container_name: easyfire-server
+    build:
+      context: .
+      dockerfile: packages/server/Dockerfile
+    image: easyfire-bookkeeping/server:${IMAGE_TAG:?IMAGE_TAG must be an immutable release tag}
     expose:
-      - '3000'
-    links:
-      - mysql
-      - redis
+      - "3000"
     depends_on:
-      - mysql
-      - redis
-    restart: on-failure
-    networks:
-      - bigcapital_network
+      mysql:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    restart: unless-stopped
     environment:
-      # Mail
       - MAIL_HOST=${MAIL_HOST}
       - MAIL_USERNAME=${MAIL_USERNAME}
       - MAIL_PASSWORD=${MAIL_PASSWORD}
@@ -48,63 +67,35 @@ services:
       - MAIL_SECURE=${MAIL_SECURE}
       - MAIL_FROM_NAME=${MAIL_FROM_NAME}
       - MAIL_FROM_ADDRESS=${MAIL_FROM_ADDRESS}
-
-      # Database
       - DB_HOST=mysql
       - DB_USER=${DB_USER}
       - DB_PASSWORD=${DB_PASSWORD}
       - DB_CHARSET=${DB_CHARSET}
-
-      # System database
       - SYSTEM_DB_NAME=${SYSTEM_DB_NAME}
-
-      # Redis
       - REDIS_HOST=redis
       - REDIS_PORT=6379
       - QUEUE_HOST=redis
       - QUEUE_PORT=6379
-
-      # Tenants databases
       - TENANT_DB_NAME_PERFIX=${TENANT_DB_NAME_PERFIX}
-
-      # Authentication
-      - JWT_SECRET=${JWT_SECRET}
-
-      # Application
+      - APP_JWT_SECRET=${APP_JWT_SECRET:?APP_JWT_SECRET must be configured}
       - BASE_URL=${BASE_URL}
-
-      # Sign-up restrictions
-      - SIGNUP_DISABLED=${SIGNUP_DISABLED}
+      - SIGNUP_DISABLED=${SIGNUP_DISABLED:?SIGNUP_DISABLED must be configured}
       - SIGNUP_ALLOWED_DOMAINS=${SIGNUP_ALLOWED_DOMAINS}
       - SIGNUP_ALLOWED_EMAILS=${SIGNUP_ALLOWED_EMAILS}
-
-      # Sign-up email confirmation
       - SIGNUP_EMAIL_CONFIRMATION=${SIGNUP_EMAIL_CONFIRMATION}
-
-      # Gotenberg (Pdf generator)
       - GOTENBERG_URL=${GOTENBERG_URL}
       - GOTENBERG_DOCS_URL=${GOTENBERG_DOCS_URL}
-
-      # Exchange Rate
       - EXCHANGE_RATE_SERVICE=${EXCHANGE_RATE_SERVICE}
-      - OPEN_EXCHANGE_RATE_APP_ID-${OPEN_EXCHANGE_RATE_APP_ID}
-
-      # Bank Sync
+      - OPEN_EXCHANGE_RATE_APP_ID=${OPEN_EXCHANGE_RATE_APP_ID}
       - BANK_FEED_ENABLED=${BANK_FEED_ENABLED}
-
-      # Plaid
       - PLAID_ENV=${PLAID_ENV}
       - PLAID_CLIENT_ID=${PLAID_CLIENT_ID}
       - PLAID_SECRET=${PLAID_SECRET}
       - PLAID_LINK_WEBHOOK=${PLAID_LINK_WEBHOOK}
-
-      # Lemon Squeez
       - LEMONSQUEEZY_API_KEY=${LEMONSQUEEZY_API_KEY}
       - LEMONSQUEEZY_STORE_ID=${LEMONSQUEEZY_STORE_ID}
       - LEMONSQUEEZY_WEBHOOK_SECRET=${LEMONSQUEEZY_WEBHOOK_SECRET}
       - HOSTED_ON_BIGCAPITAL_CLOUD=${HOSTED_ON_BIGCAPITAL_CLOUD}
-
-      # New Relic matrics tracking.
       - NEW_RELIC_DISTRIBUTED_TRACING_ENABLED=${NEW_RELIC_DISTRIBUTED_TRACING_ENABLED}
       - NEW_RELIC_LOG=${NEW_RELIC_LOG}
       - NEW_RELIC_AI_MONITORING_ENABLED=${NEW_RELIC_AI_MONITORING_ENABLED}
@@ -112,45 +103,58 @@ services:
       - NEW_RELIC_SPAN_EVENTS_MAX_SAMPLES_STORED=${NEW_RELIC_SPAN_EVENTS_MAX_SAMPLES_STORED}
       - NEW_RELIC_LICENSE_KEY=${NEW_RELIC_LICENSE_KEY}
       - NEW_RELIC_APP_NAME=${NEW_RELIC_APP_NAME}
-
-      # S3
       - S3_REGION=${S3_REGION}
       - S3_ACCESS_KEY_ID=${S3_ACCESS_KEY_ID}
       - S3_SECRET_ACCESS_KEY=${S3_SECRET_ACCESS_KEY}
       - S3_ENDPOINT=${S3_ENDPOINT}
       - S3_BUCKET=${S3_BUCKET}
-
-      # Stripe
       - STRIPE_PAYMENT_SECRET_KEY=${STRIPE_PAYMENT_SECRET_KEY}
       - STRIPE_PAYMENT_PUBLISHABLE_KEY=${STRIPE_PAYMENT_PUBLISHABLE_KEY}
       - STRIPE_PAYMENT_CLIENT_ID=${STRIPE_PAYMENT_CLIENT_ID}
       - STRIPE_PAYMENT_WEBHOOKS_SECRET=${STRIPE_PAYMENT_WEBHOOKS_SECRET}
       - STRIPE_PAYMENT_REDIRECT_URL=${STRIPE_PAYMENT_REDIRECT_URL}
+    healthcheck:
+      test:
+        [
+          "CMD",
+          "node",
+          "-e",
+          "require('http').get('http://localhost:3000/api/system_db', function(r){process.exit(r.statusCode>=200&&r.statusCode<300?0:1)}).on('error',function(){process.exit(1)})",
+        ]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+    networks:
+      - bigcapital_network
 
   database_migration:
-    container_name: bigcapital-database-migration
+    container_name: easyfire-database-migration
     build:
-      context: ./
+      context: .
       dockerfile: docker/migration/Dockerfile
+    image: easyfire-bookkeeping/migration:${IMAGE_TAG:?IMAGE_TAG must be an immutable release tag}
     environment:
-      # Database
       - DB_HOST=mysql
       - DB_USER=${DB_USER}
       - DB_PASSWORD=${DB_PASSWORD}
       - DB_CHARSET=${DB_CHARSET}
       - SYSTEM_DB_NAME=${SYSTEM_DB_NAME}
-      # Tenants databases
       - TENANT_DB_NAME_PERFIX=${TENANT_DB_NAME_PERFIX}
+      - APP_JWT_SECRET=${APP_JWT_SECRET:?APP_JWT_SECRET must be configured}
     depends_on:
-      - mysql
+      mysql:
+        condition: service_healthy
+    restart: "no"
     networks:
       - bigcapital_network
 
   mysql:
-    container_name: bigcapital-mysql
-    restart: on-failure
+    container_name: easyfire-mysql
     build:
       context: ./docker/mariadb
+    image: easyfire-bookkeeping/mariadb:${MARIADB_IMAGE_TAG:?MARIADB_IMAGE_TAG must be an immutable database release tag}
+    restart: unless-stopped
     environment:
       - MYSQL_DATABASE=${SYSTEM_DB_NAME}
       - MYSQL_USER=${DB_USER}
@@ -159,40 +163,67 @@ services:
     volumes:
       - mysql:/var/lib/mysql
     expose:
-      - '3306'
+      - "3306"
+    healthcheck:
+      test: ["CMD", "mariadb-admin", "ping", "-h", "localhost"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 30s
     networks:
       - bigcapital_network
 
   redis:
-    container_name: bigcapital-redis
-    restart: on-failure
+    container_name: easyfire-redis
     build:
       context: ./docker/redis
+    image: easyfire-bookkeeping/redis:${IMAGE_TAG:?IMAGE_TAG must be an immutable release tag}
+    restart: unless-stopped
     expose:
-      - '6379'
+      - "6379"
     volumes:
       - redis:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "PING"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 10s
     networks:
       - bigcapital_network
 
   gotenberg:
-    image: gotenberg/gotenberg:7
+    container_name: easyfire-gotenberg
+    image: gotenberg/gotenberg:7.10.2@sha256:d03b8a04c6e6c5e568b38f57352266dee4674849b71818774025f8f48d869a9a
     expose:
-      - '9000'
+      - "3000"
+    restart: unless-stopped
+    healthcheck:
+      test:
+        [
+          "CMD",
+          "curl",
+          "--fail",
+          "--silent",
+          "--show-error",
+          "http://127.0.0.1:3000/health",
+        ]
+      interval: 60s
+      timeout: 10s
+      retries: 3
+      start_period: 15s
     networks:
       - bigcapital_network
 
-# Volumes
 volumes:
   mysql:
-    name: bigcapital_prod_mysql
+    name: ${MARIADB_VOLUME_NAME:?MARIADB_VOLUME_NAME must identify the durable database volume}
     driver: local
 
   redis:
-    name: bigcapital_prod_redis
+    name: ${REDIS_VOLUME_NAME:?REDIS_VOLUME_NAME must identify the durable Redis volume}
     driver: local
 
-# Networks
 networks:
   bigcapital_network:
     driver: bridge

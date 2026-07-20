@@ -5,6 +5,7 @@ import { useMainSidebarMenu } from './hooks';
 import { SidebarContainer } from './SidebarContainer';
 import { SidebarHead } from './SidebarHead';
 import { SidebarMenu } from './SidebarMenu';
+import { EASYFIRE_SOURCE_URL } from '@/constants/legal';
 
 import '@/style/containers/Dashboard/Sidebar.scss';
 
@@ -35,8 +36,12 @@ export function Sidebar() {
 function SidebarFooterVersion() {
   const { REACT_APP_VERSION } = process.env;
 
-  if (!REACT_APP_VERSION) {
-    return null;
-  }
-  return <div class="sidebar__version">v{REACT_APP_VERSION}</div>;
+  return (
+    <div className="sidebar__version">
+      {REACT_APP_VERSION && <span>v{REACT_APP_VERSION}</span>}
+      <a href={EASYFIRE_SOURCE_URL} target="_blank" rel="noopener noreferrer">
+        Source code (AGPL-3.0)
+      </a>
+    </div>
+  );
 }

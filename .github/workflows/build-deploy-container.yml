@@ -1,8 +1,6 @@
 # This workflow will build a docker container, publish it to Github Registry.
 name: Build and Deploy Docker Container
 on:
-  release:
-    types: [created]
   workflow_dispatch:
 
 env:
@@ -39,7 +37,7 @@ jobs:
         id: meta
         uses: docker/metadata-action@98669ae865ea3cffbcbaa878cf57c20bbf1c6c38
         with:
-            images: ${{ env.WEBAPP_IMAGE_NAME }}
+          images: ${{ env.WEBAPP_IMAGE_NAME }}
 
       # Builds and push the Docker image.
       - name: Build and push Docker image
@@ -111,7 +109,7 @@ jobs:
           mkdir -p /tmp/digests
           digest="${{ steps.build.outputs.digest }}"
           touch "/tmp/digests/${digest#sha256:}"
-  
+
       - name: Upload digest
         uses: actions/upload-artifact@v4
         with:

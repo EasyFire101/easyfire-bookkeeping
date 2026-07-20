@@ -3,7 +3,10 @@ import { parseBoolean } from '@/utils/parse-boolean';
 import { registerAs } from '@nestjs/config';
 
 export default registerAs('signupRestrictions', () => ({
-  disabled: parseBoolean<boolean>(process.env.SIGNUP_DISABLED, false),
+  disabled: parseBoolean<boolean>(
+    process.env.SIGNUP_DISABLED,
+    process.env.NODE_ENV === 'production',
+  ),
   allowedDomains: castCommaListEnvVarToArray(
     process.env.SIGNUP_ALLOWED_DOMAINS,
   ),

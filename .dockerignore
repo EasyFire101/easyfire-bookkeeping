@@ -25,6 +25,11 @@ test/
 **/*.spec.ts
 **/*.test.ts
 **/*.e2e-spec.ts
+# The disposable E2E image uses exactly this one guarded server harness.
+!packages/server/test/
+packages/server/test/*
+!packages/server/test/jest-e2e.json
+!packages/server/test/easyfire-bookkeeping.e2e-spec.ts
 coverage/
 .nyc_output/
 test-results/

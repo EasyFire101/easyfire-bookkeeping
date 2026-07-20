@@ -3,7 +3,6 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import { EventEmitterModule } from '@nestjs/event-emitter';
 import { APP_GUARD, APP_INTERCEPTOR, APP_PIPE, APP_FILTER } from '@nestjs/core';
 import { join } from 'path';
-import { ServeStaticModule } from '@nestjs/serve-static';
 import { RedisModule } from '@liaoliaots/nestjs-redis';
 import {
   AcceptLanguageResolver,
@@ -81,7 +80,7 @@ import { PaymentLinksModule } from '../PaymentLinks/PaymentLinks.module';
 import { RolesModule } from '../Roles/Roles.module';
 import { SubscriptionModule } from '../Subscription/Subscription.module';
 import { OrganizationModule } from '../Organization/Organization.module';
-import { WorkspacesModule } from '../ee/Workspaces/Workspaces.module';
+import { WorkspacesModule } from '../EE/Workspaces/Workspaces.module';
 import { TenantDBManagerModule } from '../TenantDBManager/TenantDBManager.module';
 import { PaymentServicesModule } from '../PaymentServices/PaymentServices.module';
 import { AuthModule } from '../Auth/Auth.module';
@@ -110,10 +109,6 @@ import { AppThrottleModule } from './AppThrottle.module';
 
 @Module({
   imports: [
-    ServeStaticModule.forRoot({
-      rootPath: join(__dirname, '../../..', 'public'),
-      serveRoot: '/public',
-    }),
     ConfigModule.forRoot({
       envFilePath: '.env',
       load: config,
@@ -170,7 +165,7 @@ import { AppThrottleModule } from './AppThrottle.module';
     ClsModule.forRoot({
       global: true,
       middleware: {
-        setup: (cls: ClsService, req: Request, res: Response) => {
+        setup: (cls: ClsService, req: Request) => {
           cls.set('organizationId', req.headers['organization-id']);
         },
         mount: true,

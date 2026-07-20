@@ -17,13 +17,14 @@ async function bootstrap() {
   });
   app.set('query parser', 'extended');
   app.setGlobalPrefix('/api');
+  app.useStaticAssets(global.__public_dirname, { prefix: '/public' });
 
   // create and mount the middleware manually here
   app.use(new ClsMiddleware({}).use);
 
   const config = new DocumentBuilder()
-    .setTitle('Bigcapital')
-    .setDescription('Financial accounting software')
+    .setTitle('EasyFire Bookkeeping')
+    .setDescription('Open-source accounting and financial management software')
     .setVersion('1.0')
     .build();
 

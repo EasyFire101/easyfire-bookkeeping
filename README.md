@@ -1,3 +1,66 @@
+## EasyFire Bookkeeping fork
+
+This repository contains the EasyFire Bookkeeping modifications to
+[Bigcapital](https://github.com/bigcapitalhq/bigcapital), based on upstream
+commit `8c90ca328ec59dd772de3b385531eb386de11ac8`. EasyFire modifications began
+on 2026-07-09 and include single-owner branding, authentication restrictions,
+Windows/Docker production operations, backup and restore controls, and visible
+network-user source disclosure.
+
+EasyFire Bookkeeping remains licensed under
+[GNU AGPL-3.0](https://www.gnu.org/licenses/agpl-3.0.html). The public
+corresponding-source location is
+[EasyFire101/easyfire-bookkeeping](https://github.com/EasyFire101/easyfire-bookkeeping),
+and private accepted source is the owner-controlled EasyFire Forgejo repository.
+Publication is established only by exact remote readback of the same release
+commit at both destinations. Neither a URL nor this checkout proves deployment
+or authenticated live acceptance.
+Original Bigcapital history, copyright, contributors, and license text are
+preserved below. See [the EasyFire compliance record](docs/easyfire/AGPL_COMPLIANCE.md)
+for the modification and source-availability boundary.
+
+The current production controller is fresh-install-only. Existing MariaDB data
+requires a separate blue/green logical migration; Cloudflare and cloudflared
+resources are pre-existing infrastructure that the controller verifies but
+never modifies; and automated owner bootstrap is retired. See [current
+state](docs/easyfire/CURRENT_STATE.md) and the
+[production runbook](docs/easyfire/PRODUCTION_RUNBOOK.md) before operational
+work.
+
+The direct-takeover candidate now binds every controller invocation to exact
+hashes for the four executable controller files, journals built Docker image
+IDs rather than trusting mutable tags, publishes the generated environment
+through a hash-bound candidate, starts the one-shot migration container at
+most once with a bounded timeout, preserves even partially created durable
+volumes on rollback, and verifies exact task, edge, port, and foreign-volume
+consumer identity. Daily backups run only through the fifth
+`ScheduledBackup` controller stage from the sealed installed controller using
+canonical Windows PowerShell and the deployment-owner SID bound into the action
+journal. Each baseline, emergency, or scheduled backup is a crash-resumable
+recovery unit: compressed dump, SHA-256 sidecar, and authority-bound metadata,
+followed by an isolated restore check.
+
+The frozen offline dependency install, server typecheck, dependency
+compatibility suite, and full application build pass on this candidate. The
+complete production audit reports 45 advisories: 9 low, 36 moderate, 0 high,
+and 0 critical. Exact disposable Docker proof and independent-review evidence
+are recorded in [current state](docs/easyfire/CURRENT_STATE.md) and
+[HANDOFF.md](./HANDOFF.md); those records do not imply a reconciled running
+service. A truly fresh installation also has no supported way to create its
+first owner login, so owner onboarding must be designed and proven separately
+before such an installation can be usable.
+
+## EasyFire project foundation
+
+- Operating profile and runtime truth: [PROJECT_PROFILE.json](./PROJECT_PROFILE.json)
+- Durable decisions and dependency evidence: [PROJECT_LOG.md](./PROJECT_LOG.md)
+- Current continuation state: [HANDOFF.md](./HANDOFF.md)
+- Promotion gates and recovery boundaries: [FEATURE_READINESS.md](./FEATURE_READINESS.md)
+- Foundation version: 1.7.0
+- Deterministic install: `corepack pnpm install --frozen-lockfile`
+
+---
+
 <p align="center">
   <p align="center">
     <a href="https://bigcapital.app" target="_blank">
@@ -48,7 +111,7 @@ Bigcapital is a smart and open-source accounting and inventory software, Bigcapi
 
 We've got serveral options on dev and prod depending on your need to get started quickly with Bigcapital.
 
-## Self-hosted 
+## Self-hosted
 
 Bigcapital is available open-source under AGPL license. You can host it on your own servers using Docker.
 

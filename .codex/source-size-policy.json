@@ -1,0 +1,131 @@
+{
+  "version": 1,
+  "defaults": {
+    "warning_lines": 800,
+    "critical_lines": 1500,
+    "severe_lines": 3000
+  },
+  "source_files": {
+    "extensions": [
+      ".astro",
+      ".bash",
+      ".bat",
+      ".bicep",
+      ".cjs",
+      ".cmd",
+      ".cs",
+      ".csproj",
+      ".css",
+      ".dart",
+      ".dockerfile",
+      ".ex",
+      ".exs",
+      ".fsproj",
+      ".go",
+      ".gradle",
+      ".gql",
+      ".graphql",
+      ".htm",
+      ".html",
+      ".ipynb",
+      ".java",
+      ".jl",
+      ".js",
+      ".json",
+      ".jsonc",
+      ".jsx",
+      ".kt",
+      ".kts",
+      ".less",
+      ".lua",
+      ".md",
+      ".mdx",
+      ".mjs",
+      ".php",
+      ".proto",
+      ".props",
+      ".ps1",
+      ".py",
+      ".r",
+      ".rb",
+      ".rs",
+      ".sass",
+      ".scss",
+      ".sh",
+      ".sql",
+      ".svelte",
+      ".svg",
+      ".swift",
+      ".targets",
+      ".tf",
+      ".tfvars",
+      ".toml",
+      ".ts",
+      ".tsx",
+      ".txt",
+      ".vbproj",
+      ".vue",
+      ".xml",
+      ".yaml",
+      ".yml",
+      ".zsh"
+    ],
+    "basenames": [
+      "Dockerfile",
+      "Containerfile",
+      "Makefile",
+      "Justfile",
+      "Rakefile",
+      "Gemfile"
+    ]
+  },
+  "roles": [
+    {
+      "name": "easyfire-production-action-approved-monolith",
+      "path_regex": "^deploy/windows/production-action\\.ps1$",
+      "warning_lines": 3000,
+      "critical_lines": 3500,
+      "severe_lines": 4500,
+      "reason": "Exact path-scoped takeover exception at 2,764 lines (critical under defaults): splitting the journal-bound production state machine during recovery would create disproportionate release risk. Containment is the current 101-of-101 static validator, focused crash/authority tests, and a required disposable full-stack, backup, restore, cleanup, and production-invariance proof before release. Re-review when this file reaches 3,000 lines or its journal/state-transition contract changes."
+    },
+    {
+      "name": "lockfile",
+      "path_regex": "(^|/)(package-lock\\.json|npm-shrinkwrap\\.json|pnpm-lock\\.yaml|yarn\\.lock|bun\\.lockb|Cargo\\.lock|poetry\\.lock|Pipfile\\.lock)$",
+      "scan": false,
+      "reason": "Dependency lockfiles are machine-managed."
+    },
+    {
+      "name": "generated-artifact",
+      "path_regex": "(^|/)(dist|build|release|coverage|logs|node_modules|\\.git|\\.worktrees|\\.codex-worktrees|\\.cache|generated|snapshots?)/",
+      "scan": false,
+      "reason": "Generated artifacts and local logs are governed by artifact retention, not source splitting."
+    },
+    {
+      "name": "documentation",
+      "kind": "documentation",
+      "extensions": [".md", ".mdx", ".txt"],
+      "warning_lines": 1800,
+      "critical_lines": 3000,
+      "severe_lines": 5000,
+      "reason": "Long docs should split, summarize, or archive before they become hard to review."
+    },
+    {
+      "name": "structured-config",
+      "kind": "structured-config",
+      "extensions": [".json", ".jsonc", ".yaml", ".yml", ".toml", ".xml"],
+      "warning_lines": 1500,
+      "critical_lines": 3000,
+      "severe_lines": 5000,
+      "reason": "Large config/data files should split by domain or move generated data out of Git."
+    },
+    {
+      "name": "static-markup",
+      "kind": "static-markup",
+      "extensions": [".html", ".htm", ".svg"],
+      "warning_lines": 1500,
+      "critical_lines": 3000,
+      "severe_lines": 5000,
+      "reason": "Static markup should split templates, data, and generated output before becoming monolithic."
+    }
+  ]
+}

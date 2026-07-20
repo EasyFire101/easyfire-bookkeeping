@@ -1,5 +1,6 @@
 // @ts-nocheck
 import intl from 'react-intl-universal';
+import { EASYFIRE_SOURCE_URL } from './legal';
 
 export const getFooterLinks = () => [
   {
@@ -21,5 +22,9 @@ export const getFooterLinks = () => [
   {
     title: 'Bigcapital',
     link: 'http://bigcapital.ly',
+  },
+  {
+    title: 'Source Code (AGPLv3)',
+    link: EASYFIRE_SOURCE_URL,
   },
 ];

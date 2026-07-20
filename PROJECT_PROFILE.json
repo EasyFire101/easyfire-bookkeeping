@@ -1,0 +1,127 @@
+{
+  "foundationVersion": "1.7.0",
+  "foundationStatus": "active-production-candidate",
+  "projectName": "EasyFire Bookkeeping",
+  "projectMemoryId": "a61c6671-6d22-538b-a722-a3874093355e",
+  "projectMemoryAliases": [
+    "easyfire-bookkeeping",
+    "bookkeeping-autonomy-recovery-20260718"
+  ],
+  "projectType": "website",
+  "projectTypeOverlay": "Hosted single-owner accounting application candidate with durable financial data, exact four-file controller authority, immutable release and image identity, schema-2 journal-bound fresh installs, and metadata-backed verified recovery units.",
+  "purpose": "Private, single-owner EasyFire bookkeeping web application, based on Bigcapital (AGPL-3.0), for recording and reporting financial activity with durable self-hosted storage and recoverable operations.",
+  "defaultBranch": "main",
+  "projectMode": "production",
+  "runtimeMode": "hosted",
+  "executionMode": "service",
+  "controlProfile": "hosted-public",
+  "readinessLevel": "full",
+  "dataRisk": "sensitive",
+  "agentMode": "single-agent",
+  "multiAgent": {
+    "status": "not-enabled",
+    "readinessCommand": "node scripts/project-foundation-check.mjs",
+    "upgradeProcedure": "Run the creating-project-foundations skill from Command Center and request multi-agent mode; do not run a project-local npm command that is not installed here."
+  },
+  "deploymentContext": {
+    "audience": "Intended for one owner and administrator. The candidate expects the public hostname to be restricted by pre-existing Cloudflare Access plus native application authentication, with public self-registration disabled. Live acceptance is pending.",
+    "networkExposure": "Candidate contract: pre-existing Cloudflare Access and Tunnel forward to Envoy on Newsec at 127.0.0.1:80; MariaDB and Redis remain on the internal Compose network. The current controller verifies but never mutates the edge.",
+    "trustedComputeBoundary": "Newsec Windows and its Docker runtime are owner-controlled trusted compute. Cloudflare is an external routing and access-control boundary. Neither runtime has been reconciled during the direct takeover.",
+    "availabilityTarget": "Best-effort personal production service with Compose restart: unless-stopped and one exact daily task that invokes the fifth ScheduledBackup controller stage from the sealed installed controller through canonical Windows PowerShell with the journal-bound deployment-owner SID. Maintenance downtime is acceptable; high availability is not required.",
+    "assuranceTarget": "Single-user access control, secret hygiene, exact four-file executable bundles, immutable archive and built-image IDs, SYSTEM/Administrators plus journal-bound deployment-owner SID authority, crash-resumable metadata-backed recovery units with isolated restore, schema-2 journal-bound fresh installs, mandatory Postcheck, and partial-volume-preserving rollback."
+  },
+  "sourceOfTruth": {
+    "code": {
+      "status": "release-candidate",
+      "acceptedRef": "easyfire-forgejo/main",
+      "remoteName": "easyfire-forgejo",
+      "remoteUrl": "private Forgejo repository jonny-admin/easyfire-bookkeeping (machine-specific endpoint is intentionally not published)",
+      "plannedRemoteUrl": "https://github.com/EasyFire101/easyfire-bookkeeping.git",
+      "recoveryPath": "Exact Forgejo main readback defines accepted source and anonymous GitHub readback of the same commit defines AGPL corresponding source. The verified pre-takeover filesystem backup remains the local rollback authority recorded in HANDOFF.md.",
+      "verificationCommand": "git status --short --branch"
+    },
+    "runningRuntime": "No running revision has been reconciled during the direct takeover. For any actual deployment, only an exact completed schema-2 production-action journal plus live Postcheck can define runtime truth; this local checkout and historical Agent Foundry evidence cannot.",
+    "driftCheck": "After exact source-publication readback, inventory the Newsec journal first. Run Postcheck only with that journal's action ID and bound inputs, then compare its archive SHA-256, sealed release manifest, four-file controller authorities, built image IDs, action-derived volume plan, exact task definition including the journal-bound deployment-owner SID, metadata-backed backup receipts, exact port and foreign-volume-consumer inventory, and verify-only edge connector identity with accepted source. The retired startup task must be absent."
+  },
+  "sourceControlPolicy": {
+    "localCommit": "Allowed after validation for durable work when the requested lane is complete.",
+    "createRemote": "Requires explicit approval; scaffolding may record a planned URL but does not create or configure it.",
+    "push": "Requires explicit approval or a standing project-specific instruction that clearly authorizes publication.",
+    "merge": "Requires explicit approval or the project's documented guarded integration workflow.",
+    "forcePush": "Prohibited unless the owner approves the exact branch and impact."
+  },
+  "guardrails": {
+    "foundationCheck": "node scripts/project-foundation-check.mjs",
+    "impactMap": "Docs and disclosure: node --test tests/easyfire-release-readiness.test.mjs. Application or dependency changes: frozen install, format, lint, typecheck, build, focused tests, and fake-data E2E. Production scripts or Compose: PowerShell parse, revised static validator, focused controller crash matrix, disposable Docker, schema-2 transitions, migration single-start/timeout, metadata-backed backup/isolated restore, ScheduledBackup, Postcheck, and partial-volume rollback proof. Runtime changes: exact journal-bound Postcheck.",
+    "sourceSizePolicy": {
+      "policyPath": ".codex/source-size-policy.json",
+      "checkCommand": "node scripts/source-size-guard.mjs",
+      "changedCommand": "node scripts/source-size-guard.mjs --changed",
+      "defaultRule": "Warnings are advisory. When a finding blocks under the declared control profile, split it or record an exact path-scoped policy threshold plus the path, lines and severity, disproportionate-split reason, containment proof, and a re-review trigger."
+    },
+    "contractRegistry": "TypeScript application contracts plus Docker Compose restart policies, the production-action schema-2 fresh-install/resume journal, exact four-file deployment and installed controller bundles, hash-bound environment candidate, built image IDs, exact action-bound volume and port/consumer inventory, migration attempt authority, sealed release manifest, exact daily ScheduledBackup task with its journal-bound deployment-owner SID, crash-resumable metadata-backed recovery units, and focused crash-window regression tests.",
+    "replayHarness": "Synthetic E2E data and a disposable isolated Docker Compose project are required before live production acceptance.",
+    "stateMutationApproval": "Explicit approval is required for deploy, restart, rollback, migration, restore, scheduled-task changes, credentials or integrations, real financial record mutation, and Git publication or integration. Existing-data migration and owner onboarding are separate unsupported scopes; a truly fresh deployment is not login-ready until onboarding is resolved. Cloudflare/DNS/Access/Tunnel/binary/service mutations are outside the production controller and require a separate design and approval."
+  },
+  "securityAndPrivacy": {
+    "securityRequirements": "The candidate requires pre-existing Cloudflare Access for one owner identity, native JWT/application authentication, SIGNUP_DISABLED=true, empty signup allowlists, secrets outside Git, no public inbound host application port, exact controller/image/task/edge identity, sealed release identity, and metadata-backed verified backup/restore before completion. No supported first-owner onboarding path exists for a fresh database. Live verification remains pending.",
+    "sensitiveData": "Real financial records, identity and contact information, attachments, database credentials, JWT and SMTP secrets, and optional provider credentials may exist only in production-owned storage and secret boundaries.",
+    "dependencyRiskCommand": "corepack pnpm audit --prod --audit-level high",
+    "dependencyRiskCurrentEvidence": "The complete production audit on the release candidate reports 45 advisories: 9 low, 36 moderate, 0 high, and 0 critical. Build-only tools are excluded from production dependencies, patched runtime transitives are lock-enforced, and remaining moderate/low findings stay disclosed for future refreshes.",
+    "remoteSecurity": "Exact Forgejo readback defines private accepted-source authority and anonymous GitHub readback of the same commit defines the public AGPL mirror. Secrets, databases, backups, journals, credentials, and user data must never be published."
+  },
+  "reproducibility": {
+    "runtimeVersion": "Node.js 22.23.1 from .nvmrc and pnpm 10.34.5 from packageManager; Docker images use immutable release-specific tags or digests.",
+    "dependencyManifest": "package.json files across the pnpm workspace, pnpm-workspace.yaml, pnpm-lock.yaml, and docker-compose.prod.yml",
+    "lockfilePolicy": "Commit pnpm-lock.yaml and reject release installs that do not use --frozen-lockfile.",
+    "deterministicInstall": "corepack pnpm install --frozen-lockfile"
+  },
+  "operatingModel": {
+    "validation": {
+      "defaultCommand": "node --test tests/easyfire-release-readiness.test.mjs && powershell -NoProfile -ExecutionPolicy Bypass -File scripts/production/validate.ps1 && node scripts/project-foundation-check.mjs && node scripts/source-size-guard.mjs --changed",
+      "impactRule": "Use the impact map to choose focused checks before broad checks."
+    },
+    "runtimeTruth": {
+      "source": "Use sourceOfTruth.runningRuntime for the real running surface; the candidate currently has no reconciled runtime authority.",
+      "driftRequired": true
+    },
+    "stateMutationPolicy": {
+      "approvalRequired": true,
+      "examples": [
+        "deletes",
+        "migrations",
+        "sends/posts",
+        "deploys/restarts",
+        "scheduled-task changes",
+        "paid provider calls",
+        "provider configuration changes"
+      ]
+    },
+    "handoff": {
+      "file": "HANDOFF.md",
+      "requiredFields": [
+        "changed files",
+        "validation",
+        "runtime drift status",
+        "state mutations or approvals",
+        "known risks",
+        "next safe action"
+      ]
+    }
+  },
+  "artifactPolicy": {
+    "ignored": [
+      "logs/",
+      "node_modules/",
+      ".env and .env.* except safe examples",
+      "credentials/",
+      "journals/",
+      "backups/",
+      "releases/",
+      "local databases",
+      "generated build, test, coverage, and restore artifacts"
+    ],
+    "committedFixtures": "Only safe, minimal fixtures needed for tests.",
+    "retention": "Keep runtime journals off Git as deployment authority. Preserve every observed action-derived durable-volume subset and release directory across rollback. Retain each backup as one recovery unit consisting of its compressed dump, SHA-256 sidecar, and authority-bound metadata, and verify restore separately. Treat every pre-existing project-labeled or historical database/cache volume as migration authority, never as a fresh-install target. Summarize or rotate bulky diagnostics."
+  }
+}

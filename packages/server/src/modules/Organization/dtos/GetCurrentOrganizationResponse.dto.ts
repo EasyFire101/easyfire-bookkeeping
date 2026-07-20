@@ -36,7 +36,7 @@ export class OrganizationMetadataResponseDto {
 
   @ApiProperty({
     description: 'Language/locale of the organization',
-    example: 'en-US',
+    example: 'en',
   })
   language: string;
 
@@ -48,13 +48,13 @@ export class OrganizationMetadataResponseDto {
 
   @ApiProperty({
     description: 'Date format used by the organization',
-    example: 'MM/DD/YYYY',
+    example: 'MM/DD/yyyy',
   })
   dateFormat: string;
 
   @ApiProperty({
     description: 'Fiscal year of the organization',
-    example: 'January',
+    example: 'january',
   })
   fiscalYear: string;
 

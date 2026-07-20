@@ -5,7 +5,7 @@
 //   SaleInvoicesActivateBranchesSubscriber,
 //   PaymentMadeActivateBranchesSubscriber,
 //   SaleReceiptsActivateBranchesSubscriber,
-// } from './Subscribers/Activate';
+// } from './subscribers/Activate';
 // import {
 //   BillBranchValidateSubscriber,
 //   VendorCreditBranchValidateSubscriber,
@@ -22,7 +22,7 @@
 //   InvoiceBranchValidateSubscriber,
 //   ContactBranchValidateSubscriber,
 //   InventoryAdjustmentBranchValidateSubscriber
-// } from './Subscribers/Validators';
+// } from './subscribers/Validators';
 
 // export default () => [
 //   BillBranchValidateSubscriber,

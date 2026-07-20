@@ -1,27 +1,10 @@
 name: E2E
 on:
   workflow_dispatch:
-  push:
-    branches:
-      - main
-      - develop
-    paths:
-      - '**.ts'
-      - '**.tsx'
-      - '**/tsconfig.json'
-      - 'pnpm-lock.yaml'
-      - '.github/workflows/e2e.yml'
-  pull_request:
-    paths:
-      - '**.ts'
-      - '**.tsx'
-      - '**/tsconfig.json'
-      - 'pnpm-lock.yaml'
-      - '.github/workflows/e2e.yml'
 
 defaults:
   run:
-    shell: 'bash'
+    shell: "bash"
 
 jobs:
   test_e2e:
@@ -52,11 +35,11 @@ jobs:
 
       - uses: actions/setup-node@v4
         with:
-          node-version: 18.16.1
+          node-version: 22.23.1
 
-      - uses: pnpm/action-setup@v2
+      - uses: pnpm/action-setup@v4
         with:
-          version: 9
+          version: 10.34.5
 
       - name: Get pnpm store directory
         shell: bash
@@ -96,8 +79,7 @@ jobs:
 
           # Application
           BASE_URL=http://localhost:3000
-          JWT_SECRET=test-jwt-secret-for-e2e-testing
-          APP_JWT_SECRET=test-app-jwt-secret
+          APP_JWT_SECRET=test-only-app-jwt-secret-that-is-at-least-sixty-four-characters-long-2026
 
           # Sign-up
           SIGNUP_DISABLED=false
@@ -132,7 +114,14 @@ jobs:
       - name: Start server in background
         run: |
           cd packages/server && pnpm start:prod &
-          sleep 10
+          for attempt in {1..30}; do
+            if curl --fail --silent --show-error http://127.0.0.1:3000/api/system_db >/dev/null; then
+              exit 0
+            fi
+            sleep 2
+          done
+          echo "Server did not become healthy within 60 seconds" >&2
+          exit 1
         env:
           NODE_ENV: production
 

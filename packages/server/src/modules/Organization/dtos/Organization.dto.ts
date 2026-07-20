@@ -7,8 +7,11 @@ import {
   IsOptional,
   IsString,
 } from 'class-validator';
-import { MONTHS } from '../Organization/constants';
-import { ACCEPTED_LOCALES, DATE_FORMATS } from '../Organization.constants';
+import {
+  ACCEPTED_LOCALES,
+  DATE_FORMATS,
+  MONTHS,
+} from '../Organization.constants';
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 
 export class BuildOrganizationDto {
@@ -51,14 +54,14 @@ export class BuildOrganizationDto {
   @IsIn(MONTHS)
   @ApiProperty({
     description: 'Starting month of fiscal year',
-    example: 'January',
+    example: 'january',
   })
   fiscalYear: string;
 
   @IsIn(ACCEPTED_LOCALES)
   @ApiProperty({
     description: 'Language/locale of the organization',
-    example: 'en-US',
+    example: 'en',
   })
   language: string;
 
@@ -66,7 +69,7 @@ export class BuildOrganizationDto {
   @IsIn(DATE_FORMATS)
   @ApiPropertyOptional({
     description: 'Date format used by the organization',
-    example: 'MM/DD/YYYY',
+    example: 'MM/DD/yyyy',
   })
   dateFormat?: string;
 }
@@ -116,7 +119,7 @@ export class UpdateOrganizationDto {
   @IsIn(MONTHS)
   @ApiPropertyOptional({
     description: 'Starting month of fiscal year',
-    example: 'January',
+    example: 'january',
   })
   fiscalYear?: string;
 
@@ -124,7 +127,7 @@ export class UpdateOrganizationDto {
   @IsIn(ACCEPTED_LOCALES)
   @ApiPropertyOptional({
     description: 'Language/locale of the organization',
-    example: 'en-US',
+    example: 'en',
   })
   language?: string;
 
@@ -132,7 +135,7 @@ export class UpdateOrganizationDto {
   @IsIn(DATE_FORMATS)
   @ApiPropertyOptional({
     description: 'Date format used by the organization',
-    example: 'MM/DD/YYYY',
+    example: 'MM/DD/yyyy',
   })
   dateFormat?: string;
 

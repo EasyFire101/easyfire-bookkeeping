@@ -1,0 +1,59 @@
+services:
+  envoy:
+    container_name: !reset null
+    ports: !reset []
+    restart: "no"
+    labels:
+      easyfire.proof.id: ${EASYFIRE_PROOF_ID:?EASYFIRE_PROOF_ID is required}
+
+  webapp:
+    container_name: !reset null
+    restart: "no"
+    labels:
+      easyfire.proof.id: ${EASYFIRE_PROOF_ID:?EASYFIRE_PROOF_ID is required}
+
+  server:
+    container_name: !reset null
+    restart: "no"
+    labels:
+      easyfire.proof.id: ${EASYFIRE_PROOF_ID:?EASYFIRE_PROOF_ID is required}
+
+  database_migration:
+    container_name: !reset null
+    restart: "no"
+    labels:
+      easyfire.proof.id: ${EASYFIRE_PROOF_ID:?EASYFIRE_PROOF_ID is required}
+
+  mysql:
+    container_name: !reset null
+    restart: "no"
+    labels:
+      easyfire.proof.id: ${EASYFIRE_PROOF_ID:?EASYFIRE_PROOF_ID is required}
+
+  redis:
+    container_name: !reset null
+    restart: "no"
+    labels:
+      easyfire.proof.id: ${EASYFIRE_PROOF_ID:?EASYFIRE_PROOF_ID is required}
+
+  gotenberg:
+    container_name: !reset null
+    restart: "no"
+    labels:
+      easyfire.proof.id: ${EASYFIRE_PROOF_ID:?EASYFIRE_PROOF_ID is required}
+
+volumes:
+  mysql:
+    name: !reset null
+    labels:
+      easyfire.proof.id: ${EASYFIRE_PROOF_ID:?EASYFIRE_PROOF_ID is required}
+
+  redis:
+    name: !reset null
+    labels:
+      easyfire.proof.id: ${EASYFIRE_PROOF_ID:?EASYFIRE_PROOF_ID is required}
+
+networks:
+  bigcapital_network:
+    labels:
+      easyfire.proof.id: ${EASYFIRE_PROOF_ID:?EASYFIRE_PROOF_ID is required}

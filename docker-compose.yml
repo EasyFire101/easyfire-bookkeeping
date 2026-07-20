@@ -3,7 +3,7 @@
 # Avoid using this file in your production environment.
 # We're exposing here sensitive ports and mounting code volumes for rapid development and debugging of the server stack.
 
-version: '3.3'
+version: "3.3"
 
 services:
   mariadb:
@@ -17,9 +17,9 @@ services:
     volumes:
       - mysql:/var/lib/mysql
     expose:
-      - '3306'
+      - "3306"
     ports:
-      - '3306:3306'
+      - "3306:3306"
     deploy:
       restart_policy:
         condition: unless-stopped
@@ -28,9 +28,9 @@ services:
     build:
       context: ./docker/redis
     expose:
-      - '6379'
+      - "6379"
     ports:
-      - '6379:6379'
+      - "6379:6379"
     volumes:
       - redis:/data
     deploy:
@@ -39,8 +39,10 @@ services:
 
   gotenberg:
     image: gotenberg/gotenberg:7
+    profiles:
+      - pdf
     ports:
-      - '9000:3000'
+      - "9000:3000"
 
 # Volumes
 volumes:

@@ -1,0 +1,23 @@
+# Cloudflare Tunnel configuration for EasyFire Bookkeeping
+# Rename to config.yml and place in the cloudflared config directory
+# (typically %USERPROFILE%\.cloudflared\config.yml on Windows).
+#
+# Pre-requisites (gated -- do NOT execute during this workspace phase):
+# 1. Authenticate:  cloudflared tunnel login
+# 2. Create tunnel: cloudflared tunnel create easyfire-bookkeeping
+# 3. Copy the credentials file to the cloudflared directory and note its UUID.
+# 4. Route DNS:     cloudflared tunnel route dns easyfire-bookkeeping bookkeeping.easyfire.fyi
+# 5. Validate:      cloudflared tunnel ingress validate
+# 6. Install the pinned LocalSystem cloudflared service through a separately approved edge procedure.
+#    The retired startup-task helpers must never be used.
+
+tunnel: PLACEHOLDER_TUNNEL_UUID
+credentials-file: C:\path\to\cloudflared\PLACEHOLDER_TUNNEL_UUID.json
+
+originRequest:
+  connectTimeout: 30s
+
+ingress:
+  - hostname: bookkeeping.easyfire.fyi
+    service: http://localhost:80
+  - service: http_status:404

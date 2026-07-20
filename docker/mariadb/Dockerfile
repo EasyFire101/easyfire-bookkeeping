@@ -1,7 +1,7 @@
-FROM mariadb:10.2
+FROM mariadb:11.8.6@sha256:78a5047d3ba33975f183f183c2464cc7f1eab13ec8667e57cc9a5821d6da7577
 
 USER root
-ADD my.cnf /etc/mysql/conf.d/my.cnf
+COPY --chmod=0644 my.cnf /etc/mysql/conf.d/my.cnf
 
 ARG MYSQL_DATABASE=default_database
 ARG MYSQL_USER=default_user
@@ -22,5 +22,5 @@ COPY ./docker-entrypoint.sh /docker-entrypoint-initdb.d/docker-initialize.sh
 RUN chown -R mysql:root /docker-entrypoint-initdb.d
 RUN chown -R mysql:root /scripts
 
-CMD ["mysqld"]
+CMD ["mariadbd"]
 EXPOSE 3306

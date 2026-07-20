@@ -19,5 +19,9 @@
     "dev": "npm run build -- --watch"
   },
   "author": "",
-  "license": "ISC"
+  "license": "ISC",
+  "devDependencies": {
+    "tsup": "^8.3.0",
+    "typescript": "^5.1.3"
+  }
 }
