@@ -37,8 +37,10 @@ Out of scope:
 - automated production owner bootstrap or owner recovery;
 - adoption or in-place upgrade of any historical, project-labeled, or
   action-derived MariaDB/Redis volume;
-- the separate blue/green logical migration required for existing data;
-- Cloudflare Access, Tunnel, DNS, cloudflared binary, or service mutation;
+- implicit or in-place migration of existing data outside the separate
+  `MigrationSource` and blue/green authority boundary;
+- Cloudflare application, Tunnel, DNS, or binary replacement; the approved
+  exact stopped-service repair remains a separate live operation;
 - broad cleanup or deletion;
 - Bigcapital upstream mutation.
 
@@ -50,16 +52,17 @@ Out of scope:
   this takeover.
 - Action-derived volumes are durable authority, never cleanup artifacts.
   Rollback preserves the exact observed subset even after partial creation.
-- Existing-data import or migration is excluded and requires a separate
-  blue/green logical migration with backup, isolated restore, compatibility,
-  and rollback proof.
+- Existing-data import is authorized only through the separate blue/green
+  controller. The source implementation now binds an exact `MigrationSource`
+  backup and candidate-only resources, but no live import or cutover has run.
 - Each backup recovery unit is its compressed dump, adjacent SHA-256 sidecar,
   and adjacent authority-bound metadata; retention must keep them together.
 
 ## Security And Privacy
 
 - The intended edge is pre-existing Cloudflare Access and Tunnel restricted to
-  one owner identity. Its actual live identity remains to be reconciled.
+  one owner identity. Read-only API proof shows the sole owner policy, ingress,
+  DNS, and tunnel token are exact; the local cloudflared service is stopped.
 - Native application authentication remains required. Production signup is
   disabled and both signup allowlists must be empty.
 - Newsec and its Docker runtime are owner-controlled trusted compute, but trust
@@ -162,7 +165,9 @@ Out of scope:
   and Newsec/runtime reconciliation.
 - Same accepted commit on Forgejo and public GitHub.
 - Anonymous corresponding-source readback.
-- Read-only Newsec journal comparison and authenticated live acceptance.
+- Read-only Newsec journal comparison is complete; authenticated live
+  acceptance remains blocked by the unavailable SSH route and required owner
+  password entry.
 - A fresh-install production Postcheck only if a later production Action is
   actually necessary and compatible.
 - A separately designed and proven first-owner onboarding path before any truly
@@ -178,6 +183,7 @@ turn the candidate into a deployed runtime or authorize real bookkeeping data.
 Recovery starts with the verified full filesystem checkpoint in `HANDOFF.md`.
 Fresh-install production recovery uses the schema-2 action journal, sealed
 release manifest, verified backup receipts, and bounded rollback. Existing-data
-migration, manual owner onboarding, edge repair, restore into a durable target,
-and exact synthetic-record deletion each remain separate scopes requiring
-their own evidence and approval boundary.
+live migration, manual owner onboarding, edge repair, restore into a durable
+target, and exact synthetic-record deletion each remain proof-gated operations.
+The approved live scope did not cross those gates because no current
+isolated-restorable backup exists.

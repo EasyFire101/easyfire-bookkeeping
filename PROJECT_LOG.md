@@ -256,7 +256,7 @@ noncanonical SID fails before backup work.
 
 ### Record final local proof without claiming runtime state
 
-- Complete project-level suite: 69/69 passed.
+- Complete project-level suite: 79/79 passed after the recovery patch.
 - Static validator: 101/101 passed.
 - Disposable Docker proof: `b37426f03a8841d9923b853db5f40a08` with passed built
   authentication, backup/restore, and exact cleanup evidence.
@@ -291,3 +291,27 @@ noncanonical SID fails before backup work.
   blue/green logical migration project, followed by native authenticated
   synthetic acceptance. The fresh-install controller must not run against the
   existing volumes.
+
+## Direct recovery implementation and live stop - 2026-07-20
+
+- Added a caller-bound `MigrationSource` full-backup role that verifies exact
+  legacy Compose, environment, container, image, and volume identities without
+  requiring a schema-2 deployment journal. Its metadata is accepted by the
+  isolated restore verifier in a separate deterministic migration namespace,
+  and migration-source recovery units are pinned against retention.
+- Added a source-only blue/green authority controller with Plan, caller planning
+  rehearsal, and Rollback states. It binds the target release/images and both
+  task XML recovery units, emits only migration-ID-derived candidate writes and
+  exact rollback operations, and does not execute Docker or Scheduled Tasks.
+  Cutover is unconditionally blocked with `LIVE_EXECUTOR_PROOF_REQUIRED` until a
+  trusted live executor can produce identity-bound receipts.
+- Read-only Cloudflare API proof corrected the earlier edge diagnosis: the sole
+  protected owner email already matches the exact Access policy, and tunnel
+  ingress, DNS, and the service token are exact. The prior browser selected a
+  different Google identity. The tunnel is down because the exact cloudflared
+  service is stopped, not because the policy or token drifted.
+- No live repair occurred. Newsec's Tailscale SSH service stopped accepting
+  port 22 before the exact task/service checkpoint or current backup could be
+  established. This is a real infrastructure blocker, so backup, rehearsal,
+  task repair/retirement, service start, native login, and cutover remain
+  fail-closed. Every original volume, journal, release, and backup was preserved.

@@ -1,5 +1,6 @@
 import assert from "node:assert/strict";
 import { spawnSync } from "node:child_process";
+import { createHash } from "node:crypto";
 import {
   existsSync,
   mkdirSync,
@@ -13,10 +14,36 @@ import { dirname, resolve } from "node:path";
 import { performance } from "node:perf_hooks";
 import test from "node:test";
 import { fileURLToPath } from "node:url";
+import { gzipSync } from "node:zlib";
 
 const root = resolve(dirname(fileURLToPath(import.meta.url)), "..");
 const modulePath = resolve(root, "deploy/windows/production-io.psm1");
+const productionStatePath = resolve(
+  root,
+  "deploy/windows/production-state.psm1",
+);
+const backupIntegrityPath = resolve(
+  root,
+  "scripts/production/backup-integrity.psm1",
+);
+const backupScriptPath = resolve(root, "scripts/production/backup.ps1");
+const restoreScriptPath = resolve(
+  root,
+  "scripts/production/restore-verify.ps1",
+);
 const psQuote = (value) => `'${String(value).replaceAll("'", "''")}'`;
+
+function loadPowerShellFunctions(path) {
+  return [
+    `$tokens = $null; $errors = $null; $ast = [Management.Automation.Language.Parser]::ParseFile(${psQuote(path)}, [ref]$tokens, [ref]$errors);`,
+    `if (@($errors).Count -ne 0) { throw ('PowerShell parse errors: ' + (@($errors) -join '; ')) };`,
+    `$ast.FindAll({ param($node) $node -is [Management.Automation.Language.FunctionDefinitionAst] }, $true) | ForEach-Object { Invoke-Expression $_.Extent.Text };`,
+  ].join(" ");
+}
+
+function sha256(value) {
+  return createHash("sha256").update(value).digest("hex").toUpperCase();
+}
 
 function invokePowerShell(command) {
   return spawnSync(
@@ -579,4 +606,372 @@ test("connector correlation accepts one local client and rejects ambiguous clien
   } finally {
     rmSync(fixtureRoot, { recursive: true, force: true });
   }
+});
+
+test("MigrationSource backup verifies exact caller-bound legacy MariaDB authority", () => {
+  const fixtureRoot = mkdtempSync(
+    resolve(tmpdir(), "easyfire-migration-source-authority-"),
+  );
+  const composeFile = resolve(fixtureRoot, "docker-compose.prod.yml");
+  const envFile = resolve(fixtureRoot, ".env");
+  const containerFixture = resolve(fixtureRoot, "container.json");
+  const volumeFixture = resolve(fixtureRoot, "volume.json");
+  const migrationId = "11111111-2222-4333-8444-555555555555";
+  const containerId = "a".repeat(64);
+  const imageId = `sha256:${"b".repeat(64)}`;
+  const imageReference = "mariadb:11.4.5";
+  const volumeName = "easyfire_prod_mysql";
+  const projectName = "easyfire-bookkeeping-prod";
+
+  try {
+    mkdirSync(resolve(fixtureRoot, "backups"));
+    writeFileSync(
+      composeFile,
+      "services:\n  mysql:\n    image: mariadb:11.4.5\n",
+    );
+    writeFileSync(
+      envFile,
+      "SYSTEM_DB_NAME=bigcapital_system\nTENANT_DB_NAME_PERFIX=bigcapital_tenant_\nSECRET=never-print-me\n",
+    );
+    writeFileSync(
+      containerFixture,
+      JSON.stringify([
+        {
+          Id: containerId,
+          Name: "/legacy-mysql",
+          Image: imageId,
+          Config: {
+            Image: imageReference,
+            Labels: {
+              "com.docker.compose.project": projectName,
+              "com.docker.compose.service": "mysql",
+            },
+          },
+          State: { Status: "running", Health: { Status: "healthy" } },
+          Mounts: [
+            {
+              Type: "volume",
+              Name: volumeName,
+              Destination: "/var/lib/mysql",
+              RW: true,
+            },
+          ],
+        },
+      ]),
+    );
+    writeFileSync(
+      volumeFixture,
+      JSON.stringify([
+        {
+          Name: volumeName,
+          Driver: "local",
+          Scope: "local",
+          Labels: {
+            "com.docker.compose.project": projectName,
+            "com.docker.compose.volume": "mysql-data",
+          },
+        },
+      ]),
+    );
+
+    const fakeDocker = [
+      `function global:docker {`,
+      `  $call = @($args) -join ' ';`,
+      `  if ($call -ceq ${psQuote(`compose -f ${composeFile} --env-file ${envFile} -p ${projectName} ps -q mysql`)}) { $global:LASTEXITCODE = 0; Write-Output '${containerId}'; return };`,
+      `  if ($call -ceq 'inspect ${containerId}') { $global:LASTEXITCODE = 0; Get-Content -LiteralPath ${psQuote(containerFixture)} -Raw; return };`,
+      `  if ($call -ceq 'volume inspect ${volumeName}') { $global:LASTEXITCODE = 0; Get-Content -LiteralPath ${psQuote(volumeFixture)} -Raw; return };`,
+      `  $global:LASTEXITCODE = 71; throw ('Unexpected fake Docker call: ' + $call);`,
+      `};`,
+    ].join(" ");
+    const authorityCommand = [
+      `$ErrorActionPreference = 'Stop';`,
+      `Import-Module ${psQuote(productionStatePath)} -Force -ErrorAction Stop;`,
+      `Import-Module ${psQuote(backupIntegrityPath)} -Force -ErrorAction Stop;`,
+      loadPowerShellFunctions(backupScriptPath),
+      fakeDocker,
+      `$authority = Get-EasyFireMigrationSourceMysqlAuthority -ExactAuthorityRoot ${psQuote(fixtureRoot)} -ExactComposeFile ${psQuote(composeFile)} -ExactEnvFile ${psQuote(envFile)} -ExactProjectName ${psQuote(projectName)} -CanonicalMigrationId ${psQuote(migrationId)} -ExpectedContainerId ${psQuote(containerId)} -ExpectedImageReference ${psQuote(imageReference)} -ExpectedImageId ${psQuote(imageId)} -ExpectedVolumeName ${psQuote(volumeName)} -ExpectedVolumeDestination '/var/lib/mysql';`,
+      `$authority | ConvertTo-Json -Compress`,
+    ].join(" ");
+    const result = invokePowerShell(authorityCommand);
+    assert.equal(result.status, 0, `${result.stdout}\n${result.stderr}`);
+    const authority = JSON.parse(result.stdout);
+    assert.deepEqual(authority, {
+      MigrationId: migrationId,
+      AuthorityRoot: fixtureRoot,
+      ComposeProject: projectName,
+      ComposeFile: composeFile,
+      ComposeFileSha256: sha256(readFileSync(composeFile)),
+      EnvFile: envFile,
+      EnvFileSha256: sha256(readFileSync(envFile)),
+      MysqlContainerId: containerId,
+      MysqlContainerName: "legacy-mysql",
+      MysqlImageReference: imageReference,
+      MysqlImageId: imageId,
+      MysqlVolumeName: volumeName,
+      MysqlVolumeDestination: "/var/lib/mysql",
+      MysqlVolumeComposeKey: "mysql-data",
+    });
+    assert.doesNotMatch(result.stdout, /never-print-me/);
+
+    const unhealthyFixture = JSON.parse(readFileSync(containerFixture, "utf8"));
+    unhealthyFixture[0].State.Health.Status = "unhealthy";
+    writeFileSync(containerFixture, JSON.stringify(unhealthyFixture));
+    const unhealthy = invokePowerShell(authorityCommand);
+    assert.notEqual(unhealthy.status, 0);
+    assert.match(
+      `${unhealthy.stdout}\n${unhealthy.stderr}`,
+      /running and healthy/i,
+    );
+  } finally {
+    rmSync(fixtureRoot, { recursive: true, force: true });
+  }
+});
+
+test("MigrationSource metadata binds migration inputs and derives isolated restore authority", () => {
+  const fixtureRoot = mkdtempSync(
+    resolve(tmpdir(), "easyfire-migration-source-restore-"),
+  );
+  const composeFile = resolve(fixtureRoot, "docker-compose.prod.yml");
+  const envFile = resolve(fixtureRoot, ".env");
+  const migrationId = "aaaaaaaa-bbbb-4ccc-8ddd-eeeeeeeeeeee";
+  const operationId = "12345678-9abc-4def-8123-456789abcdef";
+  const containerId = "1".repeat(64);
+  const imageId = `sha256:${"2".repeat(64)}`;
+  const imageReference = "mariadb:11.4.5";
+  const volumeName = "easyfire_prod_mysql";
+  const projectName = "easyfire-bookkeeping-prod";
+  const backupFile = resolve(
+    fixtureRoot,
+    `mysql-${projectName}-full-${operationId}.sql.gz`,
+  );
+  const sidecarFile = backupFile.replace(/\.sql\.gz$/, ".sha256");
+  const metadataFile = backupFile.replace(/\.sql\.gz$/, ".metadata.json");
+
+  try {
+    writeFileSync(
+      composeFile,
+      "services:\n  mysql:\n    image: mariadb:11.4.5\n",
+    );
+    writeFileSync(
+      envFile,
+      "SYSTEM_DB_NAME=bigcapital_system\nTENANT_DB_NAME_PERFIX=bigcapital_tenant_\nSECRET=never-print-me\n",
+    );
+    const backupBytes = gzipSync(
+      "-- safe synthetic migration backup fixture\n",
+    );
+    const backupHash = sha256(backupBytes);
+    writeFileSync(backupFile, backupBytes);
+    writeFileSync(
+      sidecarFile,
+      `${backupHash}  ${backupFile.split(/[\\/]/).at(-1)}\n`,
+      "ascii",
+    );
+    const metadata = {
+      SchemaVersion: 1,
+      MigrationId: migrationId,
+      InvocationRole: "MigrationSource",
+      BackupOperationId: operationId,
+      BackupMode: "full",
+      AuthorityRoot: fixtureRoot,
+      ComposeProject: projectName,
+      ComposeFile: composeFile,
+      ComposeFileSha256: sha256(readFileSync(composeFile)),
+      EnvFile: envFile,
+      EnvFileSha256: sha256(readFileSync(envFile)),
+      MysqlContainerId: containerId,
+      MysqlContainerName: "legacy-mysql",
+      MysqlImageReference: imageReference,
+      MysqlImageId: imageId,
+      MysqlVolumeName: volumeName,
+      MysqlVolumeDestination: "/var/lib/mysql",
+      MysqlVolumeComposeKey: "mysql-data",
+      BackupFile: backupFile,
+      BackupSha256: backupHash,
+    };
+    writeFileSync(metadataFile, `${JSON.stringify(metadata)}\n`, "utf8");
+
+    const sourceAuthorityPath = resolve(fixtureRoot, "source-authority.json");
+    writeFileSync(
+      sourceAuthorityPath,
+      JSON.stringify({
+        ...metadata,
+        SchemaVersion: undefined,
+        InvocationRole: undefined,
+        BackupOperationId: undefined,
+        BackupMode: undefined,
+        BackupFile: undefined,
+        BackupSha256: undefined,
+      }),
+    );
+    const metadataCommand = [
+      `$ErrorActionPreference = 'Stop';`,
+      loadPowerShellFunctions(backupScriptPath),
+      `$sourceAuthority = Get-Content -LiteralPath ${psQuote(sourceAuthorityPath)} -Raw | ConvertFrom-Json;`,
+      `$pair = [pscustomobject]@{ BackupFile = ${psQuote(backupFile)}; Sha256 = ${psQuote(backupHash)} };`,
+      `$document = New-EasyFireBackupMetadataDocument -Pair $pair -OperationId ${psQuote(operationId)} -Mode 'full' -Role 'MigrationSource' -MigrationId ${psQuote(migrationId)} -SourceAuthority $sourceAuthority;`,
+      `$document | ConvertTo-Json -Depth 8 -Compress`,
+    ].join(" ");
+    const metadataResult = invokePowerShell(metadataCommand);
+    assert.equal(
+      metadataResult.status,
+      0,
+      `${metadataResult.stdout}\n${metadataResult.stderr}`,
+    );
+    assert.deepEqual(JSON.parse(metadataResult.stdout), metadata);
+    assert.doesNotMatch(metadataResult.stdout, /never-print-me/);
+
+    const bindingCommand = [
+      `$ErrorActionPreference = 'Stop';`,
+      `Import-Module ${psQuote(productionStatePath)} -Force -ErrorAction Stop;`,
+      `Import-Module ${psQuote(backupIntegrityPath)} -Force -ErrorAction Stop;`,
+      loadPowerShellFunctions(backupScriptPath),
+      `$binding = Test-EasyFireBackupMetadataBinding -BackupFile ${psQuote(backupFile)};`,
+      `$binding | ConvertTo-Json -Depth 8 -Compress`,
+    ].join(" ");
+    const bindingResult = invokePowerShell(bindingCommand);
+    assert.equal(
+      bindingResult.status,
+      0,
+      `${bindingResult.stdout}\n${bindingResult.stderr}`,
+    );
+    const binding = JSON.parse(bindingResult.stdout);
+    assert.equal(binding.Valid, true, binding.Reason);
+    assert.equal(binding.Document.InvocationRole, "MigrationSource");
+
+    const restoreCommand = [
+      `$ErrorActionPreference = 'Stop';`,
+      `Import-Module ${psQuote(backupIntegrityPath)} -Force -ErrorAction Stop;`,
+      loadPowerShellFunctions(restoreScriptPath),
+      `$script:MariaDbImage = 'mariadb:11.8.6@sha256:78a5047d3ba33975f183f183c2464cc7f1eab13ec8667e57cc9a5821d6da7577';`,
+      `$pair = Test-EasyFireBackupPair -BackupFile ${psQuote(backupFile)};`,
+      `$authority = Get-EasyFireRestoreAuthority -BackupPair $pair;`,
+      `$authority | ConvertTo-Json -Depth 8 -Compress`,
+    ].join(" ");
+    const restoreResult = invokePowerShell(restoreCommand);
+    assert.equal(
+      restoreResult.status,
+      0,
+      `${restoreResult.stdout}\n${restoreResult.stderr}`,
+    );
+    const restoreAuthority = JSON.parse(restoreResult.stdout);
+    assert.equal(restoreAuthority.AuthorityKind, "migration");
+    assert.equal(restoreAuthority.ActionId, migrationId);
+    assert.equal(restoreAuthority.MigrationId, migrationId);
+    assert.match(
+      restoreAuthority.ContainerName,
+      /^easyfire-migration-restore-verify-/,
+    );
+    assert.equal(restoreAuthority.Document.MigrationId, migrationId);
+    assert.equal(restoreAuthority.Document.AuthorityKind, "migration");
+
+    const environmentAuthorityCommand = (candidateEnvFile) =>
+      [
+        `$ErrorActionPreference = 'Stop';`,
+        `Import-Module ${psQuote(backupIntegrityPath)} -Force -ErrorAction Stop;`,
+        loadPowerShellFunctions(restoreScriptPath),
+        `$script:MariaDbImage = 'mariadb:11.8.6@sha256:78a5047d3ba33975f183f183c2464cc7f1eab13ec8667e57cc9a5821d6da7577';`,
+        `$pair = Test-EasyFireBackupPair -BackupFile ${psQuote(backupFile)};`,
+        `$authority = Get-EasyFireRestoreAuthority -BackupPair $pair;`,
+        `Assert-EasyFireMigrationRestoreEnvironmentAuthority -Authority $authority -CandidateEnvFile ${psQuote(candidateEnvFile)}`,
+      ].join(" ");
+    const exactEnvironment = invokePowerShell(
+      environmentAuthorityCommand(envFile),
+    );
+    assert.equal(
+      exactEnvironment.status,
+      0,
+      `${exactEnvironment.stdout}\n${exactEnvironment.stderr}`,
+    );
+
+    const alternateEnvFile = resolve(fixtureRoot, "alternate.env");
+    writeFileSync(alternateEnvFile, readFileSync(envFile));
+    const alternateEnvironment = invokePowerShell(
+      environmentAuthorityCommand(alternateEnvFile),
+    );
+    assert.notEqual(alternateEnvironment.status, 0);
+    assert.match(
+      `${alternateEnvironment.stdout}\n${alternateEnvironment.stderr}`,
+      /exact metadata-bound EnvFile/i,
+    );
+
+    writeFileSync(
+      envFile,
+      "SYSTEM_DB_NAME=changed_system\nTENANT_DB_NAME_PERFIX=changed_tenant_\n",
+    );
+    const changedEnvironment = invokePowerShell(
+      environmentAuthorityCommand(envFile),
+    );
+    assert.notEqual(changedEnvironment.status, 0);
+    assert.match(
+      `${changedEnvironment.stdout}\n${changedEnvironment.stderr}`,
+      /EnvFileSha256/i,
+    );
+
+    const proofConflict = invokePowerShell(
+      [
+        `$ErrorActionPreference = 'Stop';`,
+        `Import-Module ${psQuote(backupIntegrityPath)} -Force -ErrorAction Stop;`,
+        loadPowerShellFunctions(restoreScriptPath),
+        `$pair = Test-EasyFireBackupPair -BackupFile ${psQuote(backupFile)};`,
+        `Get-EasyFireRestoreAuthority -BackupPair $pair -ExactExpectedProofId '${"f".repeat(32)}'`,
+      ].join(" "),
+    );
+    assert.notEqual(proofConflict.status, 0);
+    assert.match(
+      `${proofConflict.stdout}\n${proofConflict.stderr}`,
+      /ExpectedProofId cannot be supplied for a migration backup/i,
+    );
+
+    writeFileSync(
+      metadataFile,
+      `${JSON.stringify({ ...metadata, BackupMode: "schema" })}\n`,
+      "utf8",
+    );
+    const schemaOnlyConflict = invokePowerShell(restoreCommand);
+    assert.notEqual(schemaOnlyConflict.status, 0);
+    assert.match(
+      `${schemaOnlyConflict.stdout}\n${schemaOnlyConflict.stderr}`,
+      /does not bind exact source authority/i,
+    );
+  } finally {
+    rmSync(fixtureRoot, { recursive: true, force: true });
+  }
+});
+
+test("MigrationSource skips retention while existing backup roles remain unchanged", () => {
+  const source = readFileSync(backupScriptPath, "utf8");
+  assert.equal(
+    source.match(/\bInvoke-EasyFireBackupRetention\b/g)?.length,
+    2,
+    "general retention may appear only in its definition and the role-aware gate",
+  );
+  assert.equal(
+    source.match(/\bInvoke-EasyFireRoleAwareBackupRetention\b/g)?.length,
+    4,
+    "all three publication paths must use the role-aware gate",
+  );
+  const command = [
+    `$ErrorActionPreference = 'Stop';`,
+    loadPowerShellFunctions(backupScriptPath),
+    `$script:RetentionCalls = @();`,
+    `function global:Invoke-EasyFireBackupRetention { param([string]$ExactBackupRoot,[string]$ExactProductionRoot,[string]$ExactProjectName,[string]$Mode,[int]$Count) $script:RetentionCalls += [pscustomobject]@{ BackupRoot=$ExactBackupRoot; ProductionRoot=$ExactProductionRoot; Project=$ExactProjectName; Mode=$Mode; Count=$Count } };`,
+    `foreach ($role in @('MigrationSource','Scheduled','Baseline','Emergency','DisposableProof')) { Invoke-EasyFireRoleAwareBackupRetention -Role $role -ExactBackupRoot 'C:\\authority\\backups' -ExactProductionRoot 'C:\\authority' -ExactProjectName 'easyfire-bookkeeping-prod' -Mode 'full' -Count 30 };`,
+    `[pscustomobject]@{ Count=@($script:RetentionCalls).Count; Calls=@($script:RetentionCalls) } | ConvertTo-Json -Depth 8 -Compress`,
+  ].join(" ");
+  const result = invokePowerShell(command);
+  assert.equal(result.status, 0, `${result.stdout}\n${result.stderr}`);
+  const proof = JSON.parse(result.stdout);
+  assert.equal(proof.Count, 4);
+  assert.deepEqual(
+    proof.Calls.map((call) => call.Project),
+    Array(4).fill("easyfire-bookkeeping-prod"),
+  );
+  assert.deepEqual(
+    proof.Calls.map((call) => call.Mode),
+    Array(4).fill("full"),
+  );
+  assert.deepEqual(
+    proof.Calls.map((call) => call.Count),
+    Array(4).fill(30),
+  );
 });

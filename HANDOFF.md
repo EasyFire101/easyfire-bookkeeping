@@ -4,12 +4,12 @@
 
 **Owner:** Direct Codex takeover for EasyFire
 
-**State:** Source-published release candidate. Exact Forgejo and anonymous
-GitHub readback, not this document, are publication authority. Read-only hosted
-runtime reconciliation found a healthy older installation whose real durable
-volumes and legacy control state are incompatible with this fresh-install-only
-controller. Production was not changed and native application acceptance was
-not reached because the tested owner identity was denied by Cloudflare Access.
+**State:** Source-published candidate plus uncommitted Direct-Codex recovery
+work. Exact Forgejo and anonymous GitHub readback, not this document, are
+publication authority. Recovery source now includes an authority-bound legacy
+backup/restore role and blue/green proof gate. Production was not changed:
+Newsec SSH stopped accepting connections before a current backup checkpoint,
+live rehearsal, task/service repair, or native application acceptance.
 
 ## Source state
 
@@ -128,7 +128,7 @@ The current dependency and application snapshot has these recorded results:
   `js-cookie@2.2.1` entry.
 - Focused production tests: 31/31 passed.
 - Static no-deploy validator: 101/101 passed.
-- Complete project-level test suite: 69/69 passed.
+- Complete project-level test suite: 79/79 passed after the recovery patch.
 - Scoped Prettier: 71/71 changed/new supported files passed; scoped web lint:
   6/6 changed files passed; foundation: 4/4; source-size guard: complete with 0
   blockers and 2 advisory split candidates; `git diff --check`: clean;
@@ -160,8 +160,12 @@ The current dependency and application snapshot has these recorded results:
 - The only volume exception is an interrupted current Action: a resume may see
   the exact two ActionId-derived volumes already bound to the same valid
   schema-2 journal at a compatible phase. It cannot adopt any other volume.
-- Existing MariaDB data needs a separate blue/green logical migration design,
-  backup and restore proof, explicit approval, and rollback plan. Never mount
+- Existing MariaDB data uses the separate `MigrationSource` backup role and
+  `migration-action.ps1` Plan/Rehearse/Cutover/Rollback authority. The tool
+  derives candidate-only resources, binds the target release/images and task
+  recovery XML, and preserves exact rollback operations. It does not execute
+  Docker or Scheduled Tasks, and Cutover is intentionally blocked with
+  `LIVE_EXECUTOR_PROOF_REQUIRED` until trusted live receipts exist. Never mount
   the old data directory under the candidate MariaDB image.
 - The production controller verifies but never mutates Cloudflare, Access,
   Tunnel, DNS, the cloudflared binary, or the Windows cloudflared service.
@@ -183,13 +187,15 @@ The current dependency and application snapshot has these recorded results:
 - The daily backup task's last result was failure and only an older recovery
   pair was present. The retired startup task is also still registered. Neither
   task was changed.
-- The existing cloudflared Windows service embeds a tunnel credential in its
-  command line. The credential is intentionally omitted here and must be rotated
-  in a separate edge-repair scope before a future release.
-- The public hostname reaches Cloudflare Access. The tested primary signed-in
-  Google identity was denied by the current policy, so native application login
-  and authenticated bookkeeping behavior could not be accepted. The repository
-  documents an email-OTP owner policy template but no canonical owner address.
+- Read-only API proof shows the protected credential file's sole owner email
+  already matches the one exact allow policy. The earlier denial used a
+  different Google identity; the correct policy was not rewritten.
+- Tunnel ingress, DNS, and the service token match the exact tunnel. The tunnel
+  is down because `EasyFireBookkeepingCloudflared` is stopped. No token value was
+  exposed and no unnecessary rotation was performed.
+- Tailscale still reaches Newsec, but SSH stopped accepting port 22 before the
+  approved recovery checkpoint could be created. No task, service, container,
+  volume, journal, release, backup, or record was changed.
 - No database query or real bookkeeping-record read was performed during this
   reconciliation.
 
@@ -221,15 +227,18 @@ The current dependency and application snapshot has these recorded results:
 - The healthy hosted revision is older than this candidate and uses incompatible
   journals and existing durable volumes. Its failed backup task must be repaired
   and a current verified recovery unit established before migration work.
-- Cloudflare Access owner identity and the embedded tunnel credential require a
-  separate edge correction. Native application authentication remains unproven.
+- The Access policy and tunnel token are already exact. Starting and proving the
+  stopped cloudflared service plus native application authentication remain
+  unproven.
 
 ## Next safe action
 
-Verify exact Forgejo and anonymous GitHub readback of the corrective source
-commit. Then treat the existing hosted installation as a migration project, not
-a fresh deployment: repair and prove backups, reconcile and rotate the edge
-credential and owner Access policy, design and dry-run a blue/green logical
-MariaDB migration with rollback, retire the legacy startup task, and only then
-perform native authenticated acceptance. Do not run the fresh-install Action
-against the existing volumes.
+Restore Newsec's maintained Tailscale SSH service first. Create and verify the
+exact task/service recovery checkpoint, then use `MigrationSource` to establish
+the current isolated-restorable backup. Execute the candidate-only rehearsal
+operations through a future trusted executor and produce all five live proof
+receipts before implementing cutover. Start and
+verify the existing exact cloudflared service, repair only the named backup task,
+retire only the named startup task, and have the owner select the allowlisted
+Google identity and enter the native password. Do not run the fresh-install
+Action against the existing volumes.

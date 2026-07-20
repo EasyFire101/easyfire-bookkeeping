@@ -4,12 +4,12 @@
 
 **Updated:** 2026-07-20
 
-**Status:** Source-published Direct Codex takeover candidate with local source,
-build, dependency-security, disposable recovery, and independent-review proof
-complete. Read-only hosted reconciliation found a healthy older installation
-that cannot be upgraded by this fresh-install-only controller. Production was
-not changed. Cloudflare Access denied the tested primary signed-in identity, so
-native application acceptance is still blocked.
+**Status:** Direct-Codex recovery source now includes an authority-bound
+`MigrationSource` backup/isolated-restore path and a fail-closed blue/green
+migration plan/proof gate. Read-only hosted reconciliation still finds a healthy
+older installation. No production cutover occurred: Newsec's Tailscale SSH
+service stopped accepting connections before a current backup or recovery
+checkpoint could be established, so every runtime write gate remains closed.
 
 This file is the source of truth for current ownership, release, and runtime
 state. Agent Foundry is bypassed and is historical provenance only. Older Agent
@@ -50,13 +50,15 @@ querying the database or changing the host:
   fresh-install-only controller and make a new Action a hard stop.
 - The daily backup task's last result is failure and only an older recovery pair
   was observed. The retired startup task is still registered.
-- The cloudflared Windows service embeds a tunnel credential in its command
-  line. The credential is intentionally not recorded and needs separate
-  rotation before a future release.
-- The public hostname reaches Cloudflare Access, but the tested primary
-  signed-in Google identity is denied by the current policy. Native application
-  authentication was therefore not reached. The repository's intended Access
-  template uses email OTP for one owner but contains no canonical owner email.
+- The protected Cloudflare credential file contains one well-formed owner email,
+  and read-only API proof shows the one Access policy already allows exactly
+  that address. The earlier denial used a different signed-in Google identity.
+- Tunnel ingress, DNS, and the service's embedded token match the exact tunnel.
+  The tunnel is down only because `EasyFireBookkeepingCloudflared` is stopped;
+  its configuration was not rewritten and its token was not exposed.
+- Repeated SSH banner failures then became a hard operational blocker. A
+  corrected recovery-checkpoint preflight made no live changes before the route
+  became unavailable.
 
 ## Candidate production contract
 
@@ -146,14 +148,15 @@ a fresh production Action can be called usable.
 | Focused controller/static validation              | Passed: 31/31 focused production tests and 101/101 static checks                                                                                                                          |
 | Production dependency audit                       | Complete: 45 advisories (9 low, 36 moderate, 0 high, 0 critical)                                                                                                                          |
 | Rebuilt web bundle                                | No JavaScript Cookie 2.2.1 marker or locked transitive dependency                                                                                                                         |
-| Complete project-level test suite                 | 69/69 passed                                                                                                                                                                              |
+| Complete project-level test suite                 | 79/79 passed after the recovery patch                                                                                                                                                     |
 | Disposable Docker and backup/restore proof        | `b37426f03a8841d9923b853db5f40a08`: `proofPassed=true`, `builtServerAuthPassed=true`, `cleanupPassed=true`, unchanged empty production inventory, and zero resources after exact teardown |
-| Independent release review                        | Source publication GO after two read-only reviews found no remaining P1/P2; live deployment remains separately gated by owner onboarding and Newsec/runtime reconciliation.               |
+| Migration recovery source                         | `MigrationSource` authority/metadata/no-retention and restore namespace tests pass; blue/green authority tests pass 7/7, with Cutover intentionally blocked pending a trusted live executor. |
+| Independent release review                        | GO for the recovery source patch and publication with no P1/P2; explicit NO-GO for live migration/cutover until a trusted executor and all runtime proof exist.                            |
 | Accepted Forgejo source                           | Initial commit `0f31d192195def0f8fe58a1532282b88609eb822` verified; final corrective commit requires exact matching readback                                                               |
 | Public GitHub corresponding source                | Initial commit anonymously verified; final corrective commit requires anonymous matching readback                                                                                         |
 | Newsec journal/runtime reconciliation             | Completed read-only: healthy older runtime, incompatible durable volumes/journals, failed backup task, and retired startup task present                                                     |
-| Authenticated live acceptance                     | Cloudflare Access reached; tested primary identity denied, so native application authentication was not reached                                                                            |
-| Production deployment                             | Blocked: existing-data migration, current verified backup, Access/credential repair, and native acceptance are required; no production mutation was performed                              |
+| Authenticated live acceptance                     | Exact Access policy is correct; the prior browser used a different Google identity. Native application authentication still requires the owner to select the allowlisted identity and enter the native password. |
+| Production deployment                             | Blocked fail-closed: Newsec SSH is unavailable and no current isolated-restorable backup, live rehearsal, rollback, native-auth, or cutover proof exists; no production mutation was performed. |
 
 Historical observations about a Cloudflare redirect or earlier local boot are
 not proof of the current candidate, deployed revision, database compatibility,
@@ -161,23 +164,29 @@ or authenticated application behavior.
 
 ## Remaining completion path
 
-Source proof, independent review, initial publication, and read-only hosted
-reconciliation are complete. The remaining endpoint is operational migration,
-not another fresh deployment:
+Source proof, initial publication, read-only hosted reconciliation, and the
+missing migration safety primitives are complete in source. The remaining
+endpoint is operational migration, not another fresh deployment:
 
-1. Publish and verify the corrective commit containing every required release
-   input.
-2. Reconcile the canonical owner Access identity and rotate the tunnel
-   credential in a separately approved edge scope.
-3. Repair the daily backup path and prove a current isolated-restorable recovery
+1. Restore the maintained Tailscale SSH route to Newsec and create the exact
+   task/service recovery checkpoint before any repair.
+2. Use the new `MigrationSource` role to produce and isolated-restore-verify a
+   current recovery unit before touching the application or database.
+3. Start and verify the already-correct, token-matched cloudflared service; do
+   not rewrite the correct Access policy or rotate a matching token without new
+   evidence.
+4. Repair the daily backup path and prove a current isolated-restorable recovery
    unit before touching the application or database.
-4. Design and locally rehearse a blue/green logical migration from the existing
-   MariaDB data to the candidate, with exact rollback and no real-data mutation
-   during rehearsal.
-5. In one approved maintenance window, execute the proven migration, retire the
+5. Implement the trusted live executor for the emitted candidate-only
+   operations and executor-generated backup, candidate-health, migration,
+   native-authentication, and rollback evidence. The current source records
+   planning receipts but deliberately rejects every Cutover request with
+   `LIVE_EXECUTOR_PROOF_REQUIRED`.
+6. In the already approved maintenance window, execute the proven migration,
+   retire only the
    legacy startup task, validate the scheduled backup, and run exact runtime
    Postcheck or an equivalent migration acceptance record.
-6. Complete native authenticated acceptance with synthetic data only. Real LLC,
+7. Complete native authenticated acceptance with synthetic data only. Real LLC,
    tax, bank, customer, vendor, and opening-balance setup remains separate.
 
 Do not run the candidate's fresh-install Action against the existing volumes.

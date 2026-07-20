@@ -322,7 +322,10 @@ test("production backup is bound to one journaled action and operation", () => {
 
   assert.match(backup, /\[string\]\$ActionId/);
   assert.match(backup, /\[string\]\$BackupOperationId/);
-  assert.match(backup, /ValidateSet\('Scheduled', 'Baseline', 'Emergency'\)/);
+  assert.match(
+    backup,
+    /ValidateSet\('Scheduled', 'Baseline', 'Emergency', 'MigrationSource'\)/,
+  );
   assert.match(backup, /ConvertTo-EasyFireCanonicalActionId/);
   assert.match(backup, /Test-EasyFireProductionJournal/);
   assert.match(backup, /PhaseInventoryFingerprint/);

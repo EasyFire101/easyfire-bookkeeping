@@ -121,6 +121,7 @@ function Get-EasyFireRestoreAuthority {
     $authorityKind = ''
     $proofId = ''
     $actionId = ''
+    $migrationId = ''
 
     if ($role -ceq 'DisposableProof') {
         $authorityKind = 'proof'
@@ -134,6 +135,39 @@ function Get-EasyFireRestoreAuthority {
             $proofId.Substring(0, 8), $proofId.Substring(8, 4), $proofId.Substring(12, 4), `
             $proofId.Substring(16, 4), $proofId.Substring(20, 12)
         $actionId = ConvertTo-EasyFireRestoreCanonicalGuid -Value $actionId -FieldName 'Derived proof ActionId'
+    } elseif ($role -ceq 'MigrationSource') {
+        $authorityKind = 'migration'
+        if ($ExactExpectedProofId) {
+            throw 'ExpectedProofId cannot be supplied for a migration backup.'
+        }
+        $expectedNames = @($commonNames + @(
+                'MigrationId', 'AuthorityRoot', 'ComposeProject', 'ComposeFile',
+                'ComposeFileSha256', 'EnvFile', 'EnvFileSha256', 'MysqlVolumeComposeKey'
+            ) | Sort-Object)
+        $migrationId = ConvertTo-EasyFireRestoreCanonicalGuid `
+            -Value ([string](Get-EasyFireRestoreProperty -Object $metadata -Name 'MigrationId' -Default '')) `
+            -FieldName 'MigrationId'
+        $actionId = $migrationId
+        try {
+            $authorityRoot = [IO.Path]::GetFullPath([string]$metadata.AuthorityRoot)
+            $composeFile = [IO.Path]::GetFullPath([string]$metadata.ComposeFile)
+            $envFile = [IO.Path]::GetFullPath([string]$metadata.EnvFile)
+        } catch {
+            throw 'MigrationSource metadata paths are invalid.'
+        }
+        $authorityPrefix = $authorityRoot.TrimEnd('\') + '\'
+        if ($mode -cne 'full' -or
+            [string]$metadata.AuthorityRoot -cne $authorityRoot -or
+            [string]$metadata.ComposeFile -cne $composeFile -or
+            [string]$metadata.EnvFile -cne $envFile -or
+            -not $composeFile.StartsWith($authorityPrefix, [StringComparison]::OrdinalIgnoreCase) -or
+            -not $envFile.StartsWith($authorityPrefix, [StringComparison]::OrdinalIgnoreCase) -or
+            [string]$metadata.ComposeProject -notmatch '^[A-Za-z0-9][A-Za-z0-9_.-]*$' -or
+            [string]$metadata.ComposeFileSha256 -notmatch '^[A-F0-9]{64}$' -or
+            [string]$metadata.EnvFileSha256 -notmatch '^[A-F0-9]{64}$' -or
+            [string]$metadata.MysqlVolumeComposeKey -notmatch '^[A-Za-z0-9][A-Za-z0-9_.-]*$') {
+            throw 'MigrationSource metadata does not bind exact source authority.'
+        }
     } else {
         $authorityKind = 'production'
         if ($ExactExpectedProofId) {
@@ -175,26 +209,49 @@ function Get-EasyFireRestoreAuthority {
         -BackupOperationId $backupOperationId -BackupSha256 ([string]$BackupPair.Sha256)
     $actionName = $actionId.Replace('-', '')
     $operationName = $backupOperationId.Replace('-', '')
-    $containerName = "easyfire-restore-verify-$actionName-$operationName"
+    $containerName = if ($authorityKind -ceq 'migration') {
+        "easyfire-migration-restore-verify-$actionName-$operationName"
+    } else {
+        "easyfire-restore-verify-$actionName-$operationName"
+    }
     $volumeName = "$containerName-data"
     $journalPath = "$([string]$BackupPair.BackupFile).restore-verify.json"
-    $document = [ordered]@{
-        SchemaVersion = 1
-        State = 'planned'
-        AuthorityKind = $authorityKind
-        ActionId = $actionId
-        ProofId = $proofId
-        BackupOperationId = $backupOperationId
-        BackupFile = [string]$BackupPair.BackupFile
-        BackupSha256 = [string]$BackupPair.Sha256
-        MetadataFile = $metadataFile
-        MetadataSha256 = Get-EasyFireSha256Hex -Path $metadataFile
-        ContainerName = $containerName
-        VolumeName = $volumeName
-        ImageReference = $script:MariaDbImage
-        AuthorityToken = $authorityToken
+    if ($authorityKind -ceq 'migration') {
+        $document = [ordered]@{
+            SchemaVersion = 1
+            State = 'planned'
+            AuthorityKind = $authorityKind
+            MigrationId = $migrationId
+            ActionId = $actionId
+            BackupOperationId = $backupOperationId
+            BackupFile = [string]$BackupPair.BackupFile
+            BackupSha256 = [string]$BackupPair.Sha256
+            MetadataFile = $metadataFile
+            MetadataSha256 = Get-EasyFireSha256Hex -Path $metadataFile
+            ContainerName = $containerName
+            VolumeName = $volumeName
+            ImageReference = $script:MariaDbImage
+            AuthorityToken = $authorityToken
+        }
+    } else {
+        $document = [ordered]@{
+            SchemaVersion = 1
+            State = 'planned'
+            AuthorityKind = $authorityKind
+            ActionId = $actionId
+            ProofId = $proofId
+            BackupOperationId = $backupOperationId
+            BackupFile = [string]$BackupPair.BackupFile
+            BackupSha256 = [string]$BackupPair.Sha256
+            MetadataFile = $metadataFile
+            MetadataSha256 = Get-EasyFireSha256Hex -Path $metadataFile
+            ContainerName = $containerName
+            VolumeName = $volumeName
+            ImageReference = $script:MariaDbImage
+            AuthorityToken = $authorityToken
+        }
     }
-    return [pscustomobject]@{
+    $authorityResult = [ordered]@{
         Document = $document
         JournalPath = $journalPath
         JournalCandidatePath = "$journalPath.planned"
@@ -205,6 +262,33 @@ function Get-EasyFireRestoreAuthority {
         ContainerName = $containerName
         VolumeName = $volumeName
         AuthorityToken = $authorityToken
+    }
+    if ($authorityKind -ceq 'migration') {
+        $authorityResult['MigrationId'] = $migrationId
+        $authorityResult['SourceEnvFile'] = [string]$metadata.EnvFile
+        $authorityResult['SourceEnvFileSha256'] = [string]$metadata.EnvFileSha256
+    }
+    return [pscustomobject]$authorityResult
+}
+
+function Assert-EasyFireMigrationRestoreEnvironmentAuthority {
+    param(
+        [Parameter(Mandatory = $true)]$Authority,
+        [Parameter(Mandatory = $true)][string]$CandidateEnvFile
+    )
+
+    if ([string]$Authority.AuthorityKind -cne 'migration') { return }
+    if (-not (Test-Path -LiteralPath $CandidateEnvFile -PathType Leaf) -or
+        (Test-EasyFireRestoreReparsePoint -Path $CandidateEnvFile)) {
+        throw 'MigrationSource restore EnvFile is missing or unsafe.'
+    }
+    $resolvedCandidate = (Resolve-Path -LiteralPath $CandidateEnvFile -ErrorAction Stop).Path
+    if ($resolvedCandidate -cne [string]$Authority.SourceEnvFile) {
+        throw 'MigrationSource restore requires the exact metadata-bound EnvFile.'
+    }
+    $actualSha256 = Get-EasyFireSha256Hex -Path $resolvedCandidate
+    if ($actualSha256 -cne [string]$Authority.SourceEnvFileSha256) {
+        throw 'MigrationSource restore EnvFileSha256 does not match metadata authority.'
     }
 }
 
@@ -344,6 +428,13 @@ function Assert-EasyFireRestoreLabels {
     if ($actualProofId -cne [string]$Authority.ProofId) {
         throw 'Restore-verifier proof label does not match the exact journal authority.'
     }
+    $expectedMigrationId = [string](Get-EasyFireRestoreProperty -Object $Authority `
+        -Name 'MigrationId' -Default '')
+    $actualMigrationId = [string](Get-EasyFireRestoreProperty -Object $Labels `
+        -Name 'easyfire.restore.migration.id' -Default '')
+    if ($actualMigrationId -cne $expectedMigrationId) {
+        throw 'Restore-verifier migration label does not match the exact journal authority.'
+    }
 }
 
 function Assert-EasyFireRestoreContainer {
@@ -443,6 +534,8 @@ if (-not $tenantPrefix -or $tenantPrefix -notmatch $identifierRegex) {
 try {
     $restoreAuthority = Get-EasyFireRestoreAuthority -BackupPair $backupPair `
         -ExactExpectedProofId $ExpectedProofId
+    Assert-EasyFireMigrationRestoreEnvironmentAuthority -Authority $restoreAuthority `
+        -CandidateEnvFile $EnvFile
     $mutexName = "Global\EasyFireRestoreVerify-$([string]$restoreAuthority.AuthorityToken)"
     $restoreMutex = New-Object Threading.Mutex($false, $mutexName)
     try {
@@ -487,6 +580,11 @@ try {
     )
     if ($restoreAuthority.ProofId) {
         $resourceLabelArguments += @('--label', "easyfire.proof.id=$([string]$restoreAuthority.ProofId)")
+    }
+    if ($restoreAuthority.MigrationId) {
+        $resourceLabelArguments += @(
+            '--label', "easyfire.restore.migration.id=$([string]$restoreAuthority.MigrationId)"
+        )
     }
     $volumeCreateArguments = @('volume', 'create', '--driver', 'local') +
         $resourceLabelArguments + @([string]$restoreAuthority.VolumeName)

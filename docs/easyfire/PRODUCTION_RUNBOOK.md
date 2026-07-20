@@ -292,13 +292,26 @@ journal authority.
 
 ## 11. Existing database migration
 
-This runbook does not authorize adoption of any historical/project-labeled
-MariaDB or Redis volume and does not implement an existing-data migration. Such a
-project must separately inventory the source engine/image/volume and schema,
-take and isolated-restore-verify a full logical backup, create a new candidate
-volume, import and validate it blue/green, prove application compatibility, and
-retain the original volume through an explicit rollback window. It requires an
-exact approval packet before any source database or production runtime change.
+The fresh-install controller still never adopts a historical/project-labeled
+MariaDB or Redis volume. Existing data uses two separate fail-closed tools:
+
+- `scripts/production/backup.ps1 -InvocationRole MigrationSource` requires a
+  canonical migration ID plus exact caller-bound release, Compose, environment,
+  project, container, image, volume, and destination identities. It will only
+  dump the exact running healthy source and pins that recovery unit against
+  retention. `restore-verify.ps1` restores it into a deterministic isolated
+  migration namespace.
+- `deploy/windows/migration-action.ps1` records Plan, caller planning rehearsal,
+  and Rollback authority. It derives candidate-only projects and volumes,
+  preserves every original release/volume/journal/backup, binds the exact target
+  release/images and task XML recovery units, and rejects every Cutover request
+  with `LIVE_EXECUTOR_PROOF_REQUIRED`.
+
+`migration-action.ps1` is an authority/planning gate, not a trusted live Docker
+or Scheduled Tasks executor. A future executor must create identity-bound live
+receipts before Cutover can be implemented; caller-authored booleans are not
+proof. Never manufacture an evidence receipt from process exit alone, and never
+run the fresh-install Action against legacy volumes.
 
 ## 12. Owner onboarding
 
