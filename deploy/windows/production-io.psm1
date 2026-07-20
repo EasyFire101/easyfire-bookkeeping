@@ -1004,16 +1004,47 @@ function Test-EasyFireHttp {
         [int]$TimeoutSec = 20,
         [switch]$NoRedirect
     )
-    try {
-        $response = Invoke-WebRequest -Uri $Uri -UseBasicParsing -TimeoutSec $TimeoutSec `
-            -MaximumRedirection $(if ($NoRedirect) { 0 } else { 5 }) -ErrorAction Stop
-        return [pscustomobject]@{ Reachable = $true; StatusCode = [int]$response.StatusCode; Location = [string]$response.Headers.Location }
-    } catch {
-        if ($_.Exception.Response) {
+    if ($NoRedirect) {
+        $response = $null
+        try {
+            $request = [System.Net.HttpWebRequest][System.Net.WebRequest]::Create($Uri)
+            $request.Method = 'GET'
+            $request.AllowAutoRedirect = $false
+            $request.Timeout = $TimeoutSec * 1000
+            $request.ReadWriteTimeout = $TimeoutSec * 1000
+            $response = [System.Net.HttpWebResponse]$request.GetResponse()
             return [pscustomobject]@{
                 Reachable = $true
-                StatusCode = [int]$_.Exception.Response.StatusCode
-                Location = [string]$_.Exception.Response.Headers['Location']
+                StatusCode = [int]$response.StatusCode
+                Location = [string]$response.Headers['Location']
+            }
+        } catch [System.Net.WebException] {
+            $exceptionResponse = Get-EasyFireMemberValue -Object $_.Exception -Name 'Response' -Default $null
+            if ($null -ne $exceptionResponse) {
+                return [pscustomobject]@{
+                    Reachable = $true
+                    StatusCode = [int]$exceptionResponse.StatusCode
+                    Location = [string]$exceptionResponse.Headers['Location']
+                }
+            }
+            return [pscustomobject]@{ Reachable = $false; StatusCode = 0; Location = ''; Error = $_.Exception.Message }
+        } catch {
+            return [pscustomobject]@{ Reachable = $false; StatusCode = 0; Location = ''; Error = $_.Exception.Message }
+        } finally {
+            if ($null -ne $response) { $response.Dispose() }
+        }
+    }
+    try {
+        $response = Invoke-WebRequest -Uri $Uri -UseBasicParsing -TimeoutSec $TimeoutSec `
+            -MaximumRedirection 5 -ErrorAction Stop
+        return [pscustomobject]@{ Reachable = $true; StatusCode = [int]$response.StatusCode; Location = [string]$response.Headers.Location }
+    } catch {
+        $exceptionResponse = Get-EasyFireMemberValue -Object $_.Exception -Name 'Response' -Default $null
+        if ($null -ne $exceptionResponse) {
+            return [pscustomobject]@{
+                Reachable = $true
+                StatusCode = [int]$exceptionResponse.StatusCode
+                Location = [string]$exceptionResponse.Headers['Location']
             }
         }
         return [pscustomobject]@{ Reachable = $false; StatusCode = 0; Location = ''; Error = $_.Exception.Message }

@@ -1,6 +1,7 @@
 import assert from "node:assert/strict";
-import { spawnSync } from "node:child_process";
+import { spawn, spawnSync } from "node:child_process";
 import { createHash } from "node:crypto";
+import { createServer } from "node:http";
 import {
   existsSync,
   mkdirSync,
@@ -996,4 +997,69 @@ test("edge verification accepts a hostname-less Cloudflare fallback ingress rule
   assert.notEqual(result.status, 0, output);
   assert.match(output, /cloudflared service is not running/i);
   assert.doesNotMatch(output, /property ['\"]hostname['\"] cannot be found/i);
+});
+
+test("HTTP verification handles exceptions without a Response property under strict mode", () => {
+  const command = [
+    `$ErrorActionPreference = 'Stop';`,
+    `Set-StrictMode -Version Latest;`,
+    loadPowerShellFunctions(modulePath),
+    `function Invoke-WebRequest { [CmdletBinding()] param([string]$Uri,[switch]$UseBasicParsing,[int]$TimeoutSec,[int]$MaximumRedirection) throw 'synthetic network failure' };`,
+    `$result = Test-EasyFireHttp -Uri 'https://bookkeeping.easyfire.fyi';`,
+    `$result | ConvertTo-Json -Compress`,
+  ].join(" ");
+  const result = spawnSync(
+    "powershell.exe",
+    ["-NoProfile", "-Command", command],
+    { encoding: "utf8" },
+  );
+  assert.equal(result.status, 0, `${result.stdout}\n${result.stderr}`);
+  const proof = JSON.parse(result.stdout);
+  assert.equal(proof.Reachable, false);
+  assert.equal(proof.StatusCode, 0);
+  assert.match(proof.Error, /synthetic network failure/i);
+});
+
+test("HTTP no-redirect verification returns the exact redirect status and location on Windows PowerShell", async () => {
+  const server = createServer((_request, response) => {
+    response.writeHead(302, { Location: "https://access.example.test/login" });
+    response.end();
+  });
+  await new Promise((resolvePromise, rejectPromise) => {
+    server.once("error", rejectPromise);
+    server.listen(0, "127.0.0.1", resolvePromise);
+  });
+
+  try {
+    const address = server.address();
+    assert.equal(typeof address, "object");
+    const result = await new Promise((resolvePromise, rejectPromise) => {
+      const child = spawn("powershell.exe", [
+        "-NoProfile",
+        "-Command",
+        `Import-Module ${psQuote(modulePath)} -Force -ErrorAction Stop; Test-EasyFireHttp -Uri 'http://127.0.0.1:${address.port}/' -NoRedirect | ConvertTo-Json -Compress`,
+      ]);
+      let stdout = "";
+      let stderr = "";
+      child.stdout.setEncoding("utf8");
+      child.stderr.setEncoding("utf8");
+      child.stdout.on("data", (chunk) => {
+        stdout += chunk;
+      });
+      child.stderr.on("data", (chunk) => {
+        stderr += chunk;
+      });
+      child.once("error", rejectPromise);
+      child.once("close", (status) => {
+        resolvePromise({ status, stdout, stderr });
+      });
+    });
+    assert.equal(result.status, 0, `${result.stdout}\n${result.stderr}`);
+    const proof = JSON.parse(result.stdout);
+    assert.equal(proof.Reachable, true);
+    assert.equal(proof.StatusCode, 302);
+    assert.equal(proof.Location, "https://access.example.test/login");
+  } finally {
+    await new Promise((resolvePromise) => server.close(resolvePromise));
+  }
 });
