@@ -975,3 +975,25 @@ test("MigrationSource skips retention while existing backup roles remain unchang
     Array(4).fill(30),
   );
 });
+
+test("edge verification accepts a hostname-less Cloudflare fallback ingress rule under strict mode", () => {
+  const command = [
+    `$ErrorActionPreference = 'Stop';`,
+    `Set-StrictMode -Version Latest;`,
+    loadPowerShellFunctions(modulePath),
+    `function Get-EasyFireCloudflareCollection { [CmdletBinding()] param([string]$Uri,[string]$ApiToken) if ($Uri -match '/access/apps/[^/]+/policies') { return ,([pscustomobject]@{ decision='allow'; include=@([pscustomobject]@{ email=[pscustomobject]@{ email='owner@example.com' } }); exclude=@(); require=@() }) } if ($Uri -match '/access/apps') { return ,([pscustomobject]@{ id='app-id'; domain='bookkeeping.easyfire.fyi'; type='self_hosted' }) } if ($Uri -match '/cfd_tunnel') { return ,([pscustomobject]@{ id='tunnel-id'; name='easyfire-bookkeeping-prod'; deleted_at=$null }) } if ($Uri -match '/dns_records') { return ,([pscustomobject]@{ id='dns-id'; name='bookkeeping.easyfire.fyi'; content='tunnel-id.cfargotunnel.com'; proxied=$true }) } throw "Unexpected collection URI: $Uri" };`,
+    `function Invoke-EasyFireCloudflareGet { [CmdletBinding()] param([string]$Uri,[string]$ApiToken) if ($Uri -match '/configurations$') { return [pscustomobject]@{ success=$true; result=[pscustomobject]@{ config=[pscustomobject]@{ ingress=@([pscustomobject]@{ hostname='bookkeeping.easyfire.fyi'; service='http://localhost:80' },[pscustomobject]@{ service='http_status:404' }) } } } } throw "Unexpected GET URI: $Uri" };`,
+    `function Get-Service { [CmdletBinding()] param([string]$Name) return $null };`,
+    `$credential=[pscustomobject]@{ apiToken=('t' * 24); accountId=('a' * 32); zoneId=('b' * 32); adminEmail='owner@example.com' };`,
+    `Get-EasyFireVerifiedEdgeState -Credential $credential -Domain 'bookkeeping.easyfire.fyi'`,
+  ].join(" ");
+  const result = spawnSync(
+    "powershell.exe",
+    ["-NoProfile", "-Command", command],
+    { encoding: "utf8" },
+  );
+  const output = `${result.stdout}\n${result.stderr}`;
+  assert.notEqual(result.status, 0, output);
+  assert.match(output, /cloudflared service is not running/i);
+  assert.doesNotMatch(output, /property ['\"]hostname['\"] cannot be found/i);
+});

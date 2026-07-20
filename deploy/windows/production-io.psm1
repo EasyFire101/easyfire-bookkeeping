@@ -902,7 +902,8 @@ function Get-EasyFireVerifiedEdgeState {
     $configResult = Invoke-EasyFireCloudflareGet -Uri "$base/accounts/$account/cfd_tunnel/$($tunnel.id)/configurations" -ApiToken $headersToken
     $ingress = @($configResult.result.config.ingress)
     if (-not $configResult.success -or $ingress.Count -ne 2 -or $ingress[0].hostname -ne $Domain -or `
-        $ingress[0].service -ne 'http://localhost:80' -or $ingress[1].hostname -or `
+        $ingress[0].service -ne 'http://localhost:80' -or `
+        (Get-EasyFireMemberValue -Object $ingress[1] -Name 'hostname' -Default '') -or `
         $ingress[1].service -ne 'http_status:404') { throw 'Exact tunnel ingress verification failed.' }
 
     $dns = @(Get-EasyFireCloudflareCollection -Uri "$base/zones/$zone/dns_records?type=CNAME&name=$Domain" -ApiToken $headersToken |
