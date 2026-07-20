@@ -915,7 +915,7 @@ function Get-EasyFireVerifiedEdgeState {
     if (-not $service -or $service.Status -ne 'Running') { throw 'cloudflared service is not running.' }
     $serviceConfig = Get-CimInstance -ClassName Win32_Service -Filter "Name='$ServiceName'" -ErrorAction Stop
     $expectedExecutable = Join-Path ${env:ProgramFiles} 'cloudflared\cloudflared.exe'
-    $expectedBinaryHash = 'B11EE950A12B15604E6B0A0F30A226516ADC7AEC75DE2E3C642B28E50DDEF9EA'
+    $expectedBinaryHash = 'CCB0756DE288D3C2C076D19764CA53E0849A10F2DD9C23F8656AC42BDEB45001'
     $servicePattern = '^"' + [regex]::Escape($expectedExecutable) + '"\s+(?:--no-autoupdate\s+tunnel|tunnel\s+--no-autoupdate)\s+run\s+--token\s+(?<Token>\S+)$'
     $serviceCommand = [string]$serviceConfig.PathName
     if (-not (Test-Path -LiteralPath $expectedExecutable -PathType Leaf) -or

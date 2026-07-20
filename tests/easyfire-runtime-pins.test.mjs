@@ -109,7 +109,7 @@ test("downloaded production executables and scripts are versioned and verified",
 
   assert.match(
     productionIo,
-    /B11EE950A12B15604E6B0A0F30A226516ADC7AEC75DE2E3C642B28E50DDEF9EA/,
+    /CCB0756DE288D3C2C076D19764CA53E0849A10F2DD9C23F8656AC42BDEB45001/,
   );
   assert.match(
     productionIo,
