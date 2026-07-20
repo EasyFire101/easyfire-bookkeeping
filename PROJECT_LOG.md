@@ -34,8 +34,9 @@ changing the edge requires its own design and approval.
 
 The pnpm dependency graph is inherited substantially from upstream. The first
 complete production audit report recorded in this takeover showed 260 findings,
-including 116 high-severity findings. Later registry-call failures produced no
-superseding complete report. Triage remains required before live deployment.
+including 116 high-severity findings. The final dependency repair superseded
+that snapshot with 45 production advisories: 9 low, 36 moderate, 0 high, and 0
+critical. Remaining findings stay disclosed for future dependency refreshes.
 
 - Alternatives considered: replacing Bigcapital with a new accounting core or
   a hosted bookkeeping SaaS was rejected because it would add data-migration,
@@ -90,10 +91,10 @@ license. Replacement would be disproportionately risky and is unnecessary.
 
 The candidate runtime contract targets Docker Desktop on Newsec with Envoy
 bound to loopback and pre-existing Cloudflare Tunnel/Access at the edge.
-The pinned cloudflared Windows service and one daily backup scheduled task match
-the host. Application containers use Compose `restart: unless-stopped`; there
-is no production startup scheduled task. This topology still requires live
-reconciliation; the Caddy/systemd proposal is retained only as historical
+Application containers use Compose `restart: unless-stopped`; the candidate
+allows no production startup scheduled task. Later read-only reconciliation
+found a healthy older runtime whose legacy task/journal and existing-volume
+state do not match this contract; the Caddy/systemd proposal remains historical
 provenance.
 
 ### Keep production journals outside Git as runtime authority
@@ -267,3 +268,26 @@ noncanonical SID fails before backup work.
 - Newsec journal/runtime/edge reconciliation, authenticated live acceptance,
   owner onboarding, deployment, and real bookkeeping-data setup remain separate
   operational boundaries.
+
+## Source correction and hosted reconciliation - 2026-07-20
+
+- The initial accepted-source commit was published and matched across private
+  Forgejo main and the anonymous public GitHub main branch.
+- A clean-tree audit found that four required root inputs had remained untracked
+  even though committed checks consumed them: `.editorconfig`,
+  `.env.production.example`, `AGENTS.md`, and the historical Agent Foundry
+  handoff. The corrective release tracks those exact inputs and reruns their
+  focused checks before final publication readback.
+- Read-only Newsec reconciliation found healthy containers on an older release,
+  existing durable MariaDB/Redis volumes, incompatible legacy journals, a
+  failing daily-backup task, and the retired startup task still registered.
+- The existing cloudflared service exposes a tunnel credential through its
+  command line. The value is not recorded; rotation belongs to a separate edge
+  scope.
+- Cloudflare Access protects the public hostname, but the tested primary
+  signed-in identity was denied. Native application authentication was not
+  reached, no database content was queried, and no host or edge state changed.
+- The remaining endpoint is a separately approved backup/edge repair and
+  blue/green logical migration project, followed by native authenticated
+  synthetic acceptance. The fresh-install controller must not run against the
+  existing volumes.

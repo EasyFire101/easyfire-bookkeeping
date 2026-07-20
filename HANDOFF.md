@@ -4,9 +4,12 @@
 
 **Owner:** Direct Codex takeover for EasyFire
 
-**State:** Locally validated release candidate. Publication authority is exact
-remote readback, not this document. The hosted runtime remains unreconciled,
-undeployed by this takeover, and not live-accepted.
+**State:** Source-published release candidate. Exact Forgejo and anonymous
+GitHub readback, not this document, are publication authority. Read-only hosted
+runtime reconciliation found a healthy older installation whose real durable
+volumes and legacy control state are incompatible with this fresh-install-only
+controller. Production was not changed and native application acceptance was
+not reached because the tested owner identity was denied by Cloudflare Access.
 
 ## Source state
 
@@ -18,6 +21,12 @@ undeployed by this takeover, and not live-accepted.
 - Accepted-source destination: `easyfire-forgejo/main`.
 - Public AGPL mirror:
   `https://github.com/EasyFire101/easyfire-bookkeeping`.
+- Initial accepted-source publication commit:
+  `0f31d192195def0f8fe58a1532282b88609eb822`.
+- A follow-up source correction tracks the four root inputs that the committed
+  validators already consumed: `.editorconfig`, `.env.production.example`,
+  `AGENTS.md`, and the historical Agent Foundry handoff. Exact final remote
+  readback remains authoritative.
 - Use `git status --short` and the final release manifest for the exact release
   inventory. Do not rely on older path counts.
 - Agent Foundry is bypassed. Its handoff is retained only as dated provenance.
@@ -135,6 +144,11 @@ The current dependency and application snapshot has these recorded results:
 - Independent read-only review: source publication GO after two reviews found no
   remaining P1/P2; live deployment remains separately gated by owner onboarding
   and Newsec/runtime reconciliation.
+- Release-input audit: the initial publication accidentally omitted four
+  required root files that remained untracked in the validation worktree. The
+  follow-up correction tracks those exact files so a clean checkout contains
+  every input used by the foundation, readiness, security, and production
+  validation checks.
 
 ## Production applicability
 
@@ -159,15 +173,33 @@ The current dependency and application snapshot has these recorded results:
 
 ## Runtime drift status
 
-- The actual Newsec runtime and its journal have not been read or reconciled in
-  this takeover. This checkout is not runtime truth.
+- Read-only reconciliation on 2026-07-20 found the existing
+  `easyfire-bookkeeping-prod` containers healthy on an older Agent
+  Foundry-origin release, with the migration container exited successfully.
+- Existing MariaDB and Redis volumes contain durable production authority and
+  were created before this candidate. The old action journals are not compatible
+  with the schema-2 controller. A fresh Action would stop and must not replace,
+  mount, or adopt those volumes.
+- The daily backup task's last result was failure and only an older recovery
+  pair was present. The retired startup task is also still registered. Neither
+  task was changed.
+- The existing cloudflared Windows service embeds a tunnel credential in its
+  command line. The credential is intentionally omitted here and must be rotated
+  in a separate edge-repair scope before a future release.
+- The public hostname reaches Cloudflare Access. The tested primary signed-in
+  Google identity was denied by the current policy, so native application login
+  and authenticated bookkeeping behavior could not be accepted. The repository
+  documents an email-OTP owner policy template but no canonical owner address.
+- No database query or real bookkeeping-record read was performed during this
+  reconciliation.
 
 ## State mutations or approvals
 
 - Direct takeover owns local source and documentation repair; Agent Foundry is
   provenance only.
-- No real LLC, tax, bank, customer, vendor, opening-balance, database, backup,
-  credential, or provider data was read or changed during local repair.
+- No accounting, database, backup, or bookkeeping-record content was queried or
+  changed. Read-only service inventory exposed an embedded Cloudflare tunnel
+  credential; it was not retained or changed and requires separate rotation.
 - Local repair and proof do not mutate any production service, scheduled task,
   Cloudflare resource, DNS record, database, credential, or real bookkeeping
   record. Source-control publication changes only the two EasyFire repositories
@@ -185,14 +217,19 @@ The current dependency and application snapshot has these recorded results:
   fresh database cannot provide a usable first-owner login until a separate
   onboarding design is approved and proven.
 - Source authority requires exact Forgejo readback and anonymous GitHub readback
-  of the same released commit.
-- The actual hosted revision, journal, edge identity, authentication behavior,
-  and data state remain unreconciled.
+  of the same final correction commit.
+- The healthy hosted revision is older than this candidate and uses incompatible
+  journals and existing durable volumes. Its failed backup task must be repaired
+  and a current verified recovery unit established before migration work.
+- Cloudflare Access owner identity and the embedded tunnel credential require a
+  separate edge correction. Native application authentication remains unproven.
 
 ## Next safe action
 
-After final proof/review and exact publication readback, perform read-only
-Newsec journal, runtime, and edge reconciliation, then authenticated acceptance.
-Run no production Action unless a fresh empty target is proven and first-owner
-onboarding has been resolved; route any existing database through a separately
-approved blue/green logical migration project.
+Verify exact Forgejo and anonymous GitHub readback of the corrective source
+commit. Then treat the existing hosted installation as a migration project, not
+a fresh deployment: repair and prove backups, reconcile and rotate the edge
+credential and owner Access policy, design and dry-run a blue/green logical
+MariaDB migration with rollback, retire the legacy startup task, and only then
+perform native authenticated acceptance. Do not run the fresh-install Action
+against the existing volumes.

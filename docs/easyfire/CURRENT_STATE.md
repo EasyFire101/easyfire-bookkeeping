@@ -4,11 +4,12 @@
 
 **Updated:** 2026-07-20
 
-**Status:** Direct Codex takeover release candidate with local source, build,
-and dependency-security validation complete. Publication is established only
-by exact EasyFire remote readback. The runtime remains unreconciled,
-undeployed by this takeover, and not accepted through the authenticated live
-site.
+**Status:** Source-published Direct Codex takeover candidate with local source,
+build, dependency-security, disposable recovery, and independent-review proof
+complete. Read-only hosted reconciliation found a healthy older installation
+that cannot be upgraded by this fresh-install-only controller. Production was
+not changed. Cloudflare Access denied the tested primary signed-in identity, so
+native application acceptance is still blocked.
 
 This file is the source of truth for current ownership, release, and runtime
 state. Agent Foundry is bypassed and is historical provenance only. Older Agent
@@ -30,6 +31,32 @@ authority.
 - Forgejo is accepted-source authority only when exact remote readback confirms
   the released commit. GitHub is corresponding-source authority only when
   anonymous readback confirms that same commit.
+- Initial publication commit:
+  `0f31d192195def0f8fe58a1532282b88609eb822`. A corrective publication tracks
+  four root inputs accidentally omitted from that commit even though its tests
+  and validators consumed them: `.editorconfig`, `.env.production.example`,
+  `AGENTS.md`, and `AGENT_FOUNDRY_EASYFIRE_HANDOFF.md`.
+
+## Observed hosted runtime
+
+Read-only reconciliation on 2026-07-20 established the following without
+querying the database or changing the host:
+
+- The existing `easyfire-bookkeeping-prod` application containers are healthy
+  on an older Agent Foundry-origin release; its one-shot migration container
+  exited successfully.
+- Existing MariaDB and Redis volumes and pre-schema-2 journals are durable
+  production authority. They are incompatible with this candidate's
+  fresh-install-only controller and make a new Action a hard stop.
+- The daily backup task's last result is failure and only an older recovery pair
+  was observed. The retired startup task is still registered.
+- The cloudflared Windows service embeds a tunnel credential in its command
+  line. The credential is intentionally not recorded and needs separate
+  rotation before a future release.
+- The public hostname reaches Cloudflare Access, but the tested primary
+  signed-in Google identity is denied by the current policy. Native application
+  authentication was therefore not reached. The repository's intended Access
+  template uses email OTP for one owner but contains no canonical owner email.
 
 ## Candidate production contract
 
@@ -122,29 +149,38 @@ a fresh production Action can be called usable.
 | Complete project-level test suite                 | 69/69 passed                                                                                                                                                                              |
 | Disposable Docker and backup/restore proof        | `b37426f03a8841d9923b853db5f40a08`: `proofPassed=true`, `builtServerAuthPassed=true`, `cleanupPassed=true`, unchanged empty production inventory, and zero resources after exact teardown |
 | Independent release review                        | Source publication GO after two read-only reviews found no remaining P1/P2; live deployment remains separately gated by owner onboarding and Newsec/runtime reconciliation.               |
-| Accepted Forgejo source                           | Established only by exact `easyfire-forgejo/main` readback of the released commit                                                                                                         |
-| Public GitHub corresponding source                | Established only by anonymous readback of that same released commit                                                                                                                       |
-| Newsec journal/runtime reconciliation             | Required after publication; no current runtime claim is made by this source record                                                                                                        |
-| Authenticated live acceptance                     | Required against the reconciled hosted revision                                                                                                                                           |
-| Production deployment                             | Eligible only after fresh-volume and first-owner boundaries are resolved; no deployment claim is made by this record                                                                      |
+| Accepted Forgejo source                           | Initial commit `0f31d192195def0f8fe58a1532282b88609eb822` verified; final corrective commit requires exact matching readback                                                               |
+| Public GitHub corresponding source                | Initial commit anonymously verified; final corrective commit requires anonymous matching readback                                                                                         |
+| Newsec journal/runtime reconciliation             | Completed read-only: healthy older runtime, incompatible durable volumes/journals, failed backup task, and retired startup task present                                                     |
+| Authenticated live acceptance                     | Cloudflare Access reached; tested primary identity denied, so native application authentication was not reached                                                                            |
+| Production deployment                             | Blocked: existing-data migration, current verified backup, Access/credential repair, and native acceptance are required; no production mutation was performed                              |
 
 Historical observations about a Cloudflare redirect or earlier local boot are
 not proof of the current candidate, deployed revision, database compatibility,
 or authenticated application behavior.
 
-## Promotion order
+## Remaining completion path
 
-1. Complete and record the final combined test run and disposable Docker
-   recovery proof on the exact candidate.
-2. Obtain independent read-only review of the final candidate and evidence.
-3. Commit and publish the same accepted commit to Forgejo and the public GitHub
-   mirror; verify anonymous corresponding-source access.
-4. Perform read-only Newsec journal and runtime reconciliation.
-5. Perform authenticated live acceptance without real financial data.
-6. Consider a production action only if it is still needed, the destination
-   has no historical, project-labeled, or action-derived MariaDB/Redis volumes,
-   and a supported first-owner onboarding path has been separately approved and
-   proven. Otherwise stop and plan the onboarding, migration, or recovery path.
+Source proof, independent review, initial publication, and read-only hosted
+reconciliation are complete. The remaining endpoint is operational migration,
+not another fresh deployment:
+
+1. Publish and verify the corrective commit containing every required release
+   input.
+2. Reconcile the canonical owner Access identity and rotate the tunnel
+   credential in a separately approved edge scope.
+3. Repair the daily backup path and prove a current isolated-restorable recovery
+   unit before touching the application or database.
+4. Design and locally rehearse a blue/green logical migration from the existing
+   MariaDB data to the candidate, with exact rollback and no real-data mutation
+   during rehearsal.
+5. In one approved maintenance window, execute the proven migration, retire the
+   legacy startup task, validate the scheduled backup, and run exact runtime
+   Postcheck or an equivalent migration acceptance record.
+6. Complete native authenticated acceptance with synthetic data only. Real LLC,
+   tax, bank, customer, vendor, and opening-balance setup remains separate.
+
+Do not run the candidate's fresh-install Action against the existing volumes.
 
 ## Data boundary
 

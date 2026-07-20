@@ -24,15 +24,15 @@
     "upgradeProcedure": "Run the creating-project-foundations skill from Command Center and request multi-agent mode; do not run a project-local npm command that is not installed here."
   },
   "deploymentContext": {
-    "audience": "Intended for one owner and administrator. The candidate expects the public hostname to be restricted by pre-existing Cloudflare Access plus native application authentication, with public self-registration disabled. Live acceptance is pending.",
+    "audience": "Intended for one owner and administrator. The public hostname is restricted by pre-existing Cloudflare Access plus native application authentication, with public self-registration disabled. The tested primary signed-in identity was denied by the current Access policy, so native live acceptance remains blocked.",
     "networkExposure": "Candidate contract: pre-existing Cloudflare Access and Tunnel forward to Envoy on Newsec at 127.0.0.1:80; MariaDB and Redis remain on the internal Compose network. The current controller verifies but never mutates the edge.",
-    "trustedComputeBoundary": "Newsec Windows and its Docker runtime are owner-controlled trusted compute. Cloudflare is an external routing and access-control boundary. Neither runtime has been reconciled during the direct takeover.",
+    "trustedComputeBoundary": "Newsec Windows and its Docker runtime are owner-controlled trusted compute. Cloudflare is an external routing and access-control boundary. Read-only reconciliation found a healthy older runtime with real durable volumes, legacy journals and tasks, and no compatibility with this fresh-install-only controller; neither the host nor edge was mutated.",
     "availabilityTarget": "Best-effort personal production service with Compose restart: unless-stopped and one exact daily task that invokes the fifth ScheduledBackup controller stage from the sealed installed controller through canonical Windows PowerShell with the journal-bound deployment-owner SID. Maintenance downtime is acceptable; high availability is not required.",
     "assuranceTarget": "Single-user access control, secret hygiene, exact four-file executable bundles, immutable archive and built-image IDs, SYSTEM/Administrators plus journal-bound deployment-owner SID authority, crash-resumable metadata-backed recovery units with isolated restore, schema-2 journal-bound fresh installs, mandatory Postcheck, and partial-volume-preserving rollback."
   },
   "sourceOfTruth": {
     "code": {
-      "status": "release-candidate",
+      "status": "published-release-candidate",
       "acceptedRef": "easyfire-forgejo/main",
       "remoteName": "easyfire-forgejo",
       "remoteUrl": "private Forgejo repository jonny-admin/easyfire-bookkeeping (machine-specific endpoint is intentionally not published)",
@@ -40,8 +40,8 @@
       "recoveryPath": "Exact Forgejo main readback defines accepted source and anonymous GitHub readback of the same commit defines AGPL corresponding source. The verified pre-takeover filesystem backup remains the local rollback authority recorded in HANDOFF.md.",
       "verificationCommand": "git status --short --branch"
     },
-    "runningRuntime": "No running revision has been reconciled during the direct takeover. For any actual deployment, only an exact completed schema-2 production-action journal plus live Postcheck can define runtime truth; this local checkout and historical Agent Foundry evidence cannot.",
-    "driftCheck": "After exact source-publication readback, inventory the Newsec journal first. Run Postcheck only with that journal's action ID and bound inputs, then compare its archive SHA-256, sealed release manifest, four-file controller authorities, built image IDs, action-derived volume plan, exact task definition including the journal-bound deployment-owner SID, metadata-backed backup receipts, exact port and foreign-volume-consumer inventory, and verify-only edge connector identity with accepted source. The retired startup task must be absent."
+    "runningRuntime": "Read-only reconciliation on 2026-07-20 found a healthy older Agent Foundry-origin easyfire-bookkeeping-prod installation with existing MariaDB and Redis volumes, pre-schema-2 journals, a failed daily-backup task, and the retired startup task still present. It is not the published candidate and cannot be adopted by the fresh-install-only controller. No database content was queried and no runtime state was changed.",
+    "driftCheck": "The published candidate cannot use Postcheck against the incompatible legacy journals. Before any migration, establish a current verified backup, inventory the exact existing release and volumes, reconcile the Access owner policy, rotate the tunnel credential embedded in the existing service command, and design a separately approved blue/green logical migration with rollback. The retired startup task must be removed only within that approved operational scope."
   },
   "sourceControlPolicy": {
     "localCommit": "Allowed after validation for durable work when the requested lane is complete.",
@@ -64,7 +64,7 @@
     "stateMutationApproval": "Explicit approval is required for deploy, restart, rollback, migration, restore, scheduled-task changes, credentials or integrations, real financial record mutation, and Git publication or integration. Existing-data migration and owner onboarding are separate unsupported scopes; a truly fresh deployment is not login-ready until onboarding is resolved. Cloudflare/DNS/Access/Tunnel/binary/service mutations are outside the production controller and require a separate design and approval."
   },
   "securityAndPrivacy": {
-    "securityRequirements": "The candidate requires pre-existing Cloudflare Access for one owner identity, native JWT/application authentication, SIGNUP_DISABLED=true, empty signup allowlists, secrets outside Git, no public inbound host application port, exact controller/image/task/edge identity, sealed release identity, and metadata-backed verified backup/restore before completion. No supported first-owner onboarding path exists for a fresh database. Live verification remains pending.",
+    "securityRequirements": "The candidate requires pre-existing Cloudflare Access for one owner identity, native JWT/application authentication, SIGNUP_DISABLED=true, empty signup allowlists, secrets outside Git, no public inbound host application port, exact controller/image/task/edge identity, sealed release identity, and metadata-backed verified backup/restore before completion. No supported first-owner onboarding path exists for a fresh database. Current live acceptance is blocked because the tested owner identity is denied by Access, and the existing cloudflared service credential requires separate rotation before a future release.",
     "sensitiveData": "Real financial records, identity and contact information, attachments, database credentials, JWT and SMTP secrets, and optional provider credentials may exist only in production-owned storage and secret boundaries.",
     "dependencyRiskCommand": "corepack pnpm audit --prod --audit-level high",
     "dependencyRiskCurrentEvidence": "The complete production audit on the release candidate reports 45 advisories: 9 low, 36 moderate, 0 high, and 0 critical. Build-only tools are excluded from production dependencies, patched runtime transitives are lock-enforced, and remaining moderate/low findings stay disclosed for future refreshes.",
