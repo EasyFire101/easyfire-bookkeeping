@@ -488,3 +488,27 @@ test("controller binds its bundle and implements abort, ingress prestate, emerge
   assert.doesNotMatch(source, /docker(?:\.exe)?\s+volume\s+rm|compose\s+down/i);
   assert.doesNotMatch(source, /Remove-Item|Clear-Content/i);
 });
+
+test("controller import order keeps the exported native helper visible", () => {
+  const source = readFileSync(controllerPath, "utf8");
+  const windowsRoot = resolve(root, "deploy/windows").replaceAll("'", "''");
+  const importLines = source.match(/^Import-Module[^\r\n]+$/gm) ?? [];
+  assert.equal(importLines.length, 4);
+  const probe = [
+    "$ErrorActionPreference = 'Stop'",
+    ...importLines.map((line) =>
+      line.replaceAll("$PSScriptRoot", `'${windowsRoot}'`),
+    ),
+    "if ($null -eq (Get-Command Invoke-EasyFireNative -ErrorAction SilentlyContinue)) { throw 'Invoke-EasyFireNative is not visible after controller imports.' }",
+  ].join("\n");
+  const result = spawnSync("powershell.exe", [
+    "-NoProfile",
+    "-NonInteractive",
+    "-Command",
+    probe,
+  ], {
+    encoding: "utf8",
+    maxBuffer: 2 * 1024 * 1024,
+  });
+  assert.equal(result.status, 0, `${result.stdout}\n${result.stderr}`);
+});

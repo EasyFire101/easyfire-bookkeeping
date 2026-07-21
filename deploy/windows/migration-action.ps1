@@ -72,10 +72,10 @@ Set-StrictMode -Version 3.0
 $ErrorActionPreference = 'Stop'
 $ProgressPreference = 'SilentlyContinue'
 
-Import-Module (Join-Path $PSScriptRoot 'production-io.psm1') -Force -ErrorAction Stop
 Import-Module (Join-Path $PSScriptRoot 'migration-state.psm1') -Force -ErrorAction Stop
 Import-Module (Join-Path $PSScriptRoot 'migration-runtime.psm1') -Force -ErrorAction Stop
 Import-Module (Join-Path $PSScriptRoot 'migration-windows.psm1') -Force -ErrorAction Stop
+Import-Module (Join-Path $PSScriptRoot 'production-io.psm1') -Force -ErrorAction Stop
 
 $script:MetadataFields = @(
     'AuthorityRoot', 'BackupFile', 'BackupMode', 'BackupOperationId', 'BackupSha256',
