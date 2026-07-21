@@ -9,15 +9,22 @@ param(
     [switch]$SchemaOnly,
 
     [string]$ComposeFile = "$PSScriptRoot\..\..\docker-compose.prod.yml",
+    [string]$ComposeOverrideFile,
     [string]$EnvFile = "$PSScriptRoot\..\..\.env",
     [string]$ProjectName = "easyfire-bookkeeping-prod",
     [string]$BackupDir = "$PSScriptRoot\..\..\backups",
     [Parameter(Mandatory = $true)][string]$AuthorityRoot,
     [Parameter(Mandatory = $true)][string]$BackupOperationId,
     [string]$ActionId,
-    [ValidateSet('Scheduled', 'Baseline', 'Emergency', 'MigrationSource')]
+    # Legacy production role subset: ValidateSet('Scheduled', 'Baseline', 'Emergency', 'MigrationSource')
+    [ValidateSet(
+        'Scheduled', 'Baseline', 'Emergency', 'MigrationSource',
+        'MigrationBaseline', 'MigrationEmergency', 'MigrationScheduled'
+    )]
     [string]$InvocationRole,
     [string]$MigrationId,
+    [string]$MigrationJournalPath,
+    [string]$CaptureAttemptId,
     [string]$ExpectedMysqlContainerId,
     [string]$ExpectedMysqlImageReference,
     [string]$ExpectedMysqlImageId,
@@ -86,6 +93,25 @@ function ConvertTo-EasyFireCanonicalMigrationId {
     return $canonical
 }
 
+function Test-EasyFireMigrationRuntimeBackupRole {
+    param([string]$Role)
+
+    return $Role -in @('MigrationBaseline', 'MigrationEmergency', 'MigrationScheduled')
+}
+
+function Get-EasyFireBackupObjectSha256 {
+    param([Parameter(Mandatory = $true)]$Value)
+
+    $json = $Value | ConvertTo-Json -Depth 30 -Compress
+    $bytes = [Text.Encoding]::UTF8.GetBytes($json)
+    $sha256 = [Security.Cryptography.SHA256]::Create()
+    try {
+        return ([BitConverter]::ToString($sha256.ComputeHash($bytes))).Replace('-', '')
+    } finally {
+        $sha256.Dispose()
+    }
+}
+
 function Get-EasyFireBackupMetadataPath {
     param([Parameter(Mandatory = $true)][string]$BackupFile)
 
@@ -120,6 +146,40 @@ function New-EasyFireBackupMetadataDocument {
             ComposeFileSha256 = [string]$SourceAuthority.ComposeFileSha256
             EnvFile = [string]$SourceAuthority.EnvFile
             EnvFileSha256 = [string]$SourceAuthority.EnvFileSha256
+            MysqlContainerId = [string]$SourceAuthority.MysqlContainerId
+            MysqlContainerName = [string]$SourceAuthority.MysqlContainerName
+            MysqlImageReference = [string]$SourceAuthority.MysqlImageReference
+            MysqlImageId = [string]$SourceAuthority.MysqlImageId
+            MysqlVolumeName = [string]$SourceAuthority.MysqlVolumeName
+            MysqlVolumeDestination = [string]$SourceAuthority.MysqlVolumeDestination
+            MysqlVolumeComposeKey = [string]$SourceAuthority.MysqlVolumeComposeKey
+            BackupFile = [string]$Pair.BackupFile
+            BackupSha256 = [string]$Pair.Sha256
+        }
+    }
+
+    if ($Role -in @('MigrationBaseline', 'MigrationEmergency', 'MigrationScheduled')) {
+        return [ordered]@{
+            SchemaVersion = 1
+            MigrationId = $MigrationId
+            InvocationRole = $Role
+            BackupOperationId = $OperationId
+            CaptureAttemptId = [string]$SourceAuthority.CaptureAttemptId
+            BackupMode = $Mode
+            AuthorityRoot = [string]$SourceAuthority.AuthorityRoot
+            MigrationJournalPath = [string]$SourceAuthority.MigrationJournalPath
+            MigrationAuthorityFingerprint = [string]$SourceAuthority.MigrationAuthorityFingerprint
+            MigrationJournalRevision = [int64]$SourceAuthority.MigrationJournalRevision
+            MigrationBackupAuthorityFingerprint = [string]$SourceAuthority.MigrationBackupAuthorityFingerprint
+            ComposeProject = [string]$SourceAuthority.ComposeProject
+            ComposeFile = [string]$SourceAuthority.ComposeFile
+            ComposeFileSha256 = [string]$SourceAuthority.ComposeFileSha256
+            ComposeOverrideFile = [string]$SourceAuthority.ComposeOverrideFile
+            ComposeOverrideSha256 = [string]$SourceAuthority.ComposeOverrideSha256
+            EnvFile = [string]$SourceAuthority.EnvFile
+            EnvFileSha256 = [string]$SourceAuthority.EnvFileSha256
+            InventoryFingerprint = [string]$SourceAuthority.InventoryFingerprint
+            DurableVolumeFingerprint = [string]$SourceAuthority.DurableVolumeFingerprint
             MysqlContainerId = [string]$SourceAuthority.MysqlContainerId
             MysqlContainerName = [string]$SourceAuthority.MysqlContainerName
             MysqlImageReference = [string]$SourceAuthority.MysqlImageReference
@@ -216,6 +276,46 @@ function Test-EasyFireBackupMetadataBinding {
                 [string]$document.MysqlVolumeComposeKey -notmatch '^[A-Za-z0-9][A-Za-z0-9_.-]*$') {
                 throw 'migration_source_authority_invalid'
             }
+        } elseif ($role -in @('MigrationBaseline', 'MigrationEmergency', 'MigrationScheduled')) {
+            $expectedNames = @($commonNames + @(
+                    'MigrationId', 'AuthorityRoot', 'MigrationJournalPath', 'CaptureAttemptId',
+                    'MigrationAuthorityFingerprint', 'MigrationJournalRevision',
+                    'MigrationBackupAuthorityFingerprint', 'ComposeProject', 'ComposeFile',
+                    'ComposeFileSha256', 'ComposeOverrideFile', 'ComposeOverrideSha256',
+                    'EnvFile', 'EnvFileSha256', 'InventoryFingerprint',
+                    'DurableVolumeFingerprint', 'MysqlVolumeComposeKey'
+                ) | Sort-Object)
+            $null = ConvertTo-EasyFireCanonicalMigrationId -Value ([string]$document.MigrationId)
+            $captureAttempt = ConvertTo-EasyFireCanonicalBackupOperationId `
+                -Value ([string]$document.CaptureAttemptId)
+            $authorityRoot = [IO.Path]::GetFullPath([string]$document.AuthorityRoot)
+            $authorityPrefix = $authorityRoot.TrimEnd('\') + '\'
+            $composeFile = [IO.Path]::GetFullPath([string]$document.ComposeFile)
+            $composeOverrideFile = [IO.Path]::GetFullPath([string]$document.ComposeOverrideFile)
+            $envFile = [IO.Path]::GetFullPath([string]$document.EnvFile)
+            $migrationJournalPath = [IO.Path]::GetFullPath([string]$document.MigrationJournalPath)
+            if ($mode -cne 'full' -or
+                [string]$document.AuthorityRoot -cne $authorityRoot -or
+                [string]$document.ComposeFile -cne $composeFile -or
+                [string]$document.ComposeOverrideFile -cne $composeOverrideFile -or
+                [string]$document.EnvFile -cne $envFile -or
+                [string]$document.MigrationJournalPath -cne $migrationJournalPath -or
+                -not $composeFile.StartsWith($authorityPrefix, [StringComparison]::OrdinalIgnoreCase) -or
+                -not $composeOverrideFile.StartsWith($authorityPrefix, [StringComparison]::OrdinalIgnoreCase) -or
+                -not $envFile.StartsWith($authorityPrefix, [StringComparison]::OrdinalIgnoreCase) -or
+                -not $migrationJournalPath.StartsWith($authorityPrefix, [StringComparison]::OrdinalIgnoreCase) -or
+                [string]$document.ComposeProject -notmatch '^[A-Za-z0-9][A-Za-z0-9_.-]*$' -or
+                [string]$document.ComposeFileSha256 -notmatch '^[A-F0-9]{64}$' -or
+                [string]$document.ComposeOverrideSha256 -notmatch '^[A-F0-9]{64}$' -or
+                [string]$document.EnvFileSha256 -notmatch '^[A-F0-9]{64}$' -or
+                [string]$document.MigrationAuthorityFingerprint -notmatch '^[A-F0-9]{64}$' -or
+                [int64]$document.MigrationJournalRevision -lt 1 -or
+                [string]$document.MigrationBackupAuthorityFingerprint -notmatch '^[A-F0-9]{64}$' -or
+                [string]$document.InventoryFingerprint -notmatch '^[A-F0-9]{64}$' -or
+                [string]$document.DurableVolumeFingerprint -notmatch '^[A-F0-9]{64}$' -or
+                [string]$document.MysqlVolumeComposeKey -notmatch '^[A-Za-z0-9][A-Za-z0-9_.-]*$') {
+                throw 'migration_runtime_authority_invalid'
+            }
         } else {
             if ($role -notin @('Scheduled', 'Baseline', 'Emergency')) { throw 'role_invalid' }
             $expectedNames = @($commonNames + @('ActionId', 'PhaseInventoryFingerprint', 'DurableVolumeFingerprint') | Sort-Object)
@@ -226,6 +326,13 @@ function Test-EasyFireBackupMetadataBinding {
             }
         }
         $actualNames = @($document.PSObject.Properties.Name | Sort-Object)
+        $expectedFilePattern = if ($role -in @(
+                'MigrationBaseline', 'MigrationEmergency', 'MigrationScheduled'
+            )) {
+            "-$([regex]::Escape($mode))-$([regex]::Escape($operationId))-capture-$([regex]::Escape($captureAttempt))\.sql\.gz$"
+        } else {
+            "-$([regex]::Escape($mode))-$([regex]::Escape($operationId))\.sql\.gz$"
+        }
         if (@(Compare-Object $expectedNames $actualNames -CaseSensitive).Count -ne 0 -or
             [int]$document.SchemaVersion -ne 1 -or $mode -notin @('full', 'schema') -or
             [string]$document.MysqlContainerId -notmatch '^[a-f0-9]{64}$' -or
@@ -235,7 +342,7 @@ function Test-EasyFireBackupMetadataBinding {
             [string]$document.MysqlVolumeDestination -cne '/var/lib/mysql' -or
             [string]$document.BackupFile -cne [string]$pair.BackupFile -or
             [string]$document.BackupSha256 -cne [string]$pair.Sha256 -or
-            [IO.Path]::GetFileName($pair.BackupFile) -notmatch "-$([regex]::Escape($mode))-$([regex]::Escape($operationId))\.sql\.gz$") {
+            [IO.Path]::GetFileName($pair.BackupFile) -notmatch $expectedFilePattern) {
             throw 'metadata_binding_invalid'
         }
         return [pscustomobject]@{
@@ -307,6 +414,43 @@ function New-EasyFirePublicationPlanDocument {
             ComposeFileSha256 = [string]$SourceAuthority.ComposeFileSha256
             EnvFile = [string]$SourceAuthority.EnvFile
             EnvFileSha256 = [string]$SourceAuthority.EnvFileSha256
+            MysqlContainerId = [string]$SourceAuthority.MysqlContainerId
+            MysqlContainerName = [string]$SourceAuthority.MysqlContainerName
+            MysqlImageReference = [string]$SourceAuthority.MysqlImageReference
+            MysqlImageId = [string]$SourceAuthority.MysqlImageId
+            MysqlVolumeName = [string]$SourceAuthority.MysqlVolumeName
+            MysqlVolumeDestination = [string]$SourceAuthority.MysqlVolumeDestination
+            MysqlVolumeComposeKey = [string]$SourceAuthority.MysqlVolumeComposeKey
+            BackupFile = $BackupFile
+            SidecarFile = $SidecarFile
+            MetadataFile = $MetadataFile
+            PartialBackupFile = $PartialBackupFile
+            PartialSidecarFile = $PartialSidecarFile
+            PartialMetadataFile = $PartialMetadataFile
+        }
+    } elseif ($Role -in @('MigrationBaseline', 'MigrationEmergency', 'MigrationScheduled')) {
+        $document = [ordered]@{
+            SchemaVersion = 1
+            State = $State
+            MigrationId = $MigrationId
+            InvocationRole = $Role
+            BackupOperationId = $OperationId
+            CaptureAttemptId = [string]$SourceAuthority.CaptureAttemptId
+            BackupMode = $Mode
+            AuthorityRoot = [string]$SourceAuthority.AuthorityRoot
+            MigrationJournalPath = [string]$SourceAuthority.MigrationJournalPath
+            MigrationAuthorityFingerprint = [string]$SourceAuthority.MigrationAuthorityFingerprint
+            MigrationJournalRevision = [int64]$SourceAuthority.MigrationJournalRevision
+            MigrationBackupAuthorityFingerprint = [string]$SourceAuthority.MigrationBackupAuthorityFingerprint
+            ComposeProject = [string]$SourceAuthority.ComposeProject
+            ComposeFile = [string]$SourceAuthority.ComposeFile
+            ComposeFileSha256 = [string]$SourceAuthority.ComposeFileSha256
+            ComposeOverrideFile = [string]$SourceAuthority.ComposeOverrideFile
+            ComposeOverrideSha256 = [string]$SourceAuthority.ComposeOverrideSha256
+            EnvFile = [string]$SourceAuthority.EnvFile
+            EnvFileSha256 = [string]$SourceAuthority.EnvFileSha256
+            InventoryFingerprint = [string]$SourceAuthority.InventoryFingerprint
+            DurableVolumeFingerprint = [string]$SourceAuthority.DurableVolumeFingerprint
             MysqlContainerId = [string]$SourceAuthority.MysqlContainerId
             MysqlContainerName = [string]$SourceAuthority.MysqlContainerName
             MysqlImageReference = [string]$SourceAuthority.MysqlImageReference
@@ -703,6 +847,10 @@ function Write-EasyFirePublishedPair {
         MetadataSha256 = [string]$Metadata.MetadataSha256
         Reused = $Reused
     }
+    $metadataDocument = Get-EasyFireBackupProperty -Object $Metadata -Name 'Document'
+    $captureAttempt = [string](Get-EasyFireBackupProperty -Object $metadataDocument `
+        -Name 'CaptureAttemptId' -Default '')
+    if ($captureAttempt) { $published['CaptureAttemptId'] = $captureAttempt }
     Write-Output ("BACKUP_PUBLISHED " + ($published | ConvertTo-Json -Compress))
 }
 
@@ -981,6 +1129,324 @@ function Get-EasyFireMigrationSourceMysqlAuthority {
     }
 }
 
+function Get-EasyFireMigrationRuntimeMysqlAuthority {
+    param(
+        [Parameter(Mandatory = $true)][string]$ExactAuthorityRoot,
+        [Parameter(Mandatory = $true)][string]$ExactComposeFile,
+        [Parameter(Mandatory = $true)][string]$ExactComposeOverrideFile,
+        [Parameter(Mandatory = $true)][string]$ExactEnvFile,
+        [Parameter(Mandatory = $true)][string]$ExactProjectName,
+        [Parameter(Mandatory = $true)][string]$CanonicalMigrationId,
+        [Parameter(Mandatory = $true)][string]$ExactMigrationJournalPath,
+        [Parameter(Mandatory = $true)][string]$OperationId,
+        [Parameter(Mandatory = $true)][string]$ExactCaptureAttemptId,
+        [Parameter(Mandatory = $true)]
+        [ValidateSet('MigrationBaseline', 'MigrationEmergency', 'MigrationScheduled')]
+        [string]$Role
+    )
+
+    $null = ConvertTo-EasyFireCanonicalMigrationId -Value $CanonicalMigrationId
+    $null = ConvertTo-EasyFireCanonicalBackupOperationId -Value $OperationId
+    $null = ConvertTo-EasyFireCanonicalBackupOperationId -Value $ExactCaptureAttemptId
+    $authorityRoot = [IO.Path]::GetFullPath($ExactAuthorityRoot)
+    $authorityPrefix = $authorityRoot.TrimEnd('\') + '\'
+    $expectedJournalPath = Join-Path (Join-Path (Join-Path $authorityRoot 'migrations') $CanonicalMigrationId) `
+        'migration.journal.json'
+    if ($ExactAuthorityRoot -cne $authorityRoot -or
+        $ExactMigrationJournalPath -cne $expectedJournalPath -or
+        -not (Test-Path -LiteralPath $authorityRoot -PathType Container) -or
+        -not (Test-Path -LiteralPath $expectedJournalPath -PathType Leaf) -or
+        (Test-EasyFireReparsePoint -Path $authorityRoot) -or
+        (Test-EasyFireReparsePoint -Path $expectedJournalPath)) {
+        throw 'Migrated-runtime backup root or schema-2 journal authority is invalid.'
+    }
+    $null = Assert-EasyFireNoReparsePathChain -Path $expectedJournalPath -TrustedRoot $authorityRoot
+
+    $composeFile = Resolve-EasyFireContainedPath -Path $ExactComposeFile -AllowedRoot $authorityRoot -MustExist
+    $composeOverrideFile = Resolve-EasyFireContainedPath -Path $ExactComposeOverrideFile `
+        -AllowedRoot $authorityRoot -MustExist
+    $envFile = Resolve-EasyFireContainedPath -Path $ExactEnvFile -AllowedRoot $authorityRoot -MustExist
+    foreach ($file in @($composeFile, $composeOverrideFile, $envFile)) {
+        if (-not (Test-Path -LiteralPath $file -PathType Leaf) -or
+            (Test-EasyFireReparsePoint -Path $file)) {
+            throw 'Migrated-runtime Compose and environment authority must use exact regular files.'
+        }
+    }
+    if ($composeFile -cne $ExactComposeFile -or
+        $composeOverrideFile -cne $ExactComposeOverrideFile -or
+        $envFile -cne $ExactEnvFile -or
+        $ExactProjectName -notmatch '^easyfire-bookkeeping-mig-c-[a-f0-9]{12}$') {
+        throw 'Migrated-runtime Compose path or project identity is not canonical.'
+    }
+
+    $journalSha256 = Get-EasyFireSha256Hex -Path $expectedJournalPath
+    try { $journal = Get-Content -LiteralPath $expectedJournalPath -Raw -Encoding utf8 | ConvertFrom-Json }
+    catch { throw 'Migrated-runtime schema-2 journal is not valid JSON.' }
+    if ((Get-EasyFireSha256Hex -Path $expectedJournalPath) -cne $journalSha256) {
+        throw 'Migrated-runtime schema-2 journal changed while it was read.'
+    }
+    $authorityDocument = Get-EasyFireBackupProperty -Object $journal -Name 'Authority'
+    $authorityFingerprint = [string](Get-EasyFireBackupProperty -Object $authorityDocument `
+        -Name 'Fingerprint' -Default '')
+    if ([int](Get-EasyFireBackupProperty -Object $journal -Name 'SchemaVersion' -Default 0) -ne 2 -or
+        [string](Get-EasyFireBackupProperty -Object $journal -Name 'MigrationId' -Default '') -cne $CanonicalMigrationId -or
+        [string](Get-EasyFireBackupProperty -Object $journal -Name 'AuthorityRoot' -Default '') -cne $authorityRoot -or
+        $authorityFingerprint -notmatch '^[A-F0-9]{64}$' -or
+        [int64](Get-EasyFireBackupProperty -Object $journal -Name 'Revision' -Default 0) -lt 1 -or
+        (Get-EasyFireBackupProperty -Object $journal -Name 'PreserveOriginals' -Default $false) -isnot [bool] -or
+        -not [bool]$journal.PreserveOriginals -or
+        -not $authorityDocument) {
+        throw 'Migrated-runtime backup requires one exact preservation-bound schema-2 journal.'
+    }
+
+    $currentState = [string](Get-EasyFireBackupProperty -Object $journal -Name 'CurrentState' -Default '')
+    $phase = [string](Get-EasyFireBackupProperty -Object $journal -Name 'Phase' -Default '')
+    switch ($Role) {
+        'MigrationBaseline' {
+            if ($currentState -cne 'CuttingOver' -or $phase -cne 'CutoverBaselineBackupRunning') {
+                throw 'MigrationBaseline requires CuttingOver|CutoverBaselineBackupRunning authority.'
+            }
+        }
+        'MigrationEmergency' {
+            if ($currentState -cne 'Completed' -or $phase -cne 'EmergencyBackupRunning') {
+                throw 'MigrationEmergency requires Completed|EmergencyBackupRunning authority.'
+            }
+        }
+        'MigrationScheduled' {
+            if ($currentState -cne 'Completed' -or $phase -cne 'Completed') {
+                throw 'MigrationScheduled requires one quiescent Completed schema-2 journal.'
+            }
+        }
+    }
+
+    $backupReceipts = Get-EasyFireBackupProperty -Object $journal -Name 'BackupReceipts'
+    $roleReceipt = if ($backupReceipts) {
+        Get-EasyFireBackupProperty -Object $backupReceipts -Name $Role
+    } else { $null }
+    $planValue = if ($roleReceipt) { Get-EasyFireBackupProperty -Object $roleReceipt -Name 'Plan' } else { $null }
+    $plan = if ($Role -ceq 'MigrationScheduled') {
+        $scheduledPlans = @($planValue)
+        if ($scheduledPlans.Count -gt 0) { $scheduledPlans[-1] } else { $null }
+    } else { $planValue }
+    $runtimeAuthority = if ($plan) { Get-EasyFireBackupProperty -Object $plan -Name 'RuntimeAuthority' } else { $null }
+    $quiescence = if ($plan) { Get-EasyFireBackupProperty -Object $plan -Name 'Quiescence' } else { $null }
+    if (-not $plan -or -not $runtimeAuthority -or
+        [int](Get-EasyFireBackupProperty -Object $plan -Name 'SchemaVersion' -Default 0) -ne 1 -or
+        [string](Get-EasyFireBackupProperty -Object $plan -Name 'BackupOperationId' -Default '') -cne $OperationId -or
+        [string](Get-EasyFireBackupProperty -Object $plan -Name 'InvocationRole' -Default '') -cne $Role -or
+        [string](Get-EasyFireBackupProperty -Object $plan -Name 'BackupMode' -Default '') -cne 'full' -or
+        [string](Get-EasyFireBackupProperty -Object $plan -Name 'State' -Default '') -cne 'active') {
+        throw 'Migrated-runtime backup plan does not bind the exact active operation.'
+    }
+    $requiresQuiescence = $true
+    $expectedQuiescenceStrategy = 'graceful-stop'
+    $quiescenceServices = if ($quiescence) {
+        @(Get-EasyFireBackupProperty -Object $quiescence -Name 'Services' -Default @())
+    } else { @() }
+    $requiredExitedServices = if ($quiescence) {
+        @(Get-EasyFireBackupProperty -Object $quiescence -Name 'RequiredExitedServices' -Default @())
+    } else { @() }
+    $expectedApplicationServices = @('envoy', 'gotenberg', 'server', 'webapp')
+    $actualQuiescenceServices = @($quiescenceServices | ForEach-Object {
+            [string](Get-EasyFireBackupProperty -Object $_ -Name 'Service' -Default '')
+        } | Sort-Object)
+    if (-not $quiescence -or
+        [int](Get-EasyFireBackupProperty -Object $quiescence -Name 'SchemaVersion' -Default 0) -ne 1 -or
+        (Get-EasyFireBackupProperty -Object $quiescence -Name 'Required' -Default $null) -isnot [bool] -or
+        [bool]$quiescence.Required -ne $requiresQuiescence -or
+        [string](Get-EasyFireBackupProperty -Object $quiescence -Name 'Strategy' -Default '') -cne
+            $expectedQuiescenceStrategy -or
+        $quiescenceServices.Count -ne 4 -or
+        $requiredExitedServices.Count -ne 1 -or
+        [string]$requiredExitedServices[0] -cne 'database_migration' -or
+        @(Compare-Object $expectedApplicationServices $actualQuiescenceServices -CaseSensitive).Count -ne 0) {
+        throw 'Migrated-runtime backup plan lacks exact app-tier consistency-boundary authority.'
+    }
+
+    $runtimeFingerprint = Get-EasyFireBackupObjectSha256 -Value $runtimeAuthority
+    $inventory = Get-EasyFireBackupProperty -Object $runtimeAuthority -Name 'Inventory'
+    $mysqlAuthority = Get-EasyFireBackupProperty -Object $runtimeAuthority -Name 'Mysql'
+    $redisAuthority = Get-EasyFireBackupProperty -Object $runtimeAuthority -Name 'Redis'
+    if ([int](Get-EasyFireBackupProperty -Object $runtimeAuthority -Name 'SchemaVersion' -Default 0) -ne 1 -or
+        [string](Get-EasyFireBackupProperty -Object $runtimeAuthority -Name 'MigrationId' -Default '') -cne $CanonicalMigrationId -or
+        [string](Get-EasyFireBackupProperty -Object $runtimeAuthority -Name 'AuthorityRoot' -Default '') -cne $authorityRoot -or
+        [string](Get-EasyFireBackupProperty -Object $runtimeAuthority -Name 'AuthorityFingerprint' -Default '') -cne
+            $authorityFingerprint -or
+        [string](Get-EasyFireBackupProperty -Object $runtimeAuthority -Name 'ProjectName' -Default '') -cne $ExactProjectName -or
+        [string](Get-EasyFireBackupProperty -Object $runtimeAuthority -Name 'ComposeFile' -Default '') -cne $composeFile -or
+        [string](Get-EasyFireBackupProperty -Object $runtimeAuthority -Name 'ComposeOverrideFile' -Default '') -cne
+            $composeOverrideFile -or
+        [string](Get-EasyFireBackupProperty -Object $runtimeAuthority -Name 'EnvFile' -Default '') -cne $envFile -or
+        [string](Get-EasyFireBackupProperty -Object $runtimeAuthority -Name 'ComposeFileSha256' -Default '') -cne
+            (Get-EasyFireSha256Hex -Path $composeFile) -or
+        [string](Get-EasyFireBackupProperty -Object $runtimeAuthority -Name 'ComposeOverrideSha256' -Default '') -cne
+            (Get-EasyFireSha256Hex -Path $composeOverrideFile) -or
+        [string](Get-EasyFireBackupProperty -Object $runtimeAuthority -Name 'EnvFileSha256' -Default '') -cne
+            (Get-EasyFireSha256Hex -Path $envFile) -or
+        [string](Get-EasyFireBackupProperty -Object $runtimeAuthority -Name 'InventoryFingerprint' -Default '') -notmatch
+            '^[A-F0-9]{64}$' -or
+        [string](Get-EasyFireBackupProperty -Object $runtimeAuthority -Name 'DurableVolumeFingerprint' -Default '') -notmatch
+            '^[A-F0-9]{64}$' -or
+        -not $inventory -or -not $mysqlAuthority -or -not $redisAuthority) {
+        throw 'Migrated-runtime backup plan runtime authority is incomplete or changed.'
+    }
+
+    $target = Get-EasyFireBackupProperty -Object (Get-EasyFireBackupProperty -Object $authorityDocument `
+        -Name 'Document') -Name 'Target'
+    $lanes = Get-EasyFireBackupProperty -Object $journal -Name 'Lanes'
+    $cutoverLane = if ($lanes) { Get-EasyFireBackupProperty -Object $lanes -Name 'Cutover' } else { $null }
+    if (-not $target -or -not $cutoverLane -or
+        [string](Get-EasyFireBackupProperty -Object $target -Name 'ReleaseDirectory' -Default '') -cne
+            [string]$runtimeAuthority.ReleaseDirectory -or
+        [string](Get-EasyFireBackupProperty -Object $target -Name 'ComposeFile' -Default '') -cne $composeFile -or
+        [string](Get-EasyFireBackupProperty -Object $target -Name 'ComposeFileSha256' -Default '') -cne
+            [string]$runtimeAuthority.ComposeFileSha256 -or
+        [string](Get-EasyFireBackupProperty -Object $cutoverLane -Name 'ProjectName' -Default '') -cne $ExactProjectName -or
+        [string](Get-EasyFireBackupProperty -Object $cutoverLane -Name 'EnvironmentFile' -Default '') -cne $envFile -or
+        [string](Get-EasyFireBackupProperty -Object $cutoverLane -Name 'ComposeOverrideFile' -Default '') -cne
+            $composeOverrideFile -or
+        [string](Get-EasyFireBackupProperty -Object $cutoverLane -Name 'MysqlVolumeName' -Default '') -cne
+            [string]$mysqlAuthority.VolumeName -or
+        [string](Get-EasyFireBackupProperty -Object $cutoverLane -Name 'RedisVolumeName' -Default '') -cne
+            [string]$redisAuthority.VolumeName) {
+        throw 'Migrated-runtime backup plan does not match immutable target and Cutover lane authority.'
+    }
+
+    if ($Role -in @('MigrationEmergency', 'MigrationScheduled')) {
+        $completed = Get-EasyFireBackupProperty -Object $journal -Name 'CompletedAuthority'
+        if (-not $completed -or [int]$completed.SchemaVersion -ne 1 -or
+            [string]$completed.ProjectName -cne $ExactProjectName -or
+            [string]$completed.ComposeFile -cne $composeFile -or
+            [string]$completed.ComposeOverrideFile -cne $composeOverrideFile -or
+            [string]$completed.EnvFile -cne $envFile -or
+            [string]$completed.InventoryFingerprint -cne [string]$runtimeAuthority.InventoryFingerprint -or
+            [string]$completed.DurableVolumeFingerprint -cne [string]$runtimeAuthority.DurableVolumeFingerprint -or
+            ($completed.Inventory | ConvertTo-Json -Depth 30 -Compress) -cne
+                ($inventory | ConvertTo-Json -Depth 30 -Compress) -or
+            ($completed.Mysql | ConvertTo-Json -Depth 8 -Compress) -cne
+                ($mysqlAuthority | ConvertTo-Json -Depth 8 -Compress) -or
+            ($completed.Redis | ConvertTo-Json -Depth 8 -Compress) -cne
+                ($redisAuthority | ConvertTo-Json -Depth 8 -Compress) -or
+            -not (Get-EasyFireBackupProperty -Object $completed -Name 'BaselineRecoveryUnit')) {
+            throw 'Migrated-runtime backup does not match immutable CompletedAuthority.'
+        }
+    }
+
+    $currentInventory = Get-EasyFireComposeInventory -ProjectName $ExactProjectName `
+        -ExactVolumeNames @([string]$mysqlAuthority.VolumeName, [string]$redisAuthority.VolumeName)
+    $currentInventoryFingerprint = Get-EasyFireInventoryFingerprint -Inventory $currentInventory
+    $currentDurableFingerprint = Get-EasyFireVolumeFingerprint -Volumes @($currentInventory.Volumes)
+    if ($currentInventoryFingerprint -cne [string]$runtimeAuthority.InventoryFingerprint -or
+        $currentDurableFingerprint -cne [string]$runtimeAuthority.DurableVolumeFingerprint) {
+        throw 'Current migrated Compose inventory no longer matches the journaled runtime authority.'
+    }
+
+    $mysql = @($currentInventory.Containers | Where-Object { [string]$_.Service -ceq 'mysql' })
+    $redis = @($currentInventory.Containers | Where-Object { [string]$_.Service -ceq 'redis' })
+    $mysqlMounts = if ($mysql.Count -eq 1) {
+        @($mysql[0].Mounts | Where-Object { [string]$_.Type -ceq 'volume' -and
+            [string]$_.Destination -ceq '/var/lib/mysql' })
+    } else { @() }
+    $redisMounts = if ($redis.Count -eq 1) {
+        @($redis[0].Mounts | Where-Object { [string]$_.Type -ceq 'volume' })
+    } else { @() }
+    $mysqlHostPortCount = if ($mysql.Count -eq 1) { @($mysql[0].PortBindings).Count } else { -1 }
+    $redisHostPortCount = if ($redis.Count -eq 1) { @($redis[0].PortBindings).Count } else { -1 }
+    if ($mysql.Count -ne 1 -or $redis.Count -ne 1 -or
+        [string]$mysql[0].State -cne 'running' -or [string]$mysql[0].Health -cne 'healthy' -or
+        [string]$redis[0].State -cne 'running' -or [string]$redis[0].Health -cne 'healthy' -or
+        $mysqlHostPortCount -ne 0 -or $redisHostPortCount -ne 0 -or
+        $mysqlMounts.Count -ne 1 -or $redisMounts.Count -ne 1 -or
+        [string]$mysql[0].Id -cne [string]$mysqlAuthority.ContainerId -or
+        [string]$mysql[0].Name -cne [string]$mysqlAuthority.ContainerName -or
+        [string]$mysql[0].ImageReference -cne [string]$mysqlAuthority.ImageReference -or
+        [string]$mysql[0].ImageId -cne [string]$mysqlAuthority.ImageId -or
+        [string]$mysqlMounts[0].Source -cne [string]$mysqlAuthority.VolumeName -or
+        [string]$redis[0].Id -cne [string]$redisAuthority.ContainerId -or
+        [string]$redis[0].Name -cne [string]$redisAuthority.ContainerName -or
+        [string]$redis[0].ImageReference -cne [string]$redisAuthority.ImageReference -or
+        [string]$redis[0].ImageId -cne [string]$redisAuthority.ImageId -or
+        [string]$redisMounts[0].Source -cne [string]$redisAuthority.VolumeName) {
+        throw 'Migrated-runtime MariaDB or Redis identity and health drifted from journal authority.'
+    }
+
+    foreach ($service in $expectedApplicationServices) {
+        $current = @($currentInventory.Containers | Where-Object { [string]$_.Service -ceq $service })
+        $planned = @($quiescenceServices | Where-Object {
+                [string](Get-EasyFireBackupProperty -Object $_ -Name 'Service' -Default '') -ceq $service
+            })
+        if ($current.Count -ne 1 -or $planned.Count -ne 1 -or
+            [string]$current[0].Id -cne [string]$planned[0].ContainerId -or
+            [string]$current[0].Name -cne [string]$planned[0].ContainerName -or
+            [string]$current[0].ImageReference -cne [string]$planned[0].ImageReference -or
+            [string]$current[0].ImageId -cne [string]$planned[0].ImageId) {
+            throw "Migrated-runtime application-tier identity drifted for service: $service"
+        }
+        if ([string]$current[0].State -cne 'exited') {
+            throw "Migrated-runtime application tier is not quiesced for service: $service"
+        }
+    }
+    $currentMigration = @($currentInventory.Containers | Where-Object {
+            [string]$_.Service -ceq 'database_migration'
+        })
+    $plannedMigration = @($inventory.Containers | Where-Object {
+            [string]$_.Service -ceq 'database_migration'
+        })
+    if ($currentMigration.Count -ne 1 -or $plannedMigration.Count -ne 1 -or
+        [string]$currentMigration[0].Id -cne [string]$plannedMigration[0].Id -or
+        [string]$currentMigration[0].Name -cne [string]$plannedMigration[0].Name -or
+        [string]$currentMigration[0].ImageReference -cne [string]$plannedMigration[0].ImageReference -or
+        [string]$currentMigration[0].ImageId -cne [string]$plannedMigration[0].ImageId -or
+        [string]$currentMigration[0].State -cne 'exited') {
+        throw 'Migrated-runtime database_migration service is not one exact exited non-writer.'
+    }
+
+    $composeArgs = @(
+        'compose', '-f', $composeFile, '-f', $composeOverrideFile, '--env-file', $envFile,
+        '-p', $ExactProjectName, 'ps', '-q', 'mysql'
+    )
+    $savedEap = $ErrorActionPreference
+    try {
+        $ErrorActionPreference = 'Continue'
+        $composeIds = @(& docker @composeArgs 2>$null | ForEach-Object { ([string]$_).Trim() } |
+            Where-Object { $_ })
+        $composeExit = $LASTEXITCODE
+    } finally {
+        $ErrorActionPreference = $savedEap
+    }
+    if ($composeExit -ne 0 -or $composeIds.Count -ne 1 -or
+        [string]$composeIds[0] -cne [string]$mysqlAuthority.ContainerId) {
+        throw 'Migrated-runtime Compose files and environment do not resolve to the journaled MariaDB.'
+    }
+
+    return [pscustomobject]@{
+        MigrationId = $CanonicalMigrationId
+        AuthorityRoot = $authorityRoot
+        MigrationJournalPath = $expectedJournalPath
+        MigrationJournalSha256 = $journalSha256
+        MigrationAuthorityFingerprint = $authorityFingerprint
+        MigrationJournalRevision = [int64]$journal.Revision
+        MigrationBackupAuthorityFingerprint = $runtimeFingerprint
+        CaptureAttemptId = $ExactCaptureAttemptId
+        ComposeProject = $ExactProjectName
+        ComposeFile = $composeFile
+        ComposeFileSha256 = [string]$runtimeAuthority.ComposeFileSha256
+        ComposeOverrideFile = $composeOverrideFile
+        ComposeOverrideSha256 = [string]$runtimeAuthority.ComposeOverrideSha256
+        EnvFile = $envFile
+        EnvFileSha256 = [string]$runtimeAuthority.EnvFileSha256
+        InventoryFingerprint = $currentInventoryFingerprint
+        DurableVolumeFingerprint = $currentDurableFingerprint
+        MysqlContainerId = [string]$mysql[0].Id
+        MysqlContainerName = [string]$mysql[0].Name
+        MysqlImageReference = [string]$mysql[0].ImageReference
+        MysqlImageId = [string]$mysql[0].ImageId
+        MysqlVolumeName = [string]$mysqlMounts[0].Source
+        MysqlVolumeDestination = [string]$mysqlMounts[0].Destination
+        MysqlVolumeComposeKey = [string]$mysqlAuthority.VolumeComposeKey
+    }
+}
+
 function Get-EasyFireDisposableMysqlAuthority {
     param(
         [Parameter(Mandatory = $true)][string]$ExactComposeFile,
@@ -1042,6 +1508,7 @@ function Invoke-EasyFireBackupRetention {
         [Parameter(Mandatory = $true)][string]$ExactProductionRoot,
         [Parameter(Mandatory = $true)][string]$ExactProjectName,
         [Parameter(Mandatory = $true)][string]$Mode,
+        [string]$ExactInvocationRole,
         [Parameter(Mandatory = $true)][int]$Count
     )
 
@@ -1059,12 +1526,14 @@ function Invoke-EasyFireBackupRetention {
         }
         $pair = Test-EasyFireBackupPair -BackupFile $candidate.FullName
         $metadata = if ($pair.Valid) { Test-EasyFireBackupMetadataBinding -BackupFile $candidate.FullName } else { $null }
-        if ($pair.Valid -and $metadata.Valid) {
+        if ($pair.Valid -and $metadata.Valid -and
+            (-not $ExactInvocationRole -or
+                [string]$metadata.Document.InvocationRole -ceq $ExactInvocationRole)) {
             $verifiedBackups += $candidate
             if ([string]$metadata.Document.InvocationRole -ceq 'MigrationSource') {
                 $migrationPinnedNames += $candidate.Name
             }
-        } else {
+        } elseif (-not $pair.Valid -or -not $metadata.Valid) {
             $reason = if (-not $pair.Valid) { $pair.Reason } else { $metadata.Reason }
             Write-Warning "Retention ignored unverified recovery unit '$($candidate.Name)' ($reason); it was not deleted."
         }
@@ -1089,7 +1558,10 @@ function Invoke-EasyFireBackupRetention {
 function Invoke-EasyFireRoleAwareBackupRetention {
     param(
         [Parameter(Mandatory = $true)]
-        [ValidateSet('Scheduled', 'Baseline', 'Emergency', 'DisposableProof', 'MigrationSource')]
+        [ValidateSet(
+            'Scheduled', 'Baseline', 'Emergency', 'DisposableProof', 'MigrationSource',
+            'MigrationBaseline', 'MigrationEmergency', 'MigrationScheduled'
+        )]
         [string]$Role,
         [Parameter(Mandatory = $true)][string]$ExactBackupRoot,
         [Parameter(Mandatory = $true)][string]$ExactProductionRoot,
@@ -1098,10 +1570,13 @@ function Invoke-EasyFireRoleAwareBackupRetention {
         [Parameter(Mandatory = $true)][int]$Count
     )
 
-    if ($Role -ceq 'MigrationSource') { return }
+    if ($Role -in @(
+            'MigrationSource', 'MigrationBaseline', 'MigrationEmergency', 'MigrationScheduled'
+        )) { return }
+    $roleFilter = ''
     Invoke-EasyFireBackupRetention -ExactBackupRoot $ExactBackupRoot `
         -ExactProductionRoot $ExactProductionRoot -ExactProjectName $ExactProjectName `
-        -Mode $Mode -Count $Count
+        -Mode $Mode -ExactInvocationRole $roleFilter -Count $Count
 }
 
 try {
@@ -1120,9 +1595,15 @@ try {
     }
     $BackupDir = $resolvedBackupDir
     $BackupOperationId = ConvertTo-EasyFireCanonicalBackupOperationId -Value $BackupOperationId
+    if ($CaptureAttemptId) {
+        $CaptureAttemptId = ConvertTo-EasyFireCanonicalBackupOperationId -Value $CaptureAttemptId
+    }
 
     if ($ProjectName -notmatch $projectNameRegex) { throw 'ProjectName is invalid.' }
     $resolvedComposeFile = [IO.Path]::GetFullPath($ComposeFile)
+    $resolvedComposeOverrideFile = if ($ComposeOverrideFile) {
+        [IO.Path]::GetFullPath($ComposeOverrideFile)
+    } else { '' }
     $resolvedEnvFile = [IO.Path]::GetFullPath($EnvFile)
     if (-not (Test-Path -LiteralPath $resolvedComposeFile -PathType Leaf) -or
         -not (Test-Path -LiteralPath $resolvedEnvFile -PathType Leaf)) {
@@ -1131,6 +1612,11 @@ try {
     if ((Test-EasyFireReparsePoint -Path $resolvedComposeFile) -or
         (Test-EasyFireReparsePoint -Path $resolvedEnvFile)) {
         throw 'ComposeFile and EnvFile cannot be reparse points.'
+    }
+    if ($resolvedComposeOverrideFile -and
+        (-not (Test-Path -LiteralPath $resolvedComposeOverrideFile -PathType Leaf) -or
+            (Test-EasyFireReparsePoint -Path $resolvedComposeOverrideFile))) {
+        throw 'ComposeOverrideFile must be one existing regular file.'
     }
 
     $backupMutex = New-Object Threading.Mutex($false, (Get-EasyFireBackupMutexName -ProductionRoot $resolvedAuthorityRoot))
@@ -1149,7 +1635,9 @@ try {
         if ($ProjectName -ceq 'easyfire-bookkeeping-prod') {
             throw 'Disposable proof cannot target the production project.'
         }
-        if ($ActionId -or $InvocationRole -or $MigrationId -or $ExpectedMysqlContainerId -or
+        if ($ActionId -or $InvocationRole -or $MigrationId -or $MigrationJournalPath -or
+            $CaptureAttemptId -or
+            $ComposeOverrideFile -or $ExpectedMysqlContainerId -or
             $ExpectedMysqlImageReference -or $ExpectedMysqlImageId -or $ExpectedMysqlVolumeName -or
             $ExpectedMysqlVolumeDestination) {
             throw 'Disposable proof cannot accept production Action journal authority.'
@@ -1176,6 +1664,38 @@ try {
             -ExpectedVolumeName $expectedProofVolume
         $mysqlContainerId = [string]$sourceAuthority.MysqlContainerId
         $publishedRole = 'DisposableProof'
+    } elseif (Test-EasyFireMigrationRuntimeBackupRole -Role $InvocationRole) {
+        if ($ActionId -or $ProofId -or $ExpectedMysqlContainerId -or
+            $ExpectedMysqlImageReference -or $ExpectedMysqlImageId -or
+            $ExpectedMysqlVolumeName -or $ExpectedMysqlVolumeDestination) {
+            throw 'Migrated-runtime backup accepts authority only from its schema-2 migration journal.'
+        }
+        if ($SchemaOnly) {
+            throw 'Migrated-runtime backup requires a full backup; SchemaOnly is not authorized.'
+        }
+        foreach ($requiredInput in @(
+                'AuthorityRoot', 'ComposeFile', 'ComposeOverrideFile', 'EnvFile',
+                'ProjectName', 'MigrationJournalPath'
+            )) {
+            if (-not $PSBoundParameters.ContainsKey($requiredInput)) {
+                throw "Migrated-runtime backup requires caller-bound -$requiredInput."
+            }
+        }
+        if (-not $MigrationId -or -not $MigrationJournalPath -or -not $CaptureAttemptId) {
+            throw 'Migrated-runtime backup requires MigrationId, MigrationJournalPath, and CaptureAttemptId.'
+        }
+        $MigrationId = ConvertTo-EasyFireCanonicalMigrationId -Value $MigrationId
+        $sourceAuthority = Get-EasyFireMigrationRuntimeMysqlAuthority `
+            -ExactAuthorityRoot $resolvedAuthorityRoot -ExactComposeFile $resolvedComposeFile `
+            -ExactComposeOverrideFile $resolvedComposeOverrideFile -ExactEnvFile $resolvedEnvFile `
+            -ExactProjectName $ProjectName -CanonicalMigrationId $MigrationId `
+            -ExactMigrationJournalPath ([IO.Path]::GetFullPath($MigrationJournalPath)) `
+            -OperationId $BackupOperationId -ExactCaptureAttemptId $CaptureAttemptId `
+            -Role $InvocationRole
+        $mysqlContainerId = [string]$sourceAuthority.MysqlContainerId
+        $publishedRole = $InvocationRole
+        $journalPath = [string]$sourceAuthority.MigrationJournalPath
+        $journalAuthorityHash = [string]$sourceAuthority.MigrationJournalSha256
     } elseif ($InvocationRole -ceq 'MigrationSource') {
         if ($ActionId -or $ProofId) {
             throw 'MigrationSource cannot accept ActionId or disposable ProofId authority.'
@@ -1187,6 +1707,9 @@ try {
             if (-not $PSBoundParameters.ContainsKey($requiredInput)) {
                 throw "MigrationSource requires caller-bound -$requiredInput."
             }
+        }
+        if ($MigrationJournalPath -or $ComposeOverrideFile -or $CaptureAttemptId) {
+            throw 'MigrationSource cannot accept migrated-runtime journal or Compose override authority.'
         }
         if (-not $MigrationId -or -not $ExpectedMysqlContainerId -or
             -not $ExpectedMysqlImageReference -or -not $ExpectedMysqlImageId -or
@@ -1208,7 +1731,8 @@ try {
             throw 'Production backup requires ActionId and InvocationRole.'
         }
         if ($ProofId) { throw 'Production backup cannot accept a disposable ProofId.' }
-        if ($MigrationId -or $ExpectedMysqlContainerId -or $ExpectedMysqlImageReference -or
+        if ($MigrationId -or $MigrationJournalPath -or $ComposeOverrideFile -or $CaptureAttemptId -or
+            $ExpectedMysqlContainerId -or $ExpectedMysqlImageReference -or
             $ExpectedMysqlImageId -or $ExpectedMysqlVolumeName -or $ExpectedMysqlVolumeDestination) {
             throw 'Journal-authorized production backup cannot accept MigrationSource authority.'
         }
@@ -1225,6 +1749,9 @@ try {
     }
 
     $dumpFileName = "mysql-${ProjectName}-${dumpMode}-$BackupOperationId"
+    if (Test-EasyFireMigrationRuntimeBackupRole -Role $publishedRole) {
+        $dumpFileName = "$dumpFileName-capture-$CaptureAttemptId"
+    }
     $compressedFile = Join-Path $BackupDir "$dumpFileName.sql.gz"
     $sidecarFile = Join-Path $BackupDir "$dumpFileName.sha256"
     $metadataFile = Get-EasyFireBackupMetadataPath -BackupFile $compressedFile
@@ -1348,6 +1875,17 @@ try {
             ($sourceAuthority | ConvertTo-Json -Depth 8 -Compress)) {
             throw 'MigrationSource authority changed immediately before dump.'
         }
+    } elseif (Test-EasyFireMigrationRuntimeBackupRole -Role $publishedRole) {
+        $revalidatedSourceAuthority = Get-EasyFireMigrationRuntimeMysqlAuthority `
+            -ExactAuthorityRoot $resolvedAuthorityRoot -ExactComposeFile $resolvedComposeFile `
+            -ExactComposeOverrideFile $resolvedComposeOverrideFile -ExactEnvFile $resolvedEnvFile `
+            -ExactProjectName $ProjectName -CanonicalMigrationId $MigrationId `
+            -ExactMigrationJournalPath $journalPath -OperationId $BackupOperationId `
+            -ExactCaptureAttemptId $CaptureAttemptId -Role $publishedRole
+        if (($revalidatedSourceAuthority | ConvertTo-Json -Depth 30 -Compress) -cne
+            ($sourceAuthority | ConvertTo-Json -Depth 30 -Compress)) {
+            throw 'Migrated-runtime authority changed immediately before dump.'
+        }
     }
     $containerSql = "/tmp/$dumpFileName.sql"
     $containerGz = "/tmp/$dumpFileName.sql.gz"
@@ -1426,6 +1964,17 @@ try {
         if (($revalidatedSourceAuthority | ConvertTo-Json -Depth 8 -Compress) -cne
             ($sourceAuthority | ConvertTo-Json -Depth 8 -Compress)) {
             throw 'MigrationSource authority changed during backup; refusing publication.'
+        }
+    } elseif (Test-EasyFireMigrationRuntimeBackupRole -Role $publishedRole) {
+        $revalidatedSourceAuthority = Get-EasyFireMigrationRuntimeMysqlAuthority `
+            -ExactAuthorityRoot $resolvedAuthorityRoot -ExactComposeFile $resolvedComposeFile `
+            -ExactComposeOverrideFile $resolvedComposeOverrideFile -ExactEnvFile $resolvedEnvFile `
+            -ExactProjectName $ProjectName -CanonicalMigrationId $MigrationId `
+            -ExactMigrationJournalPath $journalPath -OperationId $BackupOperationId `
+            -ExactCaptureAttemptId $CaptureAttemptId -Role $publishedRole
+        if (($revalidatedSourceAuthority | ConvertTo-Json -Depth 30 -Compress) -cne
+            ($sourceAuthority | ConvertTo-Json -Depth 30 -Compress)) {
+            throw 'Migrated-runtime authority changed during backup; refusing publication.'
         }
     }
 

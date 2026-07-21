@@ -315,3 +315,48 @@ noncanonical SID fails before backup work.
   established. This is a real infrastructure blocker, so backup, rehearsal,
   task repair/retirement, service start, native login, and cutover remain
   fail-closed. Every original volume, journal, release, and backup was preserved.
+
+## Direct recovery resumed and migration controller completed - 2026-07-20
+
+This entry supersedes the current-state conclusions in the preceding “live
+stop” entry without rewriting that historical record.
+
+- Newsec SSH works. Six long-running containers on the older
+  `easyfire-bookkeeping-prod` release are healthy, and its one-shot migration
+  container exited successfully with result 0.
+- The sole-owner Cloudflare Access policy, Tunnel, DNS, token identity, and the
+  exact cloudflared binary/process/connector were proven without exposing the
+  token. `EasyFireBookkeepingCloudflared` is Running with Automatic start.
+- Both legacy scheduled tasks remain enabled and Ready with
+  `LastTaskResult=1`. Their exact recovery XML hashes are preserved. They are
+  not changed until gated Cutover replaces the backup task and retires the
+  startup task.
+- The verified live-runtime checkpoint manifest SHA-256 is
+  `0AEE8A2D577B102ECA6E61B8D4063363C7420845D27BDB957BDCA4DCC66525BE`.
+- A current caller-bound `MigrationSource` backup was created with SHA-256
+  `229ED021892F495AF84219596713C24C6B30676856601B0F3AC19F7E175FB54D`;
+  its isolated network-disabled restore passed.
+- The migration controller now executes journaled `Plan`, `Rehearse`,
+  `AcceptAuthentication`, `Cutover`, and `Rollback` using candidate-only
+  resources. It binds the full ten-file executable bundle, all seven exact
+  image identities, complete mount/port authority, TTL-safe Redis continuity,
+  crash-resumable backup/rollback, and task replacement/retirement only at
+  gated Cutover.
+- Final local proof passed: 76/76 combined migration/recovery tests after the
+  containment repair (75 prior plus the new negative case), 12/12
+  action-plus-recovery tests, 101/101 static validator checks, 14/14 release
+  readiness, 135/135 repository-wide tests, 7/7 PowerShell parsing, 4/4 project
+  foundation, and 0 source-size blockers. Two independent final reviewers
+  returned GO, including targeted
+  containment proof at 2/2.
+- Every original volume, journal, release, and backup remains preserved. No
+  accounting record was inspected or changed.
+- The recovery patch has not yet been committed or published. No live candidate
+  rehearsal, native login, or cutover has run.
+- The next path is exact-source publication to the two EasyFire remotes,
+  immutable release and seven-image construction on Newsec, a new migration
+  Plan, Rehearse, owner native login if prompted, the `AcceptAuthentication`
+  source recovery drill, and Cutover only after every backup, rollback,
+  authentication, and migration gate passes. Post-cutover proof must verify the
+  replacement backup task, absence of the legacy startup task, runtime/edge
+  health, and a new current backup with isolated restore.

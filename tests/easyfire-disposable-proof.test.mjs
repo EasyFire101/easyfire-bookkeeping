@@ -8,6 +8,26 @@ import { fileURLToPath } from "node:url";
 
 const root = resolve(dirname(fileURLToPath(import.meta.url)), "..");
 const read = (path) => readFileSync(resolve(root, path), "utf8");
+const psQuote = (value) => `'${value.replaceAll("'", "''")}'`;
+
+function invokeRestoreFunctions(names, body) {
+  const path = resolve(root, "scripts/production/restore-verify.ps1");
+  const script = [
+    `$path=${psQuote(path)}`,
+    "$tokens=$null; $errors=$null",
+    "$ast=[Management.Automation.Language.Parser]::ParseFile($path,[ref]$tokens,[ref]$errors)",
+    "if($errors.Count){throw ($errors | ForEach-Object Message | Out-String)}",
+    ...names.map(
+      (name) =>
+        `$nodes=@($ast.FindAll({param($n) $n -is [Management.Automation.Language.FunctionDefinitionAst] -and $n.Name -ceq '${name}'},$true)); if($nodes.Count -ne 1){throw 'missing ${name}'}; Invoke-Expression $nodes[0].Extent.Text`,
+    ),
+    body,
+  ].join("; ");
+  return spawnSync("powershell.exe", ["-NoProfile", "-Command", script], {
+    cwd: root,
+    encoding: "utf8",
+  });
+}
 
 const MARIADB_IMAGE =
   "mariadb:11.8.6@sha256:78a5047d3ba33975f183f183c2464cc7f1eab13ec8667e57cc9a5821d6da7577";
@@ -75,11 +95,38 @@ test("restore verifier is immutable, identity-bound, and cleans only its own res
   assert.match(verifier, new RegExp(MARIADB_IMAGE.replaceAll("/", "\\/")));
   assert.match(verifier, /\[string\]\$ExpectedProofId/);
   assert.match(verifier, /easyfire_disposable_proof/);
-  assert.match(verifier, /docker rm -f -v \$createdContainerId/);
+  assert.match(verifier, /docker rm -f \$createdContainerId/);
+  assert.doesNotMatch(verifier, /docker rm -f -v/);
   assert.doesNotMatch(verifier, /docker ps -a --filter/);
   assert.doesNotMatch(verifier, /mariadb:11(?:\s|['"])/);
   assert.doesNotMatch(verifier, /WARNING: No SHA-256 sidecar found/);
   assert.doesNotMatch(verifier, /Remove-Item -Recurse/);
+});
+
+test("restore verifier rejects an otherwise exact container with a host port", () => {
+  const result = invokeRestoreFunctions(
+    [
+      "Get-EasyFireRestoreProperty",
+      "Assert-EasyFireRestoreLabels",
+      "Assert-EasyFireRestoreContainer",
+    ],
+    [
+      `$script:MariaDbImage='${MARIADB_IMAGE}'`,
+      "$authority=[pscustomobject]@{ContainerName='verify';VolumeName='verify-volume';ActionId='11111111-1111-4111-8111-111111111111';BackupOperationId='22222222-2222-4222-8222-222222222222';AuthorityToken=('a'*64);ProofId='';MigrationId=''}",
+      "$labels=[pscustomobject]@{'easyfire.restore.action.id'=$authority.ActionId;'easyfire.restore.backup.operation.id'=$authority.BackupOperationId;'easyfire.restore.authority'=$authority.AuthorityToken;'easyfire.restore.role'='restore-verify'}",
+      "$mount=[pscustomobject]@{Type='volume';Name=$authority.VolumeName;Destination='/var/lib/mysql'}",
+      "$container=[pscustomobject]@{Id=('b'*64);Name='/verify';Config=[pscustomobject]@{Image=$script:MariaDbImage;Labels=$labels};HostConfig=[pscustomobject]@{NetworkMode='none';PortBindings=$null};Mounts=@($mount)}",
+      "$exactAccepted=(Assert-EasyFireRestoreContainer -Container $container -Authority $authority) -ceq $container.Id",
+      "$container.HostConfig.PortBindings=[pscustomobject]@{'3306/tcp'=@([pscustomobject]@{HostIp='127.0.0.1';HostPort='13306'})}",
+      "$portRejected=$false; try { $null=Assert-EasyFireRestoreContainer -Container $container -Authority $authority } catch { $portRejected=$true }",
+      "[pscustomobject]@{ExactAccepted=$exactAccepted;PortRejected=$portRejected} | ConvertTo-Json -Compress",
+    ].join("; "),
+  );
+  assert.equal(result.status, 0, result.stderr);
+  assert.deepEqual(JSON.parse(result.stdout.trim().split(/\r?\n/).at(-1)), {
+    ExactAccepted: true,
+    PortRejected: true,
+  });
 });
 
 test("restore verifier journals deterministic container and volume authority before Docker mutation", () => {

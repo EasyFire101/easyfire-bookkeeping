@@ -4,12 +4,13 @@
 
 **Owner:** Direct Codex takeover for EasyFire
 
-**State:** Source-published candidate plus uncommitted Direct-Codex recovery
-work. Exact Forgejo and anonymous GitHub readback, not this document, are
-publication authority. Recovery source now includes an authority-bound legacy
-backup/restore role and blue/green proof gate. Production was not changed:
-Newsec SSH stopped accepting connections before a current backup checkpoint,
-live rehearsal, task/service repair, or native application acceptance.
+**State:** Published base plus an uncommitted, locally validated Direct-Codex
+recovery patch. Exact Forgejo and anonymous GitHub readback, not this document,
+are publication authority. Newsec SSH works, the exact cloudflared service is
+running automatically, a verified live-runtime checkpoint exists, and a current
+`MigrationSource` recovery unit passed isolated restore. The older production
+runtime remains live. No candidate rehearsal, native login, cutover, or
+publication of this recovery patch has occurred.
 
 ## Source state
 
@@ -111,6 +112,12 @@ the exact destination and apply destructive-action review before using it.
 - Added focused controller crash-window matrix coverage for resumable and
   fail-closed boundaries. The final combined run remains required before
   promotion.
+- Replaced the planning-only migration gate with a journaled blue/green
+  controller that executes `Plan`, `Rehearse`, `AcceptAuthentication`,
+  `Cutover`, and `Rollback` through candidate-only resources. It binds a full
+  ten-file executable bundle, all seven exact image identities, complete
+  mount/port authority, TTL-safe Redis continuity, crash-resumable backup and
+  rollback, and task replacement/retirement only at gated Cutover.
 
 ## Validation
 
@@ -126,13 +133,16 @@ The current dependency and application snapshot has these recorded results:
 - Full six-project monorepo build: passed.
 - Rebuilt web bundle scan: no JavaScript Cookie 2.2.1 marker; the lock has no
   `js-cookie@2.2.1` entry.
-- Focused production tests: 31/31 passed.
+- Final migration/recovery combined tests: 76/76 passed after the containment
+  repair, including the added negative case; the action-plus-recovery subset is
+  12/12.
+- Repository-wide tests: 135/135 passed, including the 15,000-file
+  materialization benchmark that had previously failed only under concurrent
+  machine load.
 - Static no-deploy validator: 101/101 passed.
-- Complete project-level test suite: 79/79 passed after the recovery patch.
-- Scoped Prettier: 71/71 changed/new supported files passed; scoped web lint:
-  6/6 changed files passed; foundation: 4/4; source-size guard: complete with 0
-  blockers and 2 advisory split candidates; `git diff --check`: clean;
-  high-confidence secret scan: 0 hits.
+- Focused release-readiness suite: 14/14 passed.
+- PowerShell 5.1 parser: 7/7 relevant scripts passed; project foundation: 4/4;
+  source-size guard: 0 blockers.
 - Repository-wide inherited debt is disclosed, not rewritten: 3,023 formatting
   findings; 645 web lint findings (81 errors, 564 warnings); and 43 web type
   errors in 26 files. None of the web type errors overlap the 7 changed web
@@ -141,9 +151,10 @@ The current dependency and application snapshot has these recorded results:
   `proofPassed=true`, `builtServerAuthPassed=true`, `cleanupPassed=true`,
   unchanged empty production inventory, and zero containers, volumes, or
   networks after exact teardown.
-- Independent read-only review: source publication GO after two reviews found no
-  remaining P1/P2; live deployment remains separately gated by owner onboarding
-  and Newsec/runtime reconciliation.
+- Independent read-only review: two final reviewers returned GO, including
+  targeted containment proof at 2/2. Live migration remains separately gated by
+  rehearsal, owner native authentication, and the controller's backup/rollback
+  proof.
 - Release-input audit: the initial publication accidentally omitted four
   required root files that remained untracked in the validation worktree. The
   follow-up correction tracks those exact files so a clean checkout contains
@@ -162,55 +173,63 @@ The current dependency and application snapshot has these recorded results:
   schema-2 journal at a compatible phase. It cannot adopt any other volume.
 - Existing MariaDB data uses the separate `MigrationSource` backup role and
   `migration-action.ps1` Plan/Rehearse/Cutover/Rollback authority. The tool
-  derives candidate-only resources, binds the target release/images and task
-  recovery XML, and preserves exact rollback operations. It does not execute
-  Docker or Scheduled Tasks, and Cutover is intentionally blocked with
-  `LIVE_EXECUTOR_PROOF_REQUIRED` until trusted live receipts exist. Never mount
-  the old data directory under the candidate MariaDB image.
+  derives candidate-only resources; binds the target release, full ten-file
+  controller bundle, seven exact image identities, mount/port authority, and
+  task-recovery XML; executes journaled `Plan`, `Rehearse`,
+  `AcceptAuthentication`, `Cutover`, and `Rollback`; and preserves exact
+  rollback operations. Cutover remains fail-closed until live backup,
+  rollback, authentication, and migration proof all pass. Never mount the old
+  data directory under the candidate MariaDB image.
 - The production controller verifies but never mutates Cloudflare, Access,
   Tunnel, DNS, the cloudflared binary, or the Windows cloudflared service.
 - Automated owner creation/recovery is unavailable.
-- The startup task is unavailable; Compose `restart: unless-stopped` owns
-  unattended container restart, and only the daily backup task is registered.
+- The candidate does not use a startup task; Compose
+  `restart: unless-stopped` owns unattended container restart. The legacy
+  startup task remains registered until gated Cutover retires it, and the
+  legacy daily backup task remains until Cutover replaces it.
 - Action ends pending Postcheck; only a successful exact-identity Postcheck can
   mark its schema-2 journal completed.
 
 ## Runtime drift status
 
-- Read-only reconciliation on 2026-07-20 found the existing
-  `easyfire-bookkeeping-prod` containers healthy on an older Agent
-  Foundry-origin release, with the migration container exited successfully.
+- Newsec SSH works. Six long-running `easyfire-bookkeeping-prod` containers are
+  healthy on the older Agent Foundry-origin release, and its one-shot migration
+  container exited successfully with result 0.
 - Existing MariaDB and Redis volumes contain durable production authority and
   were created before this candidate. The old action journals are not compatible
   with the schema-2 controller. A fresh Action would stop and must not replace,
   mount, or adopt those volumes.
-- The daily backup task's last result was failure and only an older recovery
-  pair was present. The retired startup task is also still registered. Neither
-  task was changed.
+- Both legacy scheduled tasks remain enabled and Ready with
+  `LastTaskResult=1`. Their checkpoint XML hashes are preserved; replacement of
+  the daily backup task and retirement of the startup task occur only at gated
+  Cutover.
 - Read-only API proof shows the protected credential file's sole owner email
   already matches the one exact allow policy. The earlier denial used a
   different Google identity; the correct policy was not rewritten.
-- Tunnel ingress, DNS, and the service token match the exact tunnel. The tunnel
-  is down because `EasyFireBookkeepingCloudflared` is stopped. No token value was
-  exposed and no unnecessary rotation was performed.
-- Tailscale still reaches Newsec, but SSH stopped accepting port 22 before the
-  approved recovery checkpoint could be created. No task, service, container,
-  volume, journal, release, backup, or record was changed.
-- No database query or real bookkeeping-record read was performed during this
-  reconciliation.
+- Tunnel ingress, DNS, Access policy, and token identity match the exact tunnel.
+  `EasyFireBookkeepingCloudflared` is Running with Automatic start, and its
+  binary/process/connector identity is proven without exposing the token.
+- The verified live-runtime checkpoint manifest SHA-256 is
+  `0AEE8A2D577B102ECA6E61B8D4063363C7420845D27BDB957BDCA4DCC66525BE`.
+  The current `MigrationSource` backup SHA-256 is
+  `229ED021892F495AF84219596713C24C6B30676856601B0F3AC19F7E175FB54D`,
+  and its isolated network-disabled restore passed.
+- Every original volume, journal, release, and backup is preserved. No
+  accounting record was inspected or changed. No live candidate rehearsal,
+  native login, or cutover has run.
 
 ## State mutations or approvals
 
 - Direct takeover owns local source and documentation repair; Agent Foundry is
   provenance only.
-- No accounting, database, backup, or bookkeeping-record content was queried or
-  changed. Read-only service inventory exposed an embedded Cloudflare tunnel
-  credential; it was not retained or changed and requires separate rotation.
-- Local repair and proof do not mutate any production service, scheduled task,
-  Cloudflare resource, DNS record, database, credential, or real bookkeeping
-  record. Source-control publication changes only the two EasyFire repositories
-  and is established by exact remote readback outside this self-referential
-  source record.
+- Recovery work changed only the approved cloudflared service state and created
+  private recovery evidence. It did not rewrite Access, Tunnel, DNS, or the
+  matching token, and no token value is stored here.
+- The current backup and isolated restore proof did not inspect or change an
+  accounting record. All original production data authority remains preserved.
+- Source-control publication has not yet occurred for this recovery patch. It
+  may change only the two EasyFire repositories and is established by exact
+  remote readback outside this self-referential source record.
 
 ## Known risks before promotion
 
@@ -225,20 +244,23 @@ The current dependency and application snapshot has these recorded results:
 - Source authority requires exact Forgejo readback and anonymous GitHub readback
   of the same final correction commit.
 - The healthy hosted revision is older than this candidate and uses incompatible
-  journals and existing durable volumes. Its failed backup task must be repaired
-  and a current verified recovery unit established before migration work.
-- The Access policy and tunnel token are already exact. Starting and proving the
-  stopped cloudflared service plus native application authentication remain
-  unproven.
+  journals and existing durable volumes. The current recovery unit is proven,
+  but both legacy tasks still report `LastTaskResult=1` and remain unchanged
+  until gated Cutover.
+- Access, Tunnel, DNS, token identity, and cloudflared runtime are proven. Native
+  application authentication and candidate behavior remain unproven live.
+- This exact recovery patch is locally validated but not committed or published
+  to the EasyFire remotes.
 
 ## Next safe action
 
-Restore Newsec's maintained Tailscale SSH service first. Create and verify the
-exact task/service recovery checkpoint, then use `MigrationSource` to establish
-the current isolated-restorable backup. Execute the candidate-only rehearsal
-operations through a future trusted executor and produce all five live proof
-receipts before implementing cutover. Start and
-verify the existing exact cloudflared service, repair only the named backup task,
-retire only the named startup task, and have the owner select the allowlisted
-Google identity and enter the native password. Do not run the fresh-install
-Action against the existing volumes.
+Commit and publish only the exact verified recovery source to
+`easyfire-forgejo/main` and `easyfire-github/main`, then build the immutable
+release and seven pinned images on Newsec. Create a new migration `Plan`, run the
+candidate-only `Rehearse`, and request only the owner's native
+password/MFA/CAPTCHA if the login flow prompts for it. Run
+`AcceptAuthentication` to prove the source recovery drill. Run `Cutover` only
+if backup, rollback, authentication, and migration proof all pass; then verify
+the replacement backup task, absence of the legacy startup task, runtime/edge
+health, and a new current backup with isolated restore. Do not run the
+fresh-install Action against the existing volumes.

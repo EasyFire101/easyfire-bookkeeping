@@ -4,9 +4,11 @@
 
 **Updated:** 2026-07-20
 
-**Status:** Locally validated candidate runbook. Source publication is
-established only by exact EasyFire remote readback. This runbook does not claim
-a reconciled Newsec deployment or authenticated live acceptance.
+**Status:** Locally validated Direct-Codex recovery runbook. Newsec SSH, the
+older healthy runtime, edge identity, live-runtime checkpoint, and current
+isolated-restorable backup are reconciled. The recovery patch is not yet
+committed or published, and no candidate rehearsal, native login, or cutover has
+run.
 
 Read [CURRENT_STATE.md](./CURRENT_STATE.md) first. Agent Foundry is bypassed;
 its handoff and the Caddy/Linux proposal are historical evidence only.
@@ -26,7 +28,9 @@ its handoff and the Caddy/Linux proposal are historical evidence only.
   No other volume can be adopted.
 - Cloudflare Access, Tunnel, DNS, the cloudflared binary, and the Windows
   cloudflared service are pre-existing, verify-only infrastructure. This
-  controller never mutates them.
+  controller never mutates them. Their exact identity is proven and the pinned
+  service is Running with Automatic start; do not rewrite or rotate them without
+  contrary evidence.
 - Automated production owner bootstrap is retired and unavailable.
 - A fresh database therefore has no supported first-owner login. Do not deploy
   a fresh target as usable production until a separate onboarding design is
@@ -57,8 +61,10 @@ its handoff and the Caddy/Linux proposal are historical evidence only.
 | Backup            | one exact daily task invoking the fifth `ScheduledBackup` stage from the sealed installed controller through canonical Windows PowerShell |
 | Runtime authority | completed schema-2 action journal plus successful Postcheck                                                                               |
 
-This topology is a candidate contract, not a claim that the current source is
-running. Newsec and the external edge must be reconciled after publication.
+This topology is the candidate contract, not a claim that the candidate source
+is running. The reconciled live installation is still the older release. Six
+long-running containers are healthy, its migration container exited 0, and both
+legacy scheduled tasks remain enabled/Ready with `LastTaskResult=1`.
 
 ## 3. Source and release identity
 
@@ -115,8 +121,9 @@ restore, Postcheck, and rollback proof. Partial earlier runs do not promote a
 later source snapshot.
 
 Current local evidence includes a frozen offline install, server typecheck,
-6/6 dependency compatibility tests, the full six-project build, 31/31 focused
-production tests, and 101/101 static checks. The complete production audit
+6/6 dependency compatibility tests, the full six-project build, 76/76 combined
+migration/recovery tests, 135/135 repository-wide tests, and 101/101 static
+checks. The complete production audit
 reports 45 advisories: 9 low, 36 moderate, 0 high, and 0 critical. Final
 disposable proof `b37426f03a8841d9923b853db5f40a08` and the two independent
 read-only reviews found no remaining P1/P2 for source publication. Live
@@ -293,25 +300,60 @@ journal authority.
 ## 11. Existing database migration
 
 The fresh-install controller still never adopts a historical/project-labeled
-MariaDB or Redis volume. Existing data uses two separate fail-closed tools:
+MariaDB or Redis volume. Existing data uses the separate fail-closed migration
+path:
 
 - `scripts/production/backup.ps1 -InvocationRole MigrationSource` requires a
   canonical migration ID plus exact caller-bound release, Compose, environment,
   project, container, image, volume, and destination identities. It will only
   dump the exact running healthy source and pins that recovery unit against
-  retention. `restore-verify.ps1` restores it into a deterministic isolated
-  migration namespace.
-- `deploy/windows/migration-action.ps1` records Plan, caller planning rehearsal,
-  and Rollback authority. It derives candidate-only projects and volumes,
-  preserves every original release/volume/journal/backup, binds the exact target
-  release/images and task XML recovery units, and rejects every Cutover request
-  with `LIVE_EXECUTOR_PROOF_REQUIRED`.
+  retention. `restore-verify.ps1` restores it into a deterministic isolated,
+  network-disabled migration namespace.
+- `deploy/windows/migration-action.ps1` executes journaled `Plan`, `Rehearse`,
+  `AcceptAuthentication`, `Cutover`, and `Rollback`. Its authority is the target
+  release, full ten-file executable bundle, seven exact image identities,
+  complete mount/port identity, source checkpoint, current recovery unit, and
+  preserved task XML. It accepts only migration-derived candidate projects,
+  volumes, networks, and containers.
+- Candidate MariaDB and Redis continuity is fail-closed. Redis evidence permits
+  only TTL expiry consistent with the authenticated RDB boundary; exact hashes,
+  load state, image, volume, mount, and zero-foreign-resource identity remain
+  mandatory.
+- Backup and rollback operations are journaled and crash-resumable. A partial
+  candidate lane is stopped by exact identity without deleting its volumes.
+  Every original volume, journal, release, and backup is preserved.
+- Only gated Cutover may replace the legacy daily backup task and retire the
+  legacy startup task. Both current tasks remain enabled/Ready with
+  `LastTaskResult=1` until that point.
 
-`migration-action.ps1` is an authority/planning gate, not a trusted live Docker
-or Scheduled Tasks executor. A future executor must create identity-bound live
-receipts before Cutover can be implemented; caller-authored booleans are not
-proof. Never manufacture an evidence receipt from process exit alone, and never
-run the fresh-install Action against legacy volumes.
+The verified pre-migration checkpoint manifest SHA-256 is
+`0AEE8A2D577B102ECA6E61B8D4063363C7420845D27BDB957BDCA4DCC66525BE`.
+The current `MigrationSource` backup SHA-256 is
+`229ED021892F495AF84219596713C24C6B30676856601B0F3AC19F7E175FB54D`,
+and its isolated restore passed. Do not put their machine-specific paths,
+contents, credentials, or task arguments in Git.
+
+Run the remaining migration in this order:
+
+1. Commit and publish the exact validated patch only to the two EasyFire
+   remotes, then confirm matching readback.
+2. Build the immutable target release and all seven pinned images on Newsec.
+3. Create a new `Plan` bound to the release, images, bundle, source inventory,
+   checkpoint, recovery unit, and task XML.
+4. Run candidate-only `Rehearse`. It must prove candidate health, migration
+   continuity, containment, and rollback without replacing the live runtime.
+5. Verify native login. Pause only if the owner must enter a password, MFA, or
+   CAPTCHA; never store that input in a journal or Git.
+6. Run `AcceptAuthentication` to execute and verify the source recovery drill.
+7. Run `Cutover` only if backup, rollback, authentication, and migration proof
+   all pass.
+8. Verify candidate runtime and edge health, the replacement daily backup task,
+   absence of the legacy startup task, and a new current backup with isolated
+   restore.
+
+Never manufacture an evidence receipt from process exit alone, never run the
+fresh-install Action against legacy volumes, and never treat a candidate
+resource or original recovery artifact as cleanup authority.
 
 ## 12. Owner onboarding
 

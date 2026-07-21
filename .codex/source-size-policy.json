@@ -45,6 +45,7 @@
       ".proto",
       ".props",
       ".ps1",
+      ".psm1",
       ".py",
       ".r",
       ".rb",
@@ -80,6 +81,30 @@
     ]
   },
   "roles": [
+    {
+      "name": "easyfire-migration-state-recovery-module",
+      "path_regex": "^deploy/windows/migration-state\\.psm1$",
+      "warning_lines": 1650,
+      "critical_lines": 1900,
+      "severe_lines": 2300,
+      "reason": "Exact path-scoped recovery exception at 1,678 lines: this module owns the schema-2 journal, canonical hashing, compare-and-swap transitions, receipts, preservation sets, and completed-authority validation as one state contract. Splitting that contract immediately before the one-time migration would add disproportionate cross-module recovery risk. Containment is strict PowerShell 5.1 parsing, focused transition/tamper/crash tests, independent review, and live use only after disposable rehearsal proof. Re-review after migration closeout or before 1,900 lines."
+    },
+    {
+      "name": "easyfire-migration-scheduled-backup-recovery-monolith",
+      "path_regex": "^deploy/windows/migration-scheduled-backup\\.ps1$",
+      "warning_lines": 2300,
+      "critical_lines": 2800,
+      "severe_lines": 3400,
+      "reason": "Exact path-scoped recovery exception at 2,540 lines: this controller holds the journal-bound composite MariaDB/Redis capture, crash resume, full seven-service authority, and isolated restore state machine. Splitting that reviewed retry logic immediately before the one-time migration would add disproportionate recovery risk. Containment is PowerShell 5.1 parsing, focused capture-attempt, topology, cleanup-order, and crash-boundary tests, independent review, and disposable Docker proof before release. Re-review after the migration is stable or before 2,800 lines."
+    },
+    {
+      "name": "easyfire-production-backup-recovery-monolith",
+      "path_regex": "^scripts/production/backup\\.ps1$",
+      "warning_lines": 2000,
+      "critical_lines": 2500,
+      "severe_lines": 3000,
+      "reason": "Exact path-scoped recovery exception at 2,024 lines: the existing backup publication state machine was extended with caller-bound migration roles without changing legacy role authority. A late split would separate atomic publication and retry invariants before live proof. Containment is the publication crash matrix, MigrationSource regression suite, security floor, independent review, and isolated restore verification. Re-review after migration closeout or before 2,500 lines."
+    },
     {
       "name": "easyfire-production-action-approved-monolith",
       "path_regex": "^deploy/windows/production-action\\.ps1$",

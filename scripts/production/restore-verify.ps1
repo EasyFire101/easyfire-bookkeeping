@@ -25,6 +25,8 @@ $restoreAuthority = $null
 $restoreJournalReady = $false
 $restoreMutex = $null
 $restoreMutexAcquired = $false
+$verificationCompleted = $false
+$cleanupPassedOverall = $false
 
 function Get-EasyFireRestoreProperty {
     param(
@@ -122,6 +124,7 @@ function Get-EasyFireRestoreAuthority {
     $proofId = ''
     $actionId = ''
     $migrationId = ''
+    $captureAttemptId = ''
 
     if ($role -ceq 'DisposableProof') {
         $authorityKind = 'proof'
@@ -135,15 +138,28 @@ function Get-EasyFireRestoreAuthority {
             $proofId.Substring(0, 8), $proofId.Substring(8, 4), $proofId.Substring(12, 4), `
             $proofId.Substring(16, 4), $proofId.Substring(20, 12)
         $actionId = ConvertTo-EasyFireRestoreCanonicalGuid -Value $actionId -FieldName 'Derived proof ActionId'
-    } elseif ($role -ceq 'MigrationSource') {
-        $authorityKind = 'migration'
+    } elseif ($role -in @(
+            'MigrationSource', 'MigrationBaseline', 'MigrationEmergency', 'MigrationScheduled'
+        )) {
+        $authorityKind = if ($role -ceq 'MigrationSource') { 'migration' } else { 'migration-runtime' }
         if ($ExactExpectedProofId) {
             throw 'ExpectedProofId cannot be supplied for a migration backup.'
         }
-        $expectedNames = @($commonNames + @(
-                'MigrationId', 'AuthorityRoot', 'ComposeProject', 'ComposeFile',
-                'ComposeFileSha256', 'EnvFile', 'EnvFileSha256', 'MysqlVolumeComposeKey'
-            ) | Sort-Object)
+        $migrationNames = @(
+            'MigrationId', 'AuthorityRoot', 'ComposeProject', 'ComposeFile',
+            'ComposeFileSha256', 'EnvFile', 'EnvFileSha256', 'MysqlVolumeComposeKey'
+        )
+        if ($role -ceq 'MigrationSource') {
+            $expectedNames = @($commonNames + $migrationNames | Sort-Object)
+        } else {
+            $expectedNames = @($commonNames + $migrationNames + @(
+                    'CaptureAttemptId',
+                    'ComposeOverrideFile', 'ComposeOverrideSha256', 'MigrationJournalPath',
+                    'MigrationAuthorityFingerprint', 'MigrationJournalRevision',
+                    'MigrationBackupAuthorityFingerprint', 'InventoryFingerprint',
+                    'DurableVolumeFingerprint'
+                ) | Sort-Object)
+        }
         $migrationId = ConvertTo-EasyFireRestoreCanonicalGuid `
             -Value ([string](Get-EasyFireRestoreProperty -Object $metadata -Name 'MigrationId' -Default '')) `
             -FieldName 'MigrationId'
@@ -166,7 +182,32 @@ function Get-EasyFireRestoreAuthority {
             [string]$metadata.ComposeFileSha256 -notmatch '^[A-F0-9]{64}$' -or
             [string]$metadata.EnvFileSha256 -notmatch '^[A-F0-9]{64}$' -or
             [string]$metadata.MysqlVolumeComposeKey -notmatch '^[A-Za-z0-9][A-Za-z0-9_.-]*$') {
-            throw 'MigrationSource metadata does not bind exact source authority.'
+            if ($role -ceq 'MigrationSource') {
+                throw 'MigrationSource metadata does not bind exact source authority.'
+            }
+            throw 'Migrated-runtime backup metadata does not bind exact authority.'
+        }
+        if ($role -ne 'MigrationSource') {
+            $captureAttemptId = ConvertTo-EasyFireRestoreCanonicalGuid `
+                -Value ([string]$metadata.CaptureAttemptId) -FieldName 'CaptureAttemptId'
+            try {
+                $composeOverrideFile = [IO.Path]::GetFullPath([string]$metadata.ComposeOverrideFile)
+                $migrationJournalPath = [IO.Path]::GetFullPath([string]$metadata.MigrationJournalPath)
+            } catch {
+                throw 'Migrated-runtime backup metadata paths are invalid.'
+            }
+            if ([string]$metadata.ComposeOverrideFile -cne $composeOverrideFile -or
+                [string]$metadata.MigrationJournalPath -cne $migrationJournalPath -or
+                -not $composeOverrideFile.StartsWith($authorityPrefix, [StringComparison]::OrdinalIgnoreCase) -or
+                -not $migrationJournalPath.StartsWith($authorityPrefix, [StringComparison]::OrdinalIgnoreCase) -or
+                [string]$metadata.ComposeOverrideSha256 -notmatch '^[A-F0-9]{64}$' -or
+                [string]$metadata.MigrationAuthorityFingerprint -notmatch '^[A-F0-9]{64}$' -or
+                [int64]$metadata.MigrationJournalRevision -lt 1 -or
+                [string]$metadata.MigrationBackupAuthorityFingerprint -notmatch '^[A-F0-9]{64}$' -or
+                [string]$metadata.InventoryFingerprint -notmatch '^[A-F0-9]{64}$' -or
+                [string]$metadata.DurableVolumeFingerprint -notmatch '^[A-F0-9]{64}$') {
+                throw 'Migrated-runtime backup metadata does not bind exact journal and inventory authority.'
+            }
         }
     } else {
         $authorityKind = 'production'
@@ -188,6 +229,11 @@ function Get-EasyFireRestoreAuthority {
         }
     }
 
+    $expectedBackupPattern = if ($authorityKind -ceq 'migration-runtime') {
+        "-$([regex]::Escape($mode))-$([regex]::Escape($backupOperationId))-capture-$([regex]::Escape($captureAttemptId))\.sql\.gz$"
+    } else {
+        "-$([regex]::Escape($mode))-$([regex]::Escape($backupOperationId))\.sql\.gz$"
+    }
     $actualNames = @($metadata.PSObject.Properties.Name | Sort-Object)
     if (@(Compare-Object $expectedNames $actualNames -CaseSensitive).Count -ne 0 -or
         [int](Get-EasyFireRestoreProperty -Object $metadata -Name 'SchemaVersion' -Default 0) -ne 1 -or
@@ -200,8 +246,7 @@ function Get-EasyFireRestoreAuthority {
         [string]$metadata.MysqlVolumeDestination -cne '/var/lib/mysql' -or
         [string]$metadata.BackupFile -cne [string]$BackupPair.BackupFile -or
         [string]$metadata.BackupSha256 -cne [string]$BackupPair.Sha256 -or
-        [IO.Path]::GetFileName([string]$BackupPair.BackupFile) -notmatch
-            "-$([regex]::Escape($mode))-$([regex]::Escape($backupOperationId))\.sql\.gz$") {
+        [IO.Path]::GetFileName([string]$BackupPair.BackupFile) -notmatch $expectedBackupPattern) {
         throw 'Backup metadata does not exactly bind this recovery unit.'
     }
 
@@ -209,7 +254,7 @@ function Get-EasyFireRestoreAuthority {
         -BackupOperationId $backupOperationId -BackupSha256 ([string]$BackupPair.Sha256)
     $actionName = $actionId.Replace('-', '')
     $operationName = $backupOperationId.Replace('-', '')
-    $containerName = if ($authorityKind -ceq 'migration') {
+    $containerName = if ($authorityKind -in @('migration', 'migration-runtime')) {
         "easyfire-migration-restore-verify-$actionName-$operationName"
     } else {
         "easyfire-restore-verify-$actionName-$operationName"
@@ -262,11 +307,19 @@ function Get-EasyFireRestoreAuthority {
         ContainerName = $containerName
         VolumeName = $volumeName
         AuthorityToken = $authorityToken
+        InvocationRole = $role
+        BackupFile = [string]$BackupPair.BackupFile
+        BackupSha256 = [string]$BackupPair.Sha256
+        MetadataFile = $metadataFile
+        MetadataSha256 = Get-EasyFireSha256Hex -Path $metadataFile
     }
-    if ($authorityKind -ceq 'migration') {
+    if ($authorityKind -in @('migration', 'migration-runtime')) {
         $authorityResult['MigrationId'] = $migrationId
         $authorityResult['SourceEnvFile'] = [string]$metadata.EnvFile
         $authorityResult['SourceEnvFileSha256'] = [string]$metadata.EnvFileSha256
+    }
+    if ($authorityKind -ceq 'migration-runtime') {
+        $authorityResult['CaptureAttemptId'] = $captureAttemptId
     }
     return [pscustomobject]$authorityResult
 }
@@ -277,18 +330,18 @@ function Assert-EasyFireMigrationRestoreEnvironmentAuthority {
         [Parameter(Mandatory = $true)][string]$CandidateEnvFile
     )
 
-    if ([string]$Authority.AuthorityKind -cne 'migration') { return }
+    if ([string]$Authority.AuthorityKind -notin @('migration', 'migration-runtime')) { return }
     if (-not (Test-Path -LiteralPath $CandidateEnvFile -PathType Leaf) -or
         (Test-EasyFireRestoreReparsePoint -Path $CandidateEnvFile)) {
-        throw 'MigrationSource restore EnvFile is missing or unsafe.'
+        throw 'Migration restore EnvFile is missing or unsafe.'
     }
     $resolvedCandidate = (Resolve-Path -LiteralPath $CandidateEnvFile -ErrorAction Stop).Path
     if ($resolvedCandidate -cne [string]$Authority.SourceEnvFile) {
-        throw 'MigrationSource restore requires the exact metadata-bound EnvFile.'
+        throw 'Migration restore requires the exact metadata-bound EnvFile.'
     }
     $actualSha256 = Get-EasyFireSha256Hex -Path $resolvedCandidate
     if ($actualSha256 -cne [string]$Authority.SourceEnvFileSha256) {
-        throw 'MigrationSource restore EnvFileSha256 does not match metadata authority.'
+        throw 'Migration restore EnvFileSha256 does not match metadata authority.'
     }
 }
 
@@ -444,10 +497,17 @@ function Assert-EasyFireRestoreContainer {
     )
 
     $mounts = @($Container.Mounts)
+    $hostPortCount = 0
+    if ($Container.HostConfig.PortBindings) {
+        foreach ($property in @($Container.HostConfig.PortBindings.PSObject.Properties)) {
+            $hostPortCount += @($property.Value | Where-Object { $null -ne $_ }).Count
+        }
+    }
     if ([string]$Container.Id -notmatch '^[a-f0-9]{64}$' -or
         [string]$Container.Name -cne "/$([string]$Authority.ContainerName)" -or
         [string]$Container.Config.Image -cne $script:MariaDbImage -or
         [string]$Container.HostConfig.NetworkMode -cne 'none' -or
+        $hostPortCount -ne 0 -or
         $mounts.Count -ne 1 -or
         [string]$mounts[0].Type -cne 'volume' -or
         [string]$mounts[0].Name -cne [string]$Authority.VolumeName -or
@@ -478,7 +538,7 @@ function Remove-EasyFireRestoreResources {
     $container = Get-EasyFireRestoreContainer -ContainerName ([string]$Authority.ContainerName)
     if ($null -ne $container) {
         $createdContainerId = Assert-EasyFireRestoreContainer -Container $container -Authority $Authority
-        docker rm -f -v $createdContainerId 2>&1 | Out-Null
+        docker rm -f $createdContainerId 2>&1 | Out-Null
         if ($LASTEXITCODE -ne 0) {
             throw "Failed to remove exact restore-verifier container: $createdContainerId"
         }
@@ -760,6 +820,7 @@ try {
             Write-Host "  PASS: Exact disposable proof marker was restored" -ForegroundColor Green
         }
     }
+    if ($allPassed) { $verificationCompleted = $true }
 } catch {
     Write-Host "[$(Get-Date -Format 'HH:mm:ss')] ERROR: $_" -ForegroundColor Red
     $allPassed = $false
@@ -774,6 +835,7 @@ try {
             $allPassed = $false
         }
         if ($cleanupPassed) {
+            $cleanupPassedOverall = $true
             try {
                 $null = Read-EasyFireRestoreAuthorityJournal `
                     -Path $restoreAuthority.JournalPath -ExpectedDocument $restoreAuthority.Document
@@ -795,6 +857,31 @@ try {
 }
 
 if ($allPassed) {
+    if (-not $verificationCompleted -or -not $cleanupPassedOverall) {
+        Write-Host "[$(Get-Date -Format 'HH:mm:ss')] RESTORE VERIFICATION FAILED" -ForegroundColor Red
+        exit 1
+    }
+    $receipt = [ordered]@{
+        SchemaVersion = 1
+        Result = 'Passed'
+        InvocationRole = [string]$restoreAuthority.InvocationRole
+        AuthorityKind = [string]$restoreAuthority.AuthorityKind
+        ActionId = [string]$restoreAuthority.ActionId
+        MigrationId = [string](Get-EasyFireRestoreProperty -Object $restoreAuthority -Name 'MigrationId' -Default '')
+        BackupOperationId = [string]$restoreAuthority.BackupOperationId
+        BackupFile = [string]$restoreAuthority.BackupFile
+        BackupSha256 = [string]$restoreAuthority.BackupSha256
+        MetadataFile = [string]$restoreAuthority.MetadataFile
+        MetadataSha256 = [string]$restoreAuthority.MetadataSha256
+        NetworkMode = 'none'
+        VerifierImage = $MariaDbImage
+        CleanupPassed = $true
+        VerifiedAtUtc = [DateTime]::UtcNow.ToString('o')
+    }
+    if ([string]$restoreAuthority.AuthorityKind -ceq 'migration-runtime') {
+        $receipt['CaptureAttemptId'] = [string]$restoreAuthority.CaptureAttemptId
+    }
+    Write-Output ("RESTORE_VERIFICATION_PASSED " + ($receipt | ConvertTo-Json -Compress))
     Write-Host "[$(Get-Date -Format 'HH:mm:ss')] RESTORE VERIFICATION PASSED" -ForegroundColor Green
     exit 0
 }

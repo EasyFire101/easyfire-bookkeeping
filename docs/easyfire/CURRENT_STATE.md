@@ -4,12 +4,13 @@
 
 **Updated:** 2026-07-20
 
-**Status:** Direct-Codex recovery source now includes an authority-bound
-`MigrationSource` backup/isolated-restore path and a fail-closed blue/green
-migration plan/proof gate. Read-only hosted reconciliation still finds a healthy
-older installation. No production cutover occurred: Newsec's Tailscale SSH
-service stopped accepting connections before a current backup or recovery
-checkpoint could be established, so every runtime write gate remains closed.
+**Status:** Direct-Codex recovery source now includes an executable, fail-closed
+blue/green migration controller. Newsec SSH works; the older hosted installation
+is healthy; the exact cloudflared service is running automatically; and both a
+verified live-runtime checkpoint and current isolated-restorable
+`MigrationSource` backup exist. The recovery patch is locally validated but not
+yet committed or published. No candidate rehearsal, native login, or cutover has
+occurred.
 
 This file is the source of truth for current ownership, release, and runtime
 state. Agent Foundry is bypassed and is historical provenance only. Older Agent
@@ -39,26 +40,31 @@ authority.
 
 ## Observed hosted runtime
 
-Read-only reconciliation on 2026-07-20 established the following without
-querying the database or changing the host:
+Reconciliation and approved recovery work on 2026-07-20 established the
+following without inspecting or changing an accounting record:
 
-- The existing `easyfire-bookkeeping-prod` application containers are healthy
-  on an older Agent Foundry-origin release; its one-shot migration container
-  exited successfully.
+- Six long-running `easyfire-bookkeeping-prod` application containers are
+  healthy on an older Agent Foundry-origin release; its one-shot migration
+  container exited successfully with result 0.
 - Existing MariaDB and Redis volumes and pre-schema-2 journals are durable
   production authority. They are incompatible with this candidate's
   fresh-install-only controller and make a new Action a hard stop.
-- The daily backup task's last result is failure and only an older recovery pair
-  was observed. The retired startup task is still registered.
+- Both legacy scheduled tasks remain enabled and Ready with
+  `LastTaskResult=1`. Their exact checkpoint XML hashes are preserved. The
+  retired startup task remains registered until gated Cutover, and the backup
+  task is not replaced before that same gate.
 - The protected Cloudflare credential file contains one well-formed owner email,
   and read-only API proof shows the one Access policy already allows exactly
   that address. The earlier denial used a different signed-in Google identity.
-- Tunnel ingress, DNS, and the service's embedded token match the exact tunnel.
-  The tunnel is down only because `EasyFireBookkeepingCloudflared` is stopped;
-  its configuration was not rewritten and its token was not exposed.
-- Repeated SSH banner failures then became a hard operational blocker. A
-  corrected recovery-checkpoint preflight made no live changes before the route
-  became unavailable.
+- Tunnel ingress, DNS, Access policy, and the service token identity match the
+  exact tunnel. `EasyFireBookkeepingCloudflared` is Running with Automatic start
+  and exact binary/process/connector identity; its token was not exposed.
+- Newsec SSH works. The verified live-runtime checkpoint manifest SHA-256 is
+  `0AEE8A2D577B102ECA6E61B8D4063363C7420845D27BDB957BDCA4DCC66525BE`.
+- The current `MigrationSource` backup SHA-256 is
+  `229ED021892F495AF84219596713C24C6B30676856601B0F3AC19F7E175FB54D`,
+  and isolated network-disabled restore passed. Every original volume, journal,
+  release, and backup remains preserved.
 
 ## Candidate production contract
 
@@ -102,10 +108,28 @@ MariaDB release requires a separately designed, approved, and proven blue/green
 logical migration. Never attach an existing MariaDB data directory to the new
 engine image.
 
-The only allowed pre-existing volumes are the exact two volumes already bound
+The only allowed pre-existing volumes for the fresh-install controller are the exact two volumes already bound
 to the same current ActionId and valid schema-2 journal during an interrupted
 resume, and only in a compatible phase. The controller cannot adopt any other
 volume.
+
+## Existing-data migration contract
+
+The separate existing-data controller is no longer a planning-only gate.
+`migration-action.ps1` executes journaled `Plan`, `Rehearse`,
+`AcceptAuthentication`, `Cutover`, and `Rollback` stages using only
+migration-derived candidate resources. It binds the target release, a full
+ten-file executable bundle, all seven exact image identities, complete
+mount/port identity, and the preserved task XML authority. Redis continuity is
+TTL-safe; backup and rollback are crash-resumable; partial or foreign container,
+mount, port, image, bundle, journal, task, or recovery drift fails closed.
+
+Rehearse must prove the candidate and its rollback boundary without replacing
+the live runtime. `AcceptAuthentication` runs the source recovery drill after
+the owner proves native login. Cutover is allowed only after backup, rollback,
+authentication, and migration proof all pass. Only gated Cutover may replace the
+daily backup task and retire the legacy startup task. No original volume,
+journal, release, or backup is cleanup authority.
 
 Unattended application restart relies on Compose `restart: unless-stopped`.
 `deploy/windows/start-stack.ps1` is retired and must fail closed; no production
@@ -145,18 +169,18 @@ a fresh production Action can be called usable.
 | Recovery checkpoint                               | Verified before direct takeover repairs                                                                                                                                                   |
 | Frozen offline install and full application build | Passed on the current candidate                                                                                                                                                           |
 | Dependency compatibility and server typecheck     | Passed: 6/6 compatibility tests; server typecheck clean                                                                                                                                   |
-| Focused controller/static validation              | Passed: 31/31 focused production tests and 101/101 static checks                                                                                                                          |
+| Recovery controller/static validation             | Passed: 76/76 combined tests after the final containment negative case; action plus recovery 12/12; static validator 101/101; release readiness 14/14; parser 7/7; foundation 4/4; source-size 0 blockers. |
 | Production dependency audit                       | Complete: 45 advisories (9 low, 36 moderate, 0 high, 0 critical)                                                                                                                          |
 | Rebuilt web bundle                                | No JavaScript Cookie 2.2.1 marker or locked transitive dependency                                                                                                                         |
-| Complete project-level test suite                 | 79/79 passed after the recovery patch                                                                                                                                                     |
+| Complete project-level test suite                 | 135/135 passed after the final containment repair, including the 15,000-file materialization benchmark.                                                                                   |
 | Disposable Docker and backup/restore proof        | `b37426f03a8841d9923b853db5f40a08`: `proofPassed=true`, `builtServerAuthPassed=true`, `cleanupPassed=true`, unchanged empty production inventory, and zero resources after exact teardown |
-| Migration recovery source                         | `MigrationSource` authority/metadata/no-retention and restore namespace tests pass; blue/green authority tests pass 7/7, with Cutover intentionally blocked pending a trusted live executor. |
-| Independent release review                        | GO for the recovery source patch and publication with no P1/P2; explicit NO-GO for live migration/cutover until a trusted executor and all runtime proof exist.                            |
+| Migration recovery source                         | Current backup SHA-256 `229ED021892F495AF84219596713C24C6B30676856601B0F3AC19F7E175FB54D`; isolated network-disabled restore passed.                                                       |
+| Independent release review                        | Two final GO reviews, including targeted containment proof 2/2. Live Cutover remains gated by rehearsal, native authentication, and live backup/rollback/migration proof.                    |
 | Accepted Forgejo source                           | Initial commit `0f31d192195def0f8fe58a1532282b88609eb822` verified; final corrective commit requires exact matching readback                                                               |
 | Public GitHub corresponding source                | Initial commit anonymously verified; final corrective commit requires anonymous matching readback                                                                                         |
-| Newsec journal/runtime reconciliation             | Completed read-only: healthy older runtime, incompatible durable volumes/journals, failed backup task, and retired startup task present                                                     |
+| Newsec journal/runtime reconciliation             | SSH works; six old production containers healthy; migration container exited 0; both legacy tasks enabled/Ready with `LastTaskResult=1`; checkpoint manifest SHA-256 `0AEE8A2D577B102ECA6E61B8D4063363C7420845D27BDB957BDCA4DCC66525BE`. |
 | Authenticated live acceptance                     | Exact Access policy is correct; the prior browser used a different Google identity. Native application authentication still requires the owner to select the allowlisted identity and enter the native password. |
-| Production deployment                             | Blocked fail-closed: Newsec SSH is unavailable and no current isolated-restorable backup, live rehearsal, rollback, native-auth, or cutover proof exists; no production mutation was performed. |
+| Production deployment                             | Older runtime remains live. Access/Tunnel/DNS/token and Running/Automatic cloudflared are exact. Recovery patch is unpublished; no candidate rehearsal, native login, or cutover has run.     |
 
 Historical observations about a Cloudflare redirect or earlier local boot are
 not proof of the current candidate, deployed revision, database compatibility,
@@ -164,30 +188,23 @@ or authenticated application behavior.
 
 ## Remaining completion path
 
-Source proof, initial publication, read-only hosted reconciliation, and the
-missing migration safety primitives are complete in source. The remaining
-endpoint is operational migration, not another fresh deployment:
+The runtime checkpoint, current recovery unit, edge identity, controller
+implementation, focused proof, and independent review are complete. The
+remaining endpoint is operational migration, not another fresh deployment:
 
-1. Restore the maintained Tailscale SSH route to Newsec and create the exact
-   task/service recovery checkpoint before any repair.
-2. Use the new `MigrationSource` role to produce and isolated-restore-verify a
-   current recovery unit before touching the application or database.
-3. Start and verify the already-correct, token-matched cloudflared service; do
-   not rewrite the correct Access policy or rotate a matching token without new
-   evidence.
-4. Repair the daily backup path and prove a current isolated-restorable recovery
-   unit before touching the application or database.
-5. Implement the trusted live executor for the emitted candidate-only
-   operations and executor-generated backup, candidate-health, migration,
-   native-authentication, and rollback evidence. The current source records
-   planning receipts but deliberately rejects every Cutover request with
-   `LIVE_EXECUTOR_PROOF_REQUIRED`.
-6. In the already approved maintenance window, execute the proven migration,
-   retire only the
-   legacy startup task, validate the scheduled backup, and run exact runtime
-   Postcheck or an equivalent migration acceptance record.
-7. Complete native authenticated acceptance with synthetic data only. Real LLC,
-   tax, bank, customer, vendor, and opening-balance setup remains separate.
+1. Commit and publish the exact verified patch only to `easyfire-forgejo/main`
+   and `easyfire-github/main`, confirming matching remote readback.
+2. Build an immutable release and all seven pinned images on Newsec, then create
+   a new migration `Plan` bound to those exact identities.
+3. Run candidate-only `Rehearse` and prove its rollback boundary without
+   replacing the old runtime.
+4. Complete native login; the owner enters a password, MFA, or CAPTCHA only if
+   prompted.
+5. Run `AcceptAuthentication` to execute and verify the source recovery drill.
+6. Run `Cutover` only if backup, rollback, authentication, and migration proof
+   all pass.
+7. Verify the replacement backup task, absence of the retired startup task,
+   candidate runtime/edge health, and a new current backup with isolated restore.
 
 Do not run the candidate's fresh-install Action against the existing volumes.
 
@@ -198,6 +215,7 @@ Do not run the candidate's fresh-install Action against the existing volumes.
   and real financial records stay outside Git.
 - Real LLC, tax, bank, customer, vendor, and opening-balance setup is not part
   of source publication or controller validation.
+- Recovery proof did not inspect or change an accounting record.
 - Live persistence proof, if later authorized and still needed, is limited to
   one uniquely labeled synthetic record. Its exact identity must be inventoried
   before creation and again before removing only that record.

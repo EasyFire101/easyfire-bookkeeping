@@ -6,9 +6,10 @@
 
 **Readiness level:** Full
 
-**Current status:** Locally validated release candidate. Publication authority
-requires exact EasyFire remote readback; runtime reconciliation, deployment
-status, and authenticated live acceptance remain separate evidence boundaries.
+**Current status:** Locally validated Direct-Codex recovery patch on top of the
+published candidate. Newsec runtime, edge, checkpoint, and current backup
+authority are reconciled, but this patch is not yet committed or published and
+no candidate rehearsal, native login, or cutover has run.
 
 ## Outcome and scope
 
@@ -39,8 +40,8 @@ Out of scope:
   action-derived MariaDB/Redis volume;
 - implicit or in-place migration of existing data outside the separate
   `MigrationSource` and blue/green authority boundary;
-- Cloudflare application, Tunnel, DNS, or binary replacement; the approved
-  exact stopped-service repair remains a separate live operation;
+- Cloudflare application, Tunnel, DNS, token, or binary replacement; their exact
+  identities are already proven and the pinned cloudflared service is running;
 - broad cleanup or deletion;
 - Bigcapital upstream mutation.
 
@@ -48,13 +49,15 @@ Out of scope:
 
 - The local repair touches source and sanitized synthetic fixtures only.
 - Production MariaDB and Redis volumes, attachments, credentials, journals,
-  releases, and recovery units remain outside Git and have not been read during
-  this takeover.
+  releases, and recovery units remain outside Git. Recovery copied the exact
+  database authority into a private backup without inspecting or changing any
+  accounting record.
 - Action-derived volumes are durable authority, never cleanup artifacts.
   Rollback preserves the exact observed subset even after partial creation.
 - Existing-data import is authorized only through the separate blue/green
-  controller. The source implementation now binds an exact `MigrationSource`
-  backup and candidate-only resources, but no live import or cutover has run.
+  controller. A current exact `MigrationSource` recovery unit passed isolated
+  restore. The implementation binds candidate-only resources, but no live
+  rehearsal, import, or cutover has run.
 - Each backup recovery unit is its compressed dump, adjacent SHA-256 sidecar,
   and adjacent authority-bound metadata; retention must keep them together.
 
@@ -62,7 +65,9 @@ Out of scope:
 
 - The intended edge is pre-existing Cloudflare Access and Tunnel restricted to
   one owner identity. Read-only API proof shows the sole owner policy, ingress,
-  DNS, and tunnel token are exact; the local cloudflared service is stopped.
+  DNS, and tunnel token are exact. The pinned cloudflared service is Running
+  with Automatic start and exact binary/process/connector identity; no token
+  value is exposed here.
 - Native application authentication remains required. Production signup is
   disabled and both signup allowlists must be empty.
 - Newsec and its Docker runtime are owner-controlled trusted compute, but trust
@@ -114,6 +119,15 @@ Out of scope:
   journaled operation ID. Hash/gzip and isolated network-disabled restore proof
   are required before the receipt is valid.
 
+The separate existing-data migration controller executes journaled `Plan`,
+`Rehearse`, `AcceptAuthentication`, `Cutover`, and `Rollback` stages. It binds a
+full ten-file executable bundle, the target release, all seven exact image
+identities, complete mount/port identity, and task recovery XML. Candidate
+MariaDB and Redis continuity is fail-closed, including TTL-safe Redis evidence;
+backup and rollback are crash-resumable. It may replace the daily backup task
+and retire the legacy startup task only during gated Cutover after backup,
+rollback, authentication, and migration proof pass.
+
 ## Provider And Dependency Decisions
 
 - Bigcapital remains the locally editable AGPL-3.0 accounting foundation;
@@ -160,14 +174,27 @@ Out of scope:
   shows passed application/auth/recovery proof, unchanged empty production
   inventory, and exact zero-resource teardown.
 - Independent read-only release review.
-- Final review result: source publication GO after two read-only reviews found no
-  remaining P1/P2; live deployment remains separately gated by owner onboarding
-  and Newsec/runtime reconciliation.
+- Final recovery-controller proof: 76/76 combined tests after the final
+  containment fix (75 prior plus one negative case), including 12/12
+  action-plus-recovery tests; static validator 101/101; release-readiness 14/14;
+  repository-wide tests 135/135; PowerShell parser 7/7; foundation 4/4;
+  source-size guard 0 blockers.
+- Two independent final read-only reviews returned GO, including targeted
+  containment proof at 2/2. Live Cutover remains separately gated by rehearsal,
+  owner native authentication, and live backup/rollback proof.
 - Same accepted commit on Forgejo and public GitHub.
 - Anonymous corresponding-source readback.
-- Read-only Newsec journal comparison is complete; authenticated live
-  acceptance remains blocked by the unavailable SSH route and required owner
-  password entry.
+- Newsec SSH, journal/runtime reconciliation, Access/Tunnel/DNS/token identity,
+  and the pinned Running/Automatic cloudflared service are proven. Six legacy
+  runtime containers are healthy and the migration container exited 0. Both
+  legacy tasks remain enabled/Ready with `LastTaskResult=1`.
+- The live-runtime checkpoint manifest SHA-256 is
+  `0AEE8A2D577B102ECA6E61B8D4063363C7420845D27BDB957BDCA4DCC66525BE`.
+  The current `MigrationSource` backup SHA-256 is
+  `229ED021892F495AF84219596713C24C6B30676856601B0F3AC19F7E175FB54D`,
+  and isolated restore passed.
+- Authenticated live candidate acceptance still requires the owner to enter a
+  native password/MFA/CAPTCHA only if prompted after Rehearse.
 - A fresh-install production Postcheck only if a later production Action is
   actually necessary and compatible.
 - A separately designed and proven first-owner onboarding path before any truly
@@ -175,15 +202,20 @@ Out of scope:
 
 ## Recovery Notes
 
-No production, provider, credential, database, or real bookkeeping-data state
-is changed by local repair and proof. Source publication changes only the two
-EasyFire repositories and is established by exact remote readback; it does not
-turn the candidate into a deployed runtime or authorize real bookkeeping data.
+Recovery changed only the approved cloudflared service state and created private
+checkpoint/backup evidence. It did not inspect or change any accounting record,
+rewrite the correct Access/Tunnel/DNS/token authority, or discard an original
+volume, journal, release, or backup. Source publication of this patch has not yet
+occurred; when performed, it changes only the two EasyFire repositories and
+does not itself turn the candidate into a deployed runtime.
 
 Recovery starts with the verified full filesystem checkpoint in `HANDOFF.md`.
 Fresh-install production recovery uses the schema-2 action journal, sealed
-release manifest, verified backup receipts, and bounded rollback. Existing-data
-live migration, manual owner onboarding, edge repair, restore into a durable
-target, and exact synthetic-record deletion each remain proof-gated operations.
-The approved live scope did not cross those gates because no current
-isolated-restorable backup exists.
+release manifest, verified backup receipts, and bounded rollback. The true next
+path is to publish the exact patch to the two EasyFire remotes, build an
+immutable Newsec release and seven pinned images, create a new migration Plan,
+Rehearse, complete owner native login if prompted, run the
+`AcceptAuthentication` source recovery drill, and Cutover only after every gate
+passes. Post-cutover proof must cover the replacement backup task, absence of
+the legacy startup task, runtime/edge health, and a new current backup with
+isolated restore.
