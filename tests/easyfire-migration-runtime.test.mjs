@@ -422,6 +422,52 @@ test("stage executors validate exact stopped identities before every first start
   assert.doesNotMatch(app, /Arguments\s+@\('up'/);
 });
 
+test("MySQL import uses Windows-safe single-quoted SQL arguments", () => {
+  const result = ps(`
+    Import-Module ${quote(modulePath)} -Force
+    $module = Get-Module | Where-Object { $_.Path -ceq ${quote(modulePath)} }
+    & $module {
+      $backup = [IO.Path]::GetTempFileName()
+      try {
+        [IO.File]::WriteAllText($backup, 'backup-bytes', [Text.Encoding]::UTF8)
+        $expectedSha = Get-EasyFireMigrationRuntimeFileSha256 -Path $backup
+        $script:ImportNativeCalls = @()
+        function script:Get-EasyFireMigrationLaneService {
+          param($Lane,$Service)
+          return [pscustomobject]@{ Id=('a' * 64); State='running'; Health='healthy' }
+        }
+        function script:Invoke-EasyFireNative {
+          param($FilePath,$ArgumentList)
+          $script:ImportNativeCalls += ,@($ArgumentList)
+          $text = if (@($ArgumentList).Count -ge 5 -and [string]$ArgumentList[4] -match 'SHOW DATABASES') { 'application_database' } else { '' }
+          return [pscustomobject]@{ ExitCode=0; Output=if($text){@($text)}else{@()}; Text=$text }
+        }
+        $receipt = Import-EasyFireMigrationMysqlBackup -Lane ([pscustomobject]@{}) -BackupFile $backup -ExpectedBackupSha256 $expectedSha -OperationId '11111111-1111-4111-8111-111111111111'
+        $shellCommands = @($script:ImportNativeCalls | Where-Object {
+          @($_).Count -ge 5 -and [string]$_[0] -ceq 'exec' -and [string]$_[2] -ceq 'sh' -and [string]$_[3] -ceq '-c'
+        } | ForEach-Object { [string]$_[4] })
+        [pscustomobject]@{
+          Imported=[bool]$receipt.Imported
+          ImportCommand=[string]$shellCommands[0]
+          CheckCommand=[string]$shellCommands[1]
+        } | ConvertTo-Json -Compress
+      } finally {
+        Remove-Item -LiteralPath $backup -Force -ErrorAction SilentlyContinue
+      }
+    }
+  `);
+  assert.equal(result.status, 0, result.stderr);
+  const value = JSON.parse(result.stdout.trim().split(/\r?\n/).at(-1));
+  assert.equal(value.Imported, true);
+  assert.match(
+    value.ImportCommand,
+    /--execute='source \/tmp\/easyfire-migration-[a-f0-9]+\.sql'/,
+  );
+  assert.match(value.CheckCommand, /--execute='SHOW DATABASES;'/);
+  assert.doesNotMatch(value.ImportCommand, /--execute="/);
+  assert.doesNotMatch(value.CheckCommand, /--execute="/);
+});
+
 test("Redis continuity gates on exact RDB bytes and structural integrity, not expiring key equality", () => {
   const source = readFileSync(modulePath, "utf8");
   assert.match(source, /redis-check-rdb/);

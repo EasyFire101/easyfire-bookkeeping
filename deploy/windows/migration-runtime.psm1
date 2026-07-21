@@ -920,11 +920,11 @@ function Import-EasyFireMigrationMysqlBackup {
     $null = Invoke-EasyFireNative -FilePath 'docker' -ArgumentList @('cp', $BackupFile, "$([string]$mysql.Id):$containerArchive")
     $null = Invoke-EasyFireNative -FilePath 'docker' -ArgumentList @('exec', [string]$mysql.Id, 'gzip', '-t', $containerArchive)
     $null = Invoke-EasyFireNative -FilePath 'docker' -ArgumentList @('exec', [string]$mysql.Id, 'gzip', '-d', '-k', $containerArchive)
-    $command = 'MYSQL_PWD="$MYSQL_ROOT_PASSWORD" exec mariadb --user=root --execute="source ' + $containerSql + '"'
+    $command = 'MYSQL_PWD="$MYSQL_ROOT_PASSWORD" exec mariadb --user=root --execute=''source ' + $containerSql + ''''
     $null = Invoke-EasyFireNative -FilePath 'docker' -ArgumentList @('exec', [string]$mysql.Id, 'sh', '-c', $command)
     $check = Invoke-EasyFireNative -FilePath 'docker' -ArgumentList @(
         'exec', [string]$mysql.Id, 'sh', '-c',
-        'MYSQL_PWD="$MYSQL_ROOT_PASSWORD" exec mariadb --user=root --batch --skip-column-names --execute="SHOW DATABASES;"'
+        'MYSQL_PWD="$MYSQL_ROOT_PASSWORD" exec mariadb --user=root --batch --skip-column-names --execute=''SHOW DATABASES;'''
     )
     if (@($check.Output | Where-Object { $_.Trim() -and $_.Trim() -notmatch '^(information_schema|performance_schema|mysql|sys)$' }).Count -eq 0) {
         throw 'Migration import produced no application databases.'
