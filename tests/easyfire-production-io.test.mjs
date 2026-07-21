@@ -1020,6 +1020,50 @@ test("HTTP verification handles exceptions without a Response property under str
   assert.match(proof.Error, /synthetic network failure/i);
 });
 
+test("HTTP verification treats a 200 response without Location as reachable under strict mode", async () => {
+  const server = createServer((_request, response) => {
+    response.writeHead(200, { "Content-Type": "text/plain" });
+    response.end("ok");
+  });
+  await new Promise((resolvePromise, rejectPromise) => {
+    server.once("error", rejectPromise);
+    server.listen(0, "127.0.0.1", resolvePromise);
+  });
+
+  try {
+    const address = server.address();
+    assert.equal(typeof address, "object");
+    const result = await new Promise((resolvePromise, rejectPromise) => {
+      const child = spawn("powershell.exe", [
+        "-NoProfile",
+        "-Command",
+        `Import-Module ${psQuote(modulePath)} -Force -ErrorAction Stop; Test-EasyFireHttp -Uri 'http://127.0.0.1:${address.port}/' | ConvertTo-Json -Compress`,
+      ]);
+      let stdout = "";
+      let stderr = "";
+      child.stdout.setEncoding("utf8");
+      child.stderr.setEncoding("utf8");
+      child.stdout.on("data", (chunk) => {
+        stdout += chunk;
+      });
+      child.stderr.on("data", (chunk) => {
+        stderr += chunk;
+      });
+      child.once("error", rejectPromise);
+      child.once("close", (status) => {
+        resolvePromise({ status, stdout, stderr });
+      });
+    });
+    assert.equal(result.status, 0, `${result.stdout}\n${result.stderr}`);
+    const proof = JSON.parse(result.stdout);
+    assert.equal(proof.Reachable, true);
+    assert.equal(proof.StatusCode, 200);
+    assert.equal(proof.Location, "");
+  } finally {
+    await new Promise((resolvePromise) => server.close(resolvePromise));
+  }
+});
+
 test("HTTP no-redirect verification returns the exact redirect status and location on Windows PowerShell", async () => {
   const server = createServer((_request, response) => {
     response.writeHead(302, { Location: "https://access.example.test/login" });

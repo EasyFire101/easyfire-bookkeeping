@@ -1037,7 +1037,7 @@ function Test-EasyFireHttp {
     try {
         $response = Invoke-WebRequest -Uri $Uri -UseBasicParsing -TimeoutSec $TimeoutSec `
             -MaximumRedirection 5 -ErrorAction Stop
-        return [pscustomobject]@{ Reachable = $true; StatusCode = [int]$response.StatusCode; Location = [string]$response.Headers.Location }
+        return [pscustomobject]@{ Reachable = $true; StatusCode = [int]$response.StatusCode; Location = [string]$response.Headers['Location'] }
     } catch {
         $exceptionResponse = Get-EasyFireMemberValue -Object $_.Exception -Name 'Response' -Default $null
         if ($null -ne $exceptionResponse) {
