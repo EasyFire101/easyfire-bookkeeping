@@ -451,14 +451,14 @@ test("lane stop safely accepts every partial count and quiesces running, restart
           [pscustomobject]@{ Id=([string]$index * 64); Name=$names[$_]; Project=$lane.ProjectName; Service=$_; AuthorityLabel=$lane.AuthorityLabel; State=$state }
         })
         $after = @($initial | ForEach-Object { [pscustomobject]@{ Id=$_.Id; Name=$_.Name; Project=$_.Project; Service=$_.Service; AuthorityLabel=$_.AuthorityLabel; State='exited' } })
-        $script:RuntimeNamedReads = @($initial,$after)
-        $script:RuntimeNamedReadIndex = 0
         $script:RuntimeNativeOperations = @()
         function script:Get-EasyFireMigrationNamedLaneContainers {
           param($Lane)
-          $value = @($script:RuntimeNamedReads[$script:RuntimeNamedReadIndex])
-          $script:RuntimeNamedReadIndex++
-          return $value
+          return @($initial)
+        }
+        function script:Get-EasyFireMigrationLaneInventory {
+          param($Lane)
+          return [pscustomobject]@{ Containers=@($after); Networks=@(); Volumes=@(); ReservedVolumeNames=@(); ForeignVolumeConsumers=@() }
         }
         function script:Invoke-EasyFireNative {
           param($FilePath,$ArgumentList)
@@ -491,6 +491,48 @@ test("lane stop safely accepts every partial count and quiesces running, restart
   ]);
 });
 
+test("lane stop returns the full fingerprintable post-stop inventory shape", () => {
+  const result = ps(`
+    Import-Module ${quote(modulePath)} -Force
+    $module = Get-Module | Where-Object { $_.Path -ceq ${quote(modulePath)} }
+    & $module {
+      $lane = New-EasyFireMigrationRuntimeLane -MigrationId 'd1722b19-1ca2-46b5-a040-0e303e6fd13f' -Lane Rehearsal
+      $script:RuntimeNamedReadIndex = 0
+      function script:Get-EasyFireMigrationNamedLaneContainers {
+        param($Lane)
+        $script:RuntimeNamedReadIndex++
+        return @()
+      }
+      function script:Get-EasyFireMigrationLaneInventory {
+        param($Lane)
+        return [pscustomobject][ordered]@{
+          Containers=@()
+          Networks=@([pscustomobject]@{ Id='network-id'; Name=($Lane.ProjectName + '_network'); Driver='bridge'; Scope='local'; Internal=$false; Project=$Lane.ProjectName; LogicalName='network'; Options=@() })
+          Volumes=@([pscustomobject]@{ Name=$Lane.MysqlVolumeName; CreatedAt='2026-07-21T00:00:00Z'; Driver='local'; Scope='local'; Project=$Lane.ProjectName; LogicalName='mysql'; Options=@() })
+          ReservedVolumeNames=@($Lane.MysqlVolumeName,$Lane.RedisVolumeName)
+          ForeignVolumeConsumers=@()
+        }
+      }
+      $inventory = Stop-EasyFireMigrationLaneContainers -Lane $lane
+      $fingerprint = Get-EasyFireMigrationLaneInventoryFingerprint -Inventory $inventory
+      [pscustomobject]@{
+        NamedReadCount=$script:RuntimeNamedReadIndex
+        NetworkCount=@($inventory.Networks).Count
+        VolumeCount=@($inventory.Volumes).Count
+        ReservedVolumeCount=@($inventory.ReservedVolumeNames).Count
+        Fingerprint=$fingerprint
+      } | ConvertTo-Json -Compress
+    }
+  `);
+  assert.equal(result.status, 0, result.stderr);
+  const value = JSON.parse(result.stdout.trim().split(/\r?\n/).at(-1));
+  assert.equal(value.NamedReadCount, 1);
+  assert.equal(value.NetworkCount, 1);
+  assert.equal(value.VolumeCount, 1);
+  assert.equal(value.ReservedVolumeCount, 2);
+  assert.match(value.Fingerprint, /^[A-F0-9]{64}$/);
+});
+
 test("lane stop validates before mutation, propagates native failure, and rejects unsafe readback", () => {
   const result = ps(`
     Import-Module ${quote(modulePath)} -Force
@@ -514,10 +556,16 @@ test("lane stop validates before mutation, propagates native failure, and reject
         param($Lane)
         $script:RuntimeNamedReadIndex++
         if ($script:RuntimeNamedMode -ceq 'foreign') { return @($valid,$foreign) }
-        if ($script:RuntimeNamedMode -ceq 'paused-readback' -and $script:RuntimeNamedReadIndex -eq 2) {
-          return @([pscustomobject]@{ Id=$valid.Id; Name=$valid.Name; Project=$valid.Project; Service=$valid.Service; AuthorityLabel=$valid.AuthorityLabel; State='paused' })
-        }
         return @($valid)
+      }
+      function script:Get-EasyFireMigrationLaneInventory {
+        param($Lane)
+        $containers = if ($script:RuntimeNamedMode -ceq 'paused-readback') {
+          @([pscustomobject]@{ Id=$valid.Id; Name=$valid.Name; Project=$valid.Project; Service=$valid.Service; AuthorityLabel=$valid.AuthorityLabel; State='paused' })
+        } elseif ($script:RuntimeNamedMode -ceq 'identity-drift') {
+          @([pscustomobject]@{ Id=('c' * 64); Name=$valid.Name; Project=$valid.Project; Service=$valid.Service; AuthorityLabel=$valid.AuthorityLabel; State='exited' })
+        } else { @($valid) }
+        return [pscustomobject]@{ Containers=$containers; Networks=@(); Volumes=@(); ReservedVolumeNames=@(); ForeignVolumeConsumers=@() }
       }
       $foreignMessage = ''
       try { $null = Stop-EasyFireMigrationLaneContainers -Lane $lane }
@@ -540,6 +588,12 @@ test("lane stop validates before mutation, propagates native failure, and reject
       $pausedMessage = ''
       try { $null = Stop-EasyFireMigrationLaneContainers -Lane $lane }
       catch { $pausedMessage = $_.Exception.Message }
+      $script:RuntimeNamedMode = 'identity-drift'
+      $script:RuntimeNamedReadIndex = 0
+      $script:RuntimeNativeCalls = @()
+      $identityMessage = ''
+      try { $null = Stop-EasyFireMigrationLaneContainers -Lane $lane }
+      catch { $identityMessage = $_.Exception.Message }
       [pscustomobject]@{
         ForeignMessage=$foreignMessage
         ForeignNativeCallCount=$callsBeforeFailureCase
@@ -547,6 +601,7 @@ test("lane stop validates before mutation, propagates native failure, and reject
         NativeCallCount=$nativeCallCount
         PausedMessage=$pausedMessage
         PausedStopCount=@($script:RuntimeNativeCalls | Where-Object { [string]$_[0] -ceq 'stop' }).Count
+        IdentityMessage=$identityMessage
       } | ConvertTo-Json -Compress
     }
   `);
@@ -557,6 +612,7 @@ test("lane stop validates before mutation, propagates native failure, and reject
   assert.match(value.NativeMessage, /simulated exact stop failure/i);
   assert.match(value.PausedMessage, /non-running|zero running/i);
   assert.equal(value.PausedStopCount, 1);
+  assert.match(value.IdentityMessage, /identity.*drift/i);
 });
 
 test("execution contracts preserve the required proof order and automatic rollback boundary", () => {

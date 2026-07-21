@@ -1256,7 +1256,11 @@ try {
                 $null = Refresh-EasyFireMigrationJournal
                 if ([string]$script:JournalRead.Journal.CurrentState -ceq 'Rehearsing' -and
                     [string]$script:JournalRead.Journal.Phase -cne 'AwaitingNativeAuthentication') {
-                    $aborted = Invoke-EasyFireMigrationAbortRehearsal -Failure $original
+                    try {
+                        $aborted = Invoke-EasyFireMigrationAbortRehearsal -Failure $original
+                    } catch {
+                        throw "REHEARSAL_ABORT_FAILED: original=$([string]$original.Exception.Message); abort=$([string]$_.Exception.Message); journal=$script:JournalPath"
+                    }
                     throw "REHEARSAL_ABORTED: $([string]$original.Exception.Message); journal=$([string]$aborted.JournalPath)"
                 }
                 throw

@@ -150,6 +150,35 @@ foreach ($phase in @('RehearsalAuthenticated', 'RehearsalRollbackPrepared')) {
   }
 });
 
+test("real dispatcher preserves the original rehearsal error when abort also fails", () => {
+  const evidence = runPowerShellHarness(`
+$dispatcher = Get-ControllerDispatcherText
+. ([scriptblock]::Create("function Invoke-ControllerDispatcherUnderTest { param([string]\`$Mode) $dispatcher }"))
+
+function Invoke-EasyFireMigrationRehearsal {
+    $script:JournalRead.Journal.CurrentState = 'Rehearsing'
+    $script:JournalRead.Journal.Phase = 'RehearsalDataStarting'
+    throw 'original rehearsal failure'
+}
+function Refresh-EasyFireMigrationJournal { return $script:JournalRead }
+function Invoke-EasyFireMigrationAbortRehearsal { param($Failure); throw 'abort evidence failure' }
+function Invoke-EasyFireMigrationAcceptAuthentication { throw 'not expected' }
+function Invoke-EasyFireMigrationCutover { throw 'not expected' }
+function Invoke-EasyFireMigrationAutomaticRollback { throw 'not expected' }
+
+$script:JournalPath = 'C:\\test\\migration.json'
+$script:JournalRead = [pscustomobject]@{ Journal=[pscustomobject]@{ CurrentState='Planned'; Phase='Planned' } }
+$message = ''
+try { $null = Invoke-ControllerDispatcherUnderTest -Mode Rehearse }
+catch { $message = [string]$_.Exception.Message }
+[pscustomobject]@{ Message=$message } | ConvertTo-Json -Compress
+`);
+
+  assert.match(evidence.Message, /original rehearsal failure/i);
+  assert.match(evidence.Message, /abort evidence failure/i);
+  assert.match(evidence.Message, /C:\\test\\migration\.json/i);
+});
+
 test("actual rehearsal abort stops partial lanes, preserves their volumes, verifies source, and becomes terminal", () => {
   const evidence = runPowerShellHarness(`
 . ([scriptblock]::Create((Get-ControllerFunctionText -Name 'Stop-EasyFireMigrationLaneAndVerify')))

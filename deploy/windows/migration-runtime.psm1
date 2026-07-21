@@ -1192,18 +1192,21 @@ function Stop-EasyFireMigrationLaneContainers {
             throw "Refusing to stop non-unique lane service: $service"
         }
     }
-    $readbackContainers = @(Get-EasyFireMigrationNamedLaneContainers -Lane $Lane)
+    $readback = Get-EasyFireMigrationLaneInventory -Lane $Lane
+    $readbackContainers = @(Get-EasyFireMigrationRuntimeProperty $readback 'Containers' @())
     $null = Assert-EasyFireMigrationLaneContainerSubset -Lane $Lane -Containers $readbackContainers
+    $initialIds = @($containers | ForEach-Object { [string]$_.Id } | Sort-Object)
+    $readbackIds = @($readbackContainers | ForEach-Object { [string]$_.Id } | Sort-Object)
+    if (@(Compare-Object $initialIds $readbackIds -CaseSensitive).Count -ne 0) {
+        throw 'Stopped migration lane container identity drifted across the stop boundary.'
+    }
     $unsafeStates = @($readbackContainers | Where-Object {
             [string]$_.State -cnotin @('created', 'exited', 'dead')
         })
     if ($unsafeStates.Count -ne 0) {
         throw 'Stopped migration lane must prove every deterministic container identity is non-running.'
     }
-    return [pscustomobject][ordered]@{
-        ProjectName = [string]$Lane.ProjectName
-        Containers = $readbackContainers
-    }
+    return $readback
 }
 
 function Stop-EasyFireMigrationSourceServices {
