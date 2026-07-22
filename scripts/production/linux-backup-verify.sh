@@ -700,8 +700,8 @@ database_output="$(
 )" || fail 'Unable to enumerate application databases.'
 mapfile -t application_databases < <(
   printf '%s\n' "${database_output}" |
-    awk -v system="${SYSTEM_DATABASE}" -v prefix="${TENANT_DATABASE_PREFIX}" \
-      '$0 == system || index($0, prefix) == 1' |
+    awk -v system_database="${SYSTEM_DATABASE}" -v prefix="${TENANT_DATABASE_PREFIX}" \
+      '$0 == system_database || index($0, prefix) == 1' |
     sort -u
 )
 [[ "${#application_databases[@]}" -eq 2 ]] ||

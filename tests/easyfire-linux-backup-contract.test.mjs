@@ -47,6 +47,33 @@ const protectedAccountingTables = [
   'WAREHOUSES_TRANSFERS_ENTRIES',
 ];
 
+test('Linux backup is packaged with LF line endings', async () => {
+  const [attributes, script] = await Promise.all([
+    readFile(path.join(root, '.gitattributes'), 'utf8'),
+    readFile(
+      path.join(root, 'scripts/production/linux-backup-verify.sh'),
+      'utf8',
+    ),
+  ]);
+
+  assert.match(
+    attributes,
+    /^scripts\/production\/linux-backup-verify\.sh text eol=lf$/m,
+  );
+  assert.equal(script.includes('\r'), false);
+});
+
+test('Linux backup database discovery uses GNU awk compatible identifiers', async () => {
+  const script = await readFile(
+    path.join(root, 'scripts/production/linux-backup-verify.sh'),
+    'utf8',
+  );
+
+  assert.doesNotMatch(script, /awk -v system=/);
+  assert.match(script, /awk -v system_database=/);
+  assert.match(script, /\$0 == system_database/);
+});
+
 test('Linux backup proves an append-only network-isolated restore', async () => {
   const script = await readFile(
     path.join(root, 'scripts/production/linux-backup-verify.sh'),

@@ -1,2 +1,3 @@
 docker/nginx/scripts/build-nginx.sh text eol=lf
 docker/mariadb/docker-entrypoint.sh text eol=lf
+scripts/production/linux-backup-verify.sh text eol=lf
