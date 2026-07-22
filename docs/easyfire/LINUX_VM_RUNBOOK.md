@@ -19,6 +19,21 @@ The preserved Windows runtime remains the rollback authority until the
 cutover-observation window is explicitly closed. Never allow both databases to
 accept writes.
 
+## Host runtime contract
+
+- Install Docker Engine and the Compose plugin from Docker's signed Ubuntu
+  repository; do not use Docker Desktop or the convenience installer.
+- Install the official Node.js `v22.23.1` Linux x64 release under
+  `/opt/nodejs/node-v22.23.1` only after its entry in the upstream
+  `SHASUMS256.txt` passes. Expose it as `/usr/local/bin/node`; the Guardian
+  systemd unit deliberately does not depend on Ubuntu's older Node package.
+- Install Tailscale from its signed stable Ubuntu repository, but do not enroll
+  the guest or configure Serve until the credential and candidate-health gates.
+- Record installed package versions, upstream checksums, service enablement,
+  firewall rules, and swap configuration in the deployment evidence manifest.
+- Runtime upgrades are attended releases: prove the Guardian suite and the
+  backup/restore/rollback gates before changing pinned versions.
+
 ## Filesystem contract
 
 ```text

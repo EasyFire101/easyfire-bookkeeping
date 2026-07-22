@@ -26,6 +26,8 @@ test('Guardian is timer-owned, bounded, hardened, and local-only', async () => {
   const config = JSON.parse(await text('deploy/linux/guardian.config.example.json'));
 
   assert.match(service, /Type=oneshot/);
+  assert.match(service, /ExecStart=\/usr\/local\/bin\/node /);
+  assert.doesNotMatch(service, /ExecStart=\/usr\/bin\/node /);
   assert.match(service, /TimeoutStartSec=25/);
   assert.match(service, /ProtectSystem=strict/);
   assert.match(service, /ReadWritePaths=\/var\/lib\/easyfire-bookkeeping-guardian/);
