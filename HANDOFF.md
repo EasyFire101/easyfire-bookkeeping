@@ -397,6 +397,16 @@ history; they must not be used to construct the superseding endpoint.
   bundle-proven digest and still requires its returned ID, tag, and optional
   external digest authority to match exactly. The failed tag-based attempt
   wrote no evidence and created no container or volume.
+- Release-manifest provenance then refused Git's case-ambiguous `EE`/`ee`
+  directory prefixes. The physical Windows checkout and every application
+  import already use `EE/Workspaces`; only Git's 20 recorded Workspaces paths
+  retained lowercase `ee`. Those paths are normalized to `EE` with all 20 blob
+  identities unchanged. The failed manifest attempt wrote no manifest and did
+  not create a container or volume. The prefix-aware Git scan reports zero
+  remaining collisions; the seven-project build and server typecheck pass.
+  The repository-wide typecheck still reports the pre-existing webapp type
+  backlog after all build dependencies exist; no server or Guardian typecheck
+  fails.
 - A repository-wide parallel run reported only the unchanged Windows 15,000-file
   timing guard above its 90-second ceiling under host contention. Its immediate
   isolated rerun passed all 14/14 production-I/O tests; no changed Linux release

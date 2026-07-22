@@ -592,3 +592,16 @@ returned ID, tag, external digest authority, Docker version, OS, and architectur
 to match. Regression-first tests fail on the prior lookup and pass 13/13 after
 the repair. The failed rehearsal attestation wrote no evidence and created no
 container or volume.
+
+Release-manifest source provenance next refused a case-ambiguous directory
+prefix in the Git archive: AuditLogs was tracked under `modules/EE`, while 20
+Workspaces files were tracked under `modules/ee`. This was stale index casing,
+not two intentional module roots: the physical Windows checkout and every
+application import already use `EE/Workspaces`. The 20 tracked paths are now
+normalized to `EE/Workspaces` through a reversible two-step Git move; their blob
+object identities are unchanged. The failed manifest attempt wrote no output
+and created no container or volume. A prefix-aware scan of every tracked path
+ancestor now reports zero collisions; the complete seven-project build and
+server typecheck pass. The repository-wide typecheck continues to report the
+pre-existing webapp type backlog after dependency-ordered build, while server,
+SDK, and Guardian typechecks pass.
