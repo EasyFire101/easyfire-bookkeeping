@@ -23,11 +23,13 @@
 - Foundation check: `node scripts/project-foundation-check.mjs`
 - Source-size guard: `node scripts/source-size-guard.mjs --changed`
 - Build: `pnpm run typecheck`, then `pnpm run build`
-- Production deploy or rollback: only the immutable archive-and-hash `deploy\\windows\\production-action.ps1` flow with a unique action ID and schema-2 journal. The controller is fresh-install-only. At a new ActionId, any historical, project-labeled, or action-derived MariaDB/Redis volume or prior action authority requires separate migration/recovery review. A resume may see only the exact two volumes bound to the same compatible schema-2 journal phase. Existing MariaDB data requires a blue/green logical migration.
-- Runtime check: use the completed Newsec production journal's action ID with the production-action `Postcheck` stage; never guess an action ID or treat the local checkout as runtime truth.
-- Cloudflare Access, Tunnel, DNS, the cloudflared binary, and its Windows service are pre-existing verify-only infrastructure for this controller. Edge repair is a separate scope.
+- Production deploy or rollback: the superseding endpoint is the dedicated Ubuntu VM `easyfire-bookkeeping-newsec` on Newsec. Use only the immutable Linux release, fixed root-owned deployment plan, checkpoint/release/cutover authorities, `linux-deploy-candidate.mjs`, and `linux-rollback-lock.mjs`. The Windows controllers remain historical source-runtime/rollback evidence and must not create the new production endpoint.
+- Runtime check: use `linux-deploy-candidate.mjs --verify-existing --plan /etc/easyfire-bookkeeping/deployment-plan.json`, then verify the exact systemd units, journals, receipts, runtime manifest, and private-route receipt. Never infer runtime state from this checkout or friendly Docker names.
+- Network exposure: production is private Tailscale Serve HTTPS for `easyfire-bookkeeping-newsec.taild63e9b.ts.net` to `http://127.0.0.1:8080`. Funnel, a public listener, Cloudflare cutover, and any other public route are forbidden. The still-live Windows Cloudflare path is preserved rollback authority only until gated cutover.
 - Automated production owner bootstrap is retired and unavailable. Do not use `scripts\\production\\bootstrap-owner.ps1` as a release step.
-- Production startup relies on Compose `restart: unless-stopped`; the startup scheduled-task helper is retired and must fail closed. The only controller-managed scheduled task is the exact daily backup task.
+- Every production Compose service uses `restart: "no"`. `easyfire-bookkeeping-stack.service` is the sole boot/start authority and must pass the fixed-plan `--verify-existing` gate before starting existing containers. No Windows Scheduled Task or direct Compose command may become boot authority.
+- The systemd Guardian timer may recover only the exact stateless services. MariaDB and Redis are observe-only and must fail closed for operator review. Recovery must never migrate, restore, recreate, pull, build, or mutate durable volumes.
+- Mandatory destructive/reboot rehearsal runs on a separate isolated rehearsal VM. The production VM must not double as the rehearsal environment.
 
 ## Project Profile
 
@@ -66,7 +68,7 @@
 - Keep `.env`, credentials, tokens, signing keys, local databases, logs with private payloads, and generated artifacts out of Git.
 - Maintain `.env.example` with safe placeholders when configuration is needed.
 - Store editable user data in durable backed-up storage, not only source constants, unless it is intentionally seed/default data.
-- Keep production journals, releases, backups, restore scratch space, and Cloudflare/service credentials outside Git.
+- Keep production journals, releases, backups, restore scratch space, Tailscale credentials, and preserved legacy Cloudflare/service credentials outside Git.
 
 ## Security, Privacy, And Reproducibility
 

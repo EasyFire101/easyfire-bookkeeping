@@ -1,6 +1,10 @@
 [CmdletBinding()]
 param(
-    [string]$SecondaryRoot = 'E:\EasyFire Bookkeeping Recovery\direct-vm-preflight'
+    [string]$SecondaryRoot = 'E:\EasyFire Bookkeeping Recovery\direct-vm-preflight',
+    [switch]$RequireWritersStopped,
+    [string]$SourceQuiesceReceiptPath,
+    [ValidatePattern('^[A-Fa-f0-9]{64}$')]
+    [string]$SourceQuiesceReceiptSha256
 )
 
 Set-StrictMode -Version Latest
@@ -24,6 +28,38 @@ $containers = @(
     'easyfire-owner-onboarding-web-0b7d1af8',
     'easyfire-owner-onboarding-gateway-v2-0b7d1af8'
 )
+$dataContainers = @('easyfire-mysql', 'easyfire-redis')
+$writerContainers = @($containers | Where-Object { $_ -notin $dataContainers })
+$sourceQuiesceReceipt = $null
+
+if ($RequireWritersStopped) {
+    if (-not $SourceQuiesceReceiptPath -or -not $SourceQuiesceReceiptSha256) {
+        throw 'Final writers-stopped checkpoint requires the exact source-quiesce receipt path and SHA-256.'
+    }
+    $receiptRoot = 'C:\ProgramData\AgentFoundry\easyfire-bookkeeping\direct-vm-cutover\journal'
+    $receiptFull = [IO.Path]::GetFullPath($SourceQuiesceReceiptPath)
+    $receiptRootFull = [IO.Path]::GetFullPath($receiptRoot).TrimEnd('\')
+    if (-not $receiptFull.StartsWith("$receiptRootFull\", [StringComparison]::OrdinalIgnoreCase) -or
+        -not (Test-Path -LiteralPath $receiptFull -PathType Leaf)) {
+        throw 'Source-quiesce receipt must be the exact protected cutover-journal file.'
+    }
+    $receiptItem = Get-Item -LiteralPath $receiptFull -Force
+    if (($receiptItem.Attributes -band [IO.FileAttributes]::ReparsePoint) -ne 0 -or
+        (Get-FileHash -LiteralPath $receiptFull -Algorithm SHA256).Hash -cne $SourceQuiesceReceiptSha256.ToUpperInvariant()) {
+        throw 'Source-quiesce receipt path or SHA-256 is invalid.'
+    }
+    $sourceQuiesceReceipt = Get-Content -LiteralPath $receiptFull -Raw -Encoding UTF8 | ConvertFrom-Json
+    if ([int]$sourceQuiesceReceipt.schemaVersion -ne 1 -or
+        [string]$sourceQuiesceReceipt.project -cne 'easyfire-bookkeeping' -or
+        [string]$sourceQuiesceReceipt.kind -cne 'easyfire-bookkeeping-source-quiesce-receipt' -or
+        [string]$sourceQuiesceReceipt.status -cne 'quiesced-verified' -or
+        -not [bool]$sourceQuiesceReceipt.proof.writerConnectionsAbsent -or
+        -not [bool]$sourceQuiesceReceipt.preservation.noResourcesDeleted) {
+        throw 'Source-quiesce receipt does not contain the required final-checkpoint authority.'
+    }
+} elseif ($SourceQuiesceReceiptPath -or $SourceQuiesceReceiptSha256) {
+    throw 'Source-quiesce receipt inputs are accepted only in writers-stopped mode.'
+}
 
 $rootName = "direct-vm-preflight-$stamp"
 $rootC = Join-Path 'C:\ProgramData\AgentFoundry\easyfire-bookkeeping\backups' $rootName
@@ -56,10 +92,34 @@ foreach ($root in @($rootC, $rootH)) {
     }
 }
 
-foreach ($name in $containers) {
-    $running = docker inspect --format '{{.State.Running}}' $name 2>$null
-    if ($LASTEXITCODE -ne 0 -or $running -ne 'true') {
-        throw "Required live container is not running: $name"
+if ($RequireWritersStopped) {
+    foreach ($name in $dataContainers) {
+        $state = docker inspect --format '{{.State.Running}}|{{if .State.Health}}{{.State.Health.Status}}{{else}}missing{{end}}' $name 2>$null
+        if ($LASTEXITCODE -ne 0 -or $state -ne 'true|healthy') {
+            throw "Required source data container is not running and healthy: $name"
+        }
+    }
+    foreach ($name in $writerContainers) {
+        $state = docker inspect --format '{{.State.Running}}|{{.HostConfig.RestartPolicy.Name}}' $name 2>$null
+        if ($LASTEXITCODE -ne 0 -or $state -ne 'false|no') {
+            throw "Stopped source writer restart policy must be no: $name"
+        }
+    }
+    $mysqlWriterQuery = 'mariadb -u root -p"$MYSQL_ROOT_PASSWORD" --batch --skip-column-names --raw --execute="SELECT (SELECT COUNT(*) FROM information_schema.PROCESSLIST WHERE ID <> CONNECTION_ID() AND USER NOT IN (''system user'',''event_scheduler'')),@@event_scheduler,(SELECT COUNT(*) FROM information_schema.EVENTS WHERE STATUS=''ENABLED'');"'
+    $mysqlWriterProof = docker exec $mysql sh -lc $mysqlWriterQuery
+    if ($LASTEXITCODE -ne 0 -or $mysqlWriterProof -ne "0`tOFF`t0") {
+        throw "Source MariaDB writer-connection proof failed: expected no external connections, event_scheduler OFF, and zero enabled events."
+    }
+    $redisClients = @(docker exec $redis redis-cli --raw CLIENT LIST TYPE normal | Where-Object { $_ })
+    if ($LASTEXITCODE -ne 0 -or $redisClients.Count -ne 1) {
+        throw "Source Redis external-client proof failed: observed $([Math]::Max(0, $redisClients.Count - 1))."
+    }
+} else {
+    foreach ($name in $containers) {
+        $running = docker inspect --format '{{.State.Running}}' $name 2>$null
+        if ($LASTEXITCODE -ne 0 -or $running -ne 'true') {
+            throw "Required live container is not running: $name"
+        }
     }
 }
 
@@ -69,6 +129,10 @@ $inputDir = Join-Path $rootC 'inputs'
 $imageDir = Join-Path $rootC 'images'
 $proofDir = Join-Path $rootC 'restore-proof'
 New-Item -ItemType Directory -Path $backupDir, $runtimeDir, $inputDir, $imageDir, $proofDir | Out-Null
+
+if ($RequireWritersStopped) {
+    Copy-Item -LiteralPath $receiptFull -Destination (Join-Path $inputDir 'source-quiesce-receipt.json') -Force:$false
+}
 
 $databaseOutput = docker exec $mysql sh -c `
     "mariadb -u root -p`"`$MYSQL_ROOT_PASSWORD`" -N -e 'SHOW DATABASES;'"
@@ -91,7 +155,7 @@ if (
 
 $containerBase = "/tmp/easyfire-$rootName"
 $databaseArguments = $appDatabases -join ' '
-$dumpCommand = "mariadb-dump --single-transaction --routines --triggers --events --hex-blob --add-drop-database --databases $databaseArguments -u root -p`"`$MYSQL_ROOT_PASSWORD`" > $containerBase.sql && gzip -c $containerBase.sql > $containerBase.sql.gz"
+$dumpCommand = "mariadb-dump --single-transaction --skip-lock-tables --quick --routines --triggers --events --hex-blob --add-drop-database --databases $databaseArguments -u root -p`"`$MYSQL_ROOT_PASSWORD`" > $containerBase.sql && gzip -c $containerBase.sql > $containerBase.sql.gz"
 docker exec $mysql sh -c $dumpCommand | Out-Null
 if ($LASTEXITCODE -ne 0) {
     throw 'Fresh MariaDB logical dump failed.'

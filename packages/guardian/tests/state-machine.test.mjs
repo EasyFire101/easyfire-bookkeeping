@@ -51,6 +51,22 @@ function observation(overrides = {}) {
   };
 }
 
+function priorForFailure(failedObservation, overrides = {}) {
+  const first = decideGuardianAction(
+    INITIAL_STATE,
+    failedObservation,
+    policy,
+    now,
+  );
+  assert.equal(first.state.consecutiveFailures, 1);
+  assert.equal(typeof first.state.failureFingerprint, 'string');
+  return {
+    ...first.state,
+    consecutiveFailures: 2,
+    ...overrides,
+  };
+}
+
 test('healthy observation resets failure state without recovery', () => {
   const prior = {
     ...INITIAL_STATE,
@@ -61,6 +77,7 @@ test('healthy observation resets failure state without recovery', () => {
 
   assert.equal(decision.state.phase, 'healthy');
   assert.equal(decision.state.consecutiveFailures, 0);
+  assert.equal(decision.state.failureFingerprint, null);
   assert.deepEqual(decision.action, { kind: 'none' });
 });
 
@@ -88,14 +105,11 @@ test('third matching stopped stateless failure starts only its pinned id', () =>
       ? { ...entry, state: 'stopped', healthy: false }
       : entry,
   );
-  const prior = {
-    ...INITIAL_STATE,
-    phase: 'suspect',
-    consecutiveFailures: 2,
-  };
+  const failedObservation = observation({ services });
+  const prior = priorForFailure(failedObservation);
   const decision = decideGuardianAction(
     prior,
-    observation({ services }),
+    failedObservation,
     policy,
     now,
   );
@@ -153,9 +167,10 @@ test('running but unhealthy stateless service is never restarted', () => {
   const services = observation().services.map((entry) =>
     entry.role === 'webapp' ? { ...entry, healthy: false } : entry,
   );
+  const failedObservation = observation({ services });
   const decision = decideGuardianAction(
-    { ...INITIAL_STATE, consecutiveFailures: 2 },
-    observation({ services }),
+    priorForFailure(failedObservation),
+    failedObservation,
     policy,
     now,
   );
@@ -171,10 +186,18 @@ test('shadow mode records the exact action but cannot mutate', () => {
       ? { ...entry, state: 'stopped', healthy: false }
       : entry,
   );
+  const failedObservation = observation({ services });
+  const shadowPolicy = { ...policy, shadowMode: true };
+  const first = decideGuardianAction(
+    INITIAL_STATE,
+    failedObservation,
+    shadowPolicy,
+    now,
+  );
   const decision = decideGuardianAction(
-    { ...INITIAL_STATE, consecutiveFailures: 2 },
-    observation({ services }),
-    { ...policy, shadowMode: true },
+    { ...first.state, consecutiveFailures: 2 },
+    failedObservation,
+    shadowPolicy,
     now,
   );
 
@@ -193,9 +216,8 @@ test('recovery budget exhaustion enters alert-only escalated state', () => {
       ? { ...entry, state: 'stopped', healthy: false }
       : entry,
   );
-  const prior = {
-    ...INITIAL_STATE,
-    consecutiveFailures: 2,
+  const failedObservation = observation({ services });
+  const prior = priorForFailure(failedObservation, {
     recoveryAttempts: [
       {
         at: '2026-07-21T19:20:00.000Z',
@@ -208,15 +230,42 @@ test('recovery budget exhaustion enters alert-only escalated state', () => {
         containerId: 'server-container-id',
       },
     ],
-  };
+  });
   const decision = decideGuardianAction(
     prior,
-    observation({ services }),
+    failedObservation,
     policy,
     now,
   );
 
   assert.equal(decision.state.phase, 'escalated');
   assert.match(decision.reason, /budget/i);
+  assert.deepEqual(decision.action, { kind: 'none' });
+});
+
+test('a different failure target starts a new confirmation sequence', () => {
+  const serverServices = observation().services.map((entry) =>
+    entry.role === 'server'
+      ? { ...entry, state: 'stopped', healthy: false }
+      : entry,
+  );
+  const serverObservation = observation({ services: serverServices });
+  const prior = priorForFailure(serverObservation);
+  const webappServices = observation().services.map((entry) =>
+    entry.role === 'webapp'
+      ? { ...entry, state: 'stopped', healthy: false }
+      : entry,
+  );
+
+  const decision = decideGuardianAction(
+    prior,
+    observation({ services: webappServices }),
+    policy,
+    now,
+  );
+
+  assert.equal(decision.state.phase, 'suspect');
+  assert.equal(decision.state.consecutiveFailures, 1);
+  assert.notEqual(decision.state.failureFingerprint, prior.failureFingerprint);
   assert.deepEqual(decision.action, { kind: 'none' });
 });

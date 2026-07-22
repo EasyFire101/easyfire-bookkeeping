@@ -1,6 +1,6 @@
 {
   "foundationVersion": "1.7.0",
-  "foundationStatus": "active-production-candidate",
+  "foundationStatus": "active-direct-vm-production-candidate",
   "projectName": "EasyFire Bookkeeping",
   "projectMemoryId": "a61c6671-6d22-538b-a722-a3874093355e",
   "projectMemoryAliases": [
@@ -8,7 +8,7 @@
     "bookkeeping-autonomy-recovery-20260718"
   ],
   "projectType": "website",
-  "projectTypeOverlay": "Hosted single-owner accounting application candidate with durable financial data, exact four-file fresh-install controller authority, a full ten-file existing-data migration bundle, immutable release and image identity, schema-2 journals, and metadata-backed verified recovery units.",
+  "projectTypeOverlay": "Private hosted single-owner accounting service moving to a dedicated Ubuntu VM on Newsec with immutable release/image authority, root-owned deployment and cutover receipts, systemd-owned lifecycle, Tailscale-only ingress, and verified recovery units.",
   "purpose": "Private, single-owner EasyFire bookkeeping web application, based on Bigcapital (AGPL-3.0), for recording and reporting financial activity with durable self-hosted storage and recoverable operations.",
   "defaultBranch": "main",
   "projectMode": "production",
@@ -24,11 +24,11 @@
     "upgradeProcedure": "Run the creating-project-foundations skill from Command Center and request multi-agent mode; do not run a project-local npm command that is not installed here."
   },
   "deploymentContext": {
-    "audience": "Intended for one owner and administrator. The public hostname is restricted by pre-existing Cloudflare Access plus native application authentication, with public self-registration disabled. The sole owner policy, Tunnel, DNS, token identity, and Running/Automatic cloudflared service are exact; native candidate acceptance still requires owner login after Rehearse.",
-    "networkExposure": "Candidate contract: pre-existing Cloudflare Access and Tunnel forward to Envoy on Newsec at 127.0.0.1:80; MariaDB and Redis remain on the internal Compose network. The current controllers verify but never rewrite the edge, whose exact binary, service, process, connector, Tunnel, DNS, Access, and token identity is proven.",
-    "trustedComputeBoundary": "Newsec Windows and its Docker runtime are owner-controlled trusted compute. Cloudflare is an external routing and access-control boundary. SSH works; six long-running containers on the older runtime are healthy and its migration container exited 0. Existing durable volumes, legacy journals, releases, backups, and both legacy tasks remain preserved while the separate migration controller binds only candidate-derived resources.",
-    "availabilityTarget": "Best-effort personal production service with Compose restart: unless-stopped and one exact daily task that invokes the fifth ScheduledBackup controller stage from the sealed installed controller through canonical Windows PowerShell with the journal-bound deployment-owner SID. Maintenance downtime is acceptable; high availability is not required.",
-    "assuranceTarget": "Single-user access control, secret hygiene, exact four-file fresh-install bundles and full ten-file migration bundle, immutable archive and seven-image identity, SYSTEM/Administrators plus journal-bound deployment-owner SID authority, crash-resumable metadata-backed recovery units with isolated restore, schema-2 journals, mandatory Postcheck, complete mount/port containment, TTL-safe Redis continuity, and preserving rollback."
+    "audience": "One owner and administrator on the private Tailscale tailnet with native application authentication and public self-registration disabled. No public website route is part of the superseding endpoint.",
+    "networkExposure": "The target exposes exactly one tailnet-only Tailscale Serve HTTPS host, easyfire-bookkeeping-newsec.taild63e9b.ts.net:443, proxying to Envoy at 127.0.0.1:8080. Tailscale Funnel, public host listeners, Cloudflare cutover, and direct database/cache exposure are forbidden. The old Windows Cloudflare route remains live and unchanged only until gated cutover.",
+    "trustedComputeBoundary": "Newsec is the owner-controlled Hyper-V host. The production target is the isolated Ubuntu 24.04 VM easyfire-bookkeeping-newsec with Docker Engine, Compose, systemd, and Tailscale; a separate isolated VM owns destructive/reboot rehearsal. Windows Docker data, volumes, releases, journals, backups, tasks, and edge remain preserved rollback authority until cutover completes.",
+    "availabilityTarget": "Best-effort private production service. All Compose restart policies are no; easyfire-bookkeeping-stack.service is the sole boot/start authority after exact fixed-plan verification. The systemd Guardian may recover exact stateless services only and observes MariaDB/Redis without restarting or mutating them. Maintenance downtime is acceptable; high availability is not required.",
+    "assuranceTarget": "Single-owner native authentication; private Tailscale-only ingress; immutable release, OCI and engine image identity; schema-2 checkpoint transfer authority; exact deployment and cutover plans/receipts; isolated restore; separate rehearsal VM; single-writer, rollback, reboot, and Guardian recovery proof; and preservation of every Windows runtime artifact until gated closeout."
   },
   "sourceOfTruth": {
     "code": {
@@ -40,8 +40,8 @@
       "recoveryPath": "Exact Forgejo main readback defines accepted source and anonymous GitHub readback of the same commit defines AGPL corresponding source. The verified pre-takeover filesystem backup remains the local rollback authority recorded in HANDOFF.md.",
       "verificationCommand": "git status --short --branch"
     },
-    "runningRuntime": "On 2026-07-20, Newsec SSH works; six long-running containers on the older Agent Foundry-origin easyfire-bookkeeping-prod installation are healthy and its migration container exited 0. Existing MariaDB/Redis volumes and pre-schema-2 journals remain durable authority. Both legacy tasks are enabled/Ready with LastTaskResult=1. Access, Tunnel, DNS, token identity, and the Running/Automatic cloudflared service are exact. A verified live-runtime checkpoint and current isolated-restorable MigrationSource backup exist. No candidate rehearsal, native login, or cutover has run.",
-    "driftCheck": "The candidate cannot use fresh-install Postcheck against incompatible legacy journals. Publish the exact validated recovery patch only to the two EasyFire remotes, build an immutable release and seven pinned images on Newsec, create a new migration Plan, Rehearse, complete owner native login if prompted, run the AcceptAuthentication source recovery drill, and Cutover only after backup, rollback, authentication, and migration proof pass. Then verify task replacement/retirement, runtime/edge health, and a new current backup with isolated restore."
+    "runningRuntime": "On 2026-07-22, the original Windows Bookkeeping runtime on Newsec remains the sole live writer and rollback authority; all original volumes, releases, journals, backups, tasks, and Cloudflare route remain preserved. The isolated Ubuntu 24.04 production VM easyfire-bookkeeping-newsec and the identity-separated rehearsal VM are provisioned with the pinned Docker/Compose/Node/systemd/Tailscale base, but neither has an application stack or route. Tailscale is logged out, Serve/Funnel are absent, no public listener exists, and no cutover has run.",
+    "driftCheck": "Complete fresh independent review, commit the coherent source, construct one immutable Linux release and fixed plan, then stage and restore only into the isolated rehearsal VM. Prove backup/restore, native authentication, systemd boot, Guardian stateless-only recovery, rollback lock/rearm, and reboot recovery there before staging production. Quiesce the Windows source last, capture the final receipt-bound checkpoint, prove a single writer, and activate tailnet-only Tailscale Serve only after every receipt/hash gate passes; preserve Windows as stopped rollback authority afterward."
   },
   "sourceControlPolicy": {
     "localCommit": "Allowed after validation for durable work when the requested lane is complete.",
@@ -52,19 +52,19 @@
   },
   "guardrails": {
     "foundationCheck": "node scripts/project-foundation-check.mjs",
-    "impactMap": "Docs and disclosure: node --test tests/easyfire-release-readiness.test.mjs. Application or dependency changes: frozen install, format, lint, typecheck, build, focused tests, and fake-data E2E. Production scripts or Compose: PowerShell parse, revised static validator, focused controller crash matrix, disposable Docker, schema-2 transitions, migration single-start/timeout, metadata-backed backup/isolated restore, ScheduledBackup, Postcheck, and partial-volume rollback proof. Runtime changes: exact journal-bound Postcheck.",
+    "impactMap": "Docs and disclosure: release-readiness and project-foundation checks. Application or dependency changes: frozen install, format, lint, typecheck, build, focused tests, and fake-data E2E. Linux production/Compose/systemd/Guardian changes: Node or shell parse, focused checkpoint/release/deployment/cutover/rollback/private-route tests, disposable isolated Docker, backup/restore, reboot, and separate-VM rehearsal proof. Runtime changes: fixed-plan verify-existing plus exact receipt/journal/systemd/private-route readback.",
     "sourceSizePolicy": {
       "policyPath": ".codex/source-size-policy.json",
       "checkCommand": "node scripts/source-size-guard.mjs",
       "changedCommand": "node scripts/source-size-guard.mjs --changed",
       "defaultRule": "Warnings are advisory. When a finding blocks under the declared control profile, split it or record an exact path-scoped policy threshold plus the path, lines and severity, disproportionate-split reason, containment proof, and a re-review trigger."
     },
-    "contractRegistry": "TypeScript application contracts plus Docker Compose restart policies, the production-action schema-2 fresh-install/resume journal, exact deployment bundles, hash-bound environments and images, action-bound volume and port inventory, sealed releases, exact ScheduledBackup authority, crash-resumable recovery units, the caller-bound MigrationSource role, and the executable Plan/Rehearse/AcceptAuthentication/Cutover/Rollback migration journal. Migration authority includes the full ten-file bundle, all seven images, exact mounts/ports, TTL-safe Redis continuity, candidate-only containment, and task changes only at gated Cutover.",
+    "contractRegistry": "TypeScript application contracts plus restart:no Compose, immutable release-manifest v2 and engine evidence, schema-2 Windows checkpoint transfer authority, root-owned Linux deployment plan and receipts, once-only migration/start authority, runtime manifest, systemd sole-start gate, Guardian stateless-only policy, append-only backup/restore evidence, rollback lock/rearm receipts, exclusive source-quiesce and cutover authority, and tailnet-only private-route activation receipt.",
     "replayHarness": "Synthetic E2E data and a disposable isolated Docker Compose project are required before live production acceptance.",
-    "stateMutationApproval": "Explicit approval is required for deploy, restart, rollback, migration, restore, scheduled-task changes, credentials or integrations, real financial record mutation, and Git publication or integration. The current approved recovery scope authorizes only the named bookkeeping policy/service/tasks plus candidate-only migration work after backup and proof gates pass. The production controller remains verify-only for Cloudflare and fresh-install-only for data."
+    "stateMutationApproval": "Explicit approval is required for deploy, restart, rollback, migration, restore, systemd/Tailscale changes, credentials, real financial record mutation, and Git publication or integration. The approved direct-to-VM scope authorizes only the isolated Linux candidate and exact cutover path after backup, rollback, authentication, separate-rehearsal, reboot, recovery, final-checkpoint, and single-writer proofs pass. Cloudflare and the Windows runtime remain preserve-only."
   },
   "securityAndPrivacy": {
-    "securityRequirements": "The candidate requires pre-existing Cloudflare Access for one owner identity, native JWT/application authentication, SIGNUP_DISABLED=true, empty signup allowlists, secrets outside Git, no public inbound host application port, exact controller/image/task/edge identity, sealed release identity, and metadata-backed verified backup/restore before completion. Access, Tunnel, DNS, token identity, Newsec SSH, and the Running/Automatic cloudflared service are proven; native candidate acceptance still requires owner login after Rehearse and may pause only for password, MFA, or CAPTCHA entry.",
+    "securityRequirements": "The target requires native JWT/application authentication, SIGNUP_DISABLED=true, empty signup allowlists, secrets outside Git, exact release/controller/image/systemd/runtime identity, verified backup/restore, and exactly one private Tailscale Serve host. Funnel, public listeners, direct MariaDB/Redis exposure, and Cloudflare cutover are prohibited. Owner login may pause only for password, MFA, or CAPTCHA entry.",
     "sensitiveData": "Real financial records, identity and contact information, attachments, database credentials, JWT and SMTP secrets, and optional provider credentials may exist only in production-owned storage and secret boundaries.",
     "dependencyRiskCommand": "corepack pnpm audit --prod --audit-level high",
     "dependencyRiskCurrentEvidence": "The complete production audit on the release candidate reports 45 advisories: 9 low, 36 moderate, 0 high, and 0 critical. Build-only tools are excluded from production dependencies, patched runtime transitives are lock-enforced, and remaining moderate/low findings stay disclosed for future refreshes.",
@@ -82,7 +82,7 @@
       "impactRule": "Use the impact map to choose focused checks before broad checks."
     },
     "runtimeTruth": {
-      "source": "Use sourceOfTruth.runningRuntime for the real running surface. The older runtime is reconciled; the candidate gains runtime authority only through a completed migration journal and post-cutover proof.",
+      "source": "Use sourceOfTruth.runningRuntime for the real running surface. Windows remains live authority until the exclusive cutover chain completes. The Linux VM gains production authority only through the hash-bound deployment/cutover receipts, fixed-plan verify-existing proof, systemd and reboot proof, single-writer evidence, native authentication, and private Tailscale route activation receipt.",
       "driftRequired": true
     },
     "stateMutationPolicy": {
@@ -122,6 +122,6 @@
       "generated build, test, coverage, and restore artifacts"
     ],
     "committedFixtures": "Only safe, minimal fixtures needed for tests.",
-    "retention": "Keep runtime journals off Git as deployment authority. Preserve every observed action-derived durable-volume subset and release directory across rollback. Retain each backup as one recovery unit consisting of its compressed dump, SHA-256 sidecar, and authority-bound metadata, and verify restore separately. Treat every pre-existing project-labeled or historical database/cache volume as migration authority, never as a fresh-install target. Summarize or rotate bulky diagnostics."
+    "retention": "Keep runtime journals and receipts off Git as deployment authority. Preserve the complete Windows runtime, volumes, releases, journals, tasks, backups, and edge through migration and rollback closeout. Preserve Linux failed-proof resources and immutable releases for diagnosis. Retain each backup with its dump, Redis payload when applicable, hashes, authority metadata, and isolated-restore proof. Summarize or rotate bulky diagnostics without deleting authority."
   }
 }

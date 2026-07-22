@@ -1,5 +1,7 @@
 [Unit]
 Description=Run EasyFire Bookkeeping Guardian every 30 seconds
+ConditionPathExists=/etc/easyfire-bookkeeping/runtime-manifest.json
+ConditionPathExists=!/etc/easyfire-bookkeeping/rollback.lock
 
 [Timer]
 OnBootSec=120s

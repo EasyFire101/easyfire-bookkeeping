@@ -52,6 +52,7 @@ export interface GuardianState {
   schemaVersion: 1;
   phase: GuardianPhase;
   consecutiveFailures: number;
+  failureFingerprint: string | null;
   recoveryAttempts: RecoveryAttempt[];
   cooldownUntil: string | null;
   lastReason: string;
@@ -124,6 +125,7 @@ export interface GuardianStatus {
   }>;
   probes: ProbeObservation[];
   consecutiveFailures: number;
+  failureFingerprint: string | null;
   cooldownUntil: string | null;
   recoveryAttemptsInWindow: number;
 }
@@ -132,6 +134,7 @@ export const INITIAL_STATE: GuardianState = {
   schemaVersion: 1,
   phase: 'healthy',
   consecutiveFailures: 0,
+  failureFingerprint: null,
   recoveryAttempts: [],
   cooldownUntil: null,
   lastReason: 'not-yet-observed',

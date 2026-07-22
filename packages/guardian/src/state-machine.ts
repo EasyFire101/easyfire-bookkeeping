@@ -47,6 +47,21 @@ function isIdentityMismatch(service: ServiceObservation): boolean {
   );
 }
 
+function getFailureFingerprint(observation: GuardianObservation): string {
+  const targets = [
+    ...observation.services
+      .filter((service) => service.state !== 'running' || !service.healthy)
+      .map(
+        (service) =>
+          `service:${service.role}:${service.state}:${service.healthy ? 'healthy' : 'unhealthy'}`,
+      ),
+    ...observation.probes
+      .filter((probe) => !probe.ok)
+      .map((probe) => `probe:${probe.name}`),
+  ].sort();
+  return targets.length > 0 ? targets.join('|') : 'unclassified-failure';
+}
+
 export function decideGuardianAction(
   prior: GuardianState,
   observation: GuardianObservation,
@@ -62,7 +77,11 @@ export function decideGuardianAction(
 
   if (!observation.dockerAvailable) {
     return noAction(
-      withState(base, { phase: 'escalated' }),
+      withState(base, {
+        phase: 'escalated',
+        consecutiveFailures: 0,
+        failureFingerprint: null,
+      }),
       'Docker Engine is unavailable; Guardian is observe-only for engine failures.',
     );
   }
@@ -70,7 +89,11 @@ export function decideGuardianAction(
   const identityMismatch = observation.services.find(isIdentityMismatch);
   if (identityMismatch) {
     return noAction(
-      withState(base, { phase: 'escalated' }),
+      withState(base, {
+        phase: 'escalated',
+        consecutiveFailures: 0,
+        failureFingerprint: null,
+      }),
       `Container identity mismatch for ${identityMismatch.role}; recovery refused.`,
     );
   }
@@ -82,7 +105,11 @@ export function decideGuardianAction(
   );
   if (dataFailure) {
     return noAction(
-      withState(base, { phase: 'escalated' }),
+      withState(base, {
+        phase: 'escalated',
+        consecutiveFailures: 0,
+        failureFingerprint: null,
+      }),
       `Data service ${dataFailure.role} is unhealthy; automatic recovery is forbidden.`,
     );
   }
@@ -102,16 +129,21 @@ export function decideGuardianAction(
       withState(base, {
         phase: cooldownActive ? 'cooldown' : 'healthy',
         consecutiveFailures: 0,
+        failureFingerprint: null,
         cooldownUntil: cooldownActive ? base.cooldownUntil : null,
       }),
       reason,
     );
   }
 
-  const failureCount = base.consecutiveFailures + 1;
+  const failureFingerprint = getFailureFingerprint(observation);
+  const failureCount = base.failureFingerprint === failureFingerprint
+    ? base.consecutiveFailures + 1
+    : 1;
   const failedState = withState(base, {
     phase: 'suspect',
     consecutiveFailures: failureCount,
+    failureFingerprint,
   });
 
   if (failureCount < policy.failureThreshold) {

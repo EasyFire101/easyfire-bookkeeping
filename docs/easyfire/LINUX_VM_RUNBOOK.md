@@ -50,6 +50,81 @@ accept writes.
 No secret, database dump, Redis snapshot, Docker export, runtime manifest with
 live container IDs, or accounting data belongs in Git.
 
+### Immutable operational executors
+
+`release-manifest.json` version 2 is the byte and install-mode authority for
+every executable used after `source.tar.gz` is created. In addition to the
+deployment, backup, rollback, and Guardian files, it must contain these exact
+mode-`0644` artifacts:
+
+- `scripts/production/linux-source-archive-authority.mjs`
+- `scripts/production/linux-checkpoint-authority-v2.mjs`
+- `scripts/production/direct-vm-checkpoint-v2-contract.mjs`
+- `scripts/production/direct-vm-cutover-contract.mjs`
+- `scripts/production/direct-vm-source-abort-contract.mjs`
+- `scripts/production/direct-vm-cutover-authority.ps1`
+- `scripts/production/direct-vm-preflight-checkpoint.ps1`
+- `scripts/production/linux-final-quiescence-contract.mjs`
+- `scripts/production/linux-activation-evidence-collect.mjs`
+- `scripts/production/linux-guardian-promote-active.mjs`
+- `scripts/production/linux-private-route-activate.mjs`
+
+Construct the archive only from the exact accepted Git commit, with Git's
+embedded commit header and deterministic install modes. Build the two ignored
+Guardian bundles from that commit first, then run this exact archive command
+from the repository root:
+
+```bash
+git -c tar.umask=0022 archive --format=tar.gz --output=source.tar.gz \
+  --prefix=packages/guardian/dist/ \
+  --add-file=packages/guardian/dist/guardian.js \
+  --add-file=packages/guardian/dist/runtime-manifest-generator.js \
+  --prefix= \
+  '<releaseCommit>'
+```
+
+Extract that archive into a new empty release source root and run the manifest
+producer against that extraction, never against the working checkout. The
+producer streams both gzip and tar, requires the embedded Git commit to equal
+`releaseCommit`, and requires every bound artifact's archive path, bytes, and
+mode to equal the extracted source file. It rejects traversal, duplicate or
+case-ambiguous names, links, unexpected tar types, malformed pax metadata,
+nonzero padding, and gzip/tar truncation. The two `--add-file` options above are
+required because Guardian build output is intentionally ignored by Git; the
+paired `--prefix` values place those exact bytes at their release paths before
+resetting tracked files to the archive root.
+
+On Linux, extract only into the root-owned, non-group/world-writable
+`/opt/easyfire-bookkeeping/releases/<releaseCommit>` directory and point
+`current` at that exact release. Invoke the checkpoint authority and private
+route activator only through `/usr/local/bin/node` at their exact `current`
+paths. The checkpoint producer can publish only a create-new candidate
+authority document; the initial deployment controller treats it as untrusted,
+verifies the complete manifest-bound release first, and performs no Docker
+action if either release or checkpoint proof fails. Immediately before private
+route activation, run the fixed-plan `linux-deploy-candidate.mjs
+--verify-existing` command shown below. That external gate verifies every
+release artifact before the activator can alter route state. A missing file,
+changed byte, wrong mode, symlink, owner drift, or release-path drift is a hard
+stop. Never execute an operational executor from a Git checkout, staging
+directory, home directory, temporary directory, or copied convenience path.
+
+On Windows, extract the same immutable source release into the protected,
+non-reparse-point directory
+`C:\ProgramData\AgentFoundry\easyfire-bookkeeping\releases\<releaseCommit>`.
+Apply the cutover authority ACL described by the controller, then verify the
+eight Windows-controlled release executor/module hashes against their matching
+manifest artifacts: the contract, source controller, checkpoint controller,
+checkpoint v2 contract, final-quiescence contract, activation-evidence
+collector, Guardian promotion controller, and abort contract. The cutover plan
+must bind each absolute installed path and exact SHA-256 value, including
+`C:\ProgramData\AgentFoundry\easyfire-bookkeeping\releases\<releaseCommit>\scripts\production\direct-vm-cutover-authority.ps1`.
+All seven sibling module/controller paths must remain under that same immutable
+release. Invoke the source controller only at the plan-bound installed path;
+it independently refuses a missing input, hash mismatch, reparse point, unsafe
+ACL, or self-path mismatch. The mutable project checkout is never source
+quiesce authority.
+
 ## Deployment gates
 
 1. Verify source commit and image/archive SHA-256 values.
@@ -68,43 +143,153 @@ live container IDs, or accounting data belongs in Git.
 11. Rehearse Guardian in shadow mode with disposable containers.
 12. Cut over the private Tailscale route only when every gate is green.
 
-## One-time Compose deployment
+## One-time controller deployment
 
-Use both Compose files with project `easyfire-bookkeeping-prod`:
+The controller validates the exact production, VM, and restart-`no` candidate
+Compose model and proves its only published socket is `127.0.0.1:8080` before
+creating anything. Before that validation, the attended deployment operator must materialize and
+hash-record `/etc/easyfire-bookkeeping/candidate-with-legacy-jwt.env` as a
+root-owned mode-`0600` environment that is Linux-ready in every respect except
+for its legacy JWT key. The checkpoint's `JWT_SECRET` value must remain
+untouched in that staged file. Convert it without shell evaluation or secret
+rotation:
 
 ```bash
-sudo docker compose \
-  --project-name easyfire-bookkeeping-prod \
-  --file /opt/easyfire-bookkeeping/current/docker-compose.prod.yml \
-  --file /opt/easyfire-bookkeeping/current/deploy/linux/docker-compose.vm.yml \
-  --env-file /etc/easyfire-bookkeeping/production.env \
-  config --quiet
+sudo /usr/local/bin/node \
+  /opt/easyfire-bookkeeping/current/scripts/production/linux-convert-production-env.mjs \
+  --source /etc/easyfire-bookkeeping/candidate-with-legacy-jwt.env \
+  --target /etc/easyfire-bookkeeping/production.env \
+  --release-commit '<exact 40-character releaseCommit from deployment-plan.json>' \
+  --mysql-volume '<exact easyfire_bookkeeping_vm_*_mysql name from deployment-plan.json>' \
+  --redis-volume '<matching easyfire_bookkeeping_vm_*_redis name from deployment-plan.json>' \
+  --base-url 'https://easyfire-bookkeeping-newsec.taild63e9b.ts.net'
 ```
 
-Creation, migration, and restore are explicit attended release operations.
-Routine boot uses only `docker compose start` through
+The helper validates the existing production JWT policy, maps only
+`JWT_SECRET` to `APP_JWT_SECRET`, omits the legacy key, and never prints a value.
+The release commit and both isolated volume names must be copied exactly from
+the already validated deployment plan; placeholders above are documentation,
+not runnable values.
+It refuses duplicate or ambiguous dotenv entries, symlinked or permissive
+paths, and any pre-existing target whose bytes or mode differ. A byte-identical
+root-owned mode-`0600` target is the only accepted rerun. Preserve both files
+and bind their SHA-256 values into the deployment evidence.
+
+Creation, restore, and migration are one attended transaction. The required
+order is:
+
+1. Verify the source, image bundle, checkpoint, and environment hashes; prove
+   Compose publishes only `127.0.0.1:8080`.
+2. Prove the target volume and container names do not exist. The controller
+   creates all seven services with `--pull never`, `--no-build`, and the
+   candidate override. The override leaves every restart policy permanently at
+   `no`, so Docker can never bypass the systemd authority gate.
+3. Copy the verified Redis RDB into the stopped Redis container's `/data` volume.
+4. Start only MariaDB and Redis with `start --wait`; restore the verified logical
+   SQL archive into MariaDB and revalidate the 17/70 and 1/1/1/1 invariants.
+5. Attach to the already-created `easyfire-bookkeeping-migration` container and
+   require exit code zero. Preserve the exited migration container as the
+   migration receipt.
+6. Start Gotenberg, server, webapp, and Envoy with `start --wait`; require all
+   local health probes and exact container/image identity checks.
+7. Generate the root-only runtime manifest from the running guest's actual
+   container `.Id` and `.Image` values. Do not substitute an OCI index or repo
+   digest for Docker's container image ID.
+8. Publish the final activation receipt last, then install and enable the
+   systemd stack unit and Guardian timer. All seven containers remain restart
+   `no`. The stack unit re-verifies the complete immutable authority chain
+   before each start and refuses to run while
+   `/etc/easyfire-bookkeeping/rollback.lock` exists.
+
+The release-owned deployment controller is the only creation, restore,
+migration, runtime-document, and receipt authority. The staged plan must be a
+root-owned mode-`0600` regular file at the exact fixed staging path. The bound
+`source.tar.gz`, `images.tar`, and `target-engine-evidence.json` files in the
+same staging directory must also be root-owned mode-`0600` regular files. The
+`current` symlink plus Guardian generator must already match its pinned release:
+
+```bash
+cd /opt/easyfire-bookkeeping/current
+sudo install -d -o root -g root -m 0755 /opt/easyfire-bookkeeping/guardian
+sudo install -m 0644 packages/guardian/dist/guardian.js \
+  /opt/easyfire-bookkeeping/guardian/guardian.js
+sudo install -m 0644 packages/guardian/dist/runtime-manifest-generator.js \
+  /opt/easyfire-bookkeeping/guardian/runtime-manifest-generator.js
+sudo install -m 0644 deploy/linux/easyfire-bookkeeping-stack.service \
+  /etc/systemd/system/easyfire-bookkeeping-stack.service
+sudo install -m 0644 deploy/linux/easyfire-bookkeeping-guardian.service \
+  /etc/systemd/system/easyfire-bookkeeping-guardian.service
+sudo install -m 0644 deploy/linux/easyfire-bookkeeping-guardian.timer \
+  /etc/systemd/system/easyfire-bookkeeping-guardian.timer
+
+# These are inert byte copies only. Do not daemon-reload, enable, or start them
+# until both controller calls below verify the complete manifest-bound release.
+sudo /usr/local/bin/node \
+  /opt/easyfire-bookkeeping/current/scripts/production/linux-deploy-candidate.mjs \
+  --plan /var/lib/easyfire-bookkeeping-staging/deployment-plan.json
+
+# Required readback before systemd installation or any route work:
+sudo /usr/local/bin/node \
+  /opt/easyfire-bookkeeping/current/scripts/production/linux-deploy-candidate.mjs \
+  --verify-existing \
+  --plan /etc/easyfire-bookkeeping/deployment-plan.json
+
+# Installed-copy verification has passed. Activation is allowed only now.
+sudo systemctl daemon-reload
+sudo systemctl enable \
+  easyfire-bookkeeping-stack.service easyfire-bookkeeping-guardian.timer
+```
+
+Both commands print one secret-free JSON result. A nonzero exit, missing final
+receipt, incomplete journal, identity drift, or failed restore/migration proof
+is a hard stop. Never substitute raw Compose, Docker migration, or receipt
+creation commands for this controller.
+
+Routine boot uses only `docker compose start` with the restart-`no` candidate
+override through
 `easyfire-bookkeeping-stack.service`; it never runs `up`, `down`, `build`,
 `pull`, or the migration service.
 
 ## Private Tailscale route
 
-After the guest is enrolled interactively and the local candidate is healthy:
+After the guest is enrolled interactively, the local candidate is healthy, and
+the exact cutover authorization and mutually bound proof documents are present,
+perform one final external release verification and invoke only the
+release-bound route activator:
 
 ```bash
-sudo tailscale serve --bg --https=443 http://127.0.0.1:8080
-tailscale serve status
+sudo /usr/local/bin/node \
+  /opt/easyfire-bookkeeping/current/scripts/production/linux-deploy-candidate.mjs \
+  --verify-existing \
+  --plan /etc/easyfire-bookkeeping/deployment-plan.json
+sudo /usr/local/bin/node \
+  /opt/easyfire-bookkeeping/current/scripts/production/linux-private-route-activate.mjs \
+  --activate \
+  --authorization /etc/easyfire-bookkeeping/cutover-authorization.json
 ```
 
-Do not use `tailscale funnel`. The route must remain tailnet-only. Enrollment
-or identity approval is a human credential/MFA boundary.
+The activator alone may issue the exact `tailscale serve` mutation. It performs
+another fixed-plan deployment preflight, proves Serve and Funnel are absent,
+creates the one tailnet-only HTTPS route, and publishes a root-only activation
+receipt after its postcheck. Do not run a raw `tailscale serve` or use
+`tailscale funnel`. Enrollment or identity approval is a human credential/MFA
+boundary.
 
 ## Backup and restore
 
-Backups are new timestamped directories with no retention deletion. Each unit
-contains the compressed logical MariaDB dump, optional Redis snapshot,
-sanitized invariants, image/source/runtime identifiers, SHA-256 manifest, and
-`RESTORE.md`. Verification always restores into a new network-isolated volume
-and preserves the stopped proof container and volume.
+Backups are new timestamped directories with no retention deletion. The backup
+refuses to start unless the root-only checkpoint, migration, deployment,
+runtime-manifest, and runtime-identity receipts all hash-bind the same current
+release. It also binds the full live container IDs, actual engine image IDs,
+Compose project/service labels, and exact named-volume mounts. Each unit
+contains the streamed compressed MariaDB dump, Redis snapshot, copied authority
+documents, sanitized invariants, SHA-256 manifest, and `RESTORE.md`.
+
+Verification always restores into a new `--network none` volume using the
+already-loaded MariaDB engine image with `--pull=never`. The proof uses freshly
+random credentials delivered through ephemeral root-only files; it never copies
+the production credentials. Those files are destroyed after validation while
+the stopped proof container and volume are preserved.
 
 Run the release-owned implementation as root:
 
@@ -112,11 +297,13 @@ Run the release-owned implementation as root:
 sudo /opt/easyfire-bookkeeping/current/scripts/production/linux-backup-verify.sh
 ```
 
-The command succeeds only after `mariadb-check`, the 17/70 schema table counts,
-and the 1/1/1/1 identity invariants pass in the new `--network none` proof
-container. It prints the append-only backup path and the preserved proof
-container and volume names. A collision or partial proof fails closed; it never
-reuses or removes a prior unit.
+The command succeeds only after application-user `mariadb-check`, the 17/70
+schema table counts, the 1/1/1/1 identity invariants, and numeric protected
+accounting counts from the restored snapshot pass. It rechecks every artifact hash and
+live authority, atomically publishes `backup-receipt.json`, and writes `COMPLETE`
+last. A unit without both final files is incomplete. The command prints the
+append-only backup path and preserved proof resource names; a collision or
+partial proof fails closed and never reuses or removes a prior unit.
 
 Never test restore against the active volume. Never treat Redis as accounting
 authority.
@@ -125,12 +312,50 @@ authority.
 
 Rollback is route-first and fail-closed:
 
-1. Block writes to the VM candidate.
-2. Confirm the VM database has no writes beyond the last source checkpoint, or
-   create and validate a rollback dump if it does.
-3. Move the private route to the preserved Windows endpoint.
-4. Start only the exact recorded Windows source containers if needed.
-5. Verify native login and authenticated pages.
-6. Keep the VM, volumes, release, journals, and backups preserved for review.
+1. Decide the data authority before touching either route. If the VM has never
+   received a user write, prove the no-delta window against the cutover
+   checkpoint. If it has received any write, create a VM backup, pass its
+   isolated restore, restore it into a **fresh** Windows rollback volume, and
+   validate that candidate before routing users back. Never route back to the
+   older Windows volume while newer VM records exist.
+2. Run the release-owned rollback-lock controller. It first re-verifies the
+   complete deployment authority, changes all six long-running containers to
+   restart `no`, proves that neutral restart policy, then atomically creates
+   `/etc/easyfire-bookkeeping/rollback.lock` mode `0600`.
+3. The controller stops the Guardian timer and service, disables and verifies
+   both Tailscale Serve and Funnel, then stops the four stateless containers
+   followed by Redis and MariaDB. It proves the restart policies remain `no`,
+   port 8080 has no listener, every Bookkeeping container is stopped, the
+   migration remains exited successfully, and all resources are preserved. The
+   lock blocks the systemd and Guardian paths; the proven restart-`no` policies
+   separately block Docker from resurrecting the writer. Verify both layers
+   with one reboot under the lock and a release-owned `--verify-locked` run.
+4. Route users to the exact validated Windows authority selected in step 1.
+5. Verify native login, authenticated pages, and the accounting invariants.
+6. Keep the rollback lock, VM, containers, volumes, release, journals, and every
+   backup preserved for review. Removing the lock is a later attended recovery,
+   never part of rollback cleanup.
+
+Use rehearsal mode for the mandatory pre-cutover reboot proof. Only rehearsal
+locks can be rearmed; rearm failure restores the live lock and re-quiesces the
+runtime:
+
+```bash
+sudo /usr/local/bin/node \
+  /opt/easyfire-bookkeeping/current/scripts/production/linux-rollback-lock.mjs \
+  --arm --reason rehearsal
+sudo systemctl reboot
+# After reconnecting:
+sudo /usr/local/bin/node \
+  /opt/easyfire-bookkeeping/current/scripts/production/linux-rollback-lock.mjs \
+  --verify-locked
+sudo /usr/local/bin/node \
+  /opt/easyfire-bookkeeping/current/scripts/production/linux-rollback-lock.mjs \
+  --rearm
+```
+
+For an actual rollback, use `--arm --reason rollback`, then verify the locked
+state after reboot. The controller permanently refuses `--rearm` for a real
+rollback lock.
 
 Do not delete, prune, recreate, or reuse either side during rollback.

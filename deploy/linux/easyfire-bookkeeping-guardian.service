@@ -1,12 +1,14 @@
 [Unit]
 Description=EasyFire Bookkeeping fail-closed Guardian reconciliation
 Documentation=file:/opt/easyfire-bookkeeping/current/docs/easyfire/GUARDIAN_CONTRACT.md
-Requires=docker.service
+Requires=docker.service easyfire-bookkeeping-stack.service
 After=docker.service easyfire-bookkeeping-stack.service network-online.target
-Wants=easyfire-bookkeeping-stack.service network-online.target
+Wants=network-online.target
 ConditionPathExists=/etc/easyfire-bookkeeping/guardian.json
 ConditionPathExists=/etc/easyfire-bookkeeping/runtime-manifest.json
+ConditionPathExists=!/etc/easyfire-bookkeeping/rollback.lock
 ConditionPathExists=/opt/easyfire-bookkeeping/guardian/guardian.js
+ConditionPathExists=/run/easyfire-bookkeeping-stack/ready
 
 [Service]
 Type=oneshot

@@ -1,21 +1,25 @@
 # EasyFire Bookkeeping Feature Readiness
 
-**Updated:** 2026-07-20
+**Updated:** 2026-07-22
 
 **Foundation:** 1.7.0
 
 **Readiness level:** Full
 
-**Current status:** Locally validated Direct-Codex recovery patch on top of the
-published candidate. Newsec runtime, edge, checkpoint, and current backup
-authority are reconciled, but this patch is not yet committed or published and
-no candidate rehearsal, native login, or cutover has run.
+**Current status:** Locally validated direct-to-VM recovery patch. The isolated
+Ubuntu production VM on Newsec is provisioned but has no Bookkeeping stack or
+route. Windows remains the sole live writer and preserved rollback authority.
+Checkpoint/release/deployment/cutover/private-route authorities exist in source,
+and the final-quiesced checkpoint contract now passes its combined compatibility
+suite. Immutable release construction, separate-VM rehearsal, native login,
+production restore/migration, reboot, and cutover remain open gates.
 
 ## Outcome and scope
 
-The target outcome is a recoverable, single-owner bookkeeping site whose
-verified source is EasyFire-owned, publicly available under AGPL-3.0, and
-reconciled to the authenticated hosted runtime. Source publication and runtime
+The target outcome is a recoverable, single-owner bookkeeping site on a
+dedicated Ubuntu VM, privately reachable only through Tailscale Serve and
+native authentication. Verified corresponding source remains EasyFire-owned
+and publicly available under AGPL-3.0. Source publication and private runtime
 acceptance are proven independently; neither is inferred from this document.
 
 In scope:
@@ -24,10 +28,10 @@ In scope:
 - deterministic source, image, archive, journal, backup, and restore controls;
 - static, build, synthetic E2E, disposable Docker, backup, and restore proof;
 - accepted-source and public-mirror publication after proof;
-- read-only runtime reconciliation and authenticated live acceptance after
-  publication;
-- a fresh installation only if later required and proven to have no existing
-  MariaDB volume;
+- immutable Linux release and image publication to an isolated production VM;
+- separate-VM rehearsal of restore, migration, authentication, rollback,
+  reboot, and Guardian behavior before production activation;
+- authenticated private-runtime acceptance and single-writer cutover;
 - at most one uniquely labeled synthetic persistence record, with removal of
   only its exact identifier, if live persistence proof remains necessary.
 
@@ -40,8 +44,9 @@ Out of scope:
   action-derived MariaDB/Redis volume;
 - implicit or in-place migration of existing data outside the separate
   `MigrationSource` and blue/green authority boundary;
-- Cloudflare application, Tunnel, DNS, token, or binary replacement; their exact
-  identities are already proven and the pinned cloudflared service is running;
+- Cloudflare application, Tunnel, DNS, token, or binary mutation; the legacy
+  edge remains preserve-only rollback infrastructure and is not the endpoint;
+- Tailscale Funnel, a public listener, or any public production route;
 - broad cleanup or deletion;
 - Bigcapital upstream mutation.
 
@@ -55,30 +60,70 @@ Out of scope:
 - Action-derived volumes are durable authority, never cleanup artifacts.
   Rollback preserves the exact observed subset even after partial creation.
 - Existing-data import is authorized only through the separate blue/green
-  controller. A current exact `MigrationSource` recovery unit passed isolated
-  restore. The implementation binds candidate-only resources, but no live
-  rehearsal, import, or cutover has run.
+  transfer/cutover authority. The current schema-v2 checkpoint binds exact
+  SQL/RDB payloads, source container/image/volume identity, dual-location
+  evidence, and a passed isolated restore. No Linux production import or
+  cutover has run.
 - Each backup recovery unit is its compressed dump, adjacent SHA-256 sidecar,
   and adjacent authority-bound metadata; retention must keep them together.
 
 ## Security And Privacy
 
-- The intended edge is pre-existing Cloudflare Access and Tunnel restricted to
-  one owner identity. Read-only API proof shows the sole owner policy, ingress,
-  DNS, and tunnel token are exact. The pinned cloudflared service is Running
-  with Automatic start and exact binary/process/connector identity; no token
-  value is exposed here.
+- The intended edge is exactly one tailnet-only Tailscale Serve HTTPS host,
+  `easyfire-bookkeeping-newsec.taild63e9b.ts.net`, proxying to Envoy at
+  `http://127.0.0.1:8080`. Serve activation is hash/receipt-gated. Funnel,
+  public host listeners, Cloudflare cutover, and direct MariaDB/Redis exposure
+  are prohibited.
 - Native application authentication remains required. Production signup is
   disabled and both signup allowlists must be empty.
-- Newsec and its Docker runtime are owner-controlled trusted compute, but trust
-  does not substitute for journal, inventory, archive, or backup proof.
+- Newsec is owner-controlled trusted compute, but production runs inside the
+  isolated Ubuntu VM. A separate rehearsal VM owns destructive/reboot proof.
+  Host trust does not substitute for receipts, inventory, immutable release,
+  checkpoint, backup, or restore proof.
 - MariaDB/Redis volumes contain durable production state and are never release
   cleanup targets.
 - Credentials, journals, backups, attachments, and real financial data stay
   outside Git.
 - All user-controlled inputs retain server-side validation and authorization.
 
-## Production action contract
+## Superseding Linux VM production contract
+
+- The target is `easyfire-bookkeeping-newsec`, an isolated Ubuntu 24.04 VM with
+  pinned Docker Engine/Compose, systemd, Node, and Tailscale.
+- Every Compose service declares `restart: "no"`.
+  `easyfire-bookkeeping-stack.service` is the sole boot/start authority and
+  must pass `linux-deploy-candidate.mjs --verify-existing` against the fixed
+  root-owned plan before starting existing containers.
+- Release-manifest v2 binds the source archive, image bundle, OCI index,
+  Linux/amd64 manifest, engine image IDs, Guardian artifacts, systemd units,
+  and target-engine evidence. Mutable tags or checkout paths are insufficient.
+- Checkpoint-transfer v2 binds the exact Windows checkpoint ID/timestamp,
+  source MySQL/Redis container/image/volume identity, SQL/RDB filenames,
+  bytes/hashes, isolated restore, dual-location proof, and preserved source.
+- The final checkpoint additionally requires an exclusive source-quiesce
+  receipt. MariaDB/Redis stay running and healthy on their original volumes;
+  the exact six stateless/source-route writers must be stopped with restart
+  `no`. The live-preflight mode remains strict and unchanged.
+- Deployment uses only new deployment-ID-derived Linux volumes, a once-only
+  migration container, exact 17/70 and 1/1/1/1 restore invariants, and the
+  approved 37 protected accounting-table counts. Completion follows systemd
+  activation proof, not raw Compose success.
+- Guardian is timer-owned, bounded, and stateless-only. It may recover exact
+  Gotenberg/server/webapp/Envoy identities. MariaDB and Redis are observe-only;
+  any data-service fault requires operator review.
+- Rollback lock/rearm, backup/isolated restore, reboot persistence, Guardian
+  recovery, and native authentication must pass on a separate rehearsal VM
+  before production activation.
+- Cutover requires exact Windows source quiescence, a bound final checkpoint,
+  healthy Linux deployment, one writer, rollback proof, and tailnet-only route
+  proof. The original Windows runtime remains preserved rollback authority.
+- Tailscale Serve must be absent before activation and exact after activation.
+  Funnel and an ordinary host listener on 443 are hard failures.
+
+## Historical Windows production action contract
+
+The Windows controller rules below are retained as dated recovery provenance.
+They no longer define the intended production endpoint.
 
 - Preflight performs read-only environment/provider checks and writes a
   short-lived local schema-2 receipt bound to the controller, archive, archive
@@ -132,10 +177,10 @@ rollback, authentication, and migration proof pass.
 
 - Bigcapital remains the locally editable AGPL-3.0 accounting foundation;
   replacing its domain model would add disproportionate migration risk.
-- Cloudflare Access/Tunnel/DNS/cloudflared is pre-existing hosted edge
-  infrastructure. The controller uses read-only verification and exposes no
-  direct database or backup authority to it. Edge replacement is separable
-  behind loopback Envoy and requires its own approval.
+- Tailscale is the only target ingress dependency. Serve remains tailnet-only
+  behind loopback Envoy; Funnel is forbidden. The preserved Windows Cloudflare
+  stack is historical rollback infrastructure and receives no authority over
+  the Linux target, database, backup, or cutover controller.
 - Node.js 22.23.1, pnpm 10.34.5, the workspace lockfile, and pinned production
   images are the current toolchain contract.
 - The complete production dependency audit reports 45 advisories: 9 low, 36
@@ -147,17 +192,51 @@ rollback, authentication, and migration proof pass.
 
 - Documentation/source-disclosure changes use the focused release-readiness
   test. Application/dependency changes require frozen install, typecheck, build,
-  focused tests, and synthetic E2E. Controller/Compose changes additionally
-  require parsing, static validation, crash matrix, disposable Docker,
-  migration, recovery-unit restore, Postcheck, and rollback proof.
-- Runtime truth is the exact completed Newsec schema-2 journal plus successful
-  Postcheck, never this checkout or historical Agent Foundry evidence.
+  focused tests, and synthetic E2E. Linux production, Compose, systemd,
+  Guardian, checkpoint, release, or cutover changes additionally require
+  Node/shell parsing, focused authority tests, disposable Docker,
+  backup/restore, separate-VM rollback/reboot/Guardian proof, and private-route
+  validation.
+- Runtime truth is fixed-plan verify-existing plus exact deployment/cutover/
+  backup/rollback/private-route receipts, systemd readback, authenticated
+  postcheck, and single-writer evidence—never this checkout or historical Agent
+  Foundry evidence.
 - Publication, provider mutation, deploy/restart/rollback, migration/restore,
   scheduled-task changes, owner onboarding, and real financial-data mutation
   remain separate state-changing boundaries.
 - Runtime artifacts and provider payloads stay outside Git.
 
 ## Proof required for promotion
+
+The superseding Linux endpoint additionally requires:
+
+- one coherent immutable release-manifest v2 and target-engine evidence chain;
+- schema-v2 checkpoint transfer replay against the exact preserved root;
+- explicit quiesce-receipt-bound final checkpoint mode;
+- isolated restore and once-only migration on a separate rehearsal VM;
+- native owner login against the rehearsal candidate;
+- Guardian shadow/recovery proof with MariaDB/Redis observe-only;
+- rollback lock/rearm and reboot proof on the rehearsal VM;
+- production fixed-plan deployment, backup/isolated restore, and systemd boot
+  proof;
+- exclusive Windows quiescence, final checkpoint, and one-writer evidence;
+- exact tailnet-only Tailscale Serve activation with Funnel/public listeners
+  absent; and
+- preservation/readback of the complete stopped Windows rollback runtime.
+
+The following application and historical Windows evidence remains useful but
+is not sufficient by itself for Linux promotion:
+
+- Current direct-to-VM authority tests: 97/97 passed across checkpoint,
+  cutover, backup, deployment, environment, release, and rollback contracts.
+- Guardian build/tests: 28/28 passed; Guardian typecheck passed.
+- Current release-readiness: 24/24; static no-deploy validation: 101/101;
+  production Node syntax: 18/18; direct-to-VM PowerShell parsing: 2/2; project
+  foundation: 4/4; source-size guard: 0 blockers and 15 advisory warnings.
+- Release-manifest v2 closes 30 exact executable/imported artifacts into one
+  immutable source/archive/OCI/engine/systemd/runtime authority.
+- Fresh independent combined review returned GO with no remaining promotion
+  blocker in the source contracts. Executable-byte drift requires re-review.
 
 - Focused release-readiness regression test.
 - Frozen pnpm install with committed lockfile and Node.js `22.23.1` / pnpm
@@ -184,10 +263,8 @@ rollback, authentication, and migration proof pass.
   owner native authentication, and live backup/rollback proof.
 - Same accepted commit on Forgejo and public GitHub.
 - Anonymous corresponding-source readback.
-- Newsec SSH, journal/runtime reconciliation, Access/Tunnel/DNS/token identity,
-  and the pinned Running/Automatic cloudflared service are proven. Six legacy
-  runtime containers are healthy and the migration container exited 0. Both
-  legacy tasks remain enabled/Ready with `LastTaskResult=1`.
+- Historical Newsec Windows journal/runtime and Cloudflare reconciliation is
+  proven and remains rollback evidence; it is not target-route proof.
 - The live-runtime checkpoint manifest SHA-256 is
   `0AEE8A2D577B102ECA6E61B8D4063363C7420845D27BDB957BDCA4DCC66525BE`.
   The current `MigrationSource` backup SHA-256 is
@@ -202,20 +279,22 @@ rollback, authentication, and migration proof pass.
 
 ## Recovery Notes
 
-Recovery changed only the approved cloudflared service state and created private
-checkpoint/backup evidence. It did not inspect or change any accounting record,
-rewrite the correct Access/Tunnel/DNS/token authority, or discard an original
-volume, journal, release, or backup. Source publication of this patch has not yet
-occurred; when performed, it changes only the two EasyFire repositories and
-does not itself turn the candidate into a deployed runtime.
+Recovery preserves the complete Windows runtime and created an isolated Ubuntu
+production VM, a distinct identity-separated rehearsal VM, and private
+checkpoint/backup evidence. The rehearsal VM's corrected empty export passed a
+second complete 5-file hash replay; its manifest SHA-256 is
+`4041AD48E1F0D7348F3738F82C84EA467A29204FA65ACBDC2A7313EF5EF00594`.
+This work did not inspect or change an accounting record, discard an original
+volume/journal/release/backup, activate Tailscale Serve/Funnel, or deploy an
+application stack to either VM. Source
+publication of this patch has not yet occurred; publication changes only the
+two EasyFire repositories and does not itself create runtime authority.
 
-Recovery starts with the verified full filesystem checkpoint in `HANDOFF.md`.
-Fresh-install production recovery uses the schema-2 action journal, sealed
-release manifest, verified backup receipts, and bounded rollback. The true next
-path is to publish the exact patch to the two EasyFire remotes, build an
-immutable Newsec release and seven pinned images, create a new migration Plan,
-Rehearse, complete owner native login if prompted, run the
-`AcceptAuthentication` source recovery drill, and Cutover only after every gate
-passes. Post-cutover proof must cover the replacement backup task, absence of
-the legacy startup task, runtime/edge health, and a new current backup with
-isolated restore.
+Recovery starts with the verified full filesystem and direct-VM transfer
+checkpoints in `HANDOFF.md`. The next path is fresh independent source review,
+one coherent immutable Linux release, and proof on the identity-separated
+rehearsal VM before the production VM is staged. Owner Tailscale/native-login
+input is requested only when prompted. Windows may be quiesced only after every
+backup, restore, release, migration, authentication, rollback, reboot, Guardian,
+and checkpoint gate is green. Tailnet-only Serve activates last; Windows remains
+preserved as stopped rollback authority.

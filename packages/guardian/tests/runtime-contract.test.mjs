@@ -76,6 +76,23 @@ test('runtime manifest forbids automatic database recovery', () => {
   );
 });
 
+test('runtime manifest binds every role to its exact container name and Docker health', () => {
+  const wrongName = runtimeManifest();
+  wrongName.services.find((entry) => entry.role === 'server').containerName =
+    'easyfire-bookkeeping-webapp-copy';
+  assert.throws(
+    () => parseRuntimeManifest(wrongName),
+    /server containerName must be easyfire-bookkeeping-server/,
+  );
+
+  const healthOptional = runtimeManifest();
+  healthOptional.services.find((entry) => entry.role === 'envoy').requireDockerHealth = false;
+  assert.throws(
+    () => parseRuntimeManifest(healthOptional),
+    /envoy requireDockerHealth must be true/,
+  );
+});
+
 test('Guardian probes are local-only and reject public URLs', () => {
   const config = guardianConfig();
   assert.equal(parseGuardianConfig(config).probes.length, 2);
@@ -96,6 +113,7 @@ test('Docker adapter starts only a validated pinned container id', async () => {
     { method: 'POST', path: `/containers/${id}/start` },
   ]);
   await assert.rejects(() => client.startContainer('easyfire-server'), /invalid container id/);
+  await assert.rejects(() => client.startContainer('a'.repeat(12)), /invalid container id/);
 });
 
 test('atomic status store leaves a complete restrictive JSON file', async () => {

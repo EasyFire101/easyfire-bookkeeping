@@ -34,18 +34,66 @@
           },
           "containerId": {
             "type": "string",
-            "pattern": "^[a-f0-9]{12,64}$"
+            "pattern": "^[a-f0-9]{64}$"
           },
           "imageId": {
             "type": "string",
             "pattern": "^sha256:[a-f0-9]{64}$"
           },
-          "requireDockerHealth": { "type": "boolean" },
+          "requireDockerHealth": { "const": true },
           "recoveryMode": {
             "enum": ["start-if-stopped", "observe-only"]
           }
         },
         "allOf": [
+          {
+            "if": { "properties": { "role": { "const": "envoy" } } },
+            "then": {
+              "properties": {
+                "containerName": { "const": "easyfire-bookkeeping-envoy" }
+              }
+            }
+          },
+          {
+            "if": { "properties": { "role": { "const": "webapp" } } },
+            "then": {
+              "properties": {
+                "containerName": { "const": "easyfire-bookkeeping-webapp" }
+              }
+            }
+          },
+          {
+            "if": { "properties": { "role": { "const": "server" } } },
+            "then": {
+              "properties": {
+                "containerName": { "const": "easyfire-bookkeeping-server" }
+              }
+            }
+          },
+          {
+            "if": { "properties": { "role": { "const": "gotenberg" } } },
+            "then": {
+              "properties": {
+                "containerName": { "const": "easyfire-bookkeeping-gotenberg" }
+              }
+            }
+          },
+          {
+            "if": { "properties": { "role": { "const": "mysql" } } },
+            "then": {
+              "properties": {
+                "containerName": { "const": "easyfire-bookkeeping-mysql" }
+              }
+            }
+          },
+          {
+            "if": { "properties": { "role": { "const": "redis" } } },
+            "then": {
+              "properties": {
+                "containerName": { "const": "easyfire-bookkeeping-redis" }
+              }
+            }
+          },
           {
             "if": { "properties": { "role": { "enum": ["mysql", "redis"] } } },
             "then": { "properties": { "recoveryMode": { "const": "observe-only" } } }

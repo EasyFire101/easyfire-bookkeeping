@@ -124,12 +124,16 @@ export function parseRuntimeManifest(value: unknown): RuntimeManifest {
     if (typeof candidate.containerName !== 'string' || !/^easyfire-bookkeeping-[a-z0-9-]+$/.test(candidate.containerName)) {
       throw new Error(`services[${index}].containerName is outside the Bookkeeping namespace.`);
     }
+    const expectedContainerName = `easyfire-bookkeeping-${role}`;
+    if (candidate.containerName !== expectedContainerName) {
+      throw new Error(`${role} containerName must be ${expectedContainerName}.`);
+    }
     if (names.has(candidate.containerName)) {
       throw new Error(`Duplicate container name: ${candidate.containerName}.`);
     }
     names.add(candidate.containerName);
-    if (typeof candidate.containerId !== 'string' || !/^[a-f0-9]{12,64}$/.test(candidate.containerId)) {
-      throw new Error(`services[${index}].containerId is invalid.`);
+    if (typeof candidate.containerId !== 'string' || !/^[a-f0-9]{64}$/.test(candidate.containerId)) {
+      throw new Error(`services[${index}].containerId must be a full Docker id.`);
     }
     if (ids.has(candidate.containerId)) {
       throw new Error(`Duplicate container id: ${candidate.containerId}.`);
@@ -138,8 +142,8 @@ export function parseRuntimeManifest(value: unknown): RuntimeManifest {
     if (typeof candidate.imageId !== 'string' || !/^sha256:[a-f0-9]{64}$/.test(candidate.imageId)) {
       throw new Error(`services[${index}].imageId must be a sha256 image id.`);
     }
-    if (typeof candidate.requireDockerHealth !== 'boolean') {
-      throw new Error(`services[${index}].requireDockerHealth must be boolean.`);
+    if (candidate.requireDockerHealth !== true) {
+      throw new Error(`${role} requireDockerHealth must be true.`);
     }
     const expectedMode = STATELESS_ROLES.includes(role as never)
       ? 'start-if-stopped'

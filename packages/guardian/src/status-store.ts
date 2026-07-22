@@ -6,6 +6,7 @@ import {
   open,
   readFile,
   rename,
+  unlink,
 } from 'node:fs/promises';
 import path from 'node:path';
 
@@ -29,7 +30,9 @@ export async function readGuardianState(statePath: string): Promise<GuardianStat
   if (
     parsed.schemaVersion !== 1 ||
     !Array.isArray(parsed.recoveryAttempts) ||
-    !Number.isInteger(parsed.consecutiveFailures)
+    !Number.isInteger(parsed.consecutiveFailures) ||
+    (parsed.failureFingerprint !== null &&
+      typeof parsed.failureFingerprint !== 'string')
   ) {
     throw new Error('Guardian state file is invalid; automatic recovery refused.');
   }
@@ -45,12 +48,27 @@ export async function writeJsonAtomic(
   const temporaryPath = `${targetPath}.tmp-${process.pid}-${Date.now()}`;
   const handle = await open(temporaryPath, 'wx', 0o600);
   try {
-    await handle.writeFile(`${JSON.stringify(value, null, 2)}\n`, 'utf8');
-    await handle.sync();
+    try {
+      await handle.writeFile(`${JSON.stringify(value, null, 2)}\n`, 'utf8');
+      await handle.sync();
+    }
+    finally {
+      await handle.close();
+    }
   }
-  finally {
-    await handle.close();
+  catch (error) {
+    await unlink(temporaryPath).catch(() => undefined);
+    throw error;
   }
   await rename(temporaryPath, targetPath);
   await chmod(targetPath, 0o600);
+  if (process.platform !== 'win32') {
+    const directoryHandle = await open(directory, 'r');
+    try {
+      await directoryHandle.sync();
+    }
+    finally {
+      await directoryHandle.close();
+    }
+  }
 }

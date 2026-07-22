@@ -1,20 +1,21 @@
 # EasyFire Bookkeeping Handoff
 
-**Updated:** 2026-07-20
+**Updated:** 2026-07-22
 
 **Owner:** Direct Codex takeover for EasyFire
 
-**State:** Published base plus an uncommitted, locally validated Direct-Codex
-recovery patch. Exact Forgejo and anonymous GitHub readback, not this document,
-are publication authority. Newsec SSH works, the exact cloudflared service is
-running automatically, a verified live-runtime checkpoint exists, and a current
-`MigrationSource` recovery unit passed isolated restore. The older production
-runtime remains live. No candidate rehearsal, native login, cutover, or
-publication of this recovery patch has occurred.
+**State:** The approved endpoint is now the dedicated Ubuntu VM
+`easyfire-bookkeeping-newsec` on Newsec, not Windows Docker/Cloudflare. The VM
+is provisioned and isolated with Docker Engine, Compose, systemd, and Tailscale,
+but no Bookkeeping application containers or private route are active. The
+original Windows runtime remains the sole live writer and complete rollback
+authority. A verified transfer checkpoint, release authority, Linux deployment
+controller, Guardian, rollback lock, cutover authority, and private-route gate
+exist in the uncommitted local patch. Cutover has not run.
 
 ## Source state
 
-- Local branch: `codex/easyfire-bookkeeping-autonomy-recovery-20260718`.
+- Local branch: `codex/easyfire-bookkeeping-linux-vm-migration-20260721`.
 - Upstream base (not the candidate HEAD):
   `8c90ca328ec59dd772de3b385531eb386de11ac8`.
 - Upstream-only remote: `origin` (Bigcapital); never push EasyFire changes
@@ -32,6 +33,70 @@ publication of this recovery patch has occurred.
   inventory. Do not rely on older path counts.
 - Agent Foundry is bypassed. Its handoff is retained only as dated provenance.
 
+## Superseding direct-to-VM endpoint
+
+- Production target: one dedicated Ubuntu 24.04 Hyper-V VM named
+  `easyfire-bookkeeping-newsec` on the owner-controlled Newsec host.
+- Installed base: Docker Engine 29.6.2, Compose 5.3.1, Node.js 22.23.1,
+  systemd, Tailscale 1.98.9, and 2 GiB swap. The VM has an isolated internal
+  network with outbound NAT and no inbound mapping.
+- All seven Compose services use `restart: "no"`.
+  `easyfire-bookkeeping-stack.service` is the sole boot/start authority and
+  invokes the fixed-plan read-only verifier before starting existing
+  containers. Raw Compose, Docker restart policy, and Windows Scheduled Tasks
+  are not boot authority for the target.
+- The systemd Guardian runs from a bounded timer. It may recover only the exact
+  stateless Gotenberg, server, webapp, and Envoy containers. MariaDB and Redis
+  are observe-only; any data-service fault stops automatic recovery.
+- The only approved ingress is tailnet-only Tailscale Serve HTTPS for
+  `easyfire-bookkeeping-newsec.taild63e9b.ts.net`, proxying to
+  `http://127.0.0.1:8080`. Funnel, public listeners, Cloudflare cutover, and
+  direct data-service exposure are prohibited.
+- Destructive, rollback, reboot, and Guardian recovery rehearsal must run on the
+  separate isolated VM `easyfire-bookkeeping-rehearsal-newsec`. Its machine ID,
+  SSH host key, IP, MAC address, and recovery checkpoint are distinct from the
+  production VM. The production VM is not the rehearsal VM.
+- The complete Windows runtime, volumes, releases, journals, tasks, backups,
+  and edge remain preserved. Windows remains live until backup/restore,
+  release/checkpoint/cutover authority, native authentication, separate-VM
+  rehearsal, rollback, reboot, Guardian recovery, final quiescence,
+  single-writer, and private-route proofs all pass.
+
+## Current direct-to-VM recovery authority
+
+- Primary checkpoint:
+  `direct-vm-preflight-20260721-193735`, held outside Git in the preserved
+  Newsec recovery root and a second owner-controlled recovery location.
+- The SQL payload is 17,752 bytes with SHA-256
+  `CBC01039C4A779180244AF076B1DE45D5E3BCD10CA4039E49C4A3208B56ED18E`.
+- The Redis RDB is 7,193 bytes with SHA-256
+  `0D2DEA10EAC9C53EC377F6BBD9BDC8947F909A119E423332C8597C9A88745984`.
+- The schema-v2 transfer producer verified all 16,434 file-manifest entries,
+  exact payload bytes/hashes, source MySQL/Redis container/image/volume
+  identity, dual-location evidence, and source preservation. The isolated
+  network-disabled restore passed 17/70 tables and 1/1/1/1 identity counts.
+- Release-manifest v2 separates OCI index, Linux/amd64 manifest, and Docker
+  engine image identity and is checked against source, image bundle, Guardian,
+  systemd, and target-engine evidence.
+- The cutover contract is exclusive and hash-bound across Windows source
+  quiescence, final checkpoint payloads, Linux deployment/backup/rollback/
+  reboot/Guardian proof, native authentication, single-writer state, and
+  private-route activation.
+- The transfer producer preserves its byte-locked live-preflight behavior and
+  now also has an explicit opt-in final-quiesced mode. Final mode requires the
+  exclusive quiesce receipt, cutover plan, and post-quiesce source snapshot;
+  proves MariaDB/Redis healthy on their original volumes; proves all six
+  stateless/source-route writers stopped with restart `no`; and hash-binds the
+  complete receipt/plan/snapshot chain. Focused checkpoint and cutover tests pass
+  24/24.
+- The identity-separated empty rehearsal VM export is preserved at
+  `C:\Hyper-V\easyfire-bookkeeping-rehearsal-newsec\recovery\identity-separated-empty-export-20260722-073615`.
+  Its manifest SHA-256 is
+  `4041AD48E1F0D7348F3738F82C84EA467A29204FA65ACBDC2A7313EF5EF00594`;
+  all 5 files (5,622,391,330 bytes) passed a second full hash replay. The bound
+  identity evidence SHA-256 is
+  `D904D17C71E8F39DE486B5C9FA98F588887221B5FF12B9FE5AD7DE90ACFB8494`.
+
 ## Recovery checkpoint
 
 A verified full filesystem checkpoint was created before direct repairs:
@@ -47,7 +112,10 @@ A verified full filesystem checkpoint was created before direct repairs:
 Restore uses a mirror operation and can remove destination-only files. Inventory
 the exact destination and apply destructive-action review before using it.
 
-## Completed direct-takeover repairs
+## Historical Windows direct-takeover repairs
+
+The following controls remain preserved as dated recovery provenance. They no
+longer define the intended production endpoint.
 
 - Replaced stale Agent Foundry ownership with direct EasyFire source and
   runtime authority.
@@ -121,7 +189,32 @@ the exact destination and apply destructive-action review before using it.
 
 ## Validation
 
-The current dependency and application snapshot has these recorded results:
+The direct-to-VM source currently records:
+
+- Complete checkpoint/cutover/backup/deployment/environment/release/rollback
+  authority set: 97/97 passed, including tamper, mixed-authority, stale-receipt,
+  archive traversal/link/duplicate/truncation, immutable-path, public-exposure,
+  and data-service auto-recovery refusals.
+- Guardian build/tests: 28/28 passed; Guardian TypeScript typecheck passed.
+- Release-readiness suite: 24/24 passed. Static no-deploy validation: 101/101
+  passed. Node syntax: 18/18 production modules passed; PowerShell parsing: 2/2
+  direct-to-VM scripts passed; project foundation: 4/4 passed.
+- Full preserved-root replay: 16,434 manifest entries and approximately
+  771 MiB rehashed successfully. A Windows SMB long-path `realpath` failure was
+  found and corrected with cached no-reparse directory traversal checks.
+- Release-manifest v2 closes 30 exact executable/imported artifacts, source
+  archive provenance, OCI bytes, target-engine identity, Guardian/systemd bytes,
+  and all Windows/Linux cutover helpers into one immutable authority.
+- Source-size guard reports 0 blockers and 15 advisory warnings. Diff, shell,
+  JSON, and focused syntax checks pass. No live provider or Docker mutation was
+  used as source proof.
+- Fresh independent direct-to-VM review returned GO after closing every prior
+  P0 finding, including activation-evidence freshness during preflight and the
+  shared atomic abort-versus-activate decision claim. Any later executable-byte
+  drift invalidates that verdict and requires fingerprint revalidation.
+
+The earlier Windows candidate dependency and application snapshot remains
+recorded below as historical compatibility evidence:
 
 - `corepack pnpm install --offline --frozen-lockfile --ignore-scripts`: passed.
 - Production dependency audit: 45 advisories total, consisting of 9 low, 36
@@ -163,6 +256,31 @@ The current dependency and application snapshot has these recorded results:
 
 ## Production applicability
 
+### Superseding Linux VM contract
+
+- The Linux VM controller consumes only a coherent immutable release, exact
+  image bundle and target-engine evidence, root-owned production environment,
+  schema-v2 transfer checkpoint, and fixed deployment plan.
+- Candidate resources are new and deployment-ID-derived. The source Windows
+  volumes are never mounted by the target and remain rollback authority.
+- The once-only migration container must exit 0. Restore validation must prove
+  17 system tables, 70 tenant tables, the four 1-count identity invariants, and
+  the exact 37 protected accounting tables at their approved counts.
+- Promotion first proves existing-container identity while restart remains
+  `no`; systemd then becomes the only start authority. A completed deployment
+  receipt is written only after activation proof.
+- Guardian recovery is stateless-only. MariaDB/Redis remain observe-only.
+- Rollback lock, reboot persistence, separate rehearsal VM, backup/isolated
+  restore, native login, final source quiescence/checkpoint, single-writer
+  evidence, and private Tailscale route activation are mandatory cutover gates.
+- Tailscale Serve must be absent before activation and exact/tailnet-only after
+  activation. Funnel and public host port 443 are forbidden.
+
+### Historical Windows applicability
+
+The following rules describe the preserved Windows candidate and rollback
+history; they must not be used to construct the superseding endpoint.
+
 - The production controller is **fresh-install-only**.
 - Any historical, project-labeled, or action-derived MariaDB/Redis volume,
   including `bigcapital_prod_mysql` and `bigcapital_prod_redis`, is a hard stop.
@@ -192,39 +310,49 @@ The current dependency and application snapshot has these recorded results:
 
 ## Runtime drift status
 
-- Newsec SSH works. Six long-running `easyfire-bookkeeping-prod` containers are
-  healthy on the older Agent Foundry-origin release, and its one-shot migration
-  container exited successfully with result 0.
-- Existing MariaDB and Redis volumes contain durable production authority and
-  were created before this candidate. The old action journals are not compatible
-  with the schema-2 controller. A fresh Action would stop and must not replace,
-  mount, or adopt those volumes.
-- Both legacy scheduled tasks remain enabled and Ready with
-  `LastTaskResult=1`. Their checkpoint XML hashes are preserved; replacement of
-  the daily backup task and retirement of the startup task occur only at gated
-  Cutover.
-- Read-only API proof shows the protected credential file's sole owner email
-  already matches the one exact allow policy. The earlier denial used a
-  different Google identity; the correct policy was not rewritten.
-- Tunnel ingress, DNS, Access policy, and token identity match the exact tunnel.
-  `EasyFireBookkeepingCloudflared` is Running with Automatic start, and its
-  binary/process/connector identity is proven without exposing the token.
-- The verified live-runtime checkpoint manifest SHA-256 is
-  `0AEE8A2D577B102ECA6E61B8D4063363C7420845D27BDB957BDCA4DCC66525BE`.
-  The current `MigrationSource` backup SHA-256 is
-  `229ED021892F495AF84219596713C24C6B30676856601B0F3AC19F7E175FB54D`,
-  and its isolated network-disabled restore passed.
-- Every original volume, journal, release, and backup is preserved. No
-  accounting record was inspected or changed. No live candidate rehearsal,
-  native login, or cutover has run.
+- The original Windows runtime on Newsec remains live and is the only writer.
+  Its containers, MariaDB/Redis volumes, releases, journals, tasks, backups,
+  Cloudflare route, and private proxy remain preserved for rollback. These
+  resources are not the intended long-term endpoint.
+- The Ubuntu production VM `easyfire-bookkeeping-newsec` is running with its
+  isolated internal switch, outbound-only NAT, UFW deny-incoming/routed policy,
+  Docker Engine 29.6.2, Compose 5.3.1, Node 22.23.1, systemd, Tailscale 1.98.9,
+  and swap. It has zero Bookkeeping application containers/volumes and no
+  listeners on 80, 443, or 8080.
+- Tailscale on the VM is `NeedsLogin`; Serve and Funnel are absent. Private
+  route activation therefore remains correctly blocked for owner login/MFA if
+  prompted and for every earlier cutover proof.
+- No application release has been staged on the VM, no restore or migration
+  has run there, no systemd application unit has been enabled, and no
+  production cutover has occurred.
+- The separate rehearsal VM is running at its isolated private address with
+  Docker Engine, Compose, Node, systemd, and Tailscale installed, but it also
+  has zero Bookkeeping containers/volumes and no private route. Its cloned
+  machine and SSH identities were separated before any application bytes were
+  staged, and the corrected empty state has a fully replayed export checkpoint.
+  It remains the mandatory pre-cutover destructive/reboot proof boundary.
+- The current preflight checkpoint and isolated restore are verified. A new
+  final checkpoint must be captured only after the exclusive source-quiesce
+  receipt proves MariaDB/Redis healthy and all Windows writers/routes stopped
+  with restart `no`.
+- Every original volume, journal, release, backup, and recovery artifact remains
+  preserved. No accounting record was inspected or changed by this source/doc
+  work.
 
 ## State mutations or approvals
 
 - Direct takeover owns local source and documentation repair; Agent Foundry is
   provenance only.
-- Recovery work changed only the approved cloudflared service state and created
-  private recovery evidence. It did not rewrite Access, Tunnel, DNS, or the
-  matching token, and no token value is stored here.
+- The approved direct-to-VM work provisioned the isolated production and
+  rehearsal Ubuntu VMs and their base operating stacks. No Bookkeeping
+  application container, volume, migration, restore, systemd app enablement,
+  or Tailscale route is active on either VM.
+- Current documentation/source validation is local-only. It does not stop the
+  Windows writer, change Cloudflare, authorize Tailscale, or mutate accounting
+  data.
+- Earlier Windows recovery work changed only the then-approved cloudflared
+  service state and created private recovery evidence. It did not rewrite
+  Access, Tunnel, DNS, or the matching token, and no token value is stored here.
 - The current backup and isolated restore proof did not inspect or change an
   accounting record. All original production data authority remains preserved.
 - Source-control publication has not yet occurred for this recovery patch. It
@@ -236,31 +364,32 @@ The current dependency and application snapshot has these recorded results:
 - The production dependency graph has 36 moderate and 9 low advisories. It has
   no high or critical advisories, but the remaining findings stay disclosed and
   should be reviewed during future dependency refreshes.
-- No existing production MariaDB data can be released through the fresh-only
-  controller.
-- Automated owner onboarding/recovery has no supported implementation. A truly
-  fresh database cannot provide a usable first-owner login until a separate
-  onboarding design is approved and proven.
+- The coherent immutable Linux release has not yet been cut and staged, so the
+  release, target-engine, fixed-plan, restore, migration, and systemd contracts
+  have not been exercised together on the VM.
+- The separate rehearsal VM has not yet supplied mandatory rollback/reboot/
+  Guardian proof.
+- Native owner authentication is not yet proven against the Linux candidate.
+  Tailscale requires owner login/MFA before a private route can be considered,
+  and that login does not by itself authorize route activation.
 - Source authority requires exact Forgejo readback and anonymous GitHub readback
   of the same final correction commit.
-- The healthy hosted revision is older than this candidate and uses incompatible
-  journals and existing durable volumes. The current recovery unit is proven,
-  but both legacy tasks still report `LastTaskResult=1` and remain unchanged
-  until gated Cutover.
-- Access, Tunnel, DNS, token identity, and cloudflared runtime are proven. Native
-  application authentication and candidate behavior remain unproven live.
-- This exact recovery patch is locally validated but not committed or published
-  to the EasyFire remotes.
+- This exact direct-to-VM patch is locally validated but not committed or
+  published to the EasyFire remotes.
+- Windows is intentionally still live. Any accidental Linux route or writer
+  before the single-writer receipt would be a hard stop and rollback condition.
 
 ## Next safe action
 
-Commit and publish only the exact verified recovery source to
-`easyfire-forgejo/main` and `easyfire-github/main`, then build the immutable
-release and seven pinned images on Newsec. Create a new migration `Plan`, run the
-candidate-only `Rehearse`, and request only the owner's native
-password/MFA/CAPTCHA if the login flow prompts for it. Run
-`AcceptAuthentication` to prove the source recovery drill. Run `Cutover` only
-if backup, rollback, authentication, and migration proof all pass; then verify
-the replacement backup task, absence of the legacy startup task, runtime/edge
-health, and a new current backup with isolated restore. Do not run the
-fresh-install Action against the existing volumes.
+Complete validation and fresh independent review of the coherent direct-to-VM
+patch, commit it, and construct one immutable Linux release plus fixed deployment
+plan. Stage that exact release and the verified preflight checkpoint only to the
+identity-separated rehearsal VM; prove restore, once-only migration, native
+authentication, backup/isolated restore, rollback-lock/rearm, reboot, and
+Guardian behavior there. Only after every rehearsal receipt is green may the
+production VM receive the exact release. Quiesce Windows last, capture the final
+receipt-bound checkpoint, prove one writer, and activate tailnet-only Serve only
+after every production receipt passes. Stop for owner Tailscale/native-login
+credentials when prompted. Preserve Windows stopped as rollback authority; do
+not enable Funnel, expose a public port, delete an artifact, or use the
+historical Windows fresh-install controller.

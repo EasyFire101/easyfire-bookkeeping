@@ -8,7 +8,7 @@
     "easyfire-bookkeeping-guardian": "dist/index.js"
   },
   "scripts": {
-    "build": "tsup src/index.ts --format esm --platform node --target node22 --out-dir dist --clean --sourcemap",
+    "build": "tsup --entry.index src/index.ts --entry.guardian src/index.ts --entry.runtime-manifest-generator src/runtime-manifest-generator.ts --format esm --platform node --target node22 --out-dir dist --clean --sourcemap --no-splitting",
     "typecheck": "tsc --noEmit",
     "test": "pnpm run build && node --test tests/*.test.mjs"
   },

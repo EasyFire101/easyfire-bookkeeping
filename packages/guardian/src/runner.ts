@@ -46,6 +46,7 @@ function makeStatus(
     })),
     probes: observation.probes,
     consecutiveFailures: decision.state.consecutiveFailures,
+    failureFingerprint: decision.state.failureFingerprint,
     cooldownUntil: decision.state.cooldownUntil,
     recoveryAttemptsInWindow: decision.state.recoveryAttempts.length,
   };

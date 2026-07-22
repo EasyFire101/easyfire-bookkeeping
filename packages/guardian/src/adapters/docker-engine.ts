@@ -27,7 +27,7 @@ export type DockerTransport = (
   path: string,
 ) => Promise<DockerResponse>;
 
-function requestDockerSocket(
+export function requestDockerSocket(
   socketPath: string,
   method: string,
   path: string,
@@ -133,7 +133,7 @@ export class DockerEngineClient {
   }
 
   async startContainer(containerId: string): Promise<void> {
-    if (!/^[a-f0-9]{12,64}$/.test(containerId)) {
+    if (!/^[a-f0-9]{64}$/.test(containerId)) {
       throw new Error('Refusing invalid container id.');
     }
     const response = await this.transport(

@@ -1,0 +1,21 @@
+services:
+  envoy:
+    restart: "no"
+
+  webapp:
+    restart: "no"
+
+  server:
+    restart: "no"
+
+  database_migration:
+    restart: "no"
+
+  mysql:
+    restart: "no"
+
+  redis:
+    restart: "no"
+
+  gotenberg:
+    restart: "no"
