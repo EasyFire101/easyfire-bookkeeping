@@ -569,3 +569,14 @@ Legacy Docker archives remain rejected. The producer/release matrix passes
 43/43, Guardian passes 30/30 plus typecheck, static validation passes 101/101,
 source-size has zero blockers, and the runbook now supplies distinct Buildx and
 digest-preserving Skopeo export procedures.
+
+The first commit-bound Buildx archive then exposed a distinct annotation
+representation that the synthetic compatibility fixture had not covered:
+Buildx emits a full `io.containerd.image.name` alongside a bare-tag
+`org.opencontainers.image.ref.name`. The bundle producer now treats those as
+the same authority only when the full repository/tag equals the pinned role and
+the bare tag equals that role's exact expected tag. It continues to reject a
+bare tag without a full-name annotation, wrong repositories, wrong tags,
+digests in references, or any disagreement. The regression-first focused suite
+fails on the prior implementation and passes 13/13 after the repair. The failed
+rehearsal attempt created no image bundle, container, or volume.

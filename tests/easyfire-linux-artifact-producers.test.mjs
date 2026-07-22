@@ -341,6 +341,39 @@ test('OCI producer accepts the observed Skopeo 1.20 root shape without changing 
   assert.deepEqual(await readFile(skopeoOutput), await readFile(baselineOutput));
 });
 
+test('OCI producer accepts Buildx full-name plus bare-tag annotations without changing canonical output', async (t) => {
+  const baseline = await fixture(t);
+  const buildx = await fixture(t, (role, reference) => ({
+    rootAnnotations: !['envoy', 'gotenberg'].includes(role)
+      ? {
+        'io.containerd.image.name': `docker.io/${reference}`,
+        'org.opencontainers.image.ref.name': reference.slice(reference.lastIndexOf(':') + 1),
+      }
+      : undefined,
+  }));
+  const baselineOutput = path.join(baseline.root, 'bundle', 'images.tar');
+  const buildxOutput = path.join(buildx.root, 'bundle', 'images.tar');
+  await mkdir(path.dirname(baselineOutput));
+  await mkdir(path.dirname(buildxOutput));
+
+  await produceOciBundle({
+    releaseCommit: COMMIT,
+    inputArchives: baseline.inputArchives,
+    output: baselineOutput,
+    specs: baseline.specs,
+    requireRootOwner: false,
+  });
+  await produceOciBundle({
+    releaseCommit: COMMIT,
+    inputArchives: buildx.inputArchives,
+    output: buildxOutput,
+    specs: buildx.specs,
+    requireRootOwner: false,
+  });
+
+  assert.deepEqual(await readFile(buildxOutput), await readFile(baselineOutput));
+});
+
 test('OCI producer rejects invalid root media types and missing or conflicting root references', async (t) => {
   const value = await fixture(t);
   const reference = ROLE_REFERENCES[1][1];
@@ -365,6 +398,45 @@ test('OCI producer rejects invalid root media types and missing or conflicting r
         },
       },
       /conflict|reference|tag/i,
+    ],
+    [
+      'conflicting-bare-tag',
+      {
+        rootAnnotations: {
+          'io.containerd.image.name': `docker.io/${reference}`,
+          'org.opencontainers.image.ref.name': 'git-wrong-release',
+        },
+      },
+      /conflict|reference|tag/i,
+    ],
+    [
+      'wrong-full-name-with-correct-bare-tag',
+      {
+        rootAnnotations: {
+          'io.containerd.image.name': 'docker.io/other/example:latest',
+          'org.opencontainers.image.ref.name': reference.slice(reference.lastIndexOf(':') + 1),
+        },
+      },
+      /conflict|reference|tag/i,
+    ],
+    [
+      'prefixed-bare-tag-is-not-a-bare-tag',
+      {
+        rootAnnotations: {
+          'io.containerd.image.name': `docker.io/${reference}`,
+          'org.opencontainers.image.ref.name': `docker.io/${reference.slice(reference.lastIndexOf(':') + 1)}`,
+        },
+      },
+      /conflict|reference|tag/i,
+    ],
+    [
+      'bare-tag-without-full-name',
+      {
+        rootAnnotations: {
+          'org.opencontainers.image.ref.name': reference.slice(reference.lastIndexOf(':') + 1),
+        },
+      },
+      /full|reference|tag/i,
     ],
     [
       'malformed-containerd-reference',

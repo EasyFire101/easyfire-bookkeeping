@@ -381,6 +381,13 @@ history; they must not be used to construct the superseding endpoint.
   retaining exact pinned inner-index, platform, descriptor, blob, and canonical
   output authority; its producer/release matrix passes 43/43 and classic Docker
   `manifest.json` archives remain forbidden.
+- The first commit-bound Buildx export exposed one additional standards-shaped
+  annotation combination: Buildx records the full repository/tag in
+  `io.containerd.image.name` and only the tag in
+  `org.opencontainers.image.ref.name`. The producer now accepts that pair only
+  when the full name exactly matches the expected role and the bare tag exactly
+  matches its expected tag. Bare tags without a full-name authority and all
+  mismatches still fail closed; the focused producer suite passes 13/13.
 - A repository-wide parallel run reported only the unchanged Windows 15,000-file
   timing guard above its 90-second ceiling under host contention. Its immediate
   isolated rerun passed all 14/14 production-I/O tests; no changed Linux release

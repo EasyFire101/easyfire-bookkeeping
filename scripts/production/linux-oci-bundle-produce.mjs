@@ -356,18 +356,41 @@ function normalizedRootReference(value, label) {
   return value.startsWith('docker.io/') ? value.slice('docker.io/'.length) : value;
 }
 
-function rootDescriptorReference(annotations, label) {
+function taggedReferenceTag(reference, label) {
+  const colon = reference.lastIndexOf(':');
+  const slash = reference.lastIndexOf('/');
+  if (colon <= slash || colon === reference.length - 1) {
+    refuse(`${label} must contain an exact tag.`);
+  }
+  return reference.slice(colon + 1);
+}
+
+function validateRootDescriptorReference(annotations, label, expectedReference) {
   if (!isObject(annotations)) refuse(`${label} annotations are missing.`);
-  const annotationKeys = [
-    'io.containerd.image.name',
-    'org.opencontainers.image.ref.name',
-  ];
-  const references = annotationKeys
-    .filter((key) => Object.hasOwn(annotations, key))
-    .map((key) => normalizedRootReference(annotations[key], `${label} ${key}`));
-  if (references.length === 0) refuse(`${label} reference/tag is missing.`);
-  if (new Set(references).size !== 1) refuse(`${label} reference/tag annotations conflict.`);
-  return references[0];
+  const containerdKey = 'io.containerd.image.name';
+  const ociKey = 'org.opencontainers.image.ref.name';
+  const hasContainerd = Object.hasOwn(annotations, containerdKey);
+  const hasOci = Object.hasOwn(annotations, ociKey);
+  if (!hasContainerd && !hasOci) refuse(`${label} reference/tag is missing.`);
+
+  const expected = normalizedRootReference(expectedReference, `${label} expected reference`);
+  if (hasContainerd) {
+    const containerd = normalizedRootReference(annotations[containerdKey], `${label} ${containerdKey}`);
+    if (containerd !== expected) refuse(`${label} reference/tag annotations conflict.`);
+  }
+
+  if (hasOci) {
+    const rawOci = annotations[ociKey];
+    const oci = normalizedRootReference(rawOci, `${label} ${ociKey}`);
+    const expectedTag = taggedReferenceTag(expected, `${label} expected reference`);
+    const isBareTag = rawOci === expectedTag;
+    if (oci !== expected && !isBareTag) {
+      refuse(`${label} reference/tag annotations conflict.`);
+    }
+    if (isBareTag && !hasContainerd) {
+      refuse(`${label} full reference is missing.`);
+    }
+  }
 }
 
 function platformIdentity(descriptorValue, label) {
@@ -478,9 +501,11 @@ async function validateImageArchive(archive, spec) {
     root.manifests.length !== 1
   ) refuse(`${spec.role} root index must contain exactly one image index.`);
   const rootDescriptor = requireDescriptor(root.manifests[0], OCI_INDEX, `${spec.role} root descriptor`);
-  if (
-    rootDescriptorReference(rootDescriptor.annotations, `${spec.role} OCI`) !== spec.sourceReference
-  ) refuse(`${spec.role} OCI reference/tag is invalid.`);
+  validateRootDescriptorReference(
+    rootDescriptor.annotations,
+    `${spec.role} OCI`,
+    spec.sourceReference,
+  );
   if (spec.external && rootDescriptor.digest !== spec.expectedOciIndexDigest) {
     refuse(`${spec.role} OCI index digest differs from its pinned authority.`);
   }
