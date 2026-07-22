@@ -111,6 +111,59 @@ test('accepts the exact isolated VM deployment authority', () => {
   assert.equal(parsed.expected.identityCounts.join('/'), '1/1/1/1');
 });
 
+test('binds deployment to the exact production or rehearsal hostname', () => {
+  const legacyProduction = validPlan();
+  assert.equal(
+    planContract.expectedDeploymentHostname(legacyProduction),
+    'easyfire-bookkeeping-newsec',
+  );
+
+  const production = validPlan();
+  production.target = {
+    role: 'production',
+    hostname: 'easyfire-bookkeeping-newsec',
+  };
+  assert.equal(
+    planContract.expectedDeploymentHostname(
+      controller.validateDeploymentPlan(production),
+    ),
+    'easyfire-bookkeeping-newsec',
+  );
+
+  const rehearsal = validPlan();
+  rehearsal.target = {
+    role: 'rehearsal',
+    hostname: 'easyfire-bookkeeping-rehearsal-newsec',
+  };
+  const parsed = controller.validateDeploymentPlan(rehearsal);
+  assert.deepEqual(parsed.target, rehearsal.target);
+  assert.equal(
+    planContract.expectedDeploymentHostname(parsed),
+    'easyfire-bookkeeping-rehearsal-newsec',
+  );
+
+  const mismatched = structuredClone(rehearsal);
+  mismatched.target.hostname = 'easyfire-bookkeeping-newsec';
+  assert.throws(
+    () => controller.validateDeploymentPlan(mismatched),
+    /target/i,
+  );
+
+  const unknownRole = structuredClone(rehearsal);
+  unknownRole.target.role = 'disposable';
+  assert.throws(
+    () => controller.validateDeploymentPlan(unknownRole),
+    /target/i,
+  );
+
+  const extraTargetAuthority = structuredClone(rehearsal);
+  extraTargetAuthority.target.override = true;
+  assert.throws(
+    () => controller.validateDeploymentPlan(extraTargetAuthority),
+    /target/i,
+  );
+});
+
 test('rejects paths, resources, and accounting expectations outside the contract', () => {
   const wrongRelease = validPlan();
   wrongRelease.releasePath = '/tmp/release';
@@ -201,6 +254,25 @@ test('source encodes a once-only migration and append-only failure boundary', as
   assert.doesNotMatch(source, /unless-stopped|docker\s+update/i);
   assert.doesNotMatch(source, /compose[^\n]+\b(up|down|rm|pull|build)\b/i);
   assert.doesNotMatch(source, /docker[^\n]+\b(prune|rm|rmi|volume\s+rm)\b/i);
+});
+
+test('deploy and verify-existing both enforce the plan-bound Docker hostname', async () => {
+  const source = await readFile(controllerPath, 'utf8');
+  const boundCalls = source.match(
+    /getDockerIdentity\(\s*expectedDeploymentHostname\(plan\),?\s*\)/g,
+  );
+  assert.equal(boundCalls?.length, 2);
+
+  const dockerSource = await readFile(dockerPath, 'utf8');
+  assert.match(
+    dockerSource,
+    /getDockerIdentity = async \(expectedHostname = HOSTNAME\)/,
+  );
+  assert.match(
+    dockerSource,
+    /\[HOSTNAME, REHEARSAL_HOSTNAME\]\.includes\(expectedHostname\)/,
+  );
+  assert.match(dockerSource, /info\.Name !== expectedHostname/);
 });
 
 test('publishes the one final receipt only after systemd-owned activation proof', async () => {

@@ -170,4 +170,12 @@ test('runbook invokes the deployment controller and never authorizes raw deploym
   );
   assert.doesNotMatch(runbook, /sudo docker (?:compose|start|update)/);
   assert.doesNotMatch(runbook, /unless-stopped/);
+  assert.match(
+    runbook,
+    /"role":"rehearsal","hostname":"easyfire-bookkeeping-rehearsal-newsec"/,
+  );
+  assert.match(
+    runbook,
+    /"role":"production","hostname":"easyfire-bookkeeping-newsec"/,
+  );
 });

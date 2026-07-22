@@ -605,3 +605,30 @@ ancestor now reports zero collisions; the complete seven-project build and
 server typecheck pass. The repository-wide typecheck continues to report the
 pre-existing webapp type backlog after dependency-ordered build, while server,
 SDK, and Guardian typechecks pass.
+
+## Bind rehearsal and production deployment hosts - 2026-07-22
+
+The first complete `45e2bc20946a65cbffbabac6a7b2fbf8e95d03af` target-engine
+bundle and release-manifest run passed without creating a runtime container or
+volume. The next pre-deployment audit found that the sole deployment controller
+hard-coded the production Docker hostname, while the mandatory rehearsal
+collector hard-refused anything except the distinct rehearsal hostname. That
+made the immutable release unable to satisfy both authorities and stopped work
+before restore, migration, or data mutation.
+
+The deployment plan now optionally binds an exact target role and hostname.
+New rehearsal plans must bind `rehearsal` to
+`easyfire-bookkeeping-rehearsal-newsec`; new production plans must bind
+`production` to `easyfire-bookkeeping-newsec`. The missing-target compatibility
+path remains production-only. Both initial deployment and every
+`--verify-existing` readback enforce the same plan-bound hostname, so the repair
+does not widen host authority. The runbook also records the executable rollback
+chronology: backup, arm, create plan, locked reboot, verify/rearm, Guardian
+exercise, normal reboot, native authentication, and final collection.
+
+Regression-first proof failed on the old contract and now passes. The complete
+Bookkeeping authority suite passes 295/295, Guardian passes 30/30 plus
+typecheck, static no-deploy validation passes 101/101, release readiness passes
+24/24, and the changed-file source-size guard has zero blockers. The old release
+and every staging/output artifact remain preserved; a new immutable release is
+required before rehearsal deployment.

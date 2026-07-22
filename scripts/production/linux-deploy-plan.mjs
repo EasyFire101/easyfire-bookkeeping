@@ -4,6 +4,7 @@ import { validateFinalQuiescenceAuthority } from './linux-final-quiescence-contr
 
 export const PROJECT = 'easyfire-bookkeeping-prod';
 export const HOSTNAME = 'easyfire-bookkeeping-newsec';
+export const REHEARSAL_HOSTNAME = 'easyfire-bookkeeping-rehearsal-newsec';
 export const DOCKER_SOCKET = '/var/run/docker.sock';
 export const FIXED_PLAN_PATH = '/etc/easyfire-bookkeeping/deployment-plan.json';
 export const STAGED_PLAN_PATH =
@@ -21,6 +22,23 @@ export const MAX_COMMAND_OUTPUT = 8 * 1024 * 1024;
 export const ZERO_DOCKER_TIME = '0001-01-01T00:00:00Z';
 export const SHA256 = /^[a-f0-9]{64}$/;
 export const ENGINE_SHA256 = /^sha256:[a-f0-9]{64}$/;
+
+export function expectedDeploymentHostname(plan) {
+  if (plan?.target === undefined) return HOSTNAME;
+  requireObject(plan.target, 'target');
+  exactKeys(plan.target, ['role', 'hostname'], 'target');
+  const expected = {
+    production: HOSTNAME,
+    rehearsal: REHEARSAL_HOSTNAME,
+  }[plan.target.role];
+  if (!expected || plan.target.hostname !== expected) {
+    refuse(
+      'E_PLAN_VALUE',
+      'target must bind an exact production or rehearsal hostname.',
+    );
+  }
+  return expected;
+}
 
 export const PROTECTED_ACCOUNTING_TABLES = Object.freeze([
   'ACCOUNTS_TRANSACTIONS',
@@ -341,26 +359,28 @@ const validateProtectedCounts = (value) => {
 
 export function validateDeploymentPlan(candidate) {
   const plan = requireObject(candidate, 'Deployment plan');
+  const planKeys = [
+    'schemaVersion',
+    'deploymentId',
+    'project',
+    'releaseCommit',
+    'releasePath',
+    'currentReleasePath',
+    'releaseManifest',
+    'sourceArchive',
+    'imageBundle',
+    'environment',
+    'checkpoint',
+    'composeFiles',
+    'runtimeManifestGeneratorPath',
+    'outputs',
+    'resources',
+    'expected',
+  ];
+  if (Object.hasOwn(plan, 'target')) planKeys.push('target');
   exactKeys(
     plan,
-    [
-      'schemaVersion',
-      'deploymentId',
-      'project',
-      'releaseCommit',
-      'releasePath',
-      'currentReleasePath',
-      'releaseManifest',
-      'sourceArchive',
-      'imageBundle',
-      'environment',
-      'checkpoint',
-      'composeFiles',
-      'runtimeManifestGeneratorPath',
-      'outputs',
-      'resources',
-      'expected',
-    ],
+    planKeys,
     'Deployment plan',
   );
   if (plan.schemaVersion !== 1) refuse('E_PLAN_VERSION', 'schemaVersion must be 1.');
@@ -370,6 +390,7 @@ export function validateDeploymentPlan(candidate) {
     'deploymentId',
   );
   if (plan.project !== PROJECT) refuse('E_PLAN_VALUE', `project must be ${PROJECT}.`);
+  expectedDeploymentHostname(plan);
   requireString(plan.releaseCommit, /^[a-f0-9]{40}$/, 'releaseCommit');
   const releasePath = `${FIXED_RELEASE_ROOT}/${plan.releaseCommit}`;
   requireExactPath(plan.releasePath, releasePath, 'releasePath');

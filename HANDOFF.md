@@ -407,6 +407,22 @@ history; they must not be used to construct the superseding endpoint.
   The repository-wide typecheck still reports the pre-existing webapp type
   backlog after all build dependencies exist; no server or Guardian typecheck
   fails.
+- The resulting `45e2bc20946a65cbffbabac6a7b2fbf8e95d03af` release successfully
+  produced and loaded its deterministic OCI bundle and published target-engine
+  evidence plus a release manifest with no runtime containers or volumes. A
+  pre-deployment readback then found a fail-closed contract contradiction: the
+  deployment controller allowed only the production Docker hostname while the
+  mandatory rehearsal evidence allowed only the separate rehearsal hostname.
+  The repaired plan now binds an exact `target.role`/`target.hostname` pair;
+  deploy and verify-existing enforce the same plan-bound hostname, while a
+  target-less legacy plan remains production-only. The reboot order in the
+  runbook is also corrected to arm, bind the plan, locked reboot, verify/rearm,
+  exercise, normal reboot, authenticate, then collect. Current source proof is
+  295/295 complete Bookkeeping authority tests, 30/30 Guardian tests plus
+  typecheck, 101/101 static validation, 24/24 release readiness, and zero
+  changed-file source-size blockers. The replacement immutable release must be
+  rebuilt from the final containing commit; the `45e2bc20` release must not be
+  used for rehearsal deployment.
 - A repository-wide parallel run reported only the unchanged Windows 15,000-file
   timing guard above its 90-second ceiling under host contention. Its immediate
   isolated rerun passed all 14/14 production-I/O tests; no changed Linux release
@@ -426,9 +442,9 @@ history; they must not be used to construct the superseding endpoint.
 
 ## Next safe action
 
-Create the final containing commit and rebuild one immutable Linux release plus
-fixed deployment plan. Stage that exact release and the verified preflight
-checkpoint only to the
+Create the final containing commit for the plan-bound rehearsal-host repair and
+rebuild one immutable Linux release plus fixed deployment plan. Stage that exact
+release and the verified preflight checkpoint only to the
 identity-separated rehearsal VM; prove restore, once-only migration, native
 authentication, backup/isolated restore, rollback-lock/rearm, reboot, and
 Guardian behavior there. Only after every rehearsal receipt is green may the

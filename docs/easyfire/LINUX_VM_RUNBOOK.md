@@ -365,7 +365,17 @@ quiesce authority.
 
 The controller validates the exact production, VM, and restart-`no` candidate
 Compose model and proves its only published socket is `127.0.0.1:8080` before
-creating anything. Before that validation, the attended deployment operator must materialize and
+creating anything. Every newly generated plan must bind its target explicitly:
+`{"role":"rehearsal","hostname":"easyfire-bookkeeping-rehearsal-newsec"}`
+on the isolated rehearsal VM or
+`{"role":"production","hostname":"easyfire-bookkeeping-newsec"}` on the
+production VM. The controller compares that plan-bound hostname with Docker's
+observed engine name during both deployment and every later readback. A missing
+target is accepted only as the legacy production default; never omit it from a
+new plan. This permits the required separate-host rehearsal without weakening
+the production host gate.
+
+Before that validation, the attended deployment operator must materialize and
 hash-record `/etc/easyfire-bookkeeping/candidate-with-legacy-jwt.env` as a
 root-owned mode-`0600` environment that is Linux-ready in every respect except
 for its legacy JWT key. The checkpoint's `JWT_SECRET` value must remain
@@ -572,14 +582,17 @@ sudo /usr/local/bin/node \
   --rearm
 ```
 
-The complete rehearsal is owned by the release-bound controller. Before
-`--exercise`, install a root-owned mode-`0600`
+The complete rehearsal is owned by the release-bound controller. First create a
+guest-native backup. Then arm the rehearsal rollback lock. After `--arm` returns
+its create-new evidence directory, install a root-owned mode-`0600`
 `/etc/easyfire-bookkeeping/rehearsal-evidence-plan.json` that binds the exact
 rehearsal deployment and release, the distinct production machine-ID hash, and
 all subordinate proof locations. Serve, Funnel, public listeners, and production
-machine identity must be absent. Run the exercise phase, reboot while locked,
-verify and rearm the rehearsal-only lock, then complete a normal reboot and
-Guardian recovery. At the credential boundary, run the native-auth collector in
+machine identity must be absent. Reboot while locked, verify and rearm the
+rehearsal-only lock, and only then run `--exercise`. Perform the separate normal
+reboot requested by the exercise, wait for the Guardian timer, and require its
+current-boot service result and status to be non-error before authentication and
+final collection. At the credential boundary, run the native-auth collector in
 an attached terminal and enter the owner password there; never pass or persist
 the password through a command argument, file, chat, or log:
 
@@ -589,8 +602,9 @@ sudo /usr/local/bin/node \
   --exercise \
   --plan /etc/easyfire-bookkeeping/rehearsal-evidence-plan.json
 
-# Perform the controller-requested locked reboot, verify/rearm, normal reboot,
-# and Guardian recovery steps before collecting authentication evidence.
+# The locked reboot and rearm occurred before --exercise. Perform the separate
+# normal reboot requested by --exercise and verify current-boot Guardian success
+# before collecting authentication evidence.
 sudo /usr/local/bin/node \
   /opt/easyfire-bookkeeping/current/scripts/production/linux-native-auth-proof.mjs \
   --collect \

@@ -13,6 +13,7 @@ import {
   buildStartupGateAuthority,
   DeploymentRefusal,
   FIXED_PLAN_PATH,
+  expectedDeploymentHostname,
   isObject,
   LONG_RUNNING_SERVICES,
   MAX_COMMAND_OUTPUT,
@@ -95,7 +96,9 @@ export async function executeDeployment(planPath) {
     const inputs = await collectBoundInputs(planPath, { fixedPlan: false });
     const { plan, releaseManifest, environment } = inputs;
     await assertDeploymentOutputsAbsent(plan);
-    const dockerIdentity = await getDockerIdentity();
+    const dockerIdentity = await getDockerIdentity(
+      expectedDeploymentHostname(plan),
+    );
     await assertNoExistingDockerResources(plan, releaseManifest);
     const composeConfigSha256 = await validateComposeConfig(
       plan,
@@ -511,7 +514,10 @@ export async function verifyExistingDeployment(planPath = FIXED_PLAN_PATH) {
     assertHashField(actual, expected, label);
   }
 
-  assertDockerIdentityEqual(await getDockerIdentity(), evidence.dockerEngine);
+  assertDockerIdentityEqual(
+    await getDockerIdentity(expectedDeploymentHostname(plan)),
+    evidence.dockerEngine,
+  );
   const imageIdentities = await verifyLoadedImages(releaseManifest);
   for (const role of RELEASE_ROLES) {
     const recorded = evidence.images?.[role];

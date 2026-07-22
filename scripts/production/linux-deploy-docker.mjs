@@ -11,6 +11,7 @@ import {
   DOCKER_SOCKET,
   DOCKER_VERSION,
   HOSTNAME,
+  REHEARSAL_HOSTNAME,
   isObject,
   LONG_RUNNING_SERVICES,
   MAX_COMMAND_OUTPUT,
@@ -158,7 +159,13 @@ const verifyProjectResourceSet = async (plan) => {
   }
 };
 
-export const getDockerIdentity = async () => {
+export const getDockerIdentity = async (expectedHostname = HOSTNAME) => {
+  if (![HOSTNAME, REHEARSAL_HOSTNAME].includes(expectedHostname)) {
+    refuse(
+      'E_DOCKER_IDENTITY',
+      'Expected Docker hostname is outside the deployment contract.',
+    );
+  }
   const infoResult = await docker(['info', '--format', '{{json .}}'], {
     label: 'Docker engine identity inspection',
     timeoutMs: 30_000,
@@ -181,7 +188,7 @@ export const getDockerIdentity = async () => {
   const version = parseJsonOutput(versionResult, 'Docker server version inspection');
   const composeVersion = composeResult.stdout.toString('utf8').trim().replace(/^v/, '');
   if (
-    info.Name !== HOSTNAME ||
+    info.Name !== expectedHostname ||
     info.OSType !== 'linux' ||
     info.Architecture !== 'x86_64' ||
     info.DockerRootDir !== '/var/lib/docker' ||
