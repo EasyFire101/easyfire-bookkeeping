@@ -554,3 +554,18 @@ realpath failure, and remains inside the immutable release closure. The new
 symlink/failure suite passes 16/16, the related release/controller matrix passes
 144/144, Guardian passes 30/30 plus typecheck, static validation passes 101/101,
 source-size has zero blockers, and independent re-review returned PASS.
+
+The corrected CLI then rejected the initial seven image inputs before creating
+the merged bundle because `docker save` had produced legacy `manifest.json`
+archives rather than OCI image layouts. Real Skopeo 1.20 export also exposed an
+interoperability error in the input parser: OCI permits the root index media type
+to be omitted and Skopeo uses the standard
+`org.opencontainers.image.ref.name` annotation, while the parser required an
+explicit media type and only containerd's vendor annotation. The parser now
+accepts the standards-compliant omitted-or-exact media type and either reference
+annotation, rejects missing or conflicting references, and leaves every pinned
+inner-index, platform, descriptor, blob, and canonical-output check unchanged.
+Legacy Docker archives remain rejected. The producer/release matrix passes
+43/43, Guardian passes 30/30 plus typecheck, static validation passes 101/101,
+source-size has zero blockers, and the runbook now supplies distinct Buildx and
+digest-preserving Skopeo export procedures.

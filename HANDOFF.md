@@ -376,6 +376,11 @@ history; they must not be used to construct the superseding endpoint.
   120/120 Linux/direct,
   30/30 Guardian, 101/101 static-production, and 24/24 release-readiness checks;
   both final independent reviews passed and source-size has zero blockers.
+- The first executable OCI run correctly rejected legacy `docker save` inputs.
+  The producer now interoperates with standards-compliant Skopeo layouts while
+  retaining exact pinned inner-index, platform, descriptor, blob, and canonical
+  output authority; its producer/release matrix passes 43/43 and classic Docker
+  `manifest.json` archives remain forbidden.
 - A repository-wide parallel run reported only the unchanged Windows 15,000-file
   timing guard above its 90-second ceiling under host contention. Its immediate
   isolated rerun passed all 14/14 production-I/O tests; no changed Linux release

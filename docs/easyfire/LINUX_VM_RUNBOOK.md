@@ -118,10 +118,176 @@ directory, home directory, temporary directory, or copied convenience path.
 
 Build the five EasyFire images from the exact accepted release commit and retain
 the two external images at their pinned digest references. Export exactly one
-role into each OCI input archive. Transfer the seven archives into a new
-root-owned staging directory on the rehearsal VM; every input must be a regular,
-non-symlink mode-`0600` file and no existing path may be overwritten. The old
-bundle remains preserved and must not be reused after source changes.
+role into each OCI input archive. For the five EasyFire-owned roles, use Docker
+Buildx's true OCI exporter from a `docker-container` (or equivalent) builder,
+not the classic Docker image exporter, from the exact immutable source release:
+
+```bash
+set -euo pipefail
+umask 077
+
+RELEASE_COMMIT='<exact accepted 40-character commit>'
+RELEASE_ROOT="/opt/easyfire-bookkeeping/releases/${RELEASE_COMMIT}"
+BUILDER='easyfire-bookkeeping-oci'
+OCI_DIR='/var/lib/easyfire-bookkeeping-staging/oci'
+
+[[ "$RELEASE_COMMIT" =~ ^[0-9a-f]{40}$ ]] || {
+  echo 'RELEASE_COMMIT must be exactly 40 lowercase hexadecimal characters.' >&2
+  exit 1
+}
+[[ -d "$RELEASE_ROOT" && ! -L "$RELEASE_ROOT" ]] || {
+  echo "Immutable release root is missing or is a symlink: $RELEASE_ROOT" >&2
+  exit 1
+}
+[[ "$(realpath "$RELEASE_ROOT")" == "$RELEASE_ROOT" ]] || {
+  echo "Immutable release root is not canonical: $RELEASE_ROOT" >&2
+  exit 1
+}
+
+if ! sudo /usr/bin/docker buildx inspect "$BUILDER" >/dev/null 2>&1; then
+  sudo /usr/bin/docker buildx create \
+    --name "$BUILDER" \
+    --driver docker-container \
+    --bootstrap >/dev/null
+fi
+BUILDER_DRIVER="$(sudo /usr/bin/docker buildx inspect "$BUILDER" |
+  /usr/bin/awk '$1 == "Driver:" { print $2; exit }')"
+[[ "$BUILDER_DRIVER" == 'docker-container' ]] || {
+  echo "Buildx builder $BUILDER must use the docker-container driver." >&2
+  exit 1
+}
+sudo /usr/bin/docker buildx inspect "$BUILDER" --bootstrap >/dev/null
+
+sudo /usr/bin/install -d -o root -g root -m 0700 "$OCI_DIR"
+BUILDS=(
+  'webapp|packages/webapp/Dockerfile|.|easyfire-bookkeeping/webapp|webapp.oci.tar'
+  'server|packages/server/Dockerfile|.|easyfire-bookkeeping/server|server.oci.tar'
+  'mysql|docker/mariadb/Dockerfile|docker/mariadb|easyfire-bookkeeping/mariadb|mysql.oci.tar'
+  'redis|docker/redis/Dockerfile|docker/redis|easyfire-bookkeeping/redis|redis.oci.tar'
+  'migration|docker/migration/Dockerfile|.|easyfire-bookkeeping/migration|migration.oci.tar'
+)
+
+# Check every input and destination before the first build. A partial prior run
+# is preserved and requires a fresh staging directory; nothing is overwritten.
+for build in "${BUILDS[@]}"; do
+  IFS='|' read -r role dockerfile context repository archive <<<"$build"
+  [[ -f "$RELEASE_ROOT/$dockerfile" && -d "$RELEASE_ROOT/$context" ]] || {
+    echo "Missing $role Dockerfile or context under the immutable release." >&2
+    exit 1
+  }
+  output="$OCI_DIR/$archive"
+  if sudo test -e "$output" || sudo test -L "$output"; then
+    echo "Refusing to overwrite existing OCI output: $output" >&2
+    exit 1
+  fi
+done
+
+for build in "${BUILDS[@]}"; do
+  IFS='|' read -r role dockerfile context repository archive <<<"$build"
+  reference="${repository}:git-${RELEASE_COMMIT}"
+  output="$OCI_DIR/$archive"
+  if sudo test -e "$output" || sudo test -L "$output"; then
+    echo "Refusing to overwrite existing OCI output: $output" >&2
+    exit 1
+  fi
+  sudo /usr/bin/docker buildx build \
+    --builder "$BUILDER" \
+    --platform linux/amd64 \
+    --provenance=mode=min \
+    --sbom=false \
+    --file "$RELEASE_ROOT/$dockerfile" \
+    --output "type=oci,oci-mediatypes=true,tar=true,name=${reference},dest=${output}" \
+    "$RELEASE_ROOT/$context"
+  sudo test -f "$output" && ! sudo test -L "$output"
+  sudo /usr/bin/chmod 0600 "$output"
+done
+```
+
+For the two external multi-platform indexes, copy the pinned digest without
+rewriting it by using Skopeo 1.20 or newer with both `--all` and
+`--preserve-digests`, for example:
+
+```bash
+set -euo pipefail
+umask 077
+
+SKOPEO='/usr/bin/skopeo'
+OCI_DIR='/var/lib/easyfire-bookkeeping-staging/oci'
+[[ -x "$SKOPEO" ]] || {
+  echo "Required Skopeo executable is missing: $SKOPEO" >&2
+  exit 1
+}
+SKOPEO_VERSION_OUTPUT="$($SKOPEO --version)"
+if [[ "$SKOPEO_VERSION_OUTPUT" =~ ^skopeo[[:space:]]+version[[:space:]]+([0-9]+)\.([0-9]+)(\.[0-9]+)?([~-][^[:space:]]+)?$ ]]; then
+  SKOPEO_MAJOR="${BASH_REMATCH[1]}"
+  SKOPEO_MINOR="${BASH_REMATCH[2]}"
+else
+  echo "Unrecognized Skopeo version output: $SKOPEO_VERSION_OUTPUT" >&2
+  exit 1
+fi
+(( SKOPEO_MAJOR > 1 || (SKOPEO_MAJOR == 1 && SKOPEO_MINOR >= 20) )) || {
+  echo "Skopeo 1.20 or newer is required; found $SKOPEO_VERSION_OUTPUT" >&2
+  exit 1
+}
+if ! sudo test -d "$OCI_DIR" || sudo test -L "$OCI_DIR"; then
+  echo "Root-owned OCI staging directory is missing or is a symlink: $OCI_DIR" >&2
+  exit 1
+fi
+[[ "$(sudo /usr/bin/realpath -- "$OCI_DIR")" == "$OCI_DIR" ]] || {
+  echo "OCI staging directory is not canonical: $OCI_DIR" >&2
+  exit 1
+}
+[[ "$(sudo /usr/bin/stat --format='%u:%g:%a' -- "$OCI_DIR")" == '0:0:700' ]] || {
+  echo "OCI staging directory must be root:root mode 0700: $OCI_DIR" >&2
+  exit 1
+}
+
+EXTERNAL_COPIES=(
+  'envoy|docker://docker.io/envoyproxy/envoy@sha256:b5cc70f5fe5503858817e897ae1da5d873dc32cbc493790b4e330b8a42c4af9d|envoyproxy/envoy:v1.30.11|envoy.oci.tar'
+  'gotenberg|docker://docker.io/gotenberg/gotenberg@sha256:d03b8a04c6e6c5e568b38f57352266dee4674849b71818774025f8f48d869a9a|gotenberg/gotenberg:7.10.2|gotenberg.oci.tar'
+)
+
+# Refuse every existing output, including a broken symlink, before copying
+# either pinned index. A partial prior run is preserved for inspection.
+for copy in "${EXTERNAL_COPIES[@]}"; do
+  IFS='|' read -r role source reference archive <<<"$copy"
+  output="$OCI_DIR/$archive"
+  if sudo test -e "$output" || sudo test -L "$output"; then
+    echo "Refusing to overwrite existing $role OCI output: $output" >&2
+    exit 1
+  fi
+done
+
+for copy in "${EXTERNAL_COPIES[@]}"; do
+  IFS='|' read -r role source reference archive <<<"$copy"
+  output="$OCI_DIR/$archive"
+  if sudo test -e "$output" || sudo test -L "$output"; then
+    echo "Refusing to overwrite existing $role OCI output: $output" >&2
+    exit 1
+  fi
+  sudo "$SKOPEO" copy --all --preserve-digests \
+    "$source" \
+    "oci-archive:${output}:${reference}"
+  if ! sudo test -f "$output" || sudo test -L "$output"; then
+    echo "$role OCI output is not a regular non-symlink file: $output" >&2
+    exit 1
+  fi
+  sudo /usr/bin/chown root:root -- "$output"
+  sudo /usr/bin/chmod 0600 -- "$output"
+  [[ "$(sudo /usr/bin/stat --format='%u:%g:%a' -- "$output")" == '0:0:600' ]] || {
+    echo "$role OCI output must be root:root mode 0600: $output" >&2
+    exit 1
+  }
+done
+```
+
+`docker save` / `docker image save` is forbidden for every role: it creates the
+legacy Docker `manifest.json` archive shape rather than a standards-compliant
+OCI image layout, and the release-owned producer deliberately rejects it.
+Transfer the seven OCI archives into a new root-owned staging directory on the
+rehearsal VM; every input must be a regular, non-symlink mode-`0600` file and no
+existing path may be overwritten. The old bundle remains preserved and must not
+be reused after source changes.
 
 Run the release-owned deterministic bundle producer from the immutable extracted
 release, load only its output into the isolated rehearsal engine, and then

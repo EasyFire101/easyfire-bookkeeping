@@ -159,17 +159,21 @@ function singleImageArchive(reference, seed, extraEntries = [], options = {}) {
     mediaType: OCI_INDEX,
     manifests,
   });
-  const rootIndex = jsonBytes({
+  const normalizedReference = options.dockerIoPrefix
+    ? `docker.io/${reference}`
+    : reference;
+  const rootIndexValue = {
     schemaVersion: 2,
-    mediaType: OCI_INDEX,
+    ...(options.omitRootMediaType
+      ? {}
+      : { mediaType: options.rootMediaType ?? OCI_INDEX }),
     manifests: [descriptor(imageIndex, OCI_INDEX, {
-      annotations: {
-        'io.containerd.image.name': options.dockerIoPrefix
-          ? `docker.io/${reference}`
-          : reference,
+      annotations: options.rootAnnotations ?? {
+        'io.containerd.image.name': normalizedReference,
       },
     })],
-  });
+  };
+  const rootIndex = jsonBytes(rootIndexValue);
   blobs.push(imageIndex);
   const uniqueBlobs = new Map(blobs.map((bytes) => [sha256(bytes), bytes]));
   return {
@@ -192,13 +196,13 @@ function repositoryOf(reference) {
   return reference.slice(0, reference.lastIndexOf(':'));
 }
 
-async function fixture(t) {
+async function fixture(t, optionsForRole = () => ({})) {
   const root = await mkdtemp(path.join(os.tmpdir(), 'easyfire-artifact-producers-'));
   t.after(() => rm(root, { recursive: true, force: true }));
   const inputArchives = {};
   const imageFixtures = new Map();
   for (const [role, reference] of ROLE_REFERENCES) {
-    const image = singleImageArchive(reference, role);
+    const image = singleImageArchive(reference, role, [], optionsForRole(role, reference));
     const file = path.join(root, `${role}.oci.tar`);
     await writeFile(file, image.bytes);
     if (process.platform !== 'win32') await chmod(file, 0o600);
@@ -299,6 +303,133 @@ test('OCI producer deterministically merges exactly seven validated image layout
   const inspected = await inspectOciImageBundle(first, value.specs);
   assert.deepEqual(inspected.inventory.map(({ role }) => role), ROLE_REFERENCES.map(([role]) => role));
   if (process.platform !== 'win32') assert.equal((await stat(first)).mode & 0o777, 0o600);
+});
+
+test('OCI producer accepts the observed Skopeo 1.20 root shape without changing canonical output', async (t) => {
+  const baseline = await fixture(t);
+  const skopeo = await fixture(t, (role, reference) => ({
+    omitRootMediaType: true,
+    rootAnnotations: role === 'webapp'
+      ? {
+        'io.containerd.image.name': reference,
+        'org.opencontainers.image.ref.name': `docker.io/${reference}`,
+      }
+      : {
+        'org.opencontainers.image.ref.name': `docker.io/${reference}`,
+      },
+  }));
+  const baselineOutput = path.join(baseline.root, 'bundle', 'images.tar');
+  const skopeoOutput = path.join(skopeo.root, 'bundle', 'images.tar');
+  await mkdir(path.dirname(baselineOutput));
+  await mkdir(path.dirname(skopeoOutput));
+
+  await produceOciBundle({
+    releaseCommit: COMMIT,
+    inputArchives: baseline.inputArchives,
+    output: baselineOutput,
+    specs: baseline.specs,
+    requireRootOwner: false,
+  });
+  await produceOciBundle({
+    releaseCommit: COMMIT,
+    inputArchives: skopeo.inputArchives,
+    output: skopeoOutput,
+    specs: skopeo.specs,
+    requireRootOwner: false,
+  });
+
+  assert.deepEqual(await readFile(skopeoOutput), await readFile(baselineOutput));
+});
+
+test('OCI producer rejects invalid root media types and missing or conflicting root references', async (t) => {
+  const value = await fixture(t);
+  const reference = ROLE_REFERENCES[1][1];
+  const cases = [
+    [
+      'invalid-root-media-type',
+      { rootMediaType: OCI_MANIFEST },
+      /root index/i,
+    ],
+    [
+      'missing-root-reference',
+      { omitRootMediaType: true, rootAnnotations: {} },
+      /reference|tag/i,
+    ],
+    [
+      'conflicting-root-references',
+      {
+        omitRootMediaType: true,
+        rootAnnotations: {
+          'io.containerd.image.name': `docker.io/${reference}`,
+          'org.opencontainers.image.ref.name': 'docker.io/other/example:latest',
+        },
+      },
+      /conflict|reference|tag/i,
+    ],
+    [
+      'malformed-containerd-reference',
+      {
+        rootAnnotations: {
+          'io.containerd.image.name': 'docker.io/easyfire-bookkeeping/web app:latest',
+        },
+      },
+      /exact tagged image reference/i,
+    ],
+    [
+      'malformed-oci-reference',
+      {
+        omitRootMediaType: true,
+        rootAnnotations: {
+          'org.opencontainers.image.ref.name': `docker.io/${reference}@sha256:${'a'.repeat(64)}`,
+        },
+      },
+      /exact tagged image reference/i,
+    ],
+  ];
+
+  for (const [name, options, pattern] of cases) {
+    const image = singleImageArchive(reference, name, [], options);
+    const input = path.join(value.root, `${name}.oci.tar`);
+    const output = path.join(value.root, name, 'images.tar');
+    await writeFile(input, image.bytes);
+    await mkdir(path.dirname(output));
+    if (process.platform !== 'win32') await chmod(input, 0o600);
+    await assert.rejects(
+      produceOciBundle({
+        releaseCommit: COMMIT,
+        inputArchives: { ...value.inputArchives, webapp: input },
+        output,
+        specs: value.specs,
+        requireRootOwner: false,
+      }),
+      pattern,
+    );
+  }
+});
+
+test('OCI producer continues to reject Docker legacy manifest.json archives', async (t) => {
+  const value = await fixture(t);
+  const reference = ROLE_REFERENCES[1][1];
+  const image = singleImageArchive(reference, 'docker-save', [
+    {
+      name: 'manifest.json',
+      bytes: jsonBytes([{ RepoTags: [reference], Layers: [] }]),
+    },
+  ]);
+  const input = path.join(value.root, 'docker-save.oci.tar');
+  await writeFile(input, image.bytes);
+  if (process.platform !== 'win32') await chmod(input, 0o600);
+
+  await assert.rejects(
+    produceOciBundle({
+      releaseCommit: COMMIT,
+      inputArchives: { ...value.inputArchives, webapp: input },
+      output: path.join(value.root, 'docker-save-output', 'images.tar'),
+      specs: value.specs,
+      requireRootOwner: false,
+    }),
+    /unexpected file manifest\.json/i,
+  );
 });
 
 test('OCI producer preserves real Docker 29 multi-platform and attestation index shapes', async (t) => {

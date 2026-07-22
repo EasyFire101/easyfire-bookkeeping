@@ -356,6 +356,20 @@ function normalizedRootReference(value, label) {
   return value.startsWith('docker.io/') ? value.slice('docker.io/'.length) : value;
 }
 
+function rootDescriptorReference(annotations, label) {
+  if (!isObject(annotations)) refuse(`${label} annotations are missing.`);
+  const annotationKeys = [
+    'io.containerd.image.name',
+    'org.opencontainers.image.ref.name',
+  ];
+  const references = annotationKeys
+    .filter((key) => Object.hasOwn(annotations, key))
+    .map((key) => normalizedRootReference(annotations[key], `${label} ${key}`));
+  if (references.length === 0) refuse(`${label} reference/tag is missing.`);
+  if (new Set(references).size !== 1) refuse(`${label} reference/tag annotations conflict.`);
+  return references[0];
+}
+
 function platformIdentity(descriptorValue, label) {
   const platform = object(descriptorValue.platform, `${label}.platform`);
   if (
@@ -459,17 +473,13 @@ async function validateImageArchive(archive, spec) {
   const root = parseJson(archive.entries.get('index.json')?.captured, `${spec.role} root index`);
   if (
     root.schemaVersion !== 2 ||
-    root.mediaType !== OCI_INDEX ||
+    (root.mediaType !== undefined && root.mediaType !== OCI_INDEX) ||
     !Array.isArray(root.manifests) ||
     root.manifests.length !== 1
   ) refuse(`${spec.role} root index must contain exactly one image index.`);
   const rootDescriptor = requireDescriptor(root.manifests[0], OCI_INDEX, `${spec.role} root descriptor`);
   if (
-    !isObject(rootDescriptor.annotations) ||
-    normalizedRootReference(
-      rootDescriptor.annotations['io.containerd.image.name'],
-      `${spec.role} OCI reference/tag`,
-    ) !== spec.sourceReference
+    rootDescriptorReference(rootDescriptor.annotations, `${spec.role} OCI`) !== spec.sourceReference
   ) refuse(`${spec.role} OCI reference/tag is invalid.`);
   if (spec.external && rootDescriptor.digest !== spec.expectedOciIndexDigest) {
     refuse(`${spec.role} OCI index digest differs from its pinned authority.`);
