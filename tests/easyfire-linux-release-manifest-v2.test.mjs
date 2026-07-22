@@ -49,6 +49,7 @@ const RELEASE_ARTIFACTS = [
   'scripts/production/linux-target-engine-evidence-produce.mjs',
   'scripts/production/linux-native-auth-proof.mjs',
   'scripts/production/linux-rehearsal-evidence.mjs',
+  'scripts/production/linux-guardian-boot-proof.mjs',
   'scripts/production/linux-source-archive-authority.mjs',
   'scripts/production/linux-deploy-docker.mjs',
   'scripts/production/linux-deploy-plan.mjs',

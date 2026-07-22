@@ -227,17 +227,17 @@ The superseding Linux endpoint additionally requires:
 The following application and historical Windows evidence remains useful but
 is not sufficient by itself for Linux promotion:
 
-- Current Linux/direct authority tests: 120/120 passed. The expanded
-  release/manifest/cutover/entrypoint matrix passed 144/144, including all 14
-  installed CLIs through the required `current` symlink.
-- Guardian build/tests: 30/30 passed; Guardian typecheck passed.
+- Current Linux/direct-plus-Guardian selected suite: 184/184 passed, including
+  all 14 installed CLIs through the required `current` symlink.
+- Guardian build/tests: 31/31 passed; Guardian typecheck passed.
 - Current release-readiness: 24/24; static no-deploy validation: 101/101;
   production syntax, direct-to-VM PowerShell parsing, and project foundation
-  checks passed; source-size guard: 0 blockers and 17 advisory candidates.
-- Release-manifest v2 closes 35 exact executable/imported artifacts into one
+  checks passed; source-size guard: 0 blockers and 19 advisory candidates.
+- Release-manifest v2 closes 36 exact executable/imported artifacts into one
   immutable source/archive/OCI/engine/systemd/runtime authority.
-- Fresh independent combined review returned GO with no remaining promotion
-  blocker in the source contracts. Executable-byte drift requires re-review.
+- Targeted independent Guardian review and re-review returned PASS after closing
+  timer-causality and wall-clock-bound findings. The containing release diff
+  remains subject to its own exact-byte review.
 
 - Focused release-readiness regression test.
 - Frozen pnpm install with committed lockfile and Node.js `22.23.1` / pnpm
@@ -292,8 +292,8 @@ publication of this patch has not yet occurred; publication changes only the
 two EasyFire repositories and does not itself create runtime authority.
 
 Recovery starts with the verified full filesystem and direct-VM transfer
-checkpoints in `HANDOFF.md`. The release-proof repair and two independent
-current-byte reviews now pass; the next path is one coherent commit-bound
+checkpoints in `HANDOFF.md`. Current source verification and the targeted
+Guardian review now pass; the next path is one coherent commit-bound
 immutable Linux release and proof on the identity-separated rehearsal VM before
 the production VM is staged. Owner Tailscale/native-login
 input is requested only when prompted. Windows may be quiesced only after every

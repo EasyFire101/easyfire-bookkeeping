@@ -518,7 +518,7 @@ backup directory. No VM application bytes were staged from that superseded
 bundle.
 
 The replacement source separates locked-reboot, normal-reboot, rehearsal, and
-production authority. Release-manifest v2 now binds 35 executable artifacts. A
+production authority. Release-manifest v2 then bound 35 executable artifacts. A
 deterministic seven-role OCI producer validates real multi-platform and
 attestation indexes while requiring exactly one runnable Linux/amd64 child per
 role. Target-engine evidence binds the loaded Docker 29.6.2 image identities.
@@ -626,9 +626,31 @@ does not widen host authority. The runbook also records the executable rollback
 chronology: backup, arm, create plan, locked reboot, verify/rearm, Guardian
 exercise, normal reboot, native authentication, and final collection.
 
-Regression-first proof failed on the old contract and now passes. The complete
-Bookkeeping authority suite passes 295/295, Guardian passes 30/30 plus
-typecheck, static no-deploy validation passes 101/101, release readiness passes
-24/24, and the changed-file source-size guard has zero blockers. The old release
+Regression-first proof failed on the old contract and now passes. The current
+Linux/direct-plus-Guardian selected suite passes 184/184, standalone Guardian
+passes 31/31 plus typecheck, static no-deploy validation passes 101/101,
+release readiness passes 24/24, and the changed-file source-size guard has zero blockers. The old release
 and every staging/output artifact remain preserved; a new immutable release is
 required before rehearsal deployment.
+
+## Bind Guardian proof to the recovered boot - 2026-07-22
+
+The normal-reboot rehearsal previously proved only that the Guardian timer was
+enabled and active. It did not prove that the timer had actually completed a
+healthy run after that boot. The new release-owned
+`linux-guardian-boot-proof.mjs` waits within one shrinking wall-clock deadline,
+requires a timer trigger and service start within ten seconds, requires service
+exit before the next trigger, and binds a stable current-boot systemd invocation
+to exactly one same-boot journal status matching the secure status artifact.
+Only a zero-exit healthy/cooldown observation with every exact service identity
+and HTTP probe healthy can qualify the reboot.
+
+The module is the 36th exact release artifact and is present in every source,
+runtime-generator, verifier, and test-fixture closure. Regression-first focused
+proof passes 11/11. The selected Linux/direct-plus-Guardian suite passes
+184/184, standalone Guardian passes 31/31 plus typecheck, release readiness
+passes 24/24, static no-deploy validation passes 101/101, foundation checks pass
+4/4, syntax and diff checks pass, and source-size reports zero blockers. A
+targeted independent review and re-review returned PASS after closing manual-run
+causality and inherited-timeout findings. No runtime, route, Docker resource, or
+accounting-data mutation was used for this source proof.

@@ -89,6 +89,7 @@ export const RELEASE_ARTIFACT_SPECS = [
   ['scripts/production/linux-target-engine-evidence-produce.mjs', '0644'],
   ['scripts/production/linux-native-auth-proof.mjs', '0644'],
   ['scripts/production/linux-rehearsal-evidence.mjs', '0644'],
+  ['scripts/production/linux-guardian-boot-proof.mjs', '0644'],
   ['scripts/production/linux-source-archive-authority.mjs', '0644'],
   ['scripts/production/linux-deploy-docker.mjs', '0644'],
   ['scripts/production/linux-deploy-plan.mjs', '0644'],

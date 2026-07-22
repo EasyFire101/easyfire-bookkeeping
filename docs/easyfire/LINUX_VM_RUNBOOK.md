@@ -70,6 +70,7 @@ mode-`0644` artifacts:
 - `scripts/production/linux-target-engine-evidence-produce.mjs`
 - `scripts/production/linux-native-auth-proof.mjs`
 - `scripts/production/linux-rehearsal-evidence.mjs`
+- `scripts/production/linux-guardian-boot-proof.mjs`
 - `scripts/production/linux-activation-evidence-collect.mjs`
 - `scripts/production/linux-guardian-promote-active.mjs`
 - `scripts/production/linux-private-route-activate.mjs`
@@ -597,9 +598,10 @@ all subordinate proof locations. Serve, Funnel, public listeners, and production
 machine identity must be absent. Reboot while locked, verify and rearm the
 rehearsal-only lock, and only then run `--exercise`. Perform the separate normal
 reboot requested by the exercise, wait for the Guardian timer, and require its
-current-boot service result and status to be non-error before authentication and
-final collection. At the credential boundary, run the native-auth collector in
-an attached terminal and enter the owner password there; never pass or persist
+current-boot invocation-bound journal status to exactly match the secure healthy
+status artifact before authentication and final collection. At the credential
+boundary, run the native-auth collector in an attached terminal and enter the
+owner password there; never pass or persist
 the password through a command argument, file, chat, or log:
 
 ```bash

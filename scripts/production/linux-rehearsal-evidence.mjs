@@ -17,6 +17,10 @@ import {
 } from './linux-deploy-authority.mjs';
 import { FIXED_PLAN_PATH } from './linux-deploy-plan.mjs';
 import { isCanonicalMainModule } from './linux-cli-entrypoint.mjs';
+import {
+  collectCurrentBootGuardianProof,
+  validateGuardianNormalRebootSummary,
+} from './linux-guardian-boot-proof.mjs';
 import { validateNativeAuthenticationProof } from './linux-native-auth-proof.mjs';
 import { parseManifestBoundRelease } from './linux-release-authority-verify.mjs';
 import {
@@ -248,36 +252,6 @@ const validateRollbackSummary = (rollback) => {
   }
   return rollback;
 };
-const validateNormalRebootSummary = (reboot) => {
-  exactKeys(
-    reboot,
-    [
-      'markerSha256',
-      'proofSha256',
-      'bootIdBefore',
-      'bootIdAfter',
-      'completedAt',
-      'stackAuthorityVerified',
-      'guardianTimerActive',
-      'guardianTimerEnabled',
-    ],
-    'Rehearsal normal reboot summary',
-  );
-  requireSha(reboot.markerSha256, 'Normal reboot marker hash');
-  requireSha(reboot.proofSha256, 'Normal reboot proof hash');
-  requireBootId(reboot.bootIdBefore, 'Normal reboot boot before');
-  requireBootId(reboot.bootIdAfter, 'Normal reboot boot after');
-  requireTime(reboot.completedAt, 'Normal reboot completion time');
-  if (
-    reboot.bootIdBefore === reboot.bootIdAfter ||
-    reboot.stackAuthorityVerified !== true ||
-    reboot.guardianTimerActive !== true ||
-    reboot.guardianTimerEnabled !== true
-  ) {
-    refuse('E_NORMAL_REBOOT', 'Normal reboot proof is incomplete.');
-  }
-  return reboot;
-};
 const validateRecoverySummary = (recovery) => {
   exactKeys(
     recovery,
@@ -456,7 +430,7 @@ export function buildRehearsalEvidence({
     refuse('E_HOST_ISOLATION', 'Observed rehearsal host does not match its plan.');
   }
   validateRollbackSummary(rollback);
-  validateNormalRebootSummary(normalReboot);
+  validateGuardianNormalRebootSummary(normalReboot);
   validateRecoverySummary(recovery);
   validateGuardianSummary(guardian);
   validateAuthenticationSummary(authentication);
@@ -563,7 +537,7 @@ export function validateRehearsalEvidence(candidate) {
     evidence.rehearsalDeployment.receiptSha256,
   ]) requireSha(value, 'Linux rehearsal evidence hash');
   validateRollbackSummary(evidence.rollback);
-  validateNormalRebootSummary(evidence.normalReboot);
+  validateGuardianNormalRebootSummary(evidence.normalReboot);
   validateRecoverySummary(evidence.recovery);
   validateGuardianSummary(evidence.guardian);
   validateAuthenticationSummary(evidence.authentication);
@@ -1330,6 +1304,12 @@ const collect = async (plan, runtime) => {
   if (stackActive !== 'active' || timerActive !== 'active' || timerEnabled !== 'enabled') {
     refuse('E_NORMAL_REBOOT', 'Stack or Guardian timer did not recover after reboot.');
   }
+  const currentBootGuardian = await collectCurrentBootGuardianProof({
+    run,
+    readSecureJson,
+    sha256,
+    rebootMarkerPreparedAt: marker.preparedAt,
+  });
   const normalProof = {
     schemaVersion: 1,
     project: PROJECT,
@@ -1342,6 +1322,7 @@ const collect = async (plan, runtime) => {
     stackAuthorityVerified: true,
     guardianTimerActive: true,
     guardianTimerEnabled: true,
+    guardianCurrentBoot: currentBootGuardian,
   };
   const normalBytes = Buffer.from(`${JSON.stringify(normalProof, null, 2)}\n`);
 
@@ -1398,6 +1379,7 @@ const collect = async (plan, runtime) => {
       stackAuthorityVerified: true,
       guardianTimerActive: true,
       guardianTimerEnabled: true,
+      guardianCurrentBoot: normalProof.guardianCurrentBoot,
     },
     recovery: {
       proofSha256: sha256(recoveryDoc.bytes),

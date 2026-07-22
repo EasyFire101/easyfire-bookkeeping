@@ -191,27 +191,25 @@ longer define the intended production endpoint.
 
 The direct-to-VM source currently records:
 
-- Current Linux/direct authority suite: 120/120 passed. The expanded
-  release/manifest/cutover/entrypoint matrix passed 144/144, including all 14
-  installed CLIs through the required `current` symlink and fail-closed path
-  canonicalization.
-- Guardian build/tests: 30/30 passed; Guardian TypeScript typecheck passed.
+- Current Linux/direct-plus-Guardian selected suite: 184/184 passed, including
+  all 14 installed CLIs through the required `current` symlink and fail-closed
+  path canonicalization.
+- Guardian build/tests: 31/31 passed; Guardian TypeScript typecheck passed.
 - Release-readiness suite: 24/24 passed. Static no-deploy validation: 101/101
   passed. Production syntax, direct-to-VM PowerShell parsing, and project
   foundation checks passed.
 - Full preserved-root replay: 16,434 manifest entries and approximately
   771 MiB rehashed successfully. A Windows SMB long-path `realpath` failure was
   found and corrected with cached no-reparse directory traversal checks.
-- Release-manifest v2 closes 35 exact executable/imported artifacts, source
+- Release-manifest v2 closes 36 exact executable/imported artifacts, source
   archive provenance, OCI bytes, target-engine identity, Guardian/systemd bytes,
   and all Windows/Linux cutover helpers into one immutable authority.
-- Source-size guard reports 0 blockers and 17 advisory candidates. Diff, shell,
+- Source-size guard reports 0 blockers and 19 advisory candidates. Diff, shell,
   JSON, and focused syntax checks pass. No live provider or Docker mutation was
   used as source proof.
-- Fresh independent direct-to-VM review returned GO after closing every prior
-  P0 finding, including activation-evidence freshness during preflight and the
-  shared atomic abort-versus-activate decision claim. Any later executable-byte
-  drift invalidates that verdict and requires fingerprint revalidation.
+- Targeted independent Guardian review and re-review returned PASS after closing
+  timer-causality and wall-clock-bound findings. Any later executable-byte drift
+  invalidates that verdict and requires fingerprint revalidation.
 
 The earlier Windows candidate dependency and application snapshot remains
 recorded below as historical compatibility evidence:
@@ -374,7 +372,8 @@ history; they must not be used to construct the superseding endpoint.
   OCI/engine/auth/rehearsal producers, backup-directory trust, and offline-image
   identity gaps. A real rehearsal invocation then exposed and closed a shared
   symlink-entrypoint bug across all 14 installed CLIs; the fail-closed helper is
-  the 35th immutable release artifact. Current-byte proof passed 42/42 focused,
+  the final artifact in that historical 35-artifact closure. Current-byte proof
+  for that closure passed 42/42 focused,
   120/120 Linux/direct,
   30/30 Guardian, 101/101 static-production, and 24/24 release-readiness checks;
   both final independent reviews passed and source-size has zero blockers.
@@ -418,9 +417,9 @@ history; they must not be used to construct the superseding endpoint.
   target-less legacy plan remains production-only. The reboot order in the
   runbook is also corrected to arm, bind the plan, locked reboot, verify/rearm,
   exercise, normal reboot, authenticate, then collect. Current source proof is
-  295/295 complete Bookkeeping authority tests, 30/30 Guardian tests plus
-  typecheck, 101/101 static validation, 24/24 release readiness, and zero
-  changed-file source-size blockers. The replacement immutable release must be
+  184/184 Linux/direct-plus-Guardian selected tests, 31/31 standalone Guardian
+  tests plus typecheck, 101/101 static validation, 24/24 release readiness, and
+  zero changed-file source-size blockers. The replacement immutable release must be
   rebuilt from the final containing commit; the `45e2bc20` release must not be
   used for rehearsal deployment.
 - A repository-wide parallel run reported only the unchanged Windows 15,000-file

@@ -119,11 +119,14 @@ pass/fail files:
 3. The controller writes a create-new normal-reboot marker. After a separate
    ordinary reboot, run the native-authentication collector and then
    `linux-rehearsal-evidence.mjs --collect`. Collection proves the boot ID
-   changed, the immutable stack authority passed, and the Guardian timer is
-   active and enabled, and timestamps the normal-reboot proof after the
-   authentication receipt. This proof is distinct from the locked-reboot
-   receipt.
-4. The collector consumes that release-bound native-authentication receipt. It
+   changed and the immutable stack authority passed. It then waits boundedly
+   for a completed current-boot Guardian timer invocation, binds the stable
+   systemd invocation to exactly one same-boot journal status, requires that
+   status to match the secure status file byte-for-object, and requires every
+   service identity and HTTP probe to be healthy. The normal-reboot proof is
+   timestamped after the authentication receipt and remains distinct from the
+   locked-reboot receipt.
+4. The collector consumes that release-bound native-authentication receipt. The
    receipt is created only through an interactive owner login, binds the
    authenticated account and organization responses to the signed-in
    principal, and validates the database/Redis invariants server-side. The
