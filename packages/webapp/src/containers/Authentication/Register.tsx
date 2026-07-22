@@ -32,24 +32,25 @@ export function RegisterUserForm() {
   const { mutateAsync: authLoginMutate } = useAuthLogin();
   const { mutateAsync: authRegisterMutate } = useAuthRegister();
 
-  const handleSubmit = (values, { setSubmitting, setErrors }) => {
-    authRegisterMutate(values)
-      .then(() => {
-        authLoginMutate({
+  const handleSubmit = async (values, { setSubmitting, setErrors }) => {
+    try {
+      await authRegisterMutate(values);
+
+      try {
+        await authLoginMutate({
           email: values.email,
           password: values.password,
-        }).catch(({ data: { errors } }) => {
-          AppToaster.show({
-            message: intl.get('something_wentwrong'),
-            intent: Intent.SUCCESS,
-          });
         });
-      })
-      .catch(({ response }) => {
-        const {
-          data: { errors },
-        } = response;
+      } catch {
+        AppToaster.show({
+          message: intl.get('something_wentwrong'),
+          intent: Intent.DANGER,
+        });
+      }
+    } catch (error) {
+      const errors = error?.data?.errors ?? error?.response?.data?.errors ?? [];
 
+      if (Array.isArray(errors)) {
         const formErrors = transformRegisterErrorsToForm(errors);
         const toastMessages = transformRegisterToastMessages(errors);
 
@@ -57,8 +58,17 @@ export function RegisterUserForm() {
           AppToaster.show(toastMessage);
         });
         setErrors(formErrors);
-        setSubmitting(false);
-      });
+      }
+
+      if (!Array.isArray(errors) || errors.length === 0) {
+        AppToaster.show({
+          message: intl.get('something_wentwrong'),
+          intent: Intent.DANGER,
+        });
+      }
+    } finally {
+      setSubmitting(false);
+    }
   };
 
   return (

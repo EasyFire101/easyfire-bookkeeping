@@ -35,6 +35,8 @@ export class AuthMailSubscriber {
   async handleSignupSendVerificationMail(
     payload: IAuthSignedUpEventPayload | ISignUpConfigmResendedEventPayload,
   ) {
+    if (!payload.user.verifyToken) return;
+
     try {
       await this.sendSignupVerificationMailQueue.add(
         SendSignupVerificationMailJob,

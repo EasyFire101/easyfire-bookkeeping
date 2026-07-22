@@ -40,11 +40,16 @@ export class AuthSignupService {
    * @param {AuthSignupDto} signupDTO
    */
   public async signUp(signupDTO: AuthSignupDto) {
+    const normalizedSignupDTO = {
+      ...signupDTO,
+      email: signupDTO.email.trim().toLowerCase(),
+    };
+
     // Validates the signup disable restrictions.
-    await this.validateSignupRestrictions(signupDTO.email);
+    await this.validateSignupRestrictions(normalizedSignupDTO.email);
 
     // Validates the given email uniqiness.
-    await this.validateEmailUniqiness(signupDTO.email);
+    await this.validateEmailUniqiness(normalizedSignupDTO.email);
 
     const hashedPassword = await hashPassword(signupDTO.password);
     const signupConfirmation = this.configService.get('signupConfirmation');
@@ -58,12 +63,12 @@ export class AuthSignupService {
 
     // Triggers signin up event.
     await this.eventEmitter.emitAsync(events.auth.signingUp, {
-      signupDTO,
+      signupDTO: normalizedSignupDTO,
     } as IAuthSigningUpEventPayload);
 
     const tenant = await this.tenantsManager.createTenant();
     const user = await this.systemUserModel.query().insert({
-      ...signupDTO,
+      ...normalizedSignupDTO,
       verifyToken,
       verified,
       active: true,
@@ -77,7 +82,7 @@ export class AuthSignupService {
 
     // Triggers signed up event.
     await this.eventEmitter.emitAsync(events.auth.signUp, {
-      signupDTO,
+      signupDTO: normalizedSignupDTO,
       tenant,
       user,
     } as IAuthSignedUpEventPayload);
@@ -119,12 +124,14 @@ export class AuthSignupService {
       !isEmpty(signupRestrictions.allowedEmails) ||
       !isEmpty(signupRestrictions.allowedDomains)
     ) {
-      const emailDomain = email.split('@').pop();
-      const isAllowedEmail =
-        signupRestrictions.allowedEmails.indexOf(email) !== -1;
+      const normalizedEmail = email.trim().toLowerCase();
+      const emailDomain = normalizedEmail.split('@').pop();
+      const isAllowedEmail = signupRestrictions.allowedEmails.some(
+        (allowedEmail) => allowedEmail.trim().toLowerCase() === normalizedEmail,
+      );
 
       const isAllowedDomain = signupRestrictions.allowedDomains.some(
-        (domain) => emailDomain === domain,
+        (domain) => emailDomain === domain.trim().toLowerCase(),
       );
       if (!isAllowedEmail && !isAllowedDomain) {
         throw new ServiceError(
