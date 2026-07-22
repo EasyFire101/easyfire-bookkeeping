@@ -129,18 +129,28 @@ export const verifyReleaseImageIdentity = (expected, observed) => {
   if (!isObject(observed) || observed.Id !== expected.engineImageId) {
     refuse('E_IMAGE_IDENTITY', `Loaded ${expected.role} engine image is invalid.`);
   }
-  const references = [
-    ...(Array.isArray(observed.RepoTags) ? observed.RepoTags : []),
-    ...(Array.isArray(observed.RepoDigests) ? observed.RepoDigests : []),
-  ];
+  if (!Array.isArray(observed.RepoTags)) {
+    refuse('E_IMAGE_IDENTITY', `Loaded ${expected.role} release tag is invalid.`);
+  }
+  if (!Array.isArray(observed.RepoDigests)) {
+    refuse('E_IMAGE_IDENTITY', `Loaded ${expected.role} repo digest is invalid.`);
+  }
+  const repoTags = observed.RepoTags;
+  const repoDigests = observed.RepoDigests;
   if (expected.reference.includes('@')) {
     const [tagged, digest] = expected.reference.split('@');
     const separator = tagged.lastIndexOf(':');
     const repoDigest = `${tagged.slice(0, separator)}@${digest}`;
-    if (!references.includes(repoDigest)) {
+    if (!repoTags.includes(tagged)) {
+      refuse('E_IMAGE_IDENTITY', `Loaded ${expected.role} release tag is invalid.`);
+    }
+    if (
+      repoDigests.length !== 0 &&
+      (repoDigests.length !== 1 || repoDigests[0] !== repoDigest)
+    ) {
       refuse('E_IMAGE_IDENTITY', `Loaded ${expected.role} repo digest is invalid.`);
     }
-  } else if (!references.includes(expected.reference)) {
+  } else if (!repoTags.includes(expected.reference)) {
     refuse('E_IMAGE_IDENTITY', `Loaded ${expected.role} release tag is invalid.`);
   }
   return {

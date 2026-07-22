@@ -267,6 +267,8 @@ test('accepts a preloaded release image only when its engine identity is exact',
     ...expected,
     role: 'envoy',
     reference: `envoyproxy/envoy:v1.36.4@${digest}`,
+    ociIndexDigest: digest,
+    engineImageId: digest,
   };
   const externalObserved = {
     Id: external.engineImageId,
@@ -277,6 +279,29 @@ test('accepts a preloaded release image only when its engine identity is exact',
     dockerContract.verifyReleaseImageIdentity(external, externalObserved).engineImageId,
     external.engineImageId,
   );
+  assert.equal(
+    dockerContract.verifyReleaseImageIdentity(
+      external,
+      { ...externalObserved, RepoDigests: [] },
+    ).engineImageId,
+    external.engineImageId,
+  );
+  assert.throws(
+    () => dockerContract.verifyReleaseImageIdentity(
+      external,
+      { ...externalObserved, RepoTags: [], RepoDigests: [] },
+    ),
+    /release tag is invalid/i,
+  );
+  for (const malformed of [null, `envoyproxy/envoy@${digest}`, { digest }]) {
+    assert.throws(
+      () => dockerContract.verifyReleaseImageIdentity(
+        external,
+        { ...externalObserved, RepoDigests: malformed },
+      ),
+      /repo digest is invalid/i,
+    );
+  }
   assert.throws(
     () => dockerContract.verifyReleaseImageIdentity(
       external,
