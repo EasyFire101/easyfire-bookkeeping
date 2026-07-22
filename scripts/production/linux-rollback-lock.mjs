@@ -13,7 +13,6 @@ import {
   unlink,
 } from 'node:fs/promises';
 import path from 'node:path';
-import { pathToFileURL } from 'node:url';
 
 import {
   collectBoundInputs,
@@ -24,6 +23,7 @@ import {
   PROJECT as DEPLOYMENT_PROJECT,
   SERVICE_CONTRACT,
 } from './linux-deploy-plan.mjs';
+import { isCanonicalMainModule } from './linux-cli-entrypoint.mjs';
 
 export const PROJECT = DEPLOYMENT_PROJECT;
 export const CONTROLLER_PATH =
@@ -1306,11 +1306,7 @@ async function runCli() {
   );
 }
 
-const invokedPath = process.argv[1];
-if (
-  invokedPath &&
-  pathToFileURL(path.resolve(invokedPath)).href === import.meta.url
-) {
+if (await isCanonicalMainModule(import.meta.url)) {
   runCli().catch((error) => {
     const refusal =
       error instanceof RollbackRefusal

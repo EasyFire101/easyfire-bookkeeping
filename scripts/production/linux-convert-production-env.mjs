@@ -10,7 +10,8 @@ import {
 } from 'node:fs/promises';
 import { randomBytes, timingSafeEqual } from 'node:crypto';
 import path from 'node:path';
-import { pathToFileURL } from 'node:url';
+
+import { isCanonicalMainModule } from './linux-cli-entrypoint.mjs';
 
 export const EXIT = Object.freeze({
   OK: 0,
@@ -691,7 +692,4 @@ const main = async () => {
   }
 };
 
-const isMain =
-  process.argv[1] &&
-  pathToFileURL(path.resolve(process.argv[1])).href === import.meta.url;
-if (isMain) process.exitCode = await main();
+if (await isCanonicalMainModule(import.meta.url)) process.exitCode = await main();

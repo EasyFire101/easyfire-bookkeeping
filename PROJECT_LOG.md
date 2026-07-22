@@ -518,7 +518,7 @@ backup directory. No VM application bytes were staged from that superseded
 bundle.
 
 The replacement source separates locked-reboot, normal-reboot, rehearsal, and
-production authority. Release-manifest v2 now binds 34 executable artifacts. A
+production authority. Release-manifest v2 now binds 35 executable artifacts. A
 deterministic seven-role OCI producer validates real multi-platform and
 attestation indexes while requiring exactly one runnable Linux/amd64 child per
 role. Target-engine evidence binds the loaded Docker 29.6.2 image identities.
@@ -543,3 +543,14 @@ The unchanged Windows 15,000-file performance test exceeded its timing ceiling
 only during parallel host load and passed its isolated 14/14 rerun. Windows
 remains healthy and the sole writer; both Linux VMs remain isolated with zero
 Bookkeeping application containers or volumes.
+
+The first real producer invocation through
+`/opt/easyfire-bookkeeping/current` then exposed a shared CLI bootstrap defect:
+Node canonicalized the loaded module while the main guard compared the unresolved
+symlink argument, causing 14 installed CLIs to exit zero without executing. The
+failed attempt created no bundle or runtime resource. A shared fail-closed
+`linux-cli-entrypoint.mjs` helper now compares both canonical paths, refuses any
+realpath failure, and remains inside the immutable release closure. The new
+symlink/failure suite passes 16/16, the related release/controller matrix passes
+144/144, Guardian passes 30/30 plus typecheck, static validation passes 101/101,
+source-size has zero blockers, and independent re-review returned PASS.

@@ -44,6 +44,7 @@ const RELEASE_ARTIFACTS = [
   'scripts/production/linux-deploy-authority.mjs',
   'scripts/production/linux-release-authority-verify.mjs',
   'scripts/production/linux-release-manifest-v2.mjs',
+  'scripts/production/linux-cli-entrypoint.mjs',
   'scripts/production/linux-oci-bundle-produce.mjs',
   'scripts/production/linux-target-engine-evidence-produce.mjs',
   'scripts/production/linux-native-auth-proof.mjs',

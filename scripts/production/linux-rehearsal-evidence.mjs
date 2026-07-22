@@ -11,12 +11,12 @@ import {
 } from 'node:fs/promises';
 import os from 'node:os';
 import path from 'node:path';
-import { pathToFileURL } from 'node:url';
 import {
   collectBoundInputs,
   readVerifiedDeploymentChain,
 } from './linux-deploy-authority.mjs';
 import { FIXED_PLAN_PATH } from './linux-deploy-plan.mjs';
+import { isCanonicalMainModule } from './linux-cli-entrypoint.mjs';
 import { validateNativeAuthenticationProof } from './linux-native-auth-proof.mjs';
 import { parseManifestBoundRelease } from './linux-release-authority-verify.mjs';
 import {
@@ -1484,10 +1484,7 @@ async function runCli() {
   );
 }
 
-if (
-  process.argv[1] &&
-  import.meta.url === pathToFileURL(path.resolve(process.argv[1])).href
-) {
+if (await isCanonicalMainModule(import.meta.url)) {
   runCli().catch((error) => {
     process.stderr.write(
       `${error?.code ?? 'E_REHEARSAL'}: ${error?.message ?? String(error)}\n`,

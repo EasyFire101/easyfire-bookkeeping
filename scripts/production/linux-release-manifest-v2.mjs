@@ -11,7 +11,8 @@ import {
   unlink,
 } from 'node:fs/promises';
 import path from 'node:path';
-import { fileURLToPath } from 'node:url';
+
+import { isCanonicalMainModule } from './linux-cli-entrypoint.mjs';
 
 const SHA256 = /^sha256:[a-f0-9]{64}$/;
 const COMMIT = /^[a-f0-9]{40}$/;
@@ -29,6 +30,7 @@ const RELEASE_ARTIFACTS = Object.freeze([
   ['scripts/production/linux-deploy-authority.mjs', '0644'],
   ['scripts/production/linux-release-authority-verify.mjs', '0644'],
   ['scripts/production/linux-release-manifest-v2.mjs', '0644'],
+  ['scripts/production/linux-cli-entrypoint.mjs', '0644'],
   ['scripts/production/linux-oci-bundle-produce.mjs', '0644'],
   ['scripts/production/linux-target-engine-evidence-produce.mjs', '0644'],
   ['scripts/production/linux-native-auth-proof.mjs', '0644'],
@@ -947,8 +949,7 @@ async function main() {
   process.stdout.write(`release-manifest-v2 ${result.sha256}\n`);
 }
 
-const isMain = process.argv[1] && path.resolve(process.argv[1]) === fileURLToPath(import.meta.url);
-if (isMain) {
+if (await isCanonicalMainModule(import.meta.url)) {
   main().catch((error) => {
     process.stderr.write(`release-manifest-v2 refused: ${error.message}\n`);
     process.exitCode = 1;

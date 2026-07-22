@@ -12,8 +12,8 @@ import {
   unlink,
 } from 'node:fs/promises';
 import path from 'node:path';
-import { fileURLToPath } from 'node:url';
 
+import { isCanonicalMainModule } from './linux-cli-entrypoint.mjs';
 import { inspectOciImageBundle } from './linux-release-manifest-v2.mjs';
 
 const COMMIT = /^[a-f0-9]{40}$/;
@@ -734,7 +734,7 @@ async function main() {
   process.stdout.write(`oci-bundle sha256:${result.sha256}\n`);
 }
 
-if (process.argv[1] && path.resolve(process.argv[1]) === fileURLToPath(import.meta.url)) {
+if (await isCanonicalMainModule(import.meta.url)) {
   main().catch((error) => {
     process.stderr.write(`oci-bundle refused: ${error.message}\n`);
     process.exitCode = 1;

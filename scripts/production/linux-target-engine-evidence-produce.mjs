@@ -10,8 +10,8 @@ import {
   unlink,
 } from 'node:fs/promises';
 import path from 'node:path';
-import { fileURLToPath } from 'node:url';
 
+import { isCanonicalMainModule } from './linux-cli-entrypoint.mjs';
 import { DEFAULT_IMAGE_SPECS } from './linux-oci-bundle-produce.mjs';
 import { inspectOciImageBundle } from './linux-release-manifest-v2.mjs';
 
@@ -352,7 +352,7 @@ async function main() {
   process.stdout.write(`target-engine-evidence sha256:${result.sha256}\n`);
 }
 
-if (process.argv[1] && path.resolve(process.argv[1]) === fileURLToPath(import.meta.url)) {
+if (await isCanonicalMainModule(import.meta.url)) {
   main().catch((error) => {
     process.stderr.write(`target-engine-evidence refused: ${error.message}\n`);
     process.exitCode = 1;

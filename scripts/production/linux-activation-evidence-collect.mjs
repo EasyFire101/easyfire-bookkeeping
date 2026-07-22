@@ -5,7 +5,6 @@ import { createHash } from 'node:crypto';
 import { constants } from 'node:fs';
 import { lstat, open, readFile, realpath } from 'node:fs/promises';
 import path from 'node:path';
-import { pathToFileURL } from 'node:url';
 
 import {
   sha256,
@@ -25,6 +24,7 @@ import {
   validateCheckpointManifest,
   validateDeploymentPlan,
 } from './linux-deploy-plan.mjs';
+import { isCanonicalMainModule } from './linux-cli-entrypoint.mjs';
 import { parseManifestBoundRelease } from './linux-release-authority-verify.mjs';
 import {
   parseListeningPorts,
@@ -1016,7 +1016,7 @@ async function runCli() {
   process.stdout.write(`${JSON.stringify({ status: evidence.status, output: OUTPUT })}\n`);
 }
 
-if (process.argv[1] && import.meta.url === pathToFileURL(path.resolve(process.argv[1])).href) {
+if (await isCanonicalMainModule(import.meta.url)) {
   runCli().catch((error) => {
     process.stderr.write(`${error?.code ?? 'E_ACTIVATION_EVIDENCE'}: ${error?.message ?? String(error)}\n`);
     process.exitCode = 1;

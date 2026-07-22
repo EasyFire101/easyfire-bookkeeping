@@ -4,7 +4,6 @@ import { spawn } from 'node:child_process';
 import { constants } from 'node:fs';
 import { link, lstat, open, readFile, realpath, unlink } from 'node:fs/promises';
 import path from 'node:path';
-import { pathToFileURL } from 'node:url';
 
 import {
   PRIVATE_SOURCE_LAUNCHER,
@@ -21,6 +20,7 @@ import {
   validateCutoverPlan,
   validateSourceQuiesceReceipt,
 } from './direct-vm-cutover-contract.mjs';
+import { isCanonicalMainModule } from './linux-cli-entrypoint.mjs';
 import {
   collectBoundInputs,
   readVerifiedDeploymentChain,
@@ -1307,7 +1307,7 @@ async function main() {
   refuse('E_MODE', 'Unknown source-abort contract mode.');
 }
 
-if (process.argv[1] && import.meta.url === pathToFileURL(path.resolve(process.argv[1])).href) {
+if (await isCanonicalMainModule(import.meta.url)) {
   main().catch((error) => {
     process.stderr.write(`${error?.code ?? 'E_ABORT'}: ${error?.message ?? String(error)}\n`);
     process.exitCode = 1;

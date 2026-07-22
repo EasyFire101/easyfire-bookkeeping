@@ -6,13 +6,13 @@ import { constants } from 'node:fs';
 import { lstat, open, readFile, realpath, rename } from 'node:fs/promises';
 import os from 'node:os';
 import path from 'node:path';
-import { pathToFileURL } from 'node:url';
 
 import {
   safeHashEqual,
   validateCutoverPlan,
 } from './direct-vm-cutover-contract.mjs';
 import { validateDeploymentPlan } from './linux-deploy-plan.mjs';
+import { isCanonicalMainModule } from './linux-cli-entrypoint.mjs';
 import { parseManifestBoundRelease } from './linux-release-authority-verify.mjs';
 import { validateRehearsalEvidence } from './linux-rehearsal-evidence.mjs';
 
@@ -260,7 +260,7 @@ async function runCli() {
   process.stdout.write(`${JSON.stringify({ status: receipt.status, receipt: PROMOTION_RECEIPT })}\n`);
 }
 
-if (process.argv[1] && import.meta.url === pathToFileURL(path.resolve(process.argv[1])).href) {
+if (await isCanonicalMainModule(import.meta.url)) {
   runCli().catch((error) => {
     process.stderr.write(`${error?.code ?? 'E_GUARDIAN_PROMOTION'}: ${error?.message ?? String(error)}\n`);
     process.exitCode = 1;

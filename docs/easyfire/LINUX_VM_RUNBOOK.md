@@ -65,6 +65,7 @@ mode-`0644` artifacts:
 - `scripts/production/direct-vm-cutover-authority.ps1`
 - `scripts/production/direct-vm-preflight-checkpoint.ps1`
 - `scripts/production/linux-final-quiescence-contract.mjs`
+- `scripts/production/linux-cli-entrypoint.mjs`
 - `scripts/production/linux-oci-bundle-produce.mjs`
 - `scripts/production/linux-target-engine-evidence-produce.mjs`
 - `scripts/production/linux-native-auth-proof.mjs`

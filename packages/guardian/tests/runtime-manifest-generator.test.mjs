@@ -38,6 +38,7 @@ const releaseArtifactSpecs = [
   ['scripts/production/linux-deploy-authority.mjs', '0644'],
   ['scripts/production/linux-release-authority-verify.mjs', '0644'],
   ['scripts/production/linux-release-manifest-v2.mjs', '0644'],
+  ['scripts/production/linux-cli-entrypoint.mjs', '0644'],
   ['scripts/production/linux-oci-bundle-produce.mjs', '0644'],
   ['scripts/production/linux-target-engine-evidence-produce.mjs', '0644'],
   ['scripts/production/linux-native-auth-proof.mjs', '0644'],

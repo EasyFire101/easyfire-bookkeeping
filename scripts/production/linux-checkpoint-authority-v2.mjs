@@ -14,7 +14,8 @@ import {
   unlink,
 } from 'node:fs/promises';
 import path from 'node:path';
-import { fileURLToPath } from 'node:url';
+
+import { isCanonicalMainModule } from './linux-cli-entrypoint.mjs';
 
 import {
   validateCutoverPlan,
@@ -875,7 +876,7 @@ const parseArguments = (arguments_) => {
   };
 };
 
-if (process.argv[1] && path.resolve(process.argv[1]) === fileURLToPath(import.meta.url)) {
+if (await isCanonicalMainModule(import.meta.url)) {
   try {
     const arguments_ = parseArguments(process.argv.slice(2));
     if (arguments_.help) {

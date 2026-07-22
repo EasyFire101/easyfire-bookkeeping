@@ -227,13 +227,14 @@ The superseding Linux endpoint additionally requires:
 The following application and historical Windows evidence remains useful but
 is not sufficient by itself for Linux promotion:
 
-- Current direct-to-VM authority tests: 97/97 passed across checkpoint,
-  cutover, backup, deployment, environment, release, and rollback contracts.
-- Guardian build/tests: 28/28 passed; Guardian typecheck passed.
+- Current Linux/direct authority tests: 120/120 passed. The expanded
+  release/manifest/cutover/entrypoint matrix passed 144/144, including all 14
+  installed CLIs through the required `current` symlink.
+- Guardian build/tests: 30/30 passed; Guardian typecheck passed.
 - Current release-readiness: 24/24; static no-deploy validation: 101/101;
-  production Node syntax: 18/18; direct-to-VM PowerShell parsing: 2/2; project
-  foundation: 4/4; source-size guard: 0 blockers and 15 advisory warnings.
-- Release-manifest v2 closes 30 exact executable/imported artifacts into one
+  production syntax, direct-to-VM PowerShell parsing, and project foundation
+  checks passed; source-size guard: 0 blockers and 17 advisory candidates.
+- Release-manifest v2 closes 35 exact executable/imported artifacts into one
   immutable source/archive/OCI/engine/systemd/runtime authority.
 - Fresh independent combined review returned GO with no remaining promotion
   blocker in the source contracts. Executable-byte drift requires re-review.

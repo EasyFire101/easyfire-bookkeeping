@@ -3,8 +3,8 @@ import { createHash, timingSafeEqual } from 'node:crypto';
 import { constants } from 'node:fs';
 import { link, open, readFile, unlink } from 'node:fs/promises';
 import path from 'node:path';
-import { pathToFileURL } from 'node:url';
 import { validateCheckpointV2Document } from './direct-vm-checkpoint-v2-contract.mjs';
+import { isCanonicalMainModule } from './linux-cli-entrypoint.mjs';
 export const PROJECT = 'easyfire-bookkeeping';
 export const SOURCE_HOST = 'NEWSEC';
 export const SOURCE_COMPOSE_PROJECT = 'easyfire-bookkeeping-prod';
@@ -1486,7 +1486,7 @@ async function runCli() {
   }
   refuse('E_USAGE', 'Unknown cutover contract mode.');
 }
-if (import.meta.url === pathToFileURL(process.argv[1] ?? '').href) {
+if (await isCanonicalMainModule(import.meta.url)) {
   runCli().catch((error) => {
     const refusal = error instanceof CutoverRefusal
       ? error

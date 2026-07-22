@@ -5,7 +5,6 @@ import { createHash } from 'node:crypto';
 import { constants } from 'node:fs';
 import { lstat, open, readFile, realpath } from 'node:fs/promises';
 import path from 'node:path';
-import { pathToFileURL } from 'node:url';
 
 import {
   canonicalJson,
@@ -17,6 +16,7 @@ import {
   validateActivationAuthorization,
 } from './direct-vm-cutover-contract.mjs';
 import { parseManifestBoundRelease } from './linux-release-authority-verify.mjs';
+import { isCanonicalMainModule } from './linux-cli-entrypoint.mjs';
 
 const NODE = '/usr/local/bin/node';
 const TAILSCALE = '/usr/bin/tailscale';
@@ -664,7 +664,7 @@ async function runCli() {
   })}\n`);
 }
 
-if (import.meta.url === pathToFileURL(process.argv[1] ?? '').href) {
+if (await isCanonicalMainModule(import.meta.url)) {
   runCli().catch((error) => {
     const refusal = error instanceof CutoverRefusal
       ? error

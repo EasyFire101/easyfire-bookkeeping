@@ -3,7 +3,6 @@
 import { timingSafeEqual } from 'node:crypto';
 import { readFile } from 'node:fs/promises';
 import path from 'node:path';
-import { pathToFileURL } from 'node:url';
 
 import {
   ALL_SERVICES,
@@ -25,6 +24,7 @@ import {
   STATELESS_SERVICES,
   validateDeploymentPlan,
 } from './linux-deploy-plan.mjs';
+import { isCanonicalMainModule } from './linux-cli-entrypoint.mjs';
 import {
   assertNoExistingDockerResources,
   docker,
@@ -650,11 +650,7 @@ const runCli = async () => {
   return 0;
 };
 
-const invokedPath = process.argv[1];
-if (
-  invokedPath &&
-  pathToFileURL(path.resolve(invokedPath)).href === import.meta.url
-) {
+if (await isCanonicalMainModule(import.meta.url)) {
   try {
     process.exitCode = await runCli();
   } catch (error) {
