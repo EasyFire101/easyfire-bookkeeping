@@ -284,7 +284,7 @@ export async function produceTargetEngineEvidence({
     const spec = validatedSpecs[index];
     const outputText = await queryDocker(
       runDocker,
-      ['image', 'inspect', '--format', INSPECT_FORMAT, spec.sourceReference],
+      ['image', 'inspect', '--format', INSPECT_FORMAT, bundle.inventory[index].ociIndexDigest],
       `${spec.role} image`,
     );
     images.push(parseInspectOutput(outputText, spec, bundle.inventory[index]));

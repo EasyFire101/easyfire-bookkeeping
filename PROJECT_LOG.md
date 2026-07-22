@@ -580,3 +580,15 @@ bare tag without a full-name annotation, wrong repositories, wrong tags,
 digests in references, or any disagreement. The regression-first focused suite
 fails on the prior implementation and passes 13/13 after the repair. The failed
 rehearsal attempt created no image bundle, container, or volume.
+
+After the corrected bundle loaded, Docker Engine 29.6.2 exposed another real
+containerd-store behavior missing from the synthetic runner: `docker image ls`
+showed every exact tag and root-index ID, while `docker image inspect <tag>`
+returned `No such image` for the loaded OCI indexes. Inspection by the exact
+bundle-proven root-index digest succeeded and returned the expected single
+`RepoTags` entry and bounded `RepoDigests`. The target-engine producer now uses
+that already verified digest as the lookup key, then independently requires the
+returned ID, tag, external digest authority, Docker version, OS, and architecture
+to match. Regression-first tests fail on the prior lookup and pass 13/13 after
+the repair. The failed rehearsal attestation wrote no evidence and created no
+container or volume.

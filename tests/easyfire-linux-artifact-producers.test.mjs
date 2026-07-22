@@ -617,10 +617,10 @@ test('OCI producer rejects duplicate linux/amd64 and malformed attestation child
 
 function dockerEvidenceRunner(value, overrides = {}) {
   const calls = [];
-  const byReference = new Map(ROLE_REFERENCES.map(([role, reference, external]) => {
+  const byIndexDigest = new Map(ROLE_REFERENCES.map(([role, reference, external]) => {
     const image = value.imageFixtures.get(role);
     const externalDigest = `${repositoryOf(reference)}@${image.indexDigest}`;
-    return [reference, {
+    return [image.indexDigest, {
       Id: image.indexDigest,
       RepoTags: [reference],
       RepoDigests: external ? [externalDigest] : [],
@@ -634,8 +634,8 @@ function dockerEvidenceRunner(value, overrides = {}) {
       return overrides.version ?? '29.6.2|linux|amd64\n';
     }
     assert.deepEqual(args.slice(2, 5), ['image', 'inspect', '--format']);
-    const image = byReference.get(args[6]);
-    assert.ok(image, `unexpected image reference ${args[6]}`);
+    const image = byIndexDigest.get(args[6]);
+    assert.ok(image, `unexpected image index digest ${args[6]}`);
     return `${JSON.stringify(image.Id)}\n${JSON.stringify(image.RepoTags)}\n${JSON.stringify(image.RepoDigests)}\n`;
   };
   return { calls, runDocker };
@@ -679,6 +679,10 @@ test('target-engine producer emits exact Docker 29.6.2 linux/amd64 evidence', as
   assert.equal(proof.sha256, sha256(await readFile(output)));
   assert.equal(docker.calls.length, 8);
   assert.ok(docker.calls.every((args) => args[2] === 'version' || args.slice(2, 4).join(' ') === 'image inspect'));
+  assert.deepEqual(
+    docker.calls.slice(1).map((args) => args[6]),
+    ROLE_REFERENCES.map(([role]) => value.imageFixtures.get(role).indexDigest),
+  );
   if (process.platform !== 'win32') assert.equal((await stat(output)).mode & 0o777, 0o600);
 });
 

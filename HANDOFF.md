@@ -364,9 +364,11 @@ history; they must not be used to construct the superseding endpoint.
 - The production dependency graph has 36 moderate and 9 low advisories. It has
   no high or critical advisories, but the remaining findings stay disclosed and
   should be reviewed during future dependency refreshes.
-- The coherent immutable Linux release has not yet been cut and staged, so the
-  release, target-engine, fixed-plan, restore, migration, and systemd contracts
-  have not been exercised together on the VM.
+- A prior commit-bound release reached deterministic bundle production and
+  isolated engine load. The real engine then exposed the digest-inspection
+  compatibility repair described below, so one final containing commit and
+  immutable rebuild are required before fixed-plan, restore, migration, and
+  systemd proof.
 - The replacement release/proof implementation now closes the previously
   impossible reboot receipt, preflight/final-checkpoint conflation, missing
   OCI/engine/auth/rehearsal producers, backup-directory trust, and offline-image
@@ -388,6 +390,13 @@ history; they must not be used to construct the superseding endpoint.
   when the full name exactly matches the expected role and the bare tag exactly
   matches its expected tag. Bare tags without a full-name authority and all
   mismatches still fail closed; the focused producer suite passes 13/13.
+- Docker Engine 29.6.2's containerd image store lists a loaded OCI index under
+  its exact tag but does not resolve `docker image inspect <tag>` for that
+  index. It does resolve the bundle-proven root-index digest and returns the
+  exact bound `RepoTags`/`RepoDigests`. Target-engine evidence now inspects each
+  bundle-proven digest and still requires its returned ID, tag, and optional
+  external digest authority to match exactly. The failed tag-based attempt
+  wrote no evidence and created no container or volume.
 - A repository-wide parallel run reported only the unchanged Windows 15,000-file
   timing guard above its 90-second ceiling under host contention. Its immediate
   isolated rerun passed all 14/14 production-I/O tests; no changed Linux release
@@ -399,16 +408,17 @@ history; they must not be used to construct the superseding endpoint.
   and that login does not by itself authorize route activation.
 - Source authority requires exact Forgejo readback and anonymous GitHub readback
   of the same final correction commit.
-- This exact direct-to-VM patch is locally validated but not committed or
-  published to the EasyFire remotes.
+- The current direct-to-VM source is locally validated. Its final containing
+  commit is established by Git rather than this self-referential document; no
+  direct-to-VM commit has yet been published to the EasyFire remotes.
 - Windows is intentionally still live. Any accidental Linux route or writer
   before the single-writer receipt would be a hard stop and rollback condition.
 
 ## Next safe action
 
-Commit the independently reviewed direct-to-VM patch and construct one immutable
-Linux release plus fixed deployment plan. Stage that exact release and the
-verified preflight checkpoint only to the
+Create the final containing commit and rebuild one immutable Linux release plus
+fixed deployment plan. Stage that exact release and the verified preflight
+checkpoint only to the
 identity-separated rehearsal VM; prove restore, once-only migration, native
 authentication, backup/isolated restore, rollback-lock/rearm, reboot, and
 Guardian behavior there. Only after every rehearsal receipt is green may the
