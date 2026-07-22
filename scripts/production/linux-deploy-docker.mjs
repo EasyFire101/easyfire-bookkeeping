@@ -125,6 +125,32 @@ const inspectImages = async (references) => {
   return parsed;
 };
 
+export const verifyReleaseImageIdentity = (expected, observed) => {
+  if (!isObject(observed) || observed.Id !== expected.engineImageId) {
+    refuse('E_IMAGE_IDENTITY', `Loaded ${expected.role} engine image is invalid.`);
+  }
+  const references = [
+    ...(Array.isArray(observed.RepoTags) ? observed.RepoTags : []),
+    ...(Array.isArray(observed.RepoDigests) ? observed.RepoDigests : []),
+  ];
+  if (expected.reference.includes('@')) {
+    const [tagged, digest] = expected.reference.split('@');
+    const separator = tagged.lastIndexOf(':');
+    const repoDigest = `${tagged.slice(0, separator)}@${digest}`;
+    if (!references.includes(repoDigest)) {
+      refuse('E_IMAGE_IDENTITY', `Loaded ${expected.role} repo digest is invalid.`);
+    }
+  } else if (!references.includes(expected.reference)) {
+    refuse('E_IMAGE_IDENTITY', `Loaded ${expected.role} release tag is invalid.`);
+  }
+  return {
+    reference: expected.reference,
+    ociIndexDigest: expected.ociIndexDigest,
+    linuxAmd64ManifestDigest: expected.linuxAmd64ManifestDigest,
+    engineImageId: observed.Id,
+  };
+};
+
 const verifyProjectResourceSet = async (plan) => {
   const expected = {
     container: ALL_SERVICES.map((service) => SERVICE_CONTRACT[service].name),
@@ -263,7 +289,14 @@ export const assertNoExistingDockerResources = async (plan, releaseManifest) => 
       maxOutputBytes: 512 * 1024,
     });
     if (result.code === 0) {
-      refuse('E_IMAGE_COLLISION', 'A release image reference already exists before loading.');
+      const inspected = parseJsonOutput(result, 'Preexisting release image inspection');
+      if (!Array.isArray(inspected) || inspected.length !== 1) {
+        refuse(
+          'E_DOCKER_INSPECT',
+          'Preexisting release image inspection returned an incomplete set.',
+        );
+      }
+      verifyReleaseImageIdentity(image, inspected[0]);
     }
   }
 };
@@ -506,30 +539,7 @@ export const verifyLoadedImages = async (manifest) => {
   const identities = {};
   for (let index = 0; index < entries.length; index += 1) {
     const expected = entries[index];
-    const observed = inspected[index];
-    if (!isObject(observed) || observed.Id !== expected.engineImageId) {
-      refuse('E_IMAGE_IDENTITY', `Loaded ${expected.role} engine image is invalid.`);
-    }
-    const references = [
-      ...(Array.isArray(observed.RepoTags) ? observed.RepoTags : []),
-      ...(Array.isArray(observed.RepoDigests) ? observed.RepoDigests : []),
-    ];
-    if (expected.reference.includes('@')) {
-      const [tagged, digest] = expected.reference.split('@');
-      const separator = tagged.lastIndexOf(':');
-      const repoDigest = `${tagged.slice(0, separator)}@${digest}`;
-      if (!references.includes(repoDigest)) {
-        refuse('E_IMAGE_IDENTITY', `Loaded ${expected.role} repo digest is invalid.`);
-      }
-    } else if (!references.includes(expected.reference)) {
-      refuse('E_IMAGE_IDENTITY', `Loaded ${expected.role} release tag is invalid.`);
-    }
-    identities[expected.role] = {
-      reference: expected.reference,
-      ociIndexDigest: expected.ociIndexDigest,
-      linuxAmd64ManifestDigest: expected.linuxAmd64ManifestDigest,
-      engineImageId: observed.Id,
-    };
+    identities[expected.role] = verifyReleaseImageIdentity(expected, inspected[index]);
   }
   return identities;
 };

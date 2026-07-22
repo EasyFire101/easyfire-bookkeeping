@@ -223,6 +223,69 @@ test('builds create and start commands without build, pull, up, or migration rep
   assert.ok(!routine.includes('database_migration'));
 });
 
+test('accepts a preloaded release image only when its engine identity is exact', () => {
+  const expected = {
+    role: 'webapp',
+    reference: 'easyfire-bookkeeping/webapp:release-test',
+    ociIndexDigest: `sha256:${'1'.repeat(64)}`,
+    linuxAmd64ManifestDigest: `sha256:${'2'.repeat(64)}`,
+    engineImageId: `sha256:${'3'.repeat(64)}`,
+  };
+  const observed = {
+    Id: expected.engineImageId,
+    RepoTags: [expected.reference],
+    RepoDigests: [],
+  };
+
+  assert.deepEqual(
+    dockerContract.verifyReleaseImageIdentity(expected, observed),
+    {
+      reference: expected.reference,
+      ociIndexDigest: expected.ociIndexDigest,
+      linuxAmd64ManifestDigest: expected.linuxAmd64ManifestDigest,
+      engineImageId: expected.engineImageId,
+    },
+  );
+
+  assert.throws(
+    () => dockerContract.verifyReleaseImageIdentity(
+      expected,
+      { ...observed, Id: `sha256:${'4'.repeat(64)}` },
+    ),
+    /engine image is invalid/i,
+  );
+  assert.throws(
+    () => dockerContract.verifyReleaseImageIdentity(
+      expected,
+      { ...observed, RepoTags: ['easyfire-bookkeeping/webapp:wrong'] },
+    ),
+    /release tag is invalid/i,
+  );
+
+  const digest = `sha256:${'5'.repeat(64)}`;
+  const external = {
+    ...expected,
+    role: 'envoy',
+    reference: `envoyproxy/envoy:v1.36.4@${digest}`,
+  };
+  const externalObserved = {
+    Id: external.engineImageId,
+    RepoTags: ['envoyproxy/envoy:v1.36.4'],
+    RepoDigests: [`envoyproxy/envoy@${digest}`],
+  };
+  assert.equal(
+    dockerContract.verifyReleaseImageIdentity(external, externalObserved).engineImageId,
+    external.engineImageId,
+  );
+  assert.throws(
+    () => dockerContract.verifyReleaseImageIdentity(
+      external,
+      { ...externalObserved, RepoDigests: [`envoyproxy/envoy@sha256:${'6'.repeat(64)}`] },
+    ),
+    /repo digest is invalid/i,
+  );
+});
+
 test('publishes root-only JSON with exclusive no-overwrite semantics', async () => {
   const directory = await mkdtemp(path.join(os.tmpdir(), 'easyfire-deploy-doc-'));
   const target = path.join(directory, 'receipt.json');

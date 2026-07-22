@@ -439,6 +439,7 @@ same staging directory must also be root-owned mode-`0600` regular files. The
 ```bash
 cd /opt/easyfire-bookkeeping/current
 sudo install -d -o root -g root -m 0755 /opt/easyfire-bookkeeping/guardian
+sudo install -d -o root -g root -m 0700 /var/lib/easyfire-bookkeeping-deployments
 sudo install -m 0644 packages/guardian/dist/guardian.js \
   /opt/easyfire-bookkeeping/guardian/guardian.js
 sudo install -m 0644 packages/guardian/dist/runtime-manifest-generator.js \
@@ -472,6 +473,11 @@ Both commands print one secret-free JSON result. A nonzero exit, missing final
 receipt, incomplete journal, identity drift, or failed restore/migration proof
 is a hard stop. Never substitute raw Compose, Docker migration, or receipt
 creation commands for this controller.
+
+The first controller run accepts an image reference already present on the
+target engine only when its engine image ID and manifest-bound tag or repository
+digest are exact. Any mismatched preloaded image is a hard stop. This permits a
+safe retry after an integrity-only image load without deleting verified images.
 
 Routine boot uses only `docker compose start` with the restart-`no` candidate
 override through
