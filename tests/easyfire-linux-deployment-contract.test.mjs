@@ -71,3 +71,14 @@ test('Windows migration checkpoint is no-retention and isolated-restore only', a
     /Never allow the Windows and VM databases\s+to accept writes simultaneously/,
   );
 });
+
+test('Linux backups use the release-owned isolated restore verifier', async () => {
+  const runbook = await text('docs/easyfire/LINUX_VM_RUNBOOK.md');
+  const script = await text('scripts/production/linux-backup-verify.sh');
+
+  assert.match(runbook, /linux-backup-verify\.sh/);
+  assert.match(script, /--network none/);
+  assert.match(script, /mariadb-check/);
+  assert.match(script, /restoreState: 'stopped-preserved'/);
+  assert.doesNotMatch(script, /docker\s+(rm|rmi|system prune|volume rm)/i);
+});

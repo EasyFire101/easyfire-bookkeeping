@@ -106,6 +106,18 @@ sanitized invariants, image/source/runtime identifiers, SHA-256 manifest, and
 `RESTORE.md`. Verification always restores into a new network-isolated volume
 and preserves the stopped proof container and volume.
 
+Run the release-owned implementation as root:
+
+```bash
+sudo /opt/easyfire-bookkeeping/current/scripts/production/linux-backup-verify.sh
+```
+
+The command succeeds only after `mariadb-check`, the 17/70 schema table counts,
+and the 1/1/1/1 identity invariants pass in the new `--network none` proof
+container. It prints the append-only backup path and the preserved proof
+container and volume names. A collision or partial proof fails closed; it never
+reuses or removes a prior unit.
+
 Never test restore against the active volume. Never treat Redis as accounting
 authority.
 
