@@ -9,6 +9,9 @@ import * as contract from '../scripts/production/direct-vm-cutover-contract.mjs'
 import * as abort from '../scripts/production/direct-vm-source-abort-contract.mjs';
 import * as collector from '../scripts/production/linux-activation-evidence-collect.mjs';
 import * as guardian from '../scripts/production/linux-guardian-promote-active.mjs';
+import * as nativeAuth from '../scripts/production/linux-native-auth-proof.mjs';
+import * as deployPlanContract from '../scripts/production/linux-deploy-plan.mjs';
+import * as rehearsalContract from '../scripts/production/linux-rehearsal-evidence.mjs';
 import * as route from '../scripts/production/linux-private-route-activate.mjs';
 
 const root = resolve(import.meta.dirname, '..');
@@ -242,12 +245,12 @@ function postSnapshot(plan) {
   return snapshot;
 }
 
-function quiesceReceipt(plan) {
-  const before = initialSnapshot();
+function quiesceReceipt(plan, planSha256 = digest('b')) {
+  const before = structuredClone(plan.source.expectedInitialSnapshot);
   const after = postSnapshot(plan);
   return contract.buildSourceQuiesceReceipt({
     plan,
-    planSha256: digest('b'),
+    planSha256,
     before,
     beforeSha256: hash(JSON.stringify(before)),
     after,
@@ -261,6 +264,9 @@ function activationEvidence(plan, sourceReceiptSha256) {
   const releaseCommit = digest('8').slice(0, 40);
   const deploymentPlanSha256 = digest('9');
   const checkpointManifestSha256 = digest('a');
+  const rehearsalEvidenceSha256 = digest('2');
+  const guardianPromotionReceiptSha256 = digest('6');
+  const authenticationProofSha256 = digest('3');
   return {
     schemaVersion: 1,
     project: 'easyfire-bookkeeping',
@@ -284,7 +290,7 @@ function activationEvidence(plan, sourceReceiptSha256) {
       sourceReleasePath: `/opt/easyfire-bookkeeping/releases/${releaseCommit}`,
       executablePath: `/opt/easyfire-bookkeeping/releases/${releaseCommit}/scripts/production/linux-activation-evidence-collect.mjs`,
       executableSha256: plan.controller.activationEvidenceCollectorSha256,
-      releaseManifestSha256: digest('6'),
+      releaseManifestSha256: plan.controller.releaseManifestSha256,
       collectionPlanSha256: digest('7'),
       outputPath: '/etc/easyfire-bookkeeping/cutover-evidence.json',
       outputPublishedCreateNew: true,
@@ -329,49 +335,47 @@ function activationEvidence(plan, sourceReceiptSha256) {
         deploymentId,
         checkpointManifestSha256,
       },
-      rollback: {
-        reason: 'rehearsal',
-        armedReceiptSha256: digest('2'),
-        rearmCompletionSha256: digest('3'),
-        lockedRebootVerified: true,
-        rearmedDeploymentVerified: true,
-        resourcesPreserved: true,
-        deploymentId,
-      },
-      reboot: {
-        bootIdBefore: '1516c5b2-3340-4c02-b9c4-7a340930088d',
-        bootIdAfter: '53682154-c88d-48ee-9194-adac4790d8cc',
-        stackActive: true,
-        stackAuthorityVerified: true,
-        guardianTimerActive: true,
-        dockerRestartRecoveryPassed: true,
-        daemonFailureRecoveryPassed: true,
-        invalidReceiptBootRefused: true,
+      rehearsal: {
+        status: 'passed',
+        rehearsalId: '936de674-58c3-4c99-93bc-a157d36ee4c7',
+        deploymentId: 'direct-vm-20260720-deadbeef',
+        releaseCommit,
+        releaseManifestSha256: plan.controller.releaseManifestSha256,
+        evidenceSha256: rehearsalEvidenceSha256,
+        isolatedHostMachineIdSha256: digest('4'),
+        productionMachineIdSha256: digest('5'),
+        rollbackLockedRebootReceiptSha256: digest('7'),
+        normalRebootProofSha256: digest('8'),
+        recoveryProofSha256: digest('9'),
+        guardianProofSha256: digest('a'),
+        authenticationProofSha256: digest('b'),
+        routeActivated: false,
+        publicExposure: false,
+        productionDataMutationCount: 0,
+        resourcesDeleted: false,
       },
       guardian: {
-        status: 'passed',
-        shadowRehearsalPassed: true,
-        statelessRecoveryPassed: true,
-        databaseAutoRecoveryRefused: true,
-        identityMismatchRefused: true,
-        activeModeEnabled: true,
-        healthyAfterRehearsal: true,
+        status: 'active-config-materialized',
+        rehearsalEvidenceSha256,
         shadowConfigSha256: digest('4'),
         productionConfigSha256: digest('5'),
-        promotionReceiptSha256: digest('6'),
+        promotionReceiptSha256: guardianPromotionReceiptSha256,
         promotionExecutableSha256: plan.controller.guardianPromotionSha256,
         productionConfigMode: 'root:root-0600',
         shadowMode: false,
         timerActive: true,
+        timerEnabled: true,
       },
       authentication: {
         status: 'passed',
-        method: 'native-password',
+        method: 'native-password-interactive',
         ownerConfirmed: true,
-        authenticatedPagePassed: true,
-        accountingDataValidated: true,
+        authenticatedApiPassed: true,
+        dataInvariantsPassed: true,
+        proofSha256: authenticationProofSha256,
       },
       network: {
+        proofSha256: digest('e'),
         backendState: 'Running',
         selfOnline: true,
         dnsName: `${plan.target.tailscaleDnsName}.`,
@@ -381,22 +385,16 @@ function activationEvidence(plan, sourceReceiptSha256) {
         publicListeners: [],
       },
     },
-    proofFiles: Object.fromEntries(
-      [
-        'checkpointManifest',
-        'deploymentReceipt',
-        'backupReceipt',
-        'backupComplete',
-        'rollbackArmed',
-        'rollbackRearm',
-        'reboot',
-        'recovery',
-        'guardian',
-        'guardianPromotion',
-        'authentication',
-        'network',
-      ].map((name, index) => [name, digest('abcdef012345'[index])]),
-    ),
+    proofFiles: {
+      checkpointManifest: checkpointManifestSha256,
+      deploymentReceipt: digest('e'),
+      backupReceipt: digest('f'),
+      backupComplete: digest('1'),
+      rehearsal: rehearsalEvidenceSha256,
+      guardianPromotion: guardianPromotionReceiptSha256,
+      authentication: authenticationProofSha256,
+      network: digest('e'),
+    },
   };
 }
 
@@ -442,8 +440,8 @@ function checkpointV2(plan, receipt, receiptSha256, after, afterSha256) {
       },
     },
     payloads: {
-      sqlGzip: payload('final.sql.gz', 'c'),
-      redisRdb: payload('final.rdb', 'd'),
+      sqlGzip: payload('easyfire-app-20260721-200600.sql.gz', 'c'),
+      redisRdb: payload('easyfire-redis-20260721-200600.rdb', 'd'),
     },
     isolatedRestore: {
       status: 'passed',
@@ -464,15 +462,15 @@ function checkpointV2(plan, receipt, receiptSha256, after, afterSha256) {
         entryCount: 10,
         entryBytes: 1000,
       },
-      restoreInstructions: file('direct-vm-checkpoint-RESTORE.md', '2'),
+      restoreInstructions: file('RESTORE.md', '2'),
       dualLocation: {
         ...file('dual-location-verification.json', '3'),
         status: 'passed',
         verifiedAt: '2026-07-21T20:07:10.000Z',
         primary: 'C:\\ProgramData\\AgentFoundry\\easyfire-bookkeeping\\backups\\final',
         secondary: 'E:\\EasyFire Bookkeeping Recovery\\direct-vm-preflight\\final',
-        fileCount: 12,
-        totalBytes: 2000,
+        fileCount: 11,
+        totalBytes: 1100,
       },
       recoveryUnit: {
         ...file('recovery-unit-verification-v2.json', '4'),
@@ -485,7 +483,7 @@ function checkpointV2(plan, receipt, receiptSha256, after, afterSha256) {
       schemaVersion: 1,
       mode: 'final-quiesced',
       cutoverId: plan.cutoverId,
-      cutoverPlan: { bytes: 1000, sha256: digest('b') },
+      cutoverPlan: { bytes: 1000, sha256: receipt.planSha256 },
       quiesceReceipt: {
         sourceRelativePath: 'inputs/source-quiesce-receipt.json',
         bytes: 1000,
@@ -892,9 +890,10 @@ test('activation evidence fails closed unless every migration gate passes and ex
     (value) => value.sourceQuiesce.stillQuiesced = false,
     (value) => value.checkpoint.isolatedRestoreVerified = false,
     (value) => value.guest.backup.restoreState = 'running',
-    (value) => value.guest.rollback.lockedRebootVerified = false,
-    (value) => value.guest.reboot.bootIdAfter = value.guest.reboot.bootIdBefore,
-    (value) => value.guest.guardian.databaseAutoRecoveryRefused = false,
+    (value) => value.guest.rehearsal.routeActivated = true,
+    (value) => value.guest.rehearsal.deploymentId = value.guest.deployment.deploymentId,
+    (value) => value.guest.rehearsal.releaseCommit = 'f'.repeat(40),
+    (value) => value.guest.guardian.timerEnabled = false,
     (value) => value.guest.guardian.shadowMode = true,
     (value) => value.collector.semanticProofsVerified = false,
     (value) => value.collector.executableSha256 = digest('0'),
@@ -902,11 +901,212 @@ test('activation evidence fails closed unless every migration gate passes and ex
     (value) => value.guest.network.serveAbsent = false,
     (value) => value.guest.network.funnelAbsent = false,
     (value) => value.guest.network.publicListeners.push(443),
+    (value) => value.proofFiles.checkpointManifest = digest('0'),
+    (value) => value.proofFiles.deploymentReceipt = digest('0'),
+    (value) => value.proofFiles.backupReceipt = digest('0'),
+    (value) => value.proofFiles.backupComplete = digest('0'),
+    (value) => value.proofFiles.network = digest('0'),
   ]) {
     const invalid = structuredClone(evidence);
     mutate(invalid);
     assert.throws(() => contract.validateActivationEvidence(invalid, plan, receiptSha256));
   }
+});
+
+test('collector output from validated machine receipts passes the cutover contract', () => {
+  const plan = planFixture();
+  plan.source.expectedInitialSnapshot.containers[0].imageReference = 'easyfire-bookkeeping/mariadb:pinned';
+  plan.source.expectedInitialSnapshot.containers[1].imageReference = 'easyfire-bookkeeping/redis:pinned';
+  const cutoverPlanSha256 = hash(`${JSON.stringify(plan, null, 2)}\n`);
+  const sourceReceipt = quiesceReceipt(plan, cutoverPlanSha256);
+  const sourceReceiptSha256 = hash(`${JSON.stringify(sourceReceipt, null, 2)}\n`);
+  const after = postSnapshot(plan);
+  const afterSha256 = hash(JSON.stringify(after));
+  const checkpoint = checkpointV2(plan, sourceReceipt, sourceReceiptSha256, after, afterSha256);
+  checkpoint.checkpointId = 'direct-vm-preflight-20260721-200600';
+  checkpoint.source.databaseNames[1] = 'easyfire_tenant_fixture1';
+  checkpoint.isolatedRestore.restoreContainer = 'easyfire-direct-vm-restore-20260721-200600';
+  checkpoint.isolatedRestore.restoreVolume = 'easyfire_direct_vm_restore_20260721_200600';
+  checkpoint.verification.dualLocation.primary = `${checkpoint.verification.dualLocation.primary}\\${checkpoint.checkpointId}`;
+  checkpoint.verification.dualLocation.secondary = `${checkpoint.verification.dualLocation.secondary}\\${checkpoint.checkpointId}`;
+  const checkpointManifestSha256 = hash(`${JSON.stringify(checkpoint, null, 2)}\n`);
+  const binding = contract.buildCheckpointBinding({
+    plan, planSha256: cutoverPlanSha256, sourceQuiesceReceipt: sourceReceipt,
+    sourceQuiesceReceiptSha256: sourceReceiptSha256, postQuiesceSnapshot: after,
+    postQuiesceSnapshotSha256: afterSha256, checkpoint,
+    checkpointSha256: checkpointManifestSha256,
+    boundAt: '2026-07-21T20:07:30.000Z',
+  });
+  const checkpointBindingSha256 = hash(`${JSON.stringify(binding, null, 2)}\n`);
+  const releaseCommit = plan.controller.releaseCommit;
+  const releasePath = `/opt/easyfire-bookkeeping/releases/${releaseCommit}`;
+  const deploymentId = 'direct-vm-20260721-c9a090cb';
+  const deploymentPlan = {
+    schemaVersion: 1, deploymentId, project: 'easyfire-bookkeeping-prod',
+    releaseCommit, releasePath, currentReleasePath: '/opt/easyfire-bookkeeping/current',
+    releaseManifest: { path: `${releasePath}/release-manifest.json`, sha256: plan.controller.releaseManifestSha256 },
+    sourceArchive: { path: '/var/lib/easyfire-bookkeeping-staging/source.tar.gz', sha256: digest('1') },
+    imageBundle: { path: '/var/lib/easyfire-bookkeeping-staging/images.tar', sha256: digest('2') },
+    environment: { path: '/etc/easyfire-bookkeeping/production.env', sha256: digest('3') },
+    checkpoint: {
+      manifestPath: '/var/lib/easyfire-bookkeeping-staging/checkpoint.json', manifestSha256: checkpointManifestSha256,
+      durableManifestPath: '/etc/easyfire-bookkeeping/checkpoint-manifest.json',
+      sqlGzipPath: '/var/lib/easyfire-bookkeeping-staging/database.sql.gz', sqlGzipSha256: checkpoint.payloads.sqlGzip.sha256,
+      redisRdbPath: '/var/lib/easyfire-bookkeeping-staging/dump.rdb', redisRdbSha256: checkpoint.payloads.redisRdb.sha256,
+    },
+    composeFiles: [`${releasePath}/docker-compose.prod.yml`, `${releasePath}/deploy/linux/docker-compose.vm.yml`, `${releasePath}/deploy/linux/docker-compose.candidate.yml`],
+    runtimeManifestGeneratorPath: '/opt/easyfire-bookkeeping/guardian/runtime-manifest-generator.js',
+    outputs: {
+      runtimeManifestPath: '/etc/easyfire-bookkeeping/runtime-manifest.json', runtimeIdentityEvidencePath: '/etc/easyfire-bookkeeping/runtime-identity-evidence.json',
+      migrationReceiptPath: '/etc/easyfire-bookkeeping/migration-receipt.json', deploymentReceiptPath: '/etc/easyfire-bookkeeping/deployment-receipt.json',
+      journalRoot: '/var/lib/easyfire-bookkeeping-deployments',
+    },
+    resources: { network: 'easyfire-bookkeeping-network', mysqlVolume: 'easyfire_bookkeeping_vm_20260721_c9a090cb_mysql', redisVolume: 'easyfire_bookkeeping_vm_20260721_c9a090cb_redis' },
+    expected: {
+      systemDatabase: 'easyfire_system', tenantDatabase: 'easyfire_tenant_fixture1', systemTableCount: 17, tenantTableCount: 70,
+      identityCounts: [1, 1, 1, 1], protectedTableCounts: Object.fromEntries(deployPlanContract.PROTECTED_ACCOUNTING_TABLES.map((name) => [name, 0])), redisKeyUpperBound: 35,
+    },
+  };
+  const deploymentPlanSha256 = hash(`${JSON.stringify(deploymentPlan, null, 2)}\n`);
+  const deploymentReceipt = {
+    schemaVersion: 1, project: 'easyfire-bookkeeping', deploymentId, releaseCommit,
+    releaseManifestSha256: plan.controller.releaseManifestSha256,
+    checkpointManifestSha256, environmentSha256: deploymentPlan.environment.sha256,
+    deploymentPlanSha256, migrationReceiptSha256: digest('4'), runtimeManifestSha256: digest('5'),
+    runtimeIdentityEvidenceSha256: digest('6'), completedAt: '2026-07-21T20:08:00.000Z', status: 'complete',
+  };
+  const deploymentReceiptSha256 = hash(`${JSON.stringify(deploymentReceipt, null, 2)}\n`);
+  const backupReceipt = {
+    schemaVersion: 2, status: 'passed', completedAt: '2026-07-21T20:08:30.000Z', backupStamp: '20260721T200830Z',
+    sourceAuthority: {
+      deploymentId, releaseCommit, sourceReleasePath: releasePath,
+      releaseManifestSha256: plan.controller.releaseManifestSha256,
+      checkpointManifestSha256, environmentSha256: deploymentPlan.environment.sha256,
+      deploymentPlanSha256, migrationReceiptSha256: deploymentReceipt.migrationReceiptSha256,
+      deploymentReceiptSha256, runtimeManifestSha256: deploymentReceipt.runtimeManifestSha256,
+      runtimeIdentityEvidenceSha256: deploymentReceipt.runtimeIdentityEvidenceSha256,
+    },
+    sourceContainers: {
+      mysql: { name: deployPlanContract.SERVICE_CONTRACT.mysql.name, id: digest('1'), imageReference: 'easyfire-bookkeeping/mariadb:11.8.6', imageId: image('1') },
+      redis: { name: deployPlanContract.SERVICE_CONTRACT.redis.name, id: digest('2'), imageReference: 'easyfire-bookkeeping/redis:8.4.1', imageId: image('2') },
+    },
+    sourceVolumes: { mysql: deploymentPlan.resources.mysqlVolume, redis: deploymentPlan.resources.redisVolume },
+    databases: [deploymentPlan.expected.systemDatabase, deploymentPlan.expected.tenantDatabase],
+    artifacts: { databaseSha256: digest('3'), redisSha256: digest('4'), sha256Manifest: 'SHA256SUMS', sha256ManifestSha256: digest('7'), verificationOutput: 'verification.txt', verificationOutputSha256: digest('6') },
+    validation: {
+      systemTableCount: 17, tenantTableCount: 70, identityCounts: [1, 1, 1, 1],
+      identityCountsEvidence: { path: 'proof/identity-invariants.tsv', sha256: digest('7'), valueDomain: 'nonnegative-integer' },
+      schemaTableInventory: { tableCount: 87, sourceEvidence: 'proof/source-schema-tables.tsv', sourceEvidenceSha256: digest('8'), restoredEvidence: 'proof/restored-schema-tables.tsv', restoredEvidenceSha256: digest('8'), exactMatch: true, baseTableEngine: 'InnoDB' },
+      protectedAccountingCounts: { tableCount: 37, evidence: 'proof/protected-accounting-counts.tsv', evidenceSha256: digest('9'), valueDomain: 'nonnegative-integer' },
+      applicationUserQueries: true,
+    },
+    restoreProof: { container: 'easyfire-bookkeeping-backup-restore-20260721t200830z', volume: 'easyfire_bookkeeping_backup_restore_20260721t200830z', network: 'none', state: 'stopped-preserved', consistency: 'mariadb-single-transaction', credentials: 'ephemeral-random-destroyed' },
+  };
+  const backupReceiptSha256 = hash(`${JSON.stringify(backupReceipt, null, 2)}\n`);
+  const backupComplete = { schemaVersion: 1, status: 'complete', backupStamp: backupReceipt.backupStamp, receipt: 'backup-receipt.json', receiptSha256: backupReceiptSha256, sha256Manifest: 'SHA256SUMS', sha256ManifestSha256: digest('7') };
+  const backupCompleteSha256 = hash(`${JSON.stringify(backupComplete, null, 2)}\n`);
+  const rehearsalPlan = {
+    schemaVersion: 1, project: 'easyfire-bookkeeping', kind: 'easyfire-bookkeeping-linux-rehearsal-plan', rehearsalId: '936de674-58c3-4c99-93bc-a157d36ee4c7', createdAt: '2026-07-21T18:00:00.000Z',
+    host: { hostname: 'easyfire-bookkeeping-rehearsal-newsec', machineIdSha256: digest('8'), productionMachineIdSha256: digest('9') },
+    release: { releaseCommit, releasePath, releaseManifestPath: `${releasePath}/release-manifest.json`, releaseManifestSha256: plan.controller.releaseManifestSha256 },
+    deployment: { deploymentId: 'direct-vm-20260720-deadbeef', planPath: '/etc/easyfire-bookkeeping/deployment-plan.json', planSha256: digest('a'), receiptPath: '/etc/easyfire-bookkeeping/deployment-receipt.json', receiptSha256: digest('b') },
+    rollback: { armedReceiptPath: '/etc/easyfire-bookkeeping/rollback-evidence/rehearsals/direct-vm-20260720-deadbeef/123e4567-e89b-42d3-a456-426614174000/armed.json', lockedRebootReceiptPath: '/etc/easyfire-bookkeeping/rollback-evidence/rehearsals/direct-vm-20260720-deadbeef/123e4567-e89b-42d3-a456-426614174000/locked-reboot.json', rearmReceiptPath: '/etc/easyfire-bookkeeping/rollback-evidence/rehearsals/direct-vm-20260720-deadbeef/123e4567-e89b-42d3-a456-426614174000/rearm-complete.json' },
+    authenticationProofPath: '/etc/easyfire-bookkeeping/activation-proof/authentication.json', outputPath: '/etc/easyfire-bookkeeping/rehearsal-evidence.json',
+  };
+  const rehearsalEvidence = rehearsalContract.buildRehearsalEvidence({
+    plan: rehearsalPlan, collector: { executablePath: `${releasePath}/scripts/production/linux-rehearsal-evidence.mjs`, executableSha256: digest('c') },
+    host: { hostname: rehearsalPlan.host.hostname, machineIdSha256: rehearsalPlan.host.machineIdSha256 },
+    rollback: { armedReceiptSha256: digest('d'), lockedRebootReceiptSha256: digest('e'), rearmReceiptSha256: digest('f'), bootIdBefore: '1516c5b2-3340-4c02-b9c4-7a340930088d', bootIdAfter: '53682154-c88d-48ee-9194-adac4790d8cc', lockedAt: '2026-07-21T18:10:00.000Z', rearmedAt: '2026-07-21T18:12:00.000Z', resourcesPreserved: true },
+    normalReboot: { markerSha256: digest('1'), proofSha256: digest('2'), bootIdBefore: '53682154-c88d-48ee-9194-adac4790d8cc', bootIdAfter: '71129d5d-51c2-4599-9b9e-72a649d1eef2', completedAt: '2026-07-21T18:57:00.000Z', stackAuthorityVerified: true, guardianTimerActive: true, guardianTimerEnabled: true },
+    recovery: { proofSha256: digest('3'), dockerRestart: { before: digest('4'), after: digest('5'), mainPidBefore: '100', mainPidAfter: '101', recovered: true }, daemonFailure: { mainPidBefore: '101', mainPidAfter: '102', failureObserved: true, recovered: true }, invalidAuthorityStart: { refused: true, originalReceiptSha256: digest('b'), invalidReceiptSha256: digest('6'), originalReceiptRestored: true }, completedAt: '2026-07-21T18:30:00.000Z' },
+    guardian: { proofSha256: digest('7'), shadowObservationCount: 3, shadowWouldStartObserved: true, statelessStartContainerIdSha256: digest('8'), statelessRecoveryObserved: true, cooldownObserved: true, redisObserveOnlyRefusalObserved: true, mariadbObserveOnlyRefusalObserved: true, identityMismatchRefusalObserved: true, finalHealthVerified: true, completedAt: '2026-07-21T18:20:00.000Z' },
+    authentication: { proofSha256: digest('9'), method: 'native-password-interactive', ownerConfirmed: true, authenticatedApiPassed: true, dataInvariantsPassed: true, secretMaterialPersisted: false, completedAt: '2026-07-21T18:55:00.000Z' }, completedAt: '2026-07-21T19:00:00.000Z',
+  });
+  const rehearsalEvidenceSha256 = hash(`${JSON.stringify(rehearsalEvidence, null, 2)}\n`);
+  const authenticationProof = nativeAuth.buildNativeAuthenticationProof({
+    authority: { deploymentId, releaseCommit, releaseManifestSha256: plan.controller.releaseManifestSha256, checkpointManifestSha256, deploymentPlanSha256, deploymentReceiptSha256, collectorPath: `${releasePath}/scripts/production/linux-native-auth-proof.mjs`, collectorSha256: digest('a') },
+    completedAt: '2026-07-21T20:09:15.000Z', ownerConfirmed: true, principalBindingSha256: digest('b'), accountResponseSha256: digest('c'), organizationResponseSha256: digest('d'),
+    dataProof: { systemTableCount: 17, tenantTableCount: 70, identityCounts: [1, 1, 1, 1], protectedTableCounts: Object.fromEntries(nativeAuth.PROTECTED_ACCOUNTING_TABLES.map((name) => [name, 0])), redisDatabaseSize: 20, redisKeyUpperBound: 35, mariadbCheckSha256: digest('e') },
+  });
+  const authenticationSha256 = hash(`${JSON.stringify(authenticationProof, null, 2)}\n`);
+  const shadowConfig = { schemaVersion: 1, runtimeManifestPath: '/etc/easyfire-bookkeeping/runtime-manifest.json', statePath: '/var/lib/easyfire-bookkeeping-guardian/state.json', statusPath: '/var/lib/easyfire-bookkeeping-guardian/status.json', dockerSocketPath: '/var/run/docker.sock', failureThreshold: 3, cooldownSeconds: 900, attemptWindowSeconds: 3600, maxRecoveryAttempts: 2, shadowMode: true, probes: [{ name: 'web', url: 'http://127.0.0.1:8080/', timeoutMs: 3000, expectedStatus: 200 }, { name: 'api-system', url: 'http://127.0.0.1:8080/api/system_db', timeoutMs: 3000, expectedStatus: 200 }, { name: 'auth-meta', url: 'http://127.0.0.1:8080/api/auth/meta', timeoutMs: 3000, expectedStatus: 200 }] };
+  const activeConfig = guardian.buildActiveGuardianConfig(shadowConfig);
+  const hashes = { cutoverPlan: cutoverPlanSha256, sourceReceipt: sourceReceiptSha256, checkpointBinding: checkpointBindingSha256, checkpointManifest: checkpointManifestSha256, deploymentPlan: deploymentPlanSha256, deploymentReceipt: deploymentReceiptSha256, backupReceipt: backupReceiptSha256, backupComplete: backupCompleteSha256, rehearsalEvidence: rehearsalEvidenceSha256, guardianShadowConfig: hash(`${JSON.stringify(shadowConfig, null, 2)}\n`), guardianConfig: hash(`${JSON.stringify(activeConfig, null, 2)}\n`), authentication: authenticationSha256, network: digest('f') };
+  const promotion = { schemaVersion: 1, project: 'easyfire-bookkeeping', kind: 'easyfire-bookkeeping-guardian-active-promotion', status: 'active-config-materialized', promotedAt: '2026-07-21T20:09:00.000Z', deploymentId, releaseCommit, executablePath: `${releasePath}/scripts/production/linux-guardian-promote-active.mjs`, executableSha256: plan.controller.guardianPromotionSha256, releaseManifestSha256: plan.controller.releaseManifestSha256, cutoverPlanSha256, deploymentPlanSha256, rehearsalId: rehearsalEvidence.rehearsalId, rehearsalDeploymentId: rehearsalEvidence.rehearsalDeployment.deploymentId, rehearsalEvidencePath: '/etc/easyfire-bookkeeping/rehearsal-evidence.json', rehearsalEvidenceSha256, rehearsalHostMachineIdSha256: rehearsalEvidence.host.machineIdSha256, shadowConfigPath: '/etc/easyfire-bookkeeping/guardian.shadow.json', shadowConfigSha256: hashes.guardianShadowConfig, productionConfigPath: '/etc/easyfire-bookkeeping/guardian.json', productionConfigSha256: hashes.guardianConfig, timerWasInactive: true, timerActivationPerformed: false, resourcesDeleted: false };
+  hashes.guardianPromotion = hash(`${JSON.stringify(promotion, null, 2)}\n`);
+  const collectionPlan = { schemaVersion: 1, project: 'easyfire-bookkeeping', kind: 'easyfire-bookkeeping-activation-evidence-collection-plan', cutoverId: plan.cutoverId, createdAt: '2026-07-21T20:09:30.000Z', files: { cutoverPlan: '/etc/easyfire-bookkeeping/cutover-plan.json', sourceQuiesceReceipt: '/etc/easyfire-bookkeeping/source-quiesce-receipt.json', checkpointBinding: '/etc/easyfire-bookkeeping/source-quiesce-checkpoint-binding.json', checkpointManifest: '/etc/easyfire-bookkeeping/checkpoint-manifest.json', deploymentPlan: '/etc/easyfire-bookkeeping/deployment-plan.json', deploymentReceipt: '/etc/easyfire-bookkeeping/deployment-receipt.json', rehearsalEvidence: '/etc/easyfire-bookkeeping/rehearsal-evidence.json', guardianPromotion: '/etc/easyfire-bookkeeping/guardian-active-promotion.json', authentication: '/etc/easyfire-bookkeeping/activation-proof/authentication.json', guardianConfig: '/etc/easyfire-bookkeeping/guardian.json', guardianShadowConfig: '/etc/easyfire-bookkeeping/guardian.shadow.json', backupReceipt: '/var/backups/easyfire-bookkeeping/20260721T200830Z/backup-receipt.json', backupComplete: '/var/backups/easyfire-bookkeeping/20260721T200830Z/COMPLETE' } };
+  const collectorIdentity = { schemaVersion: 1, kind: 'easyfire-bookkeeping-release-bound-activation-evidence-collector', sourceReleasePath: releasePath, executablePath: `${releasePath}/scripts/production/linux-activation-evidence-collect.mjs`, executableSha256: plan.controller.activationEvidenceCollectorSha256, releaseManifestSha256: plan.controller.releaseManifestSha256, collectionPlanSha256: digest('1'), outputPath: '/etc/easyfire-bookkeeping/cutover-evidence.json', outputPublishedCreateNew: true, secureFilesVerified: true, semanticProofsVerified: true, liveReadbacksVerified: true };
+  const activationInputs = { collectionPlan, cutoverPlan: plan, sourceReceipt, checkpointBinding: binding, checkpointManifest: checkpoint, deploymentPlan, deploymentReceipt, backupReceipt, backupComplete, rehearsalEvidence, guardianPromotion: promotion, guardianShadowConfig: shadowConfig, guardianConfig: activeConfig, authenticationProof, network: { backendState: 'Running', selfOnline: true, dnsName: `${plan.target.tailscaleDnsName}.`, serveAbsent: true, funnelAbsent: true, publicExposure: false, publicListeners: [] }, live: { deploymentVerified: true, stackActive: true, guardianTimerActive: true, guardianTimerEnabled: true, guardianConfigMode: 'root:root-0600' }, hashes, collector: collectorIdentity, collectedAt: '2026-07-21T20:10:00.000Z' };
+  const evidence = collector.buildActivationEvidence(activationInputs);
+  assert.equal(contract.validateActivationEvidence(evidence, plan, sourceReceiptSha256).status, 'all-gates-passed');
+  assert.equal(evidence.guest.rehearsal.deploymentId, rehearsalPlan.deployment.deploymentId);
+  assert.equal('rollback' in evidence.guest, false);
+  assert.equal('reboot' in evidence.guest, false);
+  const emptyArtifacts = structuredClone(activationInputs);
+  emptyArtifacts.backupReceipt.artifacts = {};
+  assert.throws(() => collector.buildActivationEvidence(emptyArtifacts), /backup|artifact|field/i);
+  const authorityDrift = structuredClone(activationInputs);
+  authorityDrift.backupReceipt.sourceAuthority.runtimeManifestSha256 = digest('0');
+  assert.throws(() => collector.buildActivationEvidence(authorityDrift), /backup|authority|bound/i);
+
+  const artifactReceipt = structuredClone(backupReceipt);
+  const artifactPaths = collector.expectedBackupArtifactPaths(artifactReceipt);
+  const observedHashes = Object.fromEntries(artifactPaths.map((name) => [name, digest('a')]));
+  const databasePath = artifactPaths.find((name) => name.startsWith('database/'));
+  const redisPath = artifactPaths.find((name) => name.startsWith('redis/'));
+  observedHashes[databasePath] = artifactReceipt.artifacts.databaseSha256;
+  observedHashes[redisPath] = artifactReceipt.artifacts.redisSha256;
+  observedHashes['proof/identity-invariants.tsv'] = artifactReceipt.validation.identityCountsEvidence.sha256;
+  observedHashes['proof/source-schema-tables.tsv'] = artifactReceipt.validation.schemaTableInventory.sourceEvidenceSha256;
+  observedHashes['proof/restored-schema-tables.tsv'] = artifactReceipt.validation.schemaTableInventory.restoredEvidenceSha256;
+  observedHashes['proof/protected-accounting-counts.tsv'] = artifactReceipt.validation.protectedAccountingCounts.evidenceSha256;
+  observedHashes['authority/release-manifest.json'] = artifactReceipt.sourceAuthority.releaseManifestSha256;
+  observedHashes['authority/checkpoint-manifest.json'] = artifactReceipt.sourceAuthority.checkpointManifestSha256;
+  observedHashes['authority/migration-receipt.json'] = artifactReceipt.sourceAuthority.migrationReceiptSha256;
+  observedHashes['authority/deployment-receipt.json'] = artifactReceipt.sourceAuthority.deploymentReceiptSha256;
+  observedHashes['authority/runtime-manifest.json'] = artifactReceipt.sourceAuthority.runtimeManifestSha256;
+  observedHashes['authority/runtime-identity-evidence.json'] = artifactReceipt.sourceAuthority.runtimeIdentityEvidenceSha256;
+  const manifestBytes = Buffer.from(artifactPaths.map((name) => `${observedHashes[name]}  ${name}\n`).join(''));
+  const verificationBytes = Buffer.from(artifactPaths.map((name) => `${name}: OK\n`).join(''));
+  artifactReceipt.artifacts.sha256ManifestSha256 = hash(manifestBytes);
+  artifactReceipt.artifacts.verificationOutputSha256 = hash(verificationBytes);
+  assert.equal(collector.validateBackupArtifactSet({
+    receipt: artifactReceipt, manifestBytes, verificationBytes, observedHashes,
+  }).artifactCount, artifactPaths.length);
+  const missingDatabase = { ...observedHashes };
+  delete missingDatabase[databasePath];
+  assert.throws(() => collector.validateBackupArtifactSet({
+    receipt: artifactReceipt, manifestBytes, verificationBytes, observedHashes: missingDatabase,
+  }), /backup|artifact|missing|field/i);
+  const corruptProof = { ...observedHashes, 'proof/protected-accounting-counts.tsv': digest('0') };
+  assert.throws(() => collector.validateBackupArtifactSet({
+    receipt: artifactReceipt, manifestBytes, verificationBytes, observedHashes: corruptProof,
+  }), /backup|artifact|hash/i);
+  const restoreContainer = [{
+    Id: digest('b'), Name: `/${artifactReceipt.restoreProof.container}`,
+    Image: artifactReceipt.sourceContainers.mysql.imageId,
+    Config: { Labels: { 'easyfire.bookkeeping.purpose': 'backup-restore-proof', 'easyfire.bookkeeping.backup-stamp': artifactReceipt.backupStamp } },
+    State: { Status: 'exited', Running: false },
+    HostConfig: { NetworkMode: 'none', RestartPolicy: { Name: 'no' } },
+    Mounts: [
+      { Type: 'bind', Source: '/run/easyfire-bookkeeping-backup-proof.abcdefgh', Destination: '/run/easyfire-proof-secrets', RW: false },
+      { Type: 'volume', Name: artifactReceipt.restoreProof.volume, Destination: '/var/lib/mysql', RW: true },
+    ],
+  }];
+  const restoreVolume = [{
+    Name: artifactReceipt.restoreProof.volume, Driver: 'local', Scope: 'local',
+    Labels: { 'easyfire.bookkeeping.purpose': 'backup-restore-proof', 'easyfire.bookkeeping.backup-stamp': artifactReceipt.backupStamp },
+  }];
+  assert.equal(collector.validatePreservedBackupRestore({
+    receipt: artifactReceipt, containerInspection: restoreContainer,
+    volumeInspection: restoreVolume,
+  }).preserved, true);
+  const runningRestore = structuredClone(restoreContainer);
+  runningRestore[0].State.Running = true;
+  assert.throws(() => collector.validatePreservedBackupRestore({
+    receipt: artifactReceipt, containerInspection: runningRestore,
+    volumeInspection: restoreVolume,
+  }), /backup|restore|stopped|preserved/i);
 });
 
 test('activation authorization grants one fresh tailnet-only Serve route', () => {
@@ -1122,7 +1322,7 @@ test('Linux route activation is immutable-release-bound before its once-only loc
   assert.doesNotMatch(source, /\bunlink\b/);
 });
 
-test('Guardian promotion requires both rehearsals and materializes only the exact active policy', () => {
+test('Guardian promotion materializes only the exact active policy', () => {
   const shadowConfig = {
     schemaVersion: 1,
     runtimeManifestPath: '/etc/easyfire-bookkeeping/runtime-manifest.json',
@@ -1143,46 +1343,6 @@ test('Guardian promotion requires both rehearsals and materializes only the exac
   const activeConfig = guardian.buildActiveGuardianConfig(shadowConfig);
   assert.equal(activeConfig.shadowMode, false);
   assert.equal(shadowConfig.shadowMode, true);
-  const shadowHash = hash(`${JSON.stringify(shadowConfig, null, 2)}\n`);
-  const activeHash = hash(`${JSON.stringify(activeConfig, null, 2)}\n`);
-  const common = {
-    schemaVersion: 1,
-    project: 'easyfire-bookkeeping',
-    status: 'passed',
-    completedAt: '2026-07-21T20:09:00.000Z',
-    deploymentId: 'direct-vm-20260721-c9a090cb',
-    releaseCommit: '8'.repeat(40),
-    disposableOnly: true,
-    productionMutationCount: 0,
-  };
-  const shadowProof = {
-    ...common,
-    kind: 'easyfire-bookkeeping-guardian-shadow-rehearsal',
-    configSha256: shadowHash,
-    healthyObservationsPassed: true,
-  };
-  const activeProof = {
-    ...common,
-    kind: 'easyfire-bookkeeping-guardian-active-disposable-rehearsal',
-    configSha256: activeHash,
-    statelessRecoveryPassed: true,
-    cooldownBudgetPassed: true,
-    databaseAutoRecoveryRefused: true,
-    identityMismatchRefused: true,
-    healthyAfterRehearsal: true,
-  };
-  assert.equal(guardian.validateGuardianRehearsalProofs({
-    shadowProof,
-    activeProof,
-    shadowConfigSha256: shadowHash,
-    activeConfigSha256: activeHash,
-  }).deploymentId, common.deploymentId);
-  assert.throws(() => guardian.validateGuardianRehearsalProofs({
-    shadowProof,
-    activeProof: { ...activeProof, databaseAutoRecoveryRefused: false },
-    shadowConfigSha256: shadowHash,
-    activeConfigSha256: activeHash,
-  }));
 });
 
 test('Guardian active promotion is release-bound before systemd or config mutation', async () => {
@@ -1191,11 +1351,17 @@ test('Guardian active promotion is release-bound before systemd or config mutati
     'utf8',
   );
   assert.match(source, /parseManifestBoundRelease/);
+  assert.match(source, /validateRehearsalEvidence/);
+  assert.match(source, /rehearsalArtifact\.sha256/);
+  assert.match(source, /authority\.rehearsalCollectorSha256/);
+  assert.match(source, /rehearsal-evidence\.json/);
+  assert.match(source, /rehearsalEvidenceSha256/);
   assert.match(source, /validateCutoverPlan/);
   assert.match(source, /validateDeploymentPlan/);
-  assert.match(source, /deployment\.deploymentId !== authority\.deploymentId/);
+  assert.match(source, /deployment\.releaseCommit !== authority\.releaseCommit/);
   assert.match(source, /realpath\(process\.argv\[1\]\)/);
   assert.match(source, /artifact\.bytes/);
+  assert.doesNotMatch(source, /--shadow-proof|--active-proof/);
   const promote = source.indexOf('async function promote');
   const immutableGate = source.indexOf('assertImmutableReleaseExecutor', promote);
   const systemd = source.indexOf('requireTimerInactive()', promote);
@@ -1217,18 +1383,13 @@ test('activation evidence collection has fixed proof paths and exclusive root-ow
       checkpointManifest: '/etc/easyfire-bookkeeping/checkpoint-manifest.json',
       deploymentPlan: '/etc/easyfire-bookkeeping/deployment-plan.json',
       deploymentReceipt: '/etc/easyfire-bookkeeping/deployment-receipt.json',
-      reboot: '/etc/easyfire-bookkeeping/activation-proof/reboot.json',
-      recovery: '/etc/easyfire-bookkeeping/activation-proof/recovery.json',
-      guardianShadow: '/etc/easyfire-bookkeeping/guardian-proof/shadow.json',
-      guardianActive: '/etc/easyfire-bookkeeping/guardian-proof/active-disposable.json',
+      rehearsalEvidence: '/etc/easyfire-bookkeeping/rehearsal-evidence.json',
       guardianPromotion: '/etc/easyfire-bookkeeping/guardian-active-promotion.json',
       authentication: '/etc/easyfire-bookkeeping/activation-proof/authentication.json',
       guardianConfig: '/etc/easyfire-bookkeeping/guardian.json',
       guardianShadowConfig: '/etc/easyfire-bookkeeping/guardian.shadow.json',
       backupReceipt: '/var/backups/easyfire-bookkeeping/20260721T200900Z/backup-receipt.json',
       backupComplete: '/var/backups/easyfire-bookkeeping/20260721T200900Z/COMPLETE',
-      rollbackArmed: '/etc/easyfire-bookkeeping/rollback-evidence/rehearsals/direct-vm-20260721-c9a090cb/123e4567-e89b-42d3-a456-426614174000/armed.json',
-      rollbackRearm: '/etc/easyfire-bookkeeping/rollback-evidence/rehearsals/direct-vm-20260721-c9a090cb/123e4567-e89b-42d3-a456-426614174000/rearm-complete.json',
     },
   };
   assert.equal(collector.validateCollectionPlan(plan).cutoverId, plan.cutoverId);
@@ -1240,7 +1401,21 @@ test('activation evidence collection has fixed proof paths and exclusive root-ow
   assert.match(source, /O_EXCL/);
   assert.match(source, /const OUTPUT = .*cutover-evidence\.json|export const OUTPUT = .*cutover-evidence\.json/);
   assert.match(source, /--verify-existing/);
+  assert.match(source, /validateRehearsalEvidence/);
+  assert.match(source, /rehearsalArtifact\.sha256/);
+  assert.match(source, /authenticationArtifact\.sha256/);
+  assert.match(source, /authenticationProof\.collector\.executableSha256/);
+  assert.doesNotMatch(source, /validateRebootRecovery|validateRollback/);
   assert.match(source, /funnel.*status/i);
+  const collectStart = source.indexOf('async function collect');
+  const absencePreflight = source.indexOf('await assertOutputsAbsent()', collectStart);
+  const backupRevalidation = source.indexOf('await revalidateBackupArtifacts(', collectStart);
+  const restoreRevalidation = source.indexOf('await revalidateBackupRestoreState(', collectStart);
+  const firstPublication = source.indexOf('await writeExclusive(NETWORK_PROOF', collectStart);
+  assert.ok(absencePreflight > collectStart && absencePreflight < firstPublication);
+  assert.ok(backupRevalidation > absencePreflight && backupRevalidation < firstPublication);
+  assert.ok(restoreRevalidation > backupRevalidation && restoreRevalidation < firstPublication);
+  assert.match(source, /Promise\.all\(\[OUTPUT, NETWORK_PROOF\]/);
 });
 
 test('activation evidence chronology rejects stale or reordered migration proofs', () => {
@@ -1250,12 +1425,7 @@ test('activation evidence chronology rejects stale or reordered migration proofs
     checkpointCreatedAt: '2026-07-21T20:02:00.000Z',
     deploymentCompletedAt: '2026-07-21T20:03:00.000Z',
     backupCompletedAt: '2026-07-21T20:04:00.000Z',
-    rollbackArmedAt: '2026-07-21T20:05:00.000Z',
-    rollbackLockedRebootVerifiedAt: '2026-07-21T20:06:00.000Z',
-    rollbackRearmedAt: '2026-07-21T20:07:00.000Z',
-    recoveryCompletedAt: '2026-07-21T20:07:30.000Z',
-    guardianShadowCompletedAt: '2026-07-21T20:08:00.000Z',
-    guardianActiveCompletedAt: '2026-07-21T20:08:30.000Z',
+    rehearsalCompletedAt: '2026-07-21T19:00:00.000Z',
     guardianPromotedAt: '2026-07-21T20:09:00.000Z',
     authenticationCompletedAt: '2026-07-21T20:09:15.000Z',
     collectionPlanCreatedAt: '2026-07-21T20:09:30.000Z',
@@ -1264,9 +1434,21 @@ test('activation evidence chronology rejects stale or reordered migration proofs
   assert.equal(collector.validateProofChronology(timeline, collectedAt).ordered, true);
   assert.throws(() => collector.validateProofChronology({
     ...timeline,
-    rollbackRearmedAt: '2026-07-21T20:05:30.000Z',
+    guardianPromotedAt: '2026-07-21T18:59:00.000Z',
   }, collectedAt), /chronolog|order/i);
   assert.throws(() => collector.validateProofChronology(timeline, '2026-07-23T20:10:00.000Z'), /stale|fresh/i);
+});
+
+test('activation evidence validator recomputes its advertised freshness window', () => {
+  const plan = planFixture();
+  const receipt = quiesceReceipt(plan);
+  const receiptSha256 = hash(`${JSON.stringify(receipt, null, 2)}\n`);
+  const evidence = activationEvidence(plan, receiptSha256);
+  evidence.chronology.sourceQuiescedAt = '2026-07-20T20:09:59.999Z';
+  assert.throws(
+    () => contract.validateActivationEvidence(evidence, plan, receiptSha256),
+    /chronology|stale|fresh/i,
+  );
 });
 
 test('Windows controller contains no cleanup/delete authority and gates every live stage', async () => {

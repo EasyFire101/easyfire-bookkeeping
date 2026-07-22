@@ -38,6 +38,10 @@ const releaseArtifactSpecs = [
   ['scripts/production/linux-deploy-authority.mjs', '0644'],
   ['scripts/production/linux-release-authority-verify.mjs', '0644'],
   ['scripts/production/linux-release-manifest-v2.mjs', '0644'],
+  ['scripts/production/linux-oci-bundle-produce.mjs', '0644'],
+  ['scripts/production/linux-target-engine-evidence-produce.mjs', '0644'],
+  ['scripts/production/linux-native-auth-proof.mjs', '0644'],
+  ['scripts/production/linux-rehearsal-evidence.mjs', '0644'],
   ['scripts/production/linux-source-archive-authority.mjs', '0644'],
   ['scripts/production/linux-deploy-docker.mjs', '0644'],
   ['scripts/production/linux-deploy-plan.mjs', '0644'],
@@ -89,49 +93,49 @@ function releaseManifest() {
         reference: `envoyproxy/envoy:v1.30.11@${sha('a')}`,
         ociIndexDigest: sha('a'),
         linuxAmd64ManifestDigest: sha('1'),
-        engineImageId: sha('8'),
+        engineImageId: sha('a'),
       },
       {
         role: 'webapp',
         reference: `easyfire-bookkeeping/webapp:git-${releaseCommit}`,
         ociIndexDigest: sha('b'),
         linuxAmd64ManifestDigest: sha('c'),
-        engineImageId: sha('2'),
+        engineImageId: sha('b'),
       },
       {
         role: 'server',
         reference: `easyfire-bookkeeping/server:git-${releaseCommit}`,
         ociIndexDigest: sha('d'),
         linuxAmd64ManifestDigest: sha('e'),
-        engineImageId: sha('3'),
+        engineImageId: sha('d'),
       },
       {
         role: 'gotenberg',
         reference: `gotenberg/gotenberg:7.10.2@${sha('f')}`,
         ociIndexDigest: sha('f'),
         linuxAmd64ManifestDigest: sha('0'),
-        engineImageId: sha('9'),
+        engineImageId: sha('f'),
       },
       {
         role: 'mysql',
         reference: `easyfire-bookkeeping/mariadb:git-${releaseCommit}`,
         ociIndexDigest: sha('1'),
         linuxAmd64ManifestDigest: sha('2'),
-        engineImageId: sha('5'),
+        engineImageId: sha('1'),
       },
       {
         role: 'redis',
         reference: `easyfire-bookkeeping/redis:git-${releaseCommit}`,
         ociIndexDigest: sha('3'),
         linuxAmd64ManifestDigest: sha('4'),
-        engineImageId: sha('6'),
+        engineImageId: sha('3'),
       },
       {
         role: 'migration',
         reference: `easyfire-bookkeeping/migration:git-${releaseCommit}`,
         ociIndexDigest: sha('5'),
         linuxAmd64ManifestDigest: sha('6'),
-        engineImageId: sha('7'),
+        engineImageId: sha('5'),
       },
     ],
   };
@@ -140,12 +144,7 @@ function releaseManifest() {
 function fakeDocker(manifest, overrides = {}) {
   const entries = new Map(manifest.images.map((entry) => [entry.role, entry]));
   const actualImageIds = new Map(
-    runtimeRoles.map((role, index) => [
-      role,
-      ['envoy', 'gotenberg'].includes(role)
-        ? sha(role === 'envoy' ? '8' : '9')
-        : entries.get(role).engineImageId,
-    ]),
+    runtimeRoles.map((role) => [role, entries.get(role).engineImageId]),
   );
   const calls = [];
   const transport = async (method, requestPath) => {
@@ -370,7 +369,7 @@ test('two concurrent publishers cannot overwrite or cross-pair runtime evidence'
   assert.equal(runtime.writer, evidence.writer);
 });
 
-test('uses the container config image ID when an external release entry names an OCI index digest', async (t) => {
+test('binds the Docker 29 image ID to the external root OCI index digest', async (t) => {
   const { manifest, options } = await fixture(t);
   const docker = fakeDocker(manifest);
 
@@ -383,15 +382,15 @@ test('uses the container config image ID when an external release entry names an
   const evidence = JSON.parse(await readFile(options.evidencePath, 'utf8'));
   assert.deepEqual(runtime, generated.runtimeManifest);
   assert.equal(runtime.services.length, 6);
-  assert.equal(runtime.services.find(({ role }) => role === 'envoy').imageId, sha('8'));
-  assert.notEqual(
+  assert.equal(runtime.services.find(({ role }) => role === 'envoy').imageId, sha('a'));
+  assert.equal(
     runtime.services.find(({ role }) => role === 'envoy').imageId,
     manifest.images.find(({ role }) => role === 'envoy').ociIndexDigest,
   );
   const envoyEvidence = evidence.services.find(({ role }) => role === 'envoy');
   assert.equal(envoyEvidence.ociIndexDigest, sha('a'));
   assert.equal(envoyEvidence.linuxAmd64ManifestDigest, sha('1'));
-  assert.equal(envoyEvidence.engineImageId, sha('8'));
+  assert.equal(envoyEvidence.engineImageId, sha('a'));
   assert.equal(
     evidence.services.find(({ role }) => role === 'envoy').verifiedRepoDigest,
     expectedRepoDigest(manifest.images.find(({ role }) => role === 'envoy').reference),
@@ -404,11 +403,40 @@ test('uses the container config image ID when an external release entry names an
   assert.ok(docker.calls.every(({ method }) => method === 'GET'));
 });
 
+test('accepts the bounded external offline-load state without losing root-index authority', async (t) => {
+  const { manifest, options } = await fixture(t);
+  const docker = fakeDocker(manifest, {
+    envoyImage: { RepoDigests: [] },
+    gotenbergImage: { RepoDigests: [] },
+  });
+
+  const generated = await generateRuntimeManifest(options, {
+    transport: docker.transport,
+    now: () => new Date('2026-07-21T22:35:00.000Z'),
+  });
+  for (const role of ['envoy', 'gotenberg']) {
+    const evidence = generated.evidence.services.find((entry) => entry.role === role);
+    const release = manifest.images.find((entry) => entry.role === role);
+    assert.equal(evidence.engineImageId, release.ociIndexDigest);
+    assert.equal(evidence.actualImageId, release.ociIndexDigest);
+    assert.equal(evidence.verifiedRepoDigest, null);
+    assert.match(evidence.configuredImageReference, /@sha256:[a-f0-9]{64}$/);
+  }
+
+  const verified = await verifyExistingRuntimeManifest(options, {
+    transport: docker.transport,
+  });
+  assert.equal(
+    verified.services.find(({ role }) => role === 'envoy').verifiedRepoDigest,
+    null,
+  );
+});
+
 test('fails closed when a custom engineImageId differs from the local config image object', async (t) => {
   const { manifest, options } = await fixture(t);
   const docker = fakeDocker(manifest, {
-    serverImage: { Id: sha('d') },
-    serverContainer: { Image: sha('d') },
+    serverImage: { Id: sha('c') },
+    serverContainer: { Image: sha('c') },
   });
 
   await assert.rejects(
@@ -434,7 +462,7 @@ test('fails closed when an external engineImageId differs even if its repo diges
   await assertMissing(options.evidencePath);
 });
 
-test('fails closed when an external local image does not prove the required repo digest', async (t) => {
+test('fails closed when an external local image claims any unbound repo digest', async (t) => {
   const { manifest, options } = await fixture(t);
   const docker = fakeDocker(manifest, {
     envoyImage: { RepoDigests: [`envoyproxy/envoy@${sha('c')}`] },
@@ -442,10 +470,43 @@ test('fails closed when an external local image does not prove the required repo
 
   await assert.rejects(
     () => generateRuntimeManifest(options, { transport: docker.transport }),
-    /envoy.*required repo digest/i,
+    /envoy.*RepoDigests.*unbound digest state/i,
   );
   await assertMissing(options.runtimeManifestPath);
   await assertMissing(options.evidencePath);
+});
+
+test('rejects extra or missing local image tag and digest arrays', async (t) => {
+  const custom = await fixture(t);
+  const webappReference = custom.manifest.images.find(({ role }) => role === 'webapp').reference;
+  const customDocker = fakeDocker(custom.manifest, {
+    webappImage: { RepoTags: [webappReference, 'easyfire-bookkeeping/webapp:extra'] },
+  });
+  await assert.rejects(
+    () => generateRuntimeManifest(custom.options, { transport: customDocker.transport }),
+    /webapp.*RepoTags.*exact release identity/i,
+  );
+
+  const external = await fixture(t);
+  const externalDocker = fakeDocker(external.manifest, {
+    envoyImage: { RepoTags: [] },
+  });
+  await assert.rejects(
+    () => generateRuntimeManifest(external.options, { transport: externalDocker.transport }),
+    /envoy.*RepoTags.*exact release identity/i,
+  );
+
+  const missingDigestArray = await fixture(t);
+  const missingDigestDocker = fakeDocker(missingDigestArray.manifest, {
+    envoyImage: { RepoDigests: undefined },
+  });
+  await assert.rejects(
+    () => generateRuntimeManifest(
+      missingDigestArray.options,
+      { transport: missingDigestDocker.transport },
+    ),
+    /envoy.*RepoDigests.*string array/i,
+  );
 });
 
 test('rejects unhealthy containers and refuses to replace either output', async (t) => {
@@ -523,7 +584,9 @@ test('rejects the ambiguous legacy imageId release contract', async (t) => {
 
 test('requires an external reference repo digest to equal ociIndexDigest', async (t) => {
   const { manifest, options } = await fixture(t);
-  manifest.images.find(({ role }) => role === 'envoy').ociIndexDigest = sha('c');
+  const envoy = manifest.images.find(({ role }) => role === 'envoy');
+  envoy.ociIndexDigest = sha('c');
+  envoy.engineImageId = sha('c');
   await writeFile(options.releaseManifestPath, `${JSON.stringify(manifest)}\n`, 'utf8');
   const docker = fakeDocker(manifest);
 

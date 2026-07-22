@@ -16,9 +16,10 @@ Cloudflare material, and it never authorizes public exposure.
   reparse point, changed artifact, or mixed release is refused.
 - Run Linux executors only from
   `/opt/easyfire-bookkeeping/releases/<releaseCommit>/scripts/production/`.
-  The evidence collector, Guardian promoter, and route activator independently
-  prove their real path and exact release-manifest artifact before commands,
-  locks, configuration promotion, or route activation.
+  The rehearsal and native-auth collectors, evidence collector, Guardian
+  promoter, and route activator independently prove their real path and exact
+  release-manifest artifact before commands, locks, proof publication,
+  configuration promotion, or route activation.
 - `/etc/easyfire-bookkeeping/cutover-evidence.json` may be created only by the
   root-only release-bound collector. Existing output is never replaced.
 
@@ -29,16 +30,29 @@ Cloudflare material, and it never authorizes public exposure.
 2. Produce the initial schema-2 checkpoint while Windows remains the only
    writer. Verify both copies, logical database restore, Redis payload, and the
    recorded source identities.
-3. Deploy and validate the isolated Linux candidate. Keep Tailscale Serve,
-   Funnel, port 443, and all public routes absent.
-4. Prove the guest-native backup and isolated restore, rollback lock/rearm,
-   reboot recovery, disposable Guardian recovery, native owner login, and
-   accounting-data validation.
-5. Run Guardian shadow rehearsal, then its active-policy rehearsal only against
-   disposable containers. Keep the production timer inactive. The promoter
-   preserves the exact shadow config as `guardian.shadow.json`, atomically
-   installs only the verified `shadowMode: false` config as root-owned `0600`,
-   and publishes a create-new promotion receipt.
+3. Qualify the exact release on the separate
+   `easyfire-bookkeeping-rehearsal-newsec` VM. Its machine identity and
+   deployment ID must differ from production, and Serve, Funnel, public
+   listeners, and production-data mutation must remain absent. The rollback
+   controller produces distinct arm, later-boot locked, and rearm receipts;
+   `--verify-locked` durably creates the locked-reboot receipt instead of merely
+   printing a successful check.
+4. Run the release-bound rehearsal controller's exercise phase. It obtains
+   machine-produced Guardian shadow/active/refusal proof, Docker service and
+   daemon recovery proof, invalid-authority refusal proof, and a create-new
+   normal-reboot marker. Reboot normally, use the native-auth collector at the
+   credential boundary, and then run the rehearsal collection phase. Collection
+   proves the changed boot ID, stack authority, and active/enabled Guardian
+   timer. Locked-reboot and normal-reboot/recovery are separate gates.
+5. At that native-auth boundary, the owner enters
+   the password interactively and explicitly confirms the sole-owner assertion
+   and that one sign-in; the collector binds authenticated account and
+   organization responses to the signed-in principal, validates exact
+   server-side database/Redis invariants, persists no password/token/session,
+   and publishes only hashes, counts, and pass/fail structure. The final
+   rehearsal receipt hashes each subordinate proof and is
+   bound to the exact release and rehearsal deployment, not to a future
+   production checkpoint or deployment.
 6. Run `Quiesce`, then `VerifyQuiesced`. Only the six exact Windows stateless
    containers stop; MariaDB and Redis remain healthy but prove zero external
    writers, the two exact tasks and Cloudflare service remain disabled, and the
@@ -46,20 +60,39 @@ Cloudflare material, and it never authorizes public exposure.
 7. Produce the final schema-2 checkpoint in stopped-writer mode and run
    `BindFinalCheckpoint`. The checkpoint must be newer than quiescence and bind
    the source receipt, snapshot, writer proof, SQL payload, and Redis payload.
-8. Copy the fixed root-owned collection plan and all named proof files to their
+8. Deploy and validate the production Linux candidate from that final
+   checkpoint with the exact qualified release. Keep Tailscale Serve, Funnel,
+   port 443, and all public routes absent. Produce the guest-native backup and
+   isolated-restore proof and a new native-auth proof bound to this production
+   deployment, checkpoint, and deployment receipt.
+9. Promote Guardian policy only with the exact-release rehearsal receipt. The
+   promoter independently proves the current production cutover/deployment,
+   production machine identity, distinct rehearsal machine/deployment, and an
+   inactive timer. It preserves the exact shadow config as
+   `guardian.shadow.json`, atomically installs only the verified
+   `shadowMode: false` config as root-owned `0600`, and publishes a create-new
+   promotion receipt. The rehearsal receipt qualifies the release; it is not a
+   substitute for the production checkpoint, backup, or live readbacks.
+10. Copy the fixed root-owned collection plan and all named proof files to their
    canonical guest paths. Run the release-bound activation-evidence collector.
-   It semantically validates every proof, cross-binds cutover/deployment/
-   checkpoint identifiers and timestamps, reruns fixed-plan deployment
-   verification, reads systemd/Tailscale/listener state, and exclusively creates
-   `cutover-evidence.json`. The collector rejects reordered or future-dated
-   proofs, a source-quiescence proof window over 24 hours, or a collection plan
-   older than 15 minutes.
-9. Run `AuthorizeActivation` with the exact collector output path and SHA-256.
+    It consumes the exact-release rehearsal receipt plus the separate current
+    production checkpoint, deployment, backup/restore, Guardian-promotion, and
+    native-auth receipts. It semantically validates and cross-binds them, reruns
+    fixed-plan deployment verification, reads systemd/Tailscale/listener state,
+    re-hashes the exact `SHA256SUMS` file set, payloads, and proof TSVs from the
+    root-owned backup directory, and confirms the isolated restore container is
+    still stopped/networkless with its exact proof volume preserved,
+    and exclusively creates `cutover-evidence.json`. Hand-authored reboot,
+    recovery, Guardian, or authentication booleans are not accepted. The
+    collector rejects reordered or future-dated production proofs, a
+    source-quiescence proof window over 24 hours, or a collection plan older
+    than 15 minutes; the earlier rehearsal is allowed to predate that window.
+11. Run `AuthorizeActivation` with the exact collector output path and SHA-256.
    Authorization is once-only, expires after 900 seconds, and names exactly one
    tailnet-only HTTPS route. The activation evidence itself must be no more than
    900 seconds old when authorization is built and when the route activator
    validates it; issuing a fresh authorization never revives stale evidence.
-10. Run the immutable route activator. It verifies Tailscale `1.98.9`, checks
+12. Run the immutable route activator. It verifies Tailscale `1.98.9`, checks
     Serve and Funnel both before and after, rejects `--yes`, creates only the
     tailnet-private Serve proxy to `http://127.0.0.1:8080`, reruns deployment
     verification, and publishes a create-new activation receipt. After every

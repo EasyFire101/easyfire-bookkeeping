@@ -40,6 +40,7 @@ const CONFIG_ROOT = '/etc/easyfire-bookkeeping';
 const EVIDENCE_ROOT = '/etc/easyfire-bookkeeping/rollback-evidence';
 const PROC_TCP = '/proc/net/tcp';
 const PROC_TCP6 = '/proc/net/tcp6';
+const BOOT_ID_PATH = '/proc/sys/kernel/random/boot_id';
 const GUARDIAN_TIMER = 'easyfire-bookkeeping-guardian.timer';
 const GUARDIAN_SERVICE = 'easyfire-bookkeeping-guardian.service';
 const STACK_SERVICE = 'easyfire-bookkeeping-stack.service';
@@ -49,6 +50,7 @@ const SHA40 = /^[a-f0-9]{40}$/;
 const SHA64 = /^[a-f0-9]{64}$/;
 const DEPLOYMENT_ID = /^direct-vm-[0-9]{8}-[a-f0-9]{8}$/;
 const LOCK_ID = /^[a-f0-9]{8}-[a-f0-9]{4}-4[a-f0-9]{3}-[89ab][a-f0-9]{3}-[a-f0-9]{12}$/;
+const BOOT_ID = /^[a-f0-9]{8}-[a-f0-9]{4}-[1-5][a-f0-9]{3}-[89ab][a-f0-9]{3}-[a-f0-9]{12}$/;
 
 export const STATELESS_CONTAINERS = Object.freeze([
   SERVICE_CONTRACT.gotenberg.name,
@@ -235,7 +237,11 @@ const evidenceDirectoryFor = (reason, deploymentId, lockId) =>
 export function createLockDocument(
   deployment,
   reason,
-  { lockId = randomUUID(), armedAt = new Date().toISOString() } = {},
+  {
+    lockId = randomUUID(),
+    armedAt = new Date().toISOString(),
+    bootIdAtArm,
+  } = {},
 ) {
   if (!['rehearsal', 'rollback'].includes(reason)) {
     refuse('E_LOCK', 'Rollback-lock reason is invalid.');
@@ -248,6 +254,7 @@ export function createLockDocument(
     reason,
     lockId,
     armedAt,
+    bootIdAtArm,
     deployment: { ...deployment },
     evidenceDirectory: evidenceDirectoryFor(
       reason,
@@ -269,6 +276,7 @@ export function validateLockDocument(candidate) {
       'reason',
       'lockId',
       'armedAt',
+      'bootIdAtArm',
       'deployment',
       'evidenceDirectory',
     ],
@@ -291,6 +299,7 @@ export function validateLockDocument(candidate) {
     candidate.status !== 'armed' ||
     !['rehearsal', 'rollback'].includes(candidate.reason) ||
     !LOCK_ID.test(candidate.lockId) ||
+    !BOOT_ID.test(candidate.bootIdAtArm) ||
     !DEPLOYMENT_ID.test(candidate.deployment.deploymentId) ||
     !SHA40.test(candidate.deployment.releaseCommit) ||
     !SHA64.test(candidate.deployment.planSha256) ||
@@ -310,6 +319,97 @@ export function validateLockDocument(candidate) {
     refuse('E_LOCK', 'Rollback lock evidence directory is invalid.');
   }
   return candidate;
+}
+
+export function buildLockedRebootReceipt({
+  lock,
+  lockSha256,
+  armedReceiptSha256,
+  bootIdAfter,
+  proof,
+  completedAt = new Date().toISOString(),
+}) {
+  validateLockDocument(lock);
+  exactKeys(proof?.tailscale, ['enrolled', 'serveAbsent', 'funnelAbsent'], 'Locked reboot Tailscale proof');
+  exactKeys(proof?.unitStates, [GUARDIAN_TIMER, GUARDIAN_SERVICE, STACK_SERVICE], 'Locked reboot unit states');
+  if (
+    !['rehearsal', 'rollback'].includes(lock.reason) ||
+    !SHA64.test(lockSha256) ||
+    !SHA64.test(armedReceiptSha256) ||
+    !BOOT_ID.test(bootIdAfter) ||
+    bootIdAfter === lock.bootIdAtArm ||
+    !isObject(proof) ||
+    !isObject(proof.runtime) ||
+    proof.runtime.migrationExitCode !== 0 ||
+    JSON.stringify(proof.runtime.stoppedContainers) !==
+      JSON.stringify(ALL_RUNTIME_CONTAINERS) ||
+    !isObject(proof.tailscale) ||
+    proof.tailscale.serveAbsent !== true ||
+    proof.tailscale.funnelAbsent !== true ||
+    !isObject(proof.unitStates) ||
+    [GUARDIAN_TIMER, GUARDIAN_SERVICE, STACK_SERVICE].some(
+      (unit) => proof.unitStates[unit] !== 'inactive',
+    )
+  ) {
+    refuse(
+      'E_LOCKED_REBOOT',
+      'Locked reboot proof is incomplete, not isolated, or did not cross a reboot.',
+    );
+  }
+  canonicalTime(completedAt, 'Locked reboot completedAt');
+  return {
+    schemaVersion: 1,
+    project: PROJECT,
+    kind: 'easyfire-bookkeeping-locked-reboot-receipt',
+    status: 'locked-reboot-verified',
+    lockId: lock.lockId,
+    reason: lock.reason,
+    completedAt,
+    lockSha256,
+    armedReceiptSha256,
+    deployment: lock.deployment,
+    bootIdBefore: lock.bootIdAtArm,
+    bootIdAfter,
+    proof: {
+      stoppedContainers: proof.runtime.stoppedContainers,
+      migrationExitCode: proof.runtime.migrationExitCode,
+      unitStates: proof.unitStates,
+      tailscale: proof.tailscale,
+      absentListeners: [443, 8080],
+      resourcesPreserved: true,
+    },
+  };
+}
+
+export function validateLockedRebootReceipt(
+  receipt,
+  lock,
+  lockSha256,
+  armedReceiptSha256,
+) {
+  const rebuilt = buildLockedRebootReceipt({
+    lock,
+    lockSha256,
+    armedReceiptSha256,
+    bootIdAfter: receipt?.bootIdAfter,
+    proof: {
+      runtime: {
+        stoppedContainers: receipt?.proof?.stoppedContainers,
+        migrationExitCode: receipt?.proof?.migrationExitCode,
+      },
+      tailscale: receipt?.proof?.tailscale,
+      unitStates: receipt?.proof?.unitStates,
+    },
+    completedAt: receipt?.completedAt,
+  });
+  if (
+    JSON.stringify(Object.keys(receipt ?? {}).sort()) !==
+      JSON.stringify(Object.keys(rebuilt).sort()) ||
+    JSON.stringify(receipt) !== JSON.stringify(rebuilt)
+  ) {
+    refuse('E_LOCKED_REBOOT', 'Locked reboot receipt is invalid or unbound.');
+  }
+  return receipt;
 }
 
 export function validateLockAgainstAuthority(lock, authority) {
@@ -738,6 +838,14 @@ const readListeningPorts = async () =>
     await readFile(PROC_TCP6, 'utf8'),
   );
 
+const readBootId = async () => {
+  const bootId = (await readFile(BOOT_ID_PATH, 'utf8')).trim().toLowerCase();
+  if (!BOOT_ID.test(bootId)) {
+    refuse('E_BOOT_ID', 'Linux boot identity is invalid.');
+  }
+  return bootId;
+};
+
 const tailscaleSnapshot = async ({ disable }) => {
   const first = parseJsonResult(
     await runCommand(tailscaleStatusCommand()),
@@ -911,7 +1019,17 @@ const buildArmedReceipt = (lock, lockSha256, proof) => ({
   },
 });
 
-const validateArmedReceipt = (receipt, lock, lockSha256) => {
+export const validateArmedReceipt = (receipt, lock, lockSha256) => {
+  exactKeys(receipt, [
+    'schemaVersion', 'project', 'kind', 'status', 'lockId', 'reason',
+    'completedAt', 'lockSha256', 'deployment', 'proof',
+  ], 'Armed receipt');
+  exactKeys(receipt.proof, [
+    'stoppedContainers', 'migrationExitCode', 'unitStates', 'tailscale',
+    'absentListeners', 'resourcesPreserved',
+  ], 'Armed receipt proof');
+  exactKeys(receipt.proof.unitStates, [GUARDIAN_TIMER, GUARDIAN_SERVICE, STACK_SERVICE], 'Armed receipt unit states');
+  exactKeys(receipt.proof.tailscale, ['enrolled', 'serveAbsent', 'funnelAbsent'], 'Armed receipt Tailscale proof');
   if (
     !isObject(receipt) ||
     receipt.schemaVersion !== 1 ||
@@ -923,6 +1041,11 @@ const validateArmedReceipt = (receipt, lock, lockSha256) => {
     receipt.lockSha256 !== lockSha256 ||
     receipt.proof?.migrationExitCode !== 0 ||
     receipt.proof?.resourcesPreserved !== true ||
+    receipt.proof.tailscale.serveAbsent !== true ||
+    receipt.proof.tailscale.funnelAbsent !== true ||
+    [GUARDIAN_TIMER, GUARDIAN_SERVICE, STACK_SERVICE].some(
+      (unit) => receipt.proof.unitStates[unit] !== 'inactive',
+    ) ||
     JSON.stringify(receipt.deployment) !== JSON.stringify(lock.deployment) ||
     JSON.stringify(receipt.proof?.stoppedContainers) !==
       JSON.stringify(ALL_RUNTIME_CONTAINERS) ||
@@ -933,7 +1056,7 @@ const validateArmedReceipt = (receipt, lock, lockSha256) => {
   canonicalTime(receipt.completedAt, 'Armed receipt completedAt');
 };
 
-async function verifyLocked() {
+async function verifyLocked({ emitRebootProof = false, requireRebootProof = false } = {}) {
   const lockDocument = await readSecureDocument(LOCK_PATH, 'Rollback lock');
   const lock = validateLockDocument(lockDocument.value);
   const verification = {
@@ -950,12 +1073,67 @@ async function verifyLocked() {
   );
   validateArmedReceipt(armedDocument.value, lock, sha256(lockDocument.bytes));
   const proof = await collectLockedProof(authority);
+  let lockedRebootProofSha256 = null;
+  let lockedRebootProofPath = null;
+  if (emitRebootProof) {
+    const bootIdAfter = await readBootId();
+    lockedRebootProofPath = `${lock.evidenceDirectory}/locked-reboot.json`;
+    if (bootIdAfter !== lock.bootIdAtArm) {
+      const candidate = buildLockedRebootReceipt({
+        lock,
+        lockSha256: sha256(lockDocument.bytes),
+        armedReceiptSha256: sha256(armedDocument.bytes),
+        bootIdAfter,
+        proof,
+      });
+      if (await pathExists(lockedRebootProofPath)) {
+        const existing = await readSecureDocument(
+          lockedRebootProofPath,
+          'Locked reboot receipt',
+        );
+        validateLockedRebootReceipt(
+          existing.value,
+          lock,
+          sha256(lockDocument.bytes),
+          sha256(armedDocument.bytes),
+        );
+        if (existing.value.bootIdAfter !== bootIdAfter) {
+          refuse(
+            'E_LOCKED_REBOOT',
+            'Locked reboot receipt belongs to a different post-lock boot.',
+          );
+        }
+        lockedRebootProofSha256 = sha256(existing.bytes);
+      } else {
+        await writeJsonExclusiveAtomic(lockedRebootProofPath, candidate);
+        const published = await readSecureDocument(
+          lockedRebootProofPath,
+          'Locked reboot receipt',
+        );
+        validateLockedRebootReceipt(
+          published.value,
+          lock,
+          sha256(lockDocument.bytes),
+          sha256(armedDocument.bytes),
+        );
+        lockedRebootProofSha256 = sha256(published.bytes);
+      }
+    }
+  }
+  if (requireRebootProof && !lockedRebootProofSha256) {
+    refuse(
+      'E_LOCKED_REBOOT_REQUIRED',
+      'Rehearsal rearm requires a durable locked-reboot proof from a later boot.',
+    );
+  }
   return {
     lock,
     lockBytes: lockDocument.bytes,
     lockSha256: sha256(lockDocument.bytes),
     authority,
     armedReceiptSha256: sha256(armedDocument.bytes),
+    lockedRebootProofPath,
+    lockedRebootProofSha256,
     proof,
   };
 }
@@ -963,7 +1141,9 @@ async function verifyLocked() {
 async function arm(reason) {
   const verification = await runDeploymentVerification('deployment-preflight');
   const authority = await readAuthority(verification);
-  const lock = createLockDocument(authority.authority, reason);
+  const lock = createLockDocument(authority.authority, reason, {
+    bootIdAtArm: await readBootId(),
+  });
   let lockPublished = false;
   try {
     await neutralizeRestartPolicy(authority, 'restart-neutralize');
@@ -1033,7 +1213,10 @@ const restoreLiveLock = async (locked) => {
 };
 
 async function rearm() {
-  const locked = await verifyLocked();
+  const locked = await verifyLocked({
+    emitRebootProof: true,
+    requireRebootProof: true,
+  });
   assertRearmAllowed(locked.lock);
   const archivedLockPath = await moveLockToEvidence(locked);
   try {
@@ -1049,6 +1232,7 @@ async function rearm() {
         archivedLockPath,
         archivedLockSha256: locked.lockSha256,
         armedReceiptSha256: locked.armedReceiptSha256,
+        lockedRebootProofSha256: locked.lockedRebootProofSha256,
         deployment: locked.lock.deployment,
         startAuthority: { unit: STACK_SERVICE, only: true },
       },
@@ -1068,6 +1252,7 @@ async function rearm() {
         completedAt: new Date().toISOString(),
         lockId: locked.lock.lockId,
         deployment: locked.lock.deployment,
+        lockedRebootProofSha256: locked.lockedRebootProofSha256,
         guardianRemainsStopped: true,
         tailscaleRemainsDisabled: true,
         resourcesPreserved: true,
@@ -1108,7 +1293,7 @@ async function runCli() {
     parsed.mode === 'arm'
       ? await arm(parsed.reason)
       : parsed.mode === 'verify-locked'
-        ? await verifyLocked()
+        ? await verifyLocked({ emitRebootProof: true, requireRebootProof: true })
         : await rearm();
   process.stdout.write(
     `${JSON.stringify({

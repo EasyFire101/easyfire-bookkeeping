@@ -291,9 +291,10 @@ publication of this patch has not yet occurred; publication changes only the
 two EasyFire repositories and does not itself create runtime authority.
 
 Recovery starts with the verified full filesystem and direct-VM transfer
-checkpoints in `HANDOFF.md`. The next path is fresh independent source review,
-one coherent immutable Linux release, and proof on the identity-separated
-rehearsal VM before the production VM is staged. Owner Tailscale/native-login
+checkpoints in `HANDOFF.md`. The release-proof repair and two independent
+current-byte reviews now pass; the next path is one coherent commit-bound
+immutable Linux release and proof on the identity-separated rehearsal VM before
+the production VM is staged. Owner Tailscale/native-login
 input is requested only when prompted. Windows may be quiesced only after every
 backup, restore, release, migration, authentication, rollback, reboot, Guardian,
 and checkpoint gate is green. Tailnet-only Serve activates last; Windows remains

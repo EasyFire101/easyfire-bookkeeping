@@ -84,6 +84,10 @@ export const RELEASE_ARTIFACT_SPECS = [
   ['scripts/production/linux-deploy-authority.mjs', '0644'],
   ['scripts/production/linux-release-authority-verify.mjs', '0644'],
   ['scripts/production/linux-release-manifest-v2.mjs', '0644'],
+  ['scripts/production/linux-oci-bundle-produce.mjs', '0644'],
+  ['scripts/production/linux-target-engine-evidence-produce.mjs', '0644'],
+  ['scripts/production/linux-native-auth-proof.mjs', '0644'],
+  ['scripts/production/linux-rehearsal-evidence.mjs', '0644'],
   ['scripts/production/linux-source-archive-authority.mjs', '0644'],
   ['scripts/production/linux-deploy-docker.mjs', '0644'],
   ['scripts/production/linux-deploy-plan.mjs', '0644'],
@@ -434,6 +438,9 @@ export function parseReleaseManifest(value: unknown): ReleaseManifest {
       `${role} release-manifest linuxAmd64ManifestDigest`,
     );
     assertSha256(candidate.engineImageId, `${role} release-manifest engineImageId`);
+    if (candidate.engineImageId !== candidate.ociIndexDigest) {
+      throw new Error(`${role} release-manifest engineImageId must equal its root OCI index digest.`);
+    }
 
     const spec = RUNTIME_ROLE_SPECS.find((entry) => entry.role === role);
     if (spec?.imageAuthority === 'engine-image-id-and-repo-digest') {
@@ -597,6 +604,14 @@ export function parseRuntimeIdentityEvidence(value: unknown): RuntimeIdentityEvi
       `${spec.role} evidence linuxAmd64ManifestDigest`,
     );
     assertSha256(candidate.engineImageId, `${spec.role} evidence engineImageId`);
+    if (
+      candidate.engineImageId !== candidate.ociIndexDigest ||
+      candidate.actualImageId !== candidate.engineImageId
+    ) {
+      throw new Error(
+        `Runtime identity evidence ${spec.role} image IDs do not bind the root OCI index digest.`,
+      );
+    }
     if (candidate.authorityKind !== spec.imageAuthority) {
       throw new Error(`Runtime identity evidence ${spec.role} authority kind is invalid.`);
     }
@@ -607,11 +622,19 @@ export function parseRuntimeIdentityEvidence(value: unknown): RuntimeIdentityEvi
     ) {
       throw new Error(`Runtime identity evidence ${spec.role} repo digest is invalid.`);
     }
-    if (
-      (spec.imageAuthority === 'engine-image-id-and-repo-digest') !==
-      (typeof candidate.verifiedRepoDigest === 'string')
+    if (spec.imageAuthority === 'engine-image-id') {
+      if (candidate.verifiedRepoDigest !== null) {
+        throw new Error(`Runtime identity evidence ${spec.role} must not claim repo digest authority.`);
+      }
+    }
+    else if (
+      candidate.verifiedRepoDigest !== null &&
+      candidate.verifiedRepoDigest !== getRequiredRepoDigest(
+        candidate.configuredImageReference,
+        spec.role,
+      )
     ) {
-      throw new Error(`Runtime identity evidence ${spec.role} repo digest authority is incomplete.`);
+      throw new Error(`Runtime identity evidence ${spec.role} repo digest authority is invalid.`);
     }
     return {
       role: spec.role,

@@ -44,6 +44,10 @@ const RELEASE_ARTIFACTS = [
   'scripts/production/linux-deploy-authority.mjs',
   'scripts/production/linux-release-authority-verify.mjs',
   'scripts/production/linux-release-manifest-v2.mjs',
+  'scripts/production/linux-oci-bundle-produce.mjs',
+  'scripts/production/linux-target-engine-evidence-produce.mjs',
+  'scripts/production/linux-native-auth-proof.mjs',
+  'scripts/production/linux-rehearsal-evidence.mjs',
   'scripts/production/linux-source-archive-authority.mjs',
   'scripts/production/linux-deploy-docker.mjs',
   'scripts/production/linux-deploy-plan.mjs',
@@ -183,14 +187,17 @@ function repositoryOf(reference) {
 function buildOciBundle({
   extraRoot = false,
   duplicateRoot = false,
+  shuffledRoot = false,
   corruptBlob = false,
   missingLinux = false,
+  duplicateLinux = false,
+  invalidNonRunnable,
 } = {}) {
   const blobs = new Map();
   const images = [];
   let corruptPath;
 
-  for (const [role, reference] of ROLE_SPECS) {
+  for (const [role, reference, external] of ROLE_SPECS) {
     const config = Buffer.from(JSON.stringify({ architecture: 'amd64', os: 'linux', role }));
     const configDescriptor = descriptor(
       config,
@@ -225,11 +232,114 @@ function buildOciBundle({
     );
     blobs.set(`blobs/sha256/${manifestDescriptor.digest.slice(7)}`, manifest);
 
+    const indexManifests = [manifestDescriptor];
+    if (external) {
+      const alternateConfig = Buffer.from(
+        JSON.stringify({ architecture: 'arm64', os: 'linux', role }),
+      );
+      const alternateConfigDescriptor = descriptor(
+        alternateConfig,
+        'application/vnd.oci.image.config.v1+json',
+      );
+      blobs.set(
+        `blobs/sha256/${alternateConfigDescriptor.digest.slice(7)}`,
+        alternateConfig,
+      );
+      const alternateLayer = Buffer.from(`synthetic-arm64-layer-for-${role}`);
+      const alternateLayerDescriptor = descriptor(
+        alternateLayer,
+        'application/vnd.oci.image.layer.v1.tar',
+      );
+      blobs.set(
+        `blobs/sha256/${alternateLayerDescriptor.digest.slice(7)}`,
+        alternateLayer,
+      );
+      const alternateManifest = Buffer.from(
+        JSON.stringify({
+          schemaVersion: 2,
+          mediaType: 'application/vnd.oci.image.manifest.v1+json',
+          config: alternateConfigDescriptor,
+          layers: [alternateLayerDescriptor],
+        }),
+      );
+      const alternateManifestDescriptor = descriptor(
+        alternateManifest,
+        'application/vnd.oci.image.manifest.v1+json',
+        {
+          platform: invalidNonRunnable === 'missing-architecture' && role === 'envoy'
+            ? { os: 'linux' }
+            : { os: 'linux', architecture: 'arm64' },
+        },
+      );
+      blobs.set(
+        `blobs/sha256/${alternateManifestDescriptor.digest.slice(7)}`,
+        alternateManifest,
+      );
+      indexManifests.push(alternateManifestDescriptor);
+
+      if (role === 'gotenberg') {
+        const attestationConfig = Buffer.from('{}');
+        const attestationConfigDescriptor = descriptor(
+          attestationConfig,
+          'application/vnd.oci.image.config.v1+json',
+        );
+        blobs.set(
+          `blobs/sha256/${attestationConfigDescriptor.digest.slice(7)}`,
+          attestationConfig,
+        );
+        const attestationLayer = Buffer.from(
+          JSON.stringify({ predicateType: 'https://slsa.dev/provenance/v0.2' }),
+        );
+        const attestationLayerDescriptor = descriptor(
+          attestationLayer,
+          'application/vnd.in-toto+json',
+          {
+            annotations: {
+              'in-toto.io/predicate-type': 'https://slsa.dev/provenance/v0.2',
+            },
+          },
+        );
+        blobs.set(
+          `blobs/sha256/${attestationLayerDescriptor.digest.slice(7)}`,
+          attestationLayer,
+        );
+        const attestationManifest = Buffer.from(
+          JSON.stringify({
+            schemaVersion: 2,
+            mediaType: 'application/vnd.oci.image.manifest.v1+json',
+            config: attestationConfigDescriptor,
+            layers: [attestationLayerDescriptor],
+          }),
+        );
+        const attestationDescriptor = descriptor(
+          attestationManifest,
+          'application/vnd.oci.image.manifest.v1+json',
+          {
+            platform: { os: 'unknown', architecture: 'unknown' },
+            annotations: invalidNonRunnable === 'bad-attestation'
+              ? { 'vnd.docker.reference.type': 'not-an-attestation' }
+              : {
+                'vnd.docker.reference.digest': manifestDescriptor.digest,
+                'vnd.docker.reference.type': 'attestation-manifest',
+              },
+          },
+        );
+        blobs.set(
+          `blobs/sha256/${attestationDescriptor.digest.slice(7)}`,
+          attestationManifest,
+        );
+        indexManifests.push(attestationDescriptor);
+      }
+    }
+    if (duplicateLinux && role === 'server') {
+      indexManifests.push({ ...manifestDescriptor });
+    }
+
     const imageIndex = Buffer.from(
       JSON.stringify({
         schemaVersion: 2,
         mediaType: 'application/vnd.oci.image.index.v1+json',
-        manifests: [manifestDescriptor],
+        manifests: indexManifests,
       }),
     );
     const imageIndexDescriptor = descriptor(
@@ -244,6 +354,7 @@ function buildOciBundle({
       indexDigest: imageIndexDescriptor.digest,
       manifestDigest: manifestDescriptor.digest,
       configDigest: configDescriptor.digest,
+      indexManifestCount: indexManifests.length,
       rootDescriptor: imageIndexDescriptor,
     });
     if (role === 'envoy') corruptPath = `blobs/sha256/${configDescriptor.digest.slice(7)}`;
@@ -257,6 +368,9 @@ function buildOciBundle({
     });
   }
   if (duplicateRoot) rootDescriptors[rootDescriptors.length - 1] = rootDescriptors[0];
+  if (shuffledRoot) {
+    [rootDescriptors[0], rootDescriptors[1]] = [rootDescriptors[1], rootDescriptors[0]];
+  }
   const index = Buffer.from(
     JSON.stringify({
       schemaVersion: 2,
@@ -319,7 +433,7 @@ async function createFixture(t, bundleOptions = {}, evidenceMutator, sourceOptio
       const repoDigest = `${repositoryOf(image.reference)}@${image.indexDigest}`;
       return {
         reference: image.reference,
-        Id: `sha256:${(index + 1).toString(16).repeat(64)}`,
+        Id: image.indexDigest,
         RepoTags: [image.reference],
         RepoDigests: external ? [repoDigest] : [],
         externalDigestAuthority: external ? repoDigest : null,
@@ -423,10 +537,16 @@ test('stream-verifies the OCI archive and emits a deterministic manifest-v2 auth
   assert.deepEqual(manifest.images.map(({ role }) => role), ROLE_SPECS.map(([role]) => role));
   assert.equal(manifest.images[0].reference, `${ROLE_SPECS[0][1]}@${fixture.images[0].indexDigest}`);
   assert.equal(manifest.images[1].reference, ROLE_SPECS[1][1]);
-  assert.equal(manifest.images[1].engineImageId, `sha256:${'2'.repeat(64)}`);
+  assert.equal(manifest.images[1].engineImageId, fixture.images[1].indexDigest);
   assert.equal(manifest.imageBundle.sha256, sha256(fixture.bundle));
   assert.equal(manifest.imageBundle.bytes, fixture.bundle.length);
   assert.equal(manifest.imageBundle.inventory.length, 7);
+  assert.ok(fixture.images[0].indexManifestCount > 1);
+  assert.ok(fixture.images[3].indexManifestCount > 1);
+  assert.equal(
+    manifest.imageBundle.inventory[0].linuxAmd64ManifestDigest,
+    fixture.images[0].manifestDigest,
+  );
   assert.equal(manifest.imageBundle.inventory[0].configDigest, fixture.images[0].configDigest);
   assert.equal(manifest.artifacts.length, RELEASE_ARTIFACTS.length);
   assert.deepEqual(manifest.artifacts.map(({ path: artifact }) => artifact), RELEASE_ARTIFACTS);
@@ -492,6 +612,11 @@ test('rejects a duplicate root image/tag even when the root count stays seven', 
   await assert.rejects(runProducer(fixture), /duplicate image\/tag/i);
 });
 
+test('rejects shuffled root image descriptors instead of silently reordering them', async (t) => {
+  const fixture = await createFixture(t, { shuffledRoot: true });
+  await assert.rejects(runProducer(fixture), /fixed role order/i);
+});
+
 test('rejects a tar blob whose sha256 filename does not match its bytes', async (t) => {
   const fixture = await createFixture(t, { corruptBlob: true });
   await assert.rejects(runProducer(fixture), /blob.*digest|digest.*blob/i);
@@ -512,9 +637,49 @@ test('requires the full target Docker Id and has no config-digest fallback', asy
   await assert.rejects(runProducer(fixture), /Docker Id.*sha256 digest/i);
 });
 
+test('requires each target Docker Id to equal the observed root OCI index digest', async (t) => {
+  const fixture = await createFixture(t, {}, (evidence) => {
+    evidence.images[1].Id = `sha256:${'f'.repeat(64)}`;
+  });
+  await assert.rejects(runProducer(fixture), /Docker Id.*root OCI index digest/i);
+});
+
+test('accepts either exact or absent external RepoDigests while preserving source authority', async (t) => {
+  const fixture = await createFixture(t, {}, (evidence) => {
+    evidence.images[0].RepoDigests = [];
+    evidence.images[3].RepoDigests = [];
+  });
+  await runProducer(fixture);
+  const manifest = JSON.parse(await readFile(fixture.output, 'utf8'));
+  assert.equal(manifest.images[0].engineImageId, fixture.images[0].indexDigest);
+  assert.equal(manifest.images[3].engineImageId, fixture.images[3].indexDigest);
+});
+
+test('rejects shuffled target-engine evidence instead of reordering it silently', async (t) => {
+  const fixture = await createFixture(t, {}, (evidence) => {
+    [evidence.images[0], evidence.images[1]] = [evidence.images[1], evidence.images[0]];
+  });
+  await assert.rejects(runProducer(fixture), /fixed role order/i);
+});
+
 test('rejects an image index without an exact linux/amd64 platform', async (t) => {
   const fixture = await createFixture(t, { missingLinux: true });
   await assert.rejects(runProducer(fixture), /linux\/amd64/i);
+});
+
+test('rejects duplicate runnable linux/amd64 descriptors in one image index', async (t) => {
+  const fixture = await createFixture(t, { duplicateLinux: true });
+  await assert.rejects(runProducer(fixture), /exactly one runnable linux\/amd64/i);
+});
+
+test('rejects malformed non-runnable platform and attestation descriptors', async (t) => {
+  for (const [invalidNonRunnable, expected] of [
+    ['missing-architecture', /non-runnable.*platform|platform.*architecture/i],
+    ['bad-attestation', /attestation/i],
+  ]) {
+    const fixture = await createFixture(t, { invalidNonRunnable });
+    await assert.rejects(runProducer(fixture), expected);
+  }
 });
 
 test('publishes exclusively and never overwrites an existing manifest', async (t) => {

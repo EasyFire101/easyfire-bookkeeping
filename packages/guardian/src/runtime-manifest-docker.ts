@@ -49,6 +49,17 @@ function stringArray(value: unknown, label: string): string[] {
   return value;
 }
 
+function exactStringArray(value: unknown, expected: string[], label: string): string[] {
+  const actual = stringArray(value, label);
+  if (
+    actual.length !== expected.length ||
+    actual.some((entry, index) => entry !== expected[index])
+  ) {
+    throw new Error(`${label} does not match the exact release identity.`);
+  }
+  return actual;
+}
+
 function verifyContainerState(
   state: Record<string, unknown>,
   role: string,
@@ -149,20 +160,39 @@ export class RuntimeIdentityDockerClient {
 
       let verifiedRepoDigest: string | null = null;
       if (spec.imageAuthority === 'engine-image-id') {
-        const repoTags = stringArray(image.RepoTags ?? [], `${spec.role} local image RepoTags`);
-        if (!repoTags.includes(releaseEntry.reference)) {
-          throw new Error(`${spec.role} local image does not own the exact final release tag.`);
-        }
-      }
-      else {
-        verifiedRepoDigest = getRequiredRepoDigest(releaseEntry.reference, spec.role);
-        const repoDigests = stringArray(
-          image.RepoDigests ?? [],
+        exactStringArray(
+          image.RepoTags,
+          [releaseEntry.reference],
+          `${spec.role} local image RepoTags`,
+        );
+        exactStringArray(
+          image.RepoDigests,
+          [],
           `${spec.role} local image RepoDigests`,
         );
-        if (!repoDigests.includes(verifiedRepoDigest)) {
-          throw new Error(`${spec.role} local image does not prove the required repo digest.`);
+      }
+      else {
+        const requiredRepoDigest = getRequiredRepoDigest(releaseEntry.reference, spec.role);
+        const taggedReference = releaseEntry.reference.slice(
+          0,
+          releaseEntry.reference.lastIndexOf('@'),
+        );
+        exactStringArray(
+          image.RepoTags,
+          [taggedReference],
+          `${spec.role} local image RepoTags`,
+        );
+        const repoDigests = stringArray(
+          image.RepoDigests,
+          `${spec.role} local image RepoDigests`,
+        );
+        if (!(
+          repoDigests.length === 0 ||
+          (repoDigests.length === 1 && repoDigests[0] === requiredRepoDigest)
+        )) {
+          throw new Error(`${spec.role} local image RepoDigests has an unbound digest state.`);
         }
+        verifiedRepoDigest = repoDigests.length === 1 ? requiredRepoDigest : null;
       }
 
       identities.push({

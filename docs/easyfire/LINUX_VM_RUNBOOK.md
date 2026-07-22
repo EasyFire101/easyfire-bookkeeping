@@ -65,6 +65,10 @@ mode-`0644` artifacts:
 - `scripts/production/direct-vm-cutover-authority.ps1`
 - `scripts/production/direct-vm-preflight-checkpoint.ps1`
 - `scripts/production/linux-final-quiescence-contract.mjs`
+- `scripts/production/linux-oci-bundle-produce.mjs`
+- `scripts/production/linux-target-engine-evidence-produce.mjs`
+- `scripts/production/linux-native-auth-proof.mjs`
+- `scripts/production/linux-rehearsal-evidence.mjs`
 - `scripts/production/linux-activation-evidence-collect.mjs`
 - `scripts/production/linux-guardian-promote-active.mjs`
 - `scripts/production/linux-private-route-activate.mjs`
@@ -108,6 +112,53 @@ release artifact before the activator can alter route state. A missing file,
 changed byte, wrong mode, symlink, owner drift, or release-path drift is a hard
 stop. Never execute an operational executor from a Git checkout, staging
 directory, home directory, temporary directory, or copied convenience path.
+
+### Offline image bundle and target-engine authority
+
+Build the five EasyFire images from the exact accepted release commit and retain
+the two external images at their pinned digest references. Export exactly one
+role into each OCI input archive. Transfer the seven archives into a new
+root-owned staging directory on the rehearsal VM; every input must be a regular,
+non-symlink mode-`0600` file and no existing path may be overwritten. The old
+bundle remains preserved and must not be reused after source changes.
+
+Run the release-owned deterministic bundle producer from the immutable extracted
+release, load only its output into the isolated rehearsal engine, and then
+produce target-engine evidence from that same engine:
+
+```bash
+RELEASE_COMMIT='<exact accepted 40-character commit>'
+STAGING='/var/lib/easyfire-bookkeeping-staging'
+
+sudo /usr/local/bin/node \
+  /opt/easyfire-bookkeeping/current/scripts/production/linux-oci-bundle-produce.mjs \
+  --release-commit "$RELEASE_COMMIT" \
+  --envoy "$STAGING/oci/envoy.oci.tar" \
+  --webapp "$STAGING/oci/webapp.oci.tar" \
+  --server "$STAGING/oci/server.oci.tar" \
+  --gotenberg "$STAGING/oci/gotenberg.oci.tar" \
+  --mysql "$STAGING/oci/mysql.oci.tar" \
+  --redis "$STAGING/oci/redis.oci.tar" \
+  --migration "$STAGING/oci/migration.oci.tar" \
+  --output "$STAGING/images.tar"
+
+sudo /usr/bin/docker image load --input "$STAGING/images.tar"
+
+sudo /usr/local/bin/node \
+  /opt/easyfire-bookkeeping/current/scripts/production/linux-target-engine-evidence-produce.mjs \
+  --release-commit "$RELEASE_COMMIT" \
+  --image-bundle "$STAGING/images.tar" \
+  --output "$STAGING/target-engine-evidence.json"
+```
+
+The producer accepts one runnable Linux/amd64 manifest per role, tolerates only
+the expected multi-platform/attestation structure, and binds the pinned root OCI
+digest. Target-engine evidence then requires Docker 29.6.2 and proves each loaded
+image ID and permitted digest identity. Build `release-manifest.json` version 2
+only after `source.tar.gz`, `images.tar`, and
+`target-engine-evidence.json` exist and pass their release-owned validators.
+Never substitute a hand-written bundle inventory, raw Docker inspection receipt,
+mutable tag, or a working-tree executor.
 
 On Windows, extract the same immutable source release into the protected,
 non-reparse-point directory
@@ -353,6 +404,45 @@ sudo /usr/local/bin/node \
   /opt/easyfire-bookkeeping/current/scripts/production/linux-rollback-lock.mjs \
   --rearm
 ```
+
+The complete rehearsal is owned by the release-bound controller. Before
+`--exercise`, install a root-owned mode-`0600`
+`/etc/easyfire-bookkeeping/rehearsal-evidence-plan.json` that binds the exact
+rehearsal deployment and release, the distinct production machine-ID hash, and
+all subordinate proof locations. Serve, Funnel, public listeners, and production
+machine identity must be absent. Run the exercise phase, reboot while locked,
+verify and rearm the rehearsal-only lock, then complete a normal reboot and
+Guardian recovery. At the credential boundary, run the native-auth collector in
+an attached terminal and enter the owner password there; never pass or persist
+the password through a command argument, file, chat, or log:
+
+```bash
+sudo /usr/local/bin/node \
+  /opt/easyfire-bookkeeping/current/scripts/production/linux-rehearsal-evidence.mjs \
+  --exercise \
+  --plan /etc/easyfire-bookkeeping/rehearsal-evidence-plan.json
+
+# Perform the controller-requested locked reboot, verify/rearm, normal reboot,
+# and Guardian recovery steps before collecting authentication evidence.
+sudo /usr/local/bin/node \
+  /opt/easyfire-bookkeeping/current/scripts/production/linux-native-auth-proof.mjs \
+  --collect \
+  --plan /etc/easyfire-bookkeeping/deployment-plan.json \
+  --output /etc/easyfire-bookkeeping/activation-proof/authentication.json
+
+sudo /usr/local/bin/node \
+  /opt/easyfire-bookkeeping/current/scripts/production/linux-rehearsal-evidence.mjs \
+  --collect \
+  --plan /etc/easyfire-bookkeeping/rehearsal-evidence-plan.json \
+  --output /etc/easyfire-bookkeeping/rehearsal-evidence.json
+```
+
+Collection revalidates chronology, machine and boot identities, the rollback
+chain, native authenticated API/data invariants, Guardian recovery, route
+absence, and every subordinate proof hash. The resulting rehearsal receipt
+qualifies only that immutable release for later production consideration; it is
+not a production checkpoint, deployment, authentication, backup, or cutover
+receipt.
 
 For an actual rollback, use `--arm --reason rollback`, then verify the locked
 state after reboot. The controller permanently refuses `--rearm` for a real

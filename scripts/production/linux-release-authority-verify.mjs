@@ -19,6 +19,10 @@ export const RELEASE_ARTIFACT_SPECS = Object.freeze([
   ['scripts/production/linux-deploy-authority.mjs', '0644'],
   ['scripts/production/linux-release-authority-verify.mjs', '0644'],
   ['scripts/production/linux-release-manifest-v2.mjs', '0644'],
+  ['scripts/production/linux-oci-bundle-produce.mjs', '0644'],
+  ['scripts/production/linux-target-engine-evidence-produce.mjs', '0644'],
+  ['scripts/production/linux-native-auth-proof.mjs', '0644'],
+  ['scripts/production/linux-rehearsal-evidence.mjs', '0644'],
   ['scripts/production/linux-source-archive-authority.mjs', '0644'],
   ['scripts/production/linux-deploy-docker.mjs', '0644'],
   ['scripts/production/linux-deploy-plan.mjs', '0644'],
@@ -139,9 +143,12 @@ function parseImages(value, releaseCommit) {
     ) {
       refuse(`${role} release reference is invalid.`);
     }
-    engineSha256(candidate.ociIndexDigest, `${role} ociIndexDigest`);
+    const ociIndexDigest = engineSha256(candidate.ociIndexDigest, `${role} ociIndexDigest`);
     engineSha256(candidate.linuxAmd64ManifestDigest, `${role} linuxAmd64ManifestDigest`);
-    engineSha256(candidate.engineImageId, `${role} engineImageId`);
+    const engineImageId = engineSha256(candidate.engineImageId, `${role} engineImageId`);
+    if (engineImageId !== ociIndexDigest) {
+      refuse(`${role} engineImageId must equal its root OCI index digest.`);
+    }
     if (['envoy', 'gotenberg'].includes(role)) {
       const parts = candidate.reference.split('@');
       const expectedTag = role === 'envoy'
@@ -442,7 +449,15 @@ function verifyEvidence(value, manifest) {
     exactArray(candidate.RepoTags, [tagged], `${role} RepoTags`);
     if (image.reference.includes('@')) {
       const repoDigest = `${repositoryOf(tagged)}@${image.ociIndexDigest}`;
-      exactArray(candidate.RepoDigests, [repoDigest], `${role} RepoDigests`);
+      if (
+        !Array.isArray(candidate.RepoDigests) ||
+        !(
+          candidate.RepoDigests.length === 0 ||
+          (candidate.RepoDigests.length === 1 && candidate.RepoDigests[0] === repoDigest)
+        )
+      ) {
+        refuse(`${role} RepoDigests does not match an allowed offline-load state.`);
+      }
       if (candidate.externalDigestAuthority !== repoDigest) {
         refuse(`${role} external digest authority is invalid.`);
       }

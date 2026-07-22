@@ -505,3 +505,41 @@ after all previously reported P0 findings were closed. The final local proof is
 97/97 migration-authority tests, 28/28 Guardian tests, 24/24 release readiness,
 101/101 static validation, and zero source-size blockers. No runtime mutation
 was used to obtain that source verdict.
+
+## Immutable release proof closure repaired - 2026-07-22
+
+Pre-deployment review proved the earlier release could not honestly complete its
+own rehearsal and activation chain. One receipt was required to represent both
+the locked/inactive reboot and the later normal active recovery; rehearsal
+evidence was incorrectly tied to a future production checkpoint; release-owned
+OCI, target-engine, native-authentication, and rehearsal producers were absent;
+and activation trusted backup-receipt hashes without reopening the preserved
+backup directory. No VM application bytes were staged from that superseded
+bundle.
+
+The replacement source separates locked-reboot, normal-reboot, rehearsal, and
+production authority. Release-manifest v2 now binds 34 executable artifacts. A
+deterministic seven-role OCI producer validates real multi-platform and
+attestation indexes while requiring exactly one runnable Linux/amd64 child per
+role. Target-engine evidence binds the loaded Docker 29.6.2 image identities.
+Native authentication uses an attached TTY, exact nested schemas, no persisted
+secret/token material, and authenticated principal/tenant/organization plus
+database/Redis invariants. Rehearsal is bound to a distinct machine and
+deployment and cannot substitute for the later production checkpoint or proofs.
+
+Activation now streams and re-hashes the exact 18-file backup manifest set,
+cross-binds SQL, Redis, authority, proof, checksum, and verification bytes, and
+requires the preserved isolated-restore container and volume to remain stopped
+and networkless before either activation output is written. Negative tests cover
+missing/corrupt backup artifacts, running restore containers, stale chronology,
+wrong machine or plan, route/public exposure, secret injection, and output-path
+reuse.
+
+Final current-byte results are 42/42 focused evidence checks, 120/120 complete
+Linux/direct checks, 30/30 Guardian tests plus typecheck, 101/101 static
+production validation, 24/24 release readiness, clean syntax/diff checks, and
+zero source-size blockers. Two independent current-byte reviews returned PASS.
+The unchanged Windows 15,000-file performance test exceeded its timing ceiling
+only during parallel host load and passed its isolated 14/14 rerun. Windows
+remains healthy and the sole writer; both Linux VMs remain isolated with zero
+Bookkeeping application containers or volumes.

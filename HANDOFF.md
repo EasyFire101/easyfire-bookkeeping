@@ -367,6 +367,16 @@ history; they must not be used to construct the superseding endpoint.
 - The coherent immutable Linux release has not yet been cut and staged, so the
   release, target-engine, fixed-plan, restore, migration, and systemd contracts
   have not been exercised together on the VM.
+- The replacement release/proof implementation now closes the previously
+  impossible reboot receipt, preflight/final-checkpoint conflation, missing
+  OCI/engine/auth/rehearsal producers, backup-directory trust, and offline-image
+  identity gaps. Current-byte proof passed 42/42 focused, 120/120 Linux/direct,
+  30/30 Guardian, 101/101 static-production, and 24/24 release-readiness checks;
+  both final independent reviews passed and source-size has zero blockers.
+- A repository-wide parallel run reported only the unchanged Windows 15,000-file
+  timing guard above its 90-second ceiling under host contention. Its immediate
+  isolated rerun passed all 14/14 production-I/O tests; no changed Linux release
+  or Guardian test failed.
 - The separate rehearsal VM has not yet supplied mandatory rollback/reboot/
   Guardian proof.
 - Native owner authentication is not yet proven against the Linux candidate.
@@ -381,9 +391,9 @@ history; they must not be used to construct the superseding endpoint.
 
 ## Next safe action
 
-Complete validation and fresh independent review of the coherent direct-to-VM
-patch, commit it, and construct one immutable Linux release plus fixed deployment
-plan. Stage that exact release and the verified preflight checkpoint only to the
+Commit the independently reviewed direct-to-VM patch and construct one immutable
+Linux release plus fixed deployment plan. Stage that exact release and the
+verified preflight checkpoint only to the
 identity-separated rehearsal VM; prove restore, once-only migration, native
 authentication, backup/isolated restore, rollback-lock/rearm, reboot, and
 Guardian behavior there. Only after every rehearsal receipt is green may the

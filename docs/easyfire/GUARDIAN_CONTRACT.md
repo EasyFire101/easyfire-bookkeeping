@@ -96,13 +96,51 @@ recovery policy ship together in this repository.
 
 ## Rehearsal and enablement
 
-1. Validate config and runtime-manifest identity.
-2. Run healthy observations in shadow mode.
-3. Rehearse failures against disposable, non-production containers.
-4. Prove data-role and identity-mismatch refusal.
-5. Prove one allowed stateless start and the cooldown/budget behavior.
-6. Enable active mode only after the VM backup, rollback, reboot, and
-   single-writer gates pass.
+Guardian qualification runs on the isolated
+`easyfire-bookkeeping-rehearsal-newsec` VM through the release-bound
+`linux-rehearsal-evidence.mjs` controller. The controller rejects a rehearsal
+machine identity equal to production, verifies the exact release manifest and
+rehearsal deployment, requires no Serve/Funnel/public listener, and records
+zero production-data mutations. Its receipt deliberately does not bind a
+future production checkpoint or deployment ID.
+
+The proof is split across real state transitions rather than operator-authored
+pass/fail files:
+
+1. The rollback controller arms the isolated deployment, verifies a later boot
+   while the lock is still effective, and durably creates `locked-reboot.json`.
+   Rearm is allowed only from that exact later-boot receipt. This proves the
+   locked-reboot behavior independently from ordinary recovery.
+2. `linux-rehearsal-evidence.mjs --exercise` validates identity, performs three
+   shadow observations, proves one allowlisted stateless start and cooldown,
+   and proves Redis, MariaDB, and identity-mismatch refusal. It also rehearses
+   Docker-service restart, Docker-daemon failure, and invalid deployment
+   authority while restoring the original receipt byte-for-byte.
+3. The controller writes a create-new normal-reboot marker. After a separate
+   ordinary reboot, run the native-authentication collector and then
+   `linux-rehearsal-evidence.mjs --collect`. Collection proves the boot ID
+   changed, the immutable stack authority passed, and the Guardian timer is
+   active and enabled, and timestamps the normal-reboot proof after the
+   authentication receipt. This proof is distinct from the locked-reboot
+   receipt.
+4. The collector consumes that release-bound native-authentication receipt. It
+   receipt is created only through an interactive owner login, binds the
+   authenticated account and organization responses to the signed-in
+   principal, and validates the database/Redis invariants server-side. The
+   owner confirmation authorizes the sole-owner assertion and that one sign-in
+   at the credential boundary; the receipt stores only hashes and counts and
+   records that no credential or session secret was persisted.
+5. The final root-owned `0600` rehearsal receipt hashes every subordinate
+   machine-produced proof and is published create-new. Production Guardian
+   promotion accepts only that exact-release receipt, then separately verifies
+   the current production cutover plan, deployment, machine identity, and
+   config before materializing active mode. The rehearsal deployment and
+   machine must differ from production.
+
+Active mode is enabled only after the production backup, rollback,
+single-writer, activation, and live-readback gates also pass. Passing the
+isolated rehearsal alone never authorizes migration, route activation, or a
+production write.
 
 Disable only the timer to suspend Guardian:
 

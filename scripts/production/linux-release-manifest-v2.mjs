@@ -20,6 +20,7 @@ const READ_CHUNK_BYTES = 1024 * 1024;
 const OCI_INDEX = 'application/vnd.oci.image.index.v1+json';
 const OCI_MANIFEST = 'application/vnd.oci.image.manifest.v1+json';
 const OCI_CONFIG = 'application/vnd.oci.image.config.v1+json';
+const IN_TOTO_LAYER = 'application/vnd.in-toto+json';
 const PINNED_DOCKER_VERSION = '29.6.2';
 const RELEASE_ARTIFACTS = Object.freeze([
   ['packages/guardian/dist/guardian.js', '0644'],
@@ -28,6 +29,10 @@ const RELEASE_ARTIFACTS = Object.freeze([
   ['scripts/production/linux-deploy-authority.mjs', '0644'],
   ['scripts/production/linux-release-authority-verify.mjs', '0644'],
   ['scripts/production/linux-release-manifest-v2.mjs', '0644'],
+  ['scripts/production/linux-oci-bundle-produce.mjs', '0644'],
+  ['scripts/production/linux-target-engine-evidence-produce.mjs', '0644'],
+  ['scripts/production/linux-native-auth-proof.mjs', '0644'],
+  ['scripts/production/linux-rehearsal-evidence.mjs', '0644'],
   ['scripts/production/linux-source-archive-authority.mjs', '0644'],
   ['scripts/production/linux-deploy-docker.mjs', '0644'],
   ['scripts/production/linux-deploy-plan.mjs', '0644'],
@@ -416,6 +421,121 @@ function requireDescriptor(value, mediaType, label) {
   return descriptorValue;
 }
 
+function requireBoundedString(value, label) {
+  if (
+    typeof value !== 'string' ||
+    value.length === 0 ||
+    value.length > 512 ||
+    /[\0\r\n]/.test(value)
+  ) {
+    refuse(`${label} must be a bounded non-empty string.`);
+  }
+  return value;
+}
+
+function requirePlatform(value, label) {
+  const platform = requireObject(value, label);
+  const allowed = new Set([
+    'architecture',
+    'os',
+    'os.version',
+    'os.features',
+    'variant',
+    'features',
+  ]);
+  if (Object.keys(platform).some((key) => !allowed.has(key))) {
+    refuse(`${label} has unsupported fields.`);
+  }
+  requireBoundedString(platform.os, `${label}.os`);
+  requireBoundedString(platform.architecture, `${label}.architecture`);
+  if (
+    !/^[a-z0-9][a-z0-9._-]{0,63}$/.test(platform.os) ||
+    !/^[a-z0-9][a-z0-9._-]{0,63}$/.test(platform.architecture)
+  ) {
+    refuse(`${label} has an invalid platform identity.`);
+  }
+  for (const key of ['os.version', 'variant']) {
+    if (key in platform) requireBoundedString(platform[key], `${label}.${key}`);
+  }
+  if (
+    'variant' in platform &&
+    !/^[a-zA-Z0-9][a-zA-Z0-9._-]{0,63}$/.test(platform.variant)
+  ) {
+    refuse(`${label}.variant is invalid.`);
+  }
+  for (const key of ['os.features', 'features']) {
+    if (!(key in platform)) continue;
+    if (
+      !Array.isArray(platform[key]) ||
+      platform[key].length > 64 ||
+      new Set(platform[key]).size !== platform[key].length
+    ) {
+      refuse(`${label}.${key} must be a bounded unique string array.`);
+    }
+    platform[key].forEach((entry, index) => {
+      requireBoundedString(entry, `${label}.${key}[${index}]`);
+    });
+  }
+  return platform;
+}
+
+function requireAnnotations(value, label) {
+  if (value === undefined) return undefined;
+  const annotations = requireObject(value, label);
+  if (Object.keys(annotations).length > 64) {
+    refuse(`${label} has too many entries.`);
+  }
+  for (const [key, annotationValue] of Object.entries(annotations)) {
+    requireBoundedString(key, `${label} key`);
+    requireBoundedString(annotationValue, `${label}.${key}`);
+  }
+  return annotations;
+}
+
+function classifyIndexChild(value, bundle, label) {
+  const descriptorValue = requireDescriptor(value, OCI_MANIFEST, label);
+  const allowed = new Set(['mediaType', 'digest', 'size', 'platform', 'annotations']);
+  if (Object.keys(descriptorValue).some((key) => !allowed.has(key))) {
+    refuse(`${label} has unsupported descriptor fields.`);
+  }
+  blobEntry(bundle, descriptorValue, label);
+  const platform = requirePlatform(descriptorValue.platform, `${label}.platform`);
+  const annotations = requireAnnotations(
+    descriptorValue.annotations,
+    `${label}.annotations`,
+  );
+  const unknownPlatform =
+    platform.os === 'unknown' || platform.architecture === 'unknown';
+  const hasAttestationFields = Boolean(
+    annotations &&
+    ('vnd.docker.reference.type' in annotations ||
+      'vnd.docker.reference.digest' in annotations),
+  );
+  if (unknownPlatform || hasAttestationFields) {
+    if (
+      platform.os !== 'unknown' ||
+      platform.architecture !== 'unknown' ||
+      annotations?.['vnd.docker.reference.type'] !== 'attestation-manifest'
+    ) {
+      refuse(`${label} has an invalid attestation descriptor.`);
+    }
+    return {
+      descriptor: descriptorValue,
+      platform,
+      attestationSubject: requireDigest(
+        annotations['vnd.docker.reference.digest'],
+        `${label} attestation subject`,
+      ),
+    };
+  }
+  return {
+    descriptor: descriptorValue,
+    platform,
+    runnableLinuxAmd64:
+      platform.os === 'linux' && platform.architecture === 'amd64',
+  };
+}
+
 function blobEntry(bundle, descriptorValue, label) {
   const digest = requireDigest(descriptorValue.digest, `${label}.digest`);
   const entry = bundle.entries.get(`blobs/sha256/${digest.slice(7)}`);
@@ -442,6 +562,58 @@ async function readDescriptorJson(bundle, descriptorValue, mediaType, label) {
     refuse(`${label} blob is not valid JSON.`);
   }
   return requireObject(value, label);
+}
+
+async function inspectIndexChildDocument(bundle, child, role, index) {
+  const label = `${role} OCI index child ${index}`;
+  const manifest = await readDescriptorJson(
+    bundle,
+    child.descriptor,
+    OCI_MANIFEST,
+    `${label} manifest`,
+  );
+  if (manifest.schemaVersion !== 2 || manifest.mediaType !== OCI_MANIFEST) {
+    refuse(`${label} manifest identity is invalid.`);
+  }
+  const config = requireDescriptor(
+    manifest.config,
+    OCI_CONFIG,
+    `${label} config descriptor`,
+  );
+  const configValue = await readDescriptorJson(
+    bundle,
+    config,
+    OCI_CONFIG,
+    `${label} config`,
+  );
+  const attestation = child.attestationSubject !== undefined;
+  if (!attestation && (
+    configValue.os !== child.platform.os ||
+    configValue.architecture !== child.platform.architecture
+  )) {
+    refuse(`${label} config does not match its declared platform.`);
+  }
+  if (!Array.isArray(manifest.layers)) refuse(`${label} layers must be an array.`);
+  if (attestation && manifest.layers.length < 1) {
+    refuse(`${label} attestation must contain at least one statement layer.`);
+  }
+  const layers = manifest.layers.map((candidate, layerIndex) => {
+    const layer = requireObject(candidate, `${label} layer ${layerIndex}`);
+    const validMediaType = attestation
+      ? layer.mediaType === IN_TOTO_LAYER
+      : typeof layer.mediaType === 'string' &&
+        layer.mediaType.startsWith('application/vnd.oci.image.layer.v1');
+    if (!validMediaType) refuse(`${label} layer ${layerIndex} has an invalid mediaType.`);
+    requireDigest(layer.digest, `${label} layer ${layerIndex}.digest`);
+    requireSafeInteger(layer.size, `${label} layer ${layerIndex}.size`);
+    blobEntry(bundle, layer, `${label} layer ${layerIndex}`);
+    return {
+      digest: layer.digest,
+      bytes: layer.size,
+      mediaType: layer.mediaType,
+    };
+  });
+  return { config, layers };
 }
 
 function normalizedReference(value, label) {
@@ -496,6 +668,9 @@ async function inspectImages(bundle, specs) {
     if (rootDigests.has(descriptorValue.digest)) {
       refuse('Root index assigns one OCI image digest to multiple expected tags.');
     }
+    if (reference !== specs[index].sourceReference) {
+      refuse('Root index image descriptors must use the fixed role order.');
+    }
     blobEntry(bundle, descriptorValue, label);
     rootDigests.add(descriptorValue.digest);
     roots.set(reference, descriptorValue);
@@ -518,57 +693,45 @@ async function inspectImages(bundle, specs) {
       imageIndex.schemaVersion !== 2 ||
       imageIndex.mediaType !== OCI_INDEX ||
       !Array.isArray(imageIndex.manifests) ||
-      imageIndex.manifests.length !== 1
+      imageIndex.manifests.length === 0 ||
+      imageIndex.manifests.length > 256
     ) {
-      refuse(`${spec.role} OCI index must contain exactly one linux/amd64 manifest.`);
+      refuse(`${spec.role} OCI index must contain image manifest descriptors.`);
     }
-    const platformDescriptor = requireDescriptor(
-      imageIndex.manifests[0],
-      OCI_MANIFEST,
-      `${spec.role} linux/amd64 descriptor`,
-    );
-    const platform = requireObject(
-      platformDescriptor.platform,
-      `${spec.role} linux/amd64 platform`,
-    );
-    if (platform.os !== 'linux' || platform.architecture !== 'amd64') {
-      refuse(`${spec.role} OCI index is missing the exact linux/amd64 platform.`);
+    const children = imageIndex.manifests.map((candidate, childIndex) =>
+      classifyIndexChild(
+        candidate,
+        bundle,
+        `${spec.role} OCI index child ${childIndex}`,
+      ));
+    const runnableChildren = children.filter((child) => child.runnableLinuxAmd64);
+    if (runnableChildren.length !== 1) {
+      refuse(`${spec.role} OCI index must contain exactly one runnable linux/amd64 manifest.`);
     }
-    const imageManifest = await readDescriptorJson(
-      bundle,
-      platformDescriptor,
-      OCI_MANIFEST,
-      `${spec.role} linux/amd64 manifest`,
+    const nonAttestationDigests = new Set(
+      children
+        .filter((child) => child.attestationSubject === undefined)
+        .map((child) => child.descriptor.digest),
     );
-    if (imageManifest.schemaVersion !== 2 || imageManifest.mediaType !== OCI_MANIFEST) {
-      refuse(`${spec.role} linux/amd64 manifest identity is invalid.`);
-    }
-    const config = requireDescriptor(
-      imageManifest.config,
-      OCI_CONFIG,
-      `${spec.role} config descriptor`,
-    );
-    blobEntry(bundle, config, `${spec.role} config descriptor`);
-    if (!Array.isArray(imageManifest.layers)) {
-      refuse(`${spec.role} manifest layers must be an array.`);
-    }
-    const layers = imageManifest.layers.map((candidate, layerIndex) => {
-      const layer = requireObject(candidate, `${spec.role} layer ${layerIndex}`);
+    for (const child of children) {
       if (
-        typeof layer.mediaType !== 'string' ||
-        !layer.mediaType.startsWith('application/vnd.oci.image.layer.v1')
+        child.attestationSubject !== undefined &&
+        !nonAttestationDigests.has(child.attestationSubject)
       ) {
-        refuse(`${spec.role} layer ${layerIndex} has an invalid mediaType.`);
+        refuse(`${spec.role} OCI index attestation does not bind an image descriptor.`);
       }
-      requireDigest(layer.digest, `${spec.role} layer ${layerIndex}.digest`);
-      requireSafeInteger(layer.size, `${spec.role} layer ${layerIndex}.size`);
-      blobEntry(bundle, layer, `${spec.role} layer ${layerIndex}`);
-      return {
-        digest: layer.digest,
-        bytes: layer.size,
-        mediaType: layer.mediaType,
-      };
-    });
+    }
+    if (new Set(children.map((child) => child.descriptor.digest)).size !== children.length) {
+      refuse(`${spec.role} OCI index contains a duplicate child descriptor.`);
+    }
+    const platformDescriptor = runnableChildren[0].descriptor;
+    let selectedDocument;
+    for (const [index, child] of children.entries()) {
+      const document = await inspectIndexChildDocument(bundle, child, spec.role, index);
+      if (child === runnableChildren[0]) selectedDocument = document;
+    }
+    if (!selectedDocument) refuse(`${spec.role} selected manifest validation is incomplete.`);
+    const { config, layers } = selectedDocument;
     inventory.push({
       role: spec.role,
       sourceReference: spec.sourceReference,
@@ -639,11 +802,14 @@ function parseEngineEvidence(document, bundle, releaseCommit, specs, inventory) 
       `Target-engine image ${index}`,
     );
     const reference = normalizedReference(candidate.reference, `Target-engine image ${index}`);
-    if (entries.has(reference)) refuse(`Target-engine evidence duplicates ${reference}.`);
-    if (!specs.some((spec) => spec.sourceReference === reference)) {
-      refuse(`Target-engine evidence contains undeclared reference ${reference}.`);
+    if (reference !== specs[index].sourceReference) {
+      refuse('Target-engine evidence images must use the fixed role order.');
     }
-    requireDigest(candidate.Id, `${reference} Docker Id`);
+    if (entries.has(reference)) refuse(`Target-engine evidence duplicates ${reference}.`);
+    const engineId = requireDigest(candidate.Id, `${reference} Docker Id`);
+    if (engineId !== inventory[index].ociIndexDigest) {
+      refuse(`${reference} Docker Id must equal its root OCI index digest.`);
+    }
     entries.set(reference, candidate);
   }
 
@@ -654,7 +820,16 @@ function parseEngineEvidence(document, bundle, releaseCommit, specs, inventory) 
     const rootDigest = inventory[index].ociIndexDigest;
     const externalDigest = `${repositoryOf(spec.sourceReference)}@${rootDigest}`;
     if (spec.external) {
-      exactStringArray(candidate.RepoDigests, [externalDigest], `${spec.role} RepoDigests`);
+      if (
+        !Array.isArray(candidate.RepoDigests) ||
+        !(
+          candidate.RepoDigests.length === 0 ||
+          (candidate.RepoDigests.length === 1 &&
+            candidate.RepoDigests[0] === externalDigest)
+        )
+      ) {
+        refuse(`${spec.role} RepoDigests does not match an allowed offline-load state.`);
+      }
       if (candidate.externalDigestAuthority !== externalDigest) {
         refuse(`${spec.role} external digest authority is invalid.`);
       }

@@ -4,6 +4,7 @@ import { spawn } from 'node:child_process';
 import { createHash } from 'node:crypto';
 import { constants } from 'node:fs';
 import { lstat, open, readFile, realpath, rename } from 'node:fs/promises';
+import os from 'node:os';
 import path from 'node:path';
 import { pathToFileURL } from 'node:url';
 
@@ -13,19 +14,18 @@ import {
 } from './direct-vm-cutover-contract.mjs';
 import { validateDeploymentPlan } from './linux-deploy-plan.mjs';
 import { parseManifestBoundRelease } from './linux-release-authority-verify.mjs';
+import { validateRehearsalEvidence } from './linux-rehearsal-evidence.mjs';
 
 export const GUARDIAN_CONFIG = '/etc/easyfire-bookkeeping/guardian.json';
 export const SHADOW_CONFIG = '/etc/easyfire-bookkeeping/guardian.shadow.json';
-export const SHADOW_PROOF = '/etc/easyfire-bookkeeping/guardian-proof/shadow.json';
-export const ACTIVE_PROOF = '/etc/easyfire-bookkeeping/guardian-proof/active-disposable.json';
+export const REHEARSAL_PROOF = '/etc/easyfire-bookkeeping/rehearsal-evidence.json';
 export const PROMOTION_RECEIPT = '/etc/easyfire-bookkeeping/guardian-active-promotion.json';
 const CUTOVER_PLAN = '/etc/easyfire-bookkeeping/cutover-plan.json';
 const DEPLOYMENT_PLAN = '/etc/easyfire-bookkeeping/deployment-plan.json';
 const PENDING_CONFIG = '/etc/easyfire-bookkeeping/guardian.json.active-pending';
 const SYSTEMCTL = '/usr/bin/systemctl';
 const TIMER = 'easyfire-bookkeeping-guardian.timer';
-const SHA256 = /^[a-f0-9]{64}$/;
-const COMMIT = /^[a-f0-9]{40}$/;
+const MACHINE_ID = '/etc/machine-id';
 
 export class GuardianPromotionRefusal extends Error {
   constructor(code, message) {
@@ -41,9 +41,6 @@ const exactKeys = (value, keys, label) => {
   if (JSON.stringify(Object.keys(value).sort()) !== JSON.stringify([...keys].sort())) {
     refuse('E_KEYS', `${label} has missing or unexpected fields.`);
   }
-};
-const validTime = (value, label) => {
-  if (typeof value !== 'string' || Number.isNaN(Date.parse(value))) refuse('E_TIME', `${label} is invalid.`);
 };
 const sha256 = (bytes) => createHash('sha256').update(bytes).digest('hex');
 
@@ -87,57 +84,6 @@ export function buildActiveGuardianConfig(shadowCandidate) {
   return validateGuardianConfig({ ...shadow, shadowMode: false }, false);
 }
 
-export function validateGuardianRehearsalProofs({
-  shadowProof,
-  activeProof,
-  shadowConfigSha256,
-  activeConfigSha256,
-}) {
-  if (!SHA256.test(shadowConfigSha256) || !SHA256.test(activeConfigSha256)) {
-    refuse('E_PROOF_HASH', 'Guardian config hashes are invalid.');
-  }
-  exactKeys(shadowProof, [
-    'schemaVersion', 'project', 'kind', 'status', 'completedAt', 'deploymentId',
-    'releaseCommit', 'configSha256', 'healthyObservationsPassed',
-    'disposableOnly', 'productionMutationCount',
-  ], 'Guardian shadow proof');
-  exactKeys(activeProof, [
-    'schemaVersion', 'project', 'kind', 'status', 'completedAt', 'deploymentId',
-    'releaseCommit', 'configSha256', 'statelessRecoveryPassed',
-    'cooldownBudgetPassed', 'databaseAutoRecoveryRefused',
-    'identityMismatchRefused', 'healthyAfterRehearsal', 'disposableOnly',
-    'productionMutationCount',
-  ], 'Guardian active disposable proof');
-  validTime(shadowProof.completedAt, 'Guardian shadow proof time');
-  validTime(activeProof.completedAt, 'Guardian active proof time');
-  if (
-    shadowProof.schemaVersion !== 1 ||
-    activeProof.schemaVersion !== 1 ||
-    shadowProof.project !== 'easyfire-bookkeeping' ||
-    activeProof.project !== 'easyfire-bookkeeping' ||
-    shadowProof.kind !== 'easyfire-bookkeeping-guardian-shadow-rehearsal' ||
-    activeProof.kind !== 'easyfire-bookkeeping-guardian-active-disposable-rehearsal' ||
-    shadowProof.status !== 'passed' ||
-    activeProof.status !== 'passed' ||
-    shadowProof.deploymentId !== activeProof.deploymentId ||
-    shadowProof.releaseCommit !== activeProof.releaseCommit ||
-    !COMMIT.test(shadowProof.releaseCommit ?? '') ||
-    shadowProof.configSha256 !== shadowConfigSha256 ||
-    activeProof.configSha256 !== activeConfigSha256 ||
-    shadowProof.healthyObservationsPassed !== true ||
-    activeProof.statelessRecoveryPassed !== true ||
-    activeProof.cooldownBudgetPassed !== true ||
-    activeProof.databaseAutoRecoveryRefused !== true ||
-    activeProof.identityMismatchRefused !== true ||
-    activeProof.healthyAfterRehearsal !== true ||
-    shadowProof.disposableOnly !== true ||
-    activeProof.disposableOnly !== true ||
-    shadowProof.productionMutationCount !== 0 ||
-    activeProof.productionMutationCount !== 0
-  ) refuse('E_REHEARSAL', 'Guardian shadow/active disposable proof is incomplete or mixed.');
-  return { deploymentId: shadowProof.deploymentId, releaseCommit: shadowProof.releaseCommit };
-}
-
 const assertSecureRootFile = async (file, mode = 0o600) => {
   const resolved = await realpath(file).catch(() => null);
   if (resolved !== file) refuse('E_FILE', `Required file is missing or traverses a symlink: ${file}`);
@@ -168,20 +114,36 @@ const assertImmutableReleaseExecutor = async (authority) => {
   const executable = await readFile(executablePath);
   const manifestDocument = await readSecureJson(`${releaseRoot}/release-manifest.json`, 0o644);
   const manifest = parseManifestBoundRelease(manifestDocument.value);
+  const machineIdSha256 = sha256(
+    (await readFile(MACHINE_ID, 'utf8')).trim(),
+  );
   const artifact = manifest.artifacts.find(({ path: artifactPath }) =>
     artifactPath === 'scripts/production/linux-guardian-promote-active.mjs');
+  const rehearsalArtifact = manifest.artifacts.find(({ path: artifactPath }) =>
+    artifactPath === 'scripts/production/linux-rehearsal-evidence.mjs');
   if (
     cutover.controller.releaseCommit !== authority.releaseCommit ||
-    deployment.deploymentId !== authority.deploymentId ||
     deployment.releaseCommit !== authority.releaseCommit ||
+    deployment.deploymentId === authority.rehearsalDeploymentId ||
+    os.hostname().toLowerCase() !== 'easyfire-bookkeeping-newsec' ||
+    machineIdSha256 !== authority.productionMachineIdSha256 ||
+    machineIdSha256 === authority.rehearsalMachineIdSha256 ||
     manifest.releaseCommit !== authority.releaseCommit ||
+    !safeHashEqual(
+      sha256(manifestDocument.bytes),
+      authority.releaseManifestSha256,
+    ) ||
     !safeHashEqual(sha256(manifestDocument.bytes), cutover.controller.releaseManifestSha256) ||
     !safeHashEqual(sha256(manifestDocument.bytes), deployment.releaseManifest.sha256) ||
     !safeHashEqual(sha256(executable), cutover.controller.guardianPromotionSha256) ||
     !artifact || artifact.mode !== '0644' || artifact.bytes !== executable.length ||
-    !safeHashEqual(artifact.sha256, sha256(executable))
+    !safeHashEqual(artifact.sha256, sha256(executable)) ||
+    !rehearsalArtifact || rehearsalArtifact.mode !== '0644' ||
+    !safeHashEqual(rehearsalArtifact.sha256, authority.rehearsalCollectorSha256)
   ) refuse('E_EXECUTOR_HASH', 'Guardian promotion is not an exact cutover/manifest-bound artifact.');
   return {
+    deploymentId: deployment.deploymentId,
+    releaseCommit: deployment.releaseCommit,
     executablePath,
     executableSha256: sha256(executable),
     releaseManifestSha256: sha256(manifestDocument.bytes),
@@ -200,6 +162,7 @@ const writeExclusive = async (file, bytes) => {
     await handle.chmod(0o600);
     await handle.sync();
   } finally { await handle.close(); }
+  await syncDirectory(path.dirname(file));
 };
 const syncDirectory = async (directory) => {
   const handle = await open(directory, constants.O_RDONLY);
@@ -219,26 +182,42 @@ const requireTimerInactive = () => new Promise((resolve, reject) => {
   });
 });
 
+const assertPromotionOutputsAbsent = async () => {
+  for (const output of [SHADOW_CONFIG, PENDING_CONFIG, PROMOTION_RECEIPT]) {
+    const exists = await lstat(output)
+      .then(() => true)
+      .catch((error) => {
+        if (error?.code === 'ENOENT') return false;
+        throw error;
+      });
+    if (exists) refuse('E_ALREADY_EXISTS', `Refusing to replace ${output}.`);
+  }
+};
+
 async function promote() {
   if (process.platform !== 'linux' || process.getuid?.() !== 0) {
     refuse('E_ROOT', 'Guardian active promotion requires Linux root.');
   }
-  const [configDocument, shadowProofDocument, activeProofDocument] = await Promise.all([
+  const [configDocument, rehearsalDocument] = await Promise.all([
     readSecureJson(GUARDIAN_CONFIG),
-    readSecureJson(SHADOW_PROOF),
-    readSecureJson(ACTIVE_PROOF),
+    readSecureJson(REHEARSAL_PROOF),
   ]);
   const shadowConfig = validateGuardianConfig(configDocument.value, true);
   const activeConfig = buildActiveGuardianConfig(shadowConfig);
   const activeBytes = Buffer.from(`${JSON.stringify(activeConfig, null, 2)}\n`);
-  const authority = validateGuardianRehearsalProofs({
-    shadowProof: shadowProofDocument.value,
-    activeProof: activeProofDocument.value,
-    shadowConfigSha256: sha256(configDocument.bytes),
-    activeConfigSha256: sha256(activeBytes),
-  });
+  const rehearsal = validateRehearsalEvidence(rehearsalDocument.value);
+  const authority = {
+    releaseCommit: rehearsal.release.releaseCommit,
+    releaseManifestSha256: rehearsal.release.releaseManifestSha256,
+    rehearsalId: rehearsal.rehearsalId,
+    rehearsalDeploymentId: rehearsal.rehearsalDeployment.deploymentId,
+    rehearsalMachineIdSha256: rehearsal.host.machineIdSha256,
+    productionMachineIdSha256: rehearsal.host.productionMachineIdSha256,
+    rehearsalCollectorSha256: rehearsal.release.collectorSha256,
+  };
   const executor = await assertImmutableReleaseExecutor(authority);
   await requireTimerInactive();
+  await assertPromotionOutputsAbsent();
   await writeExclusive(SHADOW_CONFIG, configDocument.bytes);
   await writeExclusive(PENDING_CONFIG, activeBytes);
   await rename(PENDING_CONFIG, GUARDIAN_CONFIG);
@@ -252,15 +231,16 @@ async function promote() {
     kind: 'easyfire-bookkeeping-guardian-active-promotion',
     status: 'active-config-materialized',
     promotedAt: new Date().toISOString(),
-    deploymentId: authority.deploymentId,
-    releaseCommit: authority.releaseCommit,
     ...executor,
+    rehearsalId: authority.rehearsalId,
+    rehearsalDeploymentId: authority.rehearsalDeploymentId,
+    rehearsalEvidencePath: REHEARSAL_PROOF,
+    rehearsalEvidenceSha256: sha256(rehearsalDocument.bytes),
+    rehearsalHostMachineIdSha256: authority.rehearsalMachineIdSha256,
     shadowConfigPath: SHADOW_CONFIG,
     shadowConfigSha256: sha256(configDocument.bytes),
     productionConfigPath: GUARDIAN_CONFIG,
     productionConfigSha256: sha256(readback.bytes),
-    shadowProofSha256: sha256(shadowProofDocument.bytes),
-    activeProofSha256: sha256(activeProofDocument.bytes),
     timerWasInactive: true,
     timerActivationPerformed: false,
     resourcesDeleted: false,
@@ -273,7 +253,7 @@ async function runCli() {
   const args = process.argv.slice(2);
   if (
     JSON.stringify(args) !== JSON.stringify([
-      '--promote', '--shadow-proof', SHADOW_PROOF, '--active-proof', ACTIVE_PROOF,
+      '--promote', '--rehearsal-proof', REHEARSAL_PROOF,
     ])
   ) refuse('E_USAGE', 'Use the exact fixed Guardian promotion command.');
   const receipt = await promote();

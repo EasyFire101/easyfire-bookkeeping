@@ -151,7 +151,7 @@ function buildOciBundle() {
           : sourceReference,
         ociIndexDigest: imageIndexDescriptor.digest,
         linuxAmd64ManifestDigest: imageManifestDescriptor.digest,
-        engineImageId: digest((index + 1).toString(16)),
+        engineImageId: imageIndexDescriptor.digest,
       },
       inventory: {
         role,
@@ -471,6 +471,26 @@ test('rejects target-engine evidence that no longer matches the manifest', async
   fixtureValue.manifest.targetEngineEvidence.sha256 = hash(bytes);
   fixtureValue.manifest.targetEngineEvidence.bytes = bytes.length;
   await assert.rejects(verifyManifestBoundRelease(fixtureValue.options), /webapp.*Docker Id.*engineImageId/i);
+});
+
+test('requires root-index Docker IDs and accepts the bounded external offline-load state', async (t) => {
+  const wrongId = await fixture(t);
+  wrongId.manifest.images[1].engineImageId = digest('f');
+  await assert.rejects(
+    verifyManifestBoundRelease(wrongId.options),
+    /webapp.*engineImageId.*root OCI index digest/i,
+  );
+
+  const offline = await fixture(t);
+  const evidence = JSON.parse(await readFile(offline.engineEvidencePath, 'utf8'));
+  evidence.images[0].RepoDigests = [];
+  evidence.images[3].RepoDigests = [];
+  const evidenceBytes = Buffer.from(`${JSON.stringify(evidence, null, 2)}\n`);
+  await writeFile(offline.engineEvidencePath, evidenceBytes);
+  offline.manifest.targetEngineEvidence.sha256 = hash(evidenceBytes);
+  offline.manifest.targetEngineEvidence.bytes = evidenceBytes.length;
+  const proof = await verifyManifestBoundRelease(offline.options);
+  assert.equal(proof.releaseCommit, releaseCommit);
 });
 
 test('rejects missing or undeclared release artifacts', async (t) => {

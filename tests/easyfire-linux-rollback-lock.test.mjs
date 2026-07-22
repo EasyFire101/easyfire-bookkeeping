@@ -18,6 +18,8 @@ const releaseCommit = 'a'.repeat(40);
 const planSha256 = 'b'.repeat(64);
 const deploymentReceiptSha256 = 'c'.repeat(64);
 const lockId = '123e4567-e89b-42d3-a456-426614174000';
+const bootIdAtArm = '1516c5b2-3340-4c02-b9c4-7a340930088d';
+const bootIdAfter = '53682154-c88d-48ee-9194-adac4790d8cc';
 
 function binding() {
   return {
@@ -32,6 +34,7 @@ function lock(reason = 'rehearsal') {
   return controller.createLockDocument(binding(), reason, {
     lockId,
     armedAt: '2026-07-21T22:00:00.000Z',
+    bootIdAtArm,
   });
 }
 
@@ -216,6 +219,111 @@ test('lock document is exact, deployment-bound, and rollback can never rearm', (
   );
 });
 
+test('locked reboot proof is machine-bound, requires a changed boot id, and is receipt-bound', () => {
+  const rehearsal = lock();
+  const proof = {
+    runtime: {
+      stoppedContainers: controller.ALL_RUNTIME_CONTAINERS,
+      migrationExitCode: 0,
+    },
+    tailscale: { enrolled: false, serveAbsent: true, funnelAbsent: true },
+    unitStates: {
+      'easyfire-bookkeeping-guardian.timer': 'inactive',
+      'easyfire-bookkeeping-guardian.service': 'inactive',
+      'easyfire-bookkeeping-stack.service': 'inactive',
+    },
+  };
+  const receipt = controller.buildLockedRebootReceipt({
+    lock: rehearsal,
+    lockSha256: 'd'.repeat(64),
+    armedReceiptSha256: 'e'.repeat(64),
+    bootIdAfter,
+    proof,
+    completedAt: '2026-07-21T22:05:00.000Z',
+  });
+  assert.equal(receipt.bootIdBefore, bootIdAtArm);
+  assert.equal(receipt.bootIdAfter, bootIdAfter);
+  assert.equal(receipt.status, 'locked-reboot-verified');
+  assert.deepEqual(
+    controller.validateLockedRebootReceipt(
+      receipt,
+      rehearsal,
+      'd'.repeat(64),
+      'e'.repeat(64),
+    ),
+    receipt,
+  );
+  assert.throws(
+    () => controller.buildLockedRebootReceipt({
+      lock: rehearsal,
+      lockSha256: 'd'.repeat(64),
+      armedReceiptSha256: 'e'.repeat(64),
+      bootIdAfter: bootIdAtArm,
+      proof,
+      completedAt: '2026-07-21T22:05:00.000Z',
+    }),
+    /boot/i,
+  );
+  const rollback = lock('rollback');
+  const rollbackReceipt = controller.buildLockedRebootReceipt({
+    lock: rollback,
+    lockSha256: 'f'.repeat(64),
+    armedReceiptSha256: '0'.repeat(64),
+    bootIdAfter,
+    proof,
+    completedAt: '2026-07-21T22:05:00.000Z',
+  });
+  assert.equal(rollbackReceipt.reason, 'rollback');
+  assert.equal(
+    controller.validateLockedRebootReceipt(
+      rollbackReceipt,
+      rollback,
+      'f'.repeat(64),
+      '0'.repeat(64),
+    ).status,
+    'locked-reboot-verified',
+  );
+  const nestedDrift = structuredClone(proof);
+  nestedDrift.unitStates.unexpected = 'inactive';
+  assert.throws(() => controller.buildLockedRebootReceipt({
+    lock: rehearsal, lockSha256: 'd'.repeat(64), armedReceiptSha256: 'e'.repeat(64),
+    bootIdAfter, proof: nestedDrift, completedAt: '2026-07-21T22:05:00.000Z',
+  }), /locked|proof|field/i);
+});
+
+test('armed receipt validation is exact and proves inactive units and absent routes', () => {
+  const rehearsal = lock();
+  const receipt = {
+    schemaVersion: 1, project: controller.PROJECT,
+    kind: 'easyfire-bookkeeping-rollback-armed-receipt', status: 'locked-verified',
+    lockId, reason: 'rehearsal', completedAt: '2026-07-21T22:02:00.000Z',
+    lockSha256: 'd'.repeat(64), deployment: rehearsal.deployment,
+    proof: {
+      stoppedContainers: controller.ALL_RUNTIME_CONTAINERS, migrationExitCode: 0,
+      unitStates: {
+        'easyfire-bookkeeping-guardian.timer': 'inactive',
+        'easyfire-bookkeeping-guardian.service': 'inactive',
+        'easyfire-bookkeeping-stack.service': 'inactive',
+      },
+      tailscale: { enrolled: false, serveAbsent: true, funnelAbsent: true },
+      absentListeners: [443, 8080], resourcesPreserved: true,
+    },
+  };
+  assert.doesNotThrow(() => controller.validateArmedReceipt(receipt, rehearsal, 'd'.repeat(64)));
+  for (const mutate of [
+    (value) => { value.unexpected = true; },
+    (value) => { value.proof.unitStates['easyfire-bookkeeping-stack.service'] = 'active'; },
+    (value) => { value.proof.tailscale.serveAbsent = false; },
+  ]) {
+    const invalid = structuredClone(receipt);
+    mutate(invalid);
+    assert.throws(
+      () => controller.validateArmedReceipt(invalid, rehearsal, 'd'.repeat(64)),
+      /armed|receipt|proof|field/i,
+    );
+  }
+});
+
 test('locked runtime proof binds all six stopped containers and exited migration', () => {
   const resources = deploymentResources();
   const migration = migrationResult();
@@ -319,6 +427,7 @@ test('parses Linux TCP tables and rejects listeners on 443 or 8080', () => {
 
 test('source has atomic no-replace writes and no destructive Docker vocabulary', async () => {
   const source = await readFile(controllerPath, 'utf8');
+  assert.match(source, /verifyLocked\(\{ emitRebootProof: true, requireRebootProof: true \}\)/);
   const deploymentAuthoritySource = await readFile(
     path.join(root, 'scripts', 'production', 'linux-deploy-authority.mjs'),
     'utf8',
@@ -337,6 +446,9 @@ test('source has atomic no-replace writes and no destructive Docker vocabulary',
   assert.doesNotMatch(source, /unless-stopped/);
   assert.match(source, /open\([^\n]+['"]wx['"]/);
   assert.match(source, /rename\(/);
+  assert.match(source, /locked-reboot\.json/);
+  assert.match(source, /bootIdAtArm/);
+  assert.match(source, /lockedRebootProofSha256/);
   assert.match(source, /mode[^\n]+0o600|0o600/);
   assert.match(source, /ensureLinuxRoot/);
   assert.doesNotMatch(source, /\bshell\s*:\s*true\b/);

@@ -35,22 +35,14 @@ const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-
 const COMMIT = /^[a-f0-9]{40}$/;
 const DEPLOYMENT_ID = /^direct-vm-[0-9]{8}-[a-f0-9]{8}$/;
 const WINDOWS_RELEASE_EXECUTORS = Object.freeze({
-  contractPath: 'direct-vm-cutover-contract.mjs',
-  sourceControllerPath: 'direct-vm-cutover-authority.ps1',
-  checkpointControllerPath: 'direct-vm-preflight-checkpoint.ps1',
-  checkpointV2ContractPath: 'direct-vm-checkpoint-v2-contract.mjs',
-  finalQuiescenceContractPath: 'linux-final-quiescence-contract.mjs',
-  activationEvidenceCollectorPath: 'linux-activation-evidence-collect.mjs',
-  guardianPromotionPath: 'linux-guardian-promote-active.mjs',
-  abortContractPath: 'direct-vm-source-abort-contract.mjs',
+  contractPath: 'direct-vm-cutover-contract.mjs', sourceControllerPath: 'direct-vm-cutover-authority.ps1',
+  checkpointControllerPath: 'direct-vm-preflight-checkpoint.ps1', checkpointV2ContractPath: 'direct-vm-checkpoint-v2-contract.mjs',
+  finalQuiescenceContractPath: 'linux-final-quiescence-contract.mjs', activationEvidenceCollectorPath: 'linux-activation-evidence-collect.mjs',
+  guardianPromotionPath: 'linux-guardian-promote-active.mjs', abortContractPath: 'direct-vm-source-abort-contract.mjs',
 });
 const SENSITIVE_KEY = /(?:password|secret|token|credential)/i;
 export class CutoverRefusal extends Error {
-  constructor(code, message) {
-    super(message);
-    this.name = 'CutoverRefusal';
-    this.code = code;
-  }
+  constructor(code, message) { super(message); this.name = 'CutoverRefusal'; this.code = code; }
 }
 const refuse = (code, message) => { throw new CutoverRefusal(code, message); };
 const isObject = (value) => value !== null && typeof value === 'object' && !Array.isArray(value);
@@ -995,11 +987,7 @@ const PROOF_FILE_KEYS = Object.freeze([
   'deploymentReceipt',
   'backupReceipt',
   'backupComplete',
-  'rollbackArmed',
-  'rollbackRearm',
-  'reboot',
-  'recovery',
-  'guardian',
+  'rehearsal',
   'guardianPromotion',
   'authentication',
   'network',
@@ -1010,17 +998,8 @@ export function validateActivationEvidence(candidate, planCandidate, sourceRecei
   const evidence = object(candidate, 'Activation evidence');
   rejectSensitiveKeys(evidence);
   exactKeys(evidence, [
-    'schemaVersion',
-    'project',
-    'kind',
-    'status',
-    'cutoverId',
-    'collectedAt',
-    'chronology',
-    'collector',
-    'sourceQuiesce',
-    'checkpoint',
-    'guest',
+    'schemaVersion', 'project', 'kind', 'status', 'cutoverId', 'collectedAt',
+    'chronology', 'collector', 'sourceQuiesce', 'checkpoint', 'guest',
     'proofFiles',
   ], 'Activation evidence');
   if (
@@ -1039,7 +1018,8 @@ export function validateActivationEvidence(candidate, planCandidate, sourceRecei
     chronology.collectedAt !== evidence.collectedAt || chronology.maximumProofWindowSeconds !== 86400 ||
     Date.parse(chronology.sourceQuiescedAt) > Date.parse(chronology.deploymentCompletedAt) ||
     Date.parse(chronology.deploymentCompletedAt) > Date.parse(chronology.latestProofAt) ||
-    Date.parse(chronology.latestProofAt) > Date.parse(evidence.collectedAt)
+    Date.parse(chronology.latestProofAt) > Date.parse(evidence.collectedAt) ||
+    Date.parse(evidence.collectedAt) - Date.parse(chronology.sourceQuiescedAt) > 86400000
   ) refuse('E_CHRONOLOGY', 'Activation evidence chronology is invalid.');
   const collector = object(evidence.collector, 'Activation evidence collector');
   exactKeys(collector, [
@@ -1052,6 +1032,7 @@ export function validateActivationEvidence(candidate, planCandidate, sourceRecei
     collector.schemaVersion !== 1 ||
     collector.kind !== 'easyfire-bookkeeping-release-bound-activation-evidence-collector' ||
     collector.executableSha256 !== plan.controller.activationEvidenceCollectorSha256 ||
+    collector.releaseManifestSha256 !== plan.controller.releaseManifestSha256 ||
     collector.outputPath !== '/etc/easyfire-bookkeeping/cutover-evidence.json' ||
     collector.outputPublishedCreateNew !== true ||
     collector.secureFilesVerified !== true ||
@@ -1109,62 +1090,74 @@ export function validateActivationEvidence(candidate, planCandidate, sourceRecei
   ) refuse('E_BACKUP_PROOF', 'Guest backup/restore proof is incomplete or unbound.');
   sha(backup?.receiptSha256, 'Guest backup receipt hash');
   sha(backup?.completeSha256, 'Guest backup completion hash');
-  const rollback = guest.rollback;
+  const rehearsal = guest.rehearsal;
+  exactKeys(rehearsal, [
+    'status', 'rehearsalId', 'deploymentId', 'releaseCommit',
+    'releaseManifestSha256', 'evidenceSha256',
+    'isolatedHostMachineIdSha256', 'productionMachineIdSha256',
+    'rollbackLockedRebootReceiptSha256', 'normalRebootProofSha256',
+    'recoveryProofSha256', 'guardianProofSha256',
+    'authenticationProofSha256', 'routeActivated', 'publicExposure',
+    'productionDataMutationCount', 'resourcesDeleted',
+  ], 'Release rehearsal proof');
   if (
-    rollback?.reason !== 'rehearsal' ||
-    rollback?.lockedRebootVerified !== true ||
-    rollback?.rearmedDeploymentVerified !== true ||
-    rollback?.resourcesPreserved !== true ||
-    rollback?.deploymentId !== deployment.deploymentId
-  ) refuse('E_ROLLBACK_PROOF', 'Guest rollback rehearsal proof is incomplete or unbound.');
-  sha(rollback?.armedReceiptSha256, 'Rollback armed receipt hash');
-  sha(rollback?.rearmCompletionSha256, 'Rollback rearm completion hash');
-  const reboot = guest.reboot;
-  if (
-    typeof reboot?.bootIdBefore !== 'string' ||
-    typeof reboot?.bootIdAfter !== 'string' ||
-    reboot.bootIdBefore === reboot.bootIdAfter ||
-    reboot.stackActive !== true ||
-    reboot.stackAuthorityVerified !== true ||
-    reboot.guardianTimerActive !== true ||
-    reboot.dockerRestartRecoveryPassed !== true ||
-    reboot.daemonFailureRecoveryPassed !== true ||
-    reboot.invalidReceiptBootRefused !== true
-  ) refuse('E_REBOOT_PROOF', 'Guest reboot/recovery proof is incomplete.');
+    rehearsal?.status !== 'passed' ||
+    !UUID.test(rehearsal?.rehearsalId ?? '') ||
+    !DEPLOYMENT_ID.test(rehearsal?.deploymentId ?? '') ||
+    rehearsal.deploymentId === deployment.deploymentId ||
+    rehearsal.releaseCommit !== deployment.releaseCommit ||
+    rehearsal.releaseManifestSha256 !== collector.releaseManifestSha256 ||
+    rehearsal.isolatedHostMachineIdSha256 === rehearsal.productionMachineIdSha256 ||
+    rehearsal.routeActivated !== false ||
+    rehearsal.publicExposure !== false ||
+    rehearsal.productionDataMutationCount !== 0 ||
+    rehearsal.resourcesDeleted !== false
+  ) {
+    refuse(
+      'E_REHEARSAL_PROOF',
+      'Release rehearsal proof is incomplete, mixed, or not isolated.',
+    );
+  }
+  for (const field of [
+    'releaseManifestSha256', 'evidenceSha256', 'isolatedHostMachineIdSha256',
+    'productionMachineIdSha256', 'rollbackLockedRebootReceiptSha256',
+    'normalRebootProofSha256', 'recoveryProofSha256', 'guardianProofSha256',
+    'authenticationProofSha256',
+  ]) sha(rehearsal?.[field], `Release rehearsal ${field}`);
   const guardian = guest.guardian;
   exactKeys(guardian, [
-    'status', 'shadowRehearsalPassed', 'statelessRecoveryPassed',
-    'databaseAutoRecoveryRefused', 'identityMismatchRefused',
-    'activeModeEnabled', 'healthyAfterRehearsal', 'shadowConfigSha256',
-    'productionConfigSha256', 'promotionReceiptSha256',
-    'promotionExecutableSha256', 'productionConfigMode', 'shadowMode',
-    'timerActive',
+    'status', 'rehearsalEvidenceSha256', 'shadowConfigSha256', 'productionConfigSha256',
+    'promotionReceiptSha256', 'promotionExecutableSha256', 'productionConfigMode',
+    'shadowMode', 'timerActive', 'timerEnabled',
   ], 'Guardian activation proof');
   if (
-    guardian?.status !== 'passed' ||
-    guardian?.shadowRehearsalPassed !== true ||
-    guardian?.statelessRecoveryPassed !== true ||
-    guardian?.databaseAutoRecoveryRefused !== true ||
-    guardian?.identityMismatchRefused !== true ||
-    guardian?.activeModeEnabled !== true ||
-    guardian?.healthyAfterRehearsal !== true ||
+    guardian?.status !== 'active-config-materialized' ||
+    guardian?.rehearsalEvidenceSha256 !== rehearsal.evidenceSha256 ||
     guardian?.promotionExecutableSha256 !== plan.controller.guardianPromotionSha256 ||
     guardian?.productionConfigMode !== 'root:root-0600' ||
     guardian?.shadowMode !== false ||
-    guardian?.timerActive !== true
+    guardian?.timerActive !== true ||
+    guardian?.timerEnabled !== true
   ) refuse('E_GUARDIAN_PROOF', 'Guardian proof is incomplete.');
   for (const field of [
     'shadowConfigSha256', 'productionConfigSha256', 'promotionReceiptSha256',
   ]) sha(guardian?.[field], `Guardian proof ${field}`);
   const authentication = guest.authentication;
+  exactKeys(authentication, ['status', 'method', 'ownerConfirmed',
+    'authenticatedApiPassed', 'dataInvariantsPassed', 'proofSha256'],
+  'Native authentication proof');
   if (
     authentication?.status !== 'passed' ||
-    authentication?.method !== 'native-password' ||
+    authentication?.method !== 'native-password-interactive' ||
     authentication?.ownerConfirmed !== true ||
-    authentication?.authenticatedPagePassed !== true ||
-    authentication?.accountingDataValidated !== true
+    authentication?.authenticatedApiPassed !== true ||
+    authentication?.dataInvariantsPassed !== true
   ) refuse('E_AUTH_PROOF', 'Native authentication/data proof is incomplete.');
+  sha(authentication?.proofSha256, 'Native authentication proof hash');
   const network = guest.network;
+  exactKeys(network, ['proofSha256', 'backendState', 'selfOnline', 'dnsName',
+    'serveAbsent', 'funnelAbsent', 'publicExposure', 'publicListeners'],
+  'Guest private-network proof');
   if (
     network?.backendState !== 'Running' ||
     network?.selfOnline !== true ||
@@ -1175,8 +1168,18 @@ export function validateActivationEvidence(candidate, planCandidate, sourceRecei
     !Array.isArray(network?.publicListeners) ||
     network.publicListeners.length !== 0
   ) refuse('E_NETWORK_PROOF', 'Guest private-network proof is unsafe.');
+  sha(network.proofSha256, 'Guest private-network proof hash');
   exactKeys(evidence.proofFiles, PROOF_FILE_KEYS, 'Activation proof-file hashes');
   for (const key of PROOF_FILE_KEYS) sha(evidence.proofFiles[key], `Activation proof ${key}`);
+  const expectedProofFiles = {
+    rehearsal: rehearsal.evidenceSha256, authentication: authentication.proofSha256,
+    guardianPromotion: guardian.promotionReceiptSha256, checkpointManifest: checkpoint.manifestSha256,
+    deploymentReceipt: deployment.receiptSha256, backupReceipt: backup.receiptSha256,
+    backupComplete: backup.completeSha256, network: network.proofSha256,
+  };
+  if (PROOF_FILE_KEYS.some((key) => evidence.proofFiles[key] !== expectedProofFiles[key])) {
+    refuse('E_PROOF_BINDING', 'Activation proof-file hashes are not summary-bound.');
+  }
   return evidence;
 }
 export function buildActivationAuthorization({
