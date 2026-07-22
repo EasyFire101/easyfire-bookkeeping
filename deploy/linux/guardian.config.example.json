@@ -1,0 +1,32 @@
+{
+  "schemaVersion": 1,
+  "runtimeManifestPath": "/etc/easyfire-bookkeeping/runtime-manifest.json",
+  "statePath": "/var/lib/easyfire-bookkeeping-guardian/state.json",
+  "statusPath": "/var/lib/easyfire-bookkeeping-guardian/status.json",
+  "dockerSocketPath": "/var/run/docker.sock",
+  "failureThreshold": 3,
+  "cooldownSeconds": 900,
+  "attemptWindowSeconds": 3600,
+  "maxRecoveryAttempts": 2,
+  "shadowMode": true,
+  "probes": [
+    {
+      "name": "web",
+      "url": "http://127.0.0.1:8080/",
+      "timeoutMs": 3000,
+      "expectedStatus": 200
+    },
+    {
+      "name": "api-system",
+      "url": "http://127.0.0.1:8080/api/system_db",
+      "timeoutMs": 3000,
+      "expectedStatus": 200
+    },
+    {
+      "name": "auth-meta",
+      "url": "http://127.0.0.1:8080/api/auth/meta",
+      "timeoutMs": 3000,
+      "expectedStatus": 200
+    }
+  ]
+}

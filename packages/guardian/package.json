@@ -1,0 +1,20 @@
+{
+  "name": "@easyfire/bookkeeping-guardian",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "main": "dist/index.js",
+  "bin": {
+    "easyfire-bookkeeping-guardian": "dist/index.js"
+  },
+  "scripts": {
+    "build": "tsup src/index.ts --format esm --platform node --target node22 --out-dir dist --clean --sourcemap",
+    "typecheck": "tsc --noEmit",
+    "test": "pnpm run build && node --test tests/*.test.mjs"
+  },
+  "devDependencies": {
+    "@types/node": "^20.3.1",
+    "tsup": "^8.3.0",
+    "typescript": "^5.1.6"
+  }
+}

@@ -1,0 +1,67 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://easyfire.fyi/schemas/bookkeeping-runtime-manifest-v1.json",
+  "title": "EasyFire Bookkeeping Guardian Runtime Manifest",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schemaVersion", "project", "generatedAt", "services"],
+  "properties": {
+    "schemaVersion": { "const": 1 },
+    "project": { "const": "easyfire-bookkeeping" },
+    "generatedAt": { "type": "string", "format": "date-time" },
+    "services": {
+      "type": "array",
+      "minItems": 6,
+      "maxItems": 6,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "role",
+          "containerName",
+          "containerId",
+          "imageId",
+          "requireDockerHealth",
+          "recoveryMode"
+        ],
+        "properties": {
+          "role": {
+            "enum": ["envoy", "webapp", "server", "gotenberg", "mysql", "redis"]
+          },
+          "containerName": {
+            "type": "string",
+            "pattern": "^easyfire-bookkeeping-[a-z0-9-]+$"
+          },
+          "containerId": {
+            "type": "string",
+            "pattern": "^[a-f0-9]{12,64}$"
+          },
+          "imageId": {
+            "type": "string",
+            "pattern": "^sha256:[a-f0-9]{64}$"
+          },
+          "requireDockerHealth": { "type": "boolean" },
+          "recoveryMode": {
+            "enum": ["start-if-stopped", "observe-only"]
+          }
+        },
+        "allOf": [
+          {
+            "if": { "properties": { "role": { "enum": ["mysql", "redis"] } } },
+            "then": { "properties": { "recoveryMode": { "const": "observe-only" } } }
+          },
+          {
+            "if": {
+              "properties": {
+                "role": { "enum": ["envoy", "webapp", "server", "gotenberg"] }
+              }
+            },
+            "then": {
+              "properties": { "recoveryMode": { "const": "start-if-stopped" } }
+            }
+          }
+        ]
+      }
+    }
+  }
+}

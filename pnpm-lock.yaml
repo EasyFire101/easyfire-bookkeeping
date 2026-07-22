@@ -63,6 +63,18 @@ importers:
         specifier: ^8.3.0
         version: 8.3.0(@microsoft/api-extractor@7.47.11(@types/node@20.5.1))(jiti@1.21.0)(postcss@8.4.47)(typescript@5.6.3)(yaml@2.4.2)
 
+  packages/guardian:
+    devDependencies:
+      '@types/node':
+        specifier: ^20.3.1
+        version: 20.19.25
+      tsup:
+        specifier: ^8.3.0
+        version: 8.3.0(@microsoft/api-extractor@7.47.11(@types/node@20.19.25))(jiti@1.21.0)(postcss@8.4.47)(typescript@5.6.3)(yaml@2.4.2)
+      typescript:
+        specifier: ^5.1.6
+        version: 5.6.3
+
   packages/server:
     dependencies:
       '@aws-sdk/client-s3':
@@ -20151,7 +20163,7 @@ snapshots:
 
   '@types/nodemailer@6.4.17':
     dependencies:
-      '@types/node': 20.5.1
+      '@types/node': 20.19.25
 
   '@types/normalize-package-data@2.4.4': {}
 
@@ -28477,7 +28489,7 @@ snapshots:
 
   stripe@16.10.0:
     dependencies:
-      '@types/node': 20.5.1
+      '@types/node': 20.19.25
       qs: 6.14.0
 
   strnum@1.0.5: {}

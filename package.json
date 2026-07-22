@@ -30,7 +30,8 @@
     "format:check": "lerna run format:check",
     "lint": "lerna run lint",
     "lint:check": "lerna run lint:check",
-    "test:easyfire-release": "node --test tests/easyfire-release-readiness.test.mjs tests/easyfire-runtime-pins.test.mjs"
+    "test:easyfire-release": "node --test tests/easyfire-release-readiness.test.mjs tests/easyfire-runtime-pins.test.mjs tests/easyfire-linux-deployment-contract.test.mjs",
+    "test:easyfire-guardian": "pnpm --filter @easyfire/bookkeeping-guardian test && pnpm --filter @easyfire/bookkeeping-guardian typecheck"
   },
   "devDependencies": {
     "@commitlint/cli": "^17.4.2",

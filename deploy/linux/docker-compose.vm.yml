@@ -1,0 +1,25 @@
+services:
+  envoy:
+    container_name: easyfire-bookkeeping-envoy
+
+  webapp:
+    container_name: easyfire-bookkeeping-webapp
+
+  server:
+    container_name: easyfire-bookkeeping-server
+
+  database_migration:
+    container_name: easyfire-bookkeeping-migration
+
+  mysql:
+    container_name: easyfire-bookkeeping-mysql
+
+  redis:
+    container_name: easyfire-bookkeeping-redis
+
+  gotenberg:
+    container_name: easyfire-bookkeeping-gotenberg
+
+networks:
+  bigcapital_network:
+    name: easyfire-bookkeeping-network

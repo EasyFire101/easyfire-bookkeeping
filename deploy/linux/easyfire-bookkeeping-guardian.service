@@ -1,0 +1,40 @@
+[Unit]
+Description=EasyFire Bookkeeping fail-closed Guardian reconciliation
+Documentation=file:/opt/easyfire-bookkeeping/current/docs/easyfire/GUARDIAN_CONTRACT.md
+Requires=docker.service
+After=docker.service easyfire-bookkeeping-stack.service network-online.target
+Wants=easyfire-bookkeeping-stack.service network-online.target
+ConditionPathExists=/etc/easyfire-bookkeeping/guardian.json
+ConditionPathExists=/etc/easyfire-bookkeeping/runtime-manifest.json
+ConditionPathExists=/opt/easyfire-bookkeeping/guardian/guardian.js
+
+[Service]
+Type=oneshot
+User=root
+Group=root
+UMask=0077
+ExecStart=/usr/bin/node /opt/easyfire-bookkeeping/guardian/guardian.js /etc/easyfire-bookkeeping/guardian.json
+TimeoutStartSec=25
+SuccessExitStatus=2
+NoNewPrivileges=yes
+PrivateDevices=yes
+PrivateTmp=yes
+ProtectClock=yes
+ProtectControlGroups=yes
+ProtectHome=yes
+ProtectHostname=yes
+ProtectKernelLogs=yes
+ProtectKernelModules=yes
+ProtectKernelTunables=yes
+ProtectSystem=strict
+ReadOnlyPaths=/etc/easyfire-bookkeeping /opt/easyfire-bookkeeping
+ReadWritePaths=/var/lib/easyfire-bookkeeping-guardian
+RestrictAddressFamilies=AF_UNIX AF_INET AF_INET6
+RestrictNamespaces=yes
+RestrictRealtime=yes
+RestrictSUIDSGID=yes
+LockPersonality=yes
+SystemCallArchitectures=native
+
+[Install]
+WantedBy=multi-user.target

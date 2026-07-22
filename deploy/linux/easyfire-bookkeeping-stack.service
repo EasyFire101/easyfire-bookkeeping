@@ -1,0 +1,20 @@
+[Unit]
+Description=EasyFire Bookkeeping existing-container startup gate
+Documentation=file:/opt/easyfire-bookkeeping/current/docs/easyfire/LINUX_VM_RUNBOOK.md
+Requires=docker.service
+After=docker.service network-online.target
+Wants=network-online.target
+ConditionPathExists=/etc/easyfire-bookkeeping/production.env
+ConditionPathExists=/opt/easyfire-bookkeeping/current/docker-compose.prod.yml
+ConditionPathExists=/opt/easyfire-bookkeeping/current/deploy/linux/docker-compose.vm.yml
+
+[Service]
+Type=oneshot
+RemainAfterExit=yes
+TimeoutStartSec=360
+UMask=0077
+ExecStart=/usr/bin/docker compose --project-name easyfire-bookkeeping-prod --file /opt/easyfire-bookkeeping/current/docker-compose.prod.yml --file /opt/easyfire-bookkeeping/current/deploy/linux/docker-compose.vm.yml --env-file /etc/easyfire-bookkeeping/production.env start --wait --wait-timeout 180 mysql redis
+ExecStart=/usr/bin/docker compose --project-name easyfire-bookkeeping-prod --file /opt/easyfire-bookkeeping/current/docker-compose.prod.yml --file /opt/easyfire-bookkeeping/current/deploy/linux/docker-compose.vm.yml --env-file /etc/easyfire-bookkeeping/production.env start --wait --wait-timeout 180 gotenberg server webapp envoy
+
+[Install]
+WantedBy=multi-user.target
