@@ -125,6 +125,24 @@ const inspectImages = async (references) => {
   return parsed;
 };
 
+const inspectAllImages = async () => {
+  const result = await docker(
+    ['image', 'ls', '--all', '--quiet', '--no-trunc'],
+    {
+      label: 'Docker image inventory',
+      timeoutMs: 30_000,
+      maxOutputBytes: 512 * 1024,
+    },
+  );
+  const ids = [...new Set(
+    result.stdout.toString('utf8').trim().split(/\r?\n/).filter(Boolean),
+  )];
+  if (ids.some((id) => !/^sha256:[a-f0-9]{64}$/.test(id))) {
+    refuse('E_DOCKER_INSPECT', 'Docker image inventory returned an invalid image ID.');
+  }
+  return ids.length === 0 ? [] : inspectImages(ids);
+};
+
 export const verifyReleaseImageIdentity = (expected, observed) => {
   if (!isObject(observed) || observed.Id !== expected.engineImageId) {
     refuse('E_IMAGE_IDENTITY', `Loaded ${expected.role} engine image is invalid.`);
@@ -159,6 +177,43 @@ export const verifyReleaseImageIdentity = (expected, observed) => {
     linuxAmd64ManifestDigest: expected.linuxAmd64ManifestDigest,
     engineImageId: observed.Id,
   };
+};
+
+const taggedReference = (reference) => {
+  const digestSeparator = reference.indexOf('@');
+  return digestSeparator === -1 ? reference : reference.slice(0, digestSeparator);
+};
+
+export const verifyPreexistingReleaseImages = (expectedImages, observedImages) => {
+  if (!Array.isArray(expectedImages) || !Array.isArray(observedImages)) {
+    refuse('E_DOCKER_INSPECT', 'Preexisting image inventory is invalid.');
+  }
+  const identities = {};
+  for (const expected of expectedImages) {
+    const tag = taggedReference(expected.reference);
+    const tagOwners = observedImages.filter(
+      (observed) => Array.isArray(observed?.RepoTags) && observed.RepoTags.includes(tag),
+    );
+    if (
+      tagOwners.length > 1 ||
+      (tagOwners.length === 1 && tagOwners[0].Id !== expected.engineImageId)
+    ) {
+      refuse(
+        'E_IMAGE_COLLISION',
+        `Preexisting ${expected.role} release tag belongs to a different image.`,
+      );
+    }
+    const exactImages = observedImages.filter(
+      (observed) => observed?.Id === expected.engineImageId,
+    );
+    if (exactImages.length > 1) {
+      refuse('E_DOCKER_INSPECT', 'Docker image inventory contains a duplicate image ID.');
+    }
+    if (exactImages.length === 1) {
+      identities[expected.role] = verifyReleaseImageIdentity(expected, exactImages[0]);
+    }
+  }
+  return identities;
 };
 
 const verifyProjectResourceSet = async (plan) => {
@@ -291,24 +346,10 @@ export const assertNoExistingDockerResources = async (plan, releaseManifest) => 
       refuse('E_RESOURCE_COLLISION', `An exact Bookkeeping ${kind} name already exists.`);
     }
   }
-  for (const image of releaseManifest.images.values()) {
-    const result = await docker(['image', 'inspect', image.reference], {
-      label: 'Preexisting release image inspection',
-      timeoutMs: 30_000,
-      allowedExitCodes: [0, 1],
-      maxOutputBytes: 512 * 1024,
-    });
-    if (result.code === 0) {
-      const inspected = parseJsonOutput(result, 'Preexisting release image inspection');
-      if (!Array.isArray(inspected) || inspected.length !== 1) {
-        refuse(
-          'E_DOCKER_INSPECT',
-          'Preexisting release image inspection returned an incomplete set.',
-        );
-      }
-      verifyReleaseImageIdentity(image, inspected[0]);
-    }
-  }
+  verifyPreexistingReleaseImages(
+    [...releaseManifest.images.values()],
+    await inspectAllImages(),
+  );
 };
 
 const dockerApiRequest = async (method, endpoint, body) => {
@@ -543,9 +584,9 @@ export const validateComposeConfig = async (plan, manifest) => {
   return sha256Bytes(result.stdout);
 };
 
-export const verifyLoadedImages = async (manifest) => {
+export const verifyLoadedImages = async (manifest, inspect = inspectImages) => {
   const entries = [...manifest.images.values()];
-  const inspected = await inspectImages(entries.map((entry) => entry.reference));
+  const inspected = await inspect(entries.map((entry) => entry.engineImageId));
   const identities = {};
   for (let index = 0; index < entries.length; index += 1) {
     const expected = entries[index];

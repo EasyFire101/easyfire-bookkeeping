@@ -311,6 +311,63 @@ test('accepts a preloaded release image only when its engine identity is exact',
   );
 });
 
+test('inspects loaded images by immutable engine ID instead of a Docker-shorthand tag', async () => {
+  const expected = {
+    role: 'webapp',
+    reference: 'easyfire-bookkeeping/webapp:release-test',
+    ociIndexDigest: `sha256:${'1'.repeat(64)}`,
+    linuxAmd64ManifestDigest: `sha256:${'2'.repeat(64)}`,
+    engineImageId: `sha256:${'3'.repeat(64)}`,
+  };
+  const manifest = { images: new Map([['webapp', expected]]) };
+  let inspectedReferences;
+  const identities = await dockerContract.verifyLoadedImages(
+    manifest,
+    async (references) => {
+      inspectedReferences = references;
+      return [{
+        Id: expected.engineImageId,
+        RepoTags: [expected.reference],
+        RepoDigests: [],
+      }];
+    },
+  );
+
+  assert.deepEqual(inspectedReferences, [expected.engineImageId]);
+  assert.equal(identities.webapp.engineImageId, expected.engineImageId);
+});
+
+test('preexisting image inventory rejects an expected tag owned by the wrong image ID', () => {
+  const expected = {
+    role: 'webapp',
+    reference: 'easyfire-bookkeeping/webapp:release-test',
+    ociIndexDigest: `sha256:${'1'.repeat(64)}`,
+    linuxAmd64ManifestDigest: `sha256:${'2'.repeat(64)}`,
+    engineImageId: `sha256:${'3'.repeat(64)}`,
+  };
+  const wrongOwner = {
+    Id: `sha256:${'4'.repeat(64)}`,
+    RepoTags: [expected.reference],
+    RepoDigests: [],
+  };
+
+  assert.throws(
+    () => dockerContract.verifyPreexistingReleaseImages([expected], [wrongOwner]),
+    /tag.*different image|image.*collision/i,
+  );
+  assert.deepEqual(
+    dockerContract.verifyPreexistingReleaseImages([expected], []),
+    {},
+  );
+  assert.equal(
+    dockerContract.verifyPreexistingReleaseImages(
+      [expected],
+      [{ Id: expected.engineImageId, RepoTags: [expected.reference], RepoDigests: [] }],
+    ).webapp.engineImageId,
+    expected.engineImageId,
+  );
+});
+
 test('publishes root-only JSON with exclusive no-overwrite semantics', async () => {
   const directory = await mkdtemp(path.join(os.tmpdir(), 'easyfire-deploy-doc-'));
   const target = path.join(directory, 'receipt.json');
