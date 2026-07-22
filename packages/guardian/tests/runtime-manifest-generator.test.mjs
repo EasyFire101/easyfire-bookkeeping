@@ -84,6 +84,13 @@ function expectedRepoDigest(reference) {
   return `${tag === -1 ? name : name.slice(0, tag)}@${digest}`;
 }
 
+function derivedRepoDigest(entry) {
+  const tagged = entry.reference.split('@')[0];
+  const lastSlash = tagged.lastIndexOf('/');
+  const tag = tagged.indexOf(':', lastSlash + 1);
+  return `${tag === -1 ? tagged : tagged.slice(0, tag)}@${entry.ociIndexDigest}`;
+}
+
 function releaseManifest() {
   return {
     manifestVersion: 2,
@@ -189,9 +196,7 @@ function fakeDocker(manifest, overrides = {}) {
         const image = {
           Id: actualImageIds.get(role),
           RepoTags: [entry.reference.split('@')[0]],
-          RepoDigests: ['envoy', 'gotenberg'].includes(role)
-            ? [expectedRepoDigest(entry.reference)]
-            : [],
+          RepoDigests: [derivedRepoDigest(entry)],
         };
         Object.assign(image, overrides[`${role}Image`]);
         return { statusCode: 200, body: JSON.stringify(image) };
@@ -301,13 +306,13 @@ async function fixture(t) {
     images: manifest.images.map((image) => {
       const tagged = image.reference.split('@')[0];
       const external = image.reference.includes('@');
-      const repoDigest = external ? expectedRepoDigest(image.reference) : null;
+      const repoDigest = derivedRepoDigest(image);
       return {
         reference: tagged,
         Id: image.engineImageId,
         RepoTags: [tagged],
-        RepoDigests: external ? [repoDigest] : [],
-        externalDigestAuthority: repoDigest,
+        RepoDigests: [repoDigest],
+        externalDigestAuthority: external ? repoDigest : null,
       };
     }),
   };
@@ -396,6 +401,10 @@ test('binds the Docker 29 image ID to the external root OCI index digest', async
     evidence.services.find(({ role }) => role === 'envoy').verifiedRepoDigest,
     expectedRepoDigest(manifest.images.find(({ role }) => role === 'envoy').reference),
   );
+  assert.equal(
+    evidence.services.find(({ role }) => role === 'webapp').verifiedRepoDigest,
+    null,
+  );
   assert.doesNotMatch(JSON.stringify(evidence), /APP_JWT_SECRET|must-not-escape/);
   if (process.platform !== 'win32') {
     assert.equal((await stat(options.runtimeManifestPath)).mode & 0o777, 0o600);
@@ -404,10 +413,21 @@ test('binds the Docker 29 image ID to the external root OCI index digest', async
   assert.ok(docker.calls.every(({ method }) => method === 'GET'));
 });
 
-test('accepts the bounded external offline-load state without losing root-index authority', async (t) => {
+test('accepts bounded absent RepoDigests without losing root-index authority', async (t) => {
   const { manifest, options } = await fixture(t);
+  const engineEvidence = JSON.parse(await readFile(options.engineEvidencePath, 'utf8'));
+  engineEvidence.images[1].RepoDigests = [];
+  const engineEvidenceBytes = Buffer.from(`${JSON.stringify(engineEvidence, null, 2)}\n`);
+  await writeFile(options.engineEvidencePath, engineEvidenceBytes);
+  manifest.targetEngineEvidence = {
+    ...manifest.targetEngineEvidence,
+    sha256: fileHash(engineEvidenceBytes),
+    bytes: engineEvidenceBytes.length,
+  };
+  await writeFile(options.releaseManifestPath, `${JSON.stringify(manifest)}\n`, 'utf8');
   const docker = fakeDocker(manifest, {
     envoyImage: { RepoDigests: [] },
+    webappImage: { RepoDigests: [] },
     gotenbergImage: { RepoDigests: [] },
   });
 
@@ -423,6 +443,10 @@ test('accepts the bounded external offline-load state without losing root-index 
     assert.equal(evidence.verifiedRepoDigest, null);
     assert.match(evidence.configuredImageReference, /@sha256:[a-f0-9]{64}$/);
   }
+  assert.equal(
+    generated.evidence.services.find((entry) => entry.role === 'webapp').verifiedRepoDigest,
+    null,
+  );
 
   const verified = await verifyExistingRuntimeManifest(options, {
     transport: docker.transport,
@@ -472,6 +496,20 @@ test('fails closed when an external local image claims any unbound repo digest',
   await assert.rejects(
     () => generateRuntimeManifest(options, { transport: docker.transport }),
     /envoy.*RepoDigests.*unbound digest state/i,
+  );
+  await assertMissing(options.runtimeManifestPath);
+  await assertMissing(options.evidencePath);
+});
+
+test('fails closed when a custom local image claims any unbound repo digest', async (t) => {
+  const { manifest, options } = await fixture(t);
+  const docker = fakeDocker(manifest, {
+    webappImage: { RepoDigests: [`easyfire-bookkeeping/webapp@${sha('c')}`] },
+  });
+
+  await assert.rejects(
+    () => generateRuntimeManifest(options, { transport: docker.transport }),
+    /webapp.*RepoDigests.*unbound digest state/i,
   );
   await assertMissing(options.runtimeManifestPath);
   await assertMissing(options.evidencePath);
@@ -664,6 +702,34 @@ test('rejects image inventory and target-engine evidence drift before Docker acc
     /webapp.*Docker Id.*engineImageId/i,
   );
   assert.equal(evidenceDocker.calls.length, 0);
+
+  const customDigestDrift = await fixture(t);
+  const customEvidence = JSON.parse(
+    await readFile(customDigestDrift.options.engineEvidencePath, 'utf8'),
+  );
+  customEvidence.images[1].RepoDigests = [
+    `easyfire-bookkeeping/webapp@${sha('f')}`,
+  ];
+  const customEvidenceBytes = Buffer.from(`${JSON.stringify(customEvidence, null, 2)}\n`);
+  await writeFile(customDigestDrift.options.engineEvidencePath, customEvidenceBytes);
+  customDigestDrift.manifest.targetEngineEvidence = {
+    ...customDigestDrift.manifest.targetEngineEvidence,
+    sha256: fileHash(customEvidenceBytes),
+    bytes: customEvidenceBytes.length,
+  };
+  await writeFile(
+    customDigestDrift.options.releaseManifestPath,
+    `${JSON.stringify(customDigestDrift.manifest)}\n`,
+  );
+  const customDigestDocker = fakeDocker(customDigestDrift.manifest);
+  await assert.rejects(
+    generateRuntimeManifest(
+      customDigestDrift.options,
+      { transport: customDigestDocker.transport },
+    ),
+    /webapp.*RepoDigests|digest/i,
+  );
+  assert.equal(customDigestDocker.calls.length, 0);
 });
 
 test('verify-existing rechecks identities without writes and accepts stopped or created containers', async (t) => {

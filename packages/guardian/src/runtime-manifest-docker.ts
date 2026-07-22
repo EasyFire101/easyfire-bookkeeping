@@ -4,7 +4,6 @@ import {
   requestDockerSocket,
 } from './adapters/docker-engine.js';
 import {
-  getRequiredRepoDigest,
   ReleaseManifest,
   RUNTIME_ROLE_SPECS,
   VerifiedRuntimeIdentity,
@@ -158,42 +157,29 @@ export class RuntimeIdentityDockerClient {
         );
       }
 
-      let verifiedRepoDigest: string | null = null;
-      if (spec.imageAuthority === 'engine-image-id') {
-        exactStringArray(
-          image.RepoTags,
-          [releaseEntry.reference],
-          `${spec.role} local image RepoTags`,
-        );
-        exactStringArray(
-          image.RepoDigests,
-          [],
-          `${spec.role} local image RepoDigests`,
-        );
+      const taggedReference = releaseEntry.reference.split('@')[0];
+      const tagSeparator = taggedReference.lastIndexOf(':');
+      const requiredRepoDigest =
+        `${taggedReference.slice(0, tagSeparator)}@${releaseEntry.ociIndexDigest}`;
+      exactStringArray(
+        image.RepoTags,
+        [taggedReference],
+        `${spec.role} local image RepoTags`,
+      );
+      const repoDigests = stringArray(
+        image.RepoDigests,
+        `${spec.role} local image RepoDigests`,
+      );
+      if (!(
+        repoDigests.length === 0 ||
+        (repoDigests.length === 1 && repoDigests[0] === requiredRepoDigest)
+      )) {
+        throw new Error(`${spec.role} local image RepoDigests has an unbound digest state.`);
       }
-      else {
-        const requiredRepoDigest = getRequiredRepoDigest(releaseEntry.reference, spec.role);
-        const taggedReference = releaseEntry.reference.slice(
-          0,
-          releaseEntry.reference.lastIndexOf('@'),
-        );
-        exactStringArray(
-          image.RepoTags,
-          [taggedReference],
-          `${spec.role} local image RepoTags`,
-        );
-        const repoDigests = stringArray(
-          image.RepoDigests,
-          `${spec.role} local image RepoDigests`,
-        );
-        if (!(
-          repoDigests.length === 0 ||
-          (repoDigests.length === 1 && repoDigests[0] === requiredRepoDigest)
-        )) {
-          throw new Error(`${spec.role} local image RepoDigests has an unbound digest state.`);
-        }
-        verifiedRepoDigest = repoDigests.length === 1 ? requiredRepoDigest : null;
-      }
+      const verifiedRepoDigest = spec.imageAuthority === 'engine-image-id-and-repo-digest' &&
+        repoDigests.length === 1
+        ? requiredRepoDigest
+        : null;
 
       identities.push({
         role: spec.role,

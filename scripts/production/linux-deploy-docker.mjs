@@ -155,21 +155,17 @@ export const verifyReleaseImageIdentity = (expected, observed) => {
   }
   const repoTags = observed.RepoTags;
   const repoDigests = observed.RepoDigests;
-  if (expected.reference.includes('@')) {
-    const [tagged, digest] = expected.reference.split('@');
-    const separator = tagged.lastIndexOf(':');
-    const repoDigest = `${tagged.slice(0, separator)}@${digest}`;
-    if (!repoTags.includes(tagged)) {
-      refuse('E_IMAGE_IDENTITY', `Loaded ${expected.role} release tag is invalid.`);
-    }
-    if (
-      repoDigests.length !== 0 &&
-      (repoDigests.length !== 1 || repoDigests[0] !== repoDigest)
-    ) {
-      refuse('E_IMAGE_IDENTITY', `Loaded ${expected.role} repo digest is invalid.`);
-    }
-  } else if (!repoTags.includes(expected.reference)) {
+  const tagged = expected.reference.split('@')[0];
+  const separator = tagged.lastIndexOf(':');
+  const repoDigest = `${tagged.slice(0, separator)}@${expected.ociIndexDigest}`;
+  if (!repoTags.includes(tagged)) {
     refuse('E_IMAGE_IDENTITY', `Loaded ${expected.role} release tag is invalid.`);
+  }
+  if (
+    repoDigests.length !== 0 &&
+    (repoDigests.length !== 1 || repoDigests[0] !== repoDigest)
+  ) {
+    refuse('E_IMAGE_IDENTITY', `Loaded ${expected.role} repo digest is invalid.`);
   }
   return {
     reference: expected.reference,

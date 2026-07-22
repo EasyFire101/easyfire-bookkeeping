@@ -211,23 +211,19 @@ function parseInspectOutput(output, spec, inventory) {
     refuse(`${spec.role} Docker Id does not match the OCI root index digest.`);
   }
   exactArray(RepoTags, [spec.sourceReference], `${spec.role} RepoTags`);
-  const externalDigest = `${repositoryOf(spec.sourceReference)}@${inventory.ociIndexDigest}`;
-  if (spec.external) {
-    const exactPinned = Array.isArray(RepoDigests) &&
-      (RepoDigests.length === 0 ||
-        (RepoDigests.length === 1 && RepoDigests[0] === externalDigest));
-    if (!exactPinned) {
-      refuse(`${spec.role} RepoDigests contains an unbound external digest.`);
-    }
-  } else {
-    exactArray(RepoDigests, [], `${spec.role} RepoDigests`);
+  const derivedRepoDigest = `${repositoryOf(spec.sourceReference)}@${inventory.ociIndexDigest}`;
+  const exactDerived = Array.isArray(RepoDigests) &&
+    (RepoDigests.length === 0 ||
+      (RepoDigests.length === 1 && RepoDigests[0] === derivedRepoDigest));
+  if (!exactDerived) {
+    refuse(`${spec.role} RepoDigests contains a digest outside the exact OCI image authority.`);
   }
   return {
     reference: spec.sourceReference,
     Id,
     RepoTags,
     RepoDigests,
-    externalDigestAuthority: spec.external ? externalDigest : null,
+    externalDigestAuthority: spec.external ? derivedRepoDigest : null,
   };
 }
 

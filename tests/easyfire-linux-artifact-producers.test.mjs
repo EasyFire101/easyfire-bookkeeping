@@ -83,6 +83,23 @@ function tar(entries) {
   return Buffer.concat(chunks);
 }
 
+function tarEntryBytes(archive, expectedName) {
+  let offset = 0;
+  while (offset + 512 <= archive.length) {
+    const header = archive.subarray(offset, offset + 512);
+    if (header.every((byte) => byte === 0)) break;
+    const name = header.subarray(0, 100).toString('utf8').replace(/\0.*$/, '');
+    const size = Number.parseInt(
+      header.subarray(124, 136).toString('ascii').replace(/\0.*$/, '').trim() || '0',
+      8,
+    );
+    const dataOffset = offset + 512;
+    if (name === expectedName) return archive.subarray(dataOffset, dataOffset + size);
+    offset = dataOffset + Math.ceil(size / 512) * 512;
+  }
+  assert.fail(`missing tar entry ${expectedName}`);
+}
+
 function singleImageArchive(reference, seed, extraEntries = [], options = {}) {
   const blobs = [];
   const config = jsonBytes({
@@ -303,6 +320,26 @@ test('OCI producer deterministically merges exactly seven validated image layout
   const inspected = await inspectOciImageBundle(first, value.specs);
   assert.deepEqual(inspected.inventory.map(({ role }) => role), ROLE_REFERENCES.map(([role]) => role));
   if (process.platform !== 'win32') assert.equal((await stat(first)).mode & 0o777, 0o600);
+});
+
+test('OCI producer emits Docker-canonical root image names for every release role', async (t) => {
+  const value = await fixture(t);
+  const output = path.join(value.root, 'bundle', 'images.tar');
+  await mkdir(path.dirname(output));
+
+  await produceOciBundle({
+    releaseCommit: COMMIT,
+    inputArchives: value.inputArchives,
+    output,
+    specs: value.specs,
+    requireRootOwner: false,
+  });
+
+  const rootIndex = JSON.parse(tarEntryBytes(await readFile(output), 'index.json'));
+  assert.deepEqual(
+    rootIndex.manifests.map((manifest) => manifest.annotations['io.containerd.image.name']),
+    ROLE_REFERENCES.map(([, reference]) => `docker.io/${reference}`),
+  );
 });
 
 test('OCI producer accepts the observed Skopeo 1.20 root shape without changing canonical output', async (t) => {
@@ -619,11 +656,11 @@ function dockerEvidenceRunner(value, overrides = {}) {
   const calls = [];
   const byIndexDigest = new Map(ROLE_REFERENCES.map(([role, reference, external]) => {
     const image = value.imageFixtures.get(role);
-    const externalDigest = `${repositoryOf(reference)}@${image.indexDigest}`;
+    const repoDigest = `${repositoryOf(reference)}@${image.indexDigest}`;
     return [image.indexDigest, {
       Id: image.indexDigest,
       RepoTags: [reference],
-      RepoDigests: external ? [externalDigest] : [],
+      RepoDigests: [repoDigest],
       ...overrides[role],
     }];
   }));
@@ -676,6 +713,9 @@ test('target-engine producer emits exact Docker 29.6.2 linux/amd64 evidence', as
   assert.deepEqual(evidence.images.map(({ Id }) => Id), ROLE_REFERENCES.map(([role]) => value.imageFixtures.get(role).indexDigest));
   assert.equal(evidence.images[0].externalDigestAuthority, evidence.images[0].RepoDigests[0]);
   assert.equal(evidence.images[1].externalDigestAuthority, null);
+  assert.deepEqual(evidence.images[1].RepoDigests, [
+    `${repositoryOf(evidence.images[1].reference)}@${value.imageFixtures.get('webapp').indexDigest}`,
+  ]);
   assert.equal(proof.sha256, sha256(await readFile(output)));
   assert.equal(docker.calls.length, 8);
   assert.ok(docker.calls.every((args) => args[2] === 'version' || args.slice(2, 4).join(' ') === 'image inspect'));
@@ -686,7 +726,7 @@ test('target-engine producer emits exact Docker 29.6.2 linux/amd64 evidence', as
   if (process.platform !== 'win32') assert.equal((await stat(output)).mode & 0o777, 0o600);
 });
 
-test('target-engine producer permits offline-load external RepoDigests only when authority stays pinned', async (t) => {
+test('target-engine producer permits only bounded absent RepoDigests without changing authority', async (t) => {
   const value = await fixture(t);
   const imageBundle = path.join(value.root, 'bundle', 'images.tar');
   const output = path.join(value.root, 'evidence', 'target-engine-evidence.json');
@@ -701,6 +741,7 @@ test('target-engine producer permits offline-load external RepoDigests only when
   });
   const docker = dockerEvidenceRunner(value, {
     envoy: { RepoDigests: [] },
+    webapp: { RepoDigests: [] },
     gotenberg: { RepoDigests: [] },
   });
 
@@ -723,6 +764,8 @@ test('target-engine producer permits offline-load external RepoDigests only when
       `${repositoryOf(image.reference)}@${value.imageFixtures.get(role).indexDigest}`,
     );
   }
+  assert.deepEqual(evidence.images[1].RepoDigests, []);
+  assert.equal(evidence.images[1].externalDigestAuthority, null);
 });
 
 test('target-engine producer refuses engine, image ID, tag, digest, and output drift', async (t) => {
@@ -742,6 +785,11 @@ test('target-engine producer refuses engine, image ID, tag, digest, and output d
     ['id', { server: { Id: `sha256:${'f'.repeat(64)}` } }, /server.*Id|image ID/i],
     ['tag', { redis: { RepoTags: [ROLE_REFERENCES[5][1], 'extra:tag'] } }, /redis.*RepoTags|tag/i],
     ['digest', { envoy: { RepoDigests: [`envoyproxy/envoy@sha256:${'e'.repeat(64)}`] } }, /envoy.*RepoDigests|digest/i],
+    ['custom-digest', { webapp: { RepoDigests: [`easyfire-bookkeeping/webapp@sha256:${'e'.repeat(64)}`] } }, /webapp.*RepoDigests|digest/i],
+    ['custom-extra-digest', { webapp: { RepoDigests: [
+      `${repositoryOf(ROLE_REFERENCES[1][1])}@${value.imageFixtures.get('webapp').indexDigest}`,
+      `easyfire-bookkeeping/webapp@sha256:${'e'.repeat(64)}`,
+    ] } }, /webapp.*RepoDigests|digest/i],
   ]) {
     const output = path.join(value.root, name, 'target-engine-evidence.json');
     await mkdir(path.dirname(output));

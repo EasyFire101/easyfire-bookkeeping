@@ -234,7 +234,7 @@ test('accepts a preloaded release image only when its engine identity is exact',
   const observed = {
     Id: expected.engineImageId,
     RepoTags: [expected.reference],
-    RepoDigests: [],
+    RepoDigests: [`easyfire-bookkeeping/webapp@${expected.ociIndexDigest}`],
   };
 
   assert.deepEqual(
@@ -260,6 +260,23 @@ test('accepts a preloaded release image only when its engine identity is exact',
       { ...observed, RepoTags: ['easyfire-bookkeeping/webapp:wrong'] },
     ),
     /release tag is invalid/i,
+  );
+  assert.throws(
+    () => dockerContract.verifyReleaseImageIdentity(
+      expected,
+      { ...observed, RepoDigests: [`easyfire-bookkeeping/webapp@sha256:${'6'.repeat(64)}`] },
+    ),
+    /repo digest is invalid/i,
+  );
+  assert.throws(
+    () => dockerContract.verifyReleaseImageIdentity(
+      expected,
+      { ...observed, RepoDigests: [
+        `easyfire-bookkeeping/webapp@${expected.ociIndexDigest}`,
+        `easyfire-bookkeeping/webapp@sha256:${'6'.repeat(64)}`,
+      ] },
+    ),
+    /repo digest is invalid/i,
   );
 
   const digest = `sha256:${'5'.repeat(64)}`;

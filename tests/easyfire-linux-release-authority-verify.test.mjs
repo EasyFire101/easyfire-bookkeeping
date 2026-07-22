@@ -140,7 +140,7 @@ function buildOciBundle() {
     const imageIndexDescriptor = descriptor(
       imageIndex,
       'application/vnd.oci.image.index.v1+json',
-      { annotations: { 'io.containerd.image.name': sourceReference } },
+      { annotations: { 'io.containerd.image.name': `docker.io/${sourceReference}` } },
     );
     blobs.set(`blobs/sha256/${imageIndexDescriptor.digest.slice(7)}`, imageIndex);
     return {
@@ -276,7 +276,7 @@ async function fixture(t) {
         reference: tagged,
         Id: image.engineImageId,
         RepoTags: [tagged],
-        RepoDigests: external ? [repoDigest] : [],
+        RepoDigests: [repoDigest],
         externalDigestAuthority: external ? repoDigest : null,
       };
     }),
@@ -484,6 +484,7 @@ test('requires root-index Docker IDs and accepts the bounded external offline-lo
   const offline = await fixture(t);
   const evidence = JSON.parse(await readFile(offline.engineEvidencePath, 'utf8'));
   evidence.images[0].RepoDigests = [];
+  evidence.images[1].RepoDigests = [];
   evidence.images[3].RepoDigests = [];
   const evidenceBytes = Buffer.from(`${JSON.stringify(evidence, null, 2)}\n`);
   await writeFile(offline.engineEvidencePath, evidenceBytes);
@@ -491,6 +492,22 @@ test('requires root-index Docker IDs and accepts the bounded external offline-lo
   offline.manifest.targetEngineEvidence.bytes = evidenceBytes.length;
   const proof = await verifyManifestBoundRelease(offline.options);
   assert.equal(proof.releaseCommit, releaseCommit);
+});
+
+test('rejects a custom RepoDigest not derived from the exact OCI index', async (t) => {
+  const value = await fixture(t);
+  const evidence = JSON.parse(await readFile(value.engineEvidencePath, 'utf8'));
+  evidence.images[1].RepoDigests = [
+    `easyfire-bookkeeping/webapp@sha256:${'f'.repeat(64)}`,
+  ];
+  const evidenceBytes = Buffer.from(`${JSON.stringify(evidence, null, 2)}\n`);
+  await writeFile(value.engineEvidencePath, evidenceBytes);
+  value.manifest.targetEngineEvidence.sha256 = hash(evidenceBytes);
+  value.manifest.targetEngineEvidence.bytes = evidenceBytes.length;
+  await assert.rejects(
+    verifyManifestBoundRelease(value.options),
+    /webapp.*RepoDigests|repo digest/i,
+  );
 });
 
 test('rejects missing or undeclared release artifacts', async (t) => {

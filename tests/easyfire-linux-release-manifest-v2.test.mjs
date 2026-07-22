@@ -193,6 +193,7 @@ function buildOciBundle({
   missingLinux = false,
   duplicateLinux = false,
   invalidNonRunnable,
+  shorthandRoot = false,
 } = {}) {
   const blobs = new Map();
   const images = [];
@@ -346,7 +347,11 @@ function buildOciBundle({
     const imageIndexDescriptor = descriptor(
       imageIndex,
       'application/vnd.oci.image.index.v1+json',
-      { annotations: { 'io.containerd.image.name': reference } },
+      {
+        annotations: {
+          'io.containerd.image.name': shorthandRoot ? reference : `docker.io/${reference}`,
+        },
+      },
     );
     blobs.set(`blobs/sha256/${imageIndexDescriptor.digest.slice(7)}`, imageIndex);
     images.push({
@@ -365,7 +370,7 @@ function buildOciBundle({
   if (extraRoot) {
     rootDescriptors.push({
       ...rootDescriptors[0],
-      annotations: { 'io.containerd.image.name': 'undeclared/example:latest' },
+      annotations: { 'io.containerd.image.name': 'docker.io/undeclared/example:latest' },
     });
   }
   if (duplicateRoot) rootDescriptors[rootDescriptors.length - 1] = rootDescriptors[0];
@@ -436,7 +441,7 @@ async function createFixture(t, bundleOptions = {}, evidenceMutator, sourceOptio
         reference: image.reference,
         Id: image.indexDigest,
         RepoTags: [image.reference],
-        RepoDigests: external ? [repoDigest] : [],
+        RepoDigests: [repoDigest],
         externalDigestAuthority: external ? repoDigest : null,
       };
     }),
@@ -608,6 +613,11 @@ test('rejects an undeclared extra root image/tag', async (t) => {
   await assert.rejects(runProducer(fixture), /exactly seven|undeclared/i);
 });
 
+test('rejects a shorthand aggregate root name that Docker cannot resolve canonically', async (t) => {
+  const fixture = await createFixture(t, { shorthandRoot: true });
+  await assert.rejects(runProducer(fixture), /canonical|docker\.io|root.*image.*name/i);
+});
+
 test('rejects a duplicate root image/tag even when the root count stays seven', async (t) => {
   const fixture = await createFixture(t, { duplicateRoot: true });
   await assert.rejects(runProducer(fixture), /duplicate image\/tag/i);
@@ -654,6 +664,23 @@ test('accepts either exact or absent external RepoDigests while preserving sourc
   const manifest = JSON.parse(await readFile(fixture.output, 'utf8'));
   assert.equal(manifest.images[0].engineImageId, fixture.images[0].indexDigest);
   assert.equal(manifest.images[3].engineImageId, fixture.images[3].indexDigest);
+});
+
+test('accepts only an exact derived custom RepoDigest without claiming external authority', async (t) => {
+  const accepted = await createFixture(t);
+  await runProducer(accepted);
+
+  const absent = await createFixture(t, {}, (evidence) => {
+    evidence.images[1].RepoDigests = [];
+  });
+  await runProducer(absent);
+
+  const rejected = await createFixture(t, {}, (evidence) => {
+    evidence.images[1].RepoDigests = [
+      `easyfire-bookkeeping/webapp@sha256:${'f'.repeat(64)}`,
+    ];
+  });
+  await assert.rejects(runProducer(rejected), /webapp.*RepoDigests|repo digest/i);
 });
 
 test('rejects shuffled target-engine evidence instead of reordering it silently', async (t) => {

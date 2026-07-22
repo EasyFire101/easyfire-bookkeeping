@@ -632,10 +632,12 @@ function normalizedReference(value, label) {
 
 function rootReference(descriptorValue, label) {
   const annotations = requireObject(descriptorValue.annotations, `${label}.annotations`);
-  return normalizedReference(
-    annotations['io.containerd.image.name'],
-    `${label} io.containerd.image.name`,
-  );
+  const rawReference = annotations['io.containerd.image.name'];
+  const reference = normalizedReference(rawReference, `${label} io.containerd.image.name`);
+  if (rawReference !== `docker.io/${reference}`) {
+    refuse(`${label} io.containerd.image.name must be Docker-canonical.`);
+  }
+  return reference;
 }
 
 function parseRootIndex(indexBytes) {
@@ -820,24 +822,23 @@ function parseEngineEvidence(document, bundle, releaseCommit, specs, inventory) 
     if (!candidate) refuse(`Target-engine evidence is missing ${spec.sourceReference}.`);
     exactStringArray(candidate.RepoTags, [spec.sourceReference], `${spec.role} RepoTags`);
     const rootDigest = inventory[index].ociIndexDigest;
-    const externalDigest = `${repositoryOf(spec.sourceReference)}@${rootDigest}`;
+    const derivedRepoDigest = `${repositoryOf(spec.sourceReference)}@${rootDigest}`;
+    if (
+      !Array.isArray(candidate.RepoDigests) ||
+      !(
+        candidate.RepoDigests.length === 0 ||
+        (candidate.RepoDigests.length === 1 &&
+          candidate.RepoDigests[0] === derivedRepoDigest)
+      )
+    ) {
+      refuse(`${spec.role} RepoDigests does not match the exact OCI image authority.`);
+    }
     if (spec.external) {
-      if (
-        !Array.isArray(candidate.RepoDigests) ||
-        !(
-          candidate.RepoDigests.length === 0 ||
-          (candidate.RepoDigests.length === 1 &&
-            candidate.RepoDigests[0] === externalDigest)
-        )
-      ) {
-        refuse(`${spec.role} RepoDigests does not match an allowed offline-load state.`);
-      }
-      if (candidate.externalDigestAuthority !== externalDigest) {
+      if (candidate.externalDigestAuthority !== derivedRepoDigest) {
         refuse(`${spec.role} external digest authority is invalid.`);
       }
     }
     else {
-      exactStringArray(candidate.RepoDigests, [], `${spec.role} RepoDigests`);
       if (candidate.externalDigestAuthority !== null) {
         refuse(`${spec.role} must not claim external digest authority.`);
       }

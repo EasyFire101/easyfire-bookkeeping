@@ -356,6 +356,19 @@ function normalizedRootReference(value, label) {
   return value.startsWith('docker.io/') ? value.slice('docker.io/'.length) : value;
 }
 
+function dockerCanonicalRootReference(value, label) {
+  const normalized = normalizedRootReference(value, label);
+  const [firstComponent] = normalized.split('/');
+  const hasExplicitRegistry = normalized.includes('/') && (
+    firstComponent === 'localhost' ||
+    firstComponent.includes('.') ||
+    firstComponent.includes(':')
+  );
+  return hasExplicitRegistry
+    ? normalized
+    : `docker.io/${normalized}`;
+}
+
 function taggedReferenceTag(reference, label) {
   const colon = reference.lastIndexOf(':');
   const slash = reference.lastIndexOf('/');
@@ -562,7 +575,12 @@ async function validateImageArchive(archive, spec) {
       mediaType: OCI_INDEX,
       digest: rootDescriptor.digest,
       size: rootDescriptor.size,
-      annotations: { 'io.containerd.image.name': spec.sourceReference },
+      annotations: {
+        'io.containerd.image.name': dockerCanonicalRootReference(
+          spec.sourceReference,
+          `${spec.role} output reference`,
+        ),
+      },
     },
     referenced,
   };

@@ -448,23 +448,22 @@ function verifyEvidence(value, manifest) {
       refuse(`${role} target Docker Id does not match release engineImageId.`);
     }
     exactArray(candidate.RepoTags, [tagged], `${role} RepoTags`);
+    const repoDigest = `${repositoryOf(tagged)}@${image.ociIndexDigest}`;
+    if (
+      !Array.isArray(candidate.RepoDigests) ||
+      !(
+        candidate.RepoDigests.length === 0 ||
+        (candidate.RepoDigests.length === 1 && candidate.RepoDigests[0] === repoDigest)
+      )
+    ) {
+      refuse(`${role} RepoDigests does not match the exact image authority.`);
+    }
     if (image.reference.includes('@')) {
-      const repoDigest = `${repositoryOf(tagged)}@${image.ociIndexDigest}`;
-      if (
-        !Array.isArray(candidate.RepoDigests) ||
-        !(
-          candidate.RepoDigests.length === 0 ||
-          (candidate.RepoDigests.length === 1 && candidate.RepoDigests[0] === repoDigest)
-        )
-      ) {
-        refuse(`${role} RepoDigests does not match an allowed offline-load state.`);
-      }
       if (candidate.externalDigestAuthority !== repoDigest) {
         refuse(`${role} external digest authority is invalid.`);
       }
     }
     else {
-      exactArray(candidate.RepoDigests, [], `${role} RepoDigests`);
       if (candidate.externalDigestAuthority !== null) {
         refuse(`${role} must not claim external digest authority.`);
       }

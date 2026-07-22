@@ -198,15 +198,22 @@ function parseEngineEvidence(value: unknown, manifest: ReleaseManifest): EngineE
       throw new Error(`${role} target Docker Id does not match release engineImageId.`);
     }
     exactArray(candidate.RepoTags, [taggedReference], `${role} RepoTags`);
+    const repoDigest = `${repositoryOf(taggedReference)}@${image.ociIndexDigest}`;
+    if (!(
+      Array.isArray(candidate.RepoDigests) &&
+      (
+        candidate.RepoDigests.length === 0 ||
+        (candidate.RepoDigests.length === 1 && candidate.RepoDigests[0] === repoDigest)
+      )
+    )) {
+      throw new Error(`${role} RepoDigests does not match the exact image authority.`);
+    }
     if (image.reference.includes('@')) {
-      const repoDigest = `${repositoryOf(taggedReference)}@${image.ociIndexDigest}`;
-      exactArray(candidate.RepoDigests, [repoDigest], `${role} RepoDigests`);
       if (candidate.externalDigestAuthority !== repoDigest) {
         throw new Error(`${role} external digest authority is invalid.`);
       }
     }
     else {
-      exactArray(candidate.RepoDigests, [], `${role} RepoDigests`);
       if (candidate.externalDigestAuthority !== null) {
         throw new Error(`${role} must not claim external digest authority.`);
       }
