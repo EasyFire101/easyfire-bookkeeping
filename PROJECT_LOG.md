@@ -715,9 +715,10 @@ the production Linux VM remains off, and no route or cutover occurred.
 
 A six-file durable source repair makes release-manifest mode `0644` explicit and
 gives `--verify-existing` a 120-second wait only for running containers whose
-health is `starting`; every unhealthy, stopped, missing-health, invalid, or
-identity-drift state still fails immediately. Focused release/deployment proof
-passed 38/38, Guardian proof 16/16, adjacent proof 31/31, syntax 4/4,
-`git diff --check`, and the changed-file source-size guard with no blockers.
-The next candidate must be a new immutable release containing that repair; the
+health is `starting`. Created or exited containers remain valid pre-start states
+and are not waited on; unhealthy or missing-health running containers, invalid
+states, and identity drift still fail immediately. Focused release/deployment
+proof passed 39/39, Guardian proof 16/16, adjacent proof 31/31, syntax 4/4,
+`git diff --check`, and the changed-file source-size guard with no blockers. The
+next candidate must be a new immutable release containing that repair; the
 failed sealed release must not receive another recovery attempt.

@@ -68,9 +68,10 @@ authority.
   `d8db2ce98169deb3ed5e46c6891a3189a561825beeab3fa0243beabb4a9ef3e2`.
 - A six-file source repair is validated. It makes manifest mode `0644`
   explicit and waits at most 120 seconds only for running containers whose
-  Docker health is `starting`; all unhealthy, stopped, missing-health, invalid,
-  or identity-drift states still fail immediately. The repair is not part of
-  the failed immutable release.
+  Docker health is `starting`. Created or exited containers remain valid
+  pre-start states and are not waited on; unhealthy or missing-health running
+  containers, invalid states, and identity drift still fail immediately. The
+  repair is not part of the failed immutable release.
 
 ## Preserved Windows rollback runtime
 

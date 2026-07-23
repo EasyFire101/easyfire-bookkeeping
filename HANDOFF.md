@@ -31,6 +31,8 @@ gate has now failed twice, so this run stopped without a third attempt.
   `0d09f440ac018f6c738474fceedd4f3848689e26`.
 - Manifest-mode and transient-health recovery checkpoint:
   `ef2d042ff3af570ed3a526eaca4a0de8da353e2f` (local and unpublished).
+- Monotonic 120-second recovery-deadline checkpoint:
+  `94aacae7392e6ddb607c0b4e962b6ec616559bd2` (local and unpublished).
 - Upstream base (not the candidate HEAD):
   `8c90ca328ec59dd772de3b385531eb386de11ac8`.
 - Upstream-only remote: `origin` (Bigcapital); never push EasyFire changes
@@ -501,7 +503,7 @@ history; they must not be used to construct the superseding endpoint.
   any other installed manifest mode, and waits up to 120 seconds only for
   containers that are both running and transiently `health=starting`.
   Unhealthy, missing-health, and invalid states still fail immediately. Focused
-  release/deployment tests passed 38/38, Guardian tests 16/16, adjacent tests
+  release/deployment tests passed 39/39, Guardian tests 16/16, adjacent tests
   31/31, syntax 4/4, diff check, and source-size with zero blockers. These bytes
   are not part of the immutable rehearsal release and cannot retroactively
   validate it.

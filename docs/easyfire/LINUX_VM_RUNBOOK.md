@@ -476,10 +476,12 @@ is a hard stop. Never substitute raw Compose, Docker migration, or receipt
 creation commands for this controller.
 
 `--verify-existing` may wait at most 120 seconds only while every not-yet-ready
-container is running and reports Docker health `starting`. It must fail
-immediately for unhealthy, stopped, missing-health, invalid-state, or identity
-drift. This bounded transition wait does not weaken Guardian or route-activation
-health requirements.
+container is running and reports Docker health `starting`. Created or exited
+containers are valid pre-start states and are not waited on. Unhealthy or
+missing-health running containers, invalid states, and identity drift fail
+immediately. The inspection command receives only the remaining monotonic
+deadline budget. This bounded transition wait does not weaken Guardian or
+route-activation health requirements.
 
 The first controller run accepts an image reference already present on the
 target engine only when its engine image ID and manifest-bound tag or repository
