@@ -1,11 +1,13 @@
 import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
+import { createRequire } from "node:module";
 import { dirname, resolve } from "node:path";
 import test from "node:test";
 import { fileURLToPath } from "node:url";
 
 const root = resolve(dirname(fileURLToPath(import.meta.url)), "..");
 const read = (path) => readFileSync(resolve(root, path), "utf8");
+const rootRequire = createRequire(resolve(root, "package.json"));
 
 test("sanitized accounting evidence contains one clean document", () => {
   const evidence = read("docs/easyfire/ACCOUNTING_SMOKE.md");
@@ -180,4 +182,28 @@ test("published examples contain only unmistakable secret and identity placehold
   }
   assert.match(accessTemplate, /"REPLACE_WITH_OWNER_EMAIL"/);
   assert.doesNotMatch(accessTemplate, /PLACEHOLDER_ADMIN_EMAIL@easyfire\.fyi/);
+});
+
+test("commit message hook is deterministic in linked Git worktrees", () => {
+  const hook = read(".husky/commit-msg");
+
+  assert.doesNotMatch(
+    hook,
+    /\bpnpx\b/,
+    "the hook must not download or depend on an ambient commitlint CLI",
+  );
+  assert.match(
+    hook,
+    /node_modules\/\.bin\/commitlint/,
+    "the hook must use the repository-pinned commitlint CLI",
+  );
+  assert.match(
+    hook,
+    /--edit "\$1"/,
+    "the hook must validate the exact commit-message path supplied by Git",
+  );
+  assert.doesNotThrow(
+    () => rootRequire.resolve("@lerna/project"),
+    "the configured Lerna scope provider must resolve from the repository root",
+  );
 });

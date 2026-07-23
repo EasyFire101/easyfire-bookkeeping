@@ -1,4 +1,18 @@
 #!/usr/bin/env sh
 . "$(dirname -- "$0")/_/husky.sh"
 
-pnpx commitlint --edit 
+if [ "$#" -lt 1 ] || [ -z "$1" ]; then
+  echo "commit-msg hook: Git did not provide the commit-message path." >&2
+  exit 1
+fi
+
+repo_root="$(cd "$(dirname -- "$0")/.." && pwd)" || exit 1
+commitlint="$repo_root/node_modules/.bin/commitlint"
+
+if [ ! -f "$commitlint" ]; then
+  echo "commit-msg hook: repository-pinned commitlint is unavailable." >&2
+  exit 1
+fi
+
+# Git supplies the real message path as $1; linked worktrees cannot use .git/COMMIT_EDITMSG.
+exec "$commitlint" --edit "$1"

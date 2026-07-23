@@ -201,9 +201,11 @@ The direct-to-VM source currently records:
   all 14 installed CLIs through the required `current` symlink and fail-closed
   path canonicalization.
 - Guardian build/tests: 31/31 passed; Guardian TypeScript typecheck passed.
-- Release-readiness suite: 24/24 passed. Static no-deploy validation: 101/101
-  passed. Production syntax, direct-to-VM PowerShell parsing, and project
-  foundation checks passed.
+- Release-readiness suite: 25/25 passed, including the linked-worktree
+  commit-message hook contract: use the repository-pinned commitlint, resolve
+  its Lerna scope provider from the project root, and validate Git's exact `$1`
+  message path. Static no-deploy validation: 101/101 passed. Production syntax,
+  direct-to-VM PowerShell parsing, and project foundation checks passed.
 - Full preserved-root replay: 16,434 manifest entries and approximately
   771 MiB rehashed successfully. A Windows SMB long-path `realpath` failure was
   found and corrected with cached no-reparse directory traversal checks.
