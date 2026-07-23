@@ -722,3 +722,28 @@ proof passed 39/39, Guardian proof 16/16, adjacent proof 31/31, syntax 4/4,
 `git diff --check`, and the changed-file source-size guard with no blockers. The
 next candidate must be a new immutable release containing that repair; the
 failed sealed release must not receive another recovery attempt.
+
+## Repair the live Windows stale-session blank screen - 2026-07-23
+
+The private Windows site returned its static shell, but an expired token made
+`/api/auth/account` and `/api/organization/current` return 401. The route guards
+treated token presence as authenticated while the SDK fetcher's existing error
+callback was commented out, so the 401 could not clear the stale session and
+the loading shell never finished.
+
+Commit `0e6c88914e67999df5b6e18591cd3e2cd59aa617` reconnects the existing
+`useApiFetcherOnError` callback and adds a focused regression. The test failed
+before the one-line repair, then the auth/registration/setup selection passed
+7/7 and the production webapp build succeeded. A fresh independent read-only
+review returned requirements and implementation PASS with no blocking
+findings.
+
+The 1,313-file static artifact passed an isolated `network=none`, read-only
+container smoke test for both `index.html` and its main JavaScript asset. Newsec
+then performed a frontend-only swap; the private gateway and `/api/auth/meta`
+both returned HTTP 200, and Chrome rendered `/auth/login` instead of the blank
+`/setup` shell. The exact previous frontend container and archive remain
+preserved for rollback. No API container, database or Redis volume, accounting
+record, Linux VM, or public route changed. The deployment record and restore
+instructions are under
+`C:\ProgramData\AgentFoundry\easyfire-bookkeeping\onboarding\auth-session-hotfix-20260723T223105Z`.

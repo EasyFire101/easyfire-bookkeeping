@@ -24,9 +24,30 @@ stabilized with the stack service active, six healthy containers, HTTP 200, and
 the original deployment receipt and Guardian proof unchanged. The same recovery
 gate has now failed twice, so this run stopped without a third attempt.
 
+Separately, the live Windows frontend's blank-screen regression is repaired.
+An expired browser token had left the SDK fetcher's existing 401 logout handler
+disconnected, so private boot queries failed while the route guard still treated
+the session as authenticated. Source commit
+`0e6c88914e67999df5b6e18591cd3e2cd59aa617` restores that callback and adds a
+focused regression. The patched static frontend passed an isolated
+network-disabled HTTP smoke test and a frontend-only cutover. Chrome then moved
+the previously blank `/setup` tab to a rendered `/auth/login` form. The API,
+MySQL/Redis volumes, accounting records, Linux VMs, and exposure boundary were
+not changed.
+
+The live frontend closeout record and restore instructions are preserved on
+Newsec under
+`C:\ProgramData\AgentFoundry\easyfire-bookkeeping\onboarding\auth-session-hotfix-20260723T223105Z`.
+The exact pre-change container remains stopped as
+`easyfire-owner-onboarding-web-0b7d1af8-before-auth-session-hotfix-20260723T223105Z`;
+its static archive still matches SHA-256
+`D2BF784E8D63CC0A4CCBBCB4799A31ED5943C18DB2992B87771D20E7CEF0DB8C`.
+
 ## Source state
 
 - Local branch: `codex/easyfire-bookkeeping-linux-vm-migration-20260721`.
+- Windows live-frontend stale-session repair:
+  `0e6c88914e67999df5b6e18591cd3e2cd59aa617`.
 - Backup compatibility checkpoint:
   `0d09f440ac018f6c738474fceedd4f3848689e26`.
 - Manifest-mode and transient-health recovery checkpoint:
@@ -518,6 +539,10 @@ history; they must not be used to construct the superseding endpoint.
   single-writer receipt would be a hard stop and rollback condition.
 
 ## Next safe action
+
+The accepted Windows live-frontend authentication repair is independent of the
+Linux migration gates. Do not repeat its build, smoke test, or cutover unless
+its source, static artifact, container identity, or private route changes.
 
 Do not run a third recovery attempt against the current immutable rehearsal
 release. Create one new immutable release that contains the tested manifest-mode
