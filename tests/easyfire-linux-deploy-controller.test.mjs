@@ -668,6 +668,42 @@ test('verify-existing waits only for transient starting health and stays bounded
   );
 });
 
+test('verify-existing enforces one monotonic deadline across inspection and sleep', async () => {
+  const starting = {
+    State: {
+      Running: true,
+      Status: 'running',
+      Health: { Status: 'starting' },
+    },
+  };
+  let nowMs = 0;
+  let inspections = 0;
+  const inspectionBudgets = [];
+  await assert.rejects(
+    dockerContract.waitForExistingRuntimeHealth(
+      ['mysql'],
+      {
+        attempts: 5,
+        delayMs: 10,
+        timeoutMs: 25,
+        now: () => nowMs,
+        inspect: async (_names, _label, commandTimeoutMs) => {
+          inspections += 1;
+          inspectionBudgets.push(commandTimeoutMs);
+          nowMs += 20;
+          return [starting];
+        },
+        sleep: async (milliseconds) => {
+          nowMs += milliseconds;
+        },
+      },
+    ),
+    /starting|timed out/i,
+  );
+  assert.equal(inspections, 1);
+  assert.deepEqual(inspectionBudgets, [25]);
+});
+
 test('verify-existing reaches final health before the strict Guardian identity verifier', async () => {
   const source = await readFile(controllerPath, 'utf8');
   const wait = source.indexOf(

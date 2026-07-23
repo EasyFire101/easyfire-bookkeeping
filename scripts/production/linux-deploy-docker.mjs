@@ -2,6 +2,7 @@ import { spawn } from 'node:child_process';
 import { createHash } from 'node:crypto';
 import http from 'node:http';
 import net from 'node:net';
+import { performance } from 'node:perf_hooks';
 
 import {
   ALL_SERVICES,
@@ -98,10 +99,11 @@ const parseJsonOutput = (result, label) => {
 export const inspectContainers = async (
   names,
   label = 'Docker container inspection',
+  timeoutMs = 30_000,
 ) => {
   const result = await docker(['container', 'inspect', ...names], {
     label,
-    timeoutMs: 30_000,
+    timeoutMs,
     maxOutputBytes: 4 * 1024 * 1024,
   });
   const parsed = parseJsonOutput(result, label);
@@ -808,16 +810,28 @@ export const waitForExistingRuntimeHealth = async (
   {
     attempts = 60,
     delayMs = 2_000,
+    timeoutMs = 120_000,
     inspect = inspectContainers,
     sleep = (milliseconds) =>
       new Promise((resolve) => setTimeout(resolve, milliseconds)),
+    now = () => performance.now(),
   } = {},
 ) => {
+  const deadline = now() + timeoutMs;
+  const timeout = () =>
+    refuse(
+      'E_CONTAINER_HEALTH_TIMEOUT',
+      'Runtime containers remained in the transient starting health state.',
+    );
   for (let attempt = 0; attempt < attempts; attempt += 1) {
+    const remainingBeforeInspection = deadline - now();
+    if (remainingBeforeInspection <= 0) timeout();
     const containers = await inspect(
       services.map((service) => SERVICE_CONTRACT[service].name),
       'Existing runtime health transition inspection',
+      Math.max(1, Math.min(30_000, Math.ceil(remainingBeforeInspection))),
     );
+    if (now() >= deadline) timeout();
     let starting = false;
     for (let index = 0; index < services.length; index += 1) {
       const container = containers[index];
@@ -833,10 +847,11 @@ export const waitForExistingRuntimeHealth = async (
       }
     }
     if (!starting) return containers;
-    if (attempt + 1 < attempts) await sleep(delayMs);
+    if (attempt + 1 < attempts) {
+      const remainingBeforeSleep = deadline - now();
+      if (remainingBeforeSleep <= 0) timeout();
+      await sleep(Math.min(delayMs, remainingBeforeSleep));
+    }
   }
-  refuse(
-    'E_CONTAINER_HEALTH_TIMEOUT',
-    'Runtime containers remained in the transient starting health state.',
-  );
+  timeout();
 };
