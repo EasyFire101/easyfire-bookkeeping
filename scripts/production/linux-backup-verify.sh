@@ -843,6 +843,8 @@ docker create \
   --label "easyfire.bookkeeping.backup-stamp=${STAMP}" \
   --env "MYSQL_DATABASE=${SYSTEM_DATABASE}" \
   --env "MYSQL_USER=${PROOF_DB_USER}" \
+  --env MYSQL_PASSWORD= \
+  --env MYSQL_ROOT_PASSWORD= \
   --env MYSQL_PASSWORD_FILE=/run/easyfire-proof-secrets/database-password \
   --env MYSQL_ROOT_PASSWORD_FILE=/run/easyfire-proof-secrets/root-password \
   --mount "type=bind,src=${PROOF_SECRET_DIRECTORY},dst=/run/easyfire-proof-secrets,readonly" \

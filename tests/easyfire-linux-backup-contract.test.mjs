@@ -179,6 +179,42 @@ test('Linux restore proof never reuses production credentials and publishes comp
   assert.match(script, /status: 'passed'/);
 });
 
+test('Linux restore proof clears image passwords before using file credentials', async () => {
+  const script = await readFile(
+    path.join(root, 'scripts/production/linux-backup-verify.sh'),
+    'utf8',
+  );
+  const createBlock = script.match(
+    /docker create \\\r?\n[\s\S]*?"\$\{MYSQL_IMAGE_ID\}" >\/dev\/null/,
+  );
+  assert.ok(createBlock, 'isolated MariaDB restore create command is missing');
+
+  const directPassword = createBlock[0].indexOf('--env MYSQL_PASSWORD=');
+  const directRootPassword = createBlock[0].indexOf(
+    '--env MYSQL_ROOT_PASSWORD=',
+  );
+  const filePassword = createBlock[0].indexOf('--env MYSQL_PASSWORD_FILE=');
+  const fileRootPassword = createBlock[0].indexOf(
+    '--env MYSQL_ROOT_PASSWORD_FILE=',
+  );
+
+  assert.ok(directPassword >= 0, 'inherited MYSQL_PASSWORD is not explicitly cleared');
+  assert.ok(
+    directRootPassword >= 0,
+    'inherited MYSQL_ROOT_PASSWORD is not explicitly cleared',
+  );
+  assert.ok(filePassword >= 0, 'proof database password file is missing');
+  assert.ok(fileRootPassword >= 0, 'proof root password file is missing');
+  assert.ok(
+    directPassword < filePassword,
+    'MYSQL_PASSWORD must be cleared before MYSQL_PASSWORD_FILE is supplied',
+  );
+  assert.ok(
+    directRootPassword < fileRootPassword,
+    'MYSQL_ROOT_PASSWORD must be cleared before MYSQL_ROOT_PASSWORD_FILE is supplied',
+  );
+});
+
 test('Linux recurring restore proof records evolving counts without reapplying initial migration counts', async () => {
   const script = await readFile(
     path.join(root, 'scripts/production/linux-backup-verify.sh'),
