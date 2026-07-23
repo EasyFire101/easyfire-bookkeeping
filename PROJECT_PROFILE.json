@@ -1,6 +1,6 @@
 {
   "foundationVersion": "1.7.0",
-  "foundationStatus": "active-direct-vm-production-candidate",
+  "foundationStatus": "active-direct-vm-rehearsal-recovery-blocked",
   "projectName": "EasyFire Bookkeeping",
   "projectMemoryId": "a61c6671-6d22-538b-a722-a3874093355e",
   "projectMemoryAliases": [
@@ -32,7 +32,7 @@
   },
   "sourceOfTruth": {
     "code": {
-      "status": "published-base-plus-unpublished-validated-recovery-patch",
+      "status": "published-base-plus-local-committed-runtime-recovery-fix",
       "acceptedRef": "easyfire-forgejo/main",
       "remoteName": "easyfire-forgejo",
       "remoteUrl": "private Forgejo repository jonny-admin/easyfire-bookkeeping (machine-specific endpoint is intentionally not published)",
@@ -40,8 +40,8 @@
       "recoveryPath": "Exact Forgejo main readback defines accepted source and anonymous GitHub readback of the same commit defines AGPL corresponding source. The verified pre-takeover filesystem backup remains the local rollback authority recorded in HANDOFF.md.",
       "verificationCommand": "git status --short --branch"
     },
-    "runningRuntime": "On 2026-07-22, the original Windows Bookkeeping runtime on Newsec remains the sole live writer and rollback authority; all original volumes, releases, journals, backups, tasks, and Cloudflare route remain preserved. The isolated Ubuntu 24.04 production VM easyfire-bookkeeping-newsec and the identity-separated rehearsal VM are provisioned with the pinned Docker/Compose/Node/systemd/Tailscale base, but neither has an application stack or route. Tailscale is logged out, Serve/Funnel are absent, no public listener exists, and no cutover has run.",
-    "driftCheck": "Complete fresh independent review, commit the coherent source, construct one immutable Linux release and fixed plan, then stage and restore only into the isolated rehearsal VM. Prove backup/restore, native authentication, systemd boot, Guardian stateless-only recovery, rollback lock/rearm, and reboot recovery there before staging production. Quiesce the Windows source last, capture the final receipt-bound checkpoint, prove a single writer, and activate tailnet-only Tailscale Serve only after every receipt/hash gate passes; preserve Windows as stopped rollback authority afterward."
+    "runningRuntime": "On 2026-07-23, the original Windows Bookkeeping runtime on Newsec remains the sole live production writer and rollback authority; all original volumes, releases, journals, backups, tasks, and the Cloudflare route remain preserved. The Linux production VM easyfire-bookkeeping-newsec remains off and has received no production traffic. The isolated v6 rehearsal VM has the pinned application stack safely stabilized active with six healthy long-running containers and loopback HTTP 200. Fresh backup 20260723T075310Z plus isolated restore, rollback lock/rearm, and Guardian proof passed. Runtime recovery failed twice because the sealed release raced Docker health=starting; no recovery proof, normal-reboot marker, final rehearsal receipt, native-auth proof, private route, or cutover exists.",
+    "driftCheck": "Do not rerun runtime recovery or create another compatibility continuation against the current sealed candidate. Commit and independently review the validated six-file manifest-mode/transient-health repair, build a new immutable release, and rerun only proof invalidated by that changed release, followed by one bounded recovery-only rehearsal. Continue to normal reboot, native authentication, final rehearsal collection, production staging, source quiescence, final checkpoint, single-writer proof, and tailnet-only route activation only if every preceding gate passes. Preserve Windows as the sole writer and keep the production VM off until then."
   },
   "sourceControlPolicy": {
     "localCommit": "Allowed after validation for durable work when the requested lane is complete.",

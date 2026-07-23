@@ -1,27 +1,36 @@
 # EasyFire Bookkeeping Handoff
 
-**Updated:** 2026-07-22
+**Updated:** 2026-07-23
 
 **Owner:** Direct Codex takeover for EasyFire
 
 **State:** The original Windows runtime remains live and is the sole writer and
 rollback authority; no cutover has occurred. The production VM
-`easyfire-bookkeeping-newsec` is off. The current private v6 rehearsal instance
-successfully restored the verified preflight checkpoint, ran migration once
-with exit zero, passed fixed-plan `--verify-existing`, and returned HTTP 200
-from `/`, `/api/system_db`, and `/api/auth/meta` with all six long-running
-services healthy. Its deployment-plan SHA-256 is
-`e4e4cac6ee8e56997a645b83a57689b73169b66b7053022ea91f9f7992907fc0`.
-The subsequent guest-native backup created payload files, but its isolated
-restore proof failed before publication because the pinned MariaDB image
-inherited `MYSQL_PASSWORD`/`MYSQL_ROOT_PASSWORD` while the proof container also
-set the corresponding `_FILE` variables. That backup has no `COMPLETE` marker
-or `backup-receipt.json` and is not trusted. Tailscale enrollment is a pending
-post-recovery gate, not an active blocker.
+`easyfire-bookkeeping-newsec` is off. The isolated v6 rehearsal accepted the
+checkpoint restore, once-only migration, fixed deployment plan, six-container
+health, and loopback HTTP gates. Fresh backup `20260723T075310Z` then passed a
+network-disabled isolated restore with 87 tables, 1/1/1/1 identity counts, and
+schema SHA-256
+`24b5ab66959a6971e67a321f3f2583b896aebd091760a1880275f53bb55af853`.
+Rollback lock/reboot/rearm and the bounded Guardian exercise also passed.
+
+The required runtime-recovery gate did not pass. The immutable release's
+`--verify-existing` path checked container health while Docker live-restore was
+still reporting `starting`. A bounded compatibility continuation retried the
+stack unit three times in two minutes, then timed out after 180 seconds while
+Gotenberg was still settling. No deployment receipt was moved and no recovery,
+normal-reboot, or final-rehearsal proof was published. The rehearsal is safely
+stabilized with the stack service active, six healthy containers, HTTP 200, and
+the original deployment receipt and Guardian proof unchanged. The same recovery
+gate has now failed twice, so this run stopped without a third attempt.
 
 ## Source state
 
 - Local branch: `codex/easyfire-bookkeeping-linux-vm-migration-20260721`.
+- Backup compatibility checkpoint:
+  `0d09f440ac018f6c738474fceedd4f3848689e26`.
+- Manifest-mode and transient-health recovery checkpoint:
+  `ef2d042ff3af570ed3a526eaca4a0de8da353e2f` (local and unpublished).
 - Upstream base (not the candidate HEAD):
   `8c90ca328ec59dd772de3b385531eb386de11ac8`.
 - Upstream-only remote: `origin` (Bigcapital); never push EasyFire changes
@@ -341,6 +350,25 @@ history; they must not be used to construct the superseding endpoint.
   `linux-backup-verify.sh` also supplies `MYSQL_PASSWORD_FILE` and
   `MYSQL_ROOT_PASSWORD_FILE` to the isolated proof container. This is not
   evidence of accounting-record corruption.
+- The source compatibility repair clears the image-inherited direct password
+  variables before supplying the file-based variants. Fresh backup
+  `20260723T075310Z` is complete and its network-disabled isolated restore
+  passed 87 tables, 1/1/1/1 identity counts, and schema SHA-256
+  `24b5ab66959a6971e67a321f3f2583b896aebd091760a1880275f53bb55af853`.
+- Rollback lock `4b9214a5-4b1f-4754-bd02-77bd56f13920`, locked reboot, and
+  rearm passed. Guardian runtime proof passed with SHA-256
+  `71954267a05641a5aa44f482618f5d72c4bed2edfef9ceebbead25f40121cf09`.
+- Runtime recovery failed twice because the sealed release's fixed-plan
+  verifier treats Docker's transient `health=starting` state as an immediate
+  failure. The bounded continuation's three stack retries in two minutes
+  exhausted before Gotenberg settled, and the continuation timed out at 180
+  seconds. It stopped before receipt movement or invalid-authority testing.
+- The rehearsal was returned to a clean state without rerunning recovery:
+  `easyfire-bookkeeping-stack.service` and Docker are active, all six
+  application containers are healthy, loopback `/` returns HTTP 200, deployment
+  receipt SHA-256 remains
+  `d8db2ce98169deb3ed5e46c6891a3189a561825beeab3fa0243beabb4a9ef3e2`,
+  and recovery/normal-reboot/final proof outputs remain absent.
 - Tailscale reports `NeedsLogin`, but enrollment has not been attempted because
   backup/recovery proof comes first. It consumed no material waiting time and
   is a pending gate rather than an active blocker.
@@ -359,13 +387,14 @@ history; they must not be used to construct the superseding endpoint.
 
 - Direct takeover owns local source and documentation repair; Agent Foundry is
   provenance only.
-- The approved direct-to-VM work provisioned the isolated production and
-  rehearsal Ubuntu VMs and their base operating stacks. No Bookkeeping
-  application container, volume, migration, restore, systemd app enablement,
-  or Tailscale route is active on either VM.
-- Current documentation/source validation is local-only. It does not stop the
-  Windows writer, change Cloudflare, authorize Tailscale, or mutate accounting
-  data.
+- The approved direct-to-VM work provisioned both Ubuntu VMs. The production VM
+  remains off with no production application route. The rehearsal VM contains
+  only the private isolated candidate, restored checkpoint, proof resources,
+  and preserved failed attempts described above.
+- The approved rehearsal created backup/restore, rollback/reboot, Guardian, and
+  failed-recovery evidence only on the isolated rehearsal VM. It did not stop
+  the Windows writer, change Cloudflare, authorize Tailscale, or intentionally
+  mutate an accounting record.
 - Earlier Windows recovery work changed only the then-approved cloudflared
   service state and created private recovery evidence. It did not rewrite
   Access, Tunnel, DNS, or the matching token, and no token value is stored here.
@@ -462,12 +491,20 @@ history; they must not be used to construct the superseding endpoint.
   container also supplied file-based password variables. The attempt and its
   proof volume remain preserved but are incomplete and untrusted; never reuse
   them as the fresh proof.
-- Mandatory backup/isolated-restore, native owner authentication,
-  rollback-lock/rearm, reboot, and Guardian recovery receipts remain pending.
-  Tailscale currently reports `NeedsLogin`, but enrollment has not yet become
-  the active gate. It is a pending owner action, not the cause of the stopped
-  work; stop and surface the owner login/MFA only after the earlier safety gates
-  pass and enrollment is actually attempted.
+- Backup/isolated-restore, rollback-lock/rearm, and Guardian receipts passed.
+  Runtime recovery remains failed; therefore normal-reboot proof, native owner
+  authentication, production staging, final source quiescence, single-writer
+  proof, private-route activation, and cutover remain pending. Tailscale
+  `NeedsLogin` is not the cause of this stop and must not be attempted before
+  the recovery gate passes.
+- The durable source repair writes the final release manifest as `0644`, rejects
+  any other installed manifest mode, and waits up to 120 seconds only for
+  containers that are both running and transiently `health=starting`.
+  Unhealthy, missing-health, and invalid states still fail immediately. Focused
+  release/deployment tests passed 38/38, Guardian tests 16/16, adjacent tests
+  31/31, syntax 4/4, diff check, and source-size with zero blockers. These bytes
+  are not part of the immutable rehearsal release and cannot retroactively
+  validate it.
 - Source authority requires exact Forgejo readback and anonymous GitHub readback
   of the same final correction commit.
 - The current direct-to-VM source is locally validated. Its final containing
@@ -480,19 +517,16 @@ history; they must not be used to construct the superseding endpoint.
 
 ## Next safe action
 
-Make the focused one-file compatibility repair in
-`scripts/production/linux-backup-verify.sh`: explicitly clear the image-inherited
-`MYSQL_PASSWORD` and `MYSQL_ROOT_PASSWORD` values before supplying their
-file-based variants to the isolated proof container. Validate that file, then
-create a new timestamped backup and run one fresh isolated restore proof. Do not
-reuse attempt `20260723T031624Z`, rebuild the release or VM, or repeat the
-already-accepted restore/migration/health gates while their bound inputs remain
-unchanged.
+Do not run a third recovery attempt against the current immutable rehearsal
+release. Create one new immutable release that contains the tested manifest-mode
+and transient-health source repair, bind a new fixed plan to that release, and
+run one fresh isolated recovery-only rehearsal. Reuse accepted backup/restore,
+rollback, and Guardian evidence only where the new authority contract explicitly
+permits it; otherwise regenerate only the evidence invalidated by the changed
+release input. If runtime recovery fails again, preserve the evidence and stop.
 
-Only after the fresh backup receipt is complete may work continue through native
-authentication, rollback-lock/rearm, reboot, and Guardian proof. If the same
-gate fails after the focused repair and one rerun, preserve the evidence and
-stop at a safe checkpoint. Production remains Windows until every required
+Only after recovery and normal-reboot proof pass may native authentication and
+production staging begin. Production remains Windows until every required
 receipt is green; quiesce Windows last, capture the final receipt-bound
 checkpoint, prove one writer, and activate tailnet-only Serve only after every
 production receipt passes. Stop for owner Tailscale/native-login credentials

@@ -2,15 +2,19 @@
 
 **Owner:** EasyFire
 
-**Updated:** 2026-07-20
+**Updated:** 2026-07-23
 
-**Status:** Direct-Codex recovery source now includes an executable, fail-closed
-blue/green migration controller. Newsec SSH works; the older hosted installation
-is healthy; the exact cloudflared service is running automatically; and both a
-verified live-runtime checkpoint and current isolated-restorable
-`MigrationSource` backup exist. The recovery patch is locally validated but not
-yet committed or published. No candidate rehearsal, native login, or cutover has
-occurred.
+**Status:** The direct-to-VM rehearsal is stopped at a bounded safe checkpoint.
+Windows remains the live sole production writer and rollback authority, while
+the Linux production VM remains off. On the separate isolated rehearsal VM,
+checkpoint restore, once-only migration, fixed-plan health, fresh
+backup/isolated restore, rollback lock/rearm, and Guardian behavior passed.
+Runtime recovery failed twice because the sealed release checked Docker
+containers while their health was transiently `starting`; its three bounded
+retries and 180-second continuation expired before Gotenberg settled. The
+rehearsal is safely stabilized with the stack active, six healthy containers,
+and loopback HTTP 200, but no runtime-recovery, normal-reboot,
+native-authentication, final-rehearsal, private-route, or cutover proof exists.
 
 This file is the source of truth for current ownership, release, and runtime
 state. Agent Foundry is bypassed and is historical provenance only. Older Agent
@@ -22,7 +26,7 @@ authority.
 - Upstream foundation: Bigcapital, AGPL-3.0, base commit
   `8c90ca328ec59dd772de3b385531eb386de11ac8`.
 - Local candidate branch:
-  `codex/easyfire-bookkeeping-autonomy-recovery-20260718`.
+  `codex/easyfire-bookkeeping-linux-vm-migration-20260721`.
 - Accepted-source destination: `easyfire-forgejo/main` in the private
   owner-controlled Forgejo repository `jonny-admin/easyfire-bookkeeping`.
 - Public AGPL mirror:
@@ -38,7 +42,37 @@ authority.
   and validators consumed them: `.editorconfig`, `.env.production.example`,
   `AGENTS.md`, and `AGENT_FOUNDRY_EASYFIRE_HANDOFF.md`.
 
-## Observed hosted runtime
+## Current Linux rehearsal state
+
+- Linux production VM `easyfire-bookkeeping-newsec` is off and has received no
+  production traffic. Windows remains the sole writer.
+- The isolated v6 rehearsal restored the checkpoint, ran migration once with
+  exit zero, passed fixed-plan verification, and has six healthy long-running
+  containers on loopback only.
+- Fresh backup `20260723T075310Z` passed its network-disabled isolated restore:
+  17 system plus 70 tenant tables, 1/1/1/1 identity counts, and schema SHA-256
+  `24b5ab66959a6971e67a321f3f2583b896aebd091760a1880275f53bb55af853`.
+  The earlier failed attempt `20260723T031624Z` remains preserved and untrusted.
+- Rollback lock/reboot/rearm passed. Guardian shadow observation, stateless
+  recovery, MariaDB/Redis refusal, identity-mismatch refusal, and final health
+  passed; Guardian proof SHA-256 is
+  `71954267a05641a5aa44f482618f5d72c4bed2edfef9ceebbead25f40121cf09`.
+- Runtime recovery failed twice. The sealed release's immediate
+  `--verify-existing` check raced Docker's post-restart `health=starting`
+  transition. Its compatibility continuation exhausted three retries in two
+  minutes and timed out at 180 seconds before Gotenberg settled. It moved no
+  deployment receipt and published no recovery, reboot, or final proof.
+- The rehearsal was stabilized without rerunning recovery: the stack and Docker
+  services are active, all six application containers are healthy, loopback `/`
+  returns HTTP 200, and deployment receipt SHA-256 remains
+  `d8db2ce98169deb3ed5e46c6891a3189a561825beeab3fa0243beabb4a9ef3e2`.
+- A six-file source repair is validated. It makes manifest mode `0644`
+  explicit and waits at most 120 seconds only for running containers whose
+  Docker health is `starting`; all unhealthy, stopped, missing-health, invalid,
+  or identity-drift states still fail immediately. The repair is not part of
+  the failed immutable release.
+
+## Preserved Windows rollback runtime
 
 Reconciliation and approved recovery work on 2026-07-20 established the
 following without inspecting or changing an accounting record:
@@ -66,7 +100,7 @@ following without inspecting or changing an accounting record:
   and isolated network-disabled restore passed. Every original volume, journal,
   release, and backup remains preserved.
 
-## Candidate production contract
+## Historical Windows candidate contract
 
 The repaired `deploy/windows/production-action.ps1` is a fresh-install-only
 controller. It does not adopt, upgrade, or mount any historical,
@@ -113,7 +147,7 @@ to the same current ActionId and valid schema-2 journal during an interrupted
 resume, and only in a compatible phase. The controller cannot adopt any other
 volume.
 
-## Existing-data migration contract
+## Historical Windows migration contract
 
 The separate existing-data controller is no longer a planning-only gate.
 `migration-action.ps1` executes journaled `Plan`, `Rehearse`,
@@ -143,7 +177,7 @@ emergency, and scheduled backups are crash-resumable recovery units consisting
 of a compressed dump, SHA-256 sidecar, and authority-bound metadata under a
 unique journaled operation ID.
 
-## External edge contract
+## Preserved Windows edge contract
 
 The intended hostname is `https://bookkeeping.easyfire.fyi` on the
 owner-controlled Newsec Windows host, using Compose project
@@ -175,12 +209,16 @@ a fresh production Action can be called usable.
 | Complete project-level test suite                 | 135/135 passed after the final containment repair, including the 15,000-file materialization benchmark.                                                                                   |
 | Disposable Docker and backup/restore proof        | `b37426f03a8841d9923b853db5f40a08`: `proofPassed=true`, `builtServerAuthPassed=true`, `cleanupPassed=true`, unchanged empty production inventory, and zero resources after exact teardown |
 | Migration recovery source                         | Current backup SHA-256 `229ED021892F495AF84219596713C24C6B30676856601B0F3AC19F7E175FB54D`; isolated network-disabled restore passed.                                                       |
+| Linux fresh backup and isolated restore           | Passed: `20260723T075310Z`, 17/70 tables, 1/1/1/1 identity counts, schema SHA-256 `24b5ab66959a6971e67a321f3f2583b896aebd091760a1880275f53bb55af853`.                                           |
+| Linux rollback and Guardian                       | Passed: rollback lock/reboot/rearm; Guardian proof SHA-256 `71954267a05641a5aa44f482618f5d72c4bed2edfef9ceebbead25f40121cf09`.                                                           |
+| Linux runtime recovery                            | Failed twice: sealed `--verify-existing` raced transient `health=starting`; bounded three-retry continuation timed out before Gotenberg settled. No recovery proof was published.            |
+| Linux safe stabilization                          | Passed: stack and Docker active, six application containers healthy, loopback HTTP 200, receipt unchanged, recovery/reboot/final outputs absent.                                             |
 | Independent release review                        | Two final GO reviews, including targeted containment proof 2/2. Live Cutover remains gated by rehearsal, native authentication, and live backup/rollback/migration proof.                    |
 | Accepted Forgejo source                           | Initial commit `0f31d192195def0f8fe58a1532282b88609eb822` verified; final corrective commit requires exact matching readback                                                               |
 | Public GitHub corresponding source                | Initial commit anonymously verified; final corrective commit requires anonymous matching readback                                                                                         |
 | Newsec journal/runtime reconciliation             | SSH works; six old production containers healthy; migration container exited 0; both legacy tasks enabled/Ready with `LastTaskResult=1`; checkpoint manifest SHA-256 `0AEE8A2D577B102ECA6E61B8D4063363C7420845D27BDB957BDCA4DCC66525BE`. |
 | Authenticated live acceptance                     | Exact Access policy is correct; the prior browser used a different Google identity. Native application authentication still requires the owner to select the allowlisted identity and enter the native password. |
-| Production deployment                             | Older runtime remains live. Access/Tunnel/DNS/token and Running/Automatic cloudflared are exact. Recovery patch is unpublished; no candidate rehearsal, native login, or cutover has run.     |
+| Production deployment                             | Windows remains live and sole writer. Linux production VM is off. Isolated rehearsal is pre-cutover; native login, private route, and cutover have not run.                                   |
 
 Historical observations about a Cloudflare redirect or earlier local boot are
 not proof of the current candidate, deployed revision, database compatibility,
@@ -188,25 +226,23 @@ or authenticated application behavior.
 
 ## Remaining completion path
 
-The runtime checkpoint, current recovery unit, edge identity, controller
-implementation, focused proof, and independent review are complete. The
-remaining endpoint is operational migration, not another fresh deployment:
-
-1. Commit and publish the exact verified patch only to `easyfire-forgejo/main`
-   and `easyfire-github/main`, confirming matching remote readback.
-2. Build an immutable release and all seven pinned images on Newsec, then create
-   a new migration `Plan` bound to those exact identities.
-3. Run candidate-only `Rehearse` and prove its rollback boundary without
-   replacing the old runtime.
-4. Complete native login; the owner enters a password, MFA, or CAPTCHA only if
-   prompted.
-5. Run `AcceptAuthentication` to execute and verify the source recovery drill.
-6. Run `Cutover` only if backup, rollback, authentication, and migration proof
-   all pass.
-7. Verify the replacement backup task, absence of the retired startup task,
-   candidate runtime/edge health, and a new current backup with isolated restore.
-
-Do not run the candidate's fresh-install Action against the existing volumes.
+1. Do not run a third recovery attempt against the current sealed candidate.
+   Preserve its releases, shims, journals, receipts, backups, restore resources,
+   and failed-proof evidence.
+2. Commit and independently review the validated six-file manifest-mode and
+   transient-health repair, then construct a new immutable release containing
+   those exact bytes.
+3. Validate only the gates invalidated by the changed release authority, then
+   run one bounded recovery-only rehearsal. Do not repeat accepted backup,
+   rollback, or Guardian work unless its bound input changed.
+4. Continue to normal reboot, native owner authentication, and final rehearsal
+   collection only after runtime recovery passes.
+5. Stage production and quiesce Windows only after every preceding proof is
+   green. Capture the final checkpoint, prove exactly one writer, and activate
+   tailnet-only Tailscale Serve last.
+6. Preserve Windows as stopped rollback authority after cutover. Never enable
+   Funnel, expose a public listener, delete an authority artifact, or run the
+   historical Windows fresh-install controller against existing volumes.
 
 ## Data boundary
 

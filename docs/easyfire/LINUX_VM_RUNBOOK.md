@@ -475,6 +475,12 @@ receipt, incomplete journal, identity drift, or failed restore/migration proof
 is a hard stop. Never substitute raw Compose, Docker migration, or receipt
 creation commands for this controller.
 
+`--verify-existing` may wait at most 120 seconds only while every not-yet-ready
+container is running and reports Docker health `starting`. It must fail
+immediately for unhealthy, stopped, missing-health, invalid-state, or identity
+drift. This bounded transition wait does not weaken Guardian or route-activation
+health requirements.
+
 The first controller run accepts an image reference already present on the
 target engine only when its engine image ID and manifest-bound tag or repository
 digest are exact. Any mismatched preloaded image is a hard stop. This permits a

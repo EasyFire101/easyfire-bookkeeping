@@ -685,3 +685,39 @@ backup and isolated restore proof. Do not rebuild the release or VM, reuse the
 incomplete attempt, or repeat accepted gates while their inputs remain
 unchanged. If the repaired gate fails on its one rerun, preserve the evidence
 and stop at a safe checkpoint.
+
+## Fresh backup, rollback, and Guardian pass; bounded stop at runtime recovery - 2026-07-23
+
+The one-file MariaDB backup compatibility repair produced fresh backup
+`20260723T075310Z`. Its network-disabled isolated restore passed 17 system and
+70 tenant tables, 1/1/1/1 identity counts, and exact schema SHA-256
+`24b5ab66959a6971e67a321f3f2583b896aebd091760a1880275f53bb55af853`.
+The earlier incomplete `20260723T031624Z` unit remains preserved and untrusted.
+
+Rollback lock/reboot/rearm passed, followed by Guardian shadow, stateless
+recovery, data-tier refusal, identity-mismatch refusal, and final-health proof.
+Guardian proof SHA-256 is
+`71954267a05641a5aa44f482618f5d72c4bed2edfef9ceebbead25f40121cf09`.
+
+Runtime recovery then exposed a sealed-release race. Docker restart preserved
+the containers but returned them through `health=starting`, while the installed
+`--verify-existing` gate checked immediately. The initial recovery failed. A
+bounded compatibility continuation retried the stack unit three times within
+two minutes, but MariaDB and then Gotenberg were still transiently starting; the
+continuation timed out after 180 seconds. It moved no deployment receipt and
+published no recovery proof, normal-reboot marker, or final rehearsal receipt.
+The same gate therefore failed twice and the rehearsal stopped without a third
+attempt.
+
+The rehearsal was safely stabilized with the stack active, all six application
+containers healthy, and loopback HTTP 200. Windows remains the live sole writer,
+the production Linux VM remains off, and no route or cutover occurred.
+
+A six-file durable source repair makes release-manifest mode `0644` explicit and
+gives `--verify-existing` a 120-second wait only for running containers whose
+health is `starting`; every unhealthy, stopped, missing-health, invalid, or
+identity-drift state still fails immediately. Focused release/deployment proof
+passed 38/38, Guardian proof 16/16, adjacent proof 31/31, syntax 4/4,
+`git diff --check`, and the changed-file source-size guard with no blockers.
+The next candidate must be a new immutable release containing that repair; the
+failed sealed release must not receive another recovery attempt.

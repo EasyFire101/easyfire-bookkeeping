@@ -1,18 +1,22 @@
 # EasyFire Bookkeeping Feature Readiness
 
-**Updated:** 2026-07-22
+**Updated:** 2026-07-23
 
 **Foundation:** 1.7.0
 
 **Readiness level:** Full
 
-**Current status:** Locally validated direct-to-VM recovery patch. The isolated
-Ubuntu production VM on Newsec is provisioned but has no Bookkeeping stack or
-route. Windows remains the sole live writer and preserved rollback authority.
-Checkpoint/release/deployment/cutover/private-route authorities exist in source,
-and the final-quiesced checkpoint contract now passes its combined compatibility
-suite. Immutable release construction, separate-VM rehearsal, native login,
-production restore/migration, reboot, and cutover remain open gates.
+**Current status:** The direct-to-VM candidate remains pre-cutover. Windows is
+the sole live writer and preserved rollback authority, and the Ubuntu production
+VM is off. On the separate isolated rehearsal VM, checkpoint restore, once-only
+migration, fixed-plan health, fresh backup/isolated restore, rollback
+lock/reboot/rearm, and Guardian behavior passed. Runtime recovery failed twice
+because the sealed release's verifier rejects containers while Docker still
+reports transient `health=starting`; the bounded retry window expired before
+Gotenberg settled. The rehearsal was stabilized active and healthy without
+publishing recovery or reboot proof. A tested source repair exists, but a new
+immutable release and one fresh recovery-only rehearsal are required before
+native login, production staging, or cutover.
 
 ## Outcome and scope
 
@@ -285,18 +289,24 @@ production VM, a distinct identity-separated rehearsal VM, and private
 checkpoint/backup evidence. The rehearsal VM's corrected empty export passed a
 second complete 5-file hash replay; its manifest SHA-256 is
 `4041AD48E1F0D7348F3738F82C84EA467A29204FA65ACBDC2A7313EF5EF00594`.
-This work did not inspect or change an accounting record, discard an original
-volume/journal/release/backup, activate Tailscale Serve/Funnel, or deploy an
-application stack to either VM. Source
-publication of this patch has not yet occurred; publication changes only the
-two EasyFire repositories and does not itself create runtime authority.
+Fresh backup `20260723T075310Z` passed a network-disabled isolated restore with
+87 tables, 1/1/1/1 identity counts, and exact schema SHA-256
+`24b5ab66959a6971e67a321f3f2583b896aebd091760a1880275f53bb55af853`.
+Rollback lock/reboot/rearm and Guardian proof also passed.
 
-Recovery starts with the verified full filesystem and direct-VM transfer
-checkpoints in `HANDOFF.md`. Current source verification and the targeted
-Guardian review now pass; the next path is one coherent commit-bound
-immutable Linux release and proof on the identity-separated rehearsal VM before
-the production VM is staged. Owner Tailscale/native-login
-input is requested only when prompted. Windows may be quiesced only after every
-backup, restore, release, migration, authentication, rollback, reboot, Guardian,
-and checkpoint gate is green. Tailnet-only Serve activates last; Windows remains
-preserved as stopped rollback authority.
+The runtime-recovery continuation then exhausted three stack retries in two
+minutes and timed out after 180 seconds. It stopped before moving the deployment
+receipt or testing invalid authority, and it created no recovery,
+normal-reboot, or final-rehearsal proof. The isolated rehearsal is now stable
+with the stack service active, six healthy containers, and loopback HTTP 200;
+the production VM remains off. This work did not inspect or intentionally change
+an accounting record, discard an original volume/journal/release/backup, or
+activate Tailscale Serve/Funnel.
+
+The next path is a new immutable release containing the tested manifest-mode and
+transient-health repair, followed by one fresh recovery-only rehearsal. Owner
+Tailscale/native-login input is requested only after recovery and normal reboot
+pass. Windows may be quiesced only after every backup, restore, release,
+migration, authentication, rollback, reboot, Guardian, and checkpoint gate is
+green. Tailnet-only Serve activates last; Windows remains preserved as stopped
+rollback authority.
