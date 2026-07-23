@@ -2,6 +2,7 @@
 
 import { createHash, randomUUID } from 'node:crypto';
 import {
+  chmod,
   link,
   lstat,
   open,
@@ -862,6 +863,7 @@ async function publishExclusive(outputPath, bytes) {
     await handle.sync();
     await handle.close();
     handle = undefined;
+    await chmod(temporary, 0o644);
     try {
       await link(temporary, outputPath);
     }

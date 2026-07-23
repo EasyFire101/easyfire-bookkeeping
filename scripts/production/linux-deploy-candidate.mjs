@@ -30,7 +30,6 @@ import {
   assertNoExistingDockerResources,
   docker,
   getDockerIdentity,
-  inspectContainers,
   inspectMigration,
   validateComposeConfig,
   verifyContainerContract,
@@ -39,6 +38,7 @@ import {
   verifyLoadedImages,
   verifyRunningHealth,
   verifyRuntimeContainerState,
+  waitForExistingRuntimeHealth,
 } from './linux-deploy-docker.mjs';
 import {
   assertCompletedMigration,
@@ -537,9 +537,8 @@ export async function verifyExistingDeployment(planPath = FIXED_PLAN_PATH) {
     }
   }
 
-  const runtimeContainers = await inspectContainers(
-    LONG_RUNNING_SERVICES.map((service) => SERVICE_CONTRACT[service].name),
-    'Existing runtime container inspection',
+  const runtimeContainers = await waitForExistingRuntimeHealth(
+    LONG_RUNNING_SERVICES,
   );
   for (let index = 0; index < LONG_RUNNING_SERVICES.length; index += 1) {
     const serviceName = LONG_RUNNING_SERVICES[index];

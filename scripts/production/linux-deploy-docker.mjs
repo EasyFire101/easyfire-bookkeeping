@@ -802,3 +802,41 @@ export const verifyRuntimeContainerState = (container, service) => {
     refuse('E_CONTAINER_STATE', `Runtime ${service} state is invalid.`);
   }
 };
+
+export const waitForExistingRuntimeHealth = async (
+  services,
+  {
+    attempts = 60,
+    delayMs = 2_000,
+    inspect = inspectContainers,
+    sleep = (milliseconds) =>
+      new Promise((resolve) => setTimeout(resolve, milliseconds)),
+  } = {},
+) => {
+  for (let attempt = 0; attempt < attempts; attempt += 1) {
+    const containers = await inspect(
+      services.map((service) => SERVICE_CONTRACT[service].name),
+      'Existing runtime health transition inspection',
+    );
+    let starting = false;
+    for (let index = 0; index < services.length; index += 1) {
+      const container = containers[index];
+      const service = services[index];
+      if (
+        container.State?.Running === true &&
+        container.State?.Status === 'running' &&
+        container.State?.Health?.Status === 'starting'
+      ) {
+        starting = true;
+      } else {
+        verifyRuntimeContainerState(container, service);
+      }
+    }
+    if (!starting) return containers;
+    if (attempt + 1 < attempts) await sleep(delayMs);
+  }
+  refuse(
+    'E_CONTAINER_HEALTH_TIMEOUT',
+    'Runtime containers remained in the transient starting health state.',
+  );
+};

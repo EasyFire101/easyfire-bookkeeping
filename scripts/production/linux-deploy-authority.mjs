@@ -195,6 +195,7 @@ export const collectBoundInputs = async (planPath, { fixedPlan }) => {
   const planSha256 = sha256Bytes(planDocument.bytes);
   await assertCurrentRelease(plan);
   await verifyFileHash(plan.releaseManifest.path, plan.releaseManifest.sha256, {
+    exactMode: 0o644,
     maxBytes: MAX_JSON_BYTES,
   });
   await verifyFileHash(plan.sourceArchive.path, plan.sourceArchive.sha256);

@@ -561,7 +561,17 @@ test('stream-verifies the OCI archive and emits a deterministic manifest-v2 auth
   assert.equal(manifest.artifacts.find(({ path: artifact }) => artifact.endsWith('.service')).mode, '0644');
   assert.equal(manifest.artifacts.find(({ path: artifact }) => artifact.endsWith('.sh')).mode, '0755');
   assert.equal(raw, `${JSON.stringify(manifest, null, 2)}\n`);
-  assert.equal((await stat(fixture.output)).isFile(), true);
+  const outputState = await stat(fixture.output);
+  assert.equal(outputState.isFile(), true);
+  if (process.platform === 'win32') {
+    assert.match(
+      await readFile(producerPath, 'utf8'),
+      /await handle\.close\(\);[\s\S]{0,100}await chmod\(temporary, 0o644\);[\s\S]{0,100}await link\(temporary, outputPath\)/,
+    );
+  }
+  else {
+    assert.equal(outputState.mode & 0o777, 0o644);
+  }
   assert.doesNotMatch(raw, /synthetic-layer|fixture:/);
 });
 

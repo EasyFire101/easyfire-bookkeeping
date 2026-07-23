@@ -30,6 +30,13 @@ const dockerPath = path.join(
   'production',
   'linux-deploy-docker.mjs',
 );
+const guardianDockerPath = path.join(
+  root,
+  'packages',
+  'guardian',
+  'src',
+  'runtime-manifest-docker.ts',
+);
 
 const controller = await import(pathToFileURL(controllerPath).href);
 const planContract = await import(pathToFileURL(planPath).href);
@@ -418,6 +425,14 @@ test('source encodes a once-only migration and append-only failure boundary', as
   assert.doesNotMatch(source, /docker[^\n]+\b(prune|rm|rmi|volume\s+rm)\b/i);
 });
 
+test('deployment authority requires the installed release manifest to be final 0644', async () => {
+  const source = await readFile(authorityPath, 'utf8');
+  assert.match(
+    source,
+    /verifyFileHash\(plan\.releaseManifest\.path,\s*plan\.releaseManifest\.sha256,\s*\{\s*exactMode:\s*0o644,\s*maxBytes:\s*MAX_JSON_BYTES,\s*\}\)/,
+  );
+});
+
 test('deploy and verify-existing both enforce the plan-bound Docker hostname', async () => {
   const source = await readFile(controllerPath, 'utf8');
   const boundCalls = source.match(
@@ -588,6 +603,89 @@ test('reboot preflight accepts stopped runtimes but rejects unhealthy running on
       ),
     /not healthy/i,
   );
+});
+
+test('verify-existing waits only for transient starting health and stays bounded', async () => {
+  const container = (health) => ({
+    State: {
+      Running: true,
+      Status: 'running',
+      Health: { Status: health },
+    },
+  });
+  let inspections = 0;
+  let sleeps = 0;
+  const recovered = await dockerContract.waitForExistingRuntimeHealth(
+    ['mysql'],
+    {
+      attempts: 2,
+      delayMs: 1,
+      inspect: async () => [container(inspections++ === 0 ? 'starting' : 'healthy')],
+      sleep: async () => { sleeps += 1; },
+    },
+  );
+  assert.equal(recovered[0].State.Health.Status, 'healthy');
+  assert.equal(inspections, 2);
+  assert.equal(sleeps, 1);
+
+  await assert.rejects(
+    dockerContract.waitForExistingRuntimeHealth(
+      ['mysql'],
+      {
+        attempts: 2,
+        delayMs: 1,
+        inspect: async () => [container('unhealthy')],
+        sleep: async () => assert.fail('Unhealthy is terminal, not transient.'),
+      },
+    ),
+    /not healthy/i,
+  );
+  await assert.rejects(
+    dockerContract.waitForExistingRuntimeHealth(
+      ['mysql'],
+      {
+        attempts: 2,
+        delayMs: 1,
+        inspect: async () => [{
+          State: { Running: true, Status: 'running' },
+        }],
+        sleep: async () => assert.fail('Missing health is terminal, not transient.'),
+      },
+    ),
+    /not healthy/i,
+  );
+  await assert.rejects(
+    dockerContract.waitForExistingRuntimeHealth(
+      ['mysql'],
+      {
+        attempts: 2,
+        delayMs: 1,
+        inspect: async () => [container('starting')],
+        sleep: async () => {},
+      },
+    ),
+    /starting|timed out/i,
+  );
+});
+
+test('verify-existing reaches final health before the strict Guardian identity verifier', async () => {
+  const source = await readFile(controllerPath, 'utf8');
+  const wait = source.indexOf(
+    'const runtimeContainers = await waitForExistingRuntimeHealth(',
+  );
+  const guardianVerification = source.indexOf(
+    'runRuntimeManifestGenerator(plan, true)',
+    wait,
+  );
+  assert.ok(wait >= 0);
+  assert.ok(guardianVerification > wait);
+
+  const guardianSource = await readFile(guardianDockerPath, 'utf8');
+  assert.match(
+    guardianSource,
+    /state\.Running === true && state\.Status === 'running' && healthStatus === 'healthy'/,
+  );
+  assert.doesNotMatch(guardianSource, /healthStatus === 'starting'/);
 });
 
 test('controller independently rejects Docker Compose-active env-file syntax', () => {
