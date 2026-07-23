@@ -654,3 +654,34 @@ passes 24/24, static no-deploy validation passes 101/101, foundation checks pass
 targeted independent review and re-review returned PASS after closing manual-run
 causality and inherited-timeout findings. No runtime, route, Docker resource, or
 accounting-data mutation was used for this source proof.
+
+## Establish the v6 rehearsal and stop at the backup proof - 2026-07-22
+
+The current v6 rehearsal instance restored the preserved checkpoint, ran the
+database migration exactly once with exit zero, passed fixed-plan
+`--verify-existing`, brought all six long-running containers healthy, and
+returned HTTP 200 for `/`, `/api/system_db`, and `/api/auth/meta` over
+`127.0.0.1:8080`. The bound deployment-plan SHA-256 is
+`e4e4cac6ee8e56997a645b83a57689b73169b66b7053022ea91f9f7992907fc0`.
+Those restore, once-only migration, fixed-plan, container-health, and loopback
+HTTP gates are accepted and must not be repeated unless a bound input or
+authoritative state changes.
+
+Guest-native backup attempt `20260723T031624Z` created preserved database and
+Redis payloads, then stopped during its disposable isolated restore. The proof
+container inherited direct `MYSQL_PASSWORD` and `MYSQL_ROOT_PASSWORD` values
+from the pinned MariaDB image while also receiving `MYSQL_PASSWORD_FILE` and
+`MYSQL_ROOT_PASSWORD_FILE`; the image correctly refused the mutually exclusive
+configuration and exited one. No `COMPLETE` marker or `backup-receipt.json`
+exists, so the attempt and its preserved proof volume are diagnostic evidence,
+not a trusted backup.
+
+Windows remains healthy and the sole live writer. The production VM is off, the
+rehearsal candidate has no Tailscale route, and no cutover occurred. Tailscale
+`NeedsLogin` is a pending later enrollment gate rather than an active blocker.
+The next safe action is only the focused compatibility repair in
+`scripts/production/linux-backup-verify.sh`, followed by one newly timestamped
+backup and isolated restore proof. Do not rebuild the release or VM, reuse the
+incomplete attempt, or repeat accepted gates while their inputs remain
+unchanged. If the repaired gate fails on its one rerun, preserve the evidence
+and stop at a safe checkpoint.

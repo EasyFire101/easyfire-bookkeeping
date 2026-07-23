@@ -4,14 +4,20 @@
 
 **Owner:** Direct Codex takeover for EasyFire
 
-**State:** The approved endpoint is now the dedicated Ubuntu VM
-`easyfire-bookkeeping-newsec` on Newsec, not Windows Docker/Cloudflare. The VM
-is provisioned and isolated with Docker Engine, Compose, systemd, and Tailscale,
-but no Bookkeeping application containers or private route are active. The
-original Windows runtime remains the sole live writer and complete rollback
-authority. A verified transfer checkpoint, release authority, Linux deployment
-controller, Guardian, rollback lock, cutover authority, and private-route gate
-exist in the uncommitted local patch. Cutover has not run.
+**State:** The original Windows runtime remains live and is the sole writer and
+rollback authority; no cutover has occurred. The production VM
+`easyfire-bookkeeping-newsec` is off. The current private v6 rehearsal instance
+successfully restored the verified preflight checkpoint, ran migration once
+with exit zero, passed fixed-plan `--verify-existing`, and returned HTTP 200
+from `/`, `/api/system_db`, and `/api/auth/meta` with all six long-running
+services healthy. Its deployment-plan SHA-256 is
+`e4e4cac6ee8e56997a645b83a57689b73169b66b7053022ea91f9f7992907fc0`.
+The subsequent guest-native backup created payload files, but its isolated
+restore proof failed before publication because the pinned MariaDB image
+inherited `MYSQL_PASSWORD`/`MYSQL_ROOT_PASSWORD` while the proof container also
+set the corresponding `_FILE` variables. That backup has no `COMPLETE` marker
+or `backup-receipt.json` and is not trusted. Tailscale enrollment is a pending
+post-recovery gate, not an active blocker.
 
 ## Source state
 
@@ -312,23 +318,33 @@ history; they must not be used to construct the superseding endpoint.
   Its containers, MariaDB/Redis volumes, releases, journals, tasks, backups,
   Cloudflare route, and private proxy remain preserved for rollback. These
   resources are not the intended long-term endpoint.
-- The Ubuntu production VM `easyfire-bookkeeping-newsec` is running with its
-  isolated internal switch, outbound-only NAT, UFW deny-incoming/routed policy,
-  Docker Engine 29.6.2, Compose 5.3.1, Node 22.23.1, systemd, Tailscale 1.98.9,
-  and swap. It has zero Bookkeeping application containers/volumes and no
-  listeners on 80, 443, or 8080.
-- Tailscale on the VM is `NeedsLogin`; Serve and Funnel are absent. Private
-  route activation therefore remains correctly blocked for owner login/MFA if
-  prompted and for every earlier cutover proof.
-- No application release has been staged on the VM, no restore or migration
-  has run there, no systemd application unit has been enabled, and no
-  production cutover has occurred.
-- The separate rehearsal VM is running at its isolated private address with
-  Docker Engine, Compose, Node, systemd, and Tailscale installed, but it also
-  has zero Bookkeeping containers/volumes and no private route. Its cloned
-  machine and SSH identities were separated before any application bytes were
-  staged, and the corrected empty state has a fully replayed export checkpoint.
-  It remains the mandatory pre-cutover destructive/reboot proof boundary.
+- The Ubuntu production VM `easyfire-bookkeeping-newsec` is off. It has not
+  received production traffic, no production cutover occurred, and no Windows
+  writer was quiesced.
+- The current v6 rehearsal instance is running only on its isolated private
+  switch. It has no public listener, Tailscale Serve, Funnel, or production
+  route.
+- Rehearsal v6 successfully restored the verified preflight checkpoint, ran the
+  migration exactly once with exit zero, passed fixed-plan
+  `--verify-existing`, and has six healthy long-running containers. Loopback
+  returned HTTP 200 for `/`, `/api/system_db`, and `/api/auth/meta`. Its
+  deployment-plan SHA-256 is
+  `e4e4cac6ee8e56997a645b83a57689b73169b66b7053022ea91f9f7992907fc0`.
+- Guest-native backup attempt `20260723T031624Z` created preserved database,
+  Redis, source, and authority evidence. Its network-disabled isolated restore
+  container exited one and no `COMPLETE` marker or `backup-receipt.json` was
+  written, so the unit is incomplete and must never be promoted or reused.
+- The exact failure is a compatibility conflict: the pinned MariaDB image
+  supplies `MYSQL_PASSWORD` and `MYSQL_ROOT_PASSWORD`, while
+  `linux-backup-verify.sh` also supplies `MYSQL_PASSWORD_FILE` and
+  `MYSQL_ROOT_PASSWORD_FILE` to the isolated proof container. This is not
+  evidence of accounting-record corruption.
+- Tailscale reports `NeedsLogin`, but enrollment has not been attempted because
+  backup/recovery proof comes first. It consumed no material waiting time and
+  is a pending gate rather than an active blocker.
+- Do not reprovision a VM, rebuild the validated release, or repeat the passed
+  restore, once-only migration, fixed-plan, container-health, or loopback HTTP
+  gates unless an input governing that gate changes.
 - The current preflight checkpoint and isolated restore are verified. A new
   final checkpoint must be captured only after the exclusive source-quiesce
   receipt proves MariaDB/Redis healthy and all Windows writers/routes stopped
@@ -426,30 +442,58 @@ history; they must not be used to construct the superseding endpoint.
   timing guard above its 90-second ceiling under host contention. Its immediate
   isolated rerun passed all 14/14 production-I/O tests; no changed Linux release
   or Guardian test failed.
-- The separate rehearsal VM has not yet supplied mandatory rollback/reboot/
-  Guardian proof.
-- Native owner authentication is not yet proven against the Linux candidate.
-  Tailscale requires owner login/MFA before a private route can be considered,
-  and that login does not by itself authorize route activation.
+- The current v6 rehearsal instance, using guest hostname
+  `easyfire-bookkeeping-rehearsal-newsec`, successfully restored the preserved
+  checkpoint, ran the migration exactly once with exit zero, passed
+  fixed-plan `--verify-existing`, started all six long-running containers
+  healthy, and returned HTTP 200 for `/`, `/api/system_db`, and
+  `/api/auth/meta` on `127.0.0.1:8080`. Its exact deployment-plan SHA-256 is
+  `e4e4cac6ee8e56997a645b83a57689b73169b66b7053022ea91f9f7992907fc0`.
+  These restore, once-only migration, plan, container-health, and loopback HTTP
+  gates are accepted and must not be repeated unless their bound release, plan,
+  checkpoint, environment, or authoritative state changes.
+- Guest-native backup attempt `20260723T031624Z` created preserved database and
+  Redis payloads, but its isolated restore container exited one before a
+  `COMPLETE` marker or `backup-receipt.json` could be written. The exact failure
+  was `Both MYSQL_PASSWORD and MYSQL_PASSWORD_FILE are set (but are exclusive)`:
+  the pinned MariaDB image carries direct password variables while the proof
+  container also supplied file-based password variables. The attempt and its
+  proof volume remain preserved but are incomplete and untrusted; never reuse
+  them as the fresh proof.
+- Mandatory backup/isolated-restore, native owner authentication,
+  rollback-lock/rearm, reboot, and Guardian recovery receipts remain pending.
+  Tailscale currently reports `NeedsLogin`, but enrollment has not yet become
+  the active gate. It is a pending owner action, not the cause of the stopped
+  work; stop and surface the owner login/MFA only after the earlier safety gates
+  pass and enrollment is actually attempted.
 - Source authority requires exact Forgejo readback and anonymous GitHub readback
   of the same final correction commit.
 - The current direct-to-VM source is locally validated. Its final containing
   commit is established by Git rather than this self-referential document; no
   direct-to-VM commit has yet been published to the EasyFire remotes.
-- Windows is intentionally still live. Any accidental Linux route or writer
-  before the single-writer receipt would be a hard stop and rollback condition.
+- Windows is intentionally still live and remains the sole writer. The
+  production VM is off, the rehearsal instance has no Tailscale route, and no
+  cutover occurred. Any accidental Linux route or production writer before the
+  single-writer receipt would be a hard stop and rollback condition.
 
 ## Next safe action
 
-Create the final containing commit for the plan-bound rehearsal-host repair and
-rebuild one immutable Linux release plus fixed deployment plan. Stage that exact
-release and the verified preflight checkpoint only to the
-identity-separated rehearsal VM; prove restore, once-only migration, native
-authentication, backup/isolated restore, rollback-lock/rearm, reboot, and
-Guardian behavior there. Only after every rehearsal receipt is green may the
-production VM receive the exact release. Quiesce Windows last, capture the final
-receipt-bound checkpoint, prove one writer, and activate tailnet-only Serve only
-after every production receipt passes. Stop for owner Tailscale/native-login
-credentials when prompted. Preserve Windows stopped as rollback authority; do
-not enable Funnel, expose a public port, delete an artifact, or use the
-historical Windows fresh-install controller.
+Make the focused one-file compatibility repair in
+`scripts/production/linux-backup-verify.sh`: explicitly clear the image-inherited
+`MYSQL_PASSWORD` and `MYSQL_ROOT_PASSWORD` values before supplying their
+file-based variants to the isolated proof container. Validate that file, then
+create a new timestamped backup and run one fresh isolated restore proof. Do not
+reuse attempt `20260723T031624Z`, rebuild the release or VM, or repeat the
+already-accepted restore/migration/health gates while their bound inputs remain
+unchanged.
+
+Only after the fresh backup receipt is complete may work continue through native
+authentication, rollback-lock/rearm, reboot, and Guardian proof. If the same
+gate fails after the focused repair and one rerun, preserve the evidence and
+stop at a safe checkpoint. Production remains Windows until every required
+receipt is green; quiesce Windows last, capture the final receipt-bound
+checkpoint, prove one writer, and activate tailnet-only Serve only after every
+production receipt passes. Stop for owner Tailscale/native-login credentials
+when an actual prompt is reached. Preserve Windows stopped as rollback
+authority; do not enable Funnel, expose a public port, delete an artifact, or
+use the historical Windows fresh-install controller.
